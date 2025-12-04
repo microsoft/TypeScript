@@ -1,13 +1,4 @@
-noSilentNeverTypeLeak2.ts(75,5): error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, { type: "doStuff"; params: number; }>'.
-  Type 'ParameterizedObject' is not assignable to type '{ type: "doStuff"; params: number; }'.
-    Types of property 'type' are incompatible.
-      Type 'string' is not assignable to type '"doStuff"'.
-noSilentNeverTypeLeak2.ts(81,5): error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
-  Type 'ParameterizedObject' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
-    Type 'ParameterizedObject' is not assignable to type '{ type: "doOtherStuff"; params: string; }'.
-      Types of property 'type' are incompatible.
-        Type 'string' is not assignable to type '"doOtherStuff"'.
-noSilentNeverTypeLeak2.ts(88,5): error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+noSilentNeverTypeLeak2.ts(36,3): error TS2322: Type 'ActionFunction<number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
   Type 'ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
     Type '{ type: "doStuff"; params: unknown; }' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
       Type '{ type: "doStuff"; params: unknown; }' is not assignable to type '{ type: "doStuff"; params: number; }'.
@@ -15,114 +6,55 @@ noSilentNeverTypeLeak2.ts(88,5): error TS2322: Type 'ActionFunction<MachineConte
           Type 'unknown' is not assignable to type 'number'.
 
 
-==== noSilentNeverTypeLeak2.ts (3 errors) ====
+==== noSilentNeverTypeLeak2.ts (1 errors) ====
     type Values<T> = T[keyof T];
-    
-    type MachineContext = Record<string, any>;
     
     interface ParameterizedObject {
       type: string;
       params?: unknown;
     }
     
-    type ActionFunction<
-      TContext extends MachineContext,
-      TParams extends ParameterizedObject["params"] | undefined,
-      TAction extends ParameterizedObject,
-    > = {
-      (ctx: TContext, params: TParams): void;
+    type ActionFunction<TParams, TAction extends ParameterizedObject> = {
+      (params: TParams): void;
       _out_TAction?: TAction;
     };
     
-    type ToParameterizedObject<
-      TParameterizedMap extends Record<
-        string,
-        ParameterizedObject["params"] | undefined
-      >,
-    > = Values<{
-      [K in keyof TParameterizedMap as K & string]: {
-        type: K & string;
+    type ToParameterizedObject<TParameterizedMap> = Values<{
+      [K in keyof TParameterizedMap & string]: {
+        type: K;
         params: TParameterizedMap[K];
       };
     }>;
     
-    type CollectActions<
-      TContext extends MachineContext,
-      TParams extends ParameterizedObject["params"] | undefined,
-    > = (
-      {
-        context,
-        enqueue,
-      }: {
-        context: TContext;
-        enqueue: (action: () => void) => void;
-      },
-      params: TParams,
-    ) => void;
+    declare function enqueueActions<TParams, TAction extends ParameterizedObject>(
+      collect: (params: TParams) => void,
+    ): ActionFunction<TParams, TAction>;
     
-    declare function enqueueActions<
-      TContext extends MachineContext,
-      TParams extends ParameterizedObject["params"] | undefined,
-      TAction extends ParameterizedObject = ParameterizedObject,
-    >(
-      collect: CollectActions<TContext, TParams>,
-    ): ActionFunction<TContext, TParams, TAction>;
-    
-    declare function setup<
-      TContext extends MachineContext,
-      TActions extends Record<
-        string,
-        ParameterizedObject["params"] | undefined
-      > = {},
-    >({
-      types,
-      actions,
-    }: {
-      types?: { context?: TContext };
-      actions?: {
-        [K in keyof TActions]: ActionFunction<
-          TContext,
-          TActions[K],
-          ToParameterizedObject<TActions>
-        >;
-      };
+    declare function setup<TActions>(actions: {
+      [K in keyof TActions]: ActionFunction<
+        TActions[K],
+        ToParameterizedObject<TActions>
+      >;
     }): void;
     
     setup({
-      actions: {
-        doStuff: enqueueActions((_, params: number) => {}),
-        ~~~~~~~
-!!! error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, { type: "doStuff"; params: number; }>'.
-!!! error TS2322:   Type 'ParameterizedObject' is not assignable to type '{ type: "doStuff"; params: number; }'.
-!!! error TS2322:     Types of property 'type' are incompatible.
-!!! error TS2322:       Type 'string' is not assignable to type '"doStuff"'.
-      },
+      doStuff: enqueueActions((params: number) => {}),
     });
     
     setup({
-      actions: {
-        doStuff: enqueueActions((_, params: number) => {}),
-        ~~~~~~~
-!!! error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
-!!! error TS2322:   Type 'ParameterizedObject' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
-!!! error TS2322:     Type 'ParameterizedObject' is not assignable to type '{ type: "doOtherStuff"; params: string; }'.
-!!! error TS2322:       Types of property 'type' are incompatible.
-!!! error TS2322:         Type 'string' is not assignable to type '"doOtherStuff"'.
-        doOtherStuff: (_, params: string) => {},
-      },
-    });
-    
-    setup({
-      actions: {
-        doStuff: enqueueActions((_, params: number) => {}),
-        ~~~~~~~
-!!! error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+      doStuff: enqueueActions((params: number) => {}),
+      ~~~~~~~
+!!! error TS2322: Type 'ActionFunction<number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
 !!! error TS2322:   Type 'ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
 !!! error TS2322:     Type '{ type: "doStuff"; params: unknown; }' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
 !!! error TS2322:       Type '{ type: "doStuff"; params: unknown; }' is not assignable to type '{ type: "doStuff"; params: number; }'.
 !!! error TS2322:         Types of property 'params' are incompatible.
 !!! error TS2322:           Type 'unknown' is not assignable to type 'number'.
-        doOtherStuff: (_: any, params: string) => {},
-      },
+!!! related TS6500 noSilentNeverTypeLeak2.ts:36:3: The expected type comes from property 'doStuff' which is declared here on type '{ doStuff: ActionFunction<number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>; doOtherStuff: ActionFunction<string, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>; }'
+      doOtherStuff: (params: string) => {},
     });
     
+    setup({
+      doStuff: enqueueActions((params: number) => {}),
+      doOtherStuff: (params) => {},
+    });

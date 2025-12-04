@@ -1,0 +1,110 @@
+noSilentNeverTypeLeak3.ts(90,5): error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+  Type 'ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+    Type '{ type: "doStuff"; params: unknown; }' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+      Type '{ type: "doStuff"; params: unknown; }' is not assignable to type '{ type: "doStuff"; params: number; }'.
+        Types of property 'params' are incompatible.
+          Type 'unknown' is not assignable to type 'number'.
+
+
+==== noSilentNeverTypeLeak3.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/62824
+    
+    type Values<T> = T[keyof T];
+    
+    type MachineContext = Record<string, any>;
+    
+    interface ParameterizedObject {
+      type: string;
+      params?: unknown;
+    }
+    
+    type ActionFunction<
+      TContext extends MachineContext,
+      TParams extends ParameterizedObject["params"] | undefined,
+      TAction extends ParameterizedObject,
+    > = {
+      (ctx: TContext, params: TParams): void;
+      _out_TAction?: TAction;
+    };
+    
+    type ToParameterizedObject<
+      TParameterizedMap extends Record<
+        string,
+        ParameterizedObject["params"] | undefined
+      >,
+    > = Values<{
+      [K in keyof TParameterizedMap & string]: {
+        type: K;
+        params: TParameterizedMap[K];
+      };
+    }>;
+    
+    type CollectActions<
+      TContext extends MachineContext,
+      TParams extends ParameterizedObject["params"] | undefined,
+    > = (
+      {
+        context,
+        enqueue,
+      }: {
+        context: TContext;
+        enqueue: (action: () => void) => void;
+      },
+      params: TParams,
+    ) => void;
+    
+    declare function enqueueActions<
+      TContext extends MachineContext,
+      TParams extends ParameterizedObject["params"] | undefined,
+      TAction extends ParameterizedObject = ParameterizedObject,
+    >(
+      collect: CollectActions<TContext, TParams>,
+    ): ActionFunction<TContext, TParams, TAction>;
+    
+    declare function setup<
+      TContext extends MachineContext,
+      TActions extends Record<
+        string,
+        ParameterizedObject["params"] | undefined
+      > = {},
+    >({
+      types,
+      actions,
+    }: {
+      types?: { context?: TContext };
+      actions?: {
+        [K in keyof TActions]: ActionFunction<
+          TContext,
+          TActions[K],
+          ToParameterizedObject<TActions>
+        >;
+      };
+    }): void;
+    
+    setup({
+      actions: {
+        doStuff: enqueueActions((_, params: number) => {}),
+      },
+    });
+    
+    setup({
+      actions: {
+        doStuff: enqueueActions((_, params: number) => {}),
+        doOtherStuff: (_, params: string) => {},
+      },
+    });
+    
+    setup({
+      actions: {
+        doStuff: enqueueActions((_, params: number) => {}),
+        ~~~~~~~
+!!! error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+!!! error TS2322:   Type 'ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+!!! error TS2322:     Type '{ type: "doStuff"; params: unknown; }' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+!!! error TS2322:       Type '{ type: "doStuff"; params: unknown; }' is not assignable to type '{ type: "doStuff"; params: number; }'.
+!!! error TS2322:         Types of property 'params' are incompatible.
+!!! error TS2322:           Type 'unknown' is not assignable to type 'number'.
+        doOtherStuff: (_: any, params: string) => {},
+      },
+    });
+    

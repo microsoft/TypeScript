@@ -3,92 +3,44 @@
 
 type Values<T> = T[keyof T];
 
-type MachineContext = Record<string, any>;
-
 interface ParameterizedObject {
   type: string;
   params?: unknown;
 }
 
-type ActionFunction<
-  TContext extends MachineContext,
-  TParams extends ParameterizedObject["params"] | undefined,
-  TAction extends ParameterizedObject,
-> = {
-  (ctx: TContext, params: TParams): void;
+type ActionFunction<TParams, TAction extends ParameterizedObject> = {
+  (params: TParams): void;
   _out_TAction?: TAction;
 };
 
-type ToParameterizedObject<
-  TParameterizedMap extends Record<
-    string,
-    ParameterizedObject["params"] | undefined
-  >,
-> = Values<{
-  [K in keyof TParameterizedMap as K & string]: {
-    type: K & string;
+type ToParameterizedObject<TParameterizedMap> = Values<{
+  [K in keyof TParameterizedMap & string]: {
+    type: K;
     params: TParameterizedMap[K];
   };
 }>;
 
-type CollectActions<
-  TContext extends MachineContext,
-  TParams extends ParameterizedObject["params"] | undefined,
-> = (
-  {
-    context,
-    enqueue,
-  }: {
-    context: TContext;
-    enqueue: (action: () => void) => void;
-  },
-  params: TParams,
-) => void;
+declare function enqueueActions<TParams, TAction extends ParameterizedObject>(
+  collect: (params: TParams) => void,
+): ActionFunction<TParams, TAction>;
 
-declare function enqueueActions<
-  TContext extends MachineContext,
-  TParams extends ParameterizedObject["params"] | undefined,
-  TAction extends ParameterizedObject = ParameterizedObject,
->(
-  collect: CollectActions<TContext, TParams>,
-): ActionFunction<TContext, TParams, TAction>;
-
-declare function setup<
-  TContext extends MachineContext,
-  TActions extends Record<
-    string,
-    ParameterizedObject["params"] | undefined
-  > = {},
->({
-  types,
-  actions,
-}: {
-  types?: { context?: TContext };
-  actions?: {
-    [K in keyof TActions]: ActionFunction<
-      TContext,
-      TActions[K],
-      ToParameterizedObject<TActions>
-    >;
-  };
+declare function setup<TActions>(actions: {
+  [K in keyof TActions]: ActionFunction<
+    TActions[K],
+    ToParameterizedObject<TActions>
+  >;
 }): void;
 
 setup({
-  actions: {
-    doStuff: enqueueActions((_, params: number) => {}),
-  },
+  doStuff: enqueueActions((params: number) => {}),
 });
 
 setup({
-  actions: {
-    doStuff: enqueueActions((_, params: number) => {}),
-    doOtherStuff: (_, params: string) => {},
-  },
+  doStuff: enqueueActions((params: number) => {}),
+  doOtherStuff: (params: string) => {},
 });
 
 setup({
-  actions: {
-    doStuff: enqueueActions((_, params: number) => {}),
-    doOtherStuff: (_: any, params: string) => {},
-  },
+  doStuff: enqueueActions((params: number) => {}),
+  doOtherStuff: (params) => {},
 });

@@ -1,4 +1,13 @@
-noSilentNeverTypeLeak1.ts(90,5): error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+noSilentNeverTypeLeak4.ts(75,5): error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, { type: "doStuff"; params: number; }>'.
+  Type 'ParameterizedObject' is not assignable to type '{ type: "doStuff"; params: number; }'.
+    Types of property 'type' are incompatible.
+      Type 'string' is not assignable to type '"doStuff"'.
+noSilentNeverTypeLeak4.ts(81,5): error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+  Type 'ParameterizedObject' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+    Type 'ParameterizedObject' is not assignable to type '{ type: "doOtherStuff"; params: string; }'.
+      Types of property 'type' are incompatible.
+        Type 'string' is not assignable to type '"doOtherStuff"'.
+noSilentNeverTypeLeak4.ts(88,5): error TS2322: Type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
   Type 'ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
     Type '{ type: "doStuff"; params: unknown; }' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
       Type '{ type: "doStuff"; params: unknown; }' is not assignable to type '{ type: "doStuff"; params: number; }'.
@@ -6,9 +15,7 @@ noSilentNeverTypeLeak1.ts(90,5): error TS2322: Type 'ActionFunction<MachineConte
           Type 'unknown' is not assignable to type 'number'.
 
 
-==== noSilentNeverTypeLeak1.ts (1 errors) ====
-    // https://github.com/microsoft/TypeScript/issues/62824
-    
+==== noSilentNeverTypeLeak4.ts (3 errors) ====
     type Values<T> = T[keyof T];
     
     type MachineContext = Record<string, any>;
@@ -33,8 +40,8 @@ noSilentNeverTypeLeak1.ts(90,5): error TS2322: Type 'ActionFunction<MachineConte
         ParameterizedObject["params"] | undefined
       >,
     > = Values<{
-      [K in keyof TParameterizedMap & string]: {
-        type: K;
+      [K in keyof TParameterizedMap as K & string]: {
+        type: K & string;
         params: TParameterizedMap[K];
       };
     }>;
@@ -84,12 +91,23 @@ noSilentNeverTypeLeak1.ts(90,5): error TS2322: Type 'ActionFunction<MachineConte
     setup({
       actions: {
         doStuff: enqueueActions((_, params: number) => {}),
+        ~~~~~~~
+!!! error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, { type: "doStuff"; params: number; }>'.
+!!! error TS2322:   Type 'ParameterizedObject' is not assignable to type '{ type: "doStuff"; params: number; }'.
+!!! error TS2322:     Types of property 'type' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type '"doStuff"'.
       },
     });
     
     setup({
       actions: {
         doStuff: enqueueActions((_, params: number) => {}),
+        ~~~~~~~
+!!! error TS2322: Type 'ActionFunction<MachineContext, number, ParameterizedObject>' is not assignable to type 'ActionFunction<MachineContext, number, ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>>'.
+!!! error TS2322:   Type 'ParameterizedObject' is not assignable to type 'ToParameterizedObject<{ doStuff: number; doOtherStuff: string; }>'.
+!!! error TS2322:     Type 'ParameterizedObject' is not assignable to type '{ type: "doOtherStuff"; params: string; }'.
+!!! error TS2322:       Types of property 'type' are incompatible.
+!!! error TS2322:         Type 'string' is not assignable to type '"doOtherStuff"'.
         doOtherStuff: (_, params: string) => {},
       },
     });
