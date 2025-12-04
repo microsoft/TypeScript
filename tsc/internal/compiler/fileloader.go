@@ -34,9 +34,8 @@ type fileLoader struct {
 	comparePathsOptions tspath.ComparePathsOptions
 	supportedExtensions []string
 
-	filesParser      *filesParser
-	rootTasks        []*parseTask
-	includeProcessor *includeProcessor
+	filesParser *filesParser
+	rootTasks   []*parseTask
 
 	totalFileCount atomic.Int32
 	libFileCount   atomic.Int32
@@ -101,7 +100,6 @@ func processAllProgramFiles(
 		},
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
 		supportedExtensions: core.Flatten(tsoptions.GetSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)),
-		includeProcessor:    &includeProcessor{},
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
 	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName)
@@ -363,7 +361,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 				includeReason: includeReason,
 			}, nil)
 		} else {
-			p.includeProcessor.addProcessingDiagnostic(&processingDiagnostic{
+			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
 				kind: processingDiagnosticKindUnknownReference,
 				data: includeReason,
 			})
