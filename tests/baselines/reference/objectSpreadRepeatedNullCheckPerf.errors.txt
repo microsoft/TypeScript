@@ -1,0 +1,142 @@
+objectSpreadRepeatedNullCheckPerf.ts(32,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(33,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(34,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(35,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(36,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(37,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(38,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(39,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(40,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(41,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(42,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(43,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(44,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(45,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(46,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(47,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(48,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(49,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(50,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(51,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(52,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(53,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(54,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(55,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(56,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+objectSpreadRepeatedNullCheckPerf.ts(57,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+
+
+==== objectSpreadRepeatedNullCheckPerf.ts (26 errors) ====
+    interface Props {
+        readonly a?: string
+        readonly b?: string
+        readonly c?: string
+        readonly d?: string
+        readonly e?: string
+        readonly f?: string
+        readonly g?: string
+        readonly h?: string
+        readonly i?: string
+        readonly j?: string
+        readonly k?: string
+        readonly l?: string
+        readonly m?: string
+        readonly n?: string
+        readonly o?: string
+        readonly p?: string
+        readonly q?: string
+        readonly r?: string
+        readonly s?: string
+        readonly t?: string
+        readonly u?: string
+        readonly v?: string
+        readonly w?: string
+        readonly x?: string
+        readonly y?: string
+        readonly z?: string
+    }
+    
+    function parseWithSpread(config: Record<string, number>): Props {
+        return {
+            ...config.a !== undefined && { a: config.a.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.b !== undefined && { b: config.b.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.c !== undefined && { c: config.c.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.d !== undefined && { d: config.d.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.e !== undefined && { e: config.e.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.f !== undefined && { f: config.f.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.g !== undefined && { g: config.g.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.h !== undefined && { h: config.h.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.i !== undefined && { i: config.i.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.j !== undefined && { j: config.j.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.k !== undefined && { k: config.k.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.l !== undefined && { l: config.l.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.m !== undefined && { m: config.m.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.n !== undefined && { n: config.n.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.o !== undefined && { o: config.o.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.p !== undefined && { p: config.p.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.q !== undefined && { q: config.q.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.r !== undefined && { r: config.r.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.s !== undefined && { s: config.s.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.t !== undefined && { t: config.t.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.u !== undefined && { u: config.u.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.v !== undefined && { v: config.v.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.w !== undefined && { w: config.w.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.x !== undefined && { x: config.x.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.y !== undefined && { y: config.y.toString() },
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+            ...config.z !== undefined && { z: config.z.toString() }
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
+        }
+    }
+    
+    parseWithSpread({ a: 1, b: 2, z: 26 })
