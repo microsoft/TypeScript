@@ -6,8 +6,8 @@ import { a } from "a";
 >  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
 
 import { b } from "b";
->b : import("/node_modules/a/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : X
+>  : ^
 
 import { c } from "c";
 >c : import("/node_modules/c/node_modules/x/index").default
@@ -18,8 +18,8 @@ a(b); // Works
 >     : ^^^^
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
 >  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
->b : import("/node_modules/a/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : X
+>  : ^
 
 a(c); // Error, these are from different versions of the library.
 >a(c) : void
@@ -52,8 +52,8 @@ export default class X {
 
 === /node_modules/b/index.d.ts ===
 import X from "x";
->X : typeof X
->  : ^^^^^^^^
+>X : any
+>  : ^^^
 
 export const b: X;
 >b : X
@@ -61,11 +61,12 @@ export const b: X;
 
 === /node_modules/b/node_modules/x/index.d.ts ===
 content not parsed
->X : X
->  : ^
-
->x : number
->  : ^^^^^^
+>content : any
+>        : ^^^
+>not : any
+>    : ^^^
+>parsed : any
+>       : ^^^
 
 === /node_modules/c/index.d.ts ===
 import X from "x";

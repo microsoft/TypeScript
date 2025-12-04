@@ -11,10 +11,8 @@ import {
     concatenate,
     ConstructorDeclaration,
     contains,
-    createGetCanonicalFileName,
     createTextSpanFromBounds,
     createTextSpanFromNode,
-    Debug,
     DefaultClause,
     find,
     FindAllReferences,
@@ -77,7 +75,6 @@ import {
     SyntaxKind,
     ThrowStatement,
     toArray,
-    toPath,
     tryCast,
     TryStatement,
 } from "./_namespaces/ts.js";
@@ -115,16 +112,9 @@ export namespace DocumentHighlights {
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
-        const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
         return arrayFrom(mapDefinedIterator(map.entries(), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
-                if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
-                    return undefined;
-                }
-                const redirectTarget = program.getSourceFile(fileName);
-                const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
-                fileName = redirect.fileName;
-                Debug.assert(sourceFilesSet.has(fileName));
+                return undefined;
             }
             return { fileName, highlightSpans };
         }));

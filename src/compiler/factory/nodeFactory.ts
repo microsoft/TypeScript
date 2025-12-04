@@ -375,7 +375,6 @@ import {
     QuestionDotToken,
     QuestionToken,
     ReadonlyKeyword,
-    RedirectInfo,
     reduceLeft,
     RegularExpressionLiteral,
     RestTypeNode,
@@ -1003,7 +1002,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateEnumMember,
         createSourceFile,
         updateSourceFile,
-        createRedirectedSourceFile,
         createBundle,
         updateBundle,
         createSyntheticExpression,
@@ -6092,43 +6090,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function createRedirectedSourceFile(redirectInfo: RedirectInfo) {
-        const node: SourceFile = Object.create(redirectInfo.redirectTarget);
-        Object.defineProperties(node, {
-            id: {
-                get(this: SourceFile) {
-                    return this.redirectInfo!.redirectTarget.id;
-                },
-                set(this: SourceFile, value: SourceFile["id"]) {
-                    this.redirectInfo!.redirectTarget.id = value;
-                },
-            },
-            symbol: {
-                get(this: SourceFile) {
-                    return this.redirectInfo!.redirectTarget.symbol;
-                },
-                set(this: SourceFile, value: SourceFile["symbol"]) {
-                    this.redirectInfo!.redirectTarget.symbol = value;
-                },
-            },
-        });
-        node.redirectInfo = redirectInfo;
-        return node;
-    }
-
-    function cloneRedirectedSourceFile(source: SourceFile) {
-        const node = createRedirectedSourceFile(source.redirectInfo!) as Mutable<SourceFile>;
-        node.flags |= source.flags & ~NodeFlags.Synthesized;
-        node.fileName = source.fileName;
-        node.path = source.path;
-        node.resolvedPath = source.resolvedPath;
-        node.originalFileName = source.originalFileName;
-        node.packageJsonLocations = source.packageJsonLocations;
-        node.packageJsonScope = source.packageJsonScope;
-        node.emitNode = undefined;
-        return node;
-    }
-
     function cloneSourceFileWorker(source: SourceFile) {
         // TODO: This mechanism for cloning results in megamorphic property reads and writes. In future perf-related
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
@@ -6148,7 +6109,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function cloneSourceFile(source: SourceFile) {
-        const node = source.redirectInfo ? cloneRedirectedSourceFile(source) : cloneSourceFileWorker(source);
+        const node = cloneSourceFileWorker(source);
         setOriginal(node, source);
         return node;
     }
