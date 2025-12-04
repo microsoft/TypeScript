@@ -135,6 +135,7 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     sameMap,
+    ScriptKind,
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
     single,
@@ -1255,7 +1256,6 @@ function getNewImportFixes(
     preferences: UserPreferences,
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly (FixAddNewImport | FixAddJsdocTypeImport)[]; } {
-    const isJs = hasJSFileExtension(sourceFile.fileName);
     const compilerOptions = program.getCompilerOptions();
     const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
     const getChecker = createGetChecker(program, host);
@@ -1276,9 +1276,17 @@ function getNewImportFixes(
             if (rejectNodeModulesRelativePaths && pathContainsNodeModules(moduleSpecifier)) {
                 return undefined;
             }
-            if (!importedSymbolHasValueMeaning && isJs && usagePosition !== undefined) {
-                // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                return { kind: ImportFixKind.JsdocTypeImport, moduleSpecifierKind, moduleSpecifier, usagePosition, exportInfo, isReExport: i > 0 };
+            if (!importedSymbolHasValueMeaning && usagePosition !== undefined) {
+                const scriptKind = 'scriptKind' in sourceFile
+                    ? sourceFile.scriptKind
+                    : host.getScriptKind?.(sourceFile.fileName);
+                const isJs = scriptKind !== undefined
+                    ? scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX
+                    : hasJSFileExtension(sourceFile.fileName);
+                if (isJs) {
+                    // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
+                    return { kind: ImportFixKind.JsdocTypeImport, moduleSpecifierKind, moduleSpecifier, usagePosition, exportInfo, isReExport: i > 0 };
+                }
             }
             const importKind = getImportKind(sourceFile, exportInfo.exportKind, program);
             let qualification: Qualification | undefined;
