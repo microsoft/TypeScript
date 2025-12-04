@@ -57,7 +57,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 114
+//// [/user/username/projects/myproject/main.js] Inode:: 116
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
@@ -113,7 +113,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that introduces error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 115
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 117
 export function foo2(): string;
 
 
@@ -162,7 +162,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":115} *new*
+  {"inode":117} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -203,7 +203,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 116
 
 Timeout callback:: count: 0
 9: timerToInvalidateFailedLookupResolutions *deleted*
@@ -237,7 +237,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 116
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 118
 export function foo(): string;
 
 
@@ -286,7 +286,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":116} *new*
+  {"inode":118} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -294,7 +294,7 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":115}
+  {"inode":117}
 
 Timeout callback:: count: 2
 16: timerToUpdateProgram *new*
@@ -317,7 +317,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 116
 
 Timeout callback:: count: 0
 18: timerToInvalidateFailedLookupResolutions *deleted*
