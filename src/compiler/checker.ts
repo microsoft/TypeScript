@@ -23110,7 +23110,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 for (const constituent of (target as UnionType).types) {
                                     const constituentPropType = getTypeOfPropertyOfType(constituent, prop.escapedName);
                                     if (constituentPropType) {
-                                        forEachType(constituentPropType, t => { targetDiscriminantTypes.push(t); });
+                                        forEachType(constituentPropType, t => {
+                                            targetDiscriminantTypes.push(t);
+                                        });
                                     }
                                 }
                                 const targetDiscriminantUnion = getUnionType(targetDiscriminantTypes);
