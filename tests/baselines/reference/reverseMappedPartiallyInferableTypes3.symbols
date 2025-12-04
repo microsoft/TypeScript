@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes3.ts] ////
+
+=== reverseMappedPartiallyInferableTypes3.ts ===
+declare function setup<TAction = {}>(arg: {
+>setup : Symbol(setup, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 23))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 37))
+
+  actions?: {
+>actions : Symbol(actions, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 43))
+
+    [K in keyof TAction]: (
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes3.ts, 2, 5))
+>TAction : Symbol(TAction, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 23))
+
+      params: TAction[K],
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 2, 27))
+>TAction : Symbol(TAction, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 23))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes3.ts, 2, 5))
+
+      exec: (arg: TAction) => void,
+>exec : Symbol(exec, Decl(reverseMappedPartiallyInferableTypes3.ts, 3, 25))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes3.ts, 4, 13))
+>TAction : Symbol(TAction, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 23))
+
+    ) => void;
+  };
+}): TAction;
+>TAction : Symbol(TAction, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 23))
+
+const result1 = setup({
+>result1 : Symbol(result1, Decl(reverseMappedPartiallyInferableTypes3.ts, 9, 5))
+>setup : Symbol(setup, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 0))
+
+  actions: {
+>actions : Symbol(actions, Decl(reverseMappedPartiallyInferableTypes3.ts, 9, 23))
+
+    first: (params: { count: number }, enqueue) => {},
+>first : Symbol(first, Decl(reverseMappedPartiallyInferableTypes3.ts, 10, 12))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 11, 12))
+>count : Symbol(count, Decl(reverseMappedPartiallyInferableTypes3.ts, 11, 21))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 11, 38))
+
+    second: (params: { foo: string }, enqueue) => {},
+>second : Symbol(second, Decl(reverseMappedPartiallyInferableTypes3.ts, 11, 54))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 12, 13))
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes3.ts, 12, 22))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 12, 37))
+
+  },
+});
+
+const result2 = setup({
+>result2 : Symbol(result2, Decl(reverseMappedPartiallyInferableTypes3.ts, 16, 5))
+>setup : Symbol(setup, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 0))
+
+  actions: {
+>actions : Symbol(actions, Decl(reverseMappedPartiallyInferableTypes3.ts, 16, 23))
+
+    foo: (params: { count: number }) => {},
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes3.ts, 17, 12))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 18, 10))
+>count : Symbol(count, Decl(reverseMappedPartiallyInferableTypes3.ts, 18, 19))
+
+    first: (params: { count: number }, enqueue) => {},
+>first : Symbol(first, Decl(reverseMappedPartiallyInferableTypes3.ts, 18, 43))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 19, 12))
+>count : Symbol(count, Decl(reverseMappedPartiallyInferableTypes3.ts, 19, 21))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 19, 38))
+
+    second: (params: { foo: string }, enqueue) => {},
+>second : Symbol(second, Decl(reverseMappedPartiallyInferableTypes3.ts, 19, 54))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 20, 13))
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes3.ts, 20, 22))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 20, 37))
+
+  },
+});
+
+const result3 = setup({
+>result3 : Symbol(result3, Decl(reverseMappedPartiallyInferableTypes3.ts, 24, 5))
+>setup : Symbol(setup, Decl(reverseMappedPartiallyInferableTypes3.ts, 0, 0))
+
+  actions: {
+>actions : Symbol(actions, Decl(reverseMappedPartiallyInferableTypes3.ts, 24, 23))
+
+    foo: (params: { count: number }) => {},
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes3.ts, 25, 12))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 26, 10))
+>count : Symbol(count, Decl(reverseMappedPartiallyInferableTypes3.ts, 26, 19))
+
+    first: (params: { count: number }, enqueue: (arg: never) => void) => {},
+>first : Symbol(first, Decl(reverseMappedPartiallyInferableTypes3.ts, 26, 43))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 27, 12))
+>count : Symbol(count, Decl(reverseMappedPartiallyInferableTypes3.ts, 27, 21))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 27, 38))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes3.ts, 27, 49))
+
+    second: (params: { foo: string }, enqueue: (arg: never) => void) => {},
+>second : Symbol(second, Decl(reverseMappedPartiallyInferableTypes3.ts, 27, 76))
+>params : Symbol(params, Decl(reverseMappedPartiallyInferableTypes3.ts, 28, 13))
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes3.ts, 28, 22))
+>enqueue : Symbol(enqueue, Decl(reverseMappedPartiallyInferableTypes3.ts, 28, 37))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes3.ts, 28, 48))
+
+  },
+});
+

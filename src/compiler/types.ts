@@ -6308,6 +6308,7 @@ export interface NodeLinks {
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
     instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
     nonExistentPropCheckCache?: Set<string>;
+    nonContextSensitiveType?: Type;
 }
 
 /** @internal */
@@ -7156,6 +7157,7 @@ export interface InferenceContext {
     outerReturnMapper?: TypeMapper;               // Type mapper for inferences from return types of outer function (if any)
     inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
     intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    reverseMappedScopeNodes?: Set<Node>;
     reverseMappedIntraExpressionInferenceScopeNodes?: Node[];
     reverseMappedIntraExpressionInferenceSites?: IntraExpressionInferenceSite[][];
 }
