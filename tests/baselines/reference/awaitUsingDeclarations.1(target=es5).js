@@ -40,61 +40,72 @@ class C1 {
 }
 
 switch (Math.random()) {
-    case 0:
+    case 0: {
         await using d20 = { async [Symbol.asyncDispose]() {} };
         break;
+    }
 
-    case 1:
+    case 1: {
         await using d21 = { async [Symbol.asyncDispose]() {} };
         break;
+    }
+
+    default: {
+        await using d22 = { async [Symbol.asyncDispose]() {} };
+    }
 }
 
 if (true)
     switch (0) {
-        case 0:
-            await using d22 = { async [Symbol.asyncDispose]() {} };
+        case 0: {
+            await using d23 = { async [Symbol.asyncDispose]() {} };
             break;
+        }
+
+        default: {
+            await using d24 = { async [Symbol.asyncDispose]() {} };
+        }
     }
 
 try {
-    await using d23 = { async [Symbol.asyncDispose]() {} };
-}
-catch {
-    await using d24 = { async [Symbol.asyncDispose]() {} };
-}
-finally {
     await using d25 = { async [Symbol.asyncDispose]() {} };
 }
-
-if (true) {
+catch {
     await using d26 = { async [Symbol.asyncDispose]() {} };
 }
-else {
+finally {
     await using d27 = { async [Symbol.asyncDispose]() {} };
 }
 
-while (true) {
+if (true) {
     await using d28 = { async [Symbol.asyncDispose]() {} };
+}
+else {
+    await using d29 = { async [Symbol.asyncDispose]() {} };
+}
+
+while (true) {
+    await using d30 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 
 do {
-    await using d29 = { async [Symbol.asyncDispose]() {} };
+    await using d31 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 while (true);
 
 for (;;) {
-    await using d30 = { async [Symbol.asyncDispose]() {} };
+    await using d32 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 
 for (const x in {}) {
-    await using d31 = { async [Symbol.asyncDispose]() {} };
+    await using d33 = { async [Symbol.asyncDispose]() {} };
 }
 
 for (const x of []) {
-    await using d32 = { async [Symbol.asyncDispose]() {} };
+    await using d34 = { async [Symbol.asyncDispose]() {} };
 }
 
 export {};
@@ -201,19 +212,19 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
 function af() {
     return __awaiter(this, void 0, void 0, function () {
-        var env_15, d3, e_15, result_15;
+        var env_18, d3, e_18, result_18;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    env_15 = { stack: [], error: void 0, hasError: false };
+                    env_18 = { stack: [], error: void 0, hasError: false };
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, 4, 7]);
-                    d3 = __addDisposableResource(env_15, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                    d3 = __addDisposableResource(env_18, (_a = {}, _a[Symbol.asyncDispose] = function () {
                         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/];
                         }); });
@@ -223,14 +234,14 @@ function af() {
                     _b.sent();
                     return [3 /*break*/, 7];
                 case 3:
-                    e_15 = _b.sent();
-                    env_15.error = e_15;
-                    env_15.hasError = true;
+                    e_18 = _b.sent();
+                    env_18.error = e_18;
+                    env_18.hasError = true;
                     return [3 /*break*/, 7];
                 case 4:
-                    result_15 = __disposeResources(env_15);
-                    if (!result_15) return [3 /*break*/, 6];
-                    return [4 /*yield*/, result_15];
+                    result_18 = __disposeResources(env_18);
+                    if (!result_18) return [3 /*break*/, 6];
+                    return [4 /*yield*/, result_18];
                 case 5:
                     _b.sent();
                     _b.label = 6;
@@ -242,16 +253,16 @@ function af() {
 }
 function ag() {
     return __asyncGenerator(this, arguments, function ag_1() {
-        var env_16, d5, e_16, result_16;
+        var env_19, d5, e_19, result_19;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    env_16 = { stack: [], error: void 0, hasError: false };
+                    env_19 = { stack: [], error: void 0, hasError: false };
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 5, 6, 9]);
-                    d5 = __addDisposableResource(env_16, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                    d5 = __addDisposableResource(env_19, (_a = {}, _a[Symbol.asyncDispose] = function () {
                         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/];
                         }); });
@@ -265,14 +276,14 @@ function ag() {
                     _b.sent();
                     return [3 /*break*/, 9];
                 case 5:
-                    e_16 = _b.sent();
-                    env_16.error = e_16;
-                    env_16.hasError = true;
+                    e_19 = _b.sent();
+                    env_19.error = e_19;
+                    env_19.hasError = true;
                     return [3 /*break*/, 9];
                 case 6:
-                    result_16 = __disposeResources(env_16);
-                    if (!result_16) return [3 /*break*/, 8];
-                    return [4 /*yield*/, __await(result_16)];
+                    result_19 = __disposeResources(env_19);
+                    if (!result_19) return [3 /*break*/, 8];
+                    return [4 /*yield*/, __await(result_19)];
                 case 7:
                     _b.sent();
                     _b.label = 8;
@@ -282,39 +293,39 @@ function ag() {
         });
     });
 }
-var d1, a, C1, env_1;
-var env_2 = { stack: [], error: void 0, hasError: false };
+var d1, a, C1;
+var env_1 = { stack: [], error: void 0, hasError: false };
 try {
-    d1 = __addDisposableResource(env_2, (_a = {}, _a[Symbol.asyncDispose] = function () {
+    d1 = __addDisposableResource(env_1, (_a = {}, _a[Symbol.asyncDispose] = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     }, _a), true);
     a = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var env_17, d6, e_17, result_17;
+        var env_20, d6, e_20, result_20;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    env_17 = { stack: [], error: void 0, hasError: false };
+                    env_20 = { stack: [], error: void 0, hasError: false };
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 2, 3, 6]);
-                    d6 = __addDisposableResource(env_17, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                    d6 = __addDisposableResource(env_20, (_a = {}, _a[Symbol.asyncDispose] = function () {
                         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/];
                         }); });
                     }, _a), true);
                     return [3 /*break*/, 6];
                 case 2:
-                    e_17 = _b.sent();
-                    env_17.error = e_17;
-                    env_17.hasError = true;
+                    e_20 = _b.sent();
+                    env_20.error = e_20;
+                    env_20.hasError = true;
                     return [3 /*break*/, 6];
                 case 3:
-                    result_17 = __disposeResources(env_17);
-                    if (!result_17) return [3 /*break*/, 5];
-                    return [4 /*yield*/, result_17];
+                    result_20 = __disposeResources(env_20);
+                    if (!result_20) return [3 /*break*/, 5];
+                    return [4 /*yield*/, result_20];
                 case 4:
                     _b.sent();
                     _b.label = 5;
@@ -327,30 +338,30 @@ try {
         function C1() {
             var _this = this;
             this.a = function () { return __awaiter(_this, void 0, void 0, function () {
-                var env_18, d7, e_18, result_18;
+                var env_21, d7, e_21, result_21;
                 var _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            env_18 = { stack: [], error: void 0, hasError: false };
+                            env_21 = { stack: [], error: void 0, hasError: false };
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 2, 3, 6]);
-                            d7 = __addDisposableResource(env_18, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                            d7 = __addDisposableResource(env_21, (_a = {}, _a[Symbol.asyncDispose] = function () {
                                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     return [2 /*return*/];
                                 }); });
                             }, _a), true);
                             return [3 /*break*/, 6];
                         case 2:
-                            e_18 = _b.sent();
-                            env_18.error = e_18;
-                            env_18.hasError = true;
+                            e_21 = _b.sent();
+                            env_21.error = e_21;
+                            env_21.hasError = true;
                             return [3 /*break*/, 6];
                         case 3:
-                            result_18 = __disposeResources(env_18);
-                            if (!result_18) return [3 /*break*/, 5];
-                            return [4 /*yield*/, result_18];
+                            result_21 = __disposeResources(env_21);
+                            if (!result_21) return [3 /*break*/, 5];
+                            return [4 /*yield*/, result_21];
                         case 4:
                             _b.sent();
                             _b.label = 5;
@@ -362,16 +373,16 @@ try {
         }
         C1.prototype.am = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var env_19, d13, e_19, result_19;
+                var env_22, d13, e_22, result_22;
                 var _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            env_19 = { stack: [], error: void 0, hasError: false };
+                            env_22 = { stack: [], error: void 0, hasError: false };
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 3, 4, 7]);
-                            d13 = __addDisposableResource(env_19, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                            d13 = __addDisposableResource(env_22, (_a = {}, _a[Symbol.asyncDispose] = function () {
                                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     return [2 /*return*/];
                                 }); });
@@ -381,14 +392,14 @@ try {
                             _b.sent();
                             return [3 /*break*/, 7];
                         case 3:
-                            e_19 = _b.sent();
-                            env_19.error = e_19;
-                            env_19.hasError = true;
+                            e_22 = _b.sent();
+                            env_22.error = e_22;
+                            env_22.hasError = true;
                             return [3 /*break*/, 7];
                         case 4:
-                            result_19 = __disposeResources(env_19);
-                            if (!result_19) return [3 /*break*/, 6];
-                            return [4 /*yield*/, result_19];
+                            result_22 = __disposeResources(env_22);
+                            if (!result_22) return [3 /*break*/, 6];
+                            return [4 /*yield*/, result_22];
                         case 5:
                             _b.sent();
                             _b.label = 6;
@@ -400,16 +411,16 @@ try {
         };
         C1.prototype.ag = function () {
             return __asyncGenerator(this, arguments, function ag_2() {
-                var env_20, d15, e_20, result_20;
+                var env_23, d15, e_23, result_23;
                 var _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            env_20 = { stack: [], error: void 0, hasError: false };
+                            env_23 = { stack: [], error: void 0, hasError: false };
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 5, 6, 9]);
-                            d15 = __addDisposableResource(env_20, (_a = {}, _a[Symbol.asyncDispose] = function () {
+                            d15 = __addDisposableResource(env_23, (_a = {}, _a[Symbol.asyncDispose] = function () {
                                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     return [2 /*return*/];
                                 }); });
@@ -423,14 +434,14 @@ try {
                             _b.sent();
                             return [3 /*break*/, 9];
                         case 5:
-                            e_20 = _b.sent();
-                            env_20.error = e_20;
-                            env_20.hasError = true;
+                            e_23 = _b.sent();
+                            env_23.error = e_23;
+                            env_23.hasError = true;
                             return [3 /*break*/, 9];
                         case 6:
-                            result_20 = __disposeResources(env_20);
-                            if (!result_20) return [3 /*break*/, 8];
-                            return [4 /*yield*/, __await(result_20)];
+                            result_23 = __disposeResources(env_23);
+                            if (!result_23) return [3 /*break*/, 8];
+                            return [4 /*yield*/, __await(result_23)];
                         case 7:
                             _b.sent();
                             _b.label = 8;
@@ -443,140 +454,135 @@ try {
         return C1;
     }());
     {
-        var env_3 = { stack: [], error: void 0, hasError: false };
+        var env_2 = { stack: [], error: void 0, hasError: false };
         try {
-            var d19 = __addDisposableResource(env_3, (_b = {}, _b[Symbol.asyncDispose] = function () {
+            var d19 = __addDisposableResource(env_2, (_b = {}, _b[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
             }, _b), true);
         }
         catch (e_1) {
-            env_3.error = e_1;
-            env_3.hasError = true;
+            env_2.error = e_1;
+            env_2.hasError = true;
         }
         finally {
-            var result_1 = __disposeResources(env_3);
+            var result_1 = __disposeResources(env_2);
             if (result_1)
                 await result_1;
         }
     }
-    env_1 = { stack: [], error: void 0, hasError: false };
-    try {
-        switch (Math.random()) {
-            case 0:
-                var d20 = __addDisposableResource(env_1, (_c = {}, _c[Symbol.asyncDispose] = function () {
+    switch (Math.random()) {
+        case 0: {
+            var env_3 = { stack: [], error: void 0, hasError: false };
+            try {
+                var d20 = __addDisposableResource(env_3, (_c = {}, _c[Symbol.asyncDispose] = function () {
                     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                         return [2 /*return*/];
                     }); });
                 }, _c), true);
                 break;
-            case 1:
-                var d21 = __addDisposableResource(env_1, (_d = {}, _d[Symbol.asyncDispose] = function () {
+            }
+            catch (e_2) {
+                env_3.error = e_2;
+                env_3.hasError = true;
+            }
+            finally {
+                var result_2 = __disposeResources(env_3);
+                if (result_2)
+                    await result_2;
+            }
+        }
+        case 1: {
+            var env_4 = { stack: [], error: void 0, hasError: false };
+            try {
+                var d21 = __addDisposableResource(env_4, (_d = {}, _d[Symbol.asyncDispose] = function () {
                     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                         return [2 /*return*/];
                     }); });
                 }, _d), true);
                 break;
+            }
+            catch (e_3) {
+                env_4.error = e_3;
+                env_4.hasError = true;
+            }
+            finally {
+                var result_3 = __disposeResources(env_4);
+                if (result_3)
+                    await result_3;
+            }
+        }
+        default: {
+            var env_5 = { stack: [], error: void 0, hasError: false };
+            try {
+                var d22 = __addDisposableResource(env_5, (_e = {}, _e[Symbol.asyncDispose] = function () {
+                    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        return [2 /*return*/];
+                    }); });
+                }, _e), true);
+            }
+            catch (e_4) {
+                env_5.error = e_4;
+                env_5.hasError = true;
+            }
+            finally {
+                var result_4 = __disposeResources(env_5);
+                if (result_4)
+                    await result_4;
+            }
         }
     }
-    catch (e_2) {
-        env_1.error = e_2;
-        env_1.hasError = true;
-    }
-    finally {
-        var result_2 = __disposeResources(env_1);
-        if (result_2)
-            await result_2;
-    }
-    if (true) {
-        var env_4 = { stack: [], error: void 0, hasError: false };
-        try {
-            switch (0) {
-                case 0:
-                    var d22 = __addDisposableResource(env_4, (_e = {}, _e[Symbol.asyncDispose] = function () {
+    if (true)
+        switch (0) {
+            case 0: {
+                var env_6 = { stack: [], error: void 0, hasError: false };
+                try {
+                    var d23 = __addDisposableResource(env_6, (_f = {}, _f[Symbol.asyncDispose] = function () {
                         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/];
                         }); });
-                    }, _e), true);
+                    }, _f), true);
                     break;
+                }
+                catch (e_5) {
+                    env_6.error = e_5;
+                    env_6.hasError = true;
+                }
+                finally {
+                    var result_5 = __disposeResources(env_6);
+                    if (result_5)
+                        await result_5;
+                }
+            }
+            default: {
+                var env_7 = { stack: [], error: void 0, hasError: false };
+                try {
+                    var d24 = __addDisposableResource(env_7, (_g = {}, _g[Symbol.asyncDispose] = function () {
+                        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            return [2 /*return*/];
+                        }); });
+                    }, _g), true);
+                }
+                catch (e_6) {
+                    env_7.error = e_6;
+                    env_7.hasError = true;
+                }
+                finally {
+                    var result_6 = __disposeResources(env_7);
+                    if (result_6)
+                        await result_6;
+                }
             }
         }
-        catch (e_3) {
-            env_4.error = e_3;
-            env_4.hasError = true;
-        }
-        finally {
-            var result_3 = __disposeResources(env_4);
-            if (result_3)
-                await result_3;
-        }
-    }
     try {
-        var env_5 = { stack: [], error: void 0, hasError: false };
+        var env_8 = { stack: [], error: void 0, hasError: false };
         try {
-            var d23 = __addDisposableResource(env_5, (_f = {}, _f[Symbol.asyncDispose] = function () {
-                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    return [2 /*return*/];
-                }); });
-            }, _f), true);
-        }
-        catch (e_4) {
-            env_5.error = e_4;
-            env_5.hasError = true;
-        }
-        finally {
-            var result_4 = __disposeResources(env_5);
-            if (result_4)
-                await result_4;
-        }
-    }
-    catch (_r) {
-        var env_6 = { stack: [], error: void 0, hasError: false };
-        try {
-            var d24 = __addDisposableResource(env_6, (_g = {}, _g[Symbol.asyncDispose] = function () {
-                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    return [2 /*return*/];
-                }); });
-            }, _g), true);
-        }
-        catch (e_5) {
-            env_6.error = e_5;
-            env_6.hasError = true;
-        }
-        finally {
-            var result_5 = __disposeResources(env_6);
-            if (result_5)
-                await result_5;
-        }
-    }
-    finally {
-        var env_7 = { stack: [], error: void 0, hasError: false };
-        try {
-            var d25 = __addDisposableResource(env_7, (_h = {}, _h[Symbol.asyncDispose] = function () {
+            var d25 = __addDisposableResource(env_8, (_h = {}, _h[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
             }, _h), true);
-        }
-        catch (e_6) {
-            env_7.error = e_6;
-            env_7.hasError = true;
-        }
-        finally {
-            var result_6 = __disposeResources(env_7);
-            if (result_6)
-                await result_6;
-        }
-    }
-    if (true) {
-        var env_8 = { stack: [], error: void 0, hasError: false };
-        try {
-            var d26 = __addDisposableResource(env_8, (_j = {}, _j[Symbol.asyncDispose] = function () {
-                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    return [2 /*return*/];
-                }); });
-            }, _j), true);
         }
         catch (e_7) {
             env_8.error = e_7;
@@ -588,14 +594,14 @@ try {
                 await result_7;
         }
     }
-    else {
+    catch (_t) {
         var env_9 = { stack: [], error: void 0, hasError: false };
         try {
-            var d27 = __addDisposableResource(env_9, (_k = {}, _k[Symbol.asyncDispose] = function () {
+            var d26 = __addDisposableResource(env_9, (_j = {}, _j[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _k), true);
+            }, _j), true);
         }
         catch (e_8) {
             env_9.error = e_8;
@@ -607,15 +613,14 @@ try {
                 await result_8;
         }
     }
-    while (true) {
+    finally {
         var env_10 = { stack: [], error: void 0, hasError: false };
         try {
-            var d28 = __addDisposableResource(env_10, (_l = {}, _l[Symbol.asyncDispose] = function () {
+            var d27 = __addDisposableResource(env_10, (_k = {}, _k[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _l), true);
-            break;
+            }, _k), true);
         }
         catch (e_9) {
             env_10.error = e_9;
@@ -627,15 +632,14 @@ try {
                 await result_9;
         }
     }
-    do {
+    if (true) {
         var env_11 = { stack: [], error: void 0, hasError: false };
         try {
-            var d29 = __addDisposableResource(env_11, (_m = {}, _m[Symbol.asyncDispose] = function () {
+            var d28 = __addDisposableResource(env_11, (_l = {}, _l[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _m), true);
-            break;
+            }, _l), true);
         }
         catch (e_10) {
             env_11.error = e_10;
@@ -646,16 +650,15 @@ try {
             if (result_10)
                 await result_10;
         }
-    } while (true);
-    for (;;) {
+    }
+    else {
         var env_12 = { stack: [], error: void 0, hasError: false };
         try {
-            var d30 = __addDisposableResource(env_12, (_o = {}, _o[Symbol.asyncDispose] = function () {
+            var d29 = __addDisposableResource(env_12, (_m = {}, _m[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _o), true);
-            break;
+            }, _m), true);
         }
         catch (e_11) {
             env_12.error = e_11;
@@ -667,14 +670,15 @@ try {
                 await result_11;
         }
     }
-    for (var x in {}) {
+    while (true) {
         var env_13 = { stack: [], error: void 0, hasError: false };
         try {
-            var d31 = __addDisposableResource(env_13, (_p = {}, _p[Symbol.asyncDispose] = function () {
+            var d30 = __addDisposableResource(env_13, (_o = {}, _o[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _p), true);
+            }, _o), true);
+            break;
         }
         catch (e_12) {
             env_13.error = e_12;
@@ -686,15 +690,15 @@ try {
                 await result_12;
         }
     }
-    for (var _i = 0, _s = []; _i < _s.length; _i++) {
-        var x = _s[_i];
+    do {
         var env_14 = { stack: [], error: void 0, hasError: false };
         try {
-            var d32 = __addDisposableResource(env_14, (_q = {}, _q[Symbol.asyncDispose] = function () {
+            var d31 = __addDisposableResource(env_14, (_p = {}, _p[Symbol.asyncDispose] = function () {
                 return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/];
                 }); });
-            }, _q), true);
+            }, _p), true);
+            break;
         }
         catch (e_13) {
             env_14.error = e_13;
@@ -705,15 +709,74 @@ try {
             if (result_13)
                 await result_13;
         }
+    } while (true);
+    for (;;) {
+        var env_15 = { stack: [], error: void 0, hasError: false };
+        try {
+            var d32 = __addDisposableResource(env_15, (_q = {}, _q[Symbol.asyncDispose] = function () {
+                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [2 /*return*/];
+                }); });
+            }, _q), true);
+            break;
+        }
+        catch (e_14) {
+            env_15.error = e_14;
+            env_15.hasError = true;
+        }
+        finally {
+            var result_14 = __disposeResources(env_15);
+            if (result_14)
+                await result_14;
+        }
+    }
+    for (var x in {}) {
+        var env_16 = { stack: [], error: void 0, hasError: false };
+        try {
+            var d33 = __addDisposableResource(env_16, (_r = {}, _r[Symbol.asyncDispose] = function () {
+                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [2 /*return*/];
+                }); });
+            }, _r), true);
+        }
+        catch (e_15) {
+            env_16.error = e_15;
+            env_16.hasError = true;
+        }
+        finally {
+            var result_15 = __disposeResources(env_16);
+            if (result_15)
+                await result_15;
+        }
+    }
+    for (var _i = 0, _u = []; _i < _u.length; _i++) {
+        var x = _u[_i];
+        var env_17 = { stack: [], error: void 0, hasError: false };
+        try {
+            var d34 = __addDisposableResource(env_17, (_s = {}, _s[Symbol.asyncDispose] = function () {
+                return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [2 /*return*/];
+                }); });
+            }, _s), true);
+        }
+        catch (e_16) {
+            env_17.error = e_16;
+            env_17.hasError = true;
+        }
+        finally {
+            var result_16 = __disposeResources(env_17);
+            if (result_16)
+                await result_16;
+        }
     }
 }
-catch (e_14) {
-    env_2.error = e_14;
-    env_2.hasError = true;
+catch (e_17) {
+    env_1.error = e_17;
+    env_1.hasError = true;
 }
 finally {
-    var result_14 = __disposeResources(env_2);
-    if (result_14)
-        await result_14;
+    var result_17 = __disposeResources(env_1);
+    if (result_17)
+        await result_17;
 }
 export {};

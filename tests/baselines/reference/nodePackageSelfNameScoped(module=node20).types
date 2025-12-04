@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/node/nodePackageSelfNameScoped.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as self from "@scope/package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+=== index.mts ===
+// esm format file
+import * as self from "@scope/package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+=== index.cts ===
+// cjs format file
+import * as self from "@scope/package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+

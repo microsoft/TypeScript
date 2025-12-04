@@ -87,7 +87,7 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
  * `_classThis` (or similar) variable.
  * @internal
  */
-export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
+export function classHasClassThisAssignment(node: ClassLikeDeclaration): boolean {
     return !!node.emitNode?.classThis && some(node.members, isClassThisAssignmentBlock);
 }
 

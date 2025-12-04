@@ -41,14 +41,15 @@ export const enum D {
 >C : D.C
 >  : ^^^
 }
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
     export var x;
 >x : any
+>  : ^^^
 }
-export module N {
+export namespace N {
     export interface I {
     }
 }

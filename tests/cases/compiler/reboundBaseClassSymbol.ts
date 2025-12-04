@@ -1,5 +1,5 @@
 interface A { a: number; }
-module Foo {
+namespace Foo {
     var A = 1;
     interface B extends A { b: string; } 
 }

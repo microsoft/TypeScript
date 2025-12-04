@@ -9,7 +9,7 @@ module M
 >C : C
 >  : ^
 
-  export module C {
+  export namespace C {
 >C : typeof M.C
 >  : ^^^^^^^^^^
 

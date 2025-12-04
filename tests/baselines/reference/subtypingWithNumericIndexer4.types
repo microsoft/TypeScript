@@ -35,7 +35,7 @@ class B extends A {
 >  : ^^^^^^
 }
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 >         : ^^^^^^^^^^^^^^^
 

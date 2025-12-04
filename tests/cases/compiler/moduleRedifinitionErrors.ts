@@ -1,4 +1,4 @@
 class A {
 }
-module A {
+namespace A {
 }

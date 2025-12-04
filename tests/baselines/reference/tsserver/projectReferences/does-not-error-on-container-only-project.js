@@ -1,19 +1,8 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/user/username/projects/container/lib/tsconfig.json]
 {
   "compilerOptions": {
@@ -95,6 +84,20 @@ namespace container {
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 //// [/user/username/projects/container/built/local/lib.js]
 var container;
 (function (container) {
@@ -112,16 +115,16 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
     "../../lib/index.ts"
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
   },
   "root": [
@@ -138,7 +141,7 @@ declare namespace container {
   "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
   "latestChangedDtsFile": "./lib.d.ts",
   "version": "FakeTSVersion",
-  "size": 753
+  "size": 810
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -183,17 +186,17 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
     "./lib.d.ts",
     "../../compositeexec/index.ts"
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
     "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
   },
@@ -211,7 +214,7 @@ declare namespace container {
   "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
   "latestChangedDtsFile": "./compositeExec.d.ts",
   "version": "FakeTSVersion",
-  "size": 915
+  "size": 972
 }
 
 
@@ -223,9 +226,6 @@ Info seq  [hh:mm:ss:mss] request:
           {
             "projectFileName": "/user/username/projects/container/container",
             "rootFiles": [
-              {
-                "fileName": "/a/lib/lib.d.ts"
-              },
               {
                 "fileName": "/user/username/projects/container/lib/tsconfig.json"
               },
@@ -255,7 +255,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/lib/tsconfig.json, currentDirectory: /user/username/projects/container/lib
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -280,7 +280,7 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/lib/tsconfig.
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
@@ -290,11 +290,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\n    export const myConst = 30;\n}\n"
 
 
-	../../../../../a/lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
@@ -328,7 +328,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -365,7 +365,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/exec/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/exec/tsconfig.json, currentDirectory: /user/username/projects/container/exec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -403,12 +403,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\n    export const myConst = 30;\n}\n"
 	/user/username/projects/container/exec/index.ts Text-1 "namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
 
 
-	../../../../../a/lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
@@ -444,7 +444,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -479,7 +479,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/compositeExec/tsconfig.json, currentDirectory: /user/username/projects/container/compositeExec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -519,12 +519,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\n    export const myConst = 30;\n}\n"
 	/user/username/projects/container/compositeExec/index.ts Text-1 "namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
 
 
-	../../../../../a/lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
@@ -560,7 +560,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -597,7 +597,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/tsconfig.json, currentDirectory: /user/username/projects/container
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -736,7 +736,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/container/compositeExec/index.ts: *new*
   {}
@@ -768,7 +768,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 3
         /user/username/projects/container/lib/tsconfig.json
@@ -795,7 +795,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/a/lib/lib.d.ts"
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
       },
       "seq": 2,
       "type": "request"
@@ -813,7 +814,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/a/lib/lib.d.ts"
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
       },
       "seq": 3,
       "type": "request"
@@ -831,8 +833,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+        "file": "/user/username/projects/container/lib/index.ts"
       },
       "seq": 4,
       "type": "request"
@@ -850,8 +851,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+        "file": "/user/username/projects/container/lib/index.ts"
       },
       "seq": 5,
       "type": "request"
@@ -869,7 +869,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/index.ts"
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
       },
       "seq": 6,
       "type": "request"
@@ -887,7 +888,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/index.ts"
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
       },
       "seq": 7,
       "type": "request"
@@ -905,8 +907,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+        "file": "/user/username/projects/container/exec/index.ts"
       },
       "seq": 8,
       "type": "request"
@@ -924,8 +925,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+        "file": "/user/username/projects/container/exec/index.ts"
       },
       "seq": 9,
       "type": "request"
@@ -943,7 +943,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/index.ts"
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
       },
       "seq": 10,
       "type": "request"
@@ -961,7 +962,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/index.ts"
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
       },
       "seq": 11,
       "type": "request"
@@ -979,8 +981,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+        "file": "/user/username/projects/container/compositeExec/index.ts"
       },
       "seq": 12,
       "type": "request"
@@ -998,8 +999,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+        "file": "/user/username/projects/container/compositeExec/index.ts"
       },
       "seq": 13,
       "type": "request"
@@ -1017,7 +1017,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
       "seq": 14,
       "type": "request"
@@ -1035,47 +1036,10 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
       "seq": 15,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/container/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/tsconfig.json"
-      },
-      "seq": 16,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/container/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/tsconfig.json"
-      },
-      "seq": 17,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -1093,7 +1057,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
-      "seq": 18,
+      "seq": 16,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:

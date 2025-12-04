@@ -3,8 +3,7 @@
 // @jsx: react
 // @allowSyntheticDefaultImports: false
 // @module: es2015
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/@types/react/index.d.ts
 ////export = React;
 ////export as namespace React;

@@ -12,7 +12,7 @@ declare namespace JSX {
 class foundFirst { }
 class Other {}
 
-module Dotted {
+namespace Dotted {
 	export class Name { }
 }
 

@@ -25,7 +25,7 @@ interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived
         z: string;
     }
     
-    module Generic {
+    namespace Generic {
         interface Base<T> extends Derived2<T> { // error
                   ~~~~
 !!! error TS2310: Type 'Base<T>' recursively references itself as a base type.

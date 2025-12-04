@@ -1,4 +1,4 @@
-export module mne {
+export namespace mne {
     export class class1 {
         public prop1 = 0;
     }

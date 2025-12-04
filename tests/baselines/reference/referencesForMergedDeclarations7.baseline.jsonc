@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     <|export interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Bar|] { }|>
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
@@ -13,7 +13,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
   // interface Foo { }
-  // module Foo {
+  // namespace Foo {
   //     export interface /*FIND ALL REFS*/Bar { }
   //     export module Bar { export interface Baz { } }
   //     <|export function [|Bar|]() { }|>
@@ -83,7 +83,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface Bar { }
 //     <|export module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Bar|] { export interface Baz { } }|>
 //     export function Bar() { }
@@ -95,7 +95,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
   // interface Foo { }
-  // module Foo {
+  // namespace Foo {
   //     export interface Bar { }
   //     export module /*FIND ALL REFS*/Bar { export interface Baz { } }
   //     <|export function [|Bar|]() { }|>
@@ -141,7 +141,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     <|export function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Bar|]() { }|>
@@ -153,7 +153,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
   // interface Foo { }
-  // module Foo {
+  // namespace Foo {
   //     export interface Bar { }
   //     export module Bar { export interface Baz { } }
   //     <|export function /*FIND ALL REFS*/[|Bar|]() { }|>
@@ -243,7 +243,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     <|export interface [|{| isWriteAccess: true |}Bar|] { }|>
 //     <|export module [|{| isWriteAccess: true |}Bar|] { export interface Baz { } }|>
 //     <|export function [|{| isWriteAccess: true |}Bar|]() { }|>
@@ -255,7 +255,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations7.ts ===
   // interface Foo { }
-  // module Foo {
+  // namespace Foo {
   //     export interface Bar { }
   //     export module Bar { export interface Baz { } }
   //     <|export function [|Bar|]() { }|>

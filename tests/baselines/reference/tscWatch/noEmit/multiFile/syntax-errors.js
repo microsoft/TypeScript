@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello
@@ -10,8 +10,7 @@ const a = "hello
   }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -26,12 +25,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p /home/src/projects/project -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -48,11 +47,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
 /home/src/projects/project/a.ts: *new*
   {}
 /home/src/projects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -64,13 +63,12 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -109,21 +107,20 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -163,13 +160,12 @@ Program root files: [
   "/home/src/projects/project/a.ts"
 ]
 Program options: {
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -212,13 +208,12 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -246,7 +241,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -262,13 +257,12 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -299,7 +293,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -318,13 +312,12 @@ Program root files: [
   "/home/src/projects/project/a.ts"
 ]
 Program options: {
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -358,7 +351,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -374,13 +367,12 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::

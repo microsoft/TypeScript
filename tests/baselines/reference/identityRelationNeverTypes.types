@@ -46,21 +46,21 @@ function f1(state: State<{ foo: number }>) {
 >state.matches('a') : boolean
 >                   : ^^^^^^^
 >state.matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
->              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^              ^^^^^^^      ^^^             ^^^   
+>              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >state : State<{ foo: number; }>
 >      : ^^^^^^^^^^^^^      ^^^^
 >matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
->        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^              ^^^^^^^      ^^^             ^^^   
+>        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >'a' : "a"
 >    : ^^^
 >state.matches('a.b') : boolean
 >                     : ^^^^^^^
 >state.matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
->              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^              ^^^^^^^      ^^^             ^^^   
+>              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >state : State<{ foo: number; }> & { value: "a"; }
 >      : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
->        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^              ^^^^^^^      ^^^             ^^^   
+>        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >'a.b' : "a.b"
 >      : ^^^^^
 

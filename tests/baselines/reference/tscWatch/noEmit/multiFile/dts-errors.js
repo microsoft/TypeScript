@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -11,8 +11,7 @@ const a = class { private p = 10; };
   }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,17 +26,17 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p /home/src/projects/project -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
@@ -54,11 +53,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
 /home/src/projects/project/a.ts: *new*
   {}
 /home/src/projects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -71,21 +70,20 @@ Program root files: [
 Program options: {
   "declaration": true,
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -121,21 +119,21 @@ Program root files: [
 Program options: {
   "declaration": true,
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -181,13 +179,12 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -232,13 +229,12 @@ Program root files: [
 Program options: {
   "declaration": true,
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -266,12 +262,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
@@ -288,21 +284,21 @@ Program root files: [
 Program options: {
   "declaration": true,
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -329,12 +325,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
@@ -359,13 +355,12 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -398,12 +393,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
@@ -420,13 +415,12 @@ Program root files: [
 Program options: {
   "declaration": true,
   "noEmit": true,
-  "project": "/home/src/projects/project",
   "watch": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::

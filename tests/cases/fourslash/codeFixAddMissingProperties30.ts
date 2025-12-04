@@ -9,7 +9,6 @@
 ////}
 ////[|f([{}])|]
 
-debugger;
 verify.codeFix({
     index: 0,
     description: ts.Diagnostics.Add_missing_properties.message,

@@ -477,16 +477,16 @@
 // === findRenameLocations ===
 // === /a.ts ===
 // <|type /*RENAME*/[|TRENAME|] = number;|>
-// namespace T {
+// <|namespace [|TRENAME|] {
 //     export type U = string;
-// }
+// }|>
 // <|export = [|TRENAME|];|>
 
 
 
 // === findRenameLocations ===
 // === /a.ts ===
-// type T = number;
+// <|type [|TRENAME|] = number;|>
 // <|namespace /*RENAME*/[|TRENAME|] {
 //     export type U = string;
 // }|>

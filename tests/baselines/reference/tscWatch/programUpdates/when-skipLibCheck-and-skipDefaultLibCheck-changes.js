@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 interface Document {
@@ -13,8 +13,7 @@ interface Document {
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -25,19 +24,21 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 interface Document {
     readonly fullscreen: boolean;
 }
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m13[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
@@ -65,7 +66,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -88,17 +89,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 
@@ -153,12 +154,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
 
 No shapes updated in the builder::
@@ -192,6 +193,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+
+[7m14[0m     readonly fullscreen: boolean;
+[7m  [0m [91m             ~~~~~~~~~~[0m
+
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m2[0m     fullscreen: boolean;
@@ -202,7 +208,7 @@ Output::
 [7m2[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -219,12 +225,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
 
 No shapes updated in the builder::
@@ -254,9 +260,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m13[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
@@ -285,12 +291,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -323,6 +328,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+
+[7m14[0m     readonly fullscreen: boolean;
+[7m  [0m [91m             ~~~~~~~~~~[0m
+
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m2[0m     fullscreen: boolean;
@@ -333,7 +343,7 @@ Output::
 [7m2[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -350,12 +360,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -410,12 +419,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
 
 No shapes updated in the builder::
@@ -445,9 +454,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
-[7m13[0m     readonly fullscreen: boolean;
+[7m14[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
@@ -476,12 +485,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
 
 No shapes updated in the builder::

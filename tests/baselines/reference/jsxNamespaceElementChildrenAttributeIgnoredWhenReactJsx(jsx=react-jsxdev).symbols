@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/jsxNamespaceElementChildrenAttributeIgnoredWhenReactJsx.tsx] ////
+
+=== /jsx.d.ts ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsx.d.ts, 0, 0))
+
+  interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsx.d.ts, 0, 23))
+
+    h1: { children: string }
+>h1 : Symbol(IntrinsicElements.h1, Decl(jsx.d.ts, 1, 31))
+>children : Symbol(children, Decl(jsx.d.ts, 2, 9))
+  }
+
+  type Element = string;
+>Element : Symbol(Element, Decl(jsx.d.ts, 3, 3))
+
+  interface ElementChildrenAttribute {
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsx.d.ts, 5, 24))
+
+    offspring: any;
+>offspring : Symbol(ElementChildrenAttribute.offspring, Decl(jsx.d.ts, 7, 38))
+  }
+}
+
+=== /test.tsx ===
+const Title = (props: { children: string }) => <h1>{props.children}</h1>;
+>Title : Symbol(Title, Decl(test.tsx, 0, 5))
+>props : Symbol(props, Decl(test.tsx, 0, 15))
+>children : Symbol(children, Decl(test.tsx, 0, 23))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(jsx.d.ts, 1, 31))
+>props.children : Symbol(children, Decl(test.tsx, 0, 23))
+>props : Symbol(props, Decl(test.tsx, 0, 15))
+>children : Symbol(children, Decl(test.tsx, 0, 23))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(jsx.d.ts, 1, 31))
+
+<Title>Hello, world!</Title>;
+>Title : Symbol(Title, Decl(test.tsx, 0, 5))
+>Title : Symbol(Title, Decl(test.tsx, 0, 5))
+
+const Wrong = (props: { offspring: string }) => <h1>{props.offspring}</h1>;
+>Wrong : Symbol(Wrong, Decl(test.tsx, 4, 5))
+>props : Symbol(props, Decl(test.tsx, 4, 15))
+>offspring : Symbol(offspring, Decl(test.tsx, 4, 23))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(jsx.d.ts, 1, 31))
+>props.offspring : Symbol(offspring, Decl(test.tsx, 4, 23))
+>props : Symbol(props, Decl(test.tsx, 4, 15))
+>offspring : Symbol(offspring, Decl(test.tsx, 4, 23))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(jsx.d.ts, 1, 31))
+
+<Wrong>Byebye, world!</Wrong>
+>Wrong : Symbol(Wrong, Decl(test.tsx, 4, 5))
+>Wrong : Symbol(Wrong, Decl(test.tsx, 4, 5))
+
+=== /jsx/jsx-runtime.ts ===
+
+export {};
+=== /jsx/jsx-dev-runtime.ts ===
+
+export {};
+

@@ -1,7 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: node_modules/use-query/package.json
 ////{
 ////  "name": "use-query",

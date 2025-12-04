@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @allowSyntheticDefaultImports: false
 // @esModuleInterop: false
 
 // @Filename: /foo.ts

@@ -5,7 +5,7 @@ function foo() {}
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
-module foo {
+namespace foo {
     const enum E { X }
 >E : E
 >  : ^

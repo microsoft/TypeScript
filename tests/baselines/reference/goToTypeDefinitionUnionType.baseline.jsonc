@@ -8,7 +8,7 @@
 //     x;
 // }|>
 // 
-// module M {
+// namespace M {
 //     <|export interface [|{| defId: 2 |}I|] {
 //         y;
 //     }|>

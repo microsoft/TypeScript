@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/extendsTag6.ts] ////
+
+=== foo.js ===
+/**
+ * @constructor
+ */
+class A {
+>A : A
+>  : ^
+
+    constructor() {}
+}
+
+/**
+ * @extends { A }
+ * @constructor
+ */
+class B extends A {
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+    constructor() {
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof A
+>      : ^^^^^^^^
+    }
+}
+

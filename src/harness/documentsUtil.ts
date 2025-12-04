@@ -22,7 +22,7 @@ export class TextDocument {
         return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
     }
 
-    public static fromTestFile(file: Harness.Compiler.TestFile) {
+    public static fromTestFile(file: Harness.Compiler.TestFile): TextDocument {
         return new TextDocument(
             file.unitName,
             file.content,
@@ -31,7 +31,7 @@ export class TextDocument {
         );
     }
 
-    public asTestFile() {
+    public asTestFile(): Harness.Compiler.TestFile {
         return this._testFile || (this._testFile = {
             unitName: this.file,
             content: this.text,
@@ -72,8 +72,8 @@ export class SourceMap {
     public readonly mappings: readonly Mapping[] = [];
     public readonly names: readonly string[] | undefined;
 
-    private static readonly _mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;
-    private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/mig;
+    private static readonly _mappingRegExp = /([A-Z0-9+/]+),?|(;)|./gi;
+    private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/gim;
     private static readonly _dataURLRegExp = /^data:application\/json;base64,([a-z0-9+/=]+)$/i;
     private static readonly _base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -140,7 +140,7 @@ export class SourceMap {
         this.mappings = mappings;
     }
 
-    public static getUrl(text: string) {
+    public static getUrl(text: string): string | undefined {
         let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         let lastMatch: RegExpExecArray | undefined;
         while (match = SourceMap._sourceMappingURLRegExp.exec(text)) {
@@ -149,7 +149,7 @@ export class SourceMap {
         return lastMatch ? lastMatch[1] : undefined;
     }
 
-    public static fromUrl(url: string) {
+    public static fromUrl(url: string): SourceMap | undefined {
         const match = SourceMap._dataURLRegExp.exec(url);
         return match ? new SourceMap(/*mapFile*/ undefined, ts.sys.base64decode!(match[1])) : undefined;
     }

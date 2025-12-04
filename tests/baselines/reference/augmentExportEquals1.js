@@ -19,19 +19,14 @@ import "./file2";
 let a: x.A; // should not work
 
 //// [file1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var x = 1;
-    return x;
-});
+"use strict";
+var x = 1;
+module.exports = x;
 //// [file2.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [file3.js]
-define(["require", "exports", "./file2"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a; // should not work
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("./file2");
+var a; // should not work

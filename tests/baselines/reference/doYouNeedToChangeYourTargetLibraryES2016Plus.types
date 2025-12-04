@@ -120,8 +120,8 @@ const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
 >        : ^^^
 >add : any
 >    : ^^^
->new Uint8Array(0) : Uint8Array
->                  : ^^^^^^^^^^
+>new Uint8Array(0) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0

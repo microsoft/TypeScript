@@ -9,7 +9,7 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 }
 
-module M {
+namespace M {
     export const enum NonTopLevelConstEnum { X }
 }
 

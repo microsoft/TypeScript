@@ -129,7 +129,7 @@ var f = new Foo();
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 >AmbientMod : typeof AmbientMod
 >           : ^^^^^^^^^^^^^^^^^
 
