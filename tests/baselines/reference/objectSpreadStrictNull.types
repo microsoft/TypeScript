@@ -173,7 +173,7 @@ const m = { title: "The Matrix", yearReleased: 1999 };
 const x: Movie = { ...m, title: undefined };
 >x : Movie
 >  : ^^^^^
->{ ...m, title: undefined } : { title: undefined; yearReleased: number; }
+>{ ...m, title: undefined } : { yearReleased: number; title: undefined; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : { title: string; yearReleased: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

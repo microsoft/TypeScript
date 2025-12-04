@@ -71,7 +71,7 @@ function area(s: Shape): number {
 >  : ^^^^^
 
     switch(s['dash-ok']) {
->s['dash-ok'] : "square" | "rectangle" | "circle"
+>s['dash-ok'] : "circle" | "rectangle" | "square"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
@@ -148,7 +148,7 @@ function subarea(s: Subshape): number {
 >  : ^^^^^^^^
 
     switch(s[0]["sub"].under["shape"]["dash-ok"]) {
->s[0]["sub"].under["shape"]["dash-ok"] : "square" | "rectangle" | "circle"
+>s[0]["sub"].under["shape"]["dash-ok"] : "circle" | "rectangle" | "square"
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s[0]["sub"].under["shape"] : Shape
 >                           : ^^^^^

@@ -30,7 +30,7 @@ void Symbol.toPrimitive;
 >            : ^^^^^^^^^^^^^
 
 typeof Symbol.toStringTag;
->typeof Symbol.toStringTag : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof Symbol.toStringTag : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
 >                   : ^^^^^^^^^^^^^

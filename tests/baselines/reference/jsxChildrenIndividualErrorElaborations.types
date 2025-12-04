@@ -194,7 +194,7 @@ type Cb = (x: number) => string;
 
 interface PropsMixed {
   children: Cb | Cb[];
->children : Cb | Cb[]
+>children : Cb[] | Cb
 >         : ^^^^^^^^^
 }
 

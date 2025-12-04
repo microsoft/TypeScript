@@ -21,5 +21,5 @@
 ////   },
 //// });
 
-verify.completions({ marker: ["ts"], exact: ["foo", "bar"] });
+verify.completions({ marker: ["ts"], exact: ["bar", "foo"] });
 verify.completions({ marker: ["ts2"], includes: ['"foo"', '"bar"'], isNewIdentifierLocation: false });

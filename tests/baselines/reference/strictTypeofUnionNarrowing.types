@@ -14,7 +14,7 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >                                                           : ^^^^^^
 >typeof anything === "string" : boolean
 >                             : ^^^^^^^
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString(): string; } | undefined
 >         : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
@@ -43,7 +43,7 @@ function stringify2(anything: {} | undefined): string {
 >                                                           : ^^^^^^
 >typeof anything === "string" : boolean
 >                             : ^^^^^^^
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : {} | undefined
 >         : ^^^^^^^^^^^^^^
@@ -72,7 +72,7 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 >                                                           : ^^^^^^
 >typeof anything === "string" : boolean
 >                             : ^^^^^^^
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : unknown
 >         : ^^^^^^^
@@ -103,7 +103,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >                                                           : ^^^^^^
 >typeof anything === "string" : boolean
 >                             : ^^^^^^^
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString?(): string; } | undefined
 >         : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^

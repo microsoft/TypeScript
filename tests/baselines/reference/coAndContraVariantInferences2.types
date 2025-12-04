@@ -305,7 +305,7 @@ declare function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, te
 function bar(node: Identifier | FunctionDeclaration) {
 >bar : (node: Identifier | FunctionDeclaration) => void
 >    : ^    ^^                                ^^^^^^^^^
->node : Identifier | FunctionDeclaration
+>node : FunctionDeclaration | Identifier
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const a = tryCast(node, isExpression);  // tryCast<Expression, Node>
@@ -315,7 +315,7 @@ function bar(node: Identifier | FunctionDeclaration) {
 >                            : ^^^^^^^^^^
 >tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
 >        : ^    ^^^^^^^^^   ^^   ^^^^^^^^     ^^               ^^    ^^                             ^^^^^    
->node : Identifier | FunctionDeclaration
+>node : FunctionDeclaration | Identifier
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isExpression : (node: Node) => node is Expression
 >             : ^    ^^    ^^^^^                  

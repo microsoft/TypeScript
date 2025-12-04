@@ -229,11 +229,11 @@ class C1 extends A {
 >     : ^^^^
 
             let e1 = { w: !!true ? super() : 0 };
->e1 : { w: number | void; }
+>e1 : { w: void | number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^
->{ w: !!true ? super() : 0 } : { w: number | void; }
+>{ w: !!true ? super() : 0 } : { w: void | number; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^
->w : number | void
+>w : void | number
 >  : ^^^^^^^^^^^^^
 >!!true ? super() : 0 : void | 0
 >                     : ^^^^^^^^

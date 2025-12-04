@@ -372,7 +372,7 @@ function isMobile() {
 >                                                        : ^^^^^^^^^^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^^
 >typeof window !== 'undefined' : boolean
 >                              : ^^^^^^^
->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^

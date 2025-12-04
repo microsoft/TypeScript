@@ -33,7 +33,7 @@ class Property {
 >         : ^^^^^^^^
 
     public parent: Module | Class;
->parent : Module | Class
+>parent : Class | Module
 >       : ^^^^^^^^^^^^^^
 }
 
@@ -42,10 +42,10 @@ var t: Class | Property;
 >  : ^^^^^^^^^^^^^^^^
 
 t.parent;
->t.parent : Module | Class | Namespace
+>t.parent : Class | Module | Namespace
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Class | Property
 >  : ^^^^^^^^^^^^^^^^
->parent : Module | Class | Namespace
+>parent : Class | Module | Namespace
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

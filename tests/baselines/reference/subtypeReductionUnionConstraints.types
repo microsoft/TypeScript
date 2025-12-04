@@ -59,7 +59,7 @@ declare function isBar(node: Node): node is BarNode;
 export function visitNodes<T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T): void {
 >visitNodes : <T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T) => void
 >           : ^ ^^^^^^^^^    ^^    ^^               ^^         ^^                                 ^^^^^    
->node : Node | Document
+>node : Document | Node
 >     : ^^^^^^^^^^^^^^^
 >predicate : (testNode: Node) => testNode is T
 >          : ^        ^^    ^^^^^             
@@ -73,7 +73,7 @@ export function visitNodes<T extends Node>(node: Document | Node, predicate: (te
 >             : ^^^^^^^
 >isNode : (node: unknown) => node is Node
 >       : ^    ^^       ^^^^^            
->node : Node | Document
+>node : Document | Node
 >     : ^^^^^^^^^^^^^^^
 >predicate(node) : boolean
 >                : ^^^^^^^
@@ -91,7 +91,7 @@ export function visitNodes<T extends Node>(node: Document | Node, predicate: (te
 >             : ^^^^^^^
 >isNode : (node: unknown) => node is Node
 >       : ^    ^^       ^^^^^            
->node : Node | Document
+>node : Document | Node
 >     : ^^^^^^^^^^^^^^^
 >!isBar(node) : boolean
 >             : ^^^^^^^
@@ -107,7 +107,7 @@ export function visitNodes<T extends Node>(node: Document | Node, predicate: (te
 >      : ^^^^^^
 >node.children : Node[]
 >              : ^^^^^^
->node : FooNode | Document
+>node : Document | FooNode
 >     : ^^^^^^^^^^^^^^^^^^
 >children : Node[]
 >         : ^^^^^^

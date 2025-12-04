@@ -21,7 +21,7 @@ export function prepareConfig({
 
 }: {
   additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
->additionalFiles : Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined
+>additionalFiles : Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 } = {}) {
@@ -67,7 +67,7 @@ export const prepareConfigWithContextualSignature: (param:{
 >      : ^^^^^^^^^^^^^^^^^^^^                                                     ^^^
 
   additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
->additionalFiles : Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined
+>additionalFiles : Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }) => void = ({

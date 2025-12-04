@@ -51,7 +51,7 @@ declare const styled: StyledInterface;
 
 interface BaseProps {
   as?: "select" | "input";
->as : "select" | "input" | undefined
+>as : "input" | "select" | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

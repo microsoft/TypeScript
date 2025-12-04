@@ -67,7 +67,7 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 >                                                    : ^^^^^^^^^^^^^^^^^^
 >typeof input === 'string' : boolean
 >                          : ^^^^^^^
->typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : string | ObservableInput<string>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

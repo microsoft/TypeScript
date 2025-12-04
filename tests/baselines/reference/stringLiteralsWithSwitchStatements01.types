@@ -6,7 +6,7 @@ let x: "foo";
 >  : ^^^^^
 
 let y: "foo" | "bar"; 
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
 switch (x) {
@@ -24,11 +24,11 @@ switch (x) {
 
         break;
     case y:
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
         y;
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
         break;

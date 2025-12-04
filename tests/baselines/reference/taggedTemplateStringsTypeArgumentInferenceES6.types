@@ -541,9 +541,9 @@ interface A92 {
 }
 
 var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
->a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >              : ^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
@@ -575,7 +575,7 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >   : ^^
 
 var a9e: {};
->a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type

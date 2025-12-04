@@ -4,6 +4,6 @@
 ////type T = Pick<Foo, "[|/**/|]">;
 
 verify.completions({ marker: "", exact: [
+    { name: "bar", replacementSpan: test.ranges()[0] },
     { name: "foo", replacementSpan: test.ranges()[0] },
-    { name: "bar", replacementSpan: test.ranges()[0] }
 ] });

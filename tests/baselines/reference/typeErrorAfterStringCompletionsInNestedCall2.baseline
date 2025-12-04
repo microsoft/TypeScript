@@ -113,7 +113,7 @@ Semantic Diagnostics for file '/tests/cases/fourslash/typeErrorAfterStringComple
 !!! error TS2322:           Type '{ type: "BARx"; }' is not assignable to type '{ type: "BAR"; }'.
 !!! error TS2322:             Types of property 'type' are incompatible.
 !!! error TS2322:               Type '"BARx"' is not assignable to type '"BAR"'.
-!!! related TS6500 /tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts:14:7: The expected type comes from property 'FOO' which is declared here on type '{ FOO?: ActionFunction<{ type: "FOO"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; BAR?: ActionFunction<{ type: "BAR"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; }'
+!!! related TS6500 /tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts:14:7: The expected type comes from property 'FOO' which is declared here on type '{ BAR?: ActionFunction<{ type: "BAR"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; FOO?: ActionFunction<{ type: "FOO"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; }'
           return {
             type: "BAR" as const,
           };

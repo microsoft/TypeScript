@@ -1208,7 +1208,7 @@ type Record1 = {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   jump: [number, 'up' | 'down'];
->jump : [number, "up" | "down"]
+>jump : [number, "down" | "up"]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
   stop: string;

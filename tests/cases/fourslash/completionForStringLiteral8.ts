@@ -4,4 +4,4 @@
 ////let a: As;
 ////if (a === '/**/
 
-verify.completions({ marker: "", exact: ["arf", "abacus", "abaddon"] });
+verify.completions({ marker: "", exact: ["abacus", "abaddon", "arf"] });

@@ -33,5 +33,5 @@ verify.quickInfos({
     age: number;
     dob: Date;
 })[]`,
-    4: "var c3: {\n    name: string;\n    age: number;\n}[]"
+    4: "var c3: I[]"
 });

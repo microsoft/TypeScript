@@ -49,13 +49,13 @@ export class foo0 {
 export const kBar: unique symbol;
 export class foo0 {
     /**
-     * @type {string}
-     */
-    set bar(value: string | null);
-    get bar(): string | null;
-    /**
      * @protected
      * @type {null | string}
      */
     protected [kBar]: null | string;
+    /**
+     * @type {string}
+     */
+    set bar(value: string | null);
+    get bar(): string | null;
 }

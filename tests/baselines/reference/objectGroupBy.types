@@ -6,9 +6,9 @@ Instantiation count: 2,500
 
 === objectGroupBy.ts ===
 const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
->basic : Partial<Record<"small" | "large", number[]>>
+>basic : Partial<Record<"large" | "small", number[]>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Partial<Record<"small" | "large", number[]>>
+>Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Partial<Record<"large" | "small", number[]>>
 >                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.groupBy : <K extends PropertyKey, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Partial<Record<K, T[]>>
 >               : ^ ^^^^^^^^^           ^^ ^^     ^^           ^^           ^^                             ^^^^^                       
@@ -24,11 +24,11 @@ const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >  : ^
 >8 : 8
 >  : ^
->x => x < 5 ? 'small' : 'large' : (x: number) => "small" | "large"
+>x => x < 5 ? 'small' : 'large' : (x: number) => "large" | "small"
 >                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->x < 5 ? 'small' : 'large' : "small" | "large"
+>x < 5 ? 'small' : 'large' : "large" | "small"
 >                          : ^^^^^^^^^^^^^^^^^
 >x < 5 : boolean
 >      : ^^^^^^^

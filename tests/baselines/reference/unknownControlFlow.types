@@ -74,8 +74,8 @@ function f01(u: unknown) {
 >  : ^^^^^^^
 
     let x3: {} | { x: string } | null | undefined = u;
->x3 : {} | { x: string; } | null | undefined
->   : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>x3 : { x: string; } | {} | null | undefined
+>   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >u : unknown
@@ -527,7 +527,7 @@ function f30(x: {}) {
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
 >  : ^^
@@ -549,7 +549,7 @@ function f31<T>(x: T) {
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -557,7 +557,7 @@ function f31<T>(x: T) {
 >         : ^^^^^^^^
 
         x;  // T & object | T & null
->x : (T & object) | (T & null)
+>x : (T & null) | (T & object)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x && typeof x === "object") {
@@ -567,7 +567,7 @@ function f31<T>(x: T) {
 >  : ^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
 >  : ^^^^^^^^^^^^^^
@@ -579,17 +579,17 @@ function f31<T>(x: T) {
 >  : ^^^^^^^^^^
     }
     if (typeof x === "object" && x) {
->typeof x === "object" && x : false | (T & object) | (T & null)
+>typeof x === "object" && x : false | (T & null) | (T & object)
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >"object" : "object"
 >         : ^^^^^^^^
->x : (T & object) | (T & null)
+>x : (T & null) | (T & object)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & object
@@ -607,7 +607,7 @@ function f32<T extends {} | undefined>(x: T) {
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -824,9 +824,9 @@ function f41<T>(a: T) {
 >  : ^
 
     let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
->a4 : (T & {}) | (T & null)
+>a4 : (T & null) | (T & {})
 >   : ^^^^^^^^^^^^^^^^^^^^^
->ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
+>ensureNotUndefined(ensureNotUndefined(a)) : (T & null) | (T & {})
 >                                          : ^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >                   : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
@@ -927,7 +927,7 @@ function deepEquals<T>(a: T, b: T): boolean {
 >                                               : ^^^^^^^
 >typeof a !== 'object' : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
@@ -935,7 +935,7 @@ function deepEquals<T>(a: T, b: T): boolean {
 >         : ^^^^^^^^
 >typeof b !== 'object' : boolean
 >                      : ^^^^^^^
->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : T
 >  : ^
@@ -943,11 +943,11 @@ function deepEquals<T>(a: T, b: T): boolean {
 >         : ^^^^^^^^
 >!a : boolean
 >   : ^^^^^^^
->a : (T & object) | (T & null)
+>a : (T & null) | (T & object)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >!b : boolean
 >   : ^^^^^^^
->b : (T & object) | (T & null)
+>b : (T & null) | (T & object)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return false;

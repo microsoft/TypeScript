@@ -64,9 +64,9 @@ var f = [[], [1]]; // number[][]
 >  : ^
 
 var g = [[1], ['']]; // {}[]
->g : (number[] | string[])[]
+>g : (string[] | number[])[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->[[1], ['']] : (number[] | string[])[]
+>[[1], ['']] : (string[] | number[])[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
@@ -78,7 +78,7 @@ var g = [[1], ['']]; // {}[]
 >   : ^^
 
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
->h : ({ foo: number; bar: string; } | { foo: number; bar?: undefined; })[]
+>h : ({ foo: number; bar: string; } | { bar?: undefined; foo: number; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: 1, bar: '' }, { foo: 2 }] : ({ foo: number; bar: string; } | { foo: number; })[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -100,7 +100,7 @@ var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
 >  : ^
 
 var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
->i : ({ foo: number; bar: string; } | { foo: string; bar?: undefined; })[]
+>i : ({ foo: number; bar: string; } | { bar?: undefined; foo: string; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: 1, bar: '' }, { foo: '' }] : ({ foo: number; bar: string; } | { foo: string; })[]
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -234,7 +234,7 @@ namespace Derived {
 >        : ^^^^^^^^^^^^^^
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
->h : ({ foo: Base; basear: Derived; } | { foo: Base; basear?: undefined; })[]
+>h : ({ foo: Base; basear: Derived; } | { basear?: undefined; foo: Base; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: base, basear: derived }, { foo: base }] : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -256,7 +256,7 @@ namespace Derived {
 >     : ^^^^
 
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
->i : ({ foo: Base; basear: Derived; } | { foo: Derived; basear?: undefined; })[]
+>i : ({ foo: Base; basear: Derived; } | { basear?: undefined; foo: Derived; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: base, basear: derived }, { foo: derived }] : ({ foo: Base; basear: Derived; } | { foo: Derived; })[]
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -598,9 +598,9 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >     : ^^^^
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
+>h : (T | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[t, derived] : (Derived | T)[]
+>[t, derived] : (T | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >t : T
 >  : ^
@@ -832,9 +832,9 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >     : ^^^^
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
+>h : (T | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[t, derived] : (Derived | T)[]
+>[t, derived] : (T | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >t : T
 >  : ^
@@ -852,9 +852,9 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >     : ^^^^
 
     var j = [u, derived]; // Derived[]
->j : (Derived | U)[]
+>j : (U | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[u, derived] : (Derived | U)[]
+>[u, derived] : (U | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >u : U
 >  : ^

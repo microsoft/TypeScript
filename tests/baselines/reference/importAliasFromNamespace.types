@@ -38,7 +38,7 @@ namespace SomeOther.Thing {
 >         : ^^^^^^    
 
             Internal.WhichThing.A ? "foo" : "bar";
->Internal.WhichThing.A ? "foo" : "bar" : "foo" | "bar"
+>Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
 >                                      : ^^^^^^^^^^^^^
 >Internal.WhichThing.A : Internal.WhichThing.A
 >                      : ^^^^^^^^^^^^^^^^^^^^^

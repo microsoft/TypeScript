@@ -53,7 +53,7 @@ if (typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") {
 >                                                                         : ^^^^^^^
 >typeof strOrNumOrBool !== "string" : boolean
 >                                   : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,7 +61,7 @@ if (typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") {
 >         : ^^^^^^^^
 >typeof strOrNumOrBool !== "number" : boolean
 >                                   : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : number | boolean
 >               : ^^^^^^^^^^^^^^^^
@@ -93,7 +93,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >                                                                               : ^^^^^^^
 >typeof strOrNumOrBoolOrC !== "string" : boolean
 >                                      : ^^^^^^^
->typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean | C
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -101,7 +101,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC !== "number" : boolean
 >                                      : ^^^^^^^
->typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : number | boolean | C
 >                  : ^^^^^^^^^^^^^^^^^^^^
@@ -109,7 +109,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC !== "boolean" : boolean
 >                                       : ^^^^^^^
->typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : boolean | C
 >                  : ^^^^^^^^^^^
@@ -141,7 +141,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >                                                                               : ^^^^^^^
 >typeof strOrNumOrBoolOrC !== "string" : boolean
 >                                      : ^^^^^^^
->typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean | C
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -149,7 +149,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC !== "number" : boolean
 >                                      : ^^^^^^^
->typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : number | boolean | C
 >                  : ^^^^^^^^^^^^^^^^^^^^
@@ -157,7 +157,7 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >         : ^^^^^^^^
 >typeof strOrNumOrBool === "boolean" : boolean
 >                                    : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -199,7 +199,7 @@ if (typeof strOrNumOrBool !== "string" && numOrBool !== strOrNumOrBool) {
 >                                                                   : ^^^^^^^
 >typeof strOrNumOrBool !== "string" : boolean
 >                                   : ^^^^^^^
->typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
