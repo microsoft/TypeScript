@@ -21082,6 +21082,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (instantiated) {
             return instantiated;
         }
+        // Check if the constraint type contains uninstantiated type parameters that would leak
+        // If the constraint contains a type parameter that wasn't instantiated by the mapper,
+        // we should return unknownType instead of leaking the type parameter
+        const constraintType = (innerIndexType as IndexType).type;
+        if (constraintType.flags & TypeFlags.TypeParameter) {
+            // The constraint is a type parameter that wasn't instantiated
+            // Return unknownType to avoid leaking the type parameter
+            return unknownType;
+        }
+        if (constraintType.flags & TypeFlags.IndexedAccess) {
+            const indexedAccess = constraintType as IndexedAccessType;
+            if (indexedAccess.objectType.flags & TypeFlags.TypeParameter) {
+                // The constraint is an indexed access type like T[string] where T is a type parameter
+                // that wasn't instantiated - return unknownType to avoid leaking T
+                return unknownType;
+            }
+        }
         return type; // Nested invocation of `inferTypeForHomomorphicMappedType` or the `source` instantiated into something unmappable
     }
 
@@ -26426,7 +26443,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType) || unknownType;
+            const inferred = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType);
+            if (inferred) {
+                // Check if the inferred type contains uninstantiated type parameters that would leak
+                // If it's an indexed access type like T[string] where T is a type parameter,
+                // return unknownType instead of leaking T
+                if (inferred.flags & TypeFlags.IndexedAccess) {
+                    const indexedAccess = inferred as IndexedAccessType;
+                    if (indexedAccess.objectType.flags & TypeFlags.TypeParameter) {
+                        links.type = unknownType;
+                        return unknownType;
+                    }
+                }
+                links.type = inferred;
+            } else {
+                links.type = unknownType;
+            }
         }
         return links.type;
     }
@@ -26436,7 +26468,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        const inferred = getTypeFromInference(inference);
+        if (inferred) {
+            // Check if the inferred type is the same as the type parameter we're inferring
+            // This means the inference failed and we're leaking the type parameter
+            if (inferred === typeParameter) {
+                return unknownType;
+            }
+            // Check if the inferred type is an indexed access type like T[string] where T is a type parameter
+            // that matches the constraint type - this indicates a leak
+            if (inferred.flags & TypeFlags.IndexedAccess) {
+                const indexedAccess = inferred as IndexedAccessType;
+                if (indexedAccess.objectType.flags & TypeFlags.TypeParameter && 
+                    indexedAccess.objectType === constraint.type) {
+                    return unknownType;
+                }
+            }
+            return inferred;
+        }
+        return unknownType;
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
