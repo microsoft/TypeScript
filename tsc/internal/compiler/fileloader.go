@@ -278,14 +278,20 @@ func (p *fileLoader) getDefaultLibFilePriority(a *ast.SourceFile) int {
 }
 
 func (p *fileLoader) loadSourceFileMetaData(fileName string) ast.SourceFileMetaData {
-	packageJsonScope := p.resolver.GetPackageJsonScopeIfApplicable(fileName)
+	packageJsonScope := p.resolver.GetPackageScopeForPath(fileName)
+	moduleResolutionKind := p.opts.Config.CompilerOptions().GetModuleResolutionKind()
+
 	var packageJsonType, packageJsonDirectory string
 	if packageJsonScope.Exists() {
 		packageJsonDirectory = packageJsonScope.PackageDirectory
 		if value, ok := packageJsonScope.Contents.Type.GetValue(); ok {
-			packageJsonType = value
+			if !tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionCts, tspath.ExtensionMjs, tspath.ExtensionCjs}) &&
+				core.ModuleResolutionKindNode16 <= moduleResolutionKind && moduleResolutionKind <= core.ModuleResolutionKindNodeNext || strings.Contains(fileName, "/node_modules/") {
+				packageJsonType = value
+			}
 		}
 	}
+
 	impliedNodeFormat := ast.GetImpliedNodeFormatForFile(fileName, packageJsonType)
 	return ast.SourceFileMetaData{
 		PackageJsonType:      packageJsonType,

@@ -71,6 +71,6 @@ __exportStar(require("./keys"), exports);
 
 //// [keys.d.ts]
 import { MetadataAccessor } from "@raymondfeng/pkg2";
-export declare const ADMIN: MetadataAccessor<boolean, import("../../pkg1/dist").IdType>;
+export declare const ADMIN: any;
 //// [index.d.ts]
 export * from './keys';

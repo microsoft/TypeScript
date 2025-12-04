@@ -68,14 +68,15 @@ type resolutionState struct {
 	tracer   *tracer
 
 	// request fields
-	name                string
-	containingDirectory string
-	isConfigLookup      bool
-	features            NodeResolutionFeatures
-	esmMode             bool
-	conditions          []string
-	extensions          extensions
-	compilerOptions     *core.CompilerOptions
+	name                        string
+	containingDirectory         string
+	isConfigLookup              bool
+	features                    NodeResolutionFeatures
+	esmMode                     bool
+	conditions                  []string
+	extensions                  extensions
+	compilerOptions             *core.CompilerOptions
+	resolvePackageDirectoryOnly bool
 
 	// state fields
 	candidateIsFromPackageJsonField bool
@@ -182,19 +183,6 @@ func (r *Resolver) GetPackageScopeForPath(directory string) *packagejson.InfoCac
 	return (&resolutionState{compilerOptions: r.compilerOptions, resolver: r}).getPackageScopeForPath(directory)
 }
 
-func (r *Resolver) GetPackageJsonScopeIfApplicable(path string) *packagejson.InfoCacheEntry {
-	if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionMts, tspath.ExtensionCts, tspath.ExtensionMjs, tspath.ExtensionCjs}) {
-		return nil
-	}
-
-	moduleResolutionKind := r.compilerOptions.GetModuleResolutionKind()
-	if core.ModuleResolutionKindNode16 <= moduleResolutionKind && moduleResolutionKind <= core.ModuleResolutionKindNodeNext || strings.Contains(path, "/node_modules/") {
-		return r.GetPackageScopeForPath(tspath.GetDirectoryPath(path))
-	}
-
-	return nil
-}
-
 func (r *tracer) traceResolutionUsingProjectReference(redirectedReference ResolvedProjectReference) {
 	if redirectedReference != nil && redirectedReference.CompilerOptions() != nil {
 		r.write(diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.ConfigName())
@@ -269,6 +257,17 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 	}
 
 	return r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder), traceBuilder.getTraces()
+}
+
+func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
+	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
+	state.resolvePackageDirectoryOnly = true
+	if result := state.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); result != nil && result.path != "" {
+		return state.createResolvedModuleHandlingSymlink(result)
+	}
+	return nil
 }
 
 func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
@@ -961,6 +960,16 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	candidate := tspath.NormalizePath(tspath.CombinePaths(nodeModulesDirectory, moduleName))
 	packageName, rest := ParsePackageName(moduleName)
 	packageDirectory := tspath.CombinePaths(nodeModulesDirectory, packageName)
+	if packageName == "" {
+		packageDirectory = candidate
+	}
+
+	if r.resolvePackageDirectoryOnly {
+		if r.resolver.host.FS().DirectoryExists(packageDirectory) {
+			return &resolved{path: packageDirectory}
+		}
+		return continueSearching()
+	}
 
 	var rootPackageInfo *packagejson.InfoCacheEntry
 	// First look for a nested package.json, as in `node_modules/foo/bar/package.json`

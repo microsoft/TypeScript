@@ -1206,6 +1206,10 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 		},
 		false, /*forAutoImports*/
 	)
+	if len(allSpecifiers) == 0 {
+		links.specifierCache[cacheKey] = ""
+		return ""
+	}
 	specifier := allSpecifiers[0]
 	links.specifierCache[cacheKey] = specifier
 	return specifier

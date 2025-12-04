@@ -71,4 +71,4 @@ exports.a = pkg.invoke();
 
 
 //// [index.d.ts]
-export declare const a: import("../packageA").Foo;
+export declare const a: import("package-a").Foo;
