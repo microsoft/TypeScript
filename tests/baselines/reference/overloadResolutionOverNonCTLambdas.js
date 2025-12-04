@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
 
 //// [overloadResolutionOverNonCTLambdas.ts]
-module Bugs {
+namespace Bugs {
   class A {
   }
   

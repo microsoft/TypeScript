@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/functionCall7.ts] ////
 
 //// [functionCall7.ts]
-module m1 { export class c1 { public a; }}
+namespace m1 { export class c1 { public a; }}
 function foo(a:m1.c1){ a.a = 1; }; 
 var myC = new m1.c1(); 
 foo(myC); 

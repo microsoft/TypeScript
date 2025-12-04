@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 
 // @Filename: /generation.d.ts
 //// export type GenerationConfigType = { max_length?: number };

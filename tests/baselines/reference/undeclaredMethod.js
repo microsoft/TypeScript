@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/undeclaredMethod.ts] ////
 
 //// [undeclaredMethod.ts]
-module M {
+namespace M {
     export class C {
         public salt() {}
     }

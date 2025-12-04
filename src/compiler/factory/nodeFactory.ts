@@ -135,6 +135,7 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    ImportPhaseModifierSyntaxKind,
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
@@ -332,6 +333,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -476,7 +478,7 @@ export const enum NodeFactoryFlags {
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
 /** @internal @knipignore */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -1007,6 +1009,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -3479,6 +3482,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildFlags(node.whenTrue) |
             propagateChildFlags(node.colonToken) |
             propagateChildFlags(node.whenFalse);
+        node.flowNodeWhenFalse = undefined;
+        node.flowNodeWhenTrue = undefined;
         return node;
     }
 
@@ -4719,14 +4724,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
+    function createImportClause(phaseModifier: ImportPhaseModifierSyntaxKind | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = createBaseDeclaration<ImportClause>(SyntaxKind.ImportClause);
-        node.isTypeOnly = isTypeOnly;
+        if (typeof phaseModifier === "boolean") {
+            phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
+        }
+        node.isTypeOnly = phaseModifier === SyntaxKind.TypeKeyword;
+        node.phaseModifier = phaseModifier;
         node.name = name;
         node.namedBindings = namedBindings;
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.namedBindings);
-        if (isTypeOnly) {
+        if (phaseModifier === SyntaxKind.TypeKeyword) {
             node.transformFlags |= TransformFlags.ContainsTypeScript;
         }
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -4734,11 +4743,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
-        return node.isTypeOnly !== isTypeOnly
+    function updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifierSyntaxKind | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
+        if (typeof phaseModifier === "boolean") {
+            phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
+        }
+        return node.phaseModifier !== phaseModifier
                 || node.name !== name
                 || node.namedBindings !== namedBindings
-            ? update(createImportClause(isTypeOnly, name, namedBindings), node)
+            ? update(createImportClause(phaseModifier, name, namedBindings), node)
             : node;
     }
 
@@ -6169,16 +6181,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isDeclarationFile = node.isDeclarationFile,
         referencedFiles = node.referencedFiles,
         typeReferenceDirectives = node.typeReferenceDirectives,
-        hasNoDefaultLib = node.hasNoDefaultLib,
+        _hasNoDefaultLib = false,
         libReferenceDirectives = node.libReferenceDirectives,
     ) {
         return node.statements !== statements
                 || node.isDeclarationFile !== isDeclarationFile
                 || node.referencedFiles !== referencedFiles
                 || node.typeReferenceDirectives !== typeReferenceDirectives
-                || node.hasNoDefaultLib !== hasNoDefaultLib
                 || node.libReferenceDirectives !== libReferenceDirectives
-            ? update(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, hasNoDefaultLib, libReferenceDirectives), node)
+            ? update(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, /*hasNoDefaultLib*/ false, libReferenceDirectives), node)
             : node;
     }
 
@@ -6189,7 +6200,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.syntheticFileReferences = undefined;
         node.syntheticTypeReferences = undefined;
         node.syntheticLibReferences = undefined;
-        node.hasNoDefaultLib = undefined;
         return node;
     }
 
@@ -6261,6 +6271,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.expression !== expression
             ? update(createPartiallyEmittedExpression(expression, node.original), node)
             : node;
+    }
+
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
@@ -7389,7 +7404,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 

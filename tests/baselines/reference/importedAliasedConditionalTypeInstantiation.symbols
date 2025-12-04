@@ -19,7 +19,7 @@ export type Handler<TEvent = any, TResult = any> = (
 >TResult : Symbol(TResult, Decl(index.d.ts, 0, 33))
 
 ) => void | Promise<TResult>;
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >TResult : Symbol(TResult, Decl(index.d.ts, 0, 33))
 
 export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
@@ -80,7 +80,7 @@ declare namespace lambdaTester {
 >result : Symbol(result, Decl(index.d.ts, 9, 9))
 >S : Symbol(S, Decl(index.d.ts, 8, 25))
 >additional : Symbol(additional, Decl(index.d.ts, 9, 19))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         (result: S, additional?: any, done?: () => {}): void;
 >result : Symbol(result, Decl(index.d.ts, 10, 9))

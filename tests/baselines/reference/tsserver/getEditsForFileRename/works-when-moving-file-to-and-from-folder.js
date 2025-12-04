@@ -1,5 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/myprojects/project/tsconfig.json]
 {
@@ -32,8 +34,7 @@ export function alert(message: string) {
 //// [/home/src/myprojects/project/functions/whatever/placeholder.txt]
 
 
-//// [/a/lib/lib.es2016.full.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -59,18 +60,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/project/index.ts ProjectRootPath: /home/src/myprojects/project:: Result: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/myprojects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/myprojects/project/tsconfig.json, currentDirectory: /home/src/myprojects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/tsconfig.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/myprojects/project/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/myprojects/project/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/myprojects/project/tsconfig.json : {
  "rootNames": [
   "/home/src/myprojects/project/index.ts",
@@ -92,11 +83,21 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/myprojects/project/tsconfig.json : {
   "configFilePath": "/home/src/myprojects/project/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/myprojects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/myprojects/project/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
@@ -104,12 +105,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	components/whatever/alert.ts
 	  Imported via '@app/components/whatever/alert' from file 'index.ts'
@@ -146,7 +147,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -206,6 +207,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/myprojects/node_modules/@types: *new*
@@ -214,11 +217,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
-  {}
 /home/src/myprojects/project/components/whatever/alert.ts: *new*
   {}
 /home/src/myprojects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -232,10 +235,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *new*
     version: Text-1
     containingProjects: 1
@@ -244,6 +243,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/myprojects/project/components/whatever :: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /home/src/myprojects/project/components/whatever/alert.ts:: 2
@@ -277,10 +280,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -291,6 +290,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -310,19 +313,23 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -364,9 +371,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
+/home/src/myprojects: *new*
+  {}
+/home/src/myprojects/project: *new*
   {}
 /home/src/myprojects/project/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -393,10 +404,6 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *deleted*
     version: Text-1
     pendingReloadFromDisk: true
@@ -410,6 +417,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -452,14 +463,9 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2
     documentPositionMappers: 1 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts *changed*
-    version: Text-1
-    sourceMapFilePath: false *changed*
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -468,6 +474,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -511,11 +522,6 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -524,6 +530,11 @@ ScriptInfos::
     version: SVC-1-1 *changed*
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before running Timeout callback:: count: 2
 7: /home/src/myprojects/project/tsconfig.json
@@ -533,14 +544,18 @@ Info seq  [hh:mm:ss:mss] Running: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 
@@ -594,9 +609,15 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {}
 /home/src/myprojects/project/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/myprojects:
+  {}
+/home/src/myprojects/project:
   {}
 
 FsWatchesRecursive::
@@ -613,7 +634,7 @@ Projects::
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/myprojects/project/functions/whatever :: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json
@@ -669,19 +690,23 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/components/whatever/alert.ts SVC-2-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -719,9 +744,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
+/home/src/myprojects: *new*
+  {}
+/home/src/myprojects/project: *new*
   {}
 /home/src/myprojects/project/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -743,11 +772,6 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
@@ -761,6 +785,11 @@ ScriptInfos::
     version: SVC-1-1
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -803,7 +832,7 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4
     documentPositionMappers: 1 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
 
 Before running Timeout callback:: count: 2
 15: /home/src/myprojects/project/tsconfig.json

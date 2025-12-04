@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
-// @Filename: /a/index.ts
+// @Filename: /home/src/workspaces/project/a/index.ts
 ////import { NS } from "../b";
 ////import { I } from "../c";
 ////
@@ -21,7 +21,7 @@
 ////    FC() { },
 ////};
 
-// @Filename: /a/tsconfig.json
+// @Filename: /home/src/workspaces/project/a/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "references": [
@@ -33,7 +33,7 @@
 ////    ],
 ////}
 
-// @Filename: /a2/index.ts
+// @Filename: /home/src/workspaces/project/a2/index.ts
 ////import { NS } from "../b";
 ////import { I } from "../c";
 ////
@@ -54,7 +54,7 @@
 ////    FC() { },
 ////};
 
-// @Filename: /a2/tsconfig.json
+// @Filename: /home/src/workspaces/project/a2/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "references": [
@@ -66,7 +66,7 @@
 ////    ],
 ////}
 
-// @Filename: /b/index.ts
+// @Filename: /home/src/workspaces/project/b/index.ts
 ////export namespace NS {
 ////    export function /*7*/FB() {}
 ////}
@@ -77,10 +77,10 @@
 ////
 ////const ib: I = { FB() {} };
 
-// @Filename: /b/other.ts
+// @Filename: /home/src/workspaces/project/b/other.ts
 ////export const Other = 1;
 
-// @Filename: /b/tsconfig.json
+// @Filename: /home/src/workspaces/project/b/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "files": [
@@ -89,7 +89,7 @@
 ////    ],
 ////}
 
-// @Filename: /c/index.ts
+// @Filename: /home/src/workspaces/project/c/index.ts
 ////export namespace NS {
 ////    export function /*10*/FC() {}
 ////}
@@ -100,7 +100,7 @@
 ////
 ////const ic: I = { FC() {} };
 
-// @Filename: /c/tsconfig.json
+// @Filename: /home/src/workspaces/project/c/tsconfig.json
 ////{
 ////    "extends": "../tsconfig.settings.json",
 ////    "files": [
@@ -108,7 +108,7 @@
 ////    ],
 ////}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,
@@ -120,7 +120,7 @@
 ////    "files": []
 ////}
 
-// @Filename: /tsconfig.settings.json
+// @Filename: /home/src/workspaces/project/tsconfig.settings.json
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,

@@ -350,7 +350,7 @@ for (var x in i[42]) { }
 >   : ^^
 
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

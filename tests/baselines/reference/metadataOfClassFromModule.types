@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/metadataOfClassFromModule.ts] ////
 
 === metadataOfClassFromModule.ts ===
-module MyModule {
+namespace MyModule {
 >MyModule : typeof MyModule
 >         : ^^^^^^^^^^^^^^^
 

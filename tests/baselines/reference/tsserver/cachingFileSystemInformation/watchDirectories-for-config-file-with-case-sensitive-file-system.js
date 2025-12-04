@@ -1,24 +1,13 @@
-currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: true
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts]
 export class SomeClass { };
 
 //// [/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts]
 export class configureStore { }
-
-//// [/a/lib/lib.es2016.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
 
 //// [/Users/someuser/work/applications/frontend/tsconfig.json]
 {
@@ -58,6 +47,20 @@ interface Array<T> { length: number; [n: number]: T; }
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -69,18 +72,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined:: Result: /Users/someuser/work/applications/frontend/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /Users/someuser/work/applications/frontend/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /Users/someuser/work/applications/frontend/tsconfig.json, currentDirectory: /Users/someuser/work/applications/frontend
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/tsconfig.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/Users/someuser/work/applications/frontend/tsconfig.json",
-        "reason": "Creating possible configured project for /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /Users/someuser/work/applications/frontend/tsconfig.json : {
  "rootNames": [
   "/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts",
@@ -116,6 +109,16 @@ Info seq  [hh:mm:ss:mss] Config: /Users/someuser/work/applications/frontend/tsco
   "configFilePath": "/Users/someuser/work/applications/frontend/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/Users/someuser/work/applications/frontend/tsconfig.json",
+        "reason": "Creating possible configured project for /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts 500 undefined WatchType: Closed Script info
@@ -124,16 +127,16 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/w
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/types 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
 	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
 
 
-	../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
@@ -169,7 +172,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -267,6 +270,34 @@ Info seq  [hh:mm:ss:mss] event:
                 "code": 1419
               }
             ]
+          },
+          {
+            "start": {
+              "line": 7,
+              "offset": 25
+            },
+            "end": {
+              "line": 7,
+              "offset": 31
+            },
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/Users/someuser/work/applications/frontend/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 22,
+              "offset": 5
+            },
+            "end": {
+              "line": 22,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/Users/someuser/work/applications/frontend/tsconfig.json"
           }
         ]
       }
@@ -290,6 +321,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib*
+
 
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules: *new*
@@ -302,7 +335,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
-/a/lib/lib.es2016.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -324,7 +357,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json *default*
-/a/lib/lib.es2016.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
@@ -357,13 +390,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/wo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
 	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
 	/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts Text-1 "export class Cookie { }"
 
 
-	../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
@@ -417,7 +450,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json:
   {}
-/a/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -444,7 +477,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
@@ -512,7 +545,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json:
   {}
-/a/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -537,7 +570,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json *default*
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json

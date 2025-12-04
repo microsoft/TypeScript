@@ -16,7 +16,7 @@ function foo() { this = value; }
 this = value;
 
 // identifiers: module, class, enum, function
-module M { export var a; }
+namespace M { export var a; }
 M = value;
 
 C = value;

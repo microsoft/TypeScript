@@ -1,4 +1,4 @@
-module NonGeneric {
+namespace NonGeneric {
     class C {
         fn() { return this; }
         static get x() { return 1; }
@@ -7,7 +7,7 @@ module NonGeneric {
         static foo: string; // not reflected in class type
     }
 
-    module C {
+    namespace C {
         export var bar = ''; // not reflected in class type
     }
 
@@ -18,7 +18,7 @@ module NonGeneric {
     var r6 = c.x; // error
 }
 
-module Generic {
+namespace Generic {
     class C<T, U> {
         fn() { return this; }
         static get x() { return 1; }
@@ -27,7 +27,7 @@ module Generic {
         static foo: T; // not reflected in class type
     }
 
-    module C {
+    namespace C {
         export var bar = ''; // not reflected in class type
     }
 

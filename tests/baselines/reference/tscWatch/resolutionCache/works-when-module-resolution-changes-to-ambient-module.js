@@ -1,10 +1,9 @@
-currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/foo.ts]
 import * as fs from "fs";
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -15,9 +14,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w /users/username/projects/project/foo.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /users/username/projects/project/foo.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -48,7 +49,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/foo.ts: *new*
   {}
@@ -61,15 +66,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -111,7 +116,11 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -123,12 +132,12 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 2
-14: timerToUpdateProgram *new*
-16: timerToInvalidateFailedLookupResolutions *new*
+15: timerToUpdateProgram *new*
+17: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-14: timerToUpdateProgram
-16: timerToInvalidateFailedLookupResolutions
+15: timerToUpdateProgram
+17: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -149,7 +158,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -165,7 +178,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-16: timerToInvalidateFailedLookupResolutions *deleted*
+17: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -176,7 +189,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
 

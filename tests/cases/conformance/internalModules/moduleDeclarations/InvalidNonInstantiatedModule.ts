@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export interface Point { x: number; y: number }
 }
 

@@ -4,8 +4,8 @@
 export type Type = { x?: { [Enum.A]: 0 } };
 >Type : Type
 >     : ^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : { [x: number]: 0; } | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[Enum.A] : 0
 >         : ^
 >Enum.A : any

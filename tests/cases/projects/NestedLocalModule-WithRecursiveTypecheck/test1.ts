@@ -1,4 +1,4 @@
-module myModule {
+namespace myModule {
  
  import foo = require("test2");
 

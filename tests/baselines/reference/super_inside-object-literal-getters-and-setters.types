@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts] ////
 
 === super_inside-object-literal-getters-and-setters.ts ===
-module ObjectLiteral {
+namespace ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
 >              : ^^^^^^^^^^^^^^^^^^^^
 
     var ThisInObjectLiteral = {
 >ThisInObjectLiteral : { _foo: string; foo: string; test: () => any; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; foo: string; test: () => any; }
->                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 
         _foo: '1',
 >_foo : string

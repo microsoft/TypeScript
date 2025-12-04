@@ -3,7 +3,7 @@
 //// [constructorOverloads5.ts]
  interface IArguments {}
 
- declare module M {
+ declare namespace M {
     export function RegExp(pattern: string): RegExp;
     export function RegExp(pattern: string, flags: string): RegExp;
     export class RegExp {

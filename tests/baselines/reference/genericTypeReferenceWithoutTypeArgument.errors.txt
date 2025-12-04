@@ -83,7 +83,7 @@ genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E
                         ~
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     
-    module M {
+    namespace M {
         export class E<T> { foo: T }
     }
     

@@ -44,7 +44,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToFixAwaitInSyncFunction(context) {
-        const seen = new Map<number, true>();
+        const seen = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start);
             if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;

@@ -20,10 +20,18 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "/a/b/node_modules/@types/typerefs/package.json",
-    "/a/b/node_modules/@types/typerefs/index.d.ts",
-    "/a/node_modules/@types/typerefs/package.json",
-    "/a/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/a/b/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/a/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/a/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/node_modules/@types/typerefs/package.json",
+    "/home/src/node_modules/@types/typerefs/index.d.ts",
+    "/home/node_modules/@types/typerefs/package.json",
+    "/home/node_modules/@types/typerefs/index.d.ts",
     "/node_modules/@types/typerefs/package.json",
     "/node_modules/@types/typerefs/index.d.ts",
     "/node_modules/typerefs/package.json",
@@ -37,8 +45,7 @@ typerefs: {
 
 
 MissingPaths:: [
-  "non-existing-file.ts",
-  "lib.d.ts"
+  "non-existing-file.ts"
 ]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
@@ -68,10 +75,18 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "/a/c/node_modules/@types/typerefs/package.json",
-    "/a/c/node_modules/@types/typerefs/index.d.ts",
-    "/a/node_modules/@types/typerefs/package.json",
-    "/a/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/a/c/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/a/c/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/a/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/a/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/project/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/project/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/workspaces/node_modules/@types/typerefs/package.json",
+    "/home/src/workspaces/node_modules/@types/typerefs/index.d.ts",
+    "/home/src/node_modules/@types/typerefs/package.json",
+    "/home/src/node_modules/@types/typerefs/index.d.ts",
+    "/home/node_modules/@types/typerefs/package.json",
+    "/home/node_modules/@types/typerefs/index.d.ts",
     "/node_modules/@types/typerefs/package.json",
     "/node_modules/@types/typerefs/index.d.ts",
     "/node_modules/typerefs/package.json",
@@ -85,8 +100,7 @@ typerefs: {
 
 
 MissingPaths:: [
-  "non-existing-file.ts",
-  "lib.d.ts"
+  "non-existing-file.ts"
 ]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////declare module "extmod" {
-////  module IntMod {
+////  namespace IntMod {
 ////    class Customer {
 ////      constructor(name: string);
 ////    }

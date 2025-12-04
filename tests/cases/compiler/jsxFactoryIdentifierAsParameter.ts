@@ -5,7 +5,7 @@
 //@sourcemap: true
 
 // @filename: test.tsx
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         [s: string]: any;
     }

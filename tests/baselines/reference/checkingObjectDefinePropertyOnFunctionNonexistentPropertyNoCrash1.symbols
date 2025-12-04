@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.ts] ////
+
+=== index.js ===
+export function test(fn) {
+>test : Symbol(test, Decl(index.js, 0, 0))
+>fn : Symbol(fn, Decl(index.js, 0, 21))
+
+  const composed = function (...args) { }
+>composed : Symbol(composed, Decl(index.js, 1, 7))
+>args : Symbol(args, Decl(index.js, 1, 29))
+
+  Object.defineProperty(composed, 'name', {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>composed : Symbol(composed, Decl(index.js, 1, 7))
+>'name' : Symbol(composed.name, Decl(index.js, 1, 41))
+
+    value: composed.fn + '_test'
+>value : Symbol(value, Decl(index.js, 3, 43))
+>composed : Symbol(composed, Decl(index.js, 1, 7))
+
+  })
+
+  return composed
+>composed : Symbol(composed, Decl(index.js, 1, 7))
+}
+

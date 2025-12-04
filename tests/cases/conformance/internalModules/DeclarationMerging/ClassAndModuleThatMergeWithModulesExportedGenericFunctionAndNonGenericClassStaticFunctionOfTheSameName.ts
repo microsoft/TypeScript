@@ -5,7 +5,7 @@ class clodule<T> {
     static fn(id: string) { }
 }
 
-module clodule {
+namespace clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
         return x;

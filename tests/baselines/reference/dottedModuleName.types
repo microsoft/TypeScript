@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/dottedModuleName.ts] ////
 
 === dottedModuleName.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ module M {
 >x : any
 >  : ^^^
 
-	export module X.Y.Z {
+	export namespace X.Y.Z {
 >X : typeof X
 >  : ^^^^^^^^
 >Y : typeof Y
@@ -44,17 +44,17 @@ module M {
 
 
 
-module M.N {
+namespace M.N {
 >M : typeof M
 >  : ^^^^^^^^
 >N : typeof N
 >  : ^^^^^^^^
 
-    export module X {
+    export namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
-	export module Y.Z {
+	export namespace Y.Z {
 >Y : typeof Y
 >  : ^^^^^^^^
 >Z : typeof Z

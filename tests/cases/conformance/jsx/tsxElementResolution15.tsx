@@ -1,6 +1,6 @@
 //@filename: file.tsx
 //@jsx: preserve
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementAttributesProperty { pr1: any; pr2: any; }
 	interface IntrinsicElements { }
