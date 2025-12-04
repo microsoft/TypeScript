@@ -1277,7 +1277,7 @@ function getNewImportFixes(
                 return undefined;
             }
             if (!importedSymbolHasValueMeaning && usagePosition !== undefined) {
-                const scriptKind = 'scriptKind' in sourceFile
+                const scriptKind = isFullSourceFile(sourceFile)
                     ? sourceFile.scriptKind
                     : host.getScriptKind?.(sourceFile.fileName);
                 const isJs = scriptKind !== undefined
