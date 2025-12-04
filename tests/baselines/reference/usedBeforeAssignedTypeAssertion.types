@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/usedBeforeAssignedTypeAssertion.ts] ////
+
+=== usedBeforeAssignedTypeAssertion.ts ===
+// Test case for type assertion (angle bracket syntax) - assignment should not error
+function testTypeAssertion() {
+>testTypeAssertion : () => void
+>                  : ^^^^^^^^^^
+
+    let x: number;
+>x : number
+>  : ^^^^^^
+
+    (<any>x) = 42; // Should not error - this is an assignment
+>(<any>x) = 42 : 42
+>              : ^^
+>(<any>x) : any
+>         : ^^^
+><any>x : any
+>       : ^^^
+>x : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+// Test case for 'as' expression - assignment should not error 
+function testAsExpression() {
+>testAsExpression : () => void
+>                 : ^^^^^^^^^^
+
+    let y: number;
+>y : number
+>  : ^^^^^^
+
+    (y as any) = 42; // Should not error - this is an assignment
+>(y as any) = 42 : 42
+>                : ^^
+>(y as any) : any
+>           : ^^^
+>y as any : any
+>         : ^^^
+>y : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+// Test case for parenthesized expression (should already work)
+function testParentheses() {
+>testParentheses : () => void
+>                : ^^^^^^^^^^
+
+    let z: number;
+>z : number
+>  : ^^^^^^
+
+    (z) = 42; // Should not error - this is an assignment
+>(z) = 42 : 42
+>         : ^^
+>(z) : number
+>    : ^^^^^^
+>z : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+// Test case with nested type assertions
+function testNested() {
+>testNested : () => void
+>           : ^^^^^^^^^^
+
+    let nested: any;
+>nested : any
+>       : ^^^
+
+    ((nested as any) as unknown) = "test"; // Should not error
+>((nested as any) as unknown) = "test" : "test"
+>                                      : ^^^^^^
+>((nested as any) as unknown) : unknown
+>                             : ^^^^^^^
+>(nested as any) as unknown : unknown
+>                           : ^^^^^^^
+>(nested as any) : any
+>                : ^^^
+>nested as any : any
+>              : ^^^
+>nested : any
+>       : ^^^
+>"test" : "test"
+>       : ^^^^^^
+}
+
+// Test case for const assignment via type assertion - should error
+function testConstAssignment() {
+>testConstAssignment : () => void
+>                    : ^^^^^^^^^^
+
+    const m = 32;
+>m : 32
+>  : ^^
+>32 : 32
+>   : ^^
+
+    (m as any) = 16; // Should error - cannot assign to const
+>(m as any) = 16 : 16
+>                : ^^
+>(m as any) : any
+>           : ^^^
+>m as any : any
+>         : ^^^
+>m : any
+>  : ^^^
+>16 : 16
+>   : ^^
+}
+
+// Test case for readonly property assignment via type assertion - should error
+function testReadonlyPropertyAssignment() {
+>testReadonlyPropertyAssignment : () => void
+>                               : ^^^^^^^^^^
+
+    interface ReadonlyInterface {
+        readonly prop: number;
+>prop : number
+>     : ^^^^^^
+    }
+    
+    let obj: ReadonlyInterface;
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+
+    obj = { prop: 42 };
+>obj = { prop: 42 } : { prop: number; }
+>                   : ^^^^^^^^^^^^^^^^^
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+>{ prop: 42 } : { prop: number; }
+>             : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+    
+    // Should error - cannot assign to readonly property, even through type assertion
+    (obj.prop as any) = 100;
+>(obj.prop as any) = 100 : 100
+>                        : ^^^
+>(obj.prop as any) : any
+>                  : ^^^
+>obj.prop as any : any
+>                : ^^^
+>obj.prop : any
+>         : ^^^
+>obj : ReadonlyInterface
+>    : ^^^^^^^^^^^^^^^^^
+>prop : any
+>     : ^^^
+>100 : 100
+>    : ^^^
+}
+
+// Test cases that should still produce errors for proper context
+function shouldStillError() {
+>shouldStillError : () => number
+>                 : ^^^^^^^^^^^^
+
+    let uninitialized: number;
+>uninitialized : number
+>              : ^^^^^^
+
+    return uninitialized; // Should error - never assigned
+>uninitialized : number
+>              : ^^^^^^
+}
