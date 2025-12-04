@@ -20,5 +20,5 @@ exports.Bar = Bar;
 //// [declarationEmitConstantNoWidening.d.ts]
 export declare const FOO = "FOO";
 export declare class Bar {
-    readonly type: string;
+    readonly type = "FOO";
 }

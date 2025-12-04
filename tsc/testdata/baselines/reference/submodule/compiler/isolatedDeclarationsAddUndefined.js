@@ -50,13 +50,13 @@ exports.Bar2 = Bar2;
 export declare class Bar {
     c?: readonly [1] | undefined;
     c3?: 1 | undefined;
-    readonly r: number;
+    readonly r = 1;
     f: number;
 }
 //// [file2.d.ts]
 export declare function foo(p?: (ip: number | undefined, v: number) => void): void;
 export declare function foo2(p?: (ip: number | undefined, v: number) => void): void;
 export declare class Bar2 {
-    readonly r: number;
+    readonly r = 1;
     f: number;
 }

@@ -30,6 +30,6 @@ declare enum E {
     B = "b"
 }
 declare class C {
-    readonly type: E;
+    readonly type = E.A;
 }
 declare let x: E.A;

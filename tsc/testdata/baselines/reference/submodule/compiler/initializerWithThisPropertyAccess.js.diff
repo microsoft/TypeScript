@@ -45,16 +45,3 @@
 +    prop = false;
  }
 
-
-@@= skipped -49, +45 lines =@@
- }
- declare class Foo {
-     private bar;
--    readonly barProp = false;
-+    readonly barProp: boolean;
-     constructor();
- }
- declare class Bar {
--    readonly prop = false;
-+    readonly prop: boolean;
- }

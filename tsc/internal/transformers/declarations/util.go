@@ -14,7 +14,7 @@ func canHaveLiteralInitializer(host DeclarationEmitHost, node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindPropertyDeclaration,
 		ast.KindPropertySignature:
-		return host.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate) != 0
+		return host.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate) == 0
 	case ast.KindParameter,
 		ast.KindVariableDeclaration:
 		return true

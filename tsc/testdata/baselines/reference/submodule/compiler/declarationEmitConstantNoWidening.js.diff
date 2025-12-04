@@ -10,11 +10,3 @@
 +    type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
  }
  exports.Bar = Bar;
-
-@@= skipped -10, +8 lines =@@
- //// [declarationEmitConstantNoWidening.d.ts]
- export declare const FOO = "FOO";
- export declare class Bar {
--    readonly type = "FOO";
-+    readonly type: string;
- }

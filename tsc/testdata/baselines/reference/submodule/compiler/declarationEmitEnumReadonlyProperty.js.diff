@@ -10,12 +10,3 @@
 +    type = E.A;
  }
  let x = new C().type;
-
-@@= skipped -13, +11 lines =@@
-     B = "b"
- }
- declare class C {
--    readonly type = E.A;
-+    readonly type: E;
- }
- declare let x: E.A;

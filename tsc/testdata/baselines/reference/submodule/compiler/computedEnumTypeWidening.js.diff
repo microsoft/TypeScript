@@ -36,12 +36,3 @@
  }
  // Repro from #52531
  var MyEnum;
-@@= skipped -45, +43 lines =@@
- declare class C {
-     p1: E;
-     p2: E.B;
--    readonly p3 = E.B;
-+    readonly p3: E;
-     readonly p4: E.B;
- }
- declare enum MyEnum {

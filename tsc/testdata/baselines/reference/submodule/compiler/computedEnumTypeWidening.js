@@ -178,7 +178,7 @@ declare let v2: E.B;
 declare class C {
     p1: E;
     p2: E.B;
-    readonly p3: E;
+    readonly p3 = E.B;
     readonly p4: E.B;
 }
 declare enum MyEnum {

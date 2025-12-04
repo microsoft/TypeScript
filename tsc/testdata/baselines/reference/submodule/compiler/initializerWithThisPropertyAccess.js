@@ -83,9 +83,9 @@ declare class C {
 }
 declare class Foo {
     private bar;
-    readonly barProp: boolean;
+    readonly barProp = false;
     constructor();
 }
 declare class Bar {
-    readonly prop: boolean;
+    readonly prop = false;
 }
