@@ -23096,6 +23096,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (reportErrors) {
+                // Check if we're dealing with a discriminated union case where we can provide better error messages
+                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object) {
+                    const discriminantProps = findDiscriminantProperties(getPropertiesOfType(source), target);
+                    if (discriminantProps && discriminantProps.length > 0) {
+                        // For each discriminant property, check if the source property type contains values
+                        // not present in any constituent of the target union
+                        for (const prop of discriminantProps) {
+                            const sourcePropType = getTypeOfSymbol(prop);
+                            if (sourcePropType.flags & TypeFlags.Union) {
+                                // Get all discriminant values from the target union for this property
+                                const targetDiscriminantTypes: Type[] = [];
+                                for (const constituent of (target as UnionType).types) {
+                                    const constituentPropType = getTypeOfPropertyOfType(constituent, prop.escapedName);
+                                    if (constituentPropType) {
+                                        forEachType(constituentPropType, t => { targetDiscriminantTypes.push(t); });
+                                    }
+                                }
+                                const targetDiscriminantUnion = getUnionType(targetDiscriminantTypes);
+                                // Find source types that are not assignable to the target discriminant union
+                                const incompatibleTypes: Type[] = [];
+                                for (const sourceType of (sourcePropType as UnionType).types) {
+                                    if (!isTypeAssignableTo(sourceType, targetDiscriminantUnion)) {
+                                        incompatibleTypes.push(sourceType);
+                                    }
+                                }
+                                if (incompatibleTypes.length > 0) {
+                                    const incompatibleTypesStr = incompatibleTypes.map(t => typeToString(t)).join(" | ");
+                                    const propName = symbolToString(prop);
+                                    reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_The_type_s_2_are_not_present_in_the_discriminator_3_of_the_target, typeToString(source), typeToString(target), incompatibleTypesStr, propName);
+                                    return Ternary.False;
+                                }
+                            }
+                        }
+                    }
+                }
                 // Elaborate only if we can find a best matching type in the target union
                 const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
                 if (bestMatchingType) {

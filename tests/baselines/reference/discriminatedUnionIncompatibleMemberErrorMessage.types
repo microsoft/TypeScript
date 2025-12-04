@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/discriminatedUnionIncompatibleMemberErrorMessage.ts] ////
+
+=== discriminatedUnionIncompatibleMemberErrorMessage.ts ===
+// Test case for issue #62737
+// Improve error messages when assigning objects with wider discriminator unions to discriminated union types
+
+// Basic case - single incompatible type
+type Discriminated =
+>Discriminated : Discriminated
+>              : ^^^^^^^^^^^^^
+
+  | { discriminator: "foo" }
+>discriminator : "foo"
+>              : ^^^^^
+
+  | { discriminator: "bar" };
+>discriminator : "bar"
+>              : ^^^^^
+
+type UnionType = "foo" | "bar" | "baz";
+>UnionType : UnionType
+>          : ^^^^^^^^^
+
+const obj = { discriminator: "foo" as UnionType };
+>obj : { discriminator: UnionType; }
+>    : ^^^^^^^^^^^^^^^^^         ^^^
+>{ discriminator: "foo" as UnionType } : { discriminator: UnionType; }
+>                                      : ^^^^^^^^^^^^^^^^^         ^^^
+>discriminator : UnionType
+>              : ^^^^^^^^^
+>"foo" as UnionType : UnionType
+>                   : ^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const err: Discriminated = obj; // Error: "baz" is not present in discriminator
+>err : Discriminated
+>    : ^^^^^^^^^^^^^
+>obj : { discriminator: UnionType; }
+>    : ^^^^^^^^^^^^^^^^^         ^^^
+
+// Multiple incompatible types
+type WiderUnion = "foo" | "bar" | "baz" | "qux";
+>WiderUnion : WiderUnion
+>           : ^^^^^^^^^^
+
+const obj2 = { discriminator: "foo" as WiderUnion };
+>obj2 : { discriminator: WiderUnion; }
+>     : ^^^^^^^^^^^^^^^^^          ^^^
+>{ discriminator: "foo" as WiderUnion } : { discriminator: WiderUnion; }
+>                                       : ^^^^^^^^^^^^^^^^^          ^^^
+>discriminator : WiderUnion
+>              : ^^^^^^^^^^
+>"foo" as WiderUnion : WiderUnion
+>                    : ^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const err2: Discriminated = obj2; // Error: "baz" | "qux" are not present in discriminator
+>err2 : Discriminated
+>     : ^^^^^^^^^^^^^
+>obj2 : { discriminator: WiderUnion; }
+>     : ^^^^^^^^^^^^^^^^^          ^^^
+
+// Different discriminator property name
+type Shape =
+>Shape : Shape
+>      : ^^^^^
+
+  | { kind: "circle"; radius: number }
+>kind : "circle"
+>     : ^^^^^^^^
+>radius : number
+>       : ^^^^^^
+
+  | { kind: "square"; side: number };
+>kind : "square"
+>     : ^^^^^^^^
+>side : number
+>     : ^^^^^^
+
+type ShapeKind = "circle" | "square" | "triangle";
+>ShapeKind : ShapeKind
+>          : ^^^^^^^^^
+
+const shape = { kind: "circle" as ShapeKind };
+>shape : { kind: ShapeKind; }
+>      : ^^^^^^^^         ^^^
+>{ kind: "circle" as ShapeKind } : { kind: ShapeKind; }
+>                                : ^^^^^^^^         ^^^
+>kind : ShapeKind
+>     : ^^^^^^^^^
+>"circle" as ShapeKind : ShapeKind
+>                      : ^^^^^^^^^
+>"circle" : "circle"
+>         : ^^^^^^^^
+
+const err3: Shape = shape; // Error: "triangle" is not present in discriminator "kind"
+>err3 : Shape
+>     : ^^^^^
+>shape : { kind: ShapeKind; }
+>      : ^^^^^^^^         ^^^
+
+// From issue #62603
+type Discriminated2 =
+>Discriminated2 : Discriminated2
+>               : ^^^^^^^^^^^^^^
+
+  | { discriminator: "foo" }
+>discriminator : "foo"
+>              : ^^^^^
+
+  | { discriminator: "bar" };
+>discriminator : "bar"
+>              : ^^^^^
+
+const unexpectedError: Discriminated2 = { discriminator: "foo" } as { discriminator: UnionType };
+>unexpectedError : Discriminated2
+>                : ^^^^^^^^^^^^^^
+>{ discriminator: "foo" } as { discriminator: UnionType } : { discriminator: UnionType; }
+>                                                         : ^^^^^^^^^^^^^^^^^         ^^^
+>{ discriminator: "foo" } : { discriminator: "foo"; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>discriminator : "foo"
+>              : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>discriminator : UnionType
+>              : ^^^^^^^^^
+
+

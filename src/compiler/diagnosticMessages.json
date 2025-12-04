@@ -4023,6 +4023,14 @@
         "category": "Error",
         "code": 2882
     },
+    "Type '{0}' is not assignable to type '{1}'. The types of '{2}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2883
+    },
+    "Type '{0}' is not assignable to type '{1}'. The type(s) '{2}' are not present in the discriminator '{3}' of the target.": {
+        "category": "Error",
+        "code": 2884
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
