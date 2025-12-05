@@ -126,7 +126,7 @@ verify.quickInfos({
     2: "(parameter) param: string",
 
     f: ["function f(param1: string): void", "This is firstLine\nThis is second Line"],
-    3: ["(parameter) param1: string", "first line of param\n\nparam information third line"],
+    3: ["(parameter) param1: string", "first line of param\n\n param information third line"],
 
     g: ["function g(param1: string): void", "This is firstLine\nThis is second Line"],
     4: ["(parameter) param1: string", " param information first line"],

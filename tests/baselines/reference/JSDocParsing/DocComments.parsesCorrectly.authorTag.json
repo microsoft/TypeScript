@@ -441,7 +441,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": "No Line Breaks:<the email"
+            "comment": "No Line Breaks:  <the email"
         },
         "17": {
             "kind": "JSDocTag",
@@ -471,7 +471,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": "Long Comment <long@comment.org> I\nwant to keep commenting down here, I dunno."
+            "comment": "Long Comment <long@comment.org> I\n want to keep commenting down here, I dunno."
         },
         "length": 19,
         "pos": 7,

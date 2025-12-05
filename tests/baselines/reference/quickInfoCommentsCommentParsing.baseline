@@ -483,29 +483,29 @@
 // | ----------------------------------------------------------------------
 // | (parameter) a: string
 // | this is info about a
-// | spanning on two lines and aligned perfectly
+// |                   spanning on two lines and aligned perfectly
 // | @param a this is info about a
-// | spanning on two lines and aligned perfectly
+// |                   spanning on two lines and aligned perfectly
 // | ----------------------------------------------------------------------
 //                                                ^
 // | ----------------------------------------------------------------------
 // | (parameter) b: any
 // | this is info about b
-// | spanning on two lines and aligned perfectly
-// | spanning one more line alined perfectly
-// |     spanning another line with more margin
+// |                   spanning on two lines and aligned perfectly
+// |                   spanning one more line alined perfectly
+// |                       spanning another line with more margin
 // | @param b this is info about b
-// | spanning on two lines and aligned perfectly
-// | spanning one more line alined perfectly
-// |     spanning another line with more margin
+// |                   spanning on two lines and aligned perfectly
+// |                   spanning one more line alined perfectly
+// |                       spanning another line with more margin
 // | ----------------------------------------------------------------------
 //                                                   ^
 // | ----------------------------------------------------------------------
 // | (parameter) c: any
 // | this is info about b
-// | not aligned text about parameter will eat only one space
+// |  not aligned text about parameter will eat only one space
 // | @param c this is info about b
-// | not aligned text about parameter will eat only one space
+// |  not aligned text about parameter will eat only one space
 // | ----------------------------------------------------------------------
 // }
 // jsDocCommentAlignmentTest3("hello",1, 2);
@@ -515,13 +515,13 @@
 // | This is function comment
 // |     And aligned with 4 space char margin
 // | @param a this is info about a
-// | spanning on two lines and aligned perfectly
+// |                   spanning on two lines and aligned perfectly
 // | @param b this is info about b
-// | spanning on two lines and aligned perfectly
-// | spanning one more line alined perfectly
-// |     spanning another line with more margin
+// |                   spanning on two lines and aligned perfectly
+// |                   spanning one more line alined perfectly
+// |                       spanning another line with more margin
 // | @param c this is info about b
-// | not aligned text about parameter will eat only one space
+// |  not aligned text about parameter will eat only one space
 // | ----------------------------------------------------------------------
 // 
 // ^
@@ -4691,7 +4691,7 @@
       ],
       "documentation": [
         {
-          "text": "this is info about a\nspanning on two lines and aligned perfectly",
+          "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
           "kind": "text"
         }
       ],
@@ -4708,7 +4708,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about a\nspanning on two lines and aligned perfectly",
+              "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
               "kind": "text"
             }
           ]
@@ -4765,7 +4765,7 @@
       ],
       "documentation": [
         {
-          "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+          "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
           "kind": "text"
         }
       ],
@@ -4782,7 +4782,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+              "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
               "kind": "text"
             }
           ]
@@ -4839,7 +4839,7 @@
       ],
       "documentation": [
         {
-          "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+          "text": "this is info about b\n not aligned text about parameter will eat only one space",
           "kind": "text"
         }
       ],
@@ -4856,7 +4856,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+              "text": "this is info about b\n not aligned text about parameter will eat only one space",
               "kind": "text"
             }
           ]
@@ -4994,7 +4994,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about a\nspanning on two lines and aligned perfectly",
+              "text": "this is info about a\n                  spanning on two lines and aligned perfectly",
               "kind": "text"
             }
           ]
@@ -5011,7 +5011,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+              "text": "this is info about b\n                  spanning on two lines and aligned perfectly\n                  spanning one more line alined perfectly\n                      spanning another line with more margin",
               "kind": "text"
             }
           ]
@@ -5028,7 +5028,7 @@
               "kind": "space"
             },
             {
-              "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+              "text": "this is info about b\n not aligned text about parameter will eat only one space",
               "kind": "text"
             }
           ]

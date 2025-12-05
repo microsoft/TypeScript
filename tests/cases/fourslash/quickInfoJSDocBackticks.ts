@@ -22,4 +22,4 @@ verify.quickInfoIs("function f(x: string, y: string): string", "`@param` initial
 goTo.marker("x");
 verify.quickInfoIs("(parameter) x: string", "hi there `@param`");
 goTo.marker("y");
-verify.quickInfoIs("(parameter) y: string", "hi there `@ * param\nthis is the margin");
+verify.quickInfoIs("(parameter) y: string", "hi there `@ * param\n                  this is the margin");
