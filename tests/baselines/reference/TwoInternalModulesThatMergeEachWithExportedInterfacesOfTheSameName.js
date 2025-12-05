@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts] ////
 
 //// [TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts]
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
@@ -9,7 +9,7 @@ module A {
     }
 }
 
-module A {
+namespace A {
     export interface Point {
         fromCarth(): Point;
     }
@@ -19,14 +19,14 @@ module A {
 var p: { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; };
 var p: A.Point;
 
-module X.Y.Z {
+namespace X.Y.Z {
     export interface Line {
         new (start: A.Point, end: A.Point);
     }
 }
 
-module X {
-    export module Y.Z {
+namespace X {
+    export namespace Y.Z {
         export interface Line {
             start: A.Point;
             end: A.Point;

@@ -149,11 +149,11 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push(options) : number
 >                      : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >changes : ChangeOptions[]
 >        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >options : ConfigurableStartEnd
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -161,13 +161,13 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push(error) : number
 >                    : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >changes : ChangeOptions[]
 >        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >error : { error?: number; }
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^      ^^^
 }
 
 class K {
@@ -234,6 +234,6 @@ let weak: Weak & Spoiler = propertiesWrong
 >weak : Weak & Spoiler
 >     : ^^^^^^^^^^^^^^
 >propertiesWrong : { properties: { wrong: string; }; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^                  ^^^
 
 

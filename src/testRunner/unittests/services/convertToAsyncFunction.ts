@@ -1,20 +1,20 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
-    createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    libFile as vfsWatch_LibFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 import {
     extractTest,
     newLineCharacter,
     notImplementedHost,
     TestProjectService,
-} from "./extract/helpers";
+} from "./extract/helpers.js";
 
 const libFile: File = {
-    path: "/a/lib/lib.d.ts",
-    content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
+    path: vfsWatch_LibFile.path,
+    content: `interface Boolean {}
 interface Function {}
 interface IArguments {}
 interface Number { toExponential: any; }
@@ -275,7 +275,7 @@ interface Array<T> {}`,
 };
 
 const moduleFile: File = {
-    path: "/module.ts",
+    path: "/home/src/workspaces/project/module.ts",
     content: `export function fn(res: any): any {
     return res;
 }`,
@@ -330,7 +330,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     extensions.forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: ts.Extension) {
-        const path = "/a" + extension;
+        const path = "/home/src/workspaces/project/a" + extension;
         const languageService = makeLanguageService({ path, content: t.source }, includeLib, includeModule);
         const program = languageService.getProgram()!;
 
@@ -412,7 +412,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         if (includeModule) {
             files.push(moduleFile);
         }
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const projectService = new TestProjectService(host);
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
@@ -444,7 +444,7 @@ const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: st
     testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
 });
 
-describe("unittests:: services:: convertToAsyncFunction", () => {
+describe("unittests:: services:: convertToAsyncFunction::", () => {
     _testConvertToAsyncFunction(
         "convertToAsyncFunction_basic",
         `

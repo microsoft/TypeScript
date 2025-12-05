@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/uniqueSymbolJs2.ts] ////
+
+=== /index.js ===
+/** @type {unique symbol} */
+const x = Symbol()
+>x : Symbol(x, Decl(index.js, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+/** @type {unique symbol} */
+const y = Symbol()
+>y : Symbol(y, Decl(index.js, 3, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+/** @type {typeof x} */
+let z = x
+>z : Symbol(z, Decl(index.js, 6, 3))
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+z == y // error
+>z : Symbol(z, Decl(index.js, 6, 3))
+>y : Symbol(y, Decl(index.js, 3, 5))
+

@@ -37,7 +37,7 @@ interface B extends Entity {
 // signature and simply check compatibility with the implementation.
 function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
 >hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
->        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "A"
@@ -45,7 +45,7 @@ function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
 
 function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
 >hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
->        : ^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^         ^^^           ^^^
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "B"
@@ -53,7 +53,7 @@ function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
 
 function hasKind(entity: Entity, kind: Kind): entity is Entity {
 >hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
->        : ^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : Kind
@@ -95,7 +95,7 @@ if (hasKind(x, "A")) {
 >hasKind(x, "A") : boolean
 >                : ^^^^^^^
 >hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
->        : ^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >x : A
 >  : ^
 >"A" : "A"
@@ -121,7 +121,7 @@ if (!hasKind(x, "B")) {
 >hasKind(x, "B") : boolean
 >                : ^^^^^^^
 >hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
->        : ^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^      ^^      ^^    ^^         ^^^^^^^^^^^^^^^^^
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >x : A
 >  : ^
 >"B" : "B"

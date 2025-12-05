@@ -35,7 +35,7 @@ if(foo.M2.x){
 >other.M2.x.charCodeAt(0) : number
 >                         : ^^^^^^
 >other.M2.x.charCodeAt : (index: number) => number
->                      : ^     ^^      ^^^^^^^^^^^
+>                      : ^     ^^      ^^^^^      
 >other.M2.x : string
 >           : ^^^^^^
 >other.M2 : typeof other.M2
@@ -47,13 +47,13 @@ if(foo.M2.x){
 >x : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >0 : 0
 >  : ^
 }
 
 === test/foo.d.ts ===
-export declare module M2 {
+export declare namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
@@ -63,7 +63,7 @@ export declare module M2 {
 }
 
 === test/other.d.ts ===
-export declare module M2 {
+export declare namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

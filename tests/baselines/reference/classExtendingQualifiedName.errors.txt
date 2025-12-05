@@ -2,7 +2,7 @@ classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist 
 
 
 ==== classExtendingQualifiedName.ts (1 errors) ====
-    module M {
+    namespace M {
         class C {
         }
     

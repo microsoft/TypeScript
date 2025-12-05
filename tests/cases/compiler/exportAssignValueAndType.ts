@@ -1,5 +1,5 @@
 //@module: commonjs
-declare module http {
+declare namespace http {
 	export interface Server { openPort: number; }
 }
 

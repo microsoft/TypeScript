@@ -21,81 +21,81 @@ class Base {
 
     a: typeof x;
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     b(a: typeof x) { }
 >b : (a: typeof x) => void
 >  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     get c() { return x; }
 >c : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     set c(v: typeof x) { }
 >c : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     d: (a: typeof x) => void;
 >d : (a: typeof x) => void
 >  : ^ ^^        ^^^^^    
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     static r: typeof x;
 >r : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     static s(a: typeof x) { }
 >s : (a: typeof x) => void
 >  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     static get t() { return x; }
 >t : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     static set t(v: typeof x) { }
 >t : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     static u: (a: typeof x) => void;
 >u : (a: typeof x) => void
 >  : ^ ^^        ^^^^^    
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) {}
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 // Errors
@@ -108,21 +108,21 @@ class Derived1 extends Base {
 
     protected a: typeof x;
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived2 extends Base {
@@ -135,21 +135,21 @@ class Derived2 extends Base {
 >b : (a: typeof x) => void
 >  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived3 extends Base {
@@ -160,21 +160,21 @@ class Derived3 extends Base {
 
     protected get c() { return x; }
 >c : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived4 extends Base {
@@ -185,23 +185,23 @@ class Derived4 extends Base {
 
     protected set c(v: typeof x) { }
 >c : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived5 extends Base {
@@ -214,21 +214,21 @@ class Derived5 extends Base {
 >d : (a: typeof x) => void
 >  : ^ ^^        ^^^^^    
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived6 extends Base {
@@ -239,21 +239,21 @@ class Derived6 extends Base {
 
     protected static r: typeof x;
 >r : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived7 extends Base {
@@ -266,21 +266,21 @@ class Derived7 extends Base {
 >s : (a: typeof x) => void
 >  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived8 extends Base {
@@ -291,21 +291,21 @@ class Derived8 extends Base {
 
     protected static get t() { return x; }
 >t : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived9 extends Base {
@@ -316,23 +316,23 @@ class Derived9 extends Base {
 
     protected static set t(v: typeof x) { }
 >t : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }
 
 class Derived10 extends Base {
@@ -345,19 +345,19 @@ class Derived10 extends Base {
 >u : (a: typeof x) => void
 >  : ^ ^^        ^^^^^    
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { super(a); }
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >super(a) : void
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 }

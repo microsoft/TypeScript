@@ -22,7 +22,7 @@ export declare function styled(): Color;
 === file2.ts ===
 import { styled }  from "./file1";
 >styled : () => import("color").default
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^       ^^^^^^^  ^^^^^^^
 
 export const A = styled();
 >A : import("color").default
@@ -30,5 +30,5 @@ export const A = styled();
 >styled() : import("color").default
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >styled : () => import("color").default
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^       ^^^^^^^  ^^^^^^^
 

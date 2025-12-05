@@ -64,11 +64,11 @@ const p3: ClickableDiscriminatedUnion = {
 >console.log('@@@@', ev) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'@@@@' : "@@@@"
 >       : ^^^^^^
 >ev : string

@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {
@@ -35,8 +35,8 @@ export type TheStr = string;
 }
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -47,17 +47,20 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --project ./packages/pkg1/tsconfig.json -w --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js --project ./packages/pkg1/tsconfig.json -w --traceResolution
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -76,21 +79,15 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -114,13 +111,11 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/build/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
@@ -157,19 +152,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
@@ -193,6 +188,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -201,23 +197,17 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -236,11 +226,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/other.d.ts' with Package ID 'pkg2/build/other.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pkg2"' has no exported member 'TheNum'.
 
 [7m1[0m import type { TheNum } from 'pkg2'
@@ -263,13 +248,11 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
@@ -313,7 +296,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
@@ -344,6 +327,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -352,21 +336,17 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -385,21 +365,15 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -417,13 +391,11 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
@@ -465,7 +437,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts

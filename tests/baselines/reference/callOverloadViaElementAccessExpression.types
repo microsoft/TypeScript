@@ -7,19 +7,19 @@ class C {
 
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
     foo(x: any): any {
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
 >  : ^^^
 
@@ -41,7 +41,7 @@ var r: string = c['foo'](1);
 >c['foo'](1) : number
 >            : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
->         : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
 >  : ^
 >'foo' : "foo"
@@ -55,7 +55,7 @@ var r2: number = c['foo']('');
 >c['foo']('') : string
 >             : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
->         : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
 >  : ^
 >'foo' : "foo"

@@ -32,7 +32,7 @@
 >$('.foo').addClass('bar') : $
 >                          : ^
 >$('.foo').addClass : (className: string) => $
->                   : ^         ^^      ^^^^^^
+>                   : ^         ^^      ^^^^^ 
 >$('.foo') : $
 >          : ^
 >$ : typeof $
@@ -40,7 +40,7 @@
 >'.foo' : ".foo"
 >       : ^^^^^^
 >addClass : (className: string) => $
->         : ^         ^^      ^^^^^^
+>         : ^         ^^      ^^^^^ 
 >'bar' : "bar"
 >      : ^^^^^
 

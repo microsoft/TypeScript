@@ -10,7 +10,7 @@ const enum E {
 >  : ^^^
 }
 
-module E {
+namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -127,7 +127,7 @@ foo(E2);
 >foo(E2) : void
 >        : ^^^^
 >foo : (t: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >E2 : typeof E2
 >   : ^^^^^^^^^
 

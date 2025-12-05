@@ -1,0 +1,173 @@
+//// [tests/cases/compiler/genericCallInferenceInConditionalTypes1.ts] ////
+
+=== genericCallInferenceInConditionalTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59937
+
+type Ref<T> = {
+>Ref : Symbol(Ref, Decl(genericCallInferenceInConditionalTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 2, 9))
+
+  current: T;
+>current : Symbol(current, Decl(genericCallInferenceInConditionalTypes1.ts, 2, 15))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 2, 9))
+
+};
+
+type FunctionComponent<P> = (props: P) => unknown;
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 23))
+>props : Symbol(props, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 29))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 23))
+
+type ComponentProps<T extends FunctionComponent<any>> =
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 8, 20))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+
+  T extends FunctionComponent<infer P> ? P : {};
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 8, 20))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 9, 35))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 9, 35))
+
+type PropsWithoutRef<P> = P extends any
+>PropsWithoutRef : Symbol(PropsWithoutRef, Decl(genericCallInferenceInConditionalTypes1.ts, 9, 48))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+
+  ? "ref" extends keyof P
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+
+    ? Omit<P, "ref">
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+
+    : P
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+
+  : P;
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 11, 21))
+
+type ComponentPropsWithoutRef<T extends FunctionComponent<any>> =
+>ComponentPropsWithoutRef : Symbol(ComponentPropsWithoutRef, Decl(genericCallInferenceInConditionalTypes1.ts, 15, 6))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 17, 30))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+
+  PropsWithoutRef<ComponentProps<T>>;
+>PropsWithoutRef : Symbol(PropsWithoutRef, Decl(genericCallInferenceInConditionalTypes1.ts, 9, 48))
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 17, 30))
+
+declare function forwardRef<T, P>(
+>forwardRef : Symbol(forwardRef, Decl(genericCallInferenceInConditionalTypes1.ts, 18, 37))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 28))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 30))
+
+  component: (props: P, ref: Ref<T>) => unknown,
+>component : Symbol(component, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 34))
+>props : Symbol(props, Decl(genericCallInferenceInConditionalTypes1.ts, 21, 14))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 30))
+>ref : Symbol(ref, Decl(genericCallInferenceInConditionalTypes1.ts, 21, 23))
+>Ref : Symbol(Ref, Decl(genericCallInferenceInConditionalTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 28))
+
+): (props: P & { ref?: Ref<T> }) => unknown;
+>props : Symbol(props, Decl(genericCallInferenceInConditionalTypes1.ts, 22, 4))
+>P : Symbol(P, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 30))
+>ref : Symbol(ref, Decl(genericCallInferenceInConditionalTypes1.ts, 22, 16))
+>Ref : Symbol(Ref, Decl(genericCallInferenceInConditionalTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 20, 28))
+
+const ComponentWithForwardRef = forwardRef(
+>ComponentWithForwardRef : Symbol(ComponentWithForwardRef, Decl(genericCallInferenceInConditionalTypes1.ts, 24, 5))
+>forwardRef : Symbol(forwardRef, Decl(genericCallInferenceInConditionalTypes1.ts, 18, 37))
+
+  <T extends FunctionComponent<any>>(
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 25, 3))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+
+    props: ComponentPropsWithoutRef<T>,
+>props : Symbol(props, Decl(genericCallInferenceInConditionalTypes1.ts, 25, 37))
+>ComponentPropsWithoutRef : Symbol(ComponentPropsWithoutRef, Decl(genericCallInferenceInConditionalTypes1.ts, 15, 6))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 25, 3))
+
+    ref: Ref<HTMLElement>,
+>ref : Symbol(ref, Decl(genericCallInferenceInConditionalTypes1.ts, 26, 39))
+>Ref : Symbol(Ref, Decl(genericCallInferenceInConditionalTypes1.ts, 0, 0))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  ) => {
+    return null;
+  },
+);
+
+type Test<T> = T extends { component?: infer Component }
+>Test : Symbol(Test, Decl(genericCallInferenceInConditionalTypes1.ts, 31, 2))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 10))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 10))
+>component : Symbol(component, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 26))
+>Component : Symbol(Component, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 44))
+
+  ? Component extends FunctionComponent<any>
+>Component : Symbol(Component, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 44))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+
+    ? ComponentProps<Component>
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>Component : Symbol(Component, Decl(genericCallInferenceInConditionalTypes1.ts, 33, 44))
+
+    : never
+  : never;
+
+// the first one here has a chance to pollute the cache
+type Result1 = ComponentProps<typeof ComponentWithForwardRef>;
+>Result1 : Symbol(Result1, Decl(genericCallInferenceInConditionalTypes1.ts, 37, 10))
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>ComponentWithForwardRef : Symbol(ComponentWithForwardRef, Decl(genericCallInferenceInConditionalTypes1.ts, 24, 5))
+
+// that could be incorrectly reused by this one
+type Result2 = Test<{ component: typeof ComponentWithForwardRef }>; // no `T` leak
+>Result2 : Symbol(Result2, Decl(genericCallInferenceInConditionalTypes1.ts, 40, 62))
+>Test : Symbol(Test, Decl(genericCallInferenceInConditionalTypes1.ts, 31, 2))
+>component : Symbol(component, Decl(genericCallInferenceInConditionalTypes1.ts, 42, 21))
+>ComponentWithForwardRef : Symbol(ComponentWithForwardRef, Decl(genericCallInferenceInConditionalTypes1.ts, 24, 5))
+
+// same as ComponentWithForwardRef above but using a resolved signature instead of a direct inferred result of `forwardRef`
+declare const ComponentWithForwardRef2: <T extends FunctionComponent<any>>(
+>ComponentWithForwardRef2 : Symbol(ComponentWithForwardRef2, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 13))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 41))
+>FunctionComponent : Symbol(FunctionComponent, Decl(genericCallInferenceInConditionalTypes1.ts, 4, 2))
+
+  props: PropsWithoutRef<ComponentProps<T>> & {
+>props : Symbol(props, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 75))
+>PropsWithoutRef : Symbol(PropsWithoutRef, Decl(genericCallInferenceInConditionalTypes1.ts, 9, 48))
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 41))
+
+    className?: string;
+>className : Symbol(className, Decl(genericCallInferenceInConditionalTypes1.ts, 46, 47))
+
+    as?: T | undefined;
+>as : Symbol(as, Decl(genericCallInferenceInConditionalTypes1.ts, 47, 23))
+>T : Symbol(T, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 41))
+
+  } & {
+    ref?: Ref<HTMLElement> | undefined;
+>ref : Symbol(ref, Decl(genericCallInferenceInConditionalTypes1.ts, 49, 7))
+>Ref : Symbol(Ref, Decl(genericCallInferenceInConditionalTypes1.ts, 0, 0))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  },
+) => unknown;
+
+type Result3 = ComponentProps<typeof ComponentWithForwardRef2>;
+>Result3 : Symbol(Result3, Decl(genericCallInferenceInConditionalTypes1.ts, 52, 13))
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceInConditionalTypes1.ts, 6, 50))
+>ComponentWithForwardRef2 : Symbol(ComponentWithForwardRef2, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 13))
+
+type Result4 = Test<{ component: typeof ComponentWithForwardRef2 }>;
+>Result4 : Symbol(Result4, Decl(genericCallInferenceInConditionalTypes1.ts, 54, 63))
+>Test : Symbol(Test, Decl(genericCallInferenceInConditionalTypes1.ts, 31, 2))
+>component : Symbol(component, Decl(genericCallInferenceInConditionalTypes1.ts, 55, 21))
+>ComponentWithForwardRef2 : Symbol(ComponentWithForwardRef2, Decl(genericCallInferenceInConditionalTypes1.ts, 45, 13))
+

@@ -29,7 +29,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.kind : string | boolean
 >       : ^^^^^^^^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | boolean
 >     : ^^^^^^^^^^^^^^^^
 >false : false
@@ -39,7 +39,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.a : string
 >    : ^^^^^^
 >x : { kind: false; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
     }
@@ -49,7 +49,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.kind : string | true
 >       : ^^^^^^^^^^^^^
 >x : { kind: true; b: string; } | { kind: string; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | true
 >     : ^^^^^^^^^^^^^
 >true : true
@@ -59,7 +59,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.b : string
 >    : ^^^^^^
 >x : { kind: true; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
     }
@@ -68,7 +68,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.c : string
 >    : ^^^^^^
 >x : { kind: string; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^^^      ^^^
 >c : string
 >  : ^^^^^^
     }
@@ -100,7 +100,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.kind : string | boolean
 >       : ^^^^^^^^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | boolean
 >     : ^^^^^^^^^^^^^^^^
 
@@ -112,7 +112,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.a : string
 >    : ^^^^^^
 >x : { kind: false; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -125,7 +125,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.b : string
 >    : ^^^^^^
 >x : { kind: true; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 
@@ -135,7 +135,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 >x.c : string
 >    : ^^^^^^
 >x : { kind: string; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^^^      ^^^
 >c : string
 >  : ^^^^^^
     }
@@ -159,7 +159,7 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 >x = { a: null, b: "foo", c: 4} : { a: null; b: string; c: number; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: null; b: string; } | { a: string; c: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^    ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >{ a: null, b: "foo", c: 4} : { a: null; b: string; c: number; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : null
@@ -194,7 +194,7 @@ function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 >x.a : 0 | T
 >    : ^^^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >a : 0 | T
 >  : ^^^^^
 >0 : 0
@@ -204,7 +204,7 @@ function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 >x.b : any
 >    : ^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >b : any
 >  : ^^^
     }
@@ -240,7 +240,7 @@ function f15(x: Result<number>) {
 >x.value : number
 >        : ^^^^^^
 >x : { error?: undefined; value: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -251,7 +251,7 @@ function f15(x: Result<number>) {
 >x.error : Error
 >        : ^^^^^
 >x : { error: Error; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^     ^^^
 >error : Error
 >      : ^^^^^
 >message : string
@@ -408,12 +408,12 @@ function f30(foo: Foo) {
 
         foo;
 >foo : { tag: true; x: number; } | { [x: string]: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     else {
         foo;
 >foo : { tag: false; y: number; } | { [x: string]: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -437,12 +437,12 @@ function f31(foo: Foo) {
 
         foo;
 >foo : { tag: true; x: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^    ^^^^^      ^^^
     }
     else {
         foo;
 >foo : { tag: false; y: number; } | { [x: string]: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -552,7 +552,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >foo1 : (x: RuntimeValue & { type: "number"; }) => void
 >     : ^ ^^                                  ^^^^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >type : "number"
 >     : ^^^^^^^^
 
@@ -562,7 +562,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >x.type : "number"
 >       : ^^^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >type : "number"
 >     : ^^^^^^^^
 >'number' : "number"
@@ -572,7 +572,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >x.value : number
 >        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
 >      : ^^^^^^
     }
@@ -581,7 +581,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >x.value : number
 >        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
 >      : ^^^^^^
     }
@@ -591,7 +591,7 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
 >     : ^ ^^                                                          ^^^^^^^^^
 >x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^
+>  : ^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 >type : "number"
 >     : ^^^^^^^^
 >type : "string"
@@ -603,7 +603,7 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >x.type : "string" | "number"
 >       : ^^^^^^^^^^^^^^^^^^^
 >x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 >type : "string" | "number"
 >     : ^^^^^^^^^^^^^^^^^^^
 >'number' : "number"
@@ -613,7 +613,7 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >x.value : number
 >        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
 >      : ^^^^^^
     }
@@ -622,7 +622,7 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >x.value : string
 >        : ^^^^^^
 >x : { type: "string"; value: string; } & { type: "string"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : string
 >      : ^^^^^^
     }

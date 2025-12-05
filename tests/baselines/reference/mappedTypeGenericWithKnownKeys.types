@@ -5,7 +5,7 @@
 
 function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) {
 >test : <Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) => void
->     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^   ^^           ^^^^^^^^^
+>     : ^     ^^^^^^^^^                      ^^     ^^     ^^   ^^           ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >key : keyof Shape

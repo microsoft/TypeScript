@@ -44,11 +44,11 @@ var r2: void = i.valueOf();
 >i.valueOf() : void
 >            : ^^^^
 >i.valueOf : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >i : I
 >  : ^
 >valueOf : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 var a = {
 >a : { valueOf: () => void; }
@@ -90,9 +90,9 @@ var r4: void = b.valueOf();
 >b.valueOf() : void
 >            : ^^^^
 >b.valueOf : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >b : { valueOf(): void; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^    ^^^
 >valueOf : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 

@@ -7,7 +7,7 @@ abstract class A {
 
     abstract foo();
 >foo : { (): any; (): number; (): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
     abstract foo() : number;
 >foo : { (): any; (): number; (): any; }
@@ -15,7 +15,7 @@ abstract class A {
 
     abstract foo();
 >foo : { (): any; (): number; (): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
     
     abstract bar();
 >bar : { (): any; (): any; (): any; }
@@ -60,7 +60,7 @@ abstract class B {
 
     abstract foo();
 >foo : { (): number; (): any; (): any; (): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x : number;
 >x : number
@@ -68,9 +68,9 @@ abstract class B {
 
     abstract foo();
 >foo : { (): number; (): any; (): any; (): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     abstract foo();
 >foo : { (): number; (): any; (): any; (): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -2,6 +2,7 @@
 
 === Performance Stats ===
 Type Count: 5,000
+Instantiation count: 2,500
 
 === verifyDefaultLib_webworker.ts ===
 var x: Worker;

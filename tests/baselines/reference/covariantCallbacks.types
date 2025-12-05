@@ -302,19 +302,19 @@ declare let bfs: Bivar<(x: string) => void>;
 
 bfu = bfs;
 >bfu = bfs : Bivar<(x: string) => void>
->          : ^^^^^^^ ^^      ^^^^^^^^^^
+>          : ^^^^^^^ ^^      ^^^^^    ^
 >bfu : Bivar<(x: unknown) => void>
->    : ^^^^^^^ ^^       ^^^^^^^^^^
+>    : ^^^^^^^ ^^       ^^^^^    ^
 >bfs : Bivar<(x: string) => void>
->    : ^^^^^^^ ^^      ^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^    ^
 
 bfs = bfu;
 >bfs = bfu : Bivar<(x: unknown) => void>
->          : ^^^^^^^ ^^       ^^^^^^^^^^
+>          : ^^^^^^^ ^^       ^^^^^    ^
 >bfs : Bivar<(x: string) => void>
->    : ^^^^^^^ ^^      ^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^    ^
 >bfu : Bivar<(x: unknown) => void>
->    : ^^^^^^^ ^^       ^^^^^^^^^^
+>    : ^^^^^^^ ^^       ^^^^^    ^
 
 type Bivar1<T> = { set(value: T): void }
 >Bivar1 : Bivar1<T>
@@ -346,19 +346,19 @@ declare let b2fs: Bivar2<(x: string) => void>;
 
 b1fu = b2fs;
 >b1fu = b2fs : Bivar2<(x: string) => void>
->            : ^^^^^^^^ ^^      ^^^^^^^^^^
+>            : ^^^^^^^^ ^^      ^^^^^    ^
 >b1fu : Bivar1<(x: unknown) => void>
->     : ^^^^^^^^ ^^       ^^^^^^^^^^
+>     : ^^^^^^^^ ^^       ^^^^^    ^
 >b2fs : Bivar2<(x: string) => void>
->     : ^^^^^^^^ ^^      ^^^^^^^^^^
+>     : ^^^^^^^^ ^^      ^^^^^    ^
 
 b2fs = b1fu;
 >b2fs = b1fu : Bivar1<(x: unknown) => void>
->            : ^^^^^^^^ ^^       ^^^^^^^^^^
+>            : ^^^^^^^^ ^^       ^^^^^    ^
 >b2fs : Bivar2<(x: string) => void>
->     : ^^^^^^^^ ^^      ^^^^^^^^^^
+>     : ^^^^^^^^ ^^      ^^^^^    ^
 >b1fu : Bivar1<(x: unknown) => void>
->     : ^^^^^^^^ ^^       ^^^^^^^^^^
+>     : ^^^^^^^^ ^^       ^^^^^    ^
 
 type SetLike<T> = { set(value: T): void, get(): T }
 >SetLike : SetLike<T>
@@ -384,19 +384,19 @@ declare let sy: SetLike1<(x: string) => void>;
 
 sx = sy;  // Error
 >sx = sy : SetLike1<(x: string) => void>
->        : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^      ^^^^^    ^
 >sx : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 >sy : SetLike1<(x: string) => void>
->   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 
 sy = sx;
 >sy = sx : SetLike1<(x: unknown) => void>
->        : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^       ^^^^^    ^
 >sy : SetLike1<(x: string) => void>
->   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 >sx : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 
 type SetLike1<T> = { set(value: T): void, get(): T }
 >SetLike1 : SetLike1<T>
@@ -432,17 +432,17 @@ declare let s2: SetLike2<(x: string) => void>;
 
 s1 = s2;  // Error
 >s1 = s2 : SetLike2<(x: string) => void>
->        : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^      ^^^^^    ^
 >s1 : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 >s2 : SetLike2<(x: string) => void>
->   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 
 s2 = s1;
 >s2 = s1 : SetLike1<(x: unknown) => void>
->        : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^       ^^^^^    ^
 >s2 : SetLike2<(x: string) => void>
->   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 >s1 : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 

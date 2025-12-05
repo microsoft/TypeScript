@@ -11,7 +11,7 @@ verify.completions({
     marker: "",
     includes: [{
         name: "foo",
-        source: "/foo",
+        source: "./foo",
         sourceDisplay: "./foo",
         hasAction: true,
         kind: "const",

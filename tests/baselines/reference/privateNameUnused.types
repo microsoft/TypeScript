@@ -22,11 +22,11 @@ export class A {
 >console.log(this.#used) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >this.#used : string
 >           : ^^^^^^
 >this : this
@@ -51,11 +51,11 @@ export class A2 {
 >console.log(this.#used()) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >this.#used() : void
 >             : ^^^^
 >this.#used : () => void
@@ -98,11 +98,11 @@ export class A3 {
 >console.log(this.#used) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >this.#used : number
 >           : ^^^^^^
 >this : this

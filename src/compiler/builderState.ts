@@ -1,9 +1,11 @@
 import {
     arrayFrom,
     CancellationToken,
+    CompilerOptions,
     computeSignatureWithDiagnostics,
     CustomTransformers,
     Debug,
+    EmitOnly,
     EmitOutput,
     emptyArray,
     GetCanonicalFileName,
@@ -31,7 +33,7 @@ import {
     Symbol,
     toPath,
     TypeChecker,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getFileEmitOutput(
@@ -110,6 +112,7 @@ export namespace BuilderState {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
         keys(): IterableIterator<Path>;
+        size(): number;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -123,6 +126,7 @@ export namespace BuilderState {
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
                 keys: () => forward.keys(),
+                size: () => forward.size,
 
                 deleteKey: k => {
                     (deleted ||= new Set<Path>()).add(k);
@@ -202,7 +206,7 @@ export namespace BuilderState {
      * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
      */
     function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path, getCanonicalFileName: GetCanonicalFileName): Path {
-        return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
+        return toPath(program.getRedirectFromSourceFile(fileName)?.outputDts || fileName, sourceFileDirectory, getCanonicalFileName);
     }
 
     /**
@@ -288,8 +292,14 @@ export namespace BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
+    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined): boolean | undefined {
         return oldState && !oldState.referencedMap === !newReferencedMap;
+    }
+
+    export function createReferencedMap(options: CompilerOptions): ManyToManyPathMap | undefined {
+        return options.module !== ModuleKind.None && !options.outFile ?
+            createManyToManyPathMap() :
+            undefined;
     }
 
     /**
@@ -298,9 +308,7 @@ export namespace BuilderState {
     export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
-        const isOutFile = options.outFile;
-        const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
-            createManyToManyPathMap() : undefined;
+        const referencedMap = createReferencedMap(options);
         const useOldState = canReuseOldState(referencedMap, oldState);
 
         // Ensure source files have parent pointers set
@@ -323,7 +331,7 @@ export namespace BuilderState {
                 version,
                 signature,
                 // No need to calculate affectsGlobalScope with --out since its not used at all
-                affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
+                affectsGlobalScope: !options.outFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
                 impliedFormat: sourceFile.impliedNodeFormat,
             });
         }
@@ -338,7 +346,7 @@ export namespace BuilderState {
     /**
      * Releases needed properties
      */
-    export function releaseCache(state: BuilderState) {
+    export function releaseCache(state: BuilderState): void {
         state.allFilesExcludingDefaultLibraryFile = undefined;
         state.allFileNames = undefined;
     }
@@ -383,7 +391,7 @@ export namespace BuilderState {
         return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
     }
 
-    export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+    export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path): void {
         state.fileInfos.get(path)!.signature = signature;
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
     }
@@ -394,7 +402,7 @@ export namespace BuilderState {
         cancellationToken: CancellationToken | undefined,
         host: HostForComputeHash,
         onNewSignature: (signature: string, sourceFiles: readonly SourceFile[]) => void,
-    ) {
+    ): void {
         programOfThisState.emit(
             sourceFile,
             (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
@@ -411,7 +419,7 @@ export namespace BuilderState {
                 );
             },
             cancellationToken,
-            /*emitOnly*/ true,
+            EmitOnly.BuilderSignature,
             /*customTransformers*/ undefined,
             /*forceDtsEmit*/ true,
         );
@@ -426,8 +434,8 @@ export namespace BuilderState {
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
         host: HostForComputeHash,
-        useFileVersionAsSignature = state.useFileVersionAsSignature,
-    ) {
+        useFileVersionAsSignature: boolean | undefined = state.useFileVersionAsSignature,
+    ): boolean {
         // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
         if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
 
@@ -499,7 +507,7 @@ export namespace BuilderState {
     /**
      * Gets the files referenced by the the file path
      */
-    export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
+    export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path): Path[] {
         const keys = state.referencedMap!.getKeys(referencedFilePath);
         return keys ? arrayFrom(keys.keys()) : [];
     }

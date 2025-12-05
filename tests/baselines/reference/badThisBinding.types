@@ -19,14 +19,14 @@ class Greeter {
 		foo(() => {
 >foo(() => {            bar(() => {                var x = this;			});		}) : any
 >foo : (a: any) => any
->    : ^ ^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^   
 >() => {            bar(() => {                var x = this;			});		} : () => void
 >                                                                     : ^^^^^^^^^^
 
             bar(() => {
 >bar(() => {                var x = this;			}) : any
 >bar : (a: any) => any
->    : ^ ^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^   
 >() => {                var x = this;			} : () => void
 >                                         : ^^^^^^^^^^
 

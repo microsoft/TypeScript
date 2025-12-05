@@ -3,7 +3,7 @@
 === typeParameterAsElementType.ts ===
 function fee<T>() {
 >fee : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var t: T;
 >t : T

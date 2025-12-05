@@ -27,7 +27,7 @@ class A {
 >getX = (a: A) => a.#x : (a: A) => number
 >                      : ^ ^^ ^^^^^^^^^^^
 >getX : (a: A) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >(a: A) => a.#x : (a: A) => number
 >               : ^ ^^ ^^^^^^^^^^^
 >a : A
@@ -44,15 +44,15 @@ console.log(getX(new A));
 >console.log(getX(new A)) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >getX(new A) : number
 >            : ^^^^^^
 >getX : (a: A) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >new A : A
 >      : ^
 >A : typeof A

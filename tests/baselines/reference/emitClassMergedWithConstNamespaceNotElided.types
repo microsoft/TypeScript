@@ -51,11 +51,11 @@ Clone.clone("ok");
 >Clone.clone("ok") : void
 >                  : ^^^^
 >Clone.clone : (url: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >Clone : typeof Clone
 >      : ^^^^^^^^^^^^
 >clone : (url: string) => void
->      : ^   ^^      ^^^^^^^^^
+>      : ^   ^^      ^^^^^    
 >"ok" : "ok"
 >     : ^^^^
 

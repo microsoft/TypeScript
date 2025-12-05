@@ -66,11 +66,11 @@ const test: RowRenderer<Entity> = {
 >value.toString() : string
 >                 : ^^^^^^
 >value.toString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >value : Date
 >      : ^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >'-' : "-"
 >    : ^^^
 }

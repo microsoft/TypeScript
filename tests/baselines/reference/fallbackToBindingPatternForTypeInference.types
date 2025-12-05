@@ -13,7 +13,7 @@ trans(({a}) => a);
 >trans(({a}) => a) : number
 >                  : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
->      : ^ ^^ ^^                ^^^^^^^^^^^
+>      : ^ ^^ ^^                ^^^^^      
 >({a}) => a : ({ a }: { a: any; }) => any
 >           : ^     ^^^^^^^^^^^^^^^^^^^^^
 >a : any
@@ -24,7 +24,7 @@ trans(([b,c]) => 'foo');
 >trans(([b,c]) => 'foo') : number
 >                        : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
->      : ^ ^^ ^^                ^^^^^^^^^^^
+>      : ^ ^^ ^^                ^^^^^      
 >([b,c]) => 'foo' : ([b, c]: [any, any]) => string
 >                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
@@ -38,7 +38,7 @@ trans(({d: [e,f]}) => 'foo');
 >trans(({d: [e,f]}) => 'foo') : number
 >                             : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
->      : ^ ^^ ^^                ^^^^^^^^^^^
+>      : ^ ^^ ^^                ^^^^^      
 >({d: [e,f]}) => 'foo' : ({ d: [e, f] }: { d: [any, any]; }) => string
 >                      : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : any
@@ -54,7 +54,7 @@ trans(([{g},{h}]) => 'foo');
 >trans(([{g},{h}]) => 'foo') : number
 >                            : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
->      : ^ ^^ ^^                ^^^^^^^^^^^
+>      : ^ ^^ ^^                ^^^^^      
 >([{g},{h}]) => 'foo' : ([{ g }, { h }]: [{ g: any; }, { h: any; }]) => string
 >                     : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : any
@@ -68,7 +68,7 @@ trans(({a, b = 10}) => a);
 >trans(({a, b = 10}) => a) : number
 >                          : ^^^^^^
 >trans : <T>(f: (x: T) => string) => number
->      : ^ ^^ ^^                ^^^^^^^^^^^
+>      : ^ ^^ ^^                ^^^^^      
 >({a, b = 10}) => a : ({ a, b }: { a: any; b?: number; }) => any
 >                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any

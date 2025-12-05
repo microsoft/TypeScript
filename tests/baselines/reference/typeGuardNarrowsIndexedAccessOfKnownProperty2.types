@@ -20,24 +20,24 @@ const key = 'key' as const;
 if (foo[key]) {
 >foo[key] : number | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->foo : { key?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { key?: number; }
+>    : ^^^^^^^^      ^^^
 >key : "key"
 >    : ^^^^^
 
     foo[key]; // number
 >foo[key] : number
 >         : ^^^^^^
->foo : { key?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { key?: number; }
+>    : ^^^^^^^^      ^^^
 >key : "key"
 >    : ^^^^^
 
     foo.key;  // number
 >foo.key : number
 >        : ^^^^^^
->foo : { key?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { key?: number; }
+>    : ^^^^^^^^      ^^^
 >key : number
 >    : ^^^^^^
 }

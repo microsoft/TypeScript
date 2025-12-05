@@ -41,7 +41,7 @@ class C<T> {
 >this.#bar() : T
 >            : ^
 >this.#bar : () => T
->          : ^^^^^^^
+>          : ^^^^^^ 
 >this : this
 >     : ^^^^
     }

@@ -4,13 +4,13 @@
 interface Base {
     addEventListener(x: string): any;
 >addEventListener : { (x: string): any; (x: "foo"): string; }
->                 : ^^^ ^^      ^^^   ^^^ ^^     ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^   ^^^ ^^     ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
     addEventListener(x: 'foo'): string;
 >addEventListener : { (x: string): any; (x: "foo"): string; }
->                 : ^^^ ^^      ^^^^^^^^^ ^^     ^^^      ^^^
+>                 : ^^^ ^^      ^^^   ^^^ ^^     ^^^      ^^^
 >x : "foo"
 >  : ^^^^^
 }

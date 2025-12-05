@@ -3,15 +3,15 @@
 === functionOverloads12.ts ===
 function foo():string;
 >foo : { (): string; (): number; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 
 function foo():number;
 >foo : { (): string; (): number; }
->    : ^^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 
 function foo():any { if (true) return ""; else return 0;}
 >foo : { (): string; (): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 >true : true
 >     : ^^^^
 >"" : ""

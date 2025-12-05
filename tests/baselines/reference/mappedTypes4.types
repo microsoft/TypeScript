@@ -102,7 +102,7 @@ function f1(x: A | B | C | undefined) {
 >boxify(x) : Boxified<A | B | C | undefined>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^           
 >x : A | B | C | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^
 }

@@ -2,10 +2,10 @@
 
 === parserRegularExpressionDivideAmbiguity4.ts ===
 foo(/notregexp);
->foo(/notregexp); : any
->                 : ^^^
+>foo(/notregexp) : any
+>                : ^^^
 >foo : any
 >    : ^^^
->/notregexp); : RegExp
->             : ^^^^^^
+>/notregexp : RegExp
+>           : ^^^^^^
 

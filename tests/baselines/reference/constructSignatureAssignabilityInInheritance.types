@@ -3,7 +3,7 @@
 === constructSignatureAssignabilityInInheritance.ts ===
 // Checking basic subtype relations with construct signatures
 
-module ConstructSignature {
+namespace ConstructSignature {
     interface Base { // T
         // M's
         new (x: number): void; // BUG 842221
@@ -55,7 +55,7 @@ module ConstructSignature {
     }
 }
 
-module MemberWithConstructSignature {
+namespace MemberWithConstructSignature {
 >MemberWithConstructSignature : typeof MemberWithConstructSignature
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -92,11 +92,11 @@ module MemberWithConstructSignature {
 >new b.a(1) : void
 >           : ^^^^
 >b.a : new (x: number) => void
->    : ^^^^^ ^^      ^^^^^^^^^
+>    : ^^^^^ ^^      ^^^^^    
 >b : Base
 >  : ^^^^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >1 : 1
 >  : ^
 

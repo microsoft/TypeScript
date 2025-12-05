@@ -79,9 +79,9 @@ var person2: { name: string, id: number } = bar("hello", 5);
 >id : number
 >   : ^^^^^^
 >bar("hello", 5) : { name: number; id: string; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^      ^^^^^^      ^^^
 >bar : (name: string, id: number) => { name: number; id: string; }
->    : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^  ^^      ^^^^^                             
 >"hello" : "hello"
 >        : ^^^^^^^
 >5 : 5

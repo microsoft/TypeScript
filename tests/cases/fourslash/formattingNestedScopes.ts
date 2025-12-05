@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-/////*1*/        module      My.App      {
+/////*1*/        namespace      My.App      {
 /////*2*/export      var appModule =      angular.module("app", [
 /////*3*/            ]).config([() =>            {
 /////*4*/                        configureStates
@@ -12,7 +12,7 @@
 format.document()
 
 goTo.marker("1");
-verify.currentLineContentIs("module My.App {");
+verify.currentLineContentIs("namespace My.App {");
 goTo.marker("2");
 verify.currentLineContentIs("    export var appModule = angular.module(\"app\", [");
 goTo.marker("3");

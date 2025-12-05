@@ -1,3 +1,3 @@
 
 let module = 10;
-module in {}
+namespace in {}

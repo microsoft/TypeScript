@@ -124,7 +124,7 @@ export function consume(t,s,f) {
     /** @type {(n: number) => number} */
     var fun = f
 >fun : (n: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >f : Fs
 >  : ^^
 
@@ -135,7 +135,7 @@ export function consume(t,s,f) {
 >Target.START : string
 >             : ^^^^^^
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >START : string
 >      : ^^^^^^
 
@@ -160,7 +160,7 @@ export function ff(s) {
 >           : ^^^^^^^
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -170,7 +170,7 @@ export function ff(s) {
         return Target[s]
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
 >  : ^^^^^^
     }

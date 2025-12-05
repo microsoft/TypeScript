@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts] ////
 
 === augmentedClassWithPrototypePropertyOnModule.ts ===
-declare module m {
+declare namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

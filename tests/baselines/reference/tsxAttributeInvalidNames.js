@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
@@ -22,4 +22,4 @@ data = { 32:  } /  > ;
 {
     32;
 }
-/>;;
+/>;

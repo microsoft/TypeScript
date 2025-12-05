@@ -29,11 +29,11 @@ foo((y): (y2: number) => void => {
 >y.charAt(0) : string
 >            : ^^^^^^
 >y.charAt : (pos: number) => string
->         : ^   ^^      ^^^^^^^^^^^
+>         : ^   ^^      ^^^^^      
 >y : string
 >  : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -61,11 +61,11 @@ foo((y: string) => {
 >y2.toFixed() : string
 >             : ^^^^^^
 >y2.toFixed : (fractionDigits?: number) => string
->           : ^              ^^^      ^^^^^^^^^^^
+>           : ^              ^^^      ^^^^^      
 >y2 : number
 >   : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
         return 0;
 >0 : 0

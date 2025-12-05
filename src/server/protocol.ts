@@ -1,4 +1,4 @@
-import type * as ts from "./_namespaces/ts";
+import type * as ts from "./_namespaces/ts.js";
 import type {
     ApplicableRefactorInfo,
     CompilerOptionsValue,
@@ -6,13 +6,21 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InlayHintKind,
     InteractiveRefactorArguments,
     OutputFile,
+    RefactorActionInfo,
     RefactorTriggerReason,
     RenameInfoFailure,
     RenameLocation,
     ScriptElementKind,
     ScriptKind,
+    SignatureHelpCharacterTypedReason,
+    SignatureHelpInvokedReason,
+    SignatureHelpParameter,
+    SignatureHelpRetriggerCharacter,
+    SignatureHelpRetriggeredReason,
+    SignatureHelpTriggerCharacter,
     SignatureHelpTriggerReason,
     SymbolDisplayPart,
     TextChange,
@@ -21,16 +29,16 @@ import type {
     TodoCommentDescriptor,
     TypeAcquisition,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ClassificationType,
     CompletionTriggerKind,
     OrganizeImportsMode,
     SemicolonPreference,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
-export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
+export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, InlayHintKind, OrganizeImportsMode, RefactorActionInfo, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpCharacterTypedReason, SignatureHelpInvokedReason, SignatureHelpParameter, SignatureHelpRetriggerCharacter, SignatureHelpRetriggeredReason, SignatureHelpTriggerCharacter, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
 type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
@@ -161,6 +169,8 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    PreparePasteEdits = "preparePasteEdits",
+    GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -191,6 +201,9 @@ export const enum CommandTypes {
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
+    MapCode = "mapCode",
+    /** @internal */
+    CopilotRelated = "copilotRelated",
 }
 
 /**
@@ -301,6 +314,22 @@ export interface PerformanceData {
      * The time spent creating or updating the auto-import program, in milliseconds.
      */
     createAutoImportProviderProgramDurationMs?: number;
+    /**
+     * The time spent computing diagnostics, in milliseconds.
+     */
+    diagnosticsDuration?: FileDiagnosticPerformanceData[];
+}
+
+/**
+ * Time spent computing each kind of diagnostics, in milliseconds.
+ */
+export type DiagnosticPerformanceData = { [Kind in DiagnosticEventKind]?: number; };
+
+export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+    /**
+     * The file for which the performance data is reported.
+     */
+    file: string;
 }
 
 /**
@@ -418,7 +447,7 @@ export interface OutliningSpansRequestFull extends FileRequest {
 /**
  * Response to OutliningSpansRequest request.
  *
- * @internal
+ * @internal @knipignore
  */
 export interface OutliningSpansResponseFull extends Response {
     body?: ts.OutliningSpan[];
@@ -472,6 +501,10 @@ export interface ProjectInfoRequestArgs extends FileRequestArgs {
      * Indicate if the file name list of the project is needed
      */
     needFileNameList: boolean;
+    /**
+     * if true returns details about default configured project calculation
+     */
+    needDefaultConfiguredProjectInfo?: boolean;
 }
 
 /**
@@ -500,6 +533,18 @@ export interface CompilerOptionsDiagnosticsRequestArgs {
 }
 
 /**
+ * Details about the default project for the file if tsconfig file is found
+ */
+export interface DefaultConfiguredProjectInfo {
+    /** List of config files looked and did not match because file was not part of root file names */
+    notMatchedByConfig?: readonly string[];
+    /** List of projects which were loaded but file was not part of the project or is file from referenced project */
+    notInProject?: readonly string[];
+    /** Configured project used as default */
+    defaultProject?: string;
+}
+
+/**
  * Response message body for "projectInfo" request
  */
 export interface ProjectInfo {
@@ -516,6 +561,10 @@ export interface ProjectInfo {
      * Indicates if the project has a active language service instance
      */
     languageServiceDisabled?: boolean;
+    /**
+     * Information about default project
+     */
+    configuredProjectInfo?: DefaultConfiguredProjectInfo;
 }
 
 /**
@@ -625,6 +674,49 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
     };
 }
 
+/**
+ * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+ */
+export interface PreparePasteEditsRequest extends FileRequest {
+    command: CommandTypes.PreparePasteEdits;
+    arguments: PreparePasteEditsRequestArgs;
+}
+export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+    copiedTextSpan: TextSpan[];
+}
+export interface PreparePasteEditsResponse extends Response {
+    body: boolean;
+}
+
+/**
+ * Request refactorings at a given position post pasting text from some other location.
+ */
+
+export interface GetPasteEditsRequest extends Request {
+    command: CommandTypes.GetPasteEdits;
+    arguments: GetPasteEditsRequestArgs;
+}
+
+export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+    /** The text that gets pasted in a file.  */
+    pastedText: string[];
+    /** Locations of where the `pastedText` gets added in a file. If the length of the `pastedText` and `pastedLocations` are not the same,
+     *  then the `pastedText` is combined into one and added at all the `pastedLocations`.
+     */
+    pasteLocations: TextSpan[];
+    /** The source location of each `pastedText`. If present, the length of `spans` must be equal to the length of `pastedText`. */
+    copiedFrom?: { file: string; spans: TextSpan[]; };
+}
+
+export interface GetPasteEditsResponse extends Response {
+    body: PasteEditsAction;
+}
+
+export interface PasteEditsAction {
+    edits: FileCodeEdits[];
+    fixId?: {};
+}
+
 export interface GetEditsForRefactorRequest extends Request {
     command: CommandTypes.GetEditsForRefactor;
     arguments: GetEditsForRefactorRequestArgs;
@@ -723,33 +815,13 @@ export interface ApplyCodeActionCommandRequest extends Request {
 // All we need is the `success` and `message` fields of Response.
 export interface ApplyCodeActionCommandResponse extends Response {}
 
-export interface FileRangeRequestArgs extends FileRequestArgs {
-    /**
-     * The line number for the request (1-based).
-     */
-    startLine: number;
-
-    /**
-     * The character offset (on the line) for the request (1-based).
-     */
-    startOffset: number;
-
+export interface FileRangeRequestArgs extends FileRequestArgs, FileRange {
     /**
      * Position (can be specified instead of line/offset pair)
      *
      * @internal
      */
     startPosition?: number;
-
-    /**
-     * The line number for the request (1-based).
-     */
-    endLine: number;
-
-    /**
-     * The character offset (on the line) for the request (1-based).
-     */
-    endOffset: number;
 
     /**
      * Position (can be specified instead of line/offset pair)
@@ -1238,7 +1310,7 @@ export interface RenameFullRequest extends FileLocationRequest {
     readonly arguments: RenameRequestArgs;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export interface RenameFullResponse extends Response {
     readonly body: readonly RenameLocation[];
 }
@@ -1933,6 +2005,14 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
+export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+    /**
+     * This controls how many levels of definitions will be expanded in the quick info response.
+     * The default value is 0.
+     */
+    verbosityLevel?: number;
+}
+
 /**
  * Body of QuickInfoResponse.
  */
@@ -1972,6 +2052,11 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
+
+    /**
+     * Whether the verbosity level can be increased for this quick info response.
+     */
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
@@ -2304,6 +2389,38 @@ export interface InlayHintsResponse extends Response {
     body?: InlayHintItem[];
 }
 
+export interface MapCodeRequestArgs extends FileRequestArgs {
+    /**
+     * The files and changes to try and apply/map.
+     */
+    mapping: MapCodeRequestDocumentMapping;
+}
+
+export interface MapCodeRequestDocumentMapping {
+    /**
+     * The specific code to map/insert/replace in the file.
+     */
+    contents: string[];
+
+    /**
+     * Areas of "focus" to inform the code mapper with. For example, cursor
+     * location, current selection, viewport, etc. Nested arrays denote
+     * priority: toplevel arrays are more important than inner arrays, and
+     * inner array priorities are based on items within that array. Items
+     * earlier in the arrays have higher priority.
+     */
+    focusLocations?: TextSpan[][];
+}
+
+export interface MapCodeRequest extends FileRequest {
+    command: CommandTypes.MapCode;
+    arguments: MapCodeRequestArgs;
+}
+
+export interface MapCodeResponse extends Response {
+    body: readonly FileCodeEdits[];
+}
+
 /**
  * Synchronous request for semantic diagnostics of one file.
  */
@@ -2384,7 +2501,7 @@ export interface GeterrRequestArgs {
      * List of file names for which to compute compiler errors.
      * The files will be checked in list order.
      */
-    files: string[];
+    files: (string | FileRangesRequestArgs)[];
 
     /**
      * Delay in milliseconds to wait before starting to compute
@@ -2408,6 +2525,32 @@ export interface GeterrRequest extends Request {
     arguments: GeterrRequestArgs;
 }
 
+export interface FileRange {
+    /**
+     * The line number for the request (1-based).
+     */
+    startLine: number;
+
+    /**
+     * The character offset (on the line) for the request (1-based).
+     */
+    startOffset: number;
+
+    /**
+     * The line number for the request (1-based).
+     */
+    endLine: number;
+
+    /**
+     * The character offset (on the line) for the request (1-based).
+     */
+    endOffset: number;
+}
+
+export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
+    ranges: FileRange[];
+}
+
 export type RequestCompletedEventName = "requestCompleted";
 
 /**
@@ -2420,6 +2563,7 @@ export interface RequestCompletedEvent extends Event {
 
 export interface RequestCompletedEventBody {
     request_seq: number;
+    performanceData?: PerformanceData;
 }
 
 /**
@@ -2505,9 +2649,14 @@ export interface DiagnosticEventBody {
      * An array of diagnostic information items.
      */
     diagnostics: Diagnostic[];
+
+    /**
+     * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+     */
+    spans?: TextSpan[];
 }
 
-export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
 
 /**
  * Event message for DiagnosticEventKind event types.
@@ -2669,7 +2818,7 @@ export interface CloseFileWatcherEventBody {
     readonly id: number;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export type AnyEvent =
     | RequestCompletedEvent
     | DiagnosticEvent
@@ -3108,6 +3257,8 @@ export const enum ModuleKind {
     ES2022 = "es2022",
     ESNext = "esnext",
     Node16 = "node16",
+    Node18 = "node18",
+    Node20 = "node20",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }
@@ -3118,6 +3269,7 @@ export const enum ModuleResolutionKind {
     Node = "node",
     /** @deprecated Renamed to `Node10` */
     NodeJs = "node",
+    /** @deprecated */
     Node10 = "node10",
     Node16 = "node16",
     NodeNext = "nodenext",
@@ -3143,6 +3295,7 @@ export const enum ScriptTarget {
     ES2021 = "es2021",
     ES2022 = "es2022",
     ES2023 = "es2023",
+    ES2024 = "es2024",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,

@@ -1,6 +1,6 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import { notImplementedHost } from "./extract/helpers";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { notImplementedHost } from "./extract/helpers.js";
 
 // Some tests have trailing whitespace
 

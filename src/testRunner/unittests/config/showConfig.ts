@@ -1,10 +1,10 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
         describe(name, () => {
-            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 const cwd = `/${name}`;
@@ -56,6 +56,8 @@ describe("unittests:: config:: showConfig", () => {
     showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", ["--showConfig", "--lib", "nonExistLib,es5,es2015.promise"]);
 
     showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
+
+    showTSConfigCorrectly("Show TSConfig with transitively implied options", ["--showConfig", "--module", "nodenext"]);
 
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {

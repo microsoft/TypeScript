@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/metadataOfClassFromModule.ts] ////
 
 === metadataOfClassFromModule.ts ===
-module MyModule {
+namespace MyModule {
 >MyModule : typeof MyModule
 >         : ^^^^^^^^^^^^^^^
 
@@ -22,7 +22,7 @@ module MyModule {
 
         @inject leftLeg: Leg;
 >inject : (target: any, key: string) => void
->       : ^      ^^   ^^   ^^      ^^^^^^^^^
+>       : ^      ^^   ^^   ^^      ^^^^^    
 >leftLeg : Leg
 >        : ^^^
     }

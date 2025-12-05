@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitScopeConsistency.ts] ////
+
+=== a.ts ===
+export interface A { a: number }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>a : Symbol(A.a, Decl(a.ts, 0, 20))
+
+export const f = (x: A) => x as A;
+>f : Symbol(f, Decl(a.ts, 1, 12))
+>x : Symbol(x, Decl(a.ts, 1, 18))
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 1, 18))
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== b.ts ===
+import { f } from "./a";
+>f : Symbol(f, Decl(b.ts, 0, 8))
+
+export interface A { other: number }
+>A : Symbol(A, Decl(b.ts, 0, 24))
+>other : Symbol(A.other, Decl(b.ts, 1, 20))
+
+export const g = f;
+>g : Symbol(g, Decl(b.ts, 2, 12))
+>f : Symbol(f, Decl(b.ts, 0, 8))
+

@@ -1,5 +1,5 @@
 // @module: amd
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @outdir: out/
 // @fullEmitPaths: true
 // @resolveJsonModule: true

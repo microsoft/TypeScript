@@ -4,7 +4,7 @@
 Type Count: 2,500
 
 === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
-module rionegrensis {
+namespace rionegrensis {
 >rionegrensis : typeof rionegrensis
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -277,7 +277,7 @@ module rionegrensis {
 >  : ^^^^^^^^^^^^^^^^^^^
   }
 }
-module julianae {
+namespace julianae {
 >julianae : typeof julianae
 >         : ^^^^^^^^^^^^^^^
 
@@ -1794,7 +1794,7 @@ module julianae {
 >  : ^^^^^^^^^^^^^^^^^^
   }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 >          : ^^^^^^^^^^^^^^^^
 
@@ -1855,7 +1855,7 @@ module ruatanica {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module Lanthanum {
+namespace Lanthanum {
 >Lanthanum : typeof Lanthanum
 >          : ^^^^^^^^^^^^^^^^
 
@@ -2666,7 +2666,7 @@ module Lanthanum {
 >  : ^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module rendalli {
+namespace rendalli {
 >rendalli : typeof rendalli
 >         : ^^^^^^^^^^^^^^^
 
@@ -3345,7 +3345,7 @@ module rendalli {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module trivirgatus {
+namespace trivirgatus {
 >trivirgatus : typeof trivirgatus
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -4340,7 +4340,7 @@ module trivirgatus {
 >  : ^^^^^^^^^^^^^^^^^^^^
   }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 >          : ^^^^^^^^^^^^^^^^
 
@@ -4453,7 +4453,7 @@ module quasiater {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 >          : ^^^^^^^^^^^^^^^^
 
@@ -4552,7 +4552,7 @@ module ruatanica {
 >  : ^^^^^^^^^^^^^^^^^
   }
 }
-module lavali {
+namespace lavali {
 >lavali : typeof lavali
 >       : ^^^^^^^^^^^^^
 
@@ -5773,7 +5773,7 @@ module lavali {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module dogramacii {
+namespace dogramacii {
 >dogramacii : typeof dogramacii
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -6534,7 +6534,7 @@ module dogramacii {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 >          : ^^^^^^^^^^^^^^^^
 
@@ -6921,7 +6921,7 @@ module lutreolus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -7224,7 +7224,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 >      : ^^^^^^^^^^^^
 
@@ -7473,7 +7473,7 @@ module nigra {
 >  : ^^^^^^^^^^^^^
   }
 }
-module panglima {
+namespace panglima {
 >panglima : typeof panglima
 >         : ^^^^^^^^^^^^^^^
 
@@ -7900,7 +7900,7 @@ module panglima {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 >          : ^^^^^^^^^^^^^^^^
 
@@ -8059,7 +8059,7 @@ module quasiater {
 >  : ^^^^^^^^^^^^^^^^^^^
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 >        : ^^^^^^^^^^^^^^
 
@@ -8378,7 +8378,7 @@ module minutus {
 >  : ^^^^^^^^^^^^^^^^^^^
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 >         : ^^^^^^^^^^^^^^^
 
@@ -8637,7 +8637,7 @@ module caurinus {
 >  : ^^^^^^^^^^^^^^^^
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -8664,7 +8664,7 @@ module macrorhinos {
 >  : ^^^^^^^^^^^^^^^^^
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 >     : ^^^^^^^^^^^
 
@@ -8697,7 +8697,7 @@ module howi {
 >  : ^^^^^^^^
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -8706,7 +8706,7 @@ module daubentonii {
 >         : ^^^^^^^^^^^^^^^^
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 >      : ^^^^^^^^^^^^
 
@@ -8931,7 +8931,7 @@ module nigra {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 >        : ^^^^^^^^^^^^^^
 
@@ -8972,7 +8972,7 @@ module sagitta {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 >        : ^^^^^^^^^^^^^^
 
@@ -9017,7 +9017,7 @@ module minutus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -9036,7 +9036,7 @@ module macrorhinos {
 >         : ^^^
     }
 }
-module panamensis {
+namespace panamensis {
 >panamensis : typeof panamensis
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -9285,7 +9285,7 @@ module panamensis {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 >      : ^^^^^^^^^^^^
 
@@ -9632,7 +9632,7 @@ module nigra {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module samarensis {
+namespace samarensis {
 >samarensis : typeof samarensis
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -10585,7 +10585,7 @@ module samarensis {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 >        : ^^^^^^^^^^^^^^
 
@@ -10730,7 +10730,7 @@ module sagitta {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -10763,7 +10763,7 @@ module daubentonii {
 >  : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module dammermani {
+namespace dammermani {
 >dammermani : typeof dammermani
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -10772,7 +10772,7 @@ module dammermani {
 >       : ^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -10845,7 +10845,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module chrysaeolus {
+namespace chrysaeolus {
 >chrysaeolus : typeof chrysaeolus
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -11010,7 +11010,7 @@ module chrysaeolus {
 >  : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -11177,7 +11177,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -11368,7 +11368,7 @@ module argurus {
 >  : ^^^^^^^^^^
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -11673,7 +11673,7 @@ module daubentonii {
 >  : ^^^^^^^^^^^^^
     }
 }
-module patas {
+namespace patas {
 >patas : typeof patas
 >      : ^^^^^^^^^^^^
 
@@ -12012,7 +12012,7 @@ module patas {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module provocax {
+namespace provocax {
 >provocax : typeof provocax
 >         : ^^^^^^^^^^^^^^^
 
@@ -12087,7 +12087,7 @@ module provocax {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 >        : ^^^^^^^^^^^^^^
 
@@ -12188,7 +12188,7 @@ module sagitta {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 >     : ^^^^^^^^^^^
 
@@ -12559,7 +12559,7 @@ module howi {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -12840,7 +12840,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -12849,7 +12849,7 @@ module petrophilus {
 >          : ^^^^^^^^^
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 >          : ^^^^^^^^^^^^^^^^
 
@@ -13140,7 +13140,7 @@ module lutreolus {
 >  : ^^^^^^^^^^^^^^^^^^^
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -13305,7 +13305,7 @@ module macrorhinos {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 >        : ^^^^^^^^^^^^^^
 
@@ -13618,7 +13618,7 @@ module sagitta {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 >      : ^^^^^^^^^^^^
 
@@ -13627,7 +13627,7 @@ module nigra {
 >          : ^^^^^^^^^^^^^^^^^
     }
 }
-module gabriellae {
+namespace gabriellae {
 >gabriellae : typeof gabriellae
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -13940,7 +13940,7 @@ module gabriellae {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module imperfecta {
+namespace imperfecta {
 >imperfecta : typeof imperfecta
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -14411,7 +14411,7 @@ module imperfecta {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 >          : ^^^^^^^^^^^^^^^^
 
@@ -14516,9 +14516,9 @@ module quasiater {
 >  : ^^^^^^^^^^^^^^^
     }
 }
-module butleri {
+namespace butleri {
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -14711,7 +14711,7 @@ module petrophilus {
 >  : ^^^^^^^^^^^^
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 >         : ^^^^^^^^^^^^^^^
 
@@ -14902,7 +14902,7 @@ module caurinus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 >        : ^^^^^^^^^^^^^^
 
@@ -14981,7 +14981,7 @@ module minutus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 >          : ^^^^^^^^^^^^^^^^
 
@@ -15296,7 +15296,7 @@ module lutreolus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 >          : ^^^^^^^^^^^^^^^^
 
@@ -15575,7 +15575,7 @@ module lutreolus {
 >  : ^^^^^^^^^^^^^^^^^^^
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 >     : ^^^^^^^^^^^
 
@@ -15620,7 +15620,7 @@ module howi {
 >  : ^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -15679,7 +15679,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 >        : ^^^^^^^^^^^^^^
 
@@ -15918,7 +15918,7 @@ module sagitta {
 >  : ^^^^^^^^^^^^^^^^^^
     }
 }
-module dammermani {
+namespace dammermani {
 >dammermani : typeof dammermani
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -16251,7 +16251,7 @@ module dammermani {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -16450,7 +16450,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -16845,7 +16845,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 >          : ^^^^^^^^^^^^^^^^
 
@@ -17274,7 +17274,7 @@ module ruatanica {
 >  : ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 >         : ^^^^^^^^^^^^^^^
 
@@ -17315,7 +17315,7 @@ module caurinus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 >        : ^^^^^^^^^^^^^^
 
@@ -17374,7 +17374,7 @@ module argurus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module panamensis {
+namespace panamensis {
 >panamensis : typeof panamensis
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -17631,7 +17631,7 @@ module panamensis {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -17818,7 +17818,7 @@ module petrophilus {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 >         : ^^^^^^^^^^^^^^^
 

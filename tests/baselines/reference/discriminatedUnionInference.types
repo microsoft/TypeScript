@@ -53,7 +53,7 @@ let x1 = foo({ kind: 'a', data: 42 });  // number
 >foo({ kind: 'a', data: 42 }) : number
 >                             : ^^^^^^
 >foo : <T>(item: Item<T>) => T
->    : ^ ^^    ^^       ^^^^^^
+>    : ^ ^^    ^^       ^^^^^ 
 >{ kind: 'a', data: 42 } : { kind: "a"; data: number; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "a"
@@ -71,7 +71,7 @@ let x2 = foo({ kind: 'b', data: [1, 2] });  // number
 >foo({ kind: 'b', data: [1, 2] }) : number
 >                                 : ^^^^^^
 >foo : <T>(item: Item<T>) => T
->    : ^ ^^    ^^       ^^^^^^
+>    : ^ ^^    ^^       ^^^^^ 
 >{ kind: 'b', data: [1, 2] } : { kind: "b"; data: number[]; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "b"

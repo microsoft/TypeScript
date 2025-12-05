@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/knockout.ts] ////
 
 === knockout.ts ===
-  declare module ko {
+  declare namespace ko {
 >ko : typeof ko
 >   : ^^^^^^^^^
 
@@ -41,11 +41,11 @@
 >ko.observable("Bob") : ko.Observable<string>
 >                     : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
->              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >ko : typeof ko
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
->           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >"Bob" : "Bob"
 >      : ^^^^^
 
@@ -55,11 +55,11 @@
 >ko.observable(37) : ko.Observable<number>
 >                  : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
->              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >ko : typeof ko
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
->           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
 >37 : 37
 >   : ^^
  }

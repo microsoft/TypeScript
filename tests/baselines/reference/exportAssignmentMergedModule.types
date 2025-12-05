@@ -54,7 +54,7 @@ if(!!foo.b){
 >   : ^^
 }
 === foo_0.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -72,7 +72,7 @@ module Foo {
 >true : true
 >     : ^^^^
 }
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -86,7 +86,7 @@ module Foo {
 >a : number
 >  : ^^^^^^
 	}
-	export module Test {
+	export namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 

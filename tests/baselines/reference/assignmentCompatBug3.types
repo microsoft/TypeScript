@@ -37,11 +37,11 @@ function makePoint(x: number, y: number) {
 >Math.sqrt(x*x+y*y) : number
 >                   : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >x*x+y*y : number
 >        : ^^^^^^
 >x*x : number

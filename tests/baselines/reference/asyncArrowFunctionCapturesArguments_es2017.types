@@ -21,11 +21,11 @@ class C {
 >await other.apply(this, arguments) : any
 >other.apply(this, arguments) : any
 >other.apply : (this: Function, thisArg: any, argArray?: any) => any
->            : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>            : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >other : () => void
 >      : ^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >this : this
 >     : ^^^^
 >arguments : IArguments

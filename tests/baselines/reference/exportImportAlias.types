@@ -3,7 +3,7 @@
 === exportImportAlias.ts ===
 // expect no errors here
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -23,7 +23,7 @@ module A {
 >y : number
 >  : ^^^^^^
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
 >name : string
@@ -32,7 +32,7 @@ module A {
     }
 }
 
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -89,7 +89,7 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >C : any
 >  : ^^^
 >a : any
@@ -97,7 +97,7 @@ var c: C.a.B.Id;
 >B : any
 >  : ^^^
 
-module X {
+namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
@@ -110,7 +110,7 @@ module X {
 >   : ^^
     }
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
@@ -127,7 +127,7 @@ module X {
     }
 }
 
-module Z {
+namespace Z {
 >Z : typeof Z
 >  : ^^^^^^^^
 
@@ -177,7 +177,7 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >0 : 0
 >  : ^
 
-module K {
+namespace K {
 >K : typeof K
 >  : ^^^^^^^^
 
@@ -190,7 +190,7 @@ module K {
 >     : ^^^^^^
     }
 
-    export module L {
+    export namespace L {
 >L : typeof L
 >  : ^^^^^^^^
 
@@ -212,7 +212,7 @@ module K {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -233,7 +233,7 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >new M.D('Hello') : K.L
 >                 : ^^^
 >M.D : typeof K.L
@@ -255,7 +255,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >M : any
 >  : ^^^
 >D : any

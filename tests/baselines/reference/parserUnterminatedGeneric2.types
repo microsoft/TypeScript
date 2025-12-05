@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts] ////
 
 === parserUnterminatedGeneric2.ts ===
-declare module ng {
+declare namespace ng {
 >ng : typeof ng
 >   : ^^^^^^^^^
 
@@ -39,7 +39,7 @@ declare module ng {
     interface IQService {
         all(promises: IPromise < any > []): IPromise<
 >all : (promises: IPromise<any>[]) => IPromise
->    : ^        ^^               ^^^^^^^^^^^^^
+>    : ^        ^^               ^^^^^        
 >promises : IPromise<any>[]
 >         : ^^^^^^^^^^^^^^^
 

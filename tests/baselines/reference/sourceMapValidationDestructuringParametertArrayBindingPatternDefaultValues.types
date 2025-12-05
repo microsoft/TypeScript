@@ -50,11 +50,11 @@ function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -83,11 +83,11 @@ function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 >console.log(numberB) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >numberB : number
 >        : ^^^^^^
 }
@@ -124,11 +124,11 @@ function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, 
 >console.log(nameA2) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
 >       : ^^^^^^
 }
@@ -159,11 +159,11 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >console.log(robotAInfo) : void
 >                        : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >robotAInfo : [string, string]
 >           : ^^^^^^^^^^^^^^^^
 }

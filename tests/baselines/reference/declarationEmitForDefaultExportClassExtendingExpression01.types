@@ -37,7 +37,7 @@ export default class extends getGreeterBase() {
 >getGreeterBase() : Greeter
 >                 : ^^^^^^^
 >getGreeterBase : () => GreeterConstructor
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^                  
 }
 
 

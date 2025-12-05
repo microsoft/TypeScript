@@ -159,8 +159,8 @@
 //     }
 // }
 // new a("Hello");
-// module m {
-//     export module m2 {
+// namespace m {
+//     export namespace m2 {
 //         /** class comment */
 //         export class c1 {
 //             /** constructor comment*/
@@ -1255,14 +1255,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 935,
+      "position": 941,
       "name": "33"
     },
     "item": {
       "kind": "constructor",
       "kindModifiers": "export",
       "textSpan": {
-        "start": 934,
+        "start": 940,
         "length": 2
       },
       "displayParts": [

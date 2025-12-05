@@ -6,24 +6,24 @@ import {
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export class TranspileRunner extends RunnerBase {
     protected basePath = "tests/cases/transpile";
     protected testSuiteName: TestRunnerKind = "transpile";
 
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.enumerateFiles(this.basePath, /\.[cm]?[tj]sx?/i, { recursive: true });
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         if (this.tests.length === 0) {
             this.tests = IO.enumerateTestFiles(this);
         }
@@ -48,7 +48,11 @@ enum TranspileKind {
 }
 
 class TranspileTestCase {
-    static varyBy = [];
+    static varyBy = [
+        "declarationMap",
+        "sourceMap",
+        "inlineSourceMap",
+    ];
 
     static getConfigurations(file: string): TranspileTestCase[] {
         const ext = vpath.extname(file);
@@ -103,6 +107,13 @@ class TranspileTestCase {
                 baselineText += result.outputText;
                 if (!result.outputText.endsWith("\n")) {
                     baselineText += "\r\n";
+                }
+                if (result.sourceMapText) {
+                    baselineText += `//// [${ts.changeExtension(unit.name, kind === TranspileKind.Module ? this.getJsOutputExtension(unit.name) : ts.getDeclarationEmitExtensionForPath(unit.name))}.map] ////\r\n`;
+                    baselineText += result.sourceMapText;
+                    if (!result.outputText.endsWith("\n")) {
+                        baselineText += "\r\n";
+                    }
                 }
                 if (result.diagnostics && result.diagnostics.length) {
                     baselineText += "\r\n\r\n//// [Diagnostics reported]\r\n";

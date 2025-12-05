@@ -64,7 +64,7 @@ export const validatorFunc = ObjValidator(test);
 >ObjValidator(test) : (o: any) => { Test: { Test1: { Test2: string; }; }; }
 >                   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ObjValidator : <V>(validatorObj: ObjectValidator<V>) => (o: any) => V
->             : ^ ^^            ^^                  ^^^^^^ ^^   ^^^^^^
+>             : ^ ^^            ^^                  ^^^^^             
 >test : { Test: { Test1: { Test2: NativeTypeValidator<string>; }; }; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

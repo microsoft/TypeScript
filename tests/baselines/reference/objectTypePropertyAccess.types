@@ -21,11 +21,11 @@ var r1 = c.toString();
 >c.toString() : string
 >             : ^^^^^^
 >c.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >c : C
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r2 = c['toString']();
 >r2 : string
@@ -33,7 +33,7 @@ var r2 = c['toString']();
 >c['toString']() : string
 >                : ^^^^^^
 >c['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >c : C
 >  : ^
 >'toString' : "toString"
@@ -74,11 +74,11 @@ var r4 = i.toString();
 >i.toString() : string
 >             : ^^^^^^
 >i.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >i : I
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r5 = i['toString']();
 >r5 : string
@@ -86,7 +86,7 @@ var r5 = i['toString']();
 >i['toString']() : string
 >                : ^^^^^^
 >i['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >i : I
 >  : ^
 >'toString' : "toString"
@@ -131,11 +131,11 @@ var r8 = a.toString();
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >a : { foo: string; }
 >  : ^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r9 = a['toString']();
 >r9 : string
@@ -143,7 +143,7 @@ var r9 = a['toString']();
 >a['toString']() : string
 >                : ^^^^^^
 >a['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >a : { foo: string; }
 >  : ^^^^^^^^^^^^^^^^
 >'toString' : "toString"

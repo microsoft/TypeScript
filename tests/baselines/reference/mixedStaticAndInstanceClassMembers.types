@@ -23,7 +23,7 @@ class A {
 
     m1 (a: any): void {
 >m1 : (a: number) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >a : any
 >  : ^^^
     }
@@ -39,7 +39,7 @@ class B {
 
     m1 (a: string): void;
 >m1 : { (a: string): void; (a: any): void; }
->   : ^^^ ^^      ^^^    ^^^ ^^   ^^^^^^^^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^   ^^^    ^^^
 >a : string
 >  : ^^^^^^
 
@@ -51,7 +51,7 @@ class B {
 
     m1 (a: any): void {
 >m1 : { (a: string): void; (a: any): void; }
->   : ^^^ ^^      ^^^^^^^^^^ ^^   ^^^    ^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^   ^^^    ^^^
 >a : any
 >  : ^^^
     }

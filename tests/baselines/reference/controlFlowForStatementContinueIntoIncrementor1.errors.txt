@@ -1,0 +1,45 @@
+controlFlowForStatementContinueIntoIncrementor1.ts(8,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+controlFlowForStatementContinueIntoIncrementor1.ts(23,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== controlFlowForStatementContinueIntoIncrementor1.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60945
+    
+    {
+      let iNext;
+      for (
+        let i = 0;
+        i < 10;
+        i = iNext // error
+        ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+      ) {
+        if (i == 5) {
+          iNext = "bad";
+          continue;
+        }
+        iNext = i + 1;
+      }
+    }
+    
+    {
+      let iNext: string | number = "";
+      for (
+        let i = 0;
+        i < 10;
+        i = iNext // error
+        ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+      ) {
+        if (i == 5) {
+          iNext = "bad";
+          continue;
+        }
+        iNext = i + 1;
+      }
+    }
+    

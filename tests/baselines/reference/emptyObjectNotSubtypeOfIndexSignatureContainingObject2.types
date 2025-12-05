@@ -84,7 +84,7 @@ export function fooToBar(
 >mapValues(foos, f => f.foo) : Dictionary<string>
 >                            : ^^^^^^^^^^^^^^^^^^
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 >foos : Record<string, Foo>
 >     : ^^^^^^^^^^^^^^^^^^^
 >f => f.foo : (f: Foo) => string
@@ -112,7 +112,7 @@ export function fooToBar(
 >mapValues(foos, f => f.foo) : Dictionary<string>
 >                            : ^^^^^^^^^^^^^^^^^^
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 >foos : Record<string, Foo>
 >     : ^^^^^^^^^^^^^^^^^^^
 >f => f.foo : (f: Foo) => string

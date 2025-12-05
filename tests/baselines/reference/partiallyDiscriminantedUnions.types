@@ -113,11 +113,11 @@ function isShape(s : Shapes): s is Shape {
 >Array.isArray(s) : boolean
 >                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >s : Shapes
 >  : ^^^^^^
 }
@@ -132,7 +132,7 @@ function fail(s: Shapes) {
 >isShape(s) : boolean
 >           : ^^^^^^^
 >isShape : (s: Shapes) => s is Shape
->        : ^ ^^      ^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^          
 >s : Shapes
 >  : ^^^^^^
 

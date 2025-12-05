@@ -8,7 +8,7 @@ declare var console;
 >"use strict" : "use strict"
 >             : ^^^^^^^^^^^^
 
-module Test {
+namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 
@@ -46,11 +46,11 @@ module Test {
 >this.getName() : string
 >               : ^^^^^^
 >this.getName : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >this : this
 >     : ^^^^
 >getName : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >length : number
 >       : ^^^^^^
 >0 : 0

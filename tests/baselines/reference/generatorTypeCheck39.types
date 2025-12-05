@@ -3,7 +3,7 @@
 === generatorTypeCheck39.ts ===
 function decorator(x: any) {
 >decorator : (x: any) => (y: any) => void
->          : ^ ^^   ^^^^^^ ^^^^^^^^^^^^^^
+>          : ^ ^^   ^^^^^^   ^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -21,7 +21,7 @@ function* g() {
 >decorator(yield 0) : (y: any) => void
 >                   : ^ ^^^^^^^^^^^^^^
 >decorator : (x: any) => (y: any) => void
->          : ^ ^^   ^^^^^^ ^^^^^^^^^^^^^^
+>          : ^ ^^   ^^^^^^   ^^^^^^^^^^^^
 >yield 0 : any
 >        : ^^^
 >0 : 0

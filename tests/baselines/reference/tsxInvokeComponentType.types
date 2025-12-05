@@ -26,7 +26,7 @@ const bad = <Elem />;
 ><Elem /> : JSX.Element
 >         : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 
 const good = <Elem someKey="ok" />;
 >good : JSX.Element
@@ -34,7 +34,7 @@ const good = <Elem someKey="ok" />;
 ><Elem someKey="ok" /> : JSX.Element
 >                      : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >someKey : string
 >        : ^^^^^^
 
@@ -49,8 +49,8 @@ const alsoOk = <Elem2>text</Elem2>;
 >       : ^^^^^^^^^^^
 ><Elem2>text</Elem2> : JSX.Element
 >                    : ^^^^^^^^^^^
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 

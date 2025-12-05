@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignToFn.ts] ////
 
 === assignToFn.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -31,11 +31,11 @@ module M {
 >x.f="hello" : "hello"
 >            : ^^^^^^^
 >x.f : (n: number) => boolean
->    : ^ ^^      ^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^       
 >x : I
 >  : ^
 >f : (n: number) => boolean
->  : ^ ^^      ^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^       
 >"hello" : "hello"
 >        : ^^^^^^^
 }

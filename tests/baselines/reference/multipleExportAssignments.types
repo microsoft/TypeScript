@@ -39,7 +39,7 @@ var server: {
 };
 export = server;
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 
 export = connectExport;
 >connectExport : connectExport

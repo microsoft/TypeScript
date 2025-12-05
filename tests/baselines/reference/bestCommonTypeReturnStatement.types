@@ -24,13 +24,13 @@ function f() {
 >b() : IPromise<void>
 >    : ^^^^^^^^^^^^^^
 >b : () => IPromise<void>
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^              
 
     return d();
 >d() : IPromise<any>
 >    : ^^^^^^^^^^^^^
 >d : () => IPromise<any>
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^             
 }
 
 

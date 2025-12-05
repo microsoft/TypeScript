@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/XY/a.ts]
 
@@ -7,6 +7,7 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link] symlink(/user/username/projects/myproject/XY)
+
 //// [/user/username/projects/myproject/b.ts]
 
 import { a } from "./XY/a";
@@ -14,19 +15,6 @@ import { b } from "./link/a";
 
 a;b;
 
-
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
 {
@@ -37,8 +25,22 @@ interface Array<T> { length: number; [n: number]: T; }
   }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-/a/lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
+
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -51,15 +53,17 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/XY/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/XY/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-../../../../a/lib/lib.d.ts
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
@@ -68,7 +72,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -122,19 +126,13 @@ System.register("b", ["XY/a", "link/a"], function (exports_3, context_3) {
 
 
 PolledWatches::
-/user/username/projects/myproject/XY/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/XY/a.ts: *new*
   {}
@@ -165,7 +163,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/XY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
@@ -202,6 +200,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -210,7 +209,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
   options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-../../../../a/lib/lib.d.ts
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
@@ -219,7 +223,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -289,7 +293,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/XY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts

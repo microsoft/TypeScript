@@ -12,7 +12,7 @@ function f({ show = v => v.toString() }: Show) {}
 >f : ({ show }: Show) => void
 >  : ^        ^^    ^^^^^^^^^
 >show : (x: number) => string
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
 >                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -20,17 +20,17 @@ function f({ show = v => v.toString() }: Show) {}
 >v.toString() : string
 >             : ^^^^^^
 >v.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >v : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
 >   : ^                      ^^    ^^^^^^^^^
 >showRename : (x: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
 >                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -38,11 +38,11 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 >v.toString() : string
 >             : ^^^^^^
 >v.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >v : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : ({ ["show"]: showRename }: Show) => void
@@ -50,7 +50,7 @@ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >"show" : "show"
 >       : ^^^^^^
 >showRename : (x: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
 >                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -58,11 +58,11 @@ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >v.toString() : string
 >             : ^^^^^^
 >v.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >v : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 interface Nested {
     nested: Show
@@ -85,11 +85,11 @@ function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >v.toString() : string
 >             : ^^^^^^
 >v.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >v : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 interface Tuples {
     prop: [string, number];
@@ -132,7 +132,7 @@ let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x =>
 >stringIdentity : any
 >               : ^^^
 >id : (s: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >arg => arg : (arg: string) => string
 >           : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string

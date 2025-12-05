@@ -4,19 +4,19 @@ class Point {
     static Origin: Point = { x: 0, y: 0 };
 }
 
-module Point {
+namespace Point {
     var Origin = ""; // not an error, since not exported
 }
 
 
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
 
         static Origin: Point = { x: 0, y: 0 };
     }
 
-    export module Point {
+    export namespace Point {
         var Origin = ""; // not an error since not exported
     }
 }

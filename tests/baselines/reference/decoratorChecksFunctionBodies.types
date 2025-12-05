@@ -35,7 +35,7 @@ class A {
 >func(a) : void
 >        : ^^^^
 >func : (s: string) => void
->     : ^ ^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 

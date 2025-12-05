@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
@@ -56,6 +56,6 @@ declare module JSX {
 >     : ^^^
 >32 : 32
 >   : ^^
->/>; : RegExp
->    : ^^^^^^
+>/> : RegExp
+>   : ^^^^^^
 

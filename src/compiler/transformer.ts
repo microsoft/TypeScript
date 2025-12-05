@@ -72,8 +72,8 @@ import {
     transformSystemModule,
     transformTypeScript,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
@@ -86,6 +86,8 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
         case ModuleKind.Node16:
+        case ModuleKind.Node18:
+        case ModuleKind.Node20:
         case ModuleKind.NodeNext:
         case ModuleKind.CommonJS:
             // Wraps `transformModule` and `transformECMAScriptModule` and
@@ -222,12 +224,12 @@ function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundl
 }
 
 /** @internal */
-export function noEmitSubstitution(_hint: EmitHint, node: Node) {
+export function noEmitSubstitution(_hint: EmitHint, node: Node): Node {
     return node;
 }
 
 /** @internal */
-export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
+export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void): void {
     callback(hint, node);
 }
 

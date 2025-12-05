@@ -13,10 +13,11 @@
  */
 function apply(func, thisArg, ...args) {
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
->      : ^    ^^^^^^^^^^^^       ^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>      : ^    ^^^^^^^^^^^^       ^^   ^^^^^    ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >thisArg : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 
@@ -38,26 +39,31 @@ function apply(func, thisArg, ...args) {
 >0 : 0
 >  : ^
 >func.call(thisArg) : any
+>                   : ^^^
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
+>        : ^^^
 
         case 1: return func.call(thisArg, args[0]);
 >1 : 1
 >  : ^
 >func.call(thisArg, args[0]) : any
+>                            : ^^^
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
+>        : ^^^
 >args[0] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >0 : 0
@@ -67,19 +73,23 @@ function apply(func, thisArg, ...args) {
 >2 : 2
 >  : ^
 >func.call(thisArg, args[0], args[1]) : any
+>                                     : ^^^
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
+>        : ^^^
 >args[0] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >0 : 0
 >  : ^
 >args[1] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >1 : 1
@@ -89,24 +99,29 @@ function apply(func, thisArg, ...args) {
 >3 : 3
 >  : ^
 >func.call(thisArg, args[0], args[1], args[2]) : any
+>                                              : ^^^
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
+>        : ^^^
 >args[0] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >0 : 0
 >  : ^
 >args[1] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >1 : 1
 >  : ^
 >args[2] : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 >2 : 2
@@ -114,18 +129,20 @@ function apply(func, thisArg, ...args) {
     }
     return func.apply(thisArg, args);
 >func.apply(thisArg, args) : any
+>                          : ^^^
 >func.apply : (this: Function, thisArg: any, argArray?: any) => any
->           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >thisArg : any
+>        : ^^^
 >args : any[]
 >     : ^^^^^
 }
 
 export default apply;
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
->      : ^    ^^^^^^^^^^^^       ^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>      : ^    ^^^^^^^^^^^^       ^^   ^^^^^    ^^     ^^^^^   
 

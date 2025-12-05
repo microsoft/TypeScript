@@ -1,7 +1,7 @@
 // @target: ES6
 
 
-module M {
+namespace M {
     export const x = 0;
 }
 

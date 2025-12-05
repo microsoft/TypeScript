@@ -18,7 +18,7 @@ Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {} : (dx: number, dy: number) => void
 >                                          : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >Point.prototype.add : (dx: number, dy: number) => void
->                    : ^  ^^      ^^  ^^      ^^^^^^^^^
+>                    : ^  ^^      ^^  ^^      ^^^^^    
 >Point.prototype : Point
 >                : ^^^^^
 >Point : typeof Point
@@ -26,7 +26,7 @@ Point.prototype.add = function(dx, dy) {
 >prototype : Point
 >          : ^^^^^
 >add : (dx: number, dy: number) => void
->    : ^  ^^      ^^  ^^      ^^^^^^^^^
+>    : ^  ^^      ^^  ^^      ^^^^^    
 >function(dx, dy) {} : (dx: number, dy: number) => void
 >                    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >dx : number
