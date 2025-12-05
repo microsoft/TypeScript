@@ -2,7 +2,7 @@
 
 === commentsMultiModuleSingleFile.ts ===
 /** this is multi declare module*/
-module multiM {
+namespace multiM {
 >multiM : typeof multiM
 >       : ^^^^^^^^^^^^^
 
@@ -20,7 +20,7 @@ module multiM {
 }
 
 /// this is multi module 2
-module multiM {
+namespace multiM {
 >multiM : typeof multiM
 >       : ^^^^^^^^^^^^^
 

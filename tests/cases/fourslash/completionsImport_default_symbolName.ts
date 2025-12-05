@@ -1,6 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 // @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @Filename: /node_modules/@types/range-parser/index.d.ts
 ////declare function RangeParser(): string;
@@ -21,7 +23,7 @@ verify.completions(
             name: "RangeParser",
             kind: "function",
             kindModifiers: "declare",
-            source: "/node_modules/@types/range-parser/index",
+            source: "range-parser",
             sourceDisplay: "range-parser",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions,
@@ -36,7 +38,7 @@ function RangeParser(): string`
 
 verify.applyCodeActionFromCompletion("0", {
     name: "RangeParser",
-    source: "/node_modules/@types/range-parser/index",
+    source: "range-parser",
     description: `Add import from "range-parser"`,
     newFileContent: `import RangeParser = require("range-parser");
 

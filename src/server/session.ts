@@ -2395,12 +2395,18 @@ export class Session<TMessage = string> implements EventSender {
     private getQuickInfoWorker(args: protocol.QuickInfoRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-        const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo), args.verbosityLevel);
+        const userPreferences = this.getPreferences(file);
+        const quickInfo = project.getLanguageService().getQuickInfoAtPosition(
+            file,
+            this.getPosition(args, scriptInfo),
+            userPreferences.maximumHoverLength,
+            args.verbosityLevel,
+        );
         if (!quickInfo) {
             return undefined;
         }
 
-        const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
+        const useDisplayParts = !!userPreferences.displayPartsForJSDoc;
         if (simplifiedResult) {
             const displayString = displayPartsToString(quickInfo.displayParts);
             return {

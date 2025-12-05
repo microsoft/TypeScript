@@ -57,7 +57,7 @@ export type MappedResult<T> =
 
     T extends String ? string :
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
     T
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))

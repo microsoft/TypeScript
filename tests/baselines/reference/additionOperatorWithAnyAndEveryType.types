@@ -27,7 +27,7 @@ enum E { a, b, c }
 >c : E.c
 >  : ^^^
 
-module M { export var a }
+namespace M { export var a }
 >M : typeof M
 >  : ^^^^^^^^
 >a : any

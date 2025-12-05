@@ -13,8 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-/// <reference no-default-lib="true"/>
-
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -3854,7 +3852,7 @@ declare var Float64Array: Float64ArrayConstructor;
 /// ECMAScript Internationalization API
 /////////////////////////////
 
-declare module Intl {
+declare namespace Intl {
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;

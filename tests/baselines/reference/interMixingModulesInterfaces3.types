@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/interMixingModulesInterfaces3.ts] ////
 
 === interMixingModulesInterfaces3.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
-    module B {
+    namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

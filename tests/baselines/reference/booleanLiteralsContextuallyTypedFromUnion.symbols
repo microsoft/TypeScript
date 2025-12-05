@@ -18,9 +18,9 @@ type C = A | B;
 
 const isIt = Math.random() > 0.5;
 >isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 >c : Symbol(c, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 5))

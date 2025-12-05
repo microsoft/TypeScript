@@ -16,7 +16,7 @@ declare const c3, c4 :string, c5: any;
 >   : ^^^^^^
 >c5 : any
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

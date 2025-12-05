@@ -5,7 +5,7 @@ var x = 2; //error
 var y = "";
 var y; //error
 
-module N {
+namespace N {
     var x: any;
     var x = 2; //error
 

@@ -3,7 +3,7 @@
 // Global module reference.
 
 // @Filename: referencesForGlobals_1.ts
-////module globalModule {
+////namespace globalModule {
 ////    export var x;
 ////}
 ////

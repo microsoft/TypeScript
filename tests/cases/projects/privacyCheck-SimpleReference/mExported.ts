@@ -1,4 +1,4 @@
-export module me {
+export namespace me {
     export class class1 {
         public prop1 = 0;
     }

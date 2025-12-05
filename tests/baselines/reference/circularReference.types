@@ -5,7 +5,7 @@ import foo1 = require('./foo1');
 >foo1 : typeof foo1
 >     : ^^^^^^^^^^^
 
-export module M1 {
+export namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
@@ -124,7 +124,7 @@ import foo2 = require('./foo2');
 >foo2 : typeof foo2
 >     : ^^^^^^^^^^^
 
-export module M1 {
+export namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 

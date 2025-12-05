@@ -5,10 +5,10 @@ interface I {
     [Symbol.iterator]: string;
 >[Symbol.iterator] : string
 >                  : ^^^^^^
->Symbol.iterator : any
->                : ^^^
->Symbol : any
->       : ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }

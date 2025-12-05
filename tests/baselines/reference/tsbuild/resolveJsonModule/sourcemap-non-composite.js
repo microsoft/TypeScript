@@ -29,7 +29,6 @@ export default hello.hello
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -53,6 +52,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
 TSFILE: /home/src/workspaces/solution/project/dist/hello.json
 TSFILE: /home/src/workspaces/solution/project/dist/index.js
 TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
@@ -64,6 +69,9 @@ project/src/hello.json
   Part of 'files' list in tsconfig.json
 project/src/index.ts
   Part of 'files' list in tsconfig.json
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/solution/project/dist/hello.json]
@@ -86,7 +94,7 @@ exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
-{"root":["../src/index.ts","../src/hello.json"],"version":"FakeTSVersion"}
+{"root":["../src/index.ts","../src/hello.json"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -94,12 +102,13 @@ exports.default = hello_json_1.default.hello;
     "../src/index.ts",
     "../src/hello.json"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 74
+  "size": 88
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -110,9 +119,36 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/hello.json'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because buildinfo file 'project/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
+
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+project/src/hello.json
+  Imported via "./hello.json" from file 'project/src/index.ts'
+  Part of 'files' list in tsconfig.json
+project/src/index.ts
+  Part of 'files' list in tsconfig.json
+
+Found 1 error.
 
 
 
+//// [/home/src/workspaces/solution/project/dist/hello.json] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/index.js.map] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/index.js] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

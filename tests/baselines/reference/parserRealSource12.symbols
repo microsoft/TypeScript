@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource12.ts, 0, 0))
 
     export interface IAstWalker {
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
         walk(ast: AST, parent: AST): AST;
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -67,7 +67,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 24, 18))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 24, 31))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 >AST : Symbol(AST)
     }
 
@@ -80,12 +80,12 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 28, 21))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 28, 34))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
     }
 
     class AstWalker implements IAstWalker {
 >AstWalker : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
         constructor (
             private childrenWalkers: IAstWalkChildren[],
@@ -263,7 +263,7 @@ module TypeScript {
 >options : Symbol(options, Decl(parserRealSource12.ts, 80, 72))
 >AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
 >state : Symbol(state, Decl(parserRealSource12.ts, 80, 98))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             return this.getSlowWalker(pre, post, options, state);
 >this.getSlowWalker : Symbol(AstWalkerFactory.getSlowWalker, Decl(parserRealSource12.ts, 82, 9))
@@ -284,7 +284,7 @@ module TypeScript {
 >options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
 >AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
 >state : Symbol(state, Decl(parserRealSource12.ts, 84, 103))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (!options) {
 >options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
@@ -312,81 +312,81 @@ module TypeScript {
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
@@ -504,17 +504,17 @@ module TypeScript {
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
@@ -920,17 +920,17 @@ module TypeScript {
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
@@ -1120,49 +1120,49 @@ module TypeScript {
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
->ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
->walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 31))
 
             // Verify the code is up to date with the enum
             for (var e in (<any>NodeType)._map) {
@@ -1201,17 +1201,17 @@ module TypeScript {
 >globalAstWalkerFactory : Symbol(globalAstWalkerFactory, Decl(parserRealSource12.ts, 210, 7))
     }
 
-    module ChildrenWalkers {
+    namespace ChildrenWalkers {
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
 
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
->walkNone : Symbol(walkNone, Decl(parserRealSource12.ts, 219, 28))
+>walkNone : Symbol(walkNone, Decl(parserRealSource12.ts, 219, 31))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 220, 33))
 >ASTList : Symbol(ASTList)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 220, 49))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 220, 62))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             // Nothing to do
         }
@@ -1223,7 +1223,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 224, 57))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             var len = preAst.members.length;
 >len : Symbol(len, Decl(parserRealSource12.ts, 225, 15))
@@ -1296,7 +1296,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 242, 76))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 242, 89))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.castTerm) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
@@ -1329,7 +1329,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 251, 78))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (walker.options.reverseSiblings) {
 >walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
@@ -1403,7 +1403,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 269, 72))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 269, 85))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.term) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
@@ -1425,7 +1425,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 275, 74))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (!walker.options.reverseSiblings) {
 >walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
@@ -1488,7 +1488,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 287, 84))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.operand1) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
@@ -1542,7 +1542,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 299, 62))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.name) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
@@ -1617,7 +1617,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 314, 64))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.id) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
@@ -1667,7 +1667,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 326, 76))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 326, 89))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.returnExpression) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
@@ -1689,7 +1689,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 332, 70))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.init) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
@@ -1762,7 +1762,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 350, 74))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.lval = walker.walk(preAst.lval, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
@@ -1812,7 +1812,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 360, 68))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.cond = walker.walk(preAst.cond, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
@@ -1863,7 +1863,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 370, 74))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.cond = walker.walk(preAst.cond, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
@@ -1898,7 +1898,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 377, 78))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.cond = walker.walk(preAst.cond, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
@@ -1933,7 +1933,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 384, 56))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 384, 69))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.statements) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
@@ -1956,7 +1956,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 390, 72))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.expr) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
@@ -1996,7 +1996,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 400, 76))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.val) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
@@ -2036,7 +2036,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 410, 52))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 410, 65))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.body) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
@@ -2058,7 +2058,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 416, 62))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.tryNode) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
@@ -2099,7 +2099,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 426, 66))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.tryNode) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
@@ -2139,7 +2139,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 436, 60))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 436, 73))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.body) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
@@ -2161,7 +2161,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 442, 56))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.param) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
@@ -2201,7 +2201,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 452, 68))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.name = <Identifier>walker.walk(preAst.name, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
@@ -2239,7 +2239,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 460, 70))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 460, 83))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             walkRecordChildren(preAst, parent, walker);
 >walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
@@ -2255,7 +2255,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 464, 71))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             walkNamedTypeChildren(preAst, parent, walker);
 >walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
@@ -2307,7 +2307,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 476, 58))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 476, 71))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.bod) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
@@ -2330,7 +2330,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 482, 74))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             walkNamedTypeChildren(preAst, parent, walker);
 >walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
@@ -2383,7 +2383,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 495, 73))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 495, 86))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             walkRecordChildren(preAst, parent, walker);
 >walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
@@ -2399,7 +2399,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 499, 73))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.id) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
@@ -2433,7 +2433,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 508, 72))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             if (preAst.expr) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
@@ -2472,7 +2472,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 518, 56))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 518, 69))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             //TODO: Walk "id"?
         }
@@ -2484,7 +2484,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 522, 78))
 >AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
->IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 22))
 
             preAst.labels = <ASTList>walker.walk(preAst.labels, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// module M {
+//// namespace M {
 ////     export class A {
 ////		 constructor(a: string) {}
 ////         public m(n: number) {

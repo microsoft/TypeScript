@@ -2,7 +2,7 @@ ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' do
 
 
 ==== ModuleWithExportedAndNonExportedEnums.ts (1 errors) ====
-    module A {
+    namespace A {
         export enum Color { Red, Blue }
         enum Day { Monday, Tuesday }
     }

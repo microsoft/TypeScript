@@ -25,7 +25,7 @@ class Derived2 extends Derived { baz: string; }
 >baz : string
 >    : ^^^^^^
 
-module TargetHasOptional {
+namespace TargetHasOptional {
 >TargetHasOptional : typeof TargetHasOptional
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -193,7 +193,7 @@ module TargetHasOptional {
 >  : ^
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
 >SourceHasOptional : typeof SourceHasOptional
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

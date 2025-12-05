@@ -81,7 +81,7 @@ var h2: { toString(): string } = x; // no error
 >x : true
 >  : ^^^^
 
-module M { export var a = 1; }
+namespace M { export var a = 1; }
 >M : typeof M
 >  : ^^^^^^^^
 >a : number

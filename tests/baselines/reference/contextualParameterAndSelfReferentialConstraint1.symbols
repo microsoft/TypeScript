@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/contextualParameterAndSelfReferentialConstraint1.ts] ////
+
+=== contextualParameterAndSelfReferentialConstraint1.ts ===
+type NoExcessProperties<T, U> = T & {
+>NoExcessProperties : Symbol(NoExcessProperties, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 0))
+>T : Symbol(T, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 24))
+>U : Symbol(U, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 26))
+>T : Symbol(T, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 24))
+
+  readonly [K in Exclude<keyof U, keyof T>]: never;
+>K : Symbol(K, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 1, 12))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 26))
+>T : Symbol(T, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 24))
+
+};
+
+interface Effect<out A> {
+>Effect : Symbol(Effect, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 2, 2))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 4, 17))
+
+  readonly EffectTypeId: {
+>EffectTypeId : Symbol(Effect.EffectTypeId, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 4, 25))
+
+    readonly _A: (_: never) => A;
+>_A : Symbol(_A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 5, 26))
+>_ : Symbol(_, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 6, 18))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 4, 17))
+
+  };
+}
+
+declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
+>pipe : Symbol(pipe, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 8, 1))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 22))
+>B : Symbol(B, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 24))
+>a : Symbol(a, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 28))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 22))
+>ab : Symbol(ab, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 33))
+>a : Symbol(a, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 39))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 22))
+>B : Symbol(B, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 24))
+>B : Symbol(B, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 24))
+
+interface RepeatOptions<A> {
+>RepeatOptions : Symbol(RepeatOptions, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 54))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 12, 24))
+
+  until?: (_: A) => boolean;
+>until : Symbol(RepeatOptions.until, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 12, 28))
+>_ : Symbol(_, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 13, 11))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 12, 24))
+}
+
+declare const repeat: {
+>repeat : Symbol(repeat, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 16, 13))
+
+  <O extends NoExcessProperties<RepeatOptions<A>, O>, A>(
+>O : Symbol(O, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 3))
+>NoExcessProperties : Symbol(NoExcessProperties, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 0, 0))
+>RepeatOptions : Symbol(RepeatOptions, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 10, 54))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 53))
+>O : Symbol(O, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 3))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 53))
+
+    options: O,
+>options : Symbol(options, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 57))
+>O : Symbol(O, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 3))
+
+  ): (self: Effect<A>) => Effect<A>;
+>self : Symbol(self, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 19, 6))
+>Effect : Symbol(Effect, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 2, 2))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 53))
+>Effect : Symbol(Effect, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 2, 2))
+>A : Symbol(A, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 17, 53))
+
+};
+
+pipe(
+>pipe : Symbol(pipe, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 8, 1))
+
+  {} as Effect<boolean>,
+>Effect : Symbol(Effect, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 2, 2))
+
+  repeat({
+>repeat : Symbol(repeat, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 16, 13))
+
+    until: (x) => {
+>until : Symbol(until, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 24, 10))
+>x : Symbol(x, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 25, 12))
+
+      return x; // boolean
+>x : Symbol(x, Decl(contextualParameterAndSelfReferentialConstraint1.ts, 25, 12))
+
+    },
+  }),
+);
+
