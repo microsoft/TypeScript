@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/checkForObjectTooStrict.ts] ////
 
 === checkForObjectTooStrict.ts ===
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(checkForObjectTooStrict.ts, 0, 0))
 
     export class Object {
->Object : Symbol(Object, Decl(checkForObjectTooStrict.ts, 0, 12))
+>Object : Symbol(Object, Decl(checkForObjectTooStrict.ts, 0, 15))
 
     }
 
@@ -15,14 +15,14 @@ module Foo {
 
 class Bar extends Foo.Object { // should work
 >Bar : Symbol(Bar, Decl(checkForObjectTooStrict.ts, 6, 1))
->Foo.Object : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 12))
+>Foo.Object : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 15))
 >Foo : Symbol(Foo, Decl(checkForObjectTooStrict.ts, 0, 0))
->Object : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 12))
+>Object : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 15))
 
     constructor () {
 
         super();
->super : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 12))
+>super : Symbol(Foo.Object, Decl(checkForObjectTooStrict.ts, 0, 15))
 
     }
 
@@ -36,7 +36,7 @@ class Baz extends Object {
     constructor () { // ERROR, as expected
 
         super();
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
     }
 

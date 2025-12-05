@@ -21,7 +21,7 @@ barfoo;
 >barfoo : any
 >       : ^^^
 
-declare module farboo { export const x: number; }
+declare namespace farboo { export const x: number; }
 >farboo : typeof farboo
 >       : ^^^^^^^^^^^^^
 >x : number

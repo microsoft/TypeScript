@@ -33,7 +33,7 @@ class Table<S extends Schema>  {
 >getRows : Symbol(Table.getRows, Decl(localTypeParameterInferencePriority.ts, 7, 17))
 >C : Symbol(C, Decl(localTypeParameterInferencePriority.ts, 10, 12))
 >S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
 >Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >S : Symbol(S, Decl(localTypeParameterInferencePriority.ts, 6, 12))

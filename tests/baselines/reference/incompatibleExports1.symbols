@@ -11,7 +11,7 @@ declare module "foo" {
     interface y { a: Date }
 >y : Symbol(y, Decl(incompatibleExports1.ts, 1, 36))
 >a : Symbol(y.a, Decl(incompatibleExports1.ts, 2, 17))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     export = y;
 >y : Symbol(y, Decl(incompatibleExports1.ts, 1, 36))
@@ -20,14 +20,14 @@ declare module "foo" {
 declare module "baz" {
 >"baz" : Symbol("baz", Decl(incompatibleExports1.ts, 4, 1))
 
-    export module a {
+    export namespace a {
 >a : Symbol(a, Decl(incompatibleExports1.ts, 6, 22))
 
         export var b: number;
 >b : Symbol(b, Decl(incompatibleExports1.ts, 8, 18))
     }
  
-    module c {
+    namespace c {
 >c : Symbol(c, Decl(incompatibleExports1.ts, 9, 5))
 
         export var c: string;

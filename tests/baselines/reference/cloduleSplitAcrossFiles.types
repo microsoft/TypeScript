@@ -6,7 +6,7 @@ class D { }
 >  : ^
 
 === cloduleSplitAcrossFiles_module.ts ===
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 

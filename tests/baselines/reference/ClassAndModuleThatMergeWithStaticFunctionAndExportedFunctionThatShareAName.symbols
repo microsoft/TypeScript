@@ -15,19 +15,19 @@ class Point {
 >y : Symbol(y, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 3, 43))
 }
 
-module Point {
+namespace Point {
 >Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 4, 1))
 
     export function Origin() { return null; } //expected duplicate identifier error
->Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 6, 14))
+>Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 6, 17))
 }
 
 
-module A {
+namespace A {
 >A : Symbol(A, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 8, 1))
 
     export class Point {
->Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 13), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
 
         constructor(public x: number, public y: number) { }
 >x : Symbol(Point.x, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 13, 20))
@@ -35,15 +35,15 @@ module A {
 
         static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
 >Origin : Symbol(Point.Origin, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 13, 59))
->Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 13), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
 >x : Symbol(x, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 15, 41))
 >y : Symbol(y, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 15, 47))
     }
 
-    export module Point {
->Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
+    export namespace Point {
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 11, 13), Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 16, 5))
 
         export function Origin() { return ""; }//expected duplicate identifier error
->Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 18, 25))
+>Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts, 18, 28))
     }
 }

@@ -1,6 +1,6 @@
 // @module: system
 // @target: es6
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @filename: node_modules/package/index.d.ts
 declare function packageExport(x: number): string;
 export = packageExport;

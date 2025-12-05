@@ -16,7 +16,7 @@ class C {
 >    : ^^^^^^
 }
 
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

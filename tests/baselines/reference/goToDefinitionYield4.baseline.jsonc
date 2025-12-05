@@ -1,5 +1,17 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionYield4.ts ===
 // function* gen() {
-//     class C { [/*GOTO DEF*/yield 10]() {} }
+//     class C { <|[|[/*GOTO DEF*/yield 10]|]() {}|> }
 // }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "[yield 10]",
+    "containerName": "C",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

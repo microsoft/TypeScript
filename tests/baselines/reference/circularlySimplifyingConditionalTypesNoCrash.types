@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500
+Instantiation count: 1,000
 
 === circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

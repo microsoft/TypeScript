@@ -5,7 +5,7 @@ file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
 
 
 ==== react.d.ts (0 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
@@ -34,7 +34,7 @@ file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
     	new (props?: P, context?: any): Component<P, any>;
     }
     
-    declare module TestMod {
+    declare namespace TestMod {
     	interface TestClass extends ComponentClass<{reqd: any}> {
     	}
     	var Test: TestClass;

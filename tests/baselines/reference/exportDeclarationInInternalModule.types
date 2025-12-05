@@ -12,7 +12,7 @@ class Aaa extends Bbb { }
 >Bbb : Bbb
 >    : ^^^
 
-module Aaa {
+namespace Aaa {
 >Aaa : typeof Aaa
 >    : ^^^^^^^^^^
 
@@ -21,7 +21,7 @@ module Aaa {
 >         : ^^^^^^^^
 }
 
-module Bbb {
+namespace Bbb {
 >Bbb : typeof Bbb
 >    : ^^^^^^^^^^
 

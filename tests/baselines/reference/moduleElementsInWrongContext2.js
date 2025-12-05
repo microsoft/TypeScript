@@ -2,7 +2,7 @@
 
 //// [moduleElementsInWrongContext2.ts]
 function blah () {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }

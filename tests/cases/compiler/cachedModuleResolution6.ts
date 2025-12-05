@@ -1,4 +1,4 @@
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @traceResolution: true
 
 // @filename: /a/b/c/d/e/app.ts

@@ -4,7 +4,7 @@
 declare const React: any;
 >React : any
 
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         ["package"]: any;
 >["package"] : any

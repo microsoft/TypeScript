@@ -73,18 +73,18 @@ var r4 = b.bar;
 >bar : Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 21, 16))
 
 // basic non-generic and generic case inside a module
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergeTwoInterfaces.ts, 27, 15))
 
     interface A {
->A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 13), Decl(mergeTwoInterfaces.ts, 33, 5))
 
         foo: string;
 >foo : Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 31, 17))
     }
 
     interface A {
->A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 13), Decl(mergeTwoInterfaces.ts, 33, 5))
 
         bar: number;
 >bar : Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 35, 17))
@@ -92,7 +92,7 @@ module M {
 
     var a: A;
 >a : Symbol(a, Decl(mergeTwoInterfaces.ts, 39, 7))
->A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 13), Decl(mergeTwoInterfaces.ts, 33, 5))
 
     var r1 = a.foo;
 >r1 : Symbol(r1, Decl(mergeTwoInterfaces.ts, 40, 7))

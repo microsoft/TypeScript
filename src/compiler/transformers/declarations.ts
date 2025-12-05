@@ -462,11 +462,9 @@ export function transformDeclarations(context: TransformationContext): Transform
             rawReferencedFiles = [];
             rawTypeReferenceDirectives = [];
             rawLibReferenceDirectives = [];
-            let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
                     if (sourceFile.isDeclarationFile) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
-                    hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                     currentSourceFile = sourceFile;
                     enclosingDeclaration = sourceFile;
                     lateMarkedStatements = undefined;
@@ -504,7 +502,6 @@ export function transformDeclarations(context: TransformationContext): Transform
             bundle.syntheticFileReferences = getReferencedFiles(outputFilePath);
             bundle.syntheticTypeReferences = getTypeReferences();
             bundle.syntheticLibReferences = getLibReferences();
-            bundle.hasNoDefaultLib = hasNoDefaultLib;
             return bundle;
         }
 
@@ -536,7 +533,7 @@ export function transformDeclarations(context: TransformationContext): Transform
             }
         }
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
-        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), /*hasNoDefaultLib*/ false, getLibReferences());
 
         function collectFileReferences(sourceFile: SourceFile) {
             rawReferencedFiles = concatenate(rawReferencedFiles, map(sourceFile.referencedFiles, f => [sourceFile, f]));
@@ -877,6 +874,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
+        const phaseModifier = decl.importClause.phaseModifier === SyntaxKind.DeferKeyword ? undefined : decl.importClause.phaseModifier;
         // The `importClause` visibility corresponds to the default's visibility.
         const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name : undefined;
         if (!decl.importClause.namedBindings) {
@@ -886,7 +884,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
                 ),
@@ -902,7 +900,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     namedBindings,
                 ),
@@ -918,7 +916,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 decl.modifiers,
                 factory.updateImportClause(
                     decl.importClause,
-                    decl.importClause.isTypeOnly,
+                    phaseModifier,
                     visibleDefaultBinding,
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),

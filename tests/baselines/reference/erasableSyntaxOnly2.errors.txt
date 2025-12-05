@@ -1,0 +1,24 @@
+index.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(1,19): error TS1005: '>' expected.
+index.ts(2,9): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(2,18): error TS1005: '>' expected.
+index.ts(3,9): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(3,17): error TS1005: '>' expected.
+
+
+==== index.ts (6 errors) ====
+    let a = (<unknown function foo() {});
+             ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                      ~~~~~~~~
+!!! error TS1005: '>' expected.
+    let b = <unknown 123;
+            ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~~~
+!!! error TS1005: '>' expected.
+    let c = <unknown
+            ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    
+!!! error TS1005: '>' expected.

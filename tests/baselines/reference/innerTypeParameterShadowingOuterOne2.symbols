@@ -7,7 +7,7 @@
 class C<T extends Date> {
 >C : Symbol(C, Decl(innerTypeParameterShadowingOuterOne2.ts, 0, 0))
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 8))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     g<T extends Number>() {
 >g : Symbol(C.g, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 25))
@@ -41,9 +41,9 @@ class C<T extends Date> {
 class C2<T extends Date, U extends Date> {
 >C2 : Symbol(C2, Decl(innerTypeParameterShadowingOuterOne2.ts, 13, 1))
 >T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 9))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 24))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     g<T extends Number, U extends Number>() {
 >g : Symbol(C2.g, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 42))
