@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/varBlock.ts] ////
 
 === varBlock.ts ===
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -16,7 +16,7 @@ module m2 {
 >  : ^^^
 }
 
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -78,7 +78,7 @@ declare var d3, d4 = 10;
 >10 : 10
 >   : ^^
 
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -119,7 +119,7 @@ module m3 {
 >   : ^^
 }
 
-declare module m4 {
+declare namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

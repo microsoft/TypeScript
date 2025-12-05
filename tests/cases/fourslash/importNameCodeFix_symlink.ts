@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @noLib: true
 
 // @Filename: /node_modules/real/index.d.ts

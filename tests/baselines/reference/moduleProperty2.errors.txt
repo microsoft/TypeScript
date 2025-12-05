@@ -3,7 +3,7 @@ moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'ty
 
 
 ==== moduleProperty2.ts (2 errors) ====
-    module M {
+    namespace M {
         function f() {
             var x;
         }
@@ -15,7 +15,7 @@ moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'ty
         var test2=y; // y visible because same module
     }
     
-    module N {
+    namespace N {
         var test3=M.y; // nope y private property of M
                     ~
 !!! error TS2339: Property 'y' does not exist on type 'typeof M'.

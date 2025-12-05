@@ -9,7 +9,7 @@
 
 verify.applyCodeActionFromCompletion("", {
   name: "foo",
-  source: "/foo",
+  source: "./foo",
   description: `Add import from "./foo"`,
   newFileContent: `import foo from "./foo";\n\nfoo`,
   preferences: {

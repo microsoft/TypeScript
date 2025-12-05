@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
 
 === functionTypeArgumentArrayAssignment.ts ===
-module test {
+namespace test {
 >test : typeof test
 >     : ^^^^^^^^^^^
 

@@ -4,13 +4,13 @@
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 0, 33))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 1, 33))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 1, 46))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))

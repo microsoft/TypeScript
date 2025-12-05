@@ -14,7 +14,7 @@ class A {
     public a: number;
 >a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
 
     export var n: number;

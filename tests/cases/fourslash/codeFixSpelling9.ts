@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @filename: a.ts
-////module Foo {
+////namespace Foo {
 ////    export type nums = number;
 ////}
 // @filename: b.ts

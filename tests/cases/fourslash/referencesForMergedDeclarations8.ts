@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface Foo { }
-////module Foo {
+////namespace Foo {
 ////    export interface Bar { }
 ////    /*1*/export module /*2*/Bar { export interface Baz { } }
 ////    export function Bar() { }

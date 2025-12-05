@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileModuleAssignmentInObjectLiteralProperty.ts] ////
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.ts]
-module m1 {
+namespace m1 {
     export class c {
     }
 }

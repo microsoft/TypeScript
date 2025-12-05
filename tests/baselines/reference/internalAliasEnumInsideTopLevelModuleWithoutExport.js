@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithoutExport.ts] ////
 
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.ts]
-export module a {
+export namespace a {
     export enum weekend {
         Friday,
         Saturday,

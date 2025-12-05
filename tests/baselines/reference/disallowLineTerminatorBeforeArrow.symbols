@@ -136,11 +136,11 @@ foo(()
 
     => { return false; });
 
-module m {
+namespace m {
 >m : Symbol(m, Decl(disallowLineTerminatorBeforeArrow.ts, 53, 26))
 
     class City {
->City : Symbol(City, Decl(disallowLineTerminatorBeforeArrow.ts, 55, 10))
+>City : Symbol(City, Decl(disallowLineTerminatorBeforeArrow.ts, 55, 13))
 
         constructor(x: number, thing = ()
 >x : Symbol(x, Decl(disallowLineTerminatorBeforeArrow.ts, 57, 20))
@@ -169,7 +169,7 @@ module m {
 >x : Symbol(x, Decl(disallowLineTerminatorBeforeArrow.ts, 70, 18))
 
         => new City(Enum.claw);
->City : Symbol(City, Decl(disallowLineTerminatorBeforeArrow.ts, 55, 10))
+>City : Symbol(City, Decl(disallowLineTerminatorBeforeArrow.ts, 55, 13))
 >Enum.claw : Symbol(Enum.claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
 >Enum : Symbol(Enum, Decl(disallowLineTerminatorBeforeArrow.ts, 63, 5))
 >claw : Symbol(Enum.claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))

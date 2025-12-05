@@ -13,10 +13,10 @@ consumer.tsx(5,17): error TS2604: JSX element type 'BaseComponent' does not have
     }
     
 ==== component.d.ts (0 errors) ====
-    declare module JSX {
+    declare namespace JSX {
       interface ElementAttributesProperty { props; }
     }
-    declare module React {
+    declare namespace React {
       class Component<T, U> { }
     }
     declare module "BaseComponent" {

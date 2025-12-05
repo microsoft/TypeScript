@@ -105,7 +105,7 @@ f14([2, ["abc", { x: 0, y: true }]]);
 f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]);  // Error, no x
 
-module M {
+namespace M {
     export var [a, b] = [1, 2];
 }
 

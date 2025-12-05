@@ -44,7 +44,7 @@ class SubE3 extends Base3 {
 }
 
 // Case 4
-module Base4 {
+namespace Base4 {
     class Sub4 {
         public x(){
             return "hello";

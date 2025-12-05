@@ -5,7 +5,7 @@ declare var v;
 >v : any
 >  : ^^^
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

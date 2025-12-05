@@ -4,7 +4,6 @@
         "target": "es5",
         "module": "commonjs",
         "strict": true,
-        "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "strictNullChecks": true,

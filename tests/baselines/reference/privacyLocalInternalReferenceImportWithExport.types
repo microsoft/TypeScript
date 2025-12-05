@@ -2,7 +2,7 @@
 
 === privacyLocalInternalReferenceImportWithExport.ts ===
 // private elements
-module m_private {
+namespace m_private {
 >m_private : typeof m_private
 >          : ^^^^^^^^^^^^^^^^
 
@@ -42,7 +42,7 @@ module m_private {
 
     export interface i_private {
     }
-    export module mi_private {
+    export namespace mi_private {
 >mi_private : typeof mi_private
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -51,14 +51,14 @@ module m_private {
 >  : ^
         }
     }
-    export module mu_private {
+    export namespace mu_private {
         export interface i {
         }
     }
 }
 
 // Public elements
-export module m_public {
+export namespace m_public {
 >m_public : typeof m_public
 >         : ^^^^^^^^^^^^^^^
 
@@ -96,7 +96,7 @@ export module m_public {
 
     export interface i_public {
     }
-    export module mi_public {
+    export namespace mi_public {
 >mi_public : typeof mi_public
 >          : ^^^^^^^^^^^^^^^^
 
@@ -105,13 +105,13 @@ export module m_public {
 >  : ^
         }
     }
-    export module mu_public {
+    export namespace mu_public {
         export interface i {
         }
     }
 }
 
-export module import_public {
+export namespace import_public {
 >import_public : typeof import_public
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -449,7 +449,7 @@ export module import_public {
 >                    : ^^^
 }
 
-module import_private {
+namespace import_private {
 >import_private : typeof import_private
 >               : ^^^^^^^^^^^^^^^^^^^^^
 

@@ -7,6 +7,7 @@
 ////         "rootDir": "src",
 ////         "outDir": "dist",
 ////         "module": "nodenext",
+////         "resolveJsonModule": false,
 ////     }
 //// }
 
@@ -33,6 +34,7 @@
 ////         "rewriteRelativeImportExtensions": true,
 ////         "rootDir": "src",
 ////         "outDir": "dist",
+////         "resolveJsonModule": false,
 ////     },
 ////     "references": [
 ////         { "path": "../common" }
