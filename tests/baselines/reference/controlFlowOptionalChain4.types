@@ -1,0 +1,229 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain4.ts] ////
+
+=== controlFlowOptionalChain4.ts ===
+// https://github.com/microsoft/TypeScript/issues/56998
+
+type Type = {
+>Type : Type
+>     : ^^^^
+
+  id: number;
+>id : number
+>   : ^^^^^^
+
+};
+
+type InferenceInfo = {
+>InferenceInfo : InferenceInfo
+>              : ^^^^^^^^^^^^^
+
+  typeParameter: Type;
+>typeParameter : Type
+>              : ^^^^
+
+  impliedArity?: number;
+>impliedArity : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function getInferenceInfoForType(type: Type): InferenceInfo | undefined;
+>getInferenceInfoForType : (type: Type) => InferenceInfo | undefined
+>                        : ^    ^^    ^^^^^                         
+>type : Type
+>     : ^^^^
+
+function fn1(t1: Type, t2: Type) {
+>fn1 : (t1: Type, t2: Type) => void
+>    : ^  ^^    ^^  ^^    ^^^^^^^^^
+>t1 : Type
+>   : ^^^^
+>t2 : Type
+>   : ^^^^
+
+  let info = getInferenceInfoForType(t1);
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType(t1) : InferenceInfo | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType : (type: Type) => InferenceInfo | undefined
+>                        : ^    ^^    ^^^^^                         
+>t1 : Type
+>   : ^^^^
+
+  if (info?.impliedArity !== undefined) {
+>info?.impliedArity !== undefined : boolean
+>                                 : ^^^^^^^
+>info?.impliedArity : number | undefined
+>                   : ^^^^^^^^^^^^^^^^^^
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>impliedArity : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    info.impliedArity;
+>info.impliedArity : number
+>                  : ^^^^^^
+>info : InferenceInfo
+>     : ^^^^^^^^^^^^^
+>impliedArity : number
+>             : ^^^^^^
+
+  } else if ((info = getInferenceInfoForType(t2))?.impliedArity !== undefined) {
+>(info = getInferenceInfoForType(t2))?.impliedArity !== undefined : boolean
+>                                                                 : ^^^^^^^
+>(info = getInferenceInfoForType(t2))?.impliedArity : number | undefined
+>                                                   : ^^^^^^^^^^^^^^^^^^
+>(info = getInferenceInfoForType(t2)) : InferenceInfo | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>info = getInferenceInfoForType(t2) : InferenceInfo | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType(t2) : InferenceInfo | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType : (type: Type) => InferenceInfo | undefined
+>                        : ^    ^^    ^^^^^                         
+>t2 : Type
+>   : ^^^^
+>impliedArity : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    info.impliedArity;
+>info.impliedArity : number
+>                  : ^^^^^^
+>info : InferenceInfo
+>     : ^^^^^^^^^^^^^
+>impliedArity : number
+>             : ^^^^^^
+  }
+}
+
+function fn2(t1: Type, t2: Type) {
+>fn2 : (t1: Type, t2: Type) => void
+>    : ^  ^^    ^^  ^^    ^^^^^^^^^
+>t1 : Type
+>   : ^^^^
+>t2 : Type
+>   : ^^^^
+
+  let info = getInferenceInfoForType(t1);
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType(t1) : InferenceInfo | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType : (type: Type) => InferenceInfo | undefined
+>                        : ^    ^^    ^^^^^                         
+>t1 : Type
+>   : ^^^^
+
+  if (info?.impliedArity !== undefined) {
+>info?.impliedArity !== undefined : boolean
+>                                 : ^^^^^^^
+>info?.impliedArity : number | undefined
+>                   : ^^^^^^^^^^^^^^^^^^
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>impliedArity : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    info.impliedArity;
+>info.impliedArity : number
+>                  : ^^^^^^
+>info : InferenceInfo
+>     : ^^^^^^^^^^^^^
+>impliedArity : number
+>             : ^^^^^^
+
+  } else if ((info = getInferenceInfoForType(t2))?.impliedArity) {
+>(info = getInferenceInfoForType(t2))?.impliedArity : number | undefined
+>                                                   : ^^^^^^^^^^^^^^^^^^
+>(info = getInferenceInfoForType(t2)) : InferenceInfo | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>info = getInferenceInfoForType(t2) : InferenceInfo | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>info : InferenceInfo | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType(t2) : InferenceInfo | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>getInferenceInfoForType : (type: Type) => InferenceInfo | undefined
+>                        : ^    ^^    ^^^^^                         
+>t2 : Type
+>   : ^^^^
+>impliedArity : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+
+    info.impliedArity;
+>info.impliedArity : number
+>                  : ^^^^^^
+>info : InferenceInfo
+>     : ^^^^^^^^^^^^^
+>impliedArity : number
+>             : ^^^^^^
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60855
+
+type Option = { type: "Some"; value: number } | { type: "None" };
+>Option : Option
+>       : ^^^^^^
+>type : "Some"
+>     : ^^^^^^
+>value : number
+>      : ^^^^^^
+>type : "None"
+>     : ^^^^^^
+
+declare function someOptionalOption(): Option | undefined;
+>someOptionalOption : () => Option | undefined
+>                   : ^^^^^^                  
+
+function test60855(): number | undefined {
+>test60855 : () => number | undefined
+>          : ^^^^^^                  
+
+  let option: Option | undefined;
+>option : Option | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  if ((option = someOptionalOption())?.type === "Some") {
+>(option = someOptionalOption())?.type === "Some" : boolean
+>                                                 : ^^^^^^^
+>(option = someOptionalOption())?.type : "Some" | "None" | undefined
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(option = someOptionalOption()) : Option | undefined
+>                                : ^^^^^^^^^^^^^^^^^^
+>option = someOptionalOption() : Option | undefined
+>                              : ^^^^^^^^^^^^^^^^^^
+>option : Option | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>someOptionalOption() : Option | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
+>someOptionalOption : () => Option | undefined
+>                   : ^^^^^^                  
+>type : "Some" | "None" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Some" : "Some"
+>       : ^^^^^^
+
+    return option.value;
+>option.value : number
+>             : ^^^^^^
+>option : { type: "Some"; value: number; }
+>       : ^^^^^^^^      ^^^^^^^^^      ^^^
+>value : number
+>      : ^^^^^^
+  }
+
+  return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
