@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/contextuallyTypedOptionalProperty.ts] ////
+
+=== contextuallyTypedOptionalProperty.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/55164
+
+declare function match<T>(cb: (value: T) => boolean): T;
+>match : <T>(cb: (value: T) => boolean) => T
+>      : ^ ^^  ^^                     ^^^^^ 
+>cb : (value: T) => boolean
+>   : ^     ^^ ^^^^^       
+>value : T
+>      : ^
+
+declare function foo(pos: { x?: number; y?: number }): boolean;
+>foo : (pos: { x?: number; y?: number; }) => boolean
+>    : ^   ^^                           ^^^^^       
+>pos : { x?: number; y?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+foo({ y: match(y => y > 0) })
+>foo({ y: match(y => y > 0) }) : boolean
+>                              : ^^^^^^^
+>foo : (pos: { x?: number; y?: number; }) => boolean
+>    : ^   ^^                           ^^^^^       
+>{ y: match(y => y > 0) } : { y: number | undefined; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>match(y => y > 0) : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>match : <T>(cb: (value: T) => boolean) => T
+>      : ^ ^^  ^^                     ^^^^^ 
+>y => y > 0 : (y: number | undefined) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y > 0 : boolean
+>      : ^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+declare function foo2(point: [number?]): boolean;
+>foo2 : (point: [number?]) => boolean
+>     : ^     ^^         ^^^^^       
+>point : [(number | undefined)?]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+foo2([match(y => y > 0)])
+>foo2([match(y => y > 0)]) : boolean
+>                          : ^^^^^^^
+>foo2 : (point: [number?]) => boolean
+>     : ^     ^^         ^^^^^       
+>[match(y => y > 0)] : [number | undefined]
+>                    : ^^^^^^^^^^^^^^^^^^^^
+>match(y => y > 0) : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>match : <T>(cb: (value: T) => boolean) => T
+>      : ^ ^^  ^^                     ^^^^^ 
+>y => y > 0 : (y: number | undefined) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y > 0 : boolean
+>      : ^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+

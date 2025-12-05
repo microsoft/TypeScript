@@ -1,85 +1,77 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-    createSession,
+    openExternalProjectForSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
     toExternalFile,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: Open-file", () => {
+describe("unittests:: tsserver:: openfile::", () => {
     it("can be reloaded with empty content", () => {
         const f = {
-            path: "/a/b/app.ts",
-            content: "let x = 1"
+            path: "/home/src/projects/project/a/b/app.ts",
+            content: "let x = 1",
         };
         const projectFileName = "externalProject";
-        const host = createServerHost([f]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([f]);
+        const session = new TestSession(host);
         // create a project
-        projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
-
-        const p = projectService.externalProjects[0];
-        // force to load the content of the file
-        p.updateGraph();
-
-        const scriptInfo = p.getScriptInfo(f.path)!;
-        projectService.logger.log(`Snapshot size: ${scriptInfo.getSnapshot().getLength()}`);
+        openExternalProjectForSession({
+            projectFileName,
+            rootFiles: [toExternalFile(f.path)],
+            options: {},
+        }, session);
 
         // open project and replace its content with empty string
-        projectService.openClientFile(f.path, "");
-        projectService.logger.log(`Snapshot size: ${scriptInfo.getSnapshot().getLength()}`);
-        baselineTsserverLogs("openfile", "realoaded with empty content", projectService);
+        openFilesForSession([{ file: f, content: "" }], session);
+        baselineTsserverLogs("openfile", "realoaded with empty content", session);
     });
 
     function verifyOpenFileWorks(subScenario: string, useCaseSensitiveFileNames: boolean) {
         it(subScenario, () => {
             const file1: File = {
-                path: "/a/b/src/app.ts",
-                content: "let x = 10;"
+                path: "/home/src/projects/project/a/b/src/app.ts",
+                content: "let x = 10;",
             };
             const file2: File = {
-                path: "/a/B/lib/module2.ts",
-                content: "let z = 10;"
+                path: "/home/src/projects/project/a/B/lib/module2.ts",
+                content: "let z = 10;",
             };
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
-                content: ""
+                path: "/home/src/projects/project/a/b/tsconfig.json",
+                content: "",
             };
             const configFile2: File = {
-                path: "/a/tsconfig.json",
-                content: ""
+                path: "/home/src/projects/project/a/tsconfig.json",
+                content: "",
             };
-            const host = createServerHost([file1, file2, configFile, configFile2], {
-                useCaseSensitiveFileNames
+            const host = TestServerHost.createServerHost([file1, file2, configFile, configFile2], {
+                useCaseSensitiveFileNames,
             });
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
 
             // Open file1 -> configFile
-            verifyConfigFileName(file1, "/a");
-            verifyConfigFileName(file1, "/a/b");
-            verifyConfigFileName(file1, "/a/B");
+            verifyConfigFileName(file1, "/home/src/projects/project/a");
+            verifyConfigFileName(file1, "/home/src/projects/project/a/b");
+            verifyConfigFileName(file1, "/home/src/projects/project/a/B");
 
-            // Open file2 use root "/a/b"
-            verifyConfigFileName(file2, "/a");
-            verifyConfigFileName(file2, "/a/b");
-            verifyConfigFileName(file2, "/a/B");
+            // Open file2 use root "/home/src/projects/project/a/b"
+            verifyConfigFileName(file2, "/home/src/projects/project/a");
+            verifyConfigFileName(file2, "/home/src/projects/project/a/b");
+            verifyConfigFileName(file2, "/home/src/projects/project/a/B");
 
-            baselineTsserverLogs("openfile", subScenario, service);
-            function verifyConfigFileName(file: File, projectRoot: string) {
-                const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
-                service.logger.log(`file: ${file.path} configFile: ${configFileName}`);
-                service.closeClientFile(file.path);
+            baselineTsserverLogs("openfile", subScenario, session);
+            function verifyConfigFileName(file: File, projectRootPath: string) {
+                openFilesForSession([{ file, projectRootPath }], session);
+                closeFilesForSession([file], session);
             }
         });
     }
@@ -87,50 +79,45 @@ describe("unittests:: tsserver:: Open-file", () => {
     verifyOpenFileWorks("project root is used with case-insensitive system", /*useCaseSensitiveFileNames*/ false);
 
     it("uses existing project even if project refresh is pending", () => {
-        const projectFolder = "/user/someuser/projects/myproject";
+        const projectRootPath = "/user/someuser/projects/myproject";
         const aFile: File = {
-            path: `${projectFolder}/src/a.ts`,
-            content: "export const x = 0;"
+            path: `${projectRootPath}/src/a.ts`,
+            content: "export const x = 0;",
         };
         const configFile: File = {
-            path: `${projectFolder}/tsconfig.json`,
-            content: "{}"
+            path: `${projectRootPath}/tsconfig.json`,
+            content: "{}",
         };
-        const files = [aFile, configFile, libFile];
-        const host = createServerHost(files);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(aFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
+        const files = [aFile, configFile];
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
+        openFilesForSession([{ file: aFile, projectRootPath }], session);
 
         const bFile: File = {
-            path: `${projectFolder}/src/b.ts`,
-            content: `export {}; declare module "./a" {  export const y: number; }`
+            path: `${projectRootPath}/src/b.ts`,
+            content: `export {}; declare module "./a" {  export const y: number; }`,
         };
         host.writeFile(bFile.path, bFile.content);
-        service.openClientFile(bFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
-        baselineTsserverLogs("openfile", "uses existing project even if project refresh is pending", service);
+        openFilesForSession([{ file: bFile, projectRootPath }], session);
+        baselineTsserverLogs("openfile", "uses existing project even if project refresh is pending", session);
     });
 
     it("can open same file again", () => {
-        const projectFolder = "/user/someuser/projects/myproject";
+        const projectRootPath = "/user/someuser/projects/myproject";
         const aFile: File = {
-            path: `${projectFolder}/src/a.ts`,
-            content: "export const x = 0;"
+            path: `${projectRootPath}/src/a.ts`,
+            content: "export const x = 0;",
         };
         const configFile: File = {
-            path: `${projectFolder}/tsconfig.json`,
-            content: "{}"
+            path: `${projectRootPath}/tsconfig.json`,
+            content: "{}",
         };
-        const files = [aFile, configFile, libFile];
-        const host = createServerHost(files);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        verifyProject(aFile.content);
-        verifyProject(`${aFile.content}export const y = 10;`);
-        baselineTsserverLogs("openfile", "can open same file again", service);
-
-        function verifyProject(aFileContent: string) {
-            service.openClientFile(aFile.path, aFileContent, ts.ScriptKind.TS, projectFolder);
-            service.logger.log(`aFileContent: ${service.configuredProjects.get(configFile.path)!.getCurrentProgram()?.getSourceFile(aFile.path)!.text}`);
-        }
+        const files = [aFile, configFile];
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
+        openFilesForSession([{ file: aFile, content: aFile.content, projectRootPath }], session);
+        openFilesForSession([{ file: aFile, content: `${aFile.content}export const y = 10;`, projectRootPath }], session);
+        baselineTsserverLogs("openfile", "can open same file again", session);
     });
 
     it("when file makes edits to add/remove comment directives, they are handled correcrly", () => {
@@ -148,10 +135,10 @@ function bar() {
     return z;
 }
 foo();
-bar();`
+bar();`,
         };
-        const host = createServerHost([file, libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([file]);
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         verifyGetErrRequest({ session, files: [file] });
 
@@ -165,10 +152,10 @@ bar();`
                     fileName: file.path,
                     textChanges: [{
                         newText: "             ",
-                        ...locationOfTsIgnore
-                    }]
-                }]
-            }
+                        ...locationOfTsIgnore,
+                    }],
+                }],
+            },
         });
         verifyGetErrRequest({ session, files: [file] });
         // Revert the change and no errors should be reported
@@ -179,10 +166,10 @@ bar();`
                     fileName: file.path,
                     textChanges: [{
                         newText: tsIgnoreComment,
-                        ...locationOfTsIgnore
-                    }]
-                }]
-            }
+                        ...locationOfTsIgnore,
+                    }],
+                }],
+            },
         });
         verifyGetErrRequest({ session, files: [file] });
         baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
@@ -190,13 +177,12 @@ bar();`
 
     describe("opening file and refreshing program", () => {
         function createHostAndSession() {
-            const host = createServerHost({
-                "/project/a.ts": "export const a = 10;",
-                "/project/b.ts": "export const b = 10;",
-                "/project/tsconfig.json": "{}",
-                [libFile.path]: libFile.content,
+            const host = TestServerHost.createServerHost({
+                "/home/src/projects/project/a.ts": "export const a = 10;",
+                "/home/src/projects/project/b.ts": "export const b = 10;",
+                "/home/src/projects/project/tsconfig.json": "{}",
             });
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             return { host, session };
         }
 
@@ -208,66 +194,66 @@ bar();`
                         fileName,
                         changes: [{
                             span: { start: 0, length: 0 },
-                            newText: "export const y = 10;"
-                        }]
-                    }]
-                }
+                            newText: "export const y = 10;",
+                        }],
+                    }],
+                },
             });
         }
 
         it("file opening does not refresh sourceFile", () => {
             const { host, session } = createHostAndSession();
-            openFilesForSession(["/project/a.ts"], session);
-            openFilesForSession(["/project/b.ts"], session);
-            applyEdit("/project/a.ts", session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            closeFilesForSession(["/project/b.ts"], session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            host.appendFile("/project/b.ts", "export const x = 10;");
+            openFilesForSession(["/home/src/projects/project/a.ts"], session);
+            openFilesForSession(["/home/src/projects/project/b.ts"], session);
+            applyEdit("/home/src/projects/project/a.ts", session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            closeFilesForSession(["/home/src/projects/project/b.ts"], session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            host.appendFile("/home/src/projects/project/b.ts", "export const x = 10;");
             host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("openfile", "does not refresh sourceFile", session);
         });
 
         it("file opening with different content refreshes sourceFile", () => {
             const { host, session } = createHostAndSession();
-            openFilesForSession(["/project/a.ts"], session);
-            openFilesForSession([{ file: "/project/b.ts", content: "export const newB = 10;" }], session);
-            applyEdit("/project/a.ts", session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            closeFilesForSession(["/project/b.ts"], session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            host.appendFile("/project/b.ts", "export const x = 10;");
+            openFilesForSession(["/home/src/projects/project/a.ts"], session);
+            openFilesForSession([{ file: "/home/src/projects/project/b.ts", content: "export const newB = 10;" }], session);
+            applyEdit("/home/src/projects/project/a.ts", session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            closeFilesForSession(["/home/src/projects/project/b.ts"], session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            host.appendFile("/home/src/projects/project/b.ts", "export const x = 10;");
             host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("openfile", "different content refreshes sourceFile", session);
         });
 
         it("edits on file and then close refreshes sourceFile", () => {
             const { host, session } = createHostAndSession();
-            openFilesForSession(["/project/a.ts"], session);
-            openFilesForSession(["/project/b.ts"], session);
-            applyEdit("/project/a.ts", session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            applyEdit("/project/b.ts", session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            closeFilesForSession(["/project/b.ts"], session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            host.appendFile("/project/b.ts", "export const x = 10;");
+            openFilesForSession(["/home/src/projects/project/a.ts"], session);
+            openFilesForSession(["/home/src/projects/project/b.ts"], session);
+            applyEdit("/home/src/projects/project/a.ts", session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            applyEdit("/home/src/projects/project/b.ts", session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            closeFilesForSession(["/home/src/projects/project/b.ts"], session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            host.appendFile("/home/src/projects/project/b.ts", "export const x = 10;");
             host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("openfile", "edits on file and then close refreshes sourceFile", session);
         });
 
         it("edits on file and then close does not refresh sourceFile if contents match", () => {
             const { host, session } = createHostAndSession();
-            openFilesForSession(["/project/a.ts"], session);
-            openFilesForSession(["/project/b.ts"], session);
-            applyEdit("/project/a.ts", session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            applyEdit("/project/b.ts", session);
-            host.prependFile("/project/b.ts", "export const y = 10;");
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            closeFilesForSession(["/project/b.ts"], session);
-            session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
-            host.appendFile("/project/b.ts", "export const x = 10;");
+            openFilesForSession(["/home/src/projects/project/a.ts"], session);
+            openFilesForSession(["/home/src/projects/project/b.ts"], session);
+            applyEdit("/home/src/projects/project/a.ts", session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            applyEdit("/home/src/projects/project/b.ts", session);
+            host.prependFile("/home/src/projects/project/b.ts", "export const y = 10;");
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            closeFilesForSession(["/home/src/projects/project/b.ts"], session);
+            session.getProjectService().configuredProjects.get("/home/src/projects/project/tsconfig.json")!.updateGraph();
+            host.appendFile("/home/src/projects/project/b.ts", "export const x = 10;");
             host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("openfile", "edits on file and then close does not refresh sourceFile if contents match", session);
         });

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Debug,
     Diagnostics,
     EmitFlags,
@@ -27,7 +32,6 @@ import {
     last,
     map,
     Node,
-    nullTransformationContext,
     ParameterDeclaration,
     PropertyDeclaration,
     PropertySignature,
@@ -41,12 +45,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
@@ -59,10 +58,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const decl = getDeclaration(diag.file, diag.start);
-        if (decl) doChange(changes, diag.file, decl);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
+        }),
 });
 
 function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
@@ -143,7 +143,7 @@ function transformJSDocType(node: Node): Node {
         case SyntaxKind.JSDocTypeLiteral:
             return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
         default:
-            const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
+            const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
             setEmitFlags(visited, EmitFlags.SingleLine);
             return visited;
     }
@@ -155,7 +155,8 @@ function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
             /*modifiers*/ undefined,
             isIdentifier(tag.name) ? tag.name : tag.name.right,
             isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword))));
+            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        )));
     setEmitFlags(typeNode, EmitFlags.SingleLine);
     return typeNode;
 }
@@ -225,7 +226,8 @@ function transformJSDocIndexSignature(node: TypeReferenceNode) {
         node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
         /*questionToken*/ undefined,
         factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
-        /*initializer*/ undefined);
+        /*initializer*/ undefined,
+    );
     const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
     setEmitFlags(indexSignature, EmitFlags.SingleLine);
     return indexSignature;

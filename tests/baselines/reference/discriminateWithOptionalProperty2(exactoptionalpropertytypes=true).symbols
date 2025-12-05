@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty2.ts] ////
+
+=== discriminateWithOptionalProperty2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55532#issuecomment-1694744665
+
+type PromiseOrValue<T> = Promise<T> | T;
+>PromiseOrValue : Symbol(PromiseOrValue, Decl(discriminateWithOptionalProperty2.ts, 0, 0))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 2, 20))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 2, 20))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 2, 20))
+
+function mapAsyncIterable<T, U, R = undefined>(
+>mapAsyncIterable : Symbol(mapAsyncIterable, Decl(discriminateWithOptionalProperty2.ts, 2, 40))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+  iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 4, 47))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+  callback: (value: T) => PromiseOrValue<U>,
+>callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 77))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 6, 13))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>PromiseOrValue : Symbol(PromiseOrValue, Decl(discriminateWithOptionalProperty2.ts, 0, 0))
+>U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
+
+): AsyncGenerator<U, R, void> {
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+  const iterator = iterable[Symbol.asyncIterator]();
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 4, 47))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+  async function mapResult(
+>mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
+
+    result: IteratorResult<T, R>,
+>result : Symbol(result, Decl(discriminateWithOptionalProperty2.ts, 10, 27))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+  ): Promise<IteratorResult<U, R>> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+    if (result.done) {
+>result.done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>result : Symbol(result, Decl(discriminateWithOptionalProperty2.ts, 10, 27))
+>done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+      return result;
+>result : Symbol(result, Decl(discriminateWithOptionalProperty2.ts, 10, 27))
+    }
+
+    try {
+      return { value: await callback(result.value), done: false };
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 18, 14))
+>callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 77))
+>result.value : Symbol(IteratorYieldResult.value, Decl(lib.es2015.iterable.d.ts, --, --))
+>result : Symbol(result, Decl(discriminateWithOptionalProperty2.ts, 10, 27))
+>value : Symbol(IteratorYieldResult.value, Decl(lib.es2015.iterable.d.ts, --, --))
+>done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 18, 51))
+
+    } catch (error) {
+>error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 19, 13))
+
+      if (typeof iterator.return === "function") {
+>iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+        try {
+          await iterator.return();
+>iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+        } catch (_e) {}
+>_e : Symbol(_e, Decl(discriminateWithOptionalProperty2.ts, 23, 17))
+      }
+      throw error;
+>error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 19, 13))
+    }
+  }
+
+  return {
+    async next() {
+>next : Symbol(next, Decl(discriminateWithOptionalProperty2.ts, 29, 10))
+
+      return mapResult(await iterator.next());
+>mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
+>iterator.next : Symbol(AsyncIterator.next, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>next : Symbol(AsyncIterator.next, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    },
+    async return(value: R): Promise<IteratorResult<U, R>> {
+>return : Symbol(return, Decl(discriminateWithOptionalProperty2.ts, 32, 6))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 33, 17))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
+
+      return typeof iterator.return === "function"
+>iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+        ? mapResult(await iterator.return(value))
+>mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
+>iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 33, 17))
+
+        : { value: undefined as any, done: true };
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 36, 11))
+>undefined : Symbol(undefined)
+>done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 36, 36))
+
+    },
+    async throw(error?: unknown) {
+>throw : Symbol(throw, Decl(discriminateWithOptionalProperty2.ts, 37, 6))
+>error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 38, 16))
+
+      if (typeof iterator.throw === "function") {
+>iterator.throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+        return mapResult(await iterator.throw(error));
+>mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
+>iterator.throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
+>throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 38, 16))
+      }
+      throw error;
+>error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 38, 16))
+
+    },
+    [Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(discriminateWithOptionalProperty2.ts, 43, 6))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+      return this;
+>this : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+    },
+    async [Symbol.asyncDispose]() {
+>[Symbol.asyncDispose] : Symbol([Symbol.asyncDispose], Decl(discriminateWithOptionalProperty2.ts, 46, 6))
+>Symbol.asyncDispose : Symbol(SymbolConstructor.asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncDispose : Symbol(SymbolConstructor.asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+      await this.return(undefined!);
+>this.return : Symbol(AsyncGenerator.return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>this : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>return : Symbol(AsyncGenerator.return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>undefined : Symbol(undefined)
+    }
+  };
+}
+
+const items = [1, 2, 3];
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
+
+const iterable = {
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 5))
+
+  [Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(discriminateWithOptionalProperty2.ts, 55, 18))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    return this;
+>this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
+
+  },
+  next() {
+>next : Symbol(next, Decl(discriminateWithOptionalProperty2.ts, 58, 4))
+
+    const value = items[0];
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 60, 9))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
+
+    items.shift();
+>items.shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
+>shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
+
+    return Promise.resolve({
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+      done: items.length === 0,
+>done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 62, 28))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+      value,
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 63, 31))
+
+    });
+  },
+};
+
+const doubles = mapAsyncIterable(iterable, (x) => x + x);
+>doubles : Symbol(doubles, Decl(discriminateWithOptionalProperty2.ts, 69, 5))
+>mapAsyncIterable : Symbol(mapAsyncIterable, Decl(discriminateWithOptionalProperty2.ts, 2, 40))
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 5))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 69, 44))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 69, 44))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 69, 44))
+

@@ -85,11 +85,11 @@ class C {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(methodContainingLocalFunction.ts, 32, 1))
 
     export function exhibitBug() {
->exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 34, 10))
+>exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 34, 13))
 
         function localFunction() { }
 >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 35, 34))

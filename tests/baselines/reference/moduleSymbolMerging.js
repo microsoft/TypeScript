@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/moduleSymbolMerging.ts] ////
 
 //// [A.ts]
-module A { export interface I {} }
+namespace A { export interface I {} }
 
 //// [B.ts]
-///<reference path="A.ts" />
-module A { ; }
-module B {
+///<reference path="A.ts" preserve="true" />
+namespace A { ; }
+namespace B {
 	export function f(): A.I { return null; }
 }
 
@@ -14,7 +14,7 @@ module B {
 
 //// [A.js]
 //// [B.js]
-///<reference path="A.ts" />
+///<reference path="A.ts" preserve="true" />
 var A;
 (function (A) {
     ;
@@ -27,13 +27,13 @@ var B;
 
 
 //// [A.d.ts]
-declare module A {
+declare namespace A {
     interface I {
     }
 }
 //// [B.d.ts]
-/// <reference path="A.d.ts" />
-declare module A { }
-declare module B {
+/// <reference path="A.d.ts" preserve="true" />
+declare namespace A { }
+declare namespace B {
     function f(): A.I;
 }

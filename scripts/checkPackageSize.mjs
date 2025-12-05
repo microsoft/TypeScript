@@ -117,7 +117,7 @@ else {
                 prettyPrintSizeDiff(before.unpackedSize, after.unpackedSize),
                 prettyPercentDiff(before.unpackedSize, after.unpackedSize),
             ],
-        ]
+        ],
     );
 }
 
@@ -125,7 +125,6 @@ failIfTooBig(before.size, after.size);
 failIfTooBig(before.unpackedSize, after.unpackedSize);
 
 console.log();
-
 
 /** @type {Map<string, number>} */
 const fileCounts = new Map();

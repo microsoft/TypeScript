@@ -6,13 +6,15 @@ let x;
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     let x;
 >x : any
 }
 
-module A {
+namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     let x;
 >x : any

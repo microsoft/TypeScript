@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/importAttributes/importAttributes11.ts] ////
+
+=== ./a.json ===
+{ "key": "value" }
+>"key" : Symbol("key", Decl(a.json, 0, 1))
+
+=== ./b.mts ===
+declare global {
+>global : Symbol(global, Decl(b.mts, 0, 0))
+
+    interface ImportAttributes {
+>ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.mts, 0, 16))
+
+        type: "json"
+>type : Symbol(ImportAttributes.type, Decl(b.mts, 1, 32))
+    }
+}
+
+import a
+>a : Symbol(a, Decl(b.mts, 6, 6))
+
+	from "./a.json"
+	with {type: "json"}
+

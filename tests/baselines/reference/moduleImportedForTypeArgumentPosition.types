@@ -4,14 +4,19 @@
 /**This is on import declaration*/
 import M2 = require("moduleImportedForTypeArgumentPosition_0");
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
 class C1<T>{ }
 >C1 : C1<T>
+>   : ^^^^^
 
 class Test1 extends C1<M2.M2C> {
 >Test1 : Test1
+>      : ^^^^^
 >C1 : C1<M2.M2C>
+>   : ^^^^^^^^^^
 >M2 : any
+>   : ^^^
 }
 
 === moduleImportedForTypeArgumentPosition_0.ts ===

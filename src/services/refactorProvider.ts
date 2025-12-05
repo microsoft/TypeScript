@@ -6,8 +6,8 @@ import {
     Refactor,
     RefactorContext,
     RefactorEditInfo,
-} from "./_namespaces/ts";
-import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
+} from "./_namespaces/ts.js";
+import { refactorKindBeginsWith } from "./_namespaces/ts.refactor.js";
 
 // A map with the refactor code as key, the refactor itself as value
 // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
@@ -18,7 +18,7 @@ const refactors = new Map<string, Refactor>();
  *
  * @internal
  */
-export function registerRefactor(name: string, refactor: Refactor) {
+export function registerRefactor(name: string, refactor: Refactor): void {
     refactors.set(name, refactor);
 }
 
@@ -26,8 +26,8 @@ export function registerRefactor(name: string, refactor: Refactor) {
 export function getApplicableRefactors(context: RefactorContext, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
     return arrayFrom(flatMapIterator(refactors.values(), refactor =>
         context.cancellationToken && context.cancellationToken.isCancellationRequested() ||
-        !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
-        refactor.getAvailableActions(context, includeInteractiveActions)));
+            !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
+            refactor.getAvailableActions(context, includeInteractiveActions)));
 }
 
 /** @internal */

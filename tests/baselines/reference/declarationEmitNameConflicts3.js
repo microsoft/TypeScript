@@ -1,20 +1,20 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
 
 //// [declarationEmitNameConflicts3.ts]
-module M {
+namespace M {
     export interface D { }
-    export module D {
+    export namespace D {
         export function f() { }
     }
-    export module C {
+    export namespace C {
         export function f() { }
     }
-    export module E {
+    export namespace E {
         export function f() { }
     }
 }
 
-module M.P {
+namespace M.P {
     export class C {
         static f() { }
     }
@@ -92,20 +92,20 @@ var M;
 
 
 //// [declarationEmitNameConflicts3.d.ts]
-declare module M {
+declare namespace M {
     interface D {
     }
-    module D {
+    namespace D {
         function f(): void;
     }
-    module C {
+    namespace C {
         function f(): void;
     }
-    module E {
+    namespace E {
         function f(): void;
     }
 }
-declare module M.P {
+declare namespace M.P {
     class C {
         static f(): void;
     }

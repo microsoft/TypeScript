@@ -6,17 +6,17 @@ import {
     SortedArray,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     DiscoverTypings,
     Project,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export enum LogLevel {
     terse,
     normal,
     requestTime,
-    verbose
+    verbose,
 }
 
 export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
@@ -50,7 +50,7 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         unresolvedImports,
         projectRootPath: project.getCurrentDirectory() as Path,
         cachePath,
-        kind: "discover"
+        kind: "discover",
     };
 }
 
@@ -66,7 +66,7 @@ export namespace Errors {
     }
 }
 
-export type NormalizedPath = string & { __normalizedPathTag: any };
+export type NormalizedPath = string & { __normalizedPathTag: any; };
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
@@ -102,7 +102,7 @@ export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
         },
         remove(path) {
             map.delete(path);
-        }
+        },
     };
 }
 
@@ -117,7 +117,7 @@ export interface ProjectOptions {
     configHasExcludeProperty: boolean;
 }
 
-export function isInferredProjectName(name: string) {
+export function isInferredProjectName(name: string): boolean {
     // POSIX defines /dev/null as a device - there should be no file with this prefix
     return /dev\/null\/inferredProject\d+\*/.test(name);
 }

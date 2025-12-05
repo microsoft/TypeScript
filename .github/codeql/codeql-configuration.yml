@@ -1,8 +1,10 @@
-name : CodeQL Configuration
+name: CodeQL Configuration
 
-paths:
-  - src
-  - scripts
-  - Herebyfile.mjs
 paths-ignore:
   - src/lib
+  - tests
+
+query-filters:
+  # Falls over on our dynamic RegExp generation
+  - exclude:
+      id: js/regex-injection

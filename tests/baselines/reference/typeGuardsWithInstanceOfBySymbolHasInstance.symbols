@@ -1,0 +1,583 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfBySymbolHasInstance.ts] ////
+
+=== typeGuardsWithInstanceOfBySymbolHasInstance.ts ===
+interface AConstructor {
+>AConstructor : Symbol(AConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 0, 0))
+
+    new (): A;
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+    [Symbol.hasInstance](value: unknown): value is A;
+>[Symbol.hasInstance] : Symbol(AConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 1, 14))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 2, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 2, 25))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+}
+interface A {
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+    foo: string;
+>foo : Symbol(A.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 4, 13))
+}
+declare var A: AConstructor;
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+>AConstructor : Symbol(AConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 0, 0))
+
+var obj1: A | string;
+>obj1 : Symbol(obj1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 9, 3))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+if (obj1 instanceof A) { // narrowed to A.
+>obj1 : Symbol(obj1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 9, 3))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+    obj1.foo;
+>obj1.foo : Symbol(A.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 4, 13))
+>obj1 : Symbol(obj1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 9, 3))
+>foo : Symbol(A.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 4, 13))
+
+    obj1.bar;
+>obj1 : Symbol(obj1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 9, 3))
+}
+
+var obj2: any;
+>obj2 : Symbol(obj2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 15, 3))
+
+if (obj2 instanceof A) {
+>obj2 : Symbol(obj2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 15, 3))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+    obj2.foo;
+>obj2.foo : Symbol(A.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 4, 13))
+>obj2 : Symbol(obj2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 15, 3))
+>foo : Symbol(A.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 4, 13))
+
+    obj2.bar;
+>obj2 : Symbol(obj2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 15, 3))
+}
+
+// a construct signature with generics
+interface BConstructor {
+>BConstructor : Symbol(BConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 19, 1))
+
+    new <T>(): B<T>;
+>T : Symbol(T, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 23, 9))
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+>T : Symbol(T, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 23, 9))
+
+    [Symbol.hasInstance](value: unknown): value is B<any>;
+>[Symbol.hasInstance] : Symbol(BConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 23, 20))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 24, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 24, 25))
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+}
+interface B<T> {
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+>T : Symbol(T, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 12))
+
+    foo: T;
+>foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+>T : Symbol(T, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 12))
+}
+declare var B: BConstructor;
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+>BConstructor : Symbol(BConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 19, 1))
+
+var obj3: B<number> | string;
+>obj3 : Symbol(obj3, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 31, 3))
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+
+if (obj3 instanceof B) { // narrowed to B<number>.
+>obj3 : Symbol(obj3, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 31, 3))
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+
+    obj3.foo = 1;
+>obj3.foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+>obj3 : Symbol(obj3, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 31, 3))
+>foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+
+    obj3.foo = "str";
+>obj3.foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+>obj3 : Symbol(obj3, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 31, 3))
+>foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+
+    obj3.bar = "str";
+>obj3 : Symbol(obj3, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 31, 3))
+}
+
+var obj4: any;
+>obj4 : Symbol(obj4, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 38, 3))
+
+if (obj4 instanceof B) {
+>obj4 : Symbol(obj4, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 38, 3))
+>B : Symbol(B, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 25, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 29, 11))
+
+    obj4.foo = "str";
+>obj4.foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+>obj4 : Symbol(obj4, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 38, 3))
+>foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+
+    obj4.foo = 1;
+>obj4.foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+>obj4 : Symbol(obj4, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 38, 3))
+>foo : Symbol(B.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 26, 16))
+
+    obj4.bar = "str";
+>obj4 : Symbol(obj4, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 38, 3))
+}
+
+// has multiple construct signature
+interface CConstructor {
+>CConstructor : Symbol(CConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 43, 1))
+
+    new (value: string): C1;
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 47, 9))
+>C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 50, 1))
+
+    new (value: number): C2;
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 48, 9))
+>C2 : Symbol(C2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 55, 1))
+
+    [Symbol.hasInstance](value: unknown): value is C1 | C2;
+>[Symbol.hasInstance] : Symbol(CConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 48, 28))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 49, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 49, 25))
+>C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 50, 1))
+>C2 : Symbol(C2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 55, 1))
+}
+interface C1 {
+>C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 50, 1))
+
+    foo: string;
+>foo : Symbol(C1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 51, 14))
+
+    c: string;
+>c : Symbol(C1.c, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 52, 16))
+
+    bar1: number;
+>bar1 : Symbol(C1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 53, 14))
+}
+interface C2 {
+>C2 : Symbol(C2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 55, 1))
+
+    foo: string;
+>foo : Symbol(C2.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 56, 14))
+
+    c: string;
+>c : Symbol(C2.c, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 57, 16))
+
+    bar2: number;
+>bar2 : Symbol(C2.bar2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 58, 14))
+}
+declare var C: CConstructor;
+>C : Symbol(C, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 61, 11))
+>CConstructor : Symbol(CConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 43, 1))
+
+var obj5: C1 | A;
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+>C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 50, 1))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+if (obj5 instanceof C) { // narrowed to C1.
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+>C : Symbol(C, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 61, 11))
+
+    obj5.foo;
+>obj5.foo : Symbol(C1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 51, 14))
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+>foo : Symbol(C1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 51, 14))
+
+    obj5.c;
+>obj5.c : Symbol(C1.c, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 52, 16))
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+>c : Symbol(C1.c, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 52, 16))
+
+    obj5.bar1;
+>obj5.bar1 : Symbol(C1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 53, 14))
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+>bar1 : Symbol(C1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 53, 14))
+
+    obj5.bar2;
+>obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
+}
+
+var obj6: any;
+>obj6 : Symbol(obj6, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 71, 3))
+
+if (obj6 instanceof C) {
+>obj6 : Symbol(obj6, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 71, 3))
+>C : Symbol(C, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 61, 11))
+
+    obj6.foo;
+>obj6.foo : Symbol(foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 51, 14), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 56, 14))
+>obj6 : Symbol(obj6, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 71, 3))
+>foo : Symbol(foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 51, 14), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 56, 14))
+
+    obj6.bar1;
+>obj6 : Symbol(obj6, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 71, 3))
+
+    obj6.bar2;
+>obj6 : Symbol(obj6, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 71, 3))
+}
+
+// with object type literal
+interface D {
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+    foo: string;
+>foo : Symbol(D.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 79, 13))
+}
+declare var D: {
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+    new (): D;
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+    [Symbol.hasInstance](value: unknown): value is D;
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 83, 14))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 84, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 84, 25))
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+};
+
+var obj7: D | string;
+>obj7 : Symbol(obj7, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 87, 3))
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+if (obj7 instanceof D) { // narrowed to D.
+>obj7 : Symbol(obj7, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 87, 3))
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+    obj7.foo;
+>obj7.foo : Symbol(D.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 79, 13))
+>obj7 : Symbol(obj7, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 87, 3))
+>foo : Symbol(D.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 79, 13))
+
+    obj7.bar;
+>obj7 : Symbol(obj7, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 87, 3))
+}
+
+var obj8: any;
+>obj8 : Symbol(obj8, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 93, 3))
+
+if (obj8 instanceof D) {
+>obj8 : Symbol(obj8, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 93, 3))
+>D : Symbol(D, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 76, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 82, 11))
+
+    obj8.foo;
+>obj8.foo : Symbol(D.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 79, 13))
+>obj8 : Symbol(obj8, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 93, 3))
+>foo : Symbol(D.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 79, 13))
+
+    obj8.bar;
+>obj8 : Symbol(obj8, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 93, 3))
+}
+
+// a construct signature that returns a union type
+interface EConstructor {
+>EConstructor : Symbol(EConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 97, 1))
+
+    new (): E1 | E2;
+>E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 103, 1))
+>E2 : Symbol(E2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 107, 1))
+
+    [Symbol.hasInstance](value: unknown): value is E1 | E2;
+>[Symbol.hasInstance] : Symbol(EConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 101, 20))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 102, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 102, 25))
+>E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 103, 1))
+>E2 : Symbol(E2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 107, 1))
+}
+interface E1 {
+>E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 103, 1))
+
+    foo: string;
+>foo : Symbol(E1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 104, 14))
+
+    bar1: number;
+>bar1 : Symbol(E1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 105, 16))
+}
+interface E2 {
+>E2 : Symbol(E2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 107, 1))
+
+    foo: string;
+>foo : Symbol(E2.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 108, 14))
+
+    bar2: number;
+>bar2 : Symbol(E2.bar2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 109, 16))
+}
+declare var E: EConstructor;
+>E : Symbol(E, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 112, 11))
+>EConstructor : Symbol(EConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 97, 1))
+
+var obj9: E1 | A;
+>obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
+>E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 103, 1))
+>A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
+
+if (obj9 instanceof E) { // narrowed to E1
+>obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
+>E : Symbol(E, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 112, 11))
+
+    obj9.foo;
+>obj9.foo : Symbol(E1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 104, 14))
+>obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
+>foo : Symbol(E1.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 104, 14))
+
+    obj9.bar1;
+>obj9.bar1 : Symbol(E1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 105, 16))
+>obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
+>bar1 : Symbol(E1.bar1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 105, 16))
+
+    obj9.bar2;
+>obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
+}
+
+var obj10: any;
+>obj10 : Symbol(obj10, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 121, 3))
+
+if (obj10 instanceof E) {
+>obj10 : Symbol(obj10, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 121, 3))
+>E : Symbol(E, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 112, 11))
+
+    obj10.foo;
+>obj10.foo : Symbol(foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 104, 14), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 108, 14))
+>obj10 : Symbol(obj10, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 121, 3))
+>foo : Symbol(foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 104, 14), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 108, 14))
+
+    obj10.bar1;
+>obj10 : Symbol(obj10, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 121, 3))
+
+    obj10.bar2;
+>obj10 : Symbol(obj10, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 121, 3))
+}
+
+// a construct signature that returns any
+interface FConstructor {
+>FConstructor : Symbol(FConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 126, 1))
+
+    new (): any;
+    [Symbol.hasInstance](value: unknown): value is any;
+>[Symbol.hasInstance] : Symbol(FConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 130, 16))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 131, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 131, 25))
+}
+interface F {
+>F : Symbol(F, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 132, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 137, 11))
+
+    foo: string;
+>foo : Symbol(F.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 133, 13))
+
+    bar: number;
+>bar : Symbol(F.bar, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 134, 16))
+}
+declare var F: FConstructor;
+>F : Symbol(F, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 132, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 137, 11))
+>FConstructor : Symbol(FConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 126, 1))
+
+var obj11: F | string;
+>obj11 : Symbol(obj11, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 139, 3))
+>F : Symbol(F, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 132, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 137, 11))
+
+if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
+>obj11 : Symbol(obj11, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 139, 3))
+>F : Symbol(F, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 132, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 137, 11))
+
+    obj11.foo;
+>obj11 : Symbol(obj11, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 139, 3))
+
+    obj11.bar;
+>obj11 : Symbol(obj11, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 139, 3))
+}
+
+var obj12: any;
+>obj12 : Symbol(obj12, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 145, 3))
+
+if (obj12 instanceof F) {
+>obj12 : Symbol(obj12, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 145, 3))
+>F : Symbol(F, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 132, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 137, 11))
+
+    obj12.foo;
+>obj12 : Symbol(obj12, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 145, 3))
+
+    obj12.bar;
+>obj12 : Symbol(obj12, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 145, 3))
+}
+
+// a type with a prototype, it overrides the construct signature
+interface GConstructor {
+>GConstructor : Symbol(GConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 149, 1))
+
+    prototype: G1; // high priority
+>prototype : Symbol(GConstructor.prototype, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 152, 24))
+>G1 : Symbol(G1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 156, 1))
+
+    new (): G2;    // low priority
+>G2 : Symbol(G2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 159, 1))
+
+    [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
+>[Symbol.hasInstance] : Symbol(GConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 154, 15))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 155, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 155, 25))
+>G1 : Symbol(G1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 156, 1))
+}
+interface G1 {
+>G1 : Symbol(G1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 156, 1))
+
+    foo1: number;
+>foo1 : Symbol(G1.foo1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 157, 14))
+}
+interface G2 {
+>G2 : Symbol(G2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 159, 1))
+
+    foo2: boolean;
+>foo2 : Symbol(G2.foo2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 160, 14))
+}
+declare var G: GConstructor;
+>G : Symbol(G, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 163, 11))
+>GConstructor : Symbol(GConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 149, 1))
+
+var obj13: G1 | G2;
+>obj13 : Symbol(obj13, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 165, 3))
+>G1 : Symbol(G1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 156, 1))
+>G2 : Symbol(G2, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 159, 1))
+
+if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
+>obj13 : Symbol(obj13, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 165, 3))
+>G : Symbol(G, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 163, 11))
+
+    obj13.foo1;
+>obj13.foo1 : Symbol(G1.foo1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 157, 14))
+>obj13 : Symbol(obj13, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 165, 3))
+>foo1 : Symbol(G1.foo1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 157, 14))
+
+    obj13.foo2;
+>obj13 : Symbol(obj13, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 165, 3))
+}
+
+var obj14: any;
+>obj14 : Symbol(obj14, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 171, 3))
+
+if (obj14 instanceof G) {
+>obj14 : Symbol(obj14, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 171, 3))
+>G : Symbol(G, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 163, 11))
+
+    obj14.foo1;
+>obj14.foo1 : Symbol(G1.foo1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 157, 14))
+>obj14 : Symbol(obj14, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 171, 3))
+>foo1 : Symbol(G1.foo1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 157, 14))
+
+    obj14.foo2;
+>obj14 : Symbol(obj14, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 171, 3))
+}
+
+// a type with a prototype that has any type
+interface HConstructor {
+>HConstructor : Symbol(HConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 175, 1))
+
+    prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
+>prototype : Symbol(HConstructor.prototype, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 178, 24))
+
+    new (): H;      // low priority
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+
+    [Symbol.hasInstance](value: unknown): value is H; // overrides priority
+>[Symbol.hasInstance] : Symbol(HConstructor[Symbol.hasInstance], Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 180, 14))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 181, 25))
+>value : Symbol(value, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 181, 25))
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+}
+interface H {
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+
+    foo: number;
+>foo : Symbol(H.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 183, 13))
+}
+declare var H: HConstructor;
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+>HConstructor : Symbol(HConstructor, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 175, 1))
+
+var obj15: H | string;
+>obj15 : Symbol(obj15, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 188, 3))
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+
+if (obj15 instanceof H) { // narrowed to H.
+>obj15 : Symbol(obj15, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 188, 3))
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+
+    obj15.foo;
+>obj15.foo : Symbol(H.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 183, 13))
+>obj15 : Symbol(obj15, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 188, 3))
+>foo : Symbol(H.foo, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 183, 13))
+
+    obj15.bar;
+>obj15 : Symbol(obj15, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 188, 3))
+}
+
+var obj16: any;
+>obj16 : Symbol(obj16, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 194, 3))
+
+if (obj16 instanceof H) {
+>obj16 : Symbol(obj16, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 194, 3))
+>H : Symbol(H, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 182, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 186, 11))
+
+    obj16.foo1;
+>obj16 : Symbol(obj16, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 194, 3))
+
+    obj16.foo2;
+>obj16 : Symbol(obj16, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 194, 3))
+}
+
+var obj17: any;
+>obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 200, 3))
+
+if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
+>obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 200, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    obj17.foo1;
+>obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 200, 3))
+
+    obj17.foo2;
+>obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 200, 3))
+}
+
+var obj18: any;
+>obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 206, 3))
+
+if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
+>obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 206, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+    obj18.foo1;
+>obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 206, 3))
+
+    obj18.foo2;
+>obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 206, 3))
+}
+

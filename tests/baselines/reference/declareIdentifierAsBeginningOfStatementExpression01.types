@@ -3,6 +3,7 @@
 === declareIdentifierAsBeginningOfStatementExpression01.ts ===
 class C {
 >C : C
+>  : ^
 }
 
 var declare: any;
@@ -10,6 +11,8 @@ var declare: any;
 
 declare instanceof C;
 >declare instanceof C : boolean
+>                     : ^^^^^^^
 >declare : any
 >C : typeof C
+>  : ^^^^^^^^
 

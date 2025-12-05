@@ -14,7 +14,7 @@ verify.completions({
   exact: completion.globalsPlus([
     {
       name: "someModule",
-      source: "/someModule",
+      source: "./someModule",
       sourceDisplay: "./someModule",
       text: "(property) default: 1",
       kind: "property",
@@ -24,7 +24,7 @@ verify.completions({
     },
     {
       name: "someModule",
-      source: "/someModule",
+      source: "./someModule",
       sourceDisplay: "./someModule",
       text: "const someModule: 0",
       kind: "const",
@@ -40,7 +40,7 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
   name: "someModule",
-  source: "/someModule",
+  source: "./someModule",
   data: { exportName: "default", fileName: "/someModule.ts" },
   description: `Add import from "./someModule"`,
   newFileContent: `import someModule from "./someModule";

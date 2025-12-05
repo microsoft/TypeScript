@@ -1,45 +1,44 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: getFileReferences", () => {
+describe("unittests:: tsserver:: getFileReferences::", () => {
     const importA = `import "./a";`;
     const importCurlyFromA = `import {} from "./a";`;
-    const importAFromA = `import { a } from "/project/a";`;
+    const importAFromA = `import { a } from "/home/src/projects/project/a";`;
     const typeofImportA = `type T = typeof import("./a").a;`;
 
     const aTs: File = {
-        path: "/project/a.ts",
+        path: "/home/src/projects/project/a.ts",
         content: "export const a = {};",
     };
     const bTs: File = {
-        path: "/project/b.ts",
+        path: "/home/src/projects/project/b.ts",
         content: importA,
     };
     const cTs: File = {
-        path: "/project/c.ts",
-        content: importCurlyFromA
+        path: "/home/src/projects/project/c.ts",
+        content: importCurlyFromA,
     };
     const dTs: File = {
-        path: "/project/d.ts",
-        content: [importAFromA, typeofImportA].join("\n")
+        path: "/home/src/projects/project/d.ts",
+        content: [importAFromA, typeofImportA].join("\n"),
     };
     const tsconfig: File = {
-        path: "/project/tsconfig.json",
+        path: "/home/src/projects/project/tsconfig.json",
         content: "{}",
     };
 
     function makeSampleSession() {
-        const host = createServerHost([aTs, bTs, cTs, dTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([aTs, bTs, cTs, dTs, tsconfig]);
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs, cTs, dTs], session);
         return session;
     }
@@ -59,8 +58,8 @@ describe("unittests:: tsserver:: getFileReferences", () => {
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
-                preferences: { disableLineTextInReferences: true }
-            }
+                preferences: { disableLineTextInReferences: true },
+            },
         });
         session.executeCommandSeq<ts.server.protocol.FileReferencesRequest>({
             command: ts.server.protocol.CommandTypes.FileReferences,

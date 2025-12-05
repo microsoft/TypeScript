@@ -5,19 +5,26 @@
 
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function Bar() {
 >Bar : () => JSX.Element
+>    : ^^^^^^^^^^^^^^^^^
 
   return <div />;
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 export function Foo() {
 >Foo : () => JSX.Element
+>    : ^^^^^^^^^^^^^^^^^
 
   return <Bar />;
 ><Bar /> : JSX.Element
+>        : ^^^^^^^^^^^
 >Bar : () => JSX.Element
+>    : ^^^^^^^^^^^^^^^^^
 }

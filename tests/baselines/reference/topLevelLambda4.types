@@ -3,8 +3,13 @@
 === topLevelLambda4.ts ===
 export var x = () => this.window;
 >x : () => any
+>  : ^^^^^^^^^
 >() => this.window : () => any
+>                  : ^^^^^^^^^
 >this.window : any
+>            : ^^^
 >this : undefined
+>     : ^^^^^^^^^
 >window : any
+>       : ^^^
 

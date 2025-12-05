@@ -1,0 +1,16 @@
+awaitUsingDeclarations.5.ts(3,17): error TS1492: 'await using' declarations may not have binding patterns.
+awaitUsingDeclarations.5.ts(3,17): error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== awaitUsingDeclarations.5.ts (2 errors) ====
+    {
+        await using a = null,
+                    [b] = null,
+                    ~~~
+!!! error TS1492: 'await using' declarations may not have binding patterns.
+                    ~~~
+!!! error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+                    c = null;
+    }
+    
+    export {};

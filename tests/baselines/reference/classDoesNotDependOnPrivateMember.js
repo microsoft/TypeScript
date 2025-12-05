@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
 
 //// [classDoesNotDependOnPrivateMember.ts]
-module M {
+namespace M {
     interface I { }
     export class C {
         private x: I;
@@ -21,7 +21,7 @@ var M;
 
 
 //// [classDoesNotDependOnPrivateMember.d.ts]
-declare module M {
+declare namespace M {
     class C {
         private x;
     }

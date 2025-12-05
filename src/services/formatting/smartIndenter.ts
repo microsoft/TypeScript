@@ -1,4 +1,8 @@
 import {
+    getRangeOfEnclosingComment,
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -52,17 +56,12 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    getRangeOfEnclosingComment,
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export namespace SmartIndenter {
-
     const enum Value {
-        Unknown = -1
+        Unknown = -1,
     }
 
     /**
@@ -93,7 +92,7 @@ export namespace SmartIndenter {
 
         const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
         if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
             return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
@@ -151,7 +150,7 @@ export namespace SmartIndenter {
         const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
         // use list position if the preceding token is before any list items
         if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].indexOf(currentToken.parent.kind) !== -1;
+            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].includes(currentToken.parent.kind);
             const indentSize = useTheSameBaseIndentation ? 0 : options.indentSize!;
             return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
         }
@@ -234,7 +233,7 @@ export namespace SmartIndenter {
         return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
     }
 
-    export function getBaseIndentation(options: EditorSettings) {
+    export function getBaseIndentation(options: EditorSettings): number {
         return options.baseIndentSize || 0;
     }
 
@@ -245,7 +244,8 @@ export namespace SmartIndenter {
         indentationDelta: number,
         sourceFile: SourceFile,
         isNextChild: boolean,
-        options: EditorSettings): number {
+        options: EditorSettings,
+    ): number {
         let parent = current.parent;
 
         // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
@@ -259,8 +259,7 @@ export namespace SmartIndenter {
             }
 
             const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
-            const parentAndChildShareLine =
-                containingListOrParentStart.line === currentStart.line ||
+            const parentAndChildShareLine = containingListOrParentStart.line === currentStart.line ||
                 childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
             if (useActualIndentation) {
@@ -309,8 +308,7 @@ export namespace SmartIndenter {
             // Instead, when at an argument, we unspoof the starting position of the enclosing call expression
             // *after* applying indentation for the argument.
 
-            const useTrueStart =
-                isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+            const useTrueStart = isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
             current = parent;
             parent = current.parent;
@@ -344,18 +342,11 @@ export namespace SmartIndenter {
     /*
      * Function returns Value.Unknown if actual indentation for node should not be used (i.e because node is nested expression)
      */
-    function getActualIndentationForNode(current: Node,
-        parent: Node,
-        currentLineAndChar: LineAndCharacter,
-        parentAndChildShareLine: boolean,
-        sourceFile: SourceFile,
-        options: EditorSettings): number {
-
+    function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: EditorSettings): number {
         // actual indentation is used for statements\declarations if one of cases below is true:
         // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
         // - parent and child are not on the same line
-        const useActualIndentation =
-            (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
+        const useActualIndentation = (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
             (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
         if (!useActualIndentation) {
@@ -368,7 +359,7 @@ export namespace SmartIndenter {
     const enum NextTokenKind {
         Unknown,
         OpenBrace,
-        CloseBrace
+        CloseBrace,
     }
 
     function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {
@@ -611,7 +602,10 @@ export namespace SmartIndenter {
      * value of 'character' for '$' is 3
      * value of 'column' for '$' is 6 (assuming that tab size is 4)
      */
-    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
+    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings): {
+        column: number;
+        character: number;
+    } {
         let character = 0;
         let column = 0;
         for (let pos = startPos; pos < endPos; pos++) {
@@ -730,7 +724,13 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.JsxClosingFragment;
             case SyntaxKind.IntersectionType:
             case SyntaxKind.UnionType:
-                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
+            case SyntaxKind.SatisfiesExpression:
+                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
+                    return false;
+                }
+                break;
+            case SyntaxKind.TryStatement:
+                if (childKind === SyntaxKind.Block) {
                     return false;
                 }
                 break;

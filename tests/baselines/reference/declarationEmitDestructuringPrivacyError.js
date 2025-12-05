@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts] ////
 
 //// [declarationEmitDestructuringPrivacyError.ts]
-module m {
+namespace m {
     class c {
     }
     export var [x, y, z] = [10, new c(), 30];
@@ -21,7 +21,7 @@ var m;
 
 
 //// [declarationEmitDestructuringPrivacyError.d.ts]
-declare module m {
+declare namespace m {
     class c {
     }
     export var x: number, y: c, z: number;

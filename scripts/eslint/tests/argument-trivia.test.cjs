@@ -2,10 +2,11 @@ const { RuleTester } = require("./support/RuleTester.cjs");
 const rule = require("../rules/argument-trivia.cjs");
 
 const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
+    languageOptions: {
+        parserOptions: {
+            warnOnUnsupportedTypeScriptVersion: false,
+        },
     },
-    parser: require.resolve("@typescript-eslint/parser"),
 });
 
 ruleTester.run("argument-trivia", rule, {
@@ -77,10 +78,10 @@ const fn = (prop: boolean) => {};
 fn(/* boolean arg */false);
             `,
             errors: [{ messageId: "argumentTriviaArgumentSpaceError" }],
-            output:`
+            output: `
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */ false);
-            `
+            `,
         },
     ],
 });

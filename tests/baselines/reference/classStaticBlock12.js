@@ -22,5 +22,5 @@ class C {
 _a = C;
 _C_x = { value: 1 };
 (() => {
-    __classPrivateFieldGet(C, _a, "f", _C_x);
+    __classPrivateFieldGet(_a, _a, "f", _C_x);
 })();

@@ -1,4 +1,10 @@
 import {
+    createCodeFixActionMaybeFixAll,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     Diagnostics,
     factory,
@@ -13,13 +19,7 @@ import {
     textChanges,
     Token,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionMaybeFixAll,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixConvertConstToLet";
 const errorCodes = [Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];
@@ -36,7 +36,7 @@ registerCodeFix({
     },
     getAllCodeActions: context => {
         const { program } = context;
-        const seen = new Map<number, true>();
+        const seen = new Set<number>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
@@ -50,7 +50,7 @@ registerCodeFix({
             });
         }));
     },
-    fixIds: [fixId]
+    fixIds: [fixId],
 });
 
 interface Info {

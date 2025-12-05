@@ -66,6 +66,6 @@ export class Encoder<T> implements IEncoder<T> {
     /**
      * @param {T} value
      */
-    encode(value: T): Uint8Array;
+    encode(value: T): Uint8Array<ArrayBuffer>;
 }
-export type IEncoder<T> = import('./interface').Encoder<T>;
+export type IEncoder<T> = import("./interface").Encoder<T>;

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     cast,
     Diagnostics,
     findChildOfKind,
@@ -9,12 +14,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixUnusedLabel";
 const errorCodes = [Diagnostics.Unused_label.code];

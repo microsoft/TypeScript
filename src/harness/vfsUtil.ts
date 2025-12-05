@@ -1,8 +1,8 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -25,14 +25,14 @@ export const testLibFolder = "/.lib";
 export const srcFolder = "/.src";
 
 // file type
-const S_IFMT            = 0o170000; // file type
-const S_IFSOCK          = 0o140000; // socket
-const S_IFLNK           = 0o120000; // symbolic link
-const S_IFREG           = 0o100000; // regular file
-const S_IFBLK           = 0o060000; // block device
-const S_IFDIR           = 0o040000; // directory
-const S_IFCHR           = 0o020000; // character device
-const S_IFIFO           = 0o010000; // FIFO
+const S_IFMT = 0o170000; // file type
+const S_IFSOCK = 0o140000; // socket
+const S_IFLNK = 0o120000; // symbolic link
+const S_IFREG = 0o100000; // regular file
+const S_IFBLK = 0o060000; // block device
+const S_IFDIR = 0o040000; // directory
+const S_IFCHR = 0o020000; // character device
+const S_IFIFO = 0o010000; // FIFO
 
 let devCount = 0; // A monotonically increasing count of device ids
 let inoCount = 0; // A monotonically increasing count of inodes
@@ -111,14 +111,14 @@ export class FileSystem {
     /**
      * Gets a value indicating whether the file system is read-only.
      */
-    public get isReadonly() {
+    public get isReadonly(): boolean {
         return Object.isFrozen(this);
     }
 
     /**
      * Makes the file system read-only.
      */
-    public makeReadonly() {
+    public makeReadonly(): this {
         Object.freeze(this);
         return this;
     }
@@ -126,7 +126,7 @@ export class FileSystem {
     /**
      * Gets the file system shadowed by this file system.
      */
-    public get shadowRoot() {
+    public get shadowRoot(): FileSystem | undefined {
         return this._shadowRoot;
     }
 
@@ -135,7 +135,7 @@ export class FileSystem {
      * generating file system patches using `.diff()` from one snapshot to the next. Performs
      * no action if this file system is read-only.
      */
-    public snapshot() {
+    public snapshot(): void {
         if (this.isReadonly) return;
         const fs = new FileSystem(this.ignoreCase, { time: this._time });
         fs._lazy = this._lazy;
@@ -153,7 +153,7 @@ export class FileSystem {
      * original, allowing multiple copies of the same core file system without multiple copies
      * of the same data.
      */
-    public shadow(ignoreCase = this.ignoreCase) {
+    public shadow(ignoreCase: boolean = this.ignoreCase): FileSystem {
         if (!this.isReadonly) throw new Error("Cannot shadow a mutable file system.");
         if (ignoreCase && !this.ignoreCase) throw new Error("Cannot create a case-insensitive file system from a case-sensitive one.");
         const fs = new FileSystem(ignoreCase, { time: this._time });
@@ -201,7 +201,7 @@ export class FileSystem {
      *
      * @link - http://pubs.opengroup.org/onlinepubs/9699919799/functions/getcwd.html
      */
-    public cwd() {
+    public cwd(): string {
         if (!this._cwd) throw new Error("The current working directory has not been set.");
         const { node } = this._walk(this._cwd);
         if (!node) throw createIOError("ENOENT");
@@ -214,7 +214,7 @@ export class FileSystem {
      *
      * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html
      */
-    public chdir(path: string) {
+    public chdir(path: string): void {
         if (this.isReadonly) throw createIOError("EPERM");
         path = this._resolve(path);
         const { node } = this._walk(path);
@@ -226,7 +226,7 @@ export class FileSystem {
     /**
      * Pushes the current directory onto the directory stack and changes the current working directory to the supplied path.
      */
-    public pushd(path?: string) {
+    public pushd(path?: string): void {
         if (this.isReadonly) throw createIOError("EPERM");
         if (path) path = this._resolve(path);
         if (this._cwd) {
@@ -241,7 +241,7 @@ export class FileSystem {
     /**
      * Pops the previous directory from the location stack and changes the current directory to that directory.
      */
-    public popd() {
+    public popd(): void {
         if (this.isReadonly) throw createIOError("EPERM");
         const path = this._dirStack && this._dirStack.pop();
         if (path) {
@@ -252,7 +252,7 @@ export class FileSystem {
     /**
      * Update the file system with a set of files.
      */
-    public apply(files: FileSet) {
+    public apply(files: FileSet): void {
         this._applyFiles(files, this._cwd);
     }
 
@@ -262,7 +262,7 @@ export class FileSystem {
      * @param axis The axis along which to traverse.
      * @param traversal The traversal scheme to use.
      */
-    public scanSync(path: string, axis: Axis, traversal: Traversal) {
+    public scanSync(path: string, axis: Axis, traversal: Traversal): string[] {
         path = this._resolve(path);
         const results: string[] = [];
         this._scan(path, this._stat(this._walk(path)), axis, traversal, /*noFollow*/ false, results);
@@ -275,7 +275,7 @@ export class FileSystem {
      * @param axis The axis along which to traverse.
      * @param traversal The traversal scheme to use.
      */
-    public lscanSync(path: string, axis: Axis, traversal: Traversal) {
+    public lscanSync(path: string, axis: Axis, traversal: Traversal): string[] {
         path = this._resolve(path);
         const results: string[] = [];
         this._scan(path, this._stat(this._walk(path, /*noFollow*/ true)), axis, traversal, /*noFollow*/ true, results);
@@ -321,7 +321,7 @@ export class FileSystem {
      * @param target The path in this virtual file system.
      * @param resolver An object used to resolve files in `source`.
      */
-    public mountSync(source: string, target: string, resolver: FileSystemResolver) {
+    public mountSync(source: string, target: string, resolver: FileSystemResolver): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         source = vpath.validate(source, vpath.ValidationFlags.Absolute);
@@ -339,7 +339,7 @@ export class FileSystem {
     /**
      * Recursively remove all files and directories underneath the provided path.
      */
-    public rimrafSync(path: string) {
+    public rimrafSync(path: string): void {
         try {
             const stats = this.lstatSync(path);
             if (stats.isFile() || stats.isSymbolicLink()) {
@@ -361,7 +361,7 @@ export class FileSystem {
     /**
      * Make a directory and all of its parent paths (if they don't exist).
      */
-    public mkdirpSync(path: string) {
+    public mkdirpSync(path: string): void {
         path = this._resolve(path);
         const result = this._walk(path, /*noFollow*/ true, (error, result) => {
             if (error.code === "ENOENT") {
@@ -410,7 +410,7 @@ export class FileSystem {
     /**
      * Determines whether a path exists.
      */
-    public existsSync(path: string) {
+    public existsSync(path: string): boolean {
         const result = this._walk(this._resolve(path), /*noFollow*/ true, () => "stop");
         return result !== undefined && result.node !== undefined;
     }
@@ -422,7 +422,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public statSync(path: string) {
+    public statSync(path: string): Stats {
         return this._stat(this._walk(this._resolve(path)));
     }
 
@@ -431,7 +431,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public utimesSync(path: string, atime: Date, mtime: Date) {
+    public utimesSync(path: string, atime: Date, mtime: Date): void {
         if (this.isReadonly) throw createIOError("EROFS");
         if (!isFinite(+atime) || !isFinite(+mtime)) throw createIOError("EINVAL");
 
@@ -451,10 +451,9 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public lstatSync(path: string) {
+    public lstatSync(path: string): Stats {
         return this._stat(this._walk(this._resolve(path), /*noFollow*/ true));
     }
-
 
     private _stat(entry: WalkResult) {
         const node = entry.node;
@@ -482,7 +481,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readdirSync(path: string) {
+    public readdirSync(path: string): string[] {
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (!isDirectory(node)) throw createIOError("ENOTDIR");
@@ -496,7 +495,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public mkdirSync(path: string) {
+    public mkdirSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         this._mkdir(this._walk(this._resolve(path), /*noFollow*/ true));
@@ -516,7 +515,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public rmdirSync(path: string) {
+    public rmdirSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
         path = this._resolve(path);
 
@@ -535,7 +534,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public linkSync(oldpath: string, newpath: string) {
+    public linkSync(oldpath: string, newpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { node } = this._walk(this._resolve(oldpath));
@@ -556,7 +555,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public unlinkSync(path: string) {
+    public unlinkSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node, basename } = this._walk(this._resolve(path), /*noFollow*/ true);
@@ -574,7 +573,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public renameSync(oldpath: string, newpath: string) {
+    public renameSync(oldpath: string, newpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent: oldParent, links: oldParentLinks, node, basename: oldBasename } = this._walk(this._resolve(oldpath), /*noFollow*/ true);
@@ -608,7 +607,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public symlinkSync(target: string, linkpath: string) {
+    public symlinkSync(target: string, linkpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node: existingNode, basename } = this._walk(this._resolve(linkpath), /*noFollow*/ true);
@@ -628,7 +627,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public realpathSync(path: string) {
+    public realpathSync(path: string): string {
         const { realpath } = this._walk(this._resolve(path));
         return realpath;
     }
@@ -638,7 +637,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer;
+    public readFileSync(path: string, encoding?: null): Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
     /**
      * Read from a file.
      *
@@ -650,15 +649,15 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;
-    public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-null/no-null
+    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-restricted-syntax
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (isDirectory(node)) throw createIOError("EISDIR");
         if (!isFile(node)) throw createIOError("EBADF");
 
-        const buffer = this._getBuffer(node).slice();
-        return encoding ? buffer.toString(encoding) : buffer;
+        const fileBuffer = this._getBuffer(node, encoding ?? undefined);
+        return !fileBuffer.encoding ? fileBuffer.data.slice() : fileBuffer.data;
     }
 
     /**
@@ -666,8 +665,8 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    // eslint-disable-next-line no-null/no-null
-    public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
+    // eslint-disable-next-line no-restricted-syntax
+    public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node: existingNode, basename } = this._walk(this._resolve(path), /*noFollow*/ false);
@@ -682,8 +681,11 @@ export class FileSystem {
 
         if (isDirectory(node)) throw createIOError("EISDIR");
         if (!isFile(node)) throw createIOError("EBADF");
-        node.buffer = Buffer.isBuffer(data) ? data.slice() : ts.sys.bufferFrom!("" + data, encoding || "utf8") as Buffer;
-        node.size = node.buffer.byteLength;
+        node.buffer = Buffer.isBuffer(data) ?
+            { encoding: undefined, data: data.slice() } :
+            { encoding: (encoding ?? "utf8") as BufferEncoding, data };
+        // Updated the size if it's easy to get, otherwise set to undefined. _getSize will compute the correct size
+        node.size = !node.buffer.encoding ? node.buffer.data.byteLength : undefined;
         node.mtimeMs = time;
         node.ctimeMs = time;
     }
@@ -692,7 +694,7 @@ export class FileSystem {
      * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
      * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
      */
-    public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+    public diff(base?: FileSystem | undefined, options: DiffOptions = {}): FileSet | undefined {
         if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
         const differences: FileSet = {};
         const hasDifferences = base ?
@@ -701,10 +703,11 @@ export class FileSystem {
         return hasDifferences ? differences : undefined;
     }
 
+    public static defaultEncoding: BufferEncoding | undefined = "utf8";
     /**
      * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
      */
-    public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
+    public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}): FileSet | undefined {
         const differences: FileSet = {};
         return FileSystem.rootDiff(differences, changed, base, options) ?
             differences :
@@ -768,9 +771,11 @@ export class FileSystem {
         if (isEmptyNonShadowedDirectory(changedNode) && isEmptyNonShadowedDirectory(baseNode)) return false;
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
-        if (!changedNode.links && !baseNode.links &&
+        if (
+            !changedNode.links && !baseNode.links &&
             changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+        ) return false;
 
         // no difference if both nodes have identical children
         const children: FileSet = {};
@@ -783,8 +788,8 @@ export class FileSystem {
     }
 
     private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
-        while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
-        while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+        changedNode = walkSameNodes(changedNode);
+        baseNode = walkSameNodes(baseNode);
 
         // no difference if the nodes are the same reference
         if (changedNode === baseNode) return false;
@@ -793,29 +798,44 @@ export class FileSystem {
         if (isEmptyNonShadowedFile(changedNode) && isEmptyNonShadowedFile(baseNode)) return false;
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
-        if (!changedNode.buffer && !baseNode.buffer &&
+        if (
+            !changedNode.buffer && !baseNode.buffer &&
             changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+        ) return false;
 
-        const changedBuffer = changed._getBuffer(changedNode);
-        const baseBuffer = base._getBuffer(baseNode);
+        const encoding = changedNode.buffer?.encoding ?? baseNode.buffer?.encoding ?? FileSystem.defaultEncoding;
+        const changedBuffer = changed._getBuffer(changedNode, encoding);
+        const baseBuffer = base._getBuffer(baseNode, encoding);
 
         // no difference if both buffers are the same reference
         if (changedBuffer === baseBuffer) {
             if (!options.includeChangedFileWithSameContent || changedNode.mtimeMs === baseNode.mtimeMs) return false;
-            container[basename] = new SameFileWithModifiedTime(changedBuffer);
+            container[basename] = new SameFileWithModifiedTime(changedBuffer.data, { encoding: changedBuffer.encoding });
             return true;
         }
 
         // no difference if both buffers are identical
-        if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
+        if (
+            !changedBuffer.encoding && !baseBuffer.encoding && Buffer.compare(changedBuffer.data, baseBuffer.data) === 0 // same buffer content
+            || changedBuffer.encoding === baseBuffer.encoding && changedBuffer.data === baseBuffer.data // same string content
+        ) {
             if (!options.includeChangedFileWithSameContent) return false;
-            container[basename] = new SameFileContentFile(changedBuffer);
+            container[basename] = new SameFileContentFile(changedBuffer.data, { encoding: changedBuffer.encoding });
             return true;
         }
 
-        container[basename] = new File(changedBuffer);
+        container[basename] = new File(changedBuffer.data, { encoding: changedBuffer.encoding });
         return true;
+
+        function walkSameNodes(node: FileInode) {
+            while (
+                !node.buffer &&
+                node.shadowRoot &&
+                (!options.includeChangedFileWithSameContent || node.mtimeMs === node.shadowRoot.mtimeMs)
+            ) node = node.shadowRoot;
+            return node;
+        }
     }
 
     private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {
@@ -835,7 +855,8 @@ export class FileSystem {
             container[basename] = new Symlink(node.symlink);
         }
         else {
-            container[basename] = new File(changed._getBuffer(node));
+            const buffer = changed._getBuffer(node, FileSystem.defaultEncoding);
+            container[basename] = new File(buffer.data, { encoding: buffer.encoding ?? undefined });
         }
         return true;
     }
@@ -871,7 +892,7 @@ export class FileSystem {
             mtimeMs: time,
             ctimeMs: time,
             birthtimeMs: time,
-            nlink: 0
+            nlink: 0,
         };
     }
 
@@ -964,7 +985,7 @@ export class FileSystem {
                 ctimeMs: root.ctimeMs,
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
-                shadowRoot: root
+                shadowRoot: root,
             };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
@@ -981,14 +1002,14 @@ export class FileSystem {
     }
 
     private _getSize(node: FileInode): number {
-        if (node.buffer) return node.buffer.byteLength;
+        if (node.buffer) return Buffer.byteLength(node.buffer.data);
         if (node.size !== undefined) return node.size;
         if (node.source && node.resolver) return node.size = node.resolver.statSync(node.source).size;
         if (this._shadowRoot && node.shadowRoot) return node.size = this._shadowRoot._getSize(node.shadowRoot);
         return 0;
     }
 
-    private _getBuffer(node: FileInode): Buffer {
+    private _getBuffer(node: FileInode, encoding: BufferEncoding | undefined): FileDataBuffer {
         if (!node.buffer) {
             const { source, resolver } = node;
             if (source && resolver) {
@@ -998,12 +1019,13 @@ export class FileSystem {
                 node.buffer = resolver.readFileSync(source);
             }
             else if (this._shadowRoot && node.shadowRoot) {
-                node.buffer = this._shadowRoot._getBuffer(node.shadowRoot);
+                node.buffer = this._shadowRoot._getBuffer(node.shadowRoot, encoding);
             }
             else {
-                node.buffer = Buffer.allocUnsafe(0);
+                node.buffer = { encoding: undefined, data: Buffer.allocUnsafe(0) };
             }
         }
+        ensureBufferEncoding(node.buffer, encoding);
         return node.buffer;
     }
 
@@ -1126,9 +1148,9 @@ export class FileSystem {
         for (const key of Object.keys(files)) {
             const value = normalizeFileSetEntry(files[key]);
             const path = dirname ? vpath.resolve(dirname, key) : key;
-            vpath.validate(path, vpath.ValidationFlags.Absolute);
+            vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                 if (this.stringComparer(vpath.dirname(path), path) === 0) {
                     throw new TypeError("Roots cannot be deleted.");
@@ -1186,7 +1208,7 @@ export interface Traversal {
 export interface FileSystemResolver {
     statSync(path: string): { mode: number; size: number; };
     readdirSync(path: string): string[];
-    readFileSync(path: string): Buffer;
+    readFileSync(path: string): FileDataBuffer;
 }
 
 export interface FileSystemResolverHost {
@@ -1216,9 +1238,9 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
                 throw new Error("ENOENT: path does not exist");
             }
         },
-        readFileSync(path: string): Buffer {
-            return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
-        }
+        readFileSync(path: string): FileDataBuffer {
+            return { encoding: "utf8", data: host.readFile(path)! };
+        },
     };
 }
 
@@ -1231,7 +1253,7 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
  *
  * Unless overridden, `/.src` will be the current working directory for the virtual file system.
  */
-export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}) {
+export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}): FileSystem {
     const fs = getBuiltLocal(host, ignoreCase).shadow();
     if (meta) {
         for (const key of Object.keys(meta)) {
@@ -1309,16 +1331,31 @@ export class Stats {
         this.birthtime = new Date(this.birthtimeMs);
     }
 
-    public isFile() { return (this.mode & S_IFMT) === S_IFREG; }
-    public isDirectory() { return (this.mode & S_IFMT) === S_IFDIR; }
-    public isSymbolicLink() { return (this.mode & S_IFMT) === S_IFLNK; }
-    public isBlockDevice() { return (this.mode & S_IFMT) === S_IFBLK; }
-    public isCharacterDevice() { return (this.mode & S_IFMT) === S_IFCHR; }
-    public isFIFO() { return (this.mode & S_IFMT) === S_IFIFO; }
-    public isSocket() { return (this.mode & S_IFMT) === S_IFSOCK; }
+    public isFile(): boolean {
+        return (this.mode & S_IFMT) === S_IFREG;
+    }
+    public isDirectory(): boolean {
+        return (this.mode & S_IFMT) === S_IFDIR;
+    }
+    public isSymbolicLink(): boolean {
+        return (this.mode & S_IFMT) === S_IFLNK;
+    }
+    public isBlockDevice(): boolean {
+        return (this.mode & S_IFMT) === S_IFBLK;
+    }
+    public isCharacterDevice(): boolean {
+        return (this.mode & S_IFMT) === S_IFCHR;
+    }
+    public isFIFO(): boolean {
+        return (this.mode & S_IFMT) === S_IFIFO;
+    }
+    public isSocket(): boolean {
+        return (this.mode & S_IFMT) === S_IFSOCK;
+    }
 }
 
-export const IOErrorMessages = Object.freeze({
+// IOErrorMessages is defined like this to reduce duplication for --isolatedDeclarations
+const TemplateIOErrorMessages = {
     EACCES: "access denied",
     EIO: "an I/O error occurred",
     ENOENT: "no such file or directory",
@@ -1330,10 +1367,11 @@ export const IOErrorMessages = Object.freeze({
     EINVAL: "invalid value",
     ENOTEMPTY: "directory not empty",
     EPERM: "operation not permitted",
-    EROFS: "file system is read-only"
-});
+    EROFS: "file system is read-only",
+} as const;
+export const IOErrorMessages: typeof TemplateIOErrorMessages = Object.freeze(TemplateIOErrorMessages);
 
-export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
+export function createIOError(code: keyof typeof IOErrorMessages, details = ""): NodeJS.ErrnoException {
     const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);
     err.code = code;
     if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);
@@ -1344,7 +1382,7 @@ export function createIOError(code: keyof typeof IOErrorMessages, details = "") 
  * A template used to populate files, directories, links, etc. in a virtual file system.
  */
 export interface FileSet {
-    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined;
+    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined; // eslint-disable-line no-restricted-syntax
 }
 
 export type DirectoryLike = FileSet | Directory;
@@ -1354,7 +1392,7 @@ export type FileLike = File | Buffer | string;
 export class Directory {
     public readonly files: FileSet;
     public readonly meta: Record<string, any> | undefined;
-    constructor(files: FileSet, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(files: FileSet, { meta }: { meta?: Record<string, any>; } = {}) {
         this.files = files;
         this.meta = meta;
     }
@@ -1365,7 +1403,7 @@ export class File {
     public readonly data: Buffer | string;
     public readonly encoding: string | undefined;
     public readonly meta: Record<string, any> | undefined;
-    constructor(data: Buffer | string, { meta, encoding }: { encoding?: string, meta?: Record<string, any> } = {}) {
+    constructor(data: Buffer | string, { meta, encoding }: { encoding?: string; meta?: Record<string, any>; } = {}) {
         this.data = data;
         this.encoding = encoding;
         this.meta = meta;
@@ -1373,13 +1411,13 @@ export class File {
 }
 
 export class SameFileContentFile extends File {
-    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
 
 export class SameFileWithModifiedTime extends File {
-    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
@@ -1406,7 +1444,7 @@ export class Unlink {
 export class Symlink {
     public readonly symlink: string;
     public readonly meta: Record<string, any> | undefined;
-    constructor(symlink: string, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(symlink: string, { meta }: { meta?: Record<string, any>; } = {}) {
         this.symlink = symlink;
         this.meta = meta;
     }
@@ -1417,7 +1455,7 @@ export class Mount {
     public readonly source: string;
     public readonly resolver: FileSystemResolver;
     public readonly meta: Record<string, any> | undefined;
-    constructor(source: string, resolver: FileSystemResolver, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(source: string, resolver: FileSystemResolver, { meta }: { meta?: Record<string, any>; } = {}) {
         this.source = source;
         this.resolver = resolver;
         this.meta = meta;
@@ -1426,6 +1464,17 @@ export class Mount {
 
 // a generic POSIX inode
 type Inode = FileInode | DirectoryInode | SymlinkInode;
+
+type FileDataBuffer = { encoding?: undefined; data: Buffer; } | { encoding: BufferEncoding; data: string; };
+
+function ensureBufferEncoding(fileBuffer: FileDataBuffer, encoding: BufferEncoding | undefined) {
+    if (fileBuffer.encoding === encoding) return;
+
+    const buffer = !fileBuffer.encoding ? fileBuffer.data : Buffer.from(fileBuffer.data, fileBuffer.encoding);
+
+    fileBuffer.encoding = encoding;
+    fileBuffer.data = !encoding ? buffer : buffer.toString(encoding);
+}
 
 interface FileInode {
     dev: number; // device id
@@ -1437,7 +1486,7 @@ interface FileInode {
     birthtimeMs: number; // creation time
     nlink: number; // number of hard links
     size?: number;
-    buffer?: Buffer;
+    buffer?: FileDataBuffer;
     source?: string;
     resolver?: FileSystemResolver;
     shadowRoot?: FileInode;
@@ -1519,10 +1568,10 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
                 [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                 [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                 [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
-                [srcFolder]: {}
+                [srcFolder]: {},
             },
             cwd: srcFolder,
-            meta: { defaultLibLocation: builtFolder }
+            meta: { defaultLibLocation: builtFolder },
         });
         builtLocalCI.makeReadonly();
     }
@@ -1534,9 +1583,10 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
     return builtLocalCS;
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 function normalizeFileSetEntry(value: FileSet[string]) {
-    if (value === undefined ||
+    if (
+        value === undefined ||
         value === null ||
         value instanceof Directory ||
         value instanceof File ||
@@ -1544,7 +1594,8 @@ function normalizeFileSetEntry(value: FileSet[string]) {
         value instanceof Symlink ||
         value instanceof Mount ||
         value instanceof Rmdir ||
-        value instanceof Unlink) {
+        value instanceof Unlink
+    ) {
         return value;
     }
     return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);
@@ -1555,14 +1606,14 @@ export function formatPatch(patch: FileSet | undefined): string | null;
 export function formatPatch(patch: FileSet | undefined) {
     return patch ? formatPatchWorker("", patch) : null;
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 function formatPatchWorker(dirname: string, container: FileSet): string {
     let text = "";
     for (const name of Object.keys(container)) {
         const entry = normalizeFileSetEntry(container[name]);
         const file = dirname ? vpath.combine(dirname, name) : name;
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (entry === null || entry === undefined || entry instanceof Unlink) {
             text += `//// [${file}] unlink\r\n`;
         }
@@ -1595,8 +1646,8 @@ function formatPatchWorker(dirname: string, container: FileSet): string {
     return text;
 }
 
-export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-    // eslint-disable-next-line no-null/no-null
+export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null { // eslint-disable-line no-restricted-syntax
+    // eslint-disable-next-line no-restricted-syntax
     return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
 }
 

@@ -46,7 +46,7 @@ my.predicate.query = function () {
 
     me.property = false;
 >me.property : Symbol(query.property, Decl(a.js, 9, 18))
->me : Symbol(query.property, Decl(a.js, 9, 18))
+>me : Symbol(me, Decl(a.js, 9, 7))
 >property : Symbol(query.property, Decl(a.js, 9, 18))
 
 };

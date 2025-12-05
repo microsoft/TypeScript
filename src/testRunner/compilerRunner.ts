@@ -1,4 +1,3 @@
-import * as compiler from "./_namespaces/compiler";
 import {
     Baseline,
     Compiler,
@@ -10,11 +9,11 @@ import {
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export const enum CompilerTestType {
     Conformance,
@@ -47,16 +46,17 @@ export class CompilerBaselineRunner extends RunnerBase {
         this.basePath += "/" + this.testSuiteName;
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
-    public enumerateTestFiles() {
+    private testFiles: string[] | undefined;
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true }).map(CompilerTest.getConfigurations);
+        return this.testFiles ??= this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe(this.testSuiteName + " tests", () => {
             describe("Setup compiler for compiler baselines", () => {
                 this.parseOptions();
@@ -64,14 +64,13 @@ export class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             const files = this.tests.length > 0 ? this.tests : IO.enumerateTestFiles(this);
-            files.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
-                this.checkTestCodeOutput(vpath.normalizeSeparators(file), typeof test === "string" ? CompilerTest.getConfigurations(test) : test);
+            files.forEach(file => {
+                this.checkTestCodeOutput(vpath.normalizeSeparators(file), CompilerTest.getConfigurations(file));
             });
         });
     }
 
-    public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
+    public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest): void {
         if (test && ts.some(test.configurations)) {
             test.configurations.forEach(configuration => {
                 describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
@@ -128,48 +127,38 @@ export class CompilerBaselineRunner extends RunnerBase {
 
 class CompilerTest {
     private static varyBy: readonly string[] = [
-        "module",
-        "moduleResolution",
-        "moduleDetection",
-        "allowImportingTsExtensions",
-        "target",
-        "jsx",
+        // implicit variations from defined options
+        ...ts.optionDeclarations
+            .filter(option =>
+                !option.isCommandLineOnly
+                && (
+                    option.type === "boolean"
+                    || typeof option.type === "object"
+                )
+                && (
+                    option.affectsProgramStructure
+                    || option.affectsEmit
+                    || option.affectsModuleResolution
+                    || option.affectsBindDiagnostics
+                    || option.affectsSemanticDiagnostics
+                    || option.affectsSourceFile
+                    || option.affectsDeclarationPath
+                    || option.affectsBuildInfo
+                )
+            )
+            .map(option => option.name),
+
+        // explicit variations that do not match above conditions
         "noEmit",
-        "removeComments",
-        "importHelpers",
-        "importHelpers",
-        "downlevelIteration",
         "isolatedModules",
-        "strict",
-        "noImplicitAny",
-        "strictNullChecks",
-        "strictFunctionTypes",
-        "strictBindCallApply",
-        "strictPropertyInitialization",
-        "noImplicitThis",
-        "alwaysStrict",
-        "allowSyntheticDefaultImports",
-        "esModuleInterop",
-        "emitDecoratorMetadata",
-        "skipDefaultLibCheck",
-        "preserveConstEnums",
-        "skipLibCheck",
-        "exactOptionalPropertyTypes",
-        "useDefineForClassFields",
-        "useUnknownInCatchVariables",
-        "noUncheckedIndexedAccess",
-        "noPropertyAccessFromIndexSignature",
-        "resolvePackageJsonExports",
-        "resolvePackageJsonImports",
-        "resolveJsonModule",
-        "allowArbitraryExtensions",
     ];
+
     private fileName: string;
     private justName: string;
     private configuredName: string;
     private harnessSettings: TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
-    private result: compiler.CompilationResult;
+    private result: Compiler.CompileFilesResult;
     private options: ts.CompilerOptions;
     private tsConfigFiles: Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line
@@ -263,7 +252,7 @@ class CompilerTest {
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory,
-            testCaseContent.symlinks
+            testCaseContent.symlinks,
         );
 
         this.options = this.result.options;
@@ -283,13 +272,13 @@ class CompilerTest {
             this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
-            !!this.options.pretty);
+            !!this.options.pretty,
+        );
     }
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
-                JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
+            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"), JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
 
@@ -298,7 +287,7 @@ class CompilerTest {
             const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
             const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                ? null // eslint-disable-line no-null/no-null
+                ? null // eslint-disable-line no-restricted-syntax
                 : record;
             Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
@@ -314,7 +303,8 @@ class CompilerTest {
                 this.tsConfigFiles,
                 this.toBeCompiled,
                 this.otherFiles,
-                this.harnessSettings);
+                this.harnessSettings,
+            );
         }
     }
 
@@ -323,16 +313,12 @@ class CompilerTest {
             this.configuredName,
             this.options,
             this.result,
-            this.harnessSettings);
+            this.harnessSettings,
+        );
     }
 
     public verifyTypesAndSymbols() {
-        if (this.fileName.indexOf("APISample") >= 0) {
-            return;
-        }
-
-        const noTypesAndSymbols =
-            this.harnessSettings.noTypesAndSymbols &&
+        const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
             this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
             return;
@@ -347,7 +333,7 @@ class CompilerTest {
             /*multifile*/ undefined,
             /*skipTypeBaselines*/ undefined,
             /*skipSymbolBaselines*/ undefined,
-            !!ts.length(this.result.diagnostics)
+            !!ts.length(this.result.diagnostics),
         );
     }
 
@@ -355,7 +341,7 @@ class CompilerTest {
         return {
             unitName: unit.name,
             content: unit.content,
-            fileOptions: unit.fileOptions
+            fileOptions: unit.fileOptions,
         };
     }
 }

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     getTokenAtPosition,
@@ -8,12 +13,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixExpectedComma";
 const expectedErrorCode = Diagnostics._0_expected.code;
@@ -33,17 +33,20 @@ registerCodeFix({
             changes,
             [Diagnostics.Change_0_to_1, ";", ","],
             fixId,
-            [Diagnostics.Change_0_to_1, ";", ","]
+            [Diagnostics.Change_0_to_1, ";", ","],
         )];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start, diag.code);
-        if (info) doChange(changes, context.sourceFile, info);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start, diag.code);
+            if (info) doChange(changes, context.sourceFile, info);
+        }),
 });
 
-interface Info { readonly node: Node; }
+interface Info {
+    readonly node: Node;
+}
 
 function getInfo(sourceFile: SourceFile, pos: number, _: number): Info | undefined {
     const node = getTokenAtPosition(sourceFile, pos);
@@ -51,7 +54,7 @@ function getInfo(sourceFile: SourceFile, pos: number, _: number): Info | undefin
     return (node.kind === SyntaxKind.SemicolonToken &&
             node.parent &&
             (isObjectLiteralExpression(node.parent) ||
-             isArrayLiteralExpression(node.parent))) ? { node } : undefined;
+                isArrayLiteralExpression(node.parent))) ? { node } : undefined;
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {

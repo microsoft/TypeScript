@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declFileExportImportChain2.ts] ////
 
 //// [declFileExportImportChain2_a.ts]
-module m1 {
-    export module m2 {
+namespace m1 {
+    export namespace m2 {
         export class c1 {
         }
     }
@@ -57,8 +57,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [declFileExportImportChain2_a.d.ts]
-declare module m1 {
-    module m2 {
+declare namespace m1 {
+    namespace m2 {
         class c1 {
         }
     }

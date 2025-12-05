@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts ===
 // class C {
 //     public 1() { }

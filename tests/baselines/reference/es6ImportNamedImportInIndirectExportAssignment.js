@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es6ImportNamedImportInIndirectExportAssignment.ts] ////
 
 //// [es6ImportNamedImportInIndirectExportAssignment_0.ts]
-export module a {
+export namespace a {
     export class c {
     }
 }
@@ -32,7 +32,7 @@ module.exports = x;
 
 
 //// [es6ImportNamedImportInIndirectExportAssignment_0.d.ts]
-export declare module a {
+export declare namespace a {
     class c {
     }
 }

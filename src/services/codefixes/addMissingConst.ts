@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     every,
     Expression,
@@ -17,17 +22,12 @@ import {
     textChanges,
     tryAddToSet,
     TypeChecker,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "addMissingConst";
 const errorCodes = [
     Diagnostics.Cannot_find_name_0.code,
-    Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code
+    Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code,
 ];
 
 registerCodeFix({
@@ -49,8 +49,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     const token = getTokenAtPosition(sourceFile, pos);
     const forInitializer = findAncestor(token, node =>
         isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
-        isPossiblyPartOfDestructuring(node) ? false : "quit"
-    );
+            isPossiblyPartOfDestructuring(node) ? false : "quit");
     if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
     const parent = token.parent;
@@ -69,8 +68,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
 
     const commaExpression = findAncestor(token, node =>
         isExpressionStatement(node.parent) ? true :
-        isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit"
-    );
+            isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit");
     if (commaExpression) {
         const checker = program.getTypeChecker();
         if (!expressionCouldBeVariableDeclaration(commaExpression, checker)) {
@@ -101,8 +99,7 @@ function isPossiblyPartOfDestructuring(node: Node): boolean {
 }
 
 function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker): boolean {
-    const identifier =
-        isIdentifier(expression) ? expression :
+    const identifier = isIdentifier(expression) ? expression :
         isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
         undefined;
     return !!identifier && !checker.getSymbolAtLocation(identifier);

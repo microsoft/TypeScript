@@ -1,5 +1,4 @@
-objectLiteralShorthandPropertiesAssignmentError.ts(4,43): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
-  Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+objectLiteralShorthandPropertiesAssignmentError.ts(4,43): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
 objectLiteralShorthandPropertiesAssignmentError.ts(6,81): error TS2322: Type 'string' is not assignable to type 'number'.
 objectLiteralShorthandPropertiesAssignmentError.ts(6,87): error TS2322: Type 'number' is not assignable to type 'string'.
 objectLiteralShorthandPropertiesAssignmentError.ts(8,13): error TS2322: Type 'number' is not assignable to type 'boolean'.
@@ -11,8 +10,7 @@ objectLiteralShorthandPropertiesAssignmentError.ts(8,13): error TS2322: Type 'nu
     
     var person: { b: string; id: number } = { name, id };  // error
                                               ~~~~
-!!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
     var person1: { name, id };  // ok
     function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
                                                                                     ~~~~

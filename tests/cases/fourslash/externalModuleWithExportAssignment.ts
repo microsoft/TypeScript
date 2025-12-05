@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: externalModuleWithExportAssignment_file0.ts
-////module m2 {
+////namespace m2 {
 ////    export interface connectModule {
 ////        (res, req, next): void;
 ////    }
@@ -32,9 +32,9 @@ goTo.file("externalModuleWithExportAssignment_file1.ts");
 verify.quickInfoAt("1", [
     "(alias) namespace a1",
     "(alias) var a1: {",
-    "    (): connectExport;",
-    "    test1: connectModule;",
-    "    test2(): connectModule;",
+    "    (): a1.connectExport;",
+    "    test1: a1.connectModule;",
+    "    test2(): a1.connectModule;",
     "}",
     'import a1 = require("./externalModuleWithExportAssignment_file0")'
 ].join("\n"));

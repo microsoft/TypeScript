@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/computedPropertyBindingElementDeclarationNoCrash1.ts] ////
+
+=== computedPropertyBindingElementDeclarationNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61351
+
+export type State = {
+>State : State
+>      : ^^^^^
+
+  a: number;
+>a : number
+>  : ^^^^^^
+
+  b: string;
+>b : string
+>  : ^^^^^^
+
+};
+
+export class Test {
+>Test : Test
+>     : ^^^^
+
+  setState(state: State) {}
+>setState : (state: State) => void
+>         : ^     ^^     ^^^^^^^^^
+>state : State
+>      : ^^^^^
+
+  test = (e: any) => {
+>test : (e: any) => void
+>     : ^ ^^   ^^^^^^^^^
+>(e: any) => {    for (const [key, value] of Object.entries(e)) {      this.setState({        [key]: value,      });    }  } : (e: any) => void
+>                                                                                                                            : ^ ^^   ^^^^^^^^^
+>e : any
+>  : ^^^
+
+    for (const [key, value] of Object.entries(e)) {
+>key : string
+>    : ^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>Object.entries(e) : [string, unknown][]
+>                  : ^^^^^^^^^^^^^^^^^^^
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>e : any
+>  : ^^^
+
+      this.setState({
+>this.setState({        [key]: value,      }) : void
+>                                             : ^^^^
+>this.setState : (state: State) => void
+>              : ^     ^^     ^^^^^^^^^
+>this : this
+>     : ^^^^
+>setState : (state: State) => void
+>         : ^     ^^     ^^^^^^^^^
+>{        [key]: value,      } : { [x: string]: unknown; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        [key]: value,
+>[key] : unknown
+>      : ^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+      });
+    }
+  };
+}
+

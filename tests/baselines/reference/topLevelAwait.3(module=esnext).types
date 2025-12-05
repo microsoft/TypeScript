@@ -8,5 +8,6 @@ declare const await: any;
 
 declare class C extends await {}
 >C : C
+>  : ^
 >await : any
 

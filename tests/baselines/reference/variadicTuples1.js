@@ -88,7 +88,7 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 
 function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
     const a = t[0];  // string
-    const b = t[1];  // [string, ...T, number][1]
+    const b = t[1];  // number | T[number]
     const c = t[2];  // [string, ...T, number][2]
     const d = t[n];  // [string, ...T, number][number]
 }
@@ -104,7 +104,7 @@ function f2<T extends unknown[]>(t: [string, ...T]) {
 function f3<T extends unknown[]>(t: [string, ...T, number]) {
     let [...ax] = t;  // [string, ...T, number]
     let [b1, ...bx] = t;  // string, [...T, number]
-    let [c1, c2, ...cx] = t;  // string, [string, ...T, number][1], (number | T[number])[]
+    let [c1, c2, ...cx] = t;  // string, number | T[number], (number | T[number])[]
 }
 
 // Mapped types applied to variadic tuple types
@@ -422,6 +422,8 @@ type U3 = [...[string, number], boolean];
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 
+type AnyArr = [...any];
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -478,7 +480,7 @@ function f0(t, n) {
 }
 function f1(t, n) {
     var a = t[0]; // string
-    var b = t[1]; // [string, ...T, number][1]
+    var b = t[1]; // number | T[number]
     var c = t[2]; // [string, ...T, number][2]
     var d = t[n]; // [string, ...T, number][number]
 }
@@ -491,7 +493,7 @@ function f2(t) {
 function f3(t) {
     var ax = t.slice(0); // [string, ...T, number]
     var b1 = t[0], bx = t.slice(1); // string, [...T, number]
-    var c1 = t[0], c2 = t[1], cx = t.slice(2); // string, [string, ...T, number][1], (number | T[number])[]
+    var c1 = t[0], c2 = t[1], cx = t.slice(2); // string, number | T[number], (number | T[number])[]
 }
 var tm1 = fm1([['abc'], [42], [true], ['def']]); // [boolean, string]
 function gx1(u, v) {
@@ -821,7 +823,7 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     y?: number;
     z?: boolean;
 }): void;
-declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;
+declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: [...T]) => U;
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
 declare const data: Unbounded;
@@ -830,3 +832,22 @@ type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+type AnyArr = [...any];
+
+
+!!!! File variadicTuples1.d.ts differs from original emit in noCheck emit
+//// [variadicTuples1.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -17,9 +17,9 @@
+ declare const tc2: [string, number];
+ declare const tc3: [number, number, number, ...string[]];
+ declare const tc4: [...string[], number, number, number];
+ declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
+-declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
++declare const tc5: (3 | 2 | 1 | 6 | 4 | 5)[];
+ declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
+ declare function foo2(t1: [number, string], t2: [boolean], a1: number[]): void;
+ declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
+ declare function foo4<U extends unknown[]>(u: U): void;

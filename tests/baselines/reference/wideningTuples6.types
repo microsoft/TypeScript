@@ -3,17 +3,25 @@
 === wideningTuples6.ts ===
 var [a, b] = [undefined, null];
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[undefined, null] : [undefined, null]
+>                  : ^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 a = "";
 >a = "" : ""
+>       : ^^
 >a : any
 >"" : ""
+>   : ^^
 
 b = "";
 >b = "" : ""
+>       : ^^
 >b : any
 >"" : ""
+>   : ^^
 

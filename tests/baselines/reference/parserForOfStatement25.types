@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement25.ts] ////
+
+=== parserForOfStatement25.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] of [[]]) console.log(x)
+>x : boolean
+>  : ^^^^^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : boolean
+>  : ^^^^^^^
+
+for (let {x = 'a' in {}} of [{}]) console.log(x)
+>x : boolean
+>  : ^^^^^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>[{}] : {}[]
+>     : ^^^^
+>{} : {}
+>   : ^^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : boolean
+>  : ^^^^^^^
+

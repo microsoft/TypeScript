@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors6.ts] ////
+
+=== propertyOverridesAccessors6.ts ===
+class A {
+>A : A
+>  : ^
+
+  get x() {
+>x : number
+>  : ^^^^^^
+
+    return 2;
+>2 : 2
+>  : ^
+  }
+}
+class B extends A {}
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+class C extends B {
+>C : C
+>  : ^
+>B : B
+>  : ^
+
+  x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+

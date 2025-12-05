@@ -1,14 +1,19 @@
-import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import { protocol } from "../../_namespaces/ts.server.js";
+import {
+    baselineTsserverLogs,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: services:: goToDefinition", () => {
+describe("unittests:: tsserver:: services:: goToDefinition::", () => {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
-                path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                path: "/home/src/projects/project/packages/babel-loader/tsconfig.json",
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -20,23 +25,22 @@ describe("unittests:: services:: goToDefinition", () => {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
-                path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                path: "/home/src/projects/project/packages/babel-loader/src/index.ts",
+                content: `
 declare class Stuff {
     /** For more thorough tests, use {@link checkFooIs} */
     checkFooLengthIs(len: number): void;
 
     checkFooIs(value: object): void;
 }
-`
+`,
             },
         ];
-        const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -45,34 +49,32 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
             arguments: {
                 line: 3,
                 offset: 45,
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         // Now change `babel-loader` project to no longer import `core` project
         session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
-                file: "/packages/babel-loader/src/index.ts",
-            }
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS", session);
-
     });
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
-                path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                path: "/home/src/projects/project/packages/babel-loader/tsconfig.json",
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -84,12 +86,11 @@ declare class Stuff {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
-                path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                path: "/home/src/projects/project/packages/babel-loader/src/index.ts",
+                content: `
 declare class Stuff {
   /**
    * Register a function to be run on mod initialization...
@@ -102,11 +103,11 @@ declare class Stuff {
    */
   on_init(f: (() => void) | undefined): void
 }
-`
+`,
             },
         ];
-        const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -115,26 +116,25 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
             arguments: {
                 line: 6,
                 offset: 13,
-                file: "/packages/babel-loader/src/index.ts",
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
             },
         });
         // Now change `babel-loader` project to no longer import `core` project
         session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
-                file: "/packages/babel-loader/src/index.ts",
-            }
+                file: "/home/src/projects/project/packages/babel-loader/src/index.ts",
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS2", session);
-
     });
 });

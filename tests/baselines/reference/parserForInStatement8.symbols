@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement8.ts] ////
+
+=== parserForInStatement8.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] in { '': 0 }) console.log(x)
+>x : Symbol(x, Decl(parserForInStatement8.ts, 2, 10))
+>'' : Symbol('', Decl(parserForInStatement8.ts, 2, 29))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForInStatement8.ts, 2, 10))
+
+for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
+>x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
+>'' : Symbol('', Decl(parserForInStatement8.ts, 3, 29))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
+

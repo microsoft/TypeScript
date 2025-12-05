@@ -10,7 +10,7 @@ function Outer() {
 
     self.y = 2
 >self.y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
->self : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+>self : Symbol(self, Decl(typeFromPropertyAssignment40.js, 1, 7))
 >y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
 }
 /** @type {Outer} */

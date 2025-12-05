@@ -1,7 +1,7 @@
 --incremental tests
 buildOptions::
 {
- "incremental": true
+  "incremental": true
 }
 WatchOptions::
 

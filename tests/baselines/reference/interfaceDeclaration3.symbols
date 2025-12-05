@@ -5,11 +5,11 @@ interface I1 { item:number; }
 >I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 0, 0))
 >item : Symbol(I1.item, Decl(interfaceDeclaration3.ts, 0, 14))
 
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(interfaceDeclaration3.ts, 0, 29))
 
     interface I1 { item:string; }  
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 11))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 14))
 >item : Symbol(I1.item, Decl(interfaceDeclaration3.ts, 3, 18))
 
     interface I2 { item:number; }   
@@ -18,14 +18,14 @@ module M1 {
 
     class C1 implements I1 {
 >C1 : Symbol(C1, Decl(interfaceDeclaration3.ts, 4, 33))
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 11))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 14))
 
         public item:number;
 >item : Symbol(C1.item, Decl(interfaceDeclaration3.ts, 5, 28))
     }
     class C2 implements I1 {
 >C2 : Symbol(C2, Decl(interfaceDeclaration3.ts, 7, 5))
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 11))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 2, 14))
 
         public item:string;
 >item : Symbol(C2.item, Decl(interfaceDeclaration3.ts, 8, 28))
@@ -40,9 +40,9 @@ module M1 {
     
     class C4 implements M2.I1 { 
 >C4 : Symbol(C4, Decl(interfaceDeclaration3.ts, 13, 5))
->M2.I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>M2.I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 21))
 >M2 : Symbol(M2, Decl(interfaceDeclaration3.ts, 22, 1))
->I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 21))
 
         public item:string;
 >item : Symbol(C4.item, Decl(interfaceDeclaration3.ts, 15, 31))
@@ -50,45 +50,45 @@ module M1 {
 
     class C5 implements M2.M3.I1 {
 >C5 : Symbol(C5, Decl(interfaceDeclaration3.ts, 17, 5))
->M2.M3.I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 22))
+>M2.M3.I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 25))
 >M2.M3 : Symbol(M2.M3, Decl(interfaceDeclaration3.ts, 26, 40))
 >M2 : Symbol(M2, Decl(interfaceDeclaration3.ts, 22, 1))
 >M3 : Symbol(M2.M3, Decl(interfaceDeclaration3.ts, 26, 40))
->I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 22))
+>I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 25))
 
         public item:string;
 >item : Symbol(C5.item, Decl(interfaceDeclaration3.ts, 19, 34))
     }
 }
 
-export module M2 {
+export namespace M2 {
 >M2 : Symbol(M2, Decl(interfaceDeclaration3.ts, 22, 1))
 
     export interface I1 { item:string; }
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 21))
 >item : Symbol(I1.item, Decl(interfaceDeclaration3.ts, 25, 25))
 
     export interface I2 { item:string; }
 >I2 : Symbol(I2, Decl(interfaceDeclaration3.ts, 25, 40))
 >item : Symbol(I2.item, Decl(interfaceDeclaration3.ts, 26, 25))
 
-    export module M3 {
+    export namespace M3 {
 >M3 : Symbol(M3, Decl(interfaceDeclaration3.ts, 26, 40))
 
         export interface I1 { item:string; }
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 27, 22))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 27, 25))
 >item : Symbol(I1.item, Decl(interfaceDeclaration3.ts, 28, 29))
     }
     class C1 implements I1 {
 >C1 : Symbol(C1, Decl(interfaceDeclaration3.ts, 29, 5))
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 21))
 
         public item:number;    
 >item : Symbol(C1.item, Decl(interfaceDeclaration3.ts, 30, 28))
     }
     class C2 implements I1 {
 >C2 : Symbol(C2, Decl(interfaceDeclaration3.ts, 32, 5))
->I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>I1 : Symbol(I1, Decl(interfaceDeclaration3.ts, 24, 21))
 
         public item:string;    
 >item : Symbol(C2.item, Decl(interfaceDeclaration3.ts, 33, 28))
@@ -112,9 +112,9 @@ class C1 implements I1 {
 
 class C2 implements M2.I1 { 
 >C2 : Symbol(C2, Decl(interfaceDeclaration3.ts, 43, 1))
->M2.I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>M2.I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 21))
 >M2 : Symbol(M2, Decl(interfaceDeclaration3.ts, 22, 1))
->I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 18))
+>I1 : Symbol(M2.I1, Decl(interfaceDeclaration3.ts, 24, 21))
 
     public item:string;
 >item : Symbol(C2.item, Decl(interfaceDeclaration3.ts, 45, 27))
@@ -122,11 +122,11 @@ class C2 implements M2.I1 {
 
 class C3 implements M2.M3.I1 {
 >C3 : Symbol(C3, Decl(interfaceDeclaration3.ts, 47, 1))
->M2.M3.I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 22))
+>M2.M3.I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 25))
 >M2.M3 : Symbol(M2.M3, Decl(interfaceDeclaration3.ts, 26, 40))
 >M2 : Symbol(M2, Decl(interfaceDeclaration3.ts, 22, 1))
 >M3 : Symbol(M2.M3, Decl(interfaceDeclaration3.ts, 26, 40))
->I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 22))
+>I1 : Symbol(M2.M3.I1, Decl(interfaceDeclaration3.ts, 27, 25))
 
     public item:string;
 >item : Symbol(C3.item, Decl(interfaceDeclaration3.ts, 49, 30))

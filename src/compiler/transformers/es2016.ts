@@ -15,13 +15,13 @@ import {
     visitEachChild,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2016(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     return chainBundle(context, transformSourceFile);
@@ -69,16 +69,16 @@ export function transformES2016(context: TransformationContext): (x: SourceFile 
             target = setTextRange(
                 factory.createElementAccessExpression(
                     setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
+                    setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression),
                 ),
-                left
+                left,
             );
             value = setTextRange(
                 factory.createElementAccessExpression(
                     expressionTemp,
-                    argumentExpressionTemp
+                    argumentExpressionTemp,
                 ),
-                left
+                left,
             );
         }
         else if (isPropertyAccessExpression(left)) {
@@ -87,16 +87,16 @@ export function transformES2016(context: TransformationContext): (x: SourceFile 
             target = setTextRange(
                 factory.createPropertyAccessExpression(
                     setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    left.name
+                    left.name,
                 ),
-                left
+                left,
             );
             value = setTextRange(
                 factory.createPropertyAccessExpression(
                     expressionTemp,
-                    left.name
+                    left.name,
                 ),
-                left
+                left,
             );
         }
         else {
@@ -107,9 +107,9 @@ export function transformES2016(context: TransformationContext): (x: SourceFile 
         return setTextRange(
             factory.createAssignment(
                 target,
-                setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)
+                setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node),
             ),
-            node
+            node,
         );
     }
 

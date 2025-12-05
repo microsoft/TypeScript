@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts] ////
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts]
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export class c {
         }
     }
@@ -32,8 +32,8 @@ exports.x = new exports.b.c();
 
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.d.ts]
-export declare module a {
-    module b {
+export declare namespace a {
+    namespace b {
         class c {
         }
     }

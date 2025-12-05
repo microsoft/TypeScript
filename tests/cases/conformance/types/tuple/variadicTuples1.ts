@@ -88,7 +88,7 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 
 function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
     const a = t[0];  // string
-    const b = t[1];  // [string, ...T, number][1]
+    const b = t[1];  // number | T[number]
     const c = t[2];  // [string, ...T, number][2]
     const d = t[n];  // [string, ...T, number][number]
 }
@@ -104,7 +104,7 @@ function f2<T extends unknown[]>(t: [string, ...T]) {
 function f3<T extends unknown[]>(t: [string, ...T, number]) {
     let [...ax] = t;  // [string, ...T, number]
     let [b1, ...bx] = t;  // string, [...T, number]
-    let [c1, c2, ...cx] = t;  // string, [string, ...T, number][1], (number | T[number])[]
+    let [c1, c2, ...cx] = t;  // string, number | T[number], (number | T[number])[]
 }
 
 // Mapped types applied to variadic tuple types
@@ -421,3 +421,5 @@ type U3 = [...[string, number], boolean];
 
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+
+type AnyArr = [...any];

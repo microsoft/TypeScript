@@ -3,7 +3,7 @@
 //// [declFileTypeAnnotationArrayType.ts]
 class c {
 }
-module m {
+namespace m {
     export class c {
     }
     export class g<T> {
@@ -118,7 +118,7 @@ function foo10() {
 //// [declFileTypeAnnotationArrayType.d.ts]
 declare class c {
 }
-declare module m {
+declare namespace m {
     class c {
     }
     class g<T> {

@@ -7,18 +7,18 @@ Fs::
 
 //// [/apath/tsconfig.json]
 {
- "typeAcquisition": {
-  "enable": true
- }
+  "typeAcquisition": {
+    "enable": true
+  }
 }
 
 
 configFileName:: tsconfig.json
 TypeAcquisition::
 {
- "enable": true,
- "include": [],
- "exclude": []
+  "enable": true,
+  "include": [],
+  "exclude": []
 }
 Errors::
 

@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/circularConstructorWithReturn.ts] ////
+
+=== circularConstructorWithReturn.ts ===
+// This should not be a circularity error. See
+// https://github.com/microsoft/TypeScript/pull/57465#issuecomment-1960271216
+export type Client = ReturnType<typeof getPrismaClient> extends new () => infer T ? T : never
+>Client : PrismaClient
+>       : ^^^^^^^^^^^^
+>getPrismaClient : (options?: any) => typeof PrismaClient
+>                : ^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+export function getPrismaClient(options?: any) {
+>getPrismaClient : (options?: any) => typeof PrismaClient
+>                : ^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>options : any
+
+  class PrismaClient {
+>PrismaClient : PrismaClient
+>             : ^^^^^^^^^^^^
+
+    self: Client;
+>self : PrismaClient
+>     : ^^^^^^^^^^^^
+
+    constructor(options?: any) {
+>options : any
+
+      return (this.self = applyModelsAndClientExtensions(this));
+>(this.self = applyModelsAndClientExtensions(this)) : PrismaClient
+>                                                   : ^^^^^^^^^^^^
+>this.self = applyModelsAndClientExtensions(this) : PrismaClient
+>                                                 : ^^^^^^^^^^^^
+>this.self : PrismaClient
+>          : ^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>self : PrismaClient
+>     : ^^^^^^^^^^^^
+>applyModelsAndClientExtensions(this) : PrismaClient
+>                                     : ^^^^^^^^^^^^
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
+>                               : ^      ^^      ^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+    }
+  }
+
+  return PrismaClient
+>PrismaClient : typeof PrismaClient
+>             : ^^^^^^^^^^^^^^^^^^^
+}
+
+export function applyModelsAndClientExtensions(client: Client) {
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
+>                               : ^      ^^      ^^^^^^^^^^^^^^^^^
+>client : PrismaClient
+>       : ^^^^^^^^^^^^
+
+  return client;
+>client : PrismaClient
+>       : ^^^^^^^^^^^^
+}
+

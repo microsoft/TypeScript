@@ -1,10 +1,6 @@
 //// [tests/cases/compiler/moduleResolutionWithSymlinks_notInNodeModules.ts] ////
 
 //// [abc.ts]
-// When symlinked files are not in node_modules, realpath is not used.
-// A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
-// See GH#10364. 
-
 export const x = 0;
 
 //// [app.ts]
@@ -15,17 +11,11 @@ x + x2;
 
 //// [/src/bin/shared/abc.js]
 "use strict";
-// When symlinked files are not in node_modules, realpath is not used.
-// A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
-// See GH#10364. 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 0;
 //// [/src/bin/shared2/abc.js]
 "use strict";
-// When symlinked files are not in node_modules, realpath is not used.
-// A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
-// See GH#10364. 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 0;

@@ -267,6 +267,8 @@ verify.completions({
             sortText: completion.SortText.LocationPriority,
             insertText: "static met(n: number): number {\n}",
             filterText: "met",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         }
     ],
 });

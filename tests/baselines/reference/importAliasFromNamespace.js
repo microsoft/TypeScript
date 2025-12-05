@@ -9,7 +9,7 @@ namespace My.Internal {
 }
 
 //// [usage.ts]
-/// <reference path="./internal.ts" />
+/// <reference path="./internal.ts" preserve="true" />
 namespace SomeOther.Thing {
     import Internal = My.Internal;
     export class Foo {
@@ -31,7 +31,7 @@ var My;
     })(Internal = My.Internal || (My.Internal = {}));
 })(My || (My = {}));
 //// [usage.js]
-/// <reference path="./internal.ts" />
+/// <reference path="./internal.ts" preserve="true" />
 var SomeOther;
 (function (SomeOther) {
     var Thing;
@@ -59,7 +59,7 @@ declare namespace My.Internal {
     }
 }
 //// [usage.d.ts]
-/// <reference path="internal.d.ts" />
+/// <reference path="internal.d.ts" preserve="true" />
 declare namespace SomeOther.Thing {
     class Foo {
         private _which;

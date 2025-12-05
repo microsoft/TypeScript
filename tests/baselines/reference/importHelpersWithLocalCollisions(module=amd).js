@@ -9,7 +9,7 @@ declare var dec: any, __decorate: any;
 const o = { a: 1 };
 const y = { ...o };
 
-//// [tslib.d.ts]
+//// [index.d.ts]
 export declare function __extends(d: Function, b: Function): void;
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 export declare function __param(paramIndex: number, decorator: Function): Function;
@@ -22,8 +22,9 @@ define(["require", "exports", "tslib"], function (require, exports, tslib_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    let A = exports.A = class A {
+    let A = class A {
     };
+    exports.A = A;
     exports.A = A = tslib_1.__decorate([
         dec
     ], A);

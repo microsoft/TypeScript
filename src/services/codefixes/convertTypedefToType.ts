@@ -1,14 +1,22 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
-    forEach,
+    flatMap,
+    getNewLineOrDefaultFromHost,
     getSynthesizedDeepClone,
     getTokenAtPosition,
     hasJSDocNodes,
     InterfaceDeclaration,
     isJSDocTypedefTag,
     isJSDocTypeLiteral,
+    JSDoc,
     JSDocPropertyLikeTag,
+    JSDocTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -20,8 +28,7 @@ import {
     SyntaxKind,
     textChanges,
     TypeAliasDeclaration,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "convertTypedefToType";
 const errorCodes = [Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type.code];
@@ -29,12 +36,14 @@ registerCodeFix({
     fixIds: [fixId],
     errorCodes,
     getCodeActions(context) {
+        const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
         const node = getTokenAtPosition(
             context.sourceFile,
-            context.span.start
+            context.span.start,
         );
         if (!node) return;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, node, context.sourceFile));
+
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, node, context.sourceFile, newLineCharacter));
 
         if (changes.length > 0) {
             return [
@@ -48,35 +57,102 @@ registerCodeFix({
             ];
         }
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const node = getTokenAtPosition(diag.file, diag.start);
-        if (node) doChange(changes, node, diag.file);
-    })
+    getAllCodeActions: context =>
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => {
+                const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+                const node = getTokenAtPosition(diag.file, diag.start);
+                const fixAll = true;
+                if (node) doChange(changes, node, diag.file, newLineCharacter, fixAll);
+            },
+        ),
 });
 
-function doChange(changes: textChanges.ChangeTracker, node: Node, sourceFile: SourceFile) {
-    if (isJSDocTypedefTag(node)) {
-        fixSingleTypeDef(changes, node, sourceFile);
-    }
-}
-
-function fixSingleTypeDef(
+function doChange(
     changes: textChanges.ChangeTracker,
-    typeDefNode: JSDocTypedefTag | undefined,
+    node: Node,
     sourceFile: SourceFile,
+    newLine: string,
+    fixAll = false,
 ) {
-    if (!typeDefNode) return;
+    if (!isJSDocTypedefTag(node)) return;
 
-    const declaration = createDeclaration(typeDefNode);
+    const declaration = createDeclaration(node);
     if (!declaration) return;
 
-    const comment = typeDefNode.parent;
+    const commentNode = node.parent;
 
-    changes.replaceNode(
-        sourceFile,
-        comment,
-        declaration
+    const { leftSibling, rightSibling } = getLeftAndRightSiblings(node);
+
+    let pos = commentNode.getStart();
+    let prefix = "";
+
+    // the first @typedef is the comment block with a text comment above
+    if (!leftSibling && commentNode.comment) {
+        pos = findEndOfTextBetween(commentNode, commentNode.getStart(), node.getStart());
+        prefix = `${newLine} */${newLine}`;
+    }
+
+    if (leftSibling) {
+        if (fixAll && isJSDocTypedefTag(leftSibling)) {
+            // Don't need to keep empty comment clock between created interfaces
+            pos = node.getStart();
+            prefix = "";
+        }
+        else {
+            pos = findEndOfTextBetween(commentNode, leftSibling.getStart(), node.getStart());
+            prefix = `${newLine} */${newLine}`;
+        }
+    }
+
+    let end = commentNode.getEnd();
+    let suffix = "";
+
+    if (rightSibling) {
+        if (fixAll && isJSDocTypedefTag(rightSibling)) {
+            // Don't need to keep empty comment clock between created interfaces
+            end = rightSibling.getStart();
+            suffix = `${newLine}${newLine}`;
+        }
+        else {
+            end = rightSibling.getStart();
+            suffix = `${newLine}/**${newLine} * `;
+        }
+    }
+
+    changes.replaceRange(sourceFile, { pos, end }, declaration, { prefix, suffix });
+}
+
+function getLeftAndRightSiblings(typedefNode: JSDocTypedefTag): { leftSibling?: Node; rightSibling?: Node; } {
+    const commentNode = typedefNode.parent;
+    const maxChildIndex = commentNode.getChildCount() - 1;
+
+    const currentNodeIndex = commentNode.getChildren().findIndex(
+        n => n.getStart() === typedefNode.getStart() && n.getEnd() === typedefNode.getEnd(),
     );
+
+    const leftSibling = currentNodeIndex > 0 ? commentNode.getChildAt(currentNodeIndex - 1) : undefined;
+    const rightSibling = currentNodeIndex < maxChildIndex ? commentNode.getChildAt(currentNodeIndex + 1) : undefined;
+
+    return { leftSibling, rightSibling };
+}
+
+/**
+ * Finds the index of the last meaningful symbol (except empty spaces, * and /) in the comment
+ * between start and end positions
+ */
+function findEndOfTextBetween(jsDocComment: JSDoc, from: number, to: number): number {
+    const comment = jsDocComment.getText().substring(from - jsDocComment.getStart(), to - jsDocComment.getStart());
+
+    for (let i = comment.length; i > 0; i--) {
+        if (!/[*/\s]/.test(comment.substring(i - 1, i))) {
+            return from + i;
+        }
+    }
+
+    return to;
 }
 
 function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAliasDeclaration | undefined {
@@ -86,7 +162,7 @@ function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAli
     if (!typeName) return;
 
     // For use case @typedef {object}Foo @property{bar}number
-    // But object type can be nested, meaning the value in the k/v pair can be object itself
+    // But object type can be nested, meaning the value in the k/v pair can be the object itself
     if (typeExpression.kind === SyntaxKind.JSDocTypeLiteral) {
         return createInterfaceForTypeLiteral(typeName, typeExpression);
     }
@@ -99,33 +175,33 @@ function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAli
 
 function createInterfaceForTypeLiteral(
     typeName: string,
-    typeLiteral: JSDocTypeLiteral
+    typeLiteral: JSDocTypeLiteral,
 ): InterfaceDeclaration | undefined {
     const propertySignatures = createSignatureFromTypeLiteral(typeLiteral);
     if (!some(propertySignatures)) return;
-    const interfaceDeclaration = factory.createInterfaceDeclaration(
+
+    return factory.createInterfaceDeclaration(
         /*modifiers*/ undefined,
         typeName,
         /*typeParameters*/ undefined,
         /*heritageClauses*/ undefined,
         propertySignatures,
     );
-    return interfaceDeclaration;
 }
 
 function createTypeAliasForTypeExpression(
     typeName: string,
-    typeExpression: JSDocTypeExpression
+    typeExpression: JSDocTypeExpression,
 ): TypeAliasDeclaration | undefined {
     const typeReference = getSynthesizedDeepClone(typeExpression.type);
     if (!typeReference) return;
-    const declaration = factory.createTypeAliasDeclaration(
+
+    return factory.createTypeAliasDeclaration(
         /*modifiers*/ undefined,
         factory.createIdentifier(typeName),
         /*typeParameters*/ undefined,
-        typeReference
+        typeReference,
     );
-    return declaration;
 }
 
 function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): PropertySignature[] | undefined {
@@ -150,19 +226,17 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
 
         if (typeReference && name) {
             const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
-            const prop = factory.createPropertySignature(
+
+            return factory.createPropertySignature(
                 /*modifiers*/ undefined,
                 name,
                 questionToken,
-                typeReference
+                typeReference,
             );
-
-            return prop;
         }
     };
 
-    const props = mapDefined(propertyTags, getSignature);
-    return props;
+    return mapDefined(propertyTags, getSignature);
 }
 
 function getPropertyName(tag: JSDocPropertyLikeTag): string | undefined {
@@ -170,9 +244,10 @@ function getPropertyName(tag: JSDocPropertyLikeTag): string | undefined {
 }
 
 /** @internal */
-export function getJSDocTypedefNode(node: Node): JSDocTypedefTag | undefined {
+export function getJSDocTypedefNodes(node: Node): readonly JSDocTag[] {
     if (hasJSDocNodes(node)) {
-        return forEach(node.jsDoc, (node) => node.tags?.find(isJSDocTypedefTag));
+        return flatMap(node.jsDoc, doc => doc.tags?.filter(tag => isJSDocTypedefTag(tag)));
     }
-    return undefined;
+
+    return [];
 }

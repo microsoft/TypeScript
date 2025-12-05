@@ -5,25 +5,37 @@
 
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 function maker (value: string): typeof maker.Bar {
 >maker : typeof maker
+>      : ^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >maker.Bar : typeof maker.Bar
+>          : ^^^^^^^^^^^^^^^^
 >maker : typeof maker
+>      : ^^^^^^^^^^^^
 >Bar : typeof maker.Bar
+>    : ^^^^^^^^^^^^^^^^
 
     return maker.Bar;
 >maker.Bar : typeof maker.Bar
+>          : ^^^^^^^^^^^^^^^^
 >maker : typeof maker
+>      : ^^^^^^^^^^^^
 >Bar : typeof maker.Bar
+>    : ^^^^^^^^^^^^^^^^
 }
 
 namespace maker {
 >maker : typeof maker
+>      : ^^^^^^^^^^^^
 
     export class Bar extends Foo {}
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 }
 

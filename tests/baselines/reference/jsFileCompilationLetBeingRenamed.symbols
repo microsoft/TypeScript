@@ -13,3 +13,4 @@ function foo(a) {
         // do something
     }
 }
+

@@ -3,13 +3,18 @@
 === YieldExpression11_es6.ts ===
 class C {
 >C : C
+>  : ^
 
   *foo() {
 >foo : () => Generator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield(foo);
 >yield(foo) : any
+>           : ^^^
 >(foo) : any
+>      : ^^^
 >foo : any
+>    : ^^^
   }
 }

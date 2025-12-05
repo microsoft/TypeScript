@@ -1,0 +1,85 @@
+// === breakpoints ===
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: string): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (23 to 50)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (51 to 52)  SpanInfo: undefined
+--------------------------------
+4  >type MultiSkilledRobot = [string, string[]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (53 to 97)  SpanInfo: undefined
+--------------------------------
+5  >var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (98 to 161)  SpanInfo: {"start":98,"length":62}
+    >var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]]
+    >:=> (line 5, col 0) to (line 5, col 62)
+--------------------------------
+6  >var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (162 to 235)  SpanInfo: {"start":162,"length":72}
+    >var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]]
+    >:=> (line 6, col 0) to (line 6, col 72)
+--------------------------------
+7  >let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (236 to 290)  SpanInfo: {"start":243,"length":31}
+    >skillA = ["noSkill", "noSkill"]
+    >:=> (line 7, col 7) to (line 7, col 38)
+--------------------------------
+8  >let [nameMB = "noName" ] = multiRobotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (291 to 330)  SpanInfo: {"start":296,"length":17}
+    >nameMB = "noName"
+    >:=> (line 8, col 5) to (line 8, col 22)
+--------------------------------
+9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (331 to 353)  SpanInfo: {"start":336,"length":17}
+    >nameMA = "noName"
+    >:=> (line 9, col 5) to (line 9, col 22)
+9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (354 to 381)  SpanInfo: {"start":356,"length":25}
+    >primarySkillA = "noSkill"
+    >:=> (line 9, col 25) to (line 9, col 50)
+9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (382 to 410)  SpanInfo: {"start":383,"length":27}
+    >secondarySkillA = "noSkill"
+    >:=> (line 9, col 52) to (line 9, col 79)
+9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+
+                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (411 to 452)  SpanInfo: {"start":355,"length":81}
+    >[primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
+    >:=> (line 9, col 24) to (line 9, col 105)
+--------------------------------
+10 >let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (453 to 514)  SpanInfo: {"start":458,"length":17}
+    >nameMC = "noName"
+    >:=> (line 10, col 5) to (line 10, col 22)
+--------------------------------
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (515 to 538)  SpanInfo: {"start":520,"length":18}
+    >nameMC2 = "noName"
+    >:=> (line 11, col 5) to (line 11, col 23)
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (539 to 566)  SpanInfo: {"start":541,"length":25}
+    >primarySkillC = "noSkill"
+    >:=> (line 11, col 26) to (line 11, col 51)
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (567 to 595)  SpanInfo: {"start":568,"length":27}
+    >secondarySkillC = "noSkill"
+    >:=> (line 11, col 53) to (line 11, col 80)
+11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (596 to 658)  SpanInfo: {"start":540,"length":81}
+    >[primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
+    >:=> (line 11, col 25) to (line 11, col 106)

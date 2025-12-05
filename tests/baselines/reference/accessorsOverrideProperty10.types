@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty10.ts] ////
+
+=== accessorsOverrideProperty10.ts ===
+class A {
+>A : A
+>  : ^
+
+  x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+class B extends A {}
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+class C extends B {
+>C : C
+>  : ^
+>B : B
+>  : ^
+
+  get x() {
+>x : number
+>  : ^^^^^^
+
+    return 2;
+>2 : 2
+>  : ^
+  }
+}
+

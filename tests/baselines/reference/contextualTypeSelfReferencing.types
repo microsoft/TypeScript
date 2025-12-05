@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/contextualTypeSelfReferencing.ts] ////
+
+=== contextualTypeSelfReferencing.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54048
+
+type narrow<def> = def extends string
+>narrow : narrow<def>
+>       : ^^^^^^^^^^^
+
+  ? def
+  : def extends [unknown, ...unknown[]]
+  ? def
+  : {
+      [k in keyof def]: narrow<def[k]>;
+    };
+
+declare const parse: <def>(def: narrow<def>) => def;
+>parse : <def>(def: narrow<def>) => def
+>      : ^   ^^   ^^           ^^^^^   
+>def : narrow<def>
+>    : ^^^^^^^^^^^
+
+const result = parse([{ a: "foo" }]);
+>result : [{ a: "foo"; }]
+>       : ^^^^^^^^^^^^^^^
+>parse([{ a: "foo" }]) : [{ a: "foo"; }]
+>                      : ^^^^^^^^^^^^^^^
+>parse : <def>(def: narrow<def>) => def
+>      : ^   ^^   ^^           ^^^^^   
+>[{ a: "foo" }] : [{ a: "foo"; }]
+>               : ^^^^^^^^^^^^^^^
+>{ a: "foo" } : { a: "foo"; }
+>             : ^^^^^^^^^^^^^
+>a : "foo"
+>  : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+

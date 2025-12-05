@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/internalAliasClass.ts] ////
 
 //// [internalAliasClass.ts]
-module a {
+namespace a {
     export class c {
     }
 }
 
-module c {
+namespace c {
     import b = a.c;
     export var x: b = new b();
 }
@@ -29,11 +29,11 @@ var c;
 
 
 //// [internalAliasClass.d.ts]
-declare module a {
+declare namespace a {
     class c {
     }
 }
-declare module c {
+declare namespace c {
     import b = a.c;
     var x: b;
 }

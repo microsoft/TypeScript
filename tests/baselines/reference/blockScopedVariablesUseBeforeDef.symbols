@@ -283,3 +283,52 @@ function foo17() {
 >foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 133, 9))
 }
 
+// #30907
+function wrapI1() {
+>wrapI1 : Symbol(wrapI1, Decl(blockScopedVariablesUseBeforeDef.ts, 134, 1))
+
+    const iter = (function* foo() {
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 9))
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 18))
+
+        iter;
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 9))
+
+        yield 1;
+    })();
+}
+
+function wrapI2() {
+>wrapI2 : Symbol(wrapI2, Decl(blockScopedVariablesUseBeforeDef.ts, 142, 1))
+
+    const iter = (async function* foo() {
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 9))
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 18))
+
+        iter;
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 9))
+
+        yield 1;
+    })();
+}
+
+function foo18() {
+>foo18 : Symbol(foo18, Decl(blockScopedVariablesUseBeforeDef.ts, 149, 1))
+
+    let a = (() => Enum.Yes)();
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 7))
+>Enum.Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+>Enum : Symbol(Enum, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 31))
+>Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+
+    enum Enum {
+>Enum : Symbol(Enum, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 31))
+
+        No = 0,
+>No : Symbol(Enum.No, Decl(blockScopedVariablesUseBeforeDef.ts, 153, 15))
+
+        Yes = 1,
+>Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+    }
+}
+

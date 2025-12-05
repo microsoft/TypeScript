@@ -24,7 +24,7 @@ import {
     TypeQueryNode,
     TypeReference,
     UnionOrIntersectionType,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function createGetSymbolWalker(
@@ -37,8 +37,8 @@ export function createGetSymbolWalker(
     getResolvedSymbol: (node: Identifier) => Symbol,
     getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
     getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
-    getTypeArguments: (type: TypeReference) => readonly Type[]) {
-
+    getTypeArguments: (type: TypeReference) => readonly Type[],
+): (accept?: (symbol: Symbol) => boolean) => SymbolWalker {
     return getSymbolWalker;
 
     function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
@@ -214,4 +214,3 @@ export function createGetSymbolWalker(
         }
     }
 }
-

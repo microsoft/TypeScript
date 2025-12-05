@@ -12,7 +12,7 @@
         "DifferentNamesNotSpecifiedWithAllowJs/b.js"
     ],
     "emittedFiles": [
-        "test.js",
-        "test.d.ts"
+        "DifferentNamesNotSpecifiedWithAllowJs/test.js",
+        "DifferentNamesNotSpecifiedWithAllowJs/test.d.ts"
     ]
 }

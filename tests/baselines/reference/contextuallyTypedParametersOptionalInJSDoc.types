@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/contextuallyTypedParametersOptionalInJSDoc.ts] ////
+
+=== index.js ===
+/**
+ * 
+ * @param {number} num 
+ */
+function acceptNum(num) {}
+>acceptNum : (num: number) => void
+>          : ^   ^^      ^^^^^^^^^
+>num : number
+>    : ^^^^^^
+
+/**
+ * @typedef {(a: string, b: number) => void} Fn
+ */
+
+/** @type {Fn} */
+const fn1 =
+>fn1 : Fn
+>    : ^^
+
+  /**
+   * @param [b]
+   */
+  function self(a, b) {
+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
+>                                                                                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>self : (a: string, b?: number | undefined) => void
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    acceptNum(b); // error
+>acceptNum(b) : void
+>             : ^^^^
+>acceptNum : (num: number) => void
+>          : ^   ^^      ^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    self("");
+>self("") : void
+>         : ^^^^
+>self : (a: string, b?: number | undefined) => void
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    self("", undefined);
+>self("", undefined) : void
+>                    : ^^^^
+>self : (a: string, b?: number | undefined) => void
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  };
+
+/** @type {Fn} */
+const fn2 =
+>fn2 : Fn
+>    : ^^
+
+  /**
+   * @param {number} [b]
+   */
+  function self(a, b) {
+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number) => void
+>                                                                                        : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    acceptNum(b); // error
+>acceptNum(b) : void
+>             : ^^^^
+>acceptNum : (num: number) => void
+>          : ^   ^^      ^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    self("");
+>self("") : void
+>         : ^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    self("", undefined);
+>self("", undefined) : void
+>                    : ^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
+>"" : ""
+>   : ^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  };
+

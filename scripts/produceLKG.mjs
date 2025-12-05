@@ -1,5 +1,5 @@
-import fs from "fs-extra";
-import glob from "glob";
+import fs from "fs";
+import { glob } from "glob";
 import path from "path";
 import url from "url";
 
@@ -14,8 +14,8 @@ const dest = path.join(root, "lib");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
-    await (fs.rm || fs.rmdir)(dest, { recursive: true, force: true });
-    await fs.mkdirp(dest);
+    await fs.promises.rm(dest, { recursive: true, force: true });
+    await fs.promises.mkdir(dest, { recursive: true });
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
@@ -30,9 +30,15 @@ async function copyLibFiles() {
 
 async function copyLocalizedDiagnostics() {
     for (const d of localizationDirectories) {
-        const fileName = path.join(source, d);
-        if (fs.statSync(fileName).isDirectory()) {
-            await fs.copy(fileName, path.join(dest, d));
+        const inputDir = path.join(source, d);
+        if (!fs.statSync(inputDir).isDirectory()) throw new Error(`Expected ${inputDir} to be a directory`);
+        const outputDir = path.join(dest, d);
+        await fs.promises.mkdir(outputDir, { recursive: true });
+        for (const f of await fs.promises.readdir(inputDir)) {
+            const inputFile = path.join(inputDir, f);
+            if (!fs.statSync(inputFile).isFile()) throw new Error(`Expected ${inputFile} to be a file`);
+            const outputFile = path.join(outputDir, f);
+            await fs.promises.copyFile(inputFile, outputFile);
         }
     }
 }
@@ -42,12 +48,14 @@ async function copyTypesMap() {
 }
 
 async function copyScriptOutputs() {
-    await copyFromBuiltLocal("cancellationToken.js");
     await copyFromBuiltLocal("tsc.js");
+    await copyFromBuiltLocal("_tsc.js");
     await copyFromBuiltLocal("tsserver.js");
+    await copyFromBuiltLocal("_tsserver.js");
     await copyFromBuiltLocal("tsserverlibrary.js");
     await copyFromBuiltLocal("typescript.js");
     await copyFromBuiltLocal("typingsInstaller.js");
+    await copyFromBuiltLocal("_typingsInstaller.js");
     await copyFromBuiltLocal("watchGuard.js");
 }
 
@@ -57,14 +65,14 @@ async function copyDeclarationOutputs() {
 }
 
 async function writeGitAttributes() {
-    await fs.writeFile(path.join(dest, ".gitattributes"), `* text eol=lf`, "utf-8");
+    await fs.promises.writeFile(path.join(dest, ".gitattributes"), `* text eol=lf`, "utf-8");
 }
 
 /**
  * @param {string} fileName
  */
 async function copyFromBuiltLocal(fileName) {
-    await fs.copy(path.join(source, fileName), path.join(dest, fileName));
+    await fs.promises.copyFile(path.join(source, fileName), path.join(dest, fileName));
 }
 
 /**

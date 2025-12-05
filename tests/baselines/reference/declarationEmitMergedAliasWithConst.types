@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitMergedAliasWithConst.ts] ////
+
+=== declarationEmitMergedAliasWithConst.ts ===
+export const Color = {
+>Color : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    Red: "Red",    Green: "Green",    Blue: "Blue"} as const : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    Red: "Red",    Green: "Green",    Blue: "Blue"} : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Red: "Red",
+>Red : "Red"
+>    : ^^^^^
+>"Red" : "Red"
+>      : ^^^^^
+
+    Green: "Green",
+>Green : "Green"
+>      : ^^^^^^^
+>"Green" : "Green"
+>        : ^^^^^^^
+
+    Blue: "Blue"
+>Blue : "Blue"
+>     : ^^^^^^
+>"Blue" : "Blue"
+>       : ^^^^^^
+
+} as const
+
+export type Color = typeof Color
+>Color : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Color : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type Colors = Color[keyof Color]
+>Colors : Colors
+>       : ^^^^^^
+

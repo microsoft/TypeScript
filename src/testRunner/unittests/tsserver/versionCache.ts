@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { IO } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 function editFlat(position: number, deletedLength: number, newText: string, source: string) {
     return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
@@ -212,7 +212,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
     before(() => {
         // Use scanner.ts, decent size, does not change frequently
         const testFileName = "src/compiler/scanner.ts";
-        testContent = Harness.IO.readFile(testFileName)!;
+        testContent = IO.readFile(testFileName)!;
         const totalChars = testContent.length;
         assert.isTrue(totalChars > 0, "Failed to read test file.");
 
@@ -242,7 +242,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
                 else {
                     elas[j] = ela[j];
                 }
-                etotalChars += (las[j] - elas[j]);
+                etotalChars += las[j] - elas[j];
             }
         }
     });

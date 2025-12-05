@@ -29,7 +29,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 >X : Symbol(X, Decl(moduleScopingBug.ts, 18, 5))
 
         var inner = outer;   // Error: outer not visible

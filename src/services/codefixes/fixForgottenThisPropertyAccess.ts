@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     getContainingClass,
@@ -10,12 +15,7 @@ import {
     SourceFile,
     suppressLeadingAndTrailingTrivia,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
@@ -36,10 +36,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, [Diagnostics.Add_0_to_unresolved_variable, info.className || "this"], fixId, Diagnostics.Add_qualifier_to_all_unresolved_variables_matching_a_member_name)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start, diag.code);
-        if (info) doChange(changes, context.sourceFile, info);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start, diag.code);
+            if (info) doChange(changes, context.sourceFile, info);
+        }),
 });
 
 interface Info {

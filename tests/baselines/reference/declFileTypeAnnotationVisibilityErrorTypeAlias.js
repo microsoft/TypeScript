@@ -5,28 +5,28 @@ interface Window {
     someMethod();
 }
 
-module M {
+namespace M {
     type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // Should report error that W is private
     }
 }
 
-module M1 {
+namespace M1 {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // No error
     }
 }
 
-module M2 {
+namespace M2 {
     class private1 {
     }
     class public1 {
     }
-    module m3 {
+    namespace m3 {
         export class public1 {
         }
     }
@@ -95,29 +95,29 @@ var M2;
 interface Window {
     someMethod(): any;
 }
-declare module M {
+declare namespace M {
     type W = Window | string;
-    export module N {
+    export namespace N {
         class Window {
         }
         var p: W;
     }
     export {};
 }
-declare module M1 {
+declare namespace M1 {
     type W = Window | string;
-    module N {
+    namespace N {
         class Window {
         }
         var p: W;
     }
 }
-declare module M2 {
+declare namespace M2 {
     class private1 {
     }
     class public1 {
     }
-    module m3 {
+    namespace m3 {
         class public1 {
         }
     }
