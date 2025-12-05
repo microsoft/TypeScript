@@ -61,18 +61,24 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -84,7 +90,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -96,17 +102,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -122,20 +128,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
@@ -374,13 +380,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -480,13 +492,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -558,13 +576,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -589,18 +613,24 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -612,7 +642,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -624,17 +654,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -650,20 +680,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop1: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
@@ -763,13 +793,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -841,13 +877,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
@@ -949,18 +991,24 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -972,7 +1020,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -984,17 +1032,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -1010,20 +1058,20 @@ function someFunc(arguments) {
 
 
 //// [/home/src/workspaces/outFile.d.ts]
-declare module "class" {
+declare module "src/class" {
     export class classC {
         prop: number;
     }
 }
-declare module "indirectClass" {
-    import { classC } from "class";
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
     export class indirectClass {
         classC: classC;
     }
 }
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
     export function writeLog(s: string): void;
 }
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
@@ -1175,13 +1223,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m6[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 
 

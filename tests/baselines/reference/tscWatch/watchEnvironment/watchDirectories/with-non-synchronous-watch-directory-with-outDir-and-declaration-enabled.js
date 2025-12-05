@@ -34,16 +34,22 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 118
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 119
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/dist/file1.d.ts] Inode:: 119
+//// [/user/username/projects/myproject/dist/src/file1.d.ts] Inode:: 120
 export {};
 
 
@@ -71,6 +77,8 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
   {"inode":117}
+/user/username/projects/myproject/dist/src: *new*
+  {"inode":118}
 /user/username/projects/myproject/node_modules: *new*
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
@@ -99,10 +107,7 @@ Program files::
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/node_modules/file2/index.d.ts
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -121,7 +126,7 @@ exitCode:: ExitStatus.undefined
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
 Input::
-//// [/user/username/projects/myproject/src/file3.ts] Inode:: 120
+//// [/user/username/projects/myproject/src/file3.ts] Inode:: 121
 export const y = 10;
 
 
@@ -155,18 +160,24 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file3.js] Inode:: 121
+//// [/user/username/projects/myproject/dist/src/file3.js] Inode:: 122
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
-//// [/user/username/projects/myproject/dist/file3.d.ts] Inode:: 122
+//// [/user/username/projects/myproject/dist/src/file3.d.ts] Inode:: 123
 export declare const y = 10;
 
 
@@ -194,6 +205,8 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist:
   {"inode":117}
+/user/username/projects/myproject/dist/src:
+  {"inode":118}
 /user/username/projects/myproject/node_modules:
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
@@ -205,7 +218,7 @@ FsWatches::
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/file3.ts: *new*
-  {"inode":120}
+  {"inode":121}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":10}
 
@@ -230,8 +243,7 @@ Program files::
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/file3.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file3.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file3.ts (computed .d.ts)
