@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource4.ts, 0, 0))
 
     export class BlockIntrinsics {
->BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+>BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 22))
 
         public prototype = undefined;
 >prototype : Symbol(BlockIntrinsics.prototype, Decl(parserRealSource4.ts, 7, 34))
@@ -43,7 +43,7 @@ module TypeScript {
         constructor () {
             // initialize the 'constructor' field
             this["constructor"] = undefined;
->this : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+>this : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 22))
 >"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
         }
@@ -106,7 +106,7 @@ module TypeScript {
 
         public table = <any>(<any> new BlockIntrinsics());
 >table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
->BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+>BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 22))
 
         public getAllKeys(): string[]{
 >getAllKeys : Symbol(StringHashTable.getAllKeys, Decl(parserRealSource4.ts, 35, 58))

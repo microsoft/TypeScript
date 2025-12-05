@@ -8,7 +8,7 @@ cloduleStaticMembers.ts(10,13): error TS2304: Cannot find name 'y'.
         private static x = 10;
         public static y = 10;
     }
-    module Clod {
+    namespace Clod {
         var p = Clod.x;
                      ~
 !!! error TS2341: Property 'x' is private and only accessible within class 'Clod'.

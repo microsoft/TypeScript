@@ -19,7 +19,7 @@ class C1T5 {
 }
 
 // CONTEXT: Module property declaration
-module C2T5 {
+namespace C2T5 {
     export var foo: (i: number, s: string) => number = function(i) {
         return i;
     }
@@ -64,7 +64,7 @@ class C4T5 {
 }
 
 // CONTEXT: Module property assignment
-module C5T5 {
+namespace C5T5 {
     export var foo: (i: number, s: string) => string;
     foo = function(i, s) {
         return s;

@@ -11,7 +11,7 @@ export default function foo() {
 }
 
 === b.ts ===
-import defer foo from "a";
+import defer foo from "./a";
 >foo : Symbol(foo, Decl(b.ts, 0, 6))
 
 foo();

@@ -12,7 +12,6 @@ let y = 1
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -144,6 +143,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -200,6 +200,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

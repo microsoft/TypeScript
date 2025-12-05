@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// module M {
+//// namespace M {
 ////     /*1*/class C<T> { }
 //// }
 ////  

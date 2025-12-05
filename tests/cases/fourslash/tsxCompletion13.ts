@@ -4,7 +4,7 @@
 // @jsx: preserve
 // @skipLibCheck: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }

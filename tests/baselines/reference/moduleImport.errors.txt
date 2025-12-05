@@ -2,7 +2,7 @@ moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
 
 
 ==== moduleImport.ts (1 errors) ====
-    module A.B.C {
+    namespace A.B.C {
     	import XYZ = X.Y.Z;
     	               ~
 !!! error TS2694: Namespace 'X' has no exported member 'Y'.
@@ -11,7 +11,7 @@ moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
     	}
     }
     
-    module X {
+    namespace X {
     	import ABC = A.B.C;
     	export function pong(x: number) {
     		if (x > 0) ABC.ping(x-1);

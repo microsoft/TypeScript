@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapValidationClasses.ts] ////
 
 //// [sourceMapValidationClasses.ts]
-module Foo.Bar {
+namespace Foo.Bar {
     "use strict";
 
     class Greeter {

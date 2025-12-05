@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-//// module M {
+//// namespace M {
 //// export class C1 { }
 ////     /*1*/export interface I { n: number; }
 //// }
-//// module M {
+//// namespace M {
 //// function f(): I { return null; } }
 //// 
 

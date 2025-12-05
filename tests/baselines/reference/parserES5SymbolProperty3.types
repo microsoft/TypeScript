@@ -8,10 +8,10 @@ declare class C {
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
 >                     : ^^^^^^      
->Symbol.unscopables : any
->                   : ^^^
->Symbol : any
->       : ^^^
->unscopables : any
->            : ^^^
+>Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 }

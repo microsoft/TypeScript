@@ -412,7 +412,7 @@ function createBuilderProgramState(
 
             if (canCopySemanticDiagnostics) {
                 if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) return;
-                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) return;
+                if (newProgram.isSourceFileDefaultLibrary(sourceFile) && !copyLibFileDiagnostics) return;
 
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile.get(sourceFilePath);

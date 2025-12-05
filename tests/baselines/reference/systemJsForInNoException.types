@@ -26,7 +26,8 @@ for (var key in obj)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->obj[key] : error
+>obj[key] : any
+>         : ^^^
 >obj : { a: number; }
 >    : ^^^^^^^^^^^^^^
 >key : string

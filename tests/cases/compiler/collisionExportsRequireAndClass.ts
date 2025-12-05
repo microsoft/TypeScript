@@ -4,13 +4,13 @@ export class require {
 }
 export class exports {
 }
-module m1 {
+namespace m1 {
     class require {
     }
     class exports {
     }
 }
-module m2 {
+namespace m2 {
     export class require {
     }
     export class exports {
@@ -22,13 +22,13 @@ class require {
 }
 class exports {
 }
-module m3 {
+namespace m3 {
     class require {
     }
     class exports {
     }
 }
-module m4 {
+namespace m4 {
     export class require {
     }
     export class exports {

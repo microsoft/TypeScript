@@ -54,7 +54,7 @@ assignmentCompatWithObjectMembers4.ts(87,5): error TS2322: Type '{ foo: Base; }'
 ==== assignmentCompatWithObjectMembers4.ts (17 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
     
-    module OnlyDerived {
+    namespace OnlyDerived {
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Base { baz: string; }
@@ -164,7 +164,7 @@ assignmentCompatWithObjectMembers4.ts(87,5): error TS2322: Type '{ foo: Base; }'
 !!! related TS2728 assignmentCompatWithObjectMembers4.ts:5:34: 'bar' is declared here.
     }
     
-    module WithBase {
+    namespace WithBase {
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Base { baz: string; }

@@ -4,7 +4,7 @@
 class Foo {
 	test = "test";
 }
-module Foo {
+namespace Foo {
 	export var answer = 42;
 }
 export = Foo;

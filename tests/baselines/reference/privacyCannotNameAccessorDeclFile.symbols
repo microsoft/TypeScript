@@ -229,18 +229,18 @@ declare module "GlobalWidgets" {
 >createWidget3 : Symbol(createWidget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 3, 5))
 >Widget3 : Symbol(Widget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 0, 32))
 
-    export module SpecializedGlobalWidget {
+    export namespace SpecializedGlobalWidget {
 >SpecializedGlobalWidget : Symbol(SpecializedGlobalWidget, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 4, 45))
 
         export class Widget4 {
->Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 43))
+>Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 46))
 
             name: string;
 >name : Symbol(Widget4.name, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 7, 30))
         }
         function createWidget4(): Widget4;
 >createWidget4 : Symbol(createWidget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 9, 9))
->Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 43))
+>Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 46))
     }
 }
 
@@ -258,11 +258,11 @@ export function createWidget1() {
 >Widget1 : Symbol(Widget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 0, 0))
 }
 
-export module SpecializedWidget {
+export namespace SpecializedWidget {
 >SpecializedWidget : Symbol(SpecializedWidget, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 5, 1))
 
     export class Widget2 {
->Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 33))
+>Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 36))
 
         name = 'one';
 >name : Symbol(Widget2.name, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 8, 26))
@@ -271,7 +271,7 @@ export module SpecializedWidget {
 >createWidget2 : Symbol(createWidget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 10, 5))
 
         return new Widget2();
->Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 33))
+>Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 36))
     }
 }
 

@@ -56,7 +56,7 @@ class ClassWithInitializer extends BaseErrClass {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

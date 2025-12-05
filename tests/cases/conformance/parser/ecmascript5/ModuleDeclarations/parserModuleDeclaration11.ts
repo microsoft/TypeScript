@@ -1,4 +1,4 @@
-declare module string {
+declare namespace string {
     interface X { }
     export function foo(s: string);
 }

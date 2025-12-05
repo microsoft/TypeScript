@@ -8,7 +8,7 @@ interface Element {
 
     get style(): CSSStyleDeclaration;
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
->CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
     set style(cssText: string);
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
@@ -25,11 +25,11 @@ element.style = "color: red";
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 
 element.style.animationTimingFunction;
->element.style.animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+>element.style.animationTimingFunction : Symbol(CSSStyleProperties.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
 >element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
 >element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
->animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+>animationTimingFunction : Symbol(CSSStyleProperties.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
 
 element.style = element.style; // error
 >element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))

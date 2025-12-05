@@ -2,7 +2,7 @@
 
 === commentsModules.ts ===
 /** Module comment*/
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -21,7 +21,7 @@ module m1 {
 >  : ^^^^^^
     }
     /** m2 comments*/
-    export module m2 {
+    export namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -103,7 +103,7 @@ var myvar = new m1.m2.c();
 >  : ^^^^^^^^^^^^^^
 
 /** module comment of m2.m3*/
-module m2.m3 {
+namespace m2.m3 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >m3 : typeof m3
@@ -130,7 +130,7 @@ new m2.m3.c();
 >  : ^^^^^^^^^^^^^^
 
 /** module comment of m3.m4.m5*/
-module m3.m4.m5 {
+namespace m3.m4.m5 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 >m4 : typeof m4
@@ -163,7 +163,7 @@ new m3.m4.m5.c();
 >  : ^^^^^^^^^^^^^^^^^
 
 /** module comment of m4.m5.m6*/
-module m4.m5.m6 {
+namespace m4.m5.m6 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 >m5 : typeof m5
@@ -171,7 +171,7 @@ module m4.m5.m6 {
 >m6 : typeof m6
 >   : ^^^^^^^^^
 
-    export module m7 {
+    export namespace m7 {
 >m7 : typeof m7
 >   : ^^^^^^^^^
 
@@ -205,7 +205,7 @@ new m4.m5.m6.m7.c();
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 /** module comment of m5.m6.m7*/
-module m5.m6.m7 {
+namespace m5.m6.m7 {
 >m5 : typeof m5
 >   : ^^^^^^^^^
 >m6 : typeof m6
@@ -214,7 +214,7 @@ module m5.m6.m7 {
 >   : ^^^^^^^^^
 
     /** module m8 comment*/
-    export module m8 {
+    export namespace m8 {
 >m8 : typeof m8
 >   : ^^^^^^^^^
 
@@ -247,13 +247,13 @@ new m5.m6.m7.m8.c();
 >c : typeof m5.m6.m7.m8.c
 >  : ^^^^^^^^^^^^^^^^^^^^
 
-module m6.m7 {
+namespace m6.m7 {
 >m6 : typeof m6
 >   : ^^^^^^^^^
 >m7 : typeof m7
 >   : ^^^^^^^^^
 
-    export module m8 {
+    export namespace m8 {
 >m8 : typeof m8
 >   : ^^^^^^^^^
 
@@ -282,14 +282,14 @@ new m6.m7.m8.c();
 >c : typeof m6.m7.m8.c
 >  : ^^^^^^^^^^^^^^^^^
 
-module m7.m8 {
+namespace m7.m8 {
 >m7 : typeof m7
 >   : ^^^^^^^^^
 >m8 : typeof m8
 >   : ^^^^^^^^^
 
     /** module m9 comment*/
-    export module m9 {
+    export namespace m9 {
 >m9 : typeof m9
 >   : ^^^^^^^^^
 

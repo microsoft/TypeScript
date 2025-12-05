@@ -16,7 +16,7 @@ f = 1; // ok
 var x: number = e; // ok
 x = f; // ok
 
-module Others {
+namespace Others {
     var a: any = e; // ok
 
     class C {

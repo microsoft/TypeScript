@@ -1,6 +1,6 @@
 //@module: amd
 // @declaration: true
-export module a {
+export namespace a {
     export function foo(x: number) {
         return x;
     }

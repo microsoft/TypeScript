@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unknownSymbols2.ts] ////
 
 === unknownSymbols2.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -74,7 +74,7 @@ module M {
 >qwerty : any
 >       : ^^^
 
-    module N {
+    namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

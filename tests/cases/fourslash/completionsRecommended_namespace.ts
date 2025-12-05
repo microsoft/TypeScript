@@ -31,7 +31,7 @@ verify.completions(
         marker: ["b0", "b1"],
         includes: {
             name: "Name",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "namespace Name",
             kind: "module",
