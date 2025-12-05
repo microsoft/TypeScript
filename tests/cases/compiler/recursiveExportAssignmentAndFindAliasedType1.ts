@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 // @Filename: recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts
 declare module "moduleC" {
     import self = require("moduleC");
@@ -12,5 +12,5 @@ export = ClassB;
 // @Filename: recursiveExportAssignmentAndFindAliasedType1_moduleA.ts
 /// <reference path="recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts"/>
 import moduleC = require("moduleC");
-import ClassB = require("recursiveExportAssignmentAndFindAliasedType1_moduleB");
+import ClassB = require("./recursiveExportAssignmentAndFindAliasedType1_moduleB");
 export var b: ClassB; // This should result in type ClassB

@@ -9,18 +9,20 @@ var n: number = modM.x;
 >n : number
 >  : ^^^^^^
 >modM.x : any
+>       : ^^^
 >modM : typeof modM
 >     : ^^^^^^^^^^^
 >x : any
 >  : ^^^
 
 === exportAssignmentInternalModule_A.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
 	export var x;
 >x : any
+>  : ^^^
 }
 
 export = M;

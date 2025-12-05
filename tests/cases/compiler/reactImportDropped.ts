@@ -1,5 +1,5 @@
 //@module: es6
-//@moduleResolution: node
+// @moduleResolution: bundler
 //@target: es6
 //@noImplicitAny: false
 //@allowSyntheticDefaultImports: true

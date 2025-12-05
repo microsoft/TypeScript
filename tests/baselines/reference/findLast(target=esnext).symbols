@@ -24,7 +24,7 @@ new Int8Array().findLast((item) => item === 0);
 
 new Uint8Array().findLast((item) => item === 0);
 >new Uint8Array().findLast : Symbol(Uint8Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >findLast : Symbol(Uint8Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 >item : Symbol(item, Decl(findLast.ts, 3, 27))
 >item : Symbol(item, Decl(findLast.ts, 3, 27))
@@ -117,7 +117,7 @@ new Int8Array().findLastIndex((item) => item === 0);
 
 new Uint8Array().findLastIndex((item) => item === 0);
 >new Uint8Array().findLastIndex : Symbol(Uint8Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >findLastIndex : Symbol(Uint8Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 >item : Symbol(item, Decl(findLast.ts, 17, 32))
 >item : Symbol(item, Decl(findLast.ts, 17, 32))

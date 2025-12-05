@@ -409,7 +409,7 @@ export type LoadOptionsAsyncHandler<TValue = OptionValues> = (input: string) => 
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 88, 36))
 >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
 >input : Symbol(input, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 88, 62))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >AutocompleteResult : Symbol(AutocompleteResult, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 89, 152))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 88, 36))
 
@@ -448,7 +448,7 @@ export type Options<TValue = OptionValues> = Array<Option<TValue>>;
 >Options : Symbol(Options, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 100, 1))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 20))
 >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Option : Symbol(Option, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 67))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 20))
 
@@ -713,7 +713,7 @@ export interface ValueComponentProps<TValue = OptionValues> {
 
     values?: Array<Option<TValue>>;
 >values : Symbol(ValueComponentProps.values, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 251, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Option : Symbol(Option, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 67))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 244, 37))
 }

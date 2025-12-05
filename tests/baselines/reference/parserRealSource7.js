@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class Continuation {
         public exceptionBlock = -1;
         constructor (public normalBlock: number) { }

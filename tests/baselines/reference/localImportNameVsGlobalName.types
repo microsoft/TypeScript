@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/localImportNameVsGlobalName.ts] ////
 
 === localImportNameVsGlobalName.ts ===
-module Keyboard {
+namespace Keyboard {
 >Keyboard : typeof Keyboard
 >         : ^^^^^^^^^^^^^^^
 
@@ -18,7 +18,7 @@ module Keyboard {
 >      : ^^^^^^^^^
 }
 
-module App {
+namespace App {
 >App : typeof App
 >    : ^^^^^^^^^^
 

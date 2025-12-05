@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/differentTypesWithSameName.ts] ////
 
 === differentTypesWithSameName.ts ===
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

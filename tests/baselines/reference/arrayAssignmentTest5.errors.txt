@@ -3,7 +3,7 @@ arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable 
 
 
 ==== arrayAssignmentTest5.ts (1 errors) ====
-    module Test {
+    namespace Test {
         interface IState {
         }
         interface IToken {

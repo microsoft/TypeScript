@@ -51,11 +51,11 @@ function F(x: string): number { return 42; }
 >F : Symbol(F, Decl(invalidMultipleVariableDeclarations.ts, 17, 1))
 >x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 19, 11))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
 
     export class A {
->A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+>A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(invalidMultipleVariableDeclarations.ts, 22, 20))
@@ -129,7 +129,7 @@ var arr2 = [new D<string>()];
 
 var arr2 = new Array<D<number>>();
 >arr2 : Symbol(arr2, Decl(invalidMultipleVariableDeclarations.ts, 48, 3), Decl(invalidMultipleVariableDeclarations.ts, 49, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
 
 var m: typeof M;
@@ -138,7 +138,7 @@ var m: typeof M;
 
 var m = M.A;
 >m : Symbol(m, Decl(invalidMultipleVariableDeclarations.ts, 51, 3), Decl(invalidMultipleVariableDeclarations.ts, 52, 3))
->M.A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+>M.A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 13))
 >M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
->A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+>A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 13))
 

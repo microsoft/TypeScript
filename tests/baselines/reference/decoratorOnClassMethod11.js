@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod11.ts] ////
 
 //// [decoratorOnClassMethod11.ts]
-module M {
+namespace M {
     class C {
         decorator(target: Object, key: string): void { }
 

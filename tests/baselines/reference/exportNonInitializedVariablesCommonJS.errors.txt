@@ -30,7 +30,7 @@ exportNonInitializedVariablesCommonJS.ts(3,6): error TS1123: Variable declaratio
         export let x, y, z;
     }
     
-    module C {
+    namespace C {
         export var a = 1, b, c = 2;
         export var x, y, z;
     }
