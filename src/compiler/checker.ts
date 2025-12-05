@@ -2189,7 +2189,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
-    var silentNeverIterationTypes = createIterationTypes(silentNeverType, silentNeverType, silentNeverType);
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -39230,7 +39229,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
-            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode && checkMode & ~CheckMode.SkipGenericFunctions) : undefinedWideningType;
             if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
                 yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
             }
@@ -39253,9 +39252,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, sentType: Type, isAsync: boolean): Type | undefined {
-        if (expressionType === silentNeverType) {
-            return silentNeverType;
-        }
         const errorNode = node.expression || node;
         // A `yield*` expression effectively yields everything that its operand yields
         const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar, expressionType, sentType, errorNode) : expressionType;
@@ -45859,9 +45855,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
         type = getReducedType(type);
-        if (type === silentNeverType) {
-            return silentNeverIterationTypes;
-        }
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
