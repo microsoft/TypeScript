@@ -4,7 +4,7 @@ classExtendsShadowedConstructorFunction.ts(5,21): error TS2507: Type 'number' is
 ==== classExtendsShadowedConstructorFunction.ts (1 errors) ====
     class C { foo: string; }
     
-    module M {
+    namespace M {
         var C = 1;
         class D extends C { // error, C must evaluate to constructor function
                         ~

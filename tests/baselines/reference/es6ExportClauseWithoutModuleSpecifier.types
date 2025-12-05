@@ -7,7 +7,7 @@ export class c {
 }
 export interface i {
 }
-export module m {
+export namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -23,21 +23,21 @@ export var x = 10;
 >10 : 10
 >   : ^^
 
-export module uninstantiated {
+export namespace uninstantiated {
 }
 
 === client.ts ===
-export { c } from "server";
+export { c } from "./server";
 >c : typeof import("server").c
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-export { c as c2 } from "server";
+export { c as c2 } from "./server";
 >c : typeof import("server").c
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c2 : typeof import("server").c
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-export { i, m as instantiatedModule } from "server";
+export { i, m as instantiatedModule } from "./server";
 >i : any
 >  : ^^^
 >m : typeof import("server").m
@@ -45,11 +45,11 @@ export { i, m as instantiatedModule } from "server";
 >instantiatedModule : typeof import("server").m
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-export { uninstantiated } from "server";
+export { uninstantiated } from "./server";
 >uninstantiated : any
 >               : ^^^
 
-export { x } from "server";
+export { x } from "./server";
 >x : number
 >  : ^^^^^^
 

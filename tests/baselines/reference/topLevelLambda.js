@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/topLevelLambda.ts] ////
 
 //// [topLevelLambda.ts]
-module M {
+namespace M {
 	var f = () => {this.window;}
 }
 

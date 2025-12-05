@@ -163,7 +163,7 @@ enum E20 {
     D = Math.sin(1)
 >D : Symbol(E20.D, Decl(enumClassification.ts, 75, 15))
 >Math.sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
 }
 

@@ -1063,8 +1063,8 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
  *
  * @internal
  */
-export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!Array.prototype.at
-    ? (array, offset) => array?.at(offset)
+export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!(Array.prototype as any).at
+    ? (array, offset) => (array as any)?.at(offset)
     : (array, offset) => {
         if (array !== undefined) {
             offset = toOffset(array, offset);
@@ -1623,7 +1623,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     const multiMap = new Map<THash, TElement | TElement[]>();
     let size = 0;
 
-    function* getElementIterator(): IterableIterator<TElement> {
+    function* getElementIterator(): SetIterator<TElement> {
         for (const value of multiMap.values()) {
             if (isArray(value)) {
                 yield* value;
@@ -1722,13 +1722,13 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
                 }
             }
         },
-        keys(): IterableIterator<TElement> {
+        keys(): SetIterator<TElement> {
             return getElementIterator();
         },
-        values(): IterableIterator<TElement> {
+        values(): SetIterator<TElement> {
             return getElementIterator();
         },
-        *entries(): IterableIterator<[TElement, TElement]> {
+        *entries(): SetIterator<[TElement, TElement]> {
             for (const value of getElementIterator()) {
                 yield [value, value];
             }

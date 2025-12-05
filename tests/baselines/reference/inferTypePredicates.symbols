@@ -184,7 +184,7 @@ const result = myArray
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
 >JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
 >obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
@@ -244,7 +244,7 @@ const result2 = myArray
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 64, 9))
 >JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
 >obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 64, 9))
@@ -361,7 +361,7 @@ function flakyIsString(x: string | number) {
   return typeof x === 'string' && Math.random() > 0.5;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 108, 23))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 }
 if (flakyIsString(strOrNum)) {
@@ -384,7 +384,7 @@ function isDate(x: object) {
 
   return x instanceof Date;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 117, 16))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 function flakyIsDate(x: object) {
 >flakyIsDate : Symbol(flakyIsDate, Decl(inferTypePredicates.ts, 119, 1))
@@ -392,9 +392,9 @@ function flakyIsDate(x: object) {
 
   return x instanceof Date && Math.random() > 0.5;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 120, 21))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 }
 
@@ -407,7 +407,7 @@ if (isDate(maybeDate)) {
 
   let t: Date = maybeDate;  // should ok
 >t : Symbol(t, Decl(inferTypePredicates.ts, 126, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >maybeDate : Symbol(maybeDate, Decl(inferTypePredicates.ts, 124, 11))
 
 } else {
@@ -422,7 +422,7 @@ if (flakyIsDate(maybeDate)) {
 
   let t: Date = maybeDate;  // should error
 >t : Symbol(t, Decl(inferTypePredicates.ts, 132, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >maybeDate : Symbol(maybeDate, Decl(inferTypePredicates.ts, 124, 11))
 
 } else {
@@ -440,7 +440,7 @@ function irrelevantIsNumber(x: string | number) {
 	x = Math.random() < 0.5 ? "string" : 123;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 139, 28))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
   return typeof x === 'string';
@@ -453,7 +453,7 @@ function irrelevantIsNumberDestructuring(x: string | number) {
 	[x] = [Math.random() < 0.5 ? "string" : 123];
 >x : Symbol(x, Decl(inferTypePredicates.ts, 143, 41))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
   return typeof x === 'string';
@@ -683,11 +683,11 @@ if (isNumOrStr(unk)) {
 function assertAndPredicate(x: string | number | Date) {
 >assertAndPredicate : Symbol(assertAndPredicate, Decl(inferTypePredicates.ts, 239, 1))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 242, 28))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   if (x instanceof Date) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 242, 28))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     throw new Error();
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -698,7 +698,7 @@ function assertAndPredicate(x: string | number | Date) {
 
 declare let snd: string | number | Date;
 >snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 if (assertAndPredicate(snd)) {
 >assertAndPredicate : Symbol(assertAndPredicate, Decl(inferTypePredicates.ts, 239, 1))
@@ -712,7 +712,7 @@ if (assertAndPredicate(snd)) {
 function isNumberWithThis(this: Date, x: number | string) {
 >isNumberWithThis : Symbol(isNumberWithThis, Decl(inferTypePredicates.ts, 252, 1))
 >this : Symbol(this, Decl(inferTypePredicates.ts, 254, 26))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 254, 37))
 
   return typeof x === 'number';
@@ -775,5 +775,85 @@ if (foobarPred(foobar)) {
 >foobar.foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 >foobar : Symbol(foobar, Decl(inferTypePredicates.ts, 270, 13))
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
+}
+
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+>arrTest : Symbol(arrTest, Decl(inferTypePredicates.ts, 280, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>[1, 2, null, 3].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  (x) => (x != null) satisfies boolean,
+>x : Symbol(x, Decl(inferTypePredicates.ts, 281, 3))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 281, 3))
+
+);
+
+function isEmptyString(x: unknown) {
+>isEmptyString : Symbol(isEmptyString, Decl(inferTypePredicates.ts, 282, 2))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 284, 23))
+
+  const rv = x === "";
+>rv : Symbol(rv, Decl(inferTypePredicates.ts, 285, 7))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 284, 23))
+
+  return rv satisfies boolean;
+>rv : Symbol(rv, Decl(inferTypePredicates.ts, 285, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+
+  breath: true,
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15))
+
+};
+
+type Rock = {
+>Rock : Symbol(Rock, Decl(inferTypePredicates.ts, 292, 2))
+
+  breath: false,
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 294, 13))
+
+};
+
+type Something = Animal | Rock;
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+>Rock : Symbol(Rock, Decl(inferTypePredicates.ts, 292, 2))
+
+function isAnimal(something: Something): something is Animal {
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>Animal : Symbol(Animal, Decl(inferTypePredicates.ts, 287, 1))
+
+  return something.breath
+>something.breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15), Decl(inferTypePredicates.ts, 294, 13))
+>something : Symbol(something, Decl(inferTypePredicates.ts, 300, 18))
+>breath : Symbol(breath, Decl(inferTypePredicates.ts, 290, 15), Decl(inferTypePredicates.ts, 294, 13))
+}
+
+function positive(t: Something) {
+>positive : Symbol(positive, Decl(inferTypePredicates.ts, 302, 1))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 304, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+
+  return isAnimal(t)
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 304, 18))
+}
+
+function negative(t: Something) { 
+>negative : Symbol(negative, Decl(inferTypePredicates.ts, 306, 1))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 308, 18))
+>Something : Symbol(Something, Decl(inferTypePredicates.ts, 296, 2))
+
+  return !isAnimal(t)
+>isAnimal : Symbol(isAnimal, Decl(inferTypePredicates.ts, 298, 31))
+>t : Symbol(t, Decl(inferTypePredicates.ts, 308, 18))
 }
 

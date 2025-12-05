@@ -2756,6 +2756,11 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     traceIfEnabled(state, Diagnostics.Using_0_subpath_1_with_target_2, "imports", key, combinedLookup);
                     traceIfEnabled(state, Diagnostics.Resolving_module_0_from_1, combinedLookup, scope.packageDirectory + "/");
                     const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, state.conditions);
+                    // Note: we cannot safely reassign `state.failedLookupLocations` during a request;
+                    // `nodeModuleNameResolverWorker` relies on the `state` property remaining reference-equal
+                    // to the one it initializes.
+                    state.failedLookupLocations?.push(...result.failedLookupLocations ?? emptyArray);
+                    state.affectingLocations?.push(...result.affectingLocations ?? emptyArray);
                     return toSearchResult(
                         result.resolvedModule ? {
                             path: result.resolvedModule.resolvedFileName,
@@ -2807,7 +2812,9 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetExportOrImport(subTarget, subpath, pattern, key);
                         if (result) {
-                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            if (result.value) {
+                                traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            }
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
                         }
@@ -2841,7 +2848,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_scope_0_explicitly_maps_specifier_1_to_null, scope.packageDirectory, moduleName);
             }
-            return toSearchResult(/*value*/ undefined);
+            return { value: undefined };
         }
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);
@@ -2989,7 +2996,7 @@ function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string,
 }
 
 function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const mode = state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS;
+    const mode = state.features === 0 ? undefined : (state.features & NodeResolutionFeatures.EsmMode || state.conditions.includes("import")) ? ModuleKind.ESNext : ModuleKind.CommonJS;
     // Do (up to) two passes through node_modules:
     //   1. For each ancestor node_modules directory, try to find:
     //      i.  TS/DTS files in the implementation package
@@ -3113,7 +3120,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
                 packageInfo,
             );
         if (
-            !pathAndExtension && packageInfo
+            !pathAndExtension && !rest && packageInfo
             // eslint-disable-next-line no-restricted-syntax
             && (packageInfo.contents.packageJsonContent.exports === undefined || packageInfo.contents.packageJsonContent.exports === null)
             && state.features & NodeResolutionFeatures.EsmMode

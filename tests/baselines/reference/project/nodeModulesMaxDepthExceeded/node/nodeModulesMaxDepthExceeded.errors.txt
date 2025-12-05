@@ -1,10 +1,15 @@
+maxDepthExceeded/tsconfig.json(2,3): error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 maxDepthExceeded/root.ts(3,1): error TS2322: Type 'string' is not assignable to type 'number'.
 maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a read-only property.
 
 
-==== maxDepthExceeded/tsconfig.json (0 errors) ====
+==== maxDepthExceeded/tsconfig.json (1 errors) ====
     {
       "compilerOptions": { 
+      ~~~~~~~~~~~~~~~~~
+!!! error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5107:   Visit https://aka.ms/ts6 for migration information.
         "allowJs": true,
         "maxNodeModuleJsDepth": 1, // Note: Module m1 is already included as a root file
         "outDir": "built"

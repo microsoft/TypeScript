@@ -1,4 +1,4 @@
-module Test {
+namespace Test {
     interface IState {
     }
     interface IToken {

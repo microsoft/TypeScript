@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributes.ts] ////
+
+=== index.ts ===
+import json from "./package.json" with { type: "json" };
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+=== otherc.cts ===
+import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
+>json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./package.json", { with: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./package.json" : "./package.json"
+>                 : ^^^^^^^^^^^^^^^^
+>{ with: { type: "json" } } : { with: { type: string; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "json" } : { type: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"json" : "json"
+>       : ^^^^^^
+
+=== package.json ===
+{
+>{    "name": "pkg",    "private": true,    "type": "module"} : { name: string; private: boolean; type: string; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "name": "pkg",
+>"name" : string
+>       : ^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
+
+    "private": true,
+>"private" : boolean
+>          : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    "type": "module"
+>"type" : string
+>       : ^^^^^^
+>"module" : "module"
+>         : ^^^^^^^^
+}
+

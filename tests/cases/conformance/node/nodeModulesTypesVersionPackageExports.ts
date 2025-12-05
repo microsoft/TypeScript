@@ -1,4 +1,4 @@
-// @module: node16,node18,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: index.ts
@@ -35,7 +35,7 @@ export const futureVersionApplied = true;
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 // @filename: node_modules/inner/package.json
 {
@@ -48,6 +48,6 @@ export const futureVersionApplied = true;
             "types": "./old-types.d.ts",
             "import": "./index.mjs",
             "node": "./index.js"
-        },
+        }
     }
 }

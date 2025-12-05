@@ -31,6 +31,6 @@ declarationEmitDestructuringObjectLiteralPattern.ts(6,20): error TS2353: Object 
     }
     var { a4, b4, c4 } = f15();
     
-    module m {
+    namespace m {
         export var { a4, b4, c4 } = f15();
     }

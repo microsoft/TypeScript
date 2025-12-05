@@ -14,7 +14,7 @@ interface Number {
 }
 
 interface String {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 5, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 2 more)
 
     [x: number]: string;
 >x : Symbol(x, Decl(duplicateNumericIndexers.ts, 8, 5))
@@ -24,16 +24,16 @@ interface String {
 }
 
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 10, 1))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
 
     [x: number]: T;
 >x : Symbol(x, Decl(duplicateNumericIndexers.ts, 13, 5))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
 
     [x: number]: T;
 >x : Symbol(x, Decl(duplicateNumericIndexers.ts, 14, 5))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(duplicateNumericIndexers.ts, 12, 16))
 }
 
 class C {

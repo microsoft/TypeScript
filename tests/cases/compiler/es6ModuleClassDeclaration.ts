@@ -34,7 +34,7 @@ class c2 {
 new c();
 new c2();
 
-export module m1 {
+export namespace m1 {
     export class c3 {
         constructor() {
         }
@@ -72,7 +72,7 @@ export module m1 {
     new c3();
     new c4();
 }
-module m2 {
+namespace m2 {
     export class c3 {
         constructor() {
         }

@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource8.ts, 0, 0))
 
     export class AssignScopeContext {
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         constructor (public scopeChain: ScopeChain,
 >scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
@@ -33,7 +33,7 @@ module TypeScript {
 
         context: AssignScopeContext,
 >context : Symbol(context, Decl(parserRealSource8.ts, 14, 55))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         type: Type,
 >type : Symbol(type, Decl(parserRealSource8.ts, 15, 36))
@@ -76,7 +76,7 @@ module TypeScript {
     export function popAssignScope(context: AssignScopeContext) {
 >popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
 >context : Symbol(context, Decl(parserRealSource8.ts, 27, 35))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         context.scopeChain = context.scopeChain.previous;
 >context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
@@ -90,9 +90,9 @@ module TypeScript {
     export function instanceCompare(a: Symbol, b: Symbol) {
 >instanceCompare : Symbol(instanceCompare, Decl(parserRealSource8.ts, 29, 5))
 >a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(parserRealSource8.ts, 31, 46))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         if (((a == null) || (!a.isInstanceProperty()))) {
 >a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
@@ -110,7 +110,7 @@ module TypeScript {
     export function instanceFilterStop(s: Symbol) {
 >instanceFilterStop : Symbol(instanceFilterStop, Decl(parserRealSource8.ts, 38, 5))
 >s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return s.isInstanceProperty();
 >s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
@@ -122,19 +122,19 @@ module TypeScript {
         constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
 >select : Symbol(ScopeSearchFilter.select, Decl(parserRealSource8.ts, 46, 21))
 >a : Symbol(a, Decl(parserRealSource8.ts, 46, 37))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(parserRealSource8.ts, 46, 47))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                             public stop: (s: Symbol) =>boolean) { }
 >stop : Symbol(ScopeSearchFilter.stop, Decl(parserRealSource8.ts, 46, 68))
 >s : Symbol(s, Decl(parserRealSource8.ts, 47, 42))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public result: Symbol = null;
 >result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public reset() {
 >reset : Symbol(ScopeSearchFilter.reset, Decl(parserRealSource8.ts, 49, 37))
@@ -148,7 +148,7 @@ module TypeScript {
         public update(b: Symbol): boolean {
 >update : Symbol(ScopeSearchFilter.update, Decl(parserRealSource8.ts, 53, 9))
 >b : Symbol(b, Decl(parserRealSource8.ts, 55, 22))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             this.result = this.select(this.result, b);
 >this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
@@ -192,7 +192,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 68, 42))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var moduleDecl = <ModuleDeclaration>ast;
 >moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
@@ -295,7 +295,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var classDecl = <InterfaceDeclaration>ast;
 >classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
@@ -411,7 +411,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var interfaceDecl = <InterfaceDeclaration>ast;
 >interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
@@ -480,7 +480,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 154, 40))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var withStmt = <WithStatement>ast;
 >withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
@@ -552,7 +552,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var funcDecl = <FuncDecl>ast;
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
@@ -561,11 +561,11 @@ module TypeScript {
 
         var container: Symbol = null;
 >container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var localContainer: Symbol = null;
 >localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         if (funcDecl.type) {
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
@@ -1115,7 +1115,7 @@ module TypeScript {
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 377, 41))
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 
         var catchBlock = <Catch>ast;
 >catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 378, 11))
@@ -1171,7 +1171,7 @@ module TypeScript {
 
         var context:AssignScopeContext = walker.state;
 >context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 >walker : Symbol(walker, Decl(parserRealSource8.ts, 388, 58))
 
         var go = true;
@@ -1268,7 +1268,7 @@ module TypeScript {
 
         var context:AssignScopeContext = walker.state;
 >context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
->AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 22))
 >walker : Symbol(walker, Decl(parserRealSource8.ts, 423, 59))
 
         var go = true;

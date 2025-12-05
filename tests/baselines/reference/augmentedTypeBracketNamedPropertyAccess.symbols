@@ -8,7 +8,7 @@ interface Object {
 >data : Symbol(Object.data, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 18))
 }
 interface Function {
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 2, 1))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 2, 1))
 
     functionData: string;
 >functionData : Symbol(Function.functionData, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 3, 20))

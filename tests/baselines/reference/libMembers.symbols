@@ -19,28 +19,28 @@ s.subby(12);   // error unresolved
 
 String.fromCharCode(12);
 >String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(libMembers.ts, 4, 24))
 
     export class C {
->C : Symbol(C, Decl(libMembers.ts, 5, 10))
+>C : Symbol(C, Decl(libMembers.ts, 5, 13))
     }
     var a=new C[];
 >a : Symbol(a, Decl(libMembers.ts, 8, 7))
->C : Symbol(C, Decl(libMembers.ts, 5, 10))
+>C : Symbol(C, Decl(libMembers.ts, 5, 13))
 
     a.length;
 >a : Symbol(a, Decl(libMembers.ts, 8, 7))
 
     a.push(new C());
 >a : Symbol(a, Decl(libMembers.ts, 8, 7))
->C : Symbol(C, Decl(libMembers.ts, 5, 10))
+>C : Symbol(C, Decl(libMembers.ts, 5, 13))
 
     (new C()).prototype;
->C : Symbol(C, Decl(libMembers.ts, 5, 10))
+>C : Symbol(C, Decl(libMembers.ts, 5, 13))
 }
 
 

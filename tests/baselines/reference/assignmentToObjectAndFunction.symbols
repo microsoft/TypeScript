@@ -20,12 +20,12 @@ var goodObj: Object = {
 
 var errFun: Function = {}; // Error for no call signature
 >errFun : Symbol(errFun, Decl(assignmentToObjectAndFunction.ts, 7, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function foo() { }
 >foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
 
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
 
     export var boom = 0;
@@ -34,30 +34,30 @@ module foo {
 
 var goodFundule: Function = foo; // ok
 >goodFundule : Symbol(goodFundule, Decl(assignmentToObjectAndFunction.ts, 14, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
 
 function bar() { }
 >bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
 
-module bar {
+namespace bar {
 >bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
 
     export function apply(thisArg: string, argArray?: string) { }
->apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 17, 12))
+>apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 17, 15))
 >thisArg : Symbol(thisArg, Decl(assignmentToObjectAndFunction.ts, 18, 26))
 >argArray : Symbol(argArray, Decl(assignmentToObjectAndFunction.ts, 18, 42))
 }
 
 var goodFundule2: Function = bar; // ok
 >goodFundule2 : Symbol(goodFundule2, Decl(assignmentToObjectAndFunction.ts, 21, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
 
 function bad() { }
 >bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
 
-module bad {
+namespace bad {
 >bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
 
     export var apply = 0;
@@ -66,6 +66,6 @@ module bad {
 
 var badFundule: Function = bad; // error
 >badFundule : Symbol(badFundule, Decl(assignmentToObjectAndFunction.ts, 28, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
 

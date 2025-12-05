@@ -50,7 +50,7 @@ incrementOperatorWithUnsupportedStringType.ts(65,11): error TS2356: An arithmeti
         public a: string;
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     

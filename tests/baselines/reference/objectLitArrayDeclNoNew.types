@@ -9,7 +9,7 @@ declare var console;
 >"use strict" : "use strict"
 >             : ^^^^^^^^^^^^
 
-module Test {
+namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 

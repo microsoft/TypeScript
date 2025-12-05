@@ -1,5 +1,9 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: /a.ts
 ////export default function ad() {}
 ////export const a0 = 0;

@@ -26,8 +26,11 @@ function fn(sliceIndex) {
 exports.default = { fn: fn };
 //// [reexport.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var types_1 = require("./types");
+var types_1 = __importDefault(require("./types"));
 exports.default = { test: types_1.default };
 
 
@@ -52,10 +55,10 @@ declare const _default: {
         fn: <T extends {
             x: T["x"] extends infer T_1 extends {
                 [x: string]: (...params: unknown[]) => unknown;
-            } ? { [K in keyof T_1]: T["x"][K]; } : never;
+            } ? { [K in keyof T_1]: T_1[K]; } : never;
         }>(sliceIndex: T) => T["x"] extends infer T_2 extends {
             [x: string]: (...params: unknown[]) => unknown;
-        } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never;
+        } ? { [K_1 in keyof T_2]: Parameters<T_2[K_1]>; } : never;
     };
 };
 export default _default;
