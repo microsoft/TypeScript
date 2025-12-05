@@ -2368,6 +2368,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var reverseMappedSourceStack: Type[] = [];
     var reverseMappedTargetStack: Type[] = [];
     var reverseExpandingFlags = ExpandingFlags.None;
+    var reversePartialHomomorphicInferrableTypes = new Map<number, Type>();
 
     var diagnostics = createDiagnosticCollection();
     var suggestionDiagnostics = createDiagnosticCollection();
@@ -14663,6 +14664,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
             inferredProp.declarations = prop.declarations;
             inferredProp.valueDeclaration = prop.valueDeclaration;
+            inferredProp.links.reverseMappedType = type;
             inferredProp.links.nameType = getSymbolLinks(prop).nameType;
             inferredProp.links.propertyType = getTypeOfSymbol(prop);
             if (
@@ -26408,6 +26410,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
+    function isPartialHomomorphicReverseMappedType(type: Type | undefined): boolean {
+        return !!(type && getObjectFlags(type) & ObjectFlags.ReverseMapped && getObjectFlags((type as ReverseMappedType).source) & ObjectFlags.NonInferrableType);
+    }
+
     function createReverseMappedType(source: Type, target: MappedType, constraint: IndexType) {
         // We consider a source type reverse mappable if it has a string index signature or if
         // it has one or more properties
@@ -26445,7 +26451,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType, symbol.valueDeclaration) || unknownType;
+            const declaration = symbol.valueDeclaration;
+            let source = symbol.links.propertyType;
+            if (declaration && getObjectFlags(source) & ObjectFlags.NonInferrableType) {
+                const inferrableSource = reversePartialHomomorphicInferrableTypes.get(symbol.links.reverseMappedType.id);
+                if (inferrableSource) {
+                    const name = getSymbolOfDeclaration(declaration).escapedName;
+                    const prop = getPropertyOfType(inferrableSource, name);
+                    if (prop) {
+                        source = getTypeOfSymbol(prop);
+                    }
+                }
+            }
+            links.type = inferReverseMappedType(source, symbol.links.mappedType, symbol.links.constraintType, declaration) || unknownType;
         }
         return links.type;
     }
@@ -26454,17 +26472,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
-        if (sourceValueDeclaration && getObjectFlags(sourceType) & ObjectFlags.NonInferrableType) {
-            const scopeNode = sourceValueDeclaration.parent;
-            const nonContextSensitiveScopeType = getNodeLinks(scopeNode).nonContextSensitiveType;
-            if (nonContextSensitiveScopeType) {
-                const name = getSymbolOfDeclaration(sourceValueDeclaration).escapedName;
-                const prop = getPropertyOfType(nonContextSensitiveScopeType, name);
-                if (prop) {
-                    sourceType = getTypeOfSymbol(prop);
-                }
-            }
-        }
         inferTypes([inference], sourceType, templateType);
         if (sourceValueDeclaration && getObjectFlags(sourceType) & ObjectFlags.NonInferrableType) {
             const scopeNode = sourceValueDeclaration.parent;
@@ -27195,7 +27202,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // type and then make a secondary inference from that type to T. We make a secondary inference
                 // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                 const inference = getInferenceInfoForType((constraintType as IndexType).type);
-                if (inference && !inference.isFixed && !isFromInferenceBlockedSource(source)) {
+                if (inference && (!inference.isFixed || isPartialHomomorphicReverseMappedType(inference.inferredType)) && !isFromInferenceBlockedSource(source)) {
+                    if (inference.isFixed) {
+                        if ((inference.inferredType as ReverseMappedType).source.symbol.valueDeclaration === source.symbol.valueDeclaration) {
+                            reversePartialHomomorphicInferrableTypes.set((inference.inferredType as ReverseMappedType).id, source);
+                        }
+                        return true;
+                    }
                     const inferredType = inferTypeForHomomorphicMappedType(source, target, constraintType as IndexType);
                     if (inferredType) {
                         // We assign a lower priority to inferences made from types containing non-inferrable
@@ -33499,7 +33512,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const intraExpressionInferenceContext = contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) ? getInferenceContext(node) : undefined;
-        const isReverseMappedScopeNode = (intraExpressionInferenceContext && some(intraExpressionInferenceContext.inferences, hasReverseMappedCandidate)) || false;
 
         let offset = 0;
         for (const memberDecl of node.properties) {
@@ -33512,14 +33524,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isObjectLiteralMethod(memberDecl)
             ) {
                 const isIntraExpressionInferenceSource = intraExpressionInferenceContext && (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl);
-                if (isReverseMappedScopeNode) {
+                if (isIntraExpressionInferenceSource) {
                     // this object literal is a potential source for reverse mapped type inference
                     // so we push it onto the reverse mapped intra-expression inference scope stack
                     // that makes `addIntraExpressionInferenceSite` called when checking expressions *contained in* this member
                     // to collect intra-expression inference sites for the potential reverse mapped type symbol originating from this member
                     // the member's type itself wouldn't contribute to intra-expression inference
                     // as there wouldn't be any "earlier" (in source order) expressions able to "consume" this type through contextual parameter assignment
-                    pushReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext!, node);
+                    pushReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext, node);
                 }
                 let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
                     // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
@@ -33527,8 +33539,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // we don't want to say "could not find 'a'".
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
                     checkObjectLiteralMethod(memberDecl, checkMode);
-                if (isReverseMappedScopeNode) {
-                    popReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext!);
+                if (isIntraExpressionInferenceSource) {
+                    popReverseMappedTypeIntraExpressionInferenceScope(intraExpressionInferenceContext);
                 }
                 if (isInJavascript) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
@@ -33661,13 +33673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return mapType(spread, t => t === emptyObjectType ? createObjectLiteralType() : t);
         }
 
-        const type = createObjectLiteralType();
-
-        if (isReverseMappedScopeNode) {
-            getNodeLinks(node).nonContextSensitiveType = type;
-        }
-
-        return type;
+        return createObjectLiteralType();
 
         function createObjectLiteralType() {
             const indexInfos = [];
@@ -41587,10 +41593,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function hasInferenceCandidatesOrDefault(info: InferenceInfo) {
         return !!(info.candidates || info.contraCandidates || hasTypeParameterDefault(info.typeParameter));
-    }
-
-    function hasReverseMappedCandidate(info: InferenceInfo) {
-        return some(info.candidates, t => !!(getObjectFlags(t) & ObjectFlags.ReverseMapped));
     }
 
     function hasOverlappingInferences(a: InferenceInfo[], b: InferenceInfo[]) {
