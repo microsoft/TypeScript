@@ -1,0 +1,40 @@
+discriminatedUnionIncompatibleMemberMessage.ts(12,7): error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+  Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+discriminatedUnionIncompatibleMemberMessage.ts(17,7): error TS2322: Type '{ discriminator: UnionType2; }' is not assignable to type 'Discriminated'.
+  Type '{ discriminator: UnionType2; }' is not assignable to type 'Discriminated'. The type(s) '"baz" | "qux"' are not present in the discriminator 'discriminator' of the target.
+discriminatedUnionIncompatibleMemberMessage.ts(20,7): error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+  Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+
+
+==== discriminatedUnionIncompatibleMemberMessage.ts (3 errors) ====
+    // Test case for issue #62737: Show incompatible union members in discriminated union discriminator errors
+    
+    type Discriminated =
+      | { discriminator: "foo" }
+      | { discriminator: "bar" };
+    
+    type UnionType = "foo" | "bar" | "baz";
+    
+    const obj = { discriminator: "foo" as UnionType };
+    
+    // This error should identify "baz" as the problematic type, not "foo"
+    const err: Discriminated = obj;
+          ~~~
+!!! error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+!!! error TS2322:   Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+    
+    // Additional test case with multiple incompatible members
+    type UnionType2 = "foo" | "bar" | "baz" | "qux";
+    const obj2 = { discriminator: "foo" as UnionType2 };
+    const err2: Discriminated = obj2;
+          ~~~~
+!!! error TS2322: Type '{ discriminator: UnionType2; }' is not assignable to type 'Discriminated'.
+!!! error TS2322:   Type '{ discriminator: UnionType2; }' is not assignable to type 'Discriminated'. The type(s) '"baz" | "qux"' are not present in the discriminator 'discriminator' of the target.
+    
+    // Test case with expected error (expectedError reference)
+    const expectedError: Discriminated = { discriminator: "foo" } as { discriminator: UnionType };
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+!!! error TS2322:   Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+    
+    

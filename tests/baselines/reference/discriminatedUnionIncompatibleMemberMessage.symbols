@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/discriminatedUnionIncompatibleMemberMessage.ts] ////
+
+=== discriminatedUnionIncompatibleMemberMessage.ts ===
+// Test case for issue #62737: Show incompatible union members in discriminated union discriminator errors
+
+type Discriminated =
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 0, 0))
+
+  | { discriminator: "foo" }
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 3, 5))
+
+  | { discriminator: "bar" };
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 4, 5))
+
+type UnionType = "foo" | "bar" | "baz";
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 4, 29))
+
+const obj = { discriminator: "foo" as UnionType };
+>obj : Symbol(obj, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 8, 5))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 8, 13))
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 4, 29))
+
+// This error should identify "baz" as the problematic type, not "foo"
+const err: Discriminated = obj;
+>err : Symbol(err, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 11, 5))
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 0, 0))
+>obj : Symbol(obj, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 8, 5))
+
+// Additional test case with multiple incompatible members
+type UnionType2 = "foo" | "bar" | "baz" | "qux";
+>UnionType2 : Symbol(UnionType2, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 11, 31))
+
+const obj2 = { discriminator: "foo" as UnionType2 };
+>obj2 : Symbol(obj2, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 15, 5))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 15, 14))
+>UnionType2 : Symbol(UnionType2, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 11, 31))
+
+const err2: Discriminated = obj2;
+>err2 : Symbol(err2, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 16, 5))
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 0, 0))
+>obj2 : Symbol(obj2, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 15, 5))
+
+// Test case with expected error (expectedError reference)
+const expectedError: Discriminated = { discriminator: "foo" } as { discriminator: UnionType };
+>expectedError : Symbol(expectedError, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 19, 5))
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 0, 0))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 19, 38))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 19, 66))
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberMessage.ts, 4, 29))
+
+
