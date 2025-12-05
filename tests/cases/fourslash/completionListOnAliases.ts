@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module M {
+////namespace M {
 ////    export var value;
 ////
 ////    import x = M;

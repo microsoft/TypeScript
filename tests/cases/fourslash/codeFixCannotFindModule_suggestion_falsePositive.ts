@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @resolveJsonModule: true
 // @strict: true
 

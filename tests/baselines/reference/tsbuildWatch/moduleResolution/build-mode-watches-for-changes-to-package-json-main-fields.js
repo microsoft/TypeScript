@@ -51,7 +51,6 @@ export type TheStr = string;
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -80,18 +79,27 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+[96mpackages/pkg2/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -112,14 +120,15 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -151,7 +160,7 @@ export type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -169,11 +178,11 @@ export type TheStr = string;
   "fileInfos": {
     "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../const.ts": {
@@ -223,9 +232,27 @@ export type TheStr = string;
       "../const.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../const.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../index.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../other.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./other.d.ts",
   "version": "FakeTSVersion",
-  "size": 1128
+  "size": 1127
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -250,6 +277,8 @@ exports.theNum = 42;
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
@@ -291,11 +320,7 @@ Program files::
 /user/username/projects/myproject/packages/pkg2/index.ts
 /user/username/projects/myproject/packages/pkg2/other.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/packages/pkg2/const.ts
-/user/username/projects/myproject/packages/pkg2/index.ts
-/user/username/projects/myproject/packages/pkg2/other.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -362,8 +387,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -387,7 +414,13 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mpackages/pkg2/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -461,8 +494,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
@@ -483,14 +518,21 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mpackages/pkg2/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

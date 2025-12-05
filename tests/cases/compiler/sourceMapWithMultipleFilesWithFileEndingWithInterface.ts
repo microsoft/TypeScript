@@ -1,7 +1,7 @@
 // @outFile: fooResult.js
 // @sourcemap: true
 // @Filename: a.ts
-module M {
+namespace M {
     export var X = 1;
 }
 interface Navigator {
@@ -12,7 +12,7 @@ interface Navigator {
 }
 
 // @Filename: b.ts
-module m1 {
+namespace m1 {
     export class c1 {
     }
 }

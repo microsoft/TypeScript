@@ -19,7 +19,7 @@
 //// }
 
 // @Filename: inputFile3.ts
-//// export module M {
+//// export namespace M {
 //// 	class C {c}
 //// }
 

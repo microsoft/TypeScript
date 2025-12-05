@@ -12,14 +12,13 @@ var greeter = new model.Greeter(el);
 greeter.start();
 
 //// [copyrightWithNewLine1.js]
+"use strict";
 /*****************************
 * (c) Copyright - Important
 ****************************/
-define(["require", "exports", "./greeter"], function (require, exports, model) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var el = document.getElementById('content');
-    var greeter = new model.Greeter(el);
-    /** things */
-    greeter.start();
-});
+Object.defineProperty(exports, "__esModule", { value: true });
+var model = require("./greeter");
+var el = document.getElementById('content');
+var greeter = new model.Greeter(el);
+/** things */
+greeter.start();

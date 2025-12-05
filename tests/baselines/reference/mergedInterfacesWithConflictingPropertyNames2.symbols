@@ -15,11 +15,11 @@ interface A {
 >x : Symbol(A.x, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 0, 13), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 4, 13))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 6, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 8, 10), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 11, 5))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 8, 13), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 11, 5))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 9, 16), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 13, 16))
 
         x: T;
@@ -28,7 +28,7 @@ module M {
     }
 
     interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 8, 10), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 11, 5))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 8, 13), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 11, 5))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 9, 16), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 13, 16))
 
         x: T;  // error
@@ -37,11 +37,11 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 16, 1), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 22, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 18, 11))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 18, 14))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 19, 16))
 
         x: T;
@@ -50,11 +50,11 @@ module M2 {
     }   
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 16, 1), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 22, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 24, 11))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 24, 14))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 25, 16))
 
         x: T;  // ok, different declaration space than other M2
@@ -63,11 +63,11 @@ module M2 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 28, 1), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 34, 1))
 
     export interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 30, 11), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 36, 11))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 30, 14), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 36, 14))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 31, 23), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 37, 23))
 
         x: T;
@@ -76,11 +76,11 @@ module M3 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 28, 1), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 34, 1))
 
     export interface A<T> {
->A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 30, 11), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 36, 11))
+>A : Symbol(A, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 30, 14), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 36, 14))
 >T : Symbol(T, Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 31, 23), Decl(mergedInterfacesWithConflictingPropertyNames2.ts, 37, 23))
 
         x: T;  // error

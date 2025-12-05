@@ -31,7 +31,6 @@ import * as xs4 from "./struct";
 export function foo(): void
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -89,8 +88,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/fp-ts/lib/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/fp-ts/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
@@ -103,7 +106,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts Text-1 "export function foo(): void"
 	/home/src/projects/project/src/Struct.d.ts SVC-1-0 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
 	/home/src/projects/project/src/anotherFile.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
@@ -161,7 +164,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 3,
-            "dtsSize": 588,
+            "dtsSize": 549,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -231,6 +234,10 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/projects: *new*
+  {}
+/home/src/projects/project: *new*
+  {}
 /home/src/projects/project/src/anotherFile.ts: *new*
   {}
 /home/src/projects/project/src/oneMore.ts: *new*
@@ -694,7 +701,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts Text-1 "export function foo(): void"
 	/home/src/projects/project/src/Struct.d.ts SVC-1-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n\nexport const y = 10;"
 	/home/src/projects/project/src/anotherFile.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
@@ -846,7 +853,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts Text-1 "export function foo(): void"
 	/home/src/projects/project/src/Struct.d.ts SVC-1-2 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n\nexport const y = 10;\nexport const yy = 10;"
 	/home/src/projects/project/src/anotherFile.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
@@ -1260,7 +1267,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts Text-1 "export function foo(): void"
 	/home/src/projects/project/src/Struct.d.ts SVC-1-3 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\n"
 	/home/src/projects/project/src/anotherFile.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
@@ -1389,7 +1396,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts Text-1 "export function foo(): void"
 	/home/src/projects/project/src/Struct.d.ts SVC-1-4 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs3 from \"./struct\";\n"
 	/home/src/projects/project/src/anotherFile.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"

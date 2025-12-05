@@ -7,7 +7,7 @@ import * as React from "react";
 
 type React18ReactFragment = ReadonlyArray<React18ReactNode>;
 >React18ReactFragment : Symbol(React18ReactFragment, Decl(jsxElementType.tsx, 1, 31))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
 
 type React18ReactNode =
@@ -30,7 +30,7 @@ type React18ReactNode =
   | null
   | undefined
   | Promise<React18ReactNode>;
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
 
 // // React.JSXElementConstructor but it now can return React nodes from function components.

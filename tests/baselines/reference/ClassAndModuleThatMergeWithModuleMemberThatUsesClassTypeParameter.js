@@ -9,7 +9,7 @@ class clodule1<T>{
     value: T;
 }
 
-module clodule1 {
+namespace clodule1 {
     function f(x: T) { }
 }
 
@@ -19,7 +19,7 @@ class clodule2<T>{
     value: T;
 }
 
-module clodule2 {
+namespace clodule2 {
     var x: T;
 
     class D<U extends T>{
@@ -34,7 +34,7 @@ class clodule3<T>{
     value: T;
 }
 
-module clodule3 {
+namespace clodule3 {
     export var y = { id: T };
 }
 
@@ -44,7 +44,7 @@ class clodule4<T>{
     value: T;
 }
 
-module clodule4 {
+namespace clodule4 {
     class D {
         name: T;
     }

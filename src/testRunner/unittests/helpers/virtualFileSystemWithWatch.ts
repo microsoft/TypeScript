@@ -72,8 +72,7 @@ import {
 
 export const libFile: File = {
     path: getPathForTypeScriptTestLocation("lib.d.ts"),
-    content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
+    content: `interface Boolean {}
 interface Function {}
 interface CallableFunction {}
 interface NewableFunction {}

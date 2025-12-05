@@ -12,7 +12,7 @@ ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStati
 !!! error TS2300: Duplicate identifier 'fn'.
     }
     
-    module clodule {
+    namespace clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
                         ~~

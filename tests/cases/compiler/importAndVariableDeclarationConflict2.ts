@@ -1,4 +1,4 @@
-module m {
+namespace m {
   export var m = '';
 }
 

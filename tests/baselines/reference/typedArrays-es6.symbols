@@ -38,7 +38,7 @@ const int8Array = new Int8Array(1);
 
 const nodeList = new NodeList();
 >nodeList : Symbol(nodeList, Decl(typedArrays-es6.ts, 15, 5))
->NodeList : Symbol(NodeList, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.iterable.d.ts, --, --))
+>NodeList : Symbol(NodeList, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 [...nodeList];
 >nodeList : Symbol(nodeList, Decl(typedArrays-es6.ts, 15, 5))

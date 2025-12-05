@@ -4,7 +4,7 @@ class Sammy {
     return -1;
    }
 }
-module Sammy {
+namespace Sammy {
     export var x = 1;
 }
 interface JQueryStatic {

@@ -1,5 +1,9 @@
 //// [tests/cases/conformance/classes/mixinAccessors1.ts] ////
 
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 2,500
+
 === mixinAccessors1.ts ===
 // https://github.com/microsoft/TypeScript/issues/58790
 

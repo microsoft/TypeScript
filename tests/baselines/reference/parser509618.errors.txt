@@ -2,7 +2,7 @@ parser509618.ts(2,20): error TS1036: Statements are not allowed in ambient conte
 
 
 ==== parser509618.ts (1 errors) ====
-    declare module ambiModule {
+    declare namespace ambiModule {
        interface i1 { };
                        ~
 !!! error TS1036: Statements are not allowed in ambient contexts.

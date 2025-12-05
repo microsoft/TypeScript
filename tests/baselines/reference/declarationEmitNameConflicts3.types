@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
 
 === declarationEmitNameConflicts3.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
     export interface D { }
-    export module D {
+    export namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -14,7 +14,7 @@ module M {
 >f : () => void
 >  : ^^^^^^^^^^
     }
-    export module C {
+    export namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -22,7 +22,7 @@ module M {
 >f : () => void
 >  : ^^^^^^^^^^
     }
-    export module E {
+    export namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -32,7 +32,7 @@ module M {
     }
 }
 
-module M.P {
+namespace M.P {
 >M : typeof M
 >  : ^^^^^^^^
 >P : typeof P

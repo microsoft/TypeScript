@@ -15,18 +15,18 @@ interface I {
 >y : Symbol(I.y, Decl(extension.ts, 4, 13))
 }
 
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
 
     export class C {
->C : Symbol(C, Decl(extension.ts, 8, 18))
+>C : Symbol(C, Decl(extension.ts, 8, 21))
 
         public p:number;
 >p : Symbol(C.p, Decl(extension.ts, 9, 20))
     }
 }
 
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
 
     export extension class C {
@@ -39,9 +39,9 @@ declare module M {
 
 var c=new M.C();
 >c : Symbol(c, Decl(extension.ts, 20, 3))
->M.C : Symbol(M.C, Decl(extension.ts, 8, 18))
+>M.C : Symbol(M.C, Decl(extension.ts, 8, 21))
 >M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
->C : Symbol(M.C, Decl(extension.ts, 8, 18))
+>C : Symbol(M.C, Decl(extension.ts, 8, 21))
 
 c.pe;
 >c : Symbol(c, Decl(extension.ts, 20, 3))

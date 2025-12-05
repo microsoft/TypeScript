@@ -2,8 +2,8 @@
 
 // @BaselineFile: bpSpan_typealias.baseline
 // @Filename: bpSpan_typealias.ts
-////module m2 {
-////    module m {
+////namespace m2 {
+////    namespace m {
 ////        export class c {
 ////        }
 ////    }

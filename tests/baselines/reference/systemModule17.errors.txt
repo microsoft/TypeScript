@@ -1,0 +1,41 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== f1.ts (0 errors) ====
+    export class A {}
+    export interface I {}
+    
+==== f2.ts (0 errors) ====
+    var x = 1;
+    interface I { }
+    
+    namespace N {
+    	export var x = 1;
+    	export interface I { }	
+    }
+    
+    import IX = N.x;
+    import II = N.I;
+    import { A, A as EA, I as EI } from "f1";
+    
+    export {x};
+    export {x as x1};
+    
+    export {I};
+    export {I as I1};
+    
+    export {A};
+    export {A as A1};
+    
+    export {EA};
+    export {EA as EA1};
+    
+    export {EI };
+    export {EI as EI1};
+    
+    export {IX};
+    export {IX as IX1};
+    
+    export {II};
+    export {II as II1};

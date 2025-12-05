@@ -5,7 +5,7 @@ declare function _<T>(value: Array<T>): _<T>;
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
 >value : Symbol(value, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 22))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))
@@ -18,11 +18,11 @@ declare function _<T>(value: T): _<T>;
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 19))
 
-declare module _ {
+declare namespace _ {
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
 
     export function each<T>(
->each : Symbol(each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 3, 18))
+>each : Symbol(each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 3, 21))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 4, 25))
 
         //list: List<T>,
@@ -58,11 +58,11 @@ declare class _<T> {
 >context : Symbol(context, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 15, 43))
 }
 
-module MyModule { 
+namespace MyModule { 
 >MyModule : Symbol(MyModule, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 16, 1))
 
     export class MyClass {
->MyClass : Symbol(MyClass, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 18, 17))
+>MyClass : Symbol(MyClass, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 18, 20))
 
         public get myGetter() {
 >myGetter : Symbol(MyClass.myGetter, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 19, 26))
