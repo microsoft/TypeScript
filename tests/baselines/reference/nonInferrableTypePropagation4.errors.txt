@@ -1,0 +1,92 @@
+nonInferrableTypePropagation4.ts(15,22): error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: unknown; }>'.
+  Type 'P<unknown>' is not assignable to type 'P<{ default: unknown; }>'.
+    Type 'unknown' is not assignable to type '{ default: unknown; }'.
+nonInferrableTypePropagation4.ts(25,22): error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<WithDefault<unknown>>'.
+  Type 'P<unknown>' is not assignable to type 'P<WithDefault<unknown>>'.
+    Type 'unknown' is not assignable to type 'WithDefault<unknown>'.
+nonInferrableTypePropagation4.ts(33,22): error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<[unknown]>'.
+  Type 'P<unknown>' is not assignable to type 'P<[unknown]>'.
+    Type 'unknown' is not assignable to type '[unknown]'.
+nonInferrableTypePropagation4.ts(41,22): error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: { prop: unknown; }; }>'.
+  Type 'P<unknown>' is not assignable to type 'P<{ default: { prop: unknown; }; }>'.
+    Type 'unknown' is not assignable to type '{ default: { prop: unknown; }; }'.
+nonInferrableTypePropagation4.ts(49,22): error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: [unknown]; }>'.
+  Type 'P<unknown>' is not assignable to type 'P<{ default: [unknown]; }>'.
+    Type 'unknown' is not assignable to type '{ default: [unknown]; }'.
+
+
+==== nonInferrableTypePropagation4.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/62345
+    
+    interface P<T> {
+      then: (onfulfilled: (value: T) => unknown) => unknown;
+    }
+    
+    interface PConstructor {
+      new <T>(executor: (resolve: (value: T) => void) => void): P<T>;
+    }
+    
+    declare var P: PConstructor;
+    
+    declare function foo1<T>(x: () => P<{ default: T }>): T;
+    
+    const result1 = foo1(() => {
+                         ~~~~~~~
+!!! error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: unknown; }>'.
+!!! error TS2345:   Type 'P<unknown>' is not assignable to type 'P<{ default: unknown; }>'.
+!!! error TS2345:     Type 'unknown' is not assignable to type '{ default: unknown; }'.
+      return new P((resolve) => {
+        resolve;
+      });
+    });
+    
+    type WithDefault<T> = { default: T };
+    
+    declare function foo2<T>(x: () => P<WithDefault<T>>): T;
+    
+    const result2 = foo2(() => {
+                         ~~~~~~~
+!!! error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<WithDefault<unknown>>'.
+!!! error TS2345:   Type 'P<unknown>' is not assignable to type 'P<WithDefault<unknown>>'.
+!!! error TS2345:     Type 'unknown' is not assignable to type 'WithDefault<unknown>'.
+      return new P((resolve) => {
+        resolve;
+      });
+    });
+    
+    declare function foo3<T>(x: () => P<[T]>): T;
+    
+    const result3 = foo3(() => {
+                         ~~~~~~~
+!!! error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<[unknown]>'.
+!!! error TS2345:   Type 'P<unknown>' is not assignable to type 'P<[unknown]>'.
+!!! error TS2345:     Type 'unknown' is not assignable to type '[unknown]'.
+      return new P((resolve) => {
+        resolve;
+      });
+    });
+    
+    declare function foo4<T>(x: () => P<{ default: { prop: T } }>): T;
+    
+    const result4 = foo4(() => {
+                         ~~~~~~~
+!!! error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: { prop: unknown; }; }>'.
+!!! error TS2345:   Type 'P<unknown>' is not assignable to type 'P<{ default: { prop: unknown; }; }>'.
+!!! error TS2345:     Type 'unknown' is not assignable to type '{ default: { prop: unknown; }; }'.
+      return new P((resolve) => {
+        resolve;
+      });
+    });
+    
+    declare function foo5<T>(x: () => P<{ default: [T] }>): T;
+    
+    const result5 = foo5(() => {
+                         ~~~~~~~
+!!! error TS2345: Argument of type '() => P<unknown>' is not assignable to parameter of type '() => P<{ default: [unknown]; }>'.
+!!! error TS2345:   Type 'P<unknown>' is not assignable to type 'P<{ default: [unknown]; }>'.
+!!! error TS2345:     Type 'unknown' is not assignable to type '{ default: [unknown]; }'.
+      return new P((resolve) => {
+        resolve;
+      });
+    });
+    
