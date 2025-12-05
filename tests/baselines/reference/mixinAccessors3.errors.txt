@@ -1,0 +1,25 @@
+mixinAccessors3.ts(15,7): error TS2611: 'name' is defined as a property in class 'mixin<typeof BaseClass>.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
+
+
+==== mixinAccessors3.ts (1 errors) ====
+    function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+      return class extends superclass {
+        get name() {
+          return "";
+        }
+      };
+    }
+    
+    class BaseClass {
+      set name(v: string) {}
+    }
+    
+    // error
+    class MyClass extends mixin(BaseClass) { 
+      get name() {
+          ~~~~
+!!! error TS2611: 'name' is defined as a property in class 'mixin<typeof BaseClass>.(Anonymous class) & BaseClass', but is overridden here in 'MyClass' as an accessor.
+        return "";
+      }
+    }
+    

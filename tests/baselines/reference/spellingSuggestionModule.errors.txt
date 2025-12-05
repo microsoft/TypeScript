@@ -14,9 +14,9 @@ spellingSuggestionModule.ts(8,1): error TS2552: Cannot find name 'faroo'. Did yo
     ~~~~~~
 !!! error TS2304: Cannot find name 'barfoo'.
     
-    declare module farboo { export const x: number; }
+    declare namespace farboo { export const x: number; }
     faroo;
     ~~~~~
 !!! error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
-!!! related TS2728 spellingSuggestionModule.ts:7:16: 'farboo' is declared here.
+!!! related TS2728 spellingSuggestionModule.ts:7:19: 'farboo' is declared here.
     

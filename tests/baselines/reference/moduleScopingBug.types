@@ -37,7 +37,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 

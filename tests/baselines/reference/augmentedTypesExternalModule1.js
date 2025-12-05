@@ -3,7 +3,7 @@
 //// [augmentedTypesExternalModule1.ts]
 export var a = 1;
 class c5 { public foo() { } }
-module c5 { } // should be ok everywhere
+namespace c5 { } // should be ok everywhere
 
 //// [augmentedTypesExternalModule1.js]
 define(["require", "exports"], function (require, exports) {

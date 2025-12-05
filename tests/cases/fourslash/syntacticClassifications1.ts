@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 //// // comment
-//// module M {
+//// namespace M {
 ////     var v = 0 + 1;
 ////     var s = "string";
 ////
@@ -14,14 +14,14 @@
 ////     interface I {
 ////     }
 ////
-////     module M1.M2 {
+////     namespace M1.M2 {
 ////     }
 //// }
 
 const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("// comment"),
-    c.keyword("module"), c.moduleName("M"), c.punctuation("{"),
+    c.keyword("namespace"), c.moduleName("M"), c.punctuation("{"),
         c.keyword("var"), c.identifier("v"), c.operator("="), c.numericLiteral("0"), c.operator("+"), c.numericLiteral("1"), c.punctuation(";"),
         c.keyword("var"), c.identifier("s"), c.operator("="), c.stringLiteral('"string"'), c.punctuation(";"),
         c.keyword("class"), c.className("C"), c.punctuation("<"), c.typeParameterName("T"), c.punctuation(">"), c.punctuation("{"),
@@ -30,7 +30,7 @@ verify.syntacticClassificationsAre(
         c.punctuation("}"),
         c.keyword("interface"), c.interfaceName("I"), c.punctuation("{"),
         c.punctuation("}"),
-        c.keyword("module"), c.moduleName("M1"), c.punctuation("."), c.moduleName("M2"), c.punctuation("{"),
+        c.keyword("namespace"), c.moduleName("M1"), c.punctuation("."), c.moduleName("M2"), c.punctuation("{"),
         c.punctuation("}"),
     c.punctuation("}"));
 

@@ -1,0 +1,57 @@
+c:/root/src/tsconfig.json(2,5): error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+c:/root/src/tsconfig.json(3,9): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== c:/root/src/tsconfig.json (2 errors) ====
+    {
+        "compilerOptions": {
+        ~~~~~~~~~~~~~~~~~
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+            "baseUrl": "../",
+            ~~~~~~~~~
+!!! error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5101:   Visit https://aka.ms/ts6 for migration information.
+            "paths": {
+                "*": [
+                    "*",
+                    "c:/shared/*"
+                ],
+                "templates/*": [
+                    "generated/src/templates/*"
+                ]
+            },
+            "rootDirs": [
+                ".",
+                "../generated/src"
+            ]
+        }
+    }
+    
+==== c:/root/src/file1.ts (0 errors) ====
+    import {x} from "./project/file2";
+    import {y} from "module3";
+    
+    declare function use(x: string);
+    use(x.toFixed());
+    use(y.toFixed());
+    
+==== c:/root/src/file3.d.ts (0 errors) ====
+    export let x: number;
+    
+==== c:/root/generated/src/project/file2.ts (0 errors) ====
+    import {a} from "module1";
+    import {b} from "templates/module2";
+    import {x as c} from "../file3";
+    export let x = a + b + c;
+    
+==== c:/shared/module1.d.ts (0 errors) ====
+    export let a: number
+    
+==== c:/root/generated/src/templates/module2.ts (0 errors) ====
+    export let b: number;
+    
+==== c:/module3.d.ts (0 errors) ====
+    export let y: number;
+    
+    

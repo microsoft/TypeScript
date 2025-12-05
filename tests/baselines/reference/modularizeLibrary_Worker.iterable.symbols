@@ -4,7 +4,7 @@
 for (const [key, entry] of new FormData()) {
 >key : Symbol(key, Decl(modularizeLibrary_Worker.iterable.ts, 0, 12))
 >entry : Symbol(entry, Decl(modularizeLibrary_Worker.iterable.ts, 0, 16))
->FormData : Symbol(FormData, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.iterable.d.ts, --, --))
+>FormData : Symbol(FormData, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
 
     entry;
 >entry : Symbol(entry, Decl(modularizeLibrary_Worker.iterable.ts, 0, 16))

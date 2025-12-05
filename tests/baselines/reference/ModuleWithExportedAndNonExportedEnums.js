@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts] ////
 
 //// [ModuleWithExportedAndNonExportedEnums.ts]
-module A {
+namespace A {
     export enum Color { Red, Blue }
     enum Day { Monday, Tuesday }
 }

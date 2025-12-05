@@ -4,7 +4,7 @@
 Strict subtype cache: 2,500
 Assignability cache: 10,000
 Type Count: 10,000
-Instantiation count: 100,000
+Instantiation count: 50,000
 
 === conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
 type BigUnion =

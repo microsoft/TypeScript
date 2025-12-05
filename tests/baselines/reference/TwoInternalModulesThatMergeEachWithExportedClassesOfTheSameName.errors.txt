@@ -5,7 +5,7 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
 
 
 ==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (4 errors) ====
-    module A {
+    namespace A {
         export class Point {
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -24,7 +24,7 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
         }
     }
     
-    module X.Y.Z {
+    namespace X.Y.Z {
         export class Line {
                      ~~~~
 !!! error TS2300: Duplicate identifier 'Line'.
@@ -32,9 +32,9 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
         }
     }
     
-    module X {
-        export module Y {
-            export module Z {
+    namespace X {
+        export namespace Y {
+            export namespace Z {
                 // expected error
                 export class Line {
                              ~~~~

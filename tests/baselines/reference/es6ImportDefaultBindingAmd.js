@@ -18,9 +18,13 @@ define(["require", "exports"], function (require, exports) {
     exports.default = a;
 });
 //// [es6ImportDefaultBindingAmd_1.js]
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "es6ImportDefaultBindingAmd_0"], function (require, exports, es6ImportDefaultBindingAmd_0_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    es6ImportDefaultBindingAmd_0_1 = __importDefault(es6ImportDefaultBindingAmd_0_1);
     var x = es6ImportDefaultBindingAmd_0_1.default;
 });
 

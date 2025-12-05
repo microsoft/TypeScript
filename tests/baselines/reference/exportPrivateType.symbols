@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/exportPrivateType.ts] ////
 
 === exportPrivateType.ts ===
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
 
     class C1 {
->C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 15))
 
         x: string;
 >x : Symbol(C1.x, Decl(exportPrivateType.ts, 1, 14))
 
         y: C1;
 >y : Symbol(C1.y, Decl(exportPrivateType.ts, 2, 18))
->C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 15))
     }
  
     class C2 {
@@ -48,7 +48,7 @@ module foo {
     // None of the types are exported, so per section 10.3, should all be errors
     export var e: C1;
 >e : Symbol(e, Decl(exportPrivateType.ts, 21, 14))
->C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 15))
 
     export var f: I1;
 >f : Symbol(f, Decl(exportPrivateType.ts, 22, 14))

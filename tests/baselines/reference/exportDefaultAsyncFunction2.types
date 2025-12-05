@@ -14,7 +14,7 @@ export function await(...args: any[]): any { }
 >     : ^^^^^
 
 === a.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : <T>(...args: any[]) => any
 >      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
@@ -50,7 +50,7 @@ export default async () => { return 0; };
 >  : ^
 
 === c.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : <T>(...args: any[]) => any
 >      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
@@ -63,7 +63,7 @@ export default async<number>();
 >      : ^ ^^^^^    ^^     ^^^^^   
 
 === d.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : <T>(...args: any[]) => any
 >      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
@@ -74,7 +74,7 @@ export default async;
 >      : ^ ^^^^^    ^^     ^^^^^   
 
 === e.ts ===
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 >async : <T>(...args: any[]) => any
 >      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any

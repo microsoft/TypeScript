@@ -88,7 +88,7 @@ letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is no
     };
     
     // modules
-    module m {
+    namespace m {
         let l22 = 0;
     
         {
@@ -139,7 +139,7 @@ letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is no
         }
     }
     
-    module m3 {
+    namespace m3 {
         label: let l34 = 0;
         {
             label2: let l35 = 0;

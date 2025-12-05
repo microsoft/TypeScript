@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 //@Filename: file.tsx
 ////declare var React: any;
-////declare module JSX {
+////declare namespace JSX {
 ////    interface Element { }
 ////    interface IntrinsicElements {
 ////        div: { "aria-whatever"?: string  }

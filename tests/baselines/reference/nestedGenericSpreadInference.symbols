@@ -22,13 +22,12 @@ declare function call<A extends unknown[], T>(x: { x: (...args: A) => T }, ...ar
 >A : Symbol(A, Decl(nestedGenericSpreadInference.ts, 1, 22))
 >T : Symbol(T, Decl(nestedGenericSpreadInference.ts, 1, 42))
 
-// This should be of type `number` - ideally, it also would not error.
 const leak = call(wrap(<T>(x: T) => x), 1);
->leak : Symbol(leak, Decl(nestedGenericSpreadInference.ts, 4, 5))
+>leak : Symbol(leak, Decl(nestedGenericSpreadInference.ts, 3, 5))
 >call : Symbol(call, Decl(nestedGenericSpreadInference.ts, 0, 41))
 >wrap : Symbol(wrap, Decl(nestedGenericSpreadInference.ts, 0, 0))
->T : Symbol(T, Decl(nestedGenericSpreadInference.ts, 4, 24))
->x : Symbol(x, Decl(nestedGenericSpreadInference.ts, 4, 27))
->T : Symbol(T, Decl(nestedGenericSpreadInference.ts, 4, 24))
->x : Symbol(x, Decl(nestedGenericSpreadInference.ts, 4, 27))
+>T : Symbol(T, Decl(nestedGenericSpreadInference.ts, 3, 24))
+>x : Symbol(x, Decl(nestedGenericSpreadInference.ts, 3, 27))
+>T : Symbol(T, Decl(nestedGenericSpreadInference.ts, 3, 24))
+>x : Symbol(x, Decl(nestedGenericSpreadInference.ts, 3, 27))
 

@@ -16,7 +16,7 @@
 // | var a: number
 // | ----------------------------------------------------------------------
 // }
-// module m {
+// namespace m {
 //     var c = 10;
 //         ^
 // | ----------------------------------------------------------------------
@@ -219,14 +219,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 65,
+      "position": 68,
       "name": "4"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 65,
+        "start": 68,
         "length": 1
       },
       "displayParts": [
@@ -261,14 +261,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 88,
+      "position": 91,
       "name": "5"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "export",
       "textSpan": {
-        "start": 88,
+        "start": 91,
         "length": 1
       },
       "displayParts": [
@@ -311,14 +311,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 102,
+      "position": 105,
       "name": "6"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 102,
+        "start": 105,
         "length": 1
       },
       "displayParts": [
@@ -373,14 +373,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 123,
+      "position": 126,
       "name": "7"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 123,
+        "start": 126,
         "length": 1
       },
       "displayParts": [
@@ -435,70 +435,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 127,
-      "name": "8"
-    },
-    "item": {
-      "kind": "var",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 127,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
       "position": 130,
-      "name": "9"
+      "name": "8"
     },
     "item": {
       "kind": "var",
@@ -559,14 +497,76 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 139,
+      "position": 133,
+      "name": "9"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 133,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
+      "position": 142,
       "name": "10"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 139,
+        "start": 142,
         "length": 1
       },
       "displayParts": [
@@ -705,14 +705,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 193,
+      "position": 196,
       "name": "11"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 193,
+        "start": 196,
         "length": 1
       },
       "displayParts": [
@@ -851,14 +851,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 197,
+      "position": 200,
       "name": "12"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 197,
+        "start": 200,
         "length": 1
       },
       "displayParts": [
@@ -997,14 +997,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 200,
+      "position": 203,
       "name": "13"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 200,
+        "start": 203,
         "length": 1
       },
       "displayParts": [
@@ -1103,14 +1103,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVar.ts",
-      "position": 207,
+      "position": 210,
       "name": "14"
     },
     "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 207,
+        "start": 210,
         "length": 1
       },
       "displayParts": [

@@ -1,5 +1,4 @@
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: main.ts
 import {Row2, C} from '.'
 const x : Row2 = { }

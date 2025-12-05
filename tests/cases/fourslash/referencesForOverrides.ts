@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////module FindRef3 {
-////	module SimpleClassTest {
+////namespace FindRef3 {
+////	namespace SimpleClassTest {
 ////		export class Foo {
 ////			public /*foo*/foo(): void {
 ////			}
@@ -12,7 +12,7 @@
 ////		}
 ////	}
 ////
-////	module SimpleInterfaceTest {
+////	namespace SimpleInterfaceTest {
 ////		export interface IFoo {
 ////			/*ifoo*/ifoo(): void;
 ////		}
@@ -21,7 +21,7 @@
 ////		}
 ////	}
 ////
-////	module SimpleClassInterfaceTest {
+////	namespace SimpleClassInterfaceTest {
 ////		export interface IFoo {
 ////			/*icfoo*/icfoo(): void;
 ////		}
@@ -31,7 +31,7 @@
 ////		}
 ////	}
 ////
-////	module Test {
+////	namespace Test {
 ////		export interface IBase {
 ////			/*field*/field: string;
 ////			/*method*/method(): void;

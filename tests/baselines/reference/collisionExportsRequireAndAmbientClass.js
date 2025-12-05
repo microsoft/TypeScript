@@ -5,13 +5,13 @@ export declare class require {
 }
 export declare class exports {
 }
-declare module m1 {
+declare namespace m1 {
     class require {
     }
     class exports {
     }
 }
-module m2 {
+namespace m2 {
     export declare class require {
     }
     export declare class exports {
@@ -23,13 +23,13 @@ declare class require {
 }
 declare class exports {
 }
-declare module m3 {
+declare namespace m3 {
     class require {
     }
     class exports {
     }
 }
-module m4 {
+namespace m4 {
     export declare class require {
     }
     export declare class exports {
@@ -38,13 +38,11 @@ module m4 {
 }
 
 //// [collisionExportsRequireAndAmbientClass_externalmodule.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var m2;
-    (function (m2) {
-    })(m2 || (m2 = {}));
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var m2;
+(function (m2) {
+})(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientClass_globalFile.js]
 var m4;
 (function (m4) {

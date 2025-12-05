@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientWithSameNameAndCommonRoot.ts] ////
 
 //// [module.d.ts]
-declare module A {
-    export module Point {
+declare namespace A {
+    export namespace Point {
         export var Origin: {
             x: number;
             y: number;
@@ -11,7 +11,7 @@ declare module A {
 }
 
 //// [class.d.ts]
-declare module A {
+declare namespace A {
     export class Point {
         constructor(x: number, y: number);
         x: number;

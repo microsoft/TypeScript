@@ -17,7 +17,7 @@ verify.completions({
         name: "Foo",
         sourceDisplay: "./foo",
         source: "./foo",
-        insertText: "import * as Foo from \"./foo\";",
+        insertText: "import Foo from \"./foo\";",
         replacementSpan: test.ranges()[0]
     }, {
         name: "type",

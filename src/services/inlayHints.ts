@@ -42,8 +42,10 @@ import {
     isBindingPattern,
     isCallExpression,
     isCallSignatureDeclaration,
+    isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorTypeNode,
+    isConstructSignatureDeclaration,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
@@ -103,6 +105,7 @@ import {
     NodeArray,
     NodeBuilderFlags,
     ParameterDeclaration,
+    parameterIsThisKeyword,
     PrefixUnaryExpression,
     PropertyDeclaration,
     QuotePreference,
@@ -437,24 +440,26 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
-            const param = node.parameters[i];
-            if (!isHintableDeclaration(param)) {
+        let pos = 0;
+        for (const param of node.parameters) {
+            if (isHintableDeclaration(param)) {
+                addParameterTypeHint(param, parameterIsThisKeyword(param) ? signature.thisParameter : signature.parameters[pos]);
+            }
+            if (parameterIsThisKeyword(param)) {
                 continue;
             }
-
-            const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
-            if (effectiveTypeAnnotation) {
-                continue;
-            }
-
-            const typeHints = getParameterDeclarationTypeHints(signature.parameters[i]);
-            if (!typeHints) {
-                continue;
-            }
-
-            addTypeHints(typeHints, param.questionToken ? param.questionToken.end : param.name.end);
+            pos++;
         }
+    }
+
+    function addParameterTypeHint(node: ParameterDeclaration, symbol: Symbol | undefined) {
+        const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(node);
+        if (effectiveTypeAnnotation || symbol === undefined) return;
+
+        const typeHints = getParameterDeclarationTypeHints(symbol);
+        if (typeHints === undefined) return;
+
+        addTypeHints(typeHints, node.questionToken ? node.questionToken.end : node.name.end);
     }
 
     function getParameterDeclarationTypeHints(symbol: Symbol) {
@@ -577,6 +582,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isTypeParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     visitForDisplayParts(node.name);
                     if (node.constraint) {
@@ -592,6 +598,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isParameter);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     if (node.dotDotDotToken) {
                         parts.push({ text: "..." });
@@ -822,6 +829,15 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.type);
                     }
                     break;
+                case SyntaxKind.ConstructSignature:
+                    Debug.assertNode(node, isConstructSignatureDeclaration);
+                    parts.push({ text: "new " });
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
                 case SyntaxKind.ArrayBindingPattern:
                     Debug.assertNode(node, isArrayBindingPattern);
                     parts.push({ text: "[" });
@@ -872,6 +888,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.ThisType:
                     Debug.assertNode(node, isThisTypeNode);
                     parts.push({ text: "this" });
+                    break;
+                case SyntaxKind.ComputedPropertyName:
+                    Debug.assertNode(node, isComputedPropertyName);
+                    parts.push({ text: "[" });
+                    visitForDisplayParts(node.expression);
+                    parts.push({ text: "]" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
