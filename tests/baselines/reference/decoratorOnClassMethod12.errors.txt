@@ -2,7 +2,7 @@ decoratorOnClassMethod12.ts(6,11): error TS2660: 'super' can only be referenced 
 
 
 ==== decoratorOnClassMethod12.ts (1 errors) ====
-    module M {
+    namespace M {
         class S {
             decorator(target: Object, key: string): void { }
         }

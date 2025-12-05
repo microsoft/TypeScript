@@ -8,52 +8,52 @@ declare const itNum: Iterable<number>
 ;(function(...rest) {})(...itNum)
 >(function(...rest) {})(...itNum) : void
 >                                 : ^^^^
->(function(...rest) {}) : (...rest: Iterable<number>) => void
->                       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function(...rest) {} : (...rest: Iterable<number>) => void
->                     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->rest : Iterable<number>
->     : ^^^^^^^^^^^^^^^^
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>(function(...rest) {}) : (...rest: any[]) => void
+>                       : ^^^^    ^^^^^^^^^^^^^^^^
+>function(...rest) {} : (...rest: any[]) => void
+>                     : ^^^^    ^^^^^^^^^^^^^^^^
+>rest : any[]
+>     : ^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
 ;(function(a, ...rest) {})('', ...itNum)
 >(function(a, ...rest) {})('', ...itNum) : void
 >                                        : ^^^^
->(function(a, ...rest) {}) : (a: string, ...rest: Iterable<number>) => void
->                          : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function(a, ...rest) {} : (a: string, ...rest: Iterable<number>) => void
->                        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function(a, ...rest) {}) : (a: string, ...rest: any[]) => void
+>                          : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>function(a, ...rest) {} : (a: string, ...rest: any[]) => void
+>                        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->rest : Iterable<number>
->     : ^^^^^^^^^^^^^^^^
+>rest : any[]
+>     : ^^^^^
 >'' : ""
 >   : ^^
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
 ;(function(a, ...rest) {})('', true, ...itNum)
 >(function(a, ...rest) {})('', true, ...itNum) : void
 >                                              : ^^^^
->(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
->                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
->                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: any[]) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: any[]) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->rest : [boolean, ...Iterable<number>[]]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : [boolean, ...any[]]
+>     : ^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 >true : true
 >     : ^^^^
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
@@ -76,14 +76,14 @@ const res1 = fn1(..."hello");
 >        : ^^^^^^^
 
 const res2 = fn1(...itNum);
->res2 : Iterable<number>
->     : ^^^^^^^^^^^^^^^^
->fn1(...itNum) : Iterable<number>
->              : ^^^^^^^^^^^^^^^^
+>res2 : readonly any[]
+>     : ^^^^^^^^^^^^^^
+>fn1(...itNum) : readonly any[]
+>              : ^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
 >    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
@@ -102,16 +102,16 @@ const res3 = fn1(true, ..."hello");
 >        : ^^^^^^^
 
 const res4 = fn1(true, ...itNum);
->res4 : readonly [true, ...Iterable<number>[]]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fn1(true, ...itNum) : readonly [true, ...Iterable<number>[]]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>res4 : readonly [true, ...any[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1(true, ...itNum) : readonly [true, ...any[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
 >    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >true : true
 >     : ^^^^
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
@@ -135,14 +135,14 @@ const p1 = foo(..."hello");
 >        : ^^^^^^^
 
 const p2 = foo(...itNum);
->p2 : Iterable<number>
->   : ^^^^^^^^^^^^^^^^
->foo(...itNum) : Iterable<number>
->              : ^^^^^^^^^^^^^^^^
+>p2 : any[]
+>   : ^^^^^
+>foo(...itNum) : any[]
+>              : ^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 
@@ -161,16 +161,16 @@ const p3 = foo(true, ..."hello");
 >        : ^^^^^^^
 
 const p4 = foo(true, ...itNum);
->p4 : [boolean, ...Iterable<number>[]]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->foo(true, ...itNum) : [boolean, ...Iterable<number>[]]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p4 : [boolean, ...any[]]
+>   : ^^^^^^^^^^^^^^^^^^^
+>foo(true, ...itNum) : [boolean, ...any[]]
+>                    : ^^^^^^^^^^^^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >true : true
 >     : ^^^^
->...itNum : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>...itNum : any
+>         : ^^^
 >itNum : Iterable<number>
 >      : ^^^^^^^^^^^^^^^^
 

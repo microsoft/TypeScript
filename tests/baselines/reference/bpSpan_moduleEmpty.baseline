@@ -1,8 +1,8 @@
 // === breakpoints ===
 
-1  >module Bar {
+1  >namespace Bar {
 
-    ~~~~~~~~~~~~~                                 => Pos: (0 to 12)  SpanInfo: undefined
+    ~~~~~~~~~~~~~~~~                              => Pos: (0 to 15)  SpanInfo: undefined
 --------------------------------
 2  >}
-    ~                                             => Pos: (13 to 13)  SpanInfo: undefined
+    ~                                             => Pos: (16 to 16)  SpanInfo: undefined

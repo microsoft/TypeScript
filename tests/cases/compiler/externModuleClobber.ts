@@ -1,4 +1,4 @@
-declare module EM {
+declare namespace EM {
 	export class Position { }
 
 	export class EC {

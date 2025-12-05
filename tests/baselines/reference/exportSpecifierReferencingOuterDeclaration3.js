@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts] ////
 
 //// [exportSpecifierReferencingOuterDeclaration3.ts]
-declare module X { export interface bar { } }
+declare namespace X { export interface bar { } }
 declare module "m" {
-    module X { export interface foo { } }
+    namespace X { export interface foo { } }
     export { X };
     export function foo(): X.foo;
     export function bar(): X.bar; // error

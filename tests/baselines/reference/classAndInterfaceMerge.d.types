@@ -11,7 +11,7 @@ interface C { }
 
 interface C { }
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -30,6 +30,6 @@ declare module M {
 >   : ^^
 }
 
-declare module M {
+declare namespace M {
     export interface C2 { }
 }

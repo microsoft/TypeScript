@@ -78,7 +78,7 @@ var s = "foo\
 
 var r: RegExp;
 >r : Symbol(r, Decl(literals.ts, 34, 3), Decl(literals.ts, 35, 3), Decl(literals.ts, 36, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var r = /what/;
 >r : Symbol(r, Decl(literals.ts, 34, 3), Decl(literals.ts, 35, 3), Decl(literals.ts, 36, 3))

@@ -29,7 +29,6 @@ export {}
 //// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a) Inode:: 18
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 23
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -56,8 +55,15 @@ CreatingProgramWith::
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/user/projects/myproject/src/package.json' does not exist.
+File '/home/user/projects/myproject/package.json' does not exist.
+File '/home/user/projects/package.json' does not exist.
+File '/home/user/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
@@ -71,19 +77,23 @@ Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
 File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/package.json' does not exist.
-File '/home/user/projects/myproject/package.json' does not exist.
-File '/home/user/projects/package.json' does not exist.
-File '/home/user/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects 0 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects 0 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 0 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 0 {"synchronousWatchDirectory":true} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
@@ -100,7 +110,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchron
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 121
+//// [/home/user/projects/myproject/src/file.js] Inode:: 124
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -123,6 +133,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":23}
+/home/user/projects: *new*
+  {"inode":3}
 /home/user/projects/myproject: *new*
   {"inode":4}
 /home/user/projects/myproject/node_modules: *new*
@@ -219,6 +231,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":23}
+/home/user/projects:
+  {"inode":3}
 /home/user/projects/myproject:
   {"inode":4}
 /home/user/projects/myproject/node_modules:
@@ -271,8 +285,15 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
@@ -287,8 +308,7 @@ Directory '/home/user/projects/node_modules' does not exist, skipping all lookup
 Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/node_modules/a.js' does not exist.
@@ -315,7 +335,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchro
 
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 121
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 124
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:
@@ -340,6 +360,8 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":23}
+/home/user/projects:
+  {"inode":3}
 /home/user/projects/myproject:
   {"inode":4}
 /home/user/projects/myproject/node_modules:

@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePreservesTypeParameterConstraint.ts] ////
+
+=== declarationEmitMappedTypePreservesTypeParameterConstraint.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54560
+
+declare type requiredKeys<T extends object> = {
+>requiredKeys : Symbol(requiredKeys, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 2, 26))
+
+  [k in keyof T]: undefined extends T[k] ? never : k;
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 3, 3))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 2, 26))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 2, 26))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 3, 3))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 3, 3))
+
+}[keyof T];
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 2, 26))
+
+declare type addQuestionMarks<
+>addQuestionMarks : Symbol(addQuestionMarks, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 4, 11))
+
+  T extends object,
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 6, 30))
+
+  R extends keyof T = requiredKeys<T>
+>R : Symbol(R, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 7, 19))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 6, 30))
+>requiredKeys : Symbol(requiredKeys, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 6, 30))
+
+> = Pick<Required<T>, R> & Partial<T>;
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 6, 30))
+>R : Symbol(R, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 7, 19))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 6, 30))
+
+declare type identity<T> = T;
+>identity : Symbol(identity, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 9, 38))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 11, 22))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 11, 22))
+
+declare type flatten<T> = identity<{
+>flatten : Symbol(flatten, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 11, 29))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 13, 21))
+>identity : Symbol(identity, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 9, 38))
+
+  [k in keyof T]: T[k];
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 14, 3))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 13, 21))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 13, 21))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 14, 3))
+
+}>;
+
+export declare abstract class ZodType<Output = any> {
+>ZodType : Symbol(ZodType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 15, 3))
+>Output : Symbol(Output, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 17, 38))
+
+  readonly _output: Output;
+>_output : Symbol(ZodType._output, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 17, 53))
+>Output : Symbol(Output, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 17, 38))
+}
+
+export declare class ZodLiteral<T> extends ZodType<T> {}
+>ZodLiteral : Symbol(ZodLiteral, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 19, 1))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 21, 32))
+>ZodType : Symbol(ZodType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 15, 3))
+>T : Symbol(T, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 21, 32))
+
+export declare type ZodTypeAny = ZodType<any>;
+>ZodTypeAny : Symbol(ZodTypeAny, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 21, 56))
+>ZodType : Symbol(ZodType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 15, 3))
+
+export declare type baseObjectOutputType<Shape extends ZodRawShape> = {
+>baseObjectOutputType : Symbol(baseObjectOutputType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 23, 46))
+>Shape : Symbol(Shape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 25, 41))
+>ZodRawShape : Symbol(ZodRawShape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 31, 2))
+
+  [k in keyof Shape]: Shape[k]["_output"];
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 26, 3))
+>Shape : Symbol(Shape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 25, 41))
+>Shape : Symbol(Shape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 25, 41))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 26, 3))
+
+};
+
+export declare type objectOutputType<Shape extends ZodRawShape> = flatten<
+>objectOutputType : Symbol(objectOutputType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 27, 2))
+>Shape : Symbol(Shape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 29, 37))
+>ZodRawShape : Symbol(ZodRawShape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 31, 2))
+>flatten : Symbol(flatten, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 11, 29))
+
+  addQuestionMarks<baseObjectOutputType<Shape>>
+>addQuestionMarks : Symbol(addQuestionMarks, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 4, 11))
+>baseObjectOutputType : Symbol(baseObjectOutputType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 23, 46))
+>Shape : Symbol(Shape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 29, 37))
+
+>;
+
+export declare type ZodRawShape = {
+>ZodRawShape : Symbol(ZodRawShape, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 31, 2))
+
+  [k: string]: ZodTypeAny;
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 34, 3))
+>ZodTypeAny : Symbol(ZodTypeAny, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 21, 56))
+
+};
+
+export const buildSchema = <V extends string>(
+>buildSchema : Symbol(buildSchema, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 37, 12))
+>V : Symbol(V, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 37, 28))
+
+  version: V
+>version : Symbol(version, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 37, 46))
+>V : Symbol(V, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 37, 28))
+
+): objectOutputType<{
+>objectOutputType : Symbol(objectOutputType, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 27, 2))
+
+  version: ZodLiteral<V>;
+>version : Symbol(version, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 39, 21))
+>ZodLiteral : Symbol(ZodLiteral, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 19, 1))
+>V : Symbol(V, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 37, 28))
+
+}> => ({} as any);
+
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 22))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 22))
+
+export type entryOf<o> = evaluate<
+>entryOf : Symbol(entryOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 53))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+        ? keyof o & number
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+        : keyof o]
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 53, 22))
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+>entryOf : Symbol(entryOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 53))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 53, 22))
+
+export const entriesOf = <o extends object>(o: o) =>
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+
+    Object.entries(o) as entriesOf<o>
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+

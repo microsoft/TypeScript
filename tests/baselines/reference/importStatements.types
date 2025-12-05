@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/codeGeneration/importStatements.ts] ////
 
 === importStatements.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -30,7 +30,7 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 >a : typeof a
 >  : ^^^^^^^^
@@ -39,7 +39,7 @@ module B {
 }
 
 // no code gen expected
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -77,7 +77,7 @@ module C {
 }
 
 // code gen expected
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -104,7 +104,7 @@ module D {
 >  : ^
 }
 
-module E {
+namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 

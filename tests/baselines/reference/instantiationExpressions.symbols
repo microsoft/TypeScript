@@ -67,28 +67,28 @@ function f2() {
 
     const A0 = Array<>;  // Error
 >A0 : Symbol(A0, Decl(instantiationExpressions.ts, 17, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     const A1 = Array<string>;  // new (...) => string[]
 >A1 : Symbol(A1, Decl(instantiationExpressions.ts, 18, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     const A2 = Array<string, number>;  // Error
 >A2 : Symbol(A2, Decl(instantiationExpressions.ts, 19, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 type T20 = typeof Array<>;  // Error
 >T20 : Symbol(T20, Decl(instantiationExpressions.ts, 20, 1))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T21 = typeof Array<string>;  // new (...) => string[]
 >T21 : Symbol(T21, Decl(instantiationExpressions.ts, 22, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T22 = typeof Array<string, number>;  // Error
 >T22 : Symbol(T22, Decl(instantiationExpressions.ts, 23, 32))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 declare class C<T> {
 >C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
@@ -552,7 +552,7 @@ type A<U> = InstanceType<typeof Array<U>>;  // U[]
 >A : Symbol(A, Decl(instantiationExpressions.ts, 144, 29))
 >U : Symbol(U, Decl(instantiationExpressions.ts, 146, 7))
 >InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(instantiationExpressions.ts, 146, 7))
 
 declare const g1: {

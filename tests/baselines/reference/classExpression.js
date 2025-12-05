@@ -9,7 +9,7 @@ var y = {
     }
 }
 
-module M {
+namespace M {
     var z = class C4 {
     }
 }

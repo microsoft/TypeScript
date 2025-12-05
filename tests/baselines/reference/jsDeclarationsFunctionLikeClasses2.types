@@ -291,16 +291,16 @@ export function Point2D(x, y) {
 }
 
 Point2D.prototype = {
->Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
->                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
->Point2D.prototype : { __proto__: typeof Vec; x: number; y: number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+>Point2D.prototype : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >Point2D : typeof Point2D
 >        : ^^^^^^^^^^^^^^
->prototype : { __proto__: typeof Vec; x: number; y: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
->{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
->                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>prototype : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+>{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 
     __proto__: Vec,
 >__proto__ : typeof Vec
@@ -315,8 +315,8 @@ Point2D.prototype = {
         return this.storage[0];
 >this.storage[0] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
 >        : ^^^
 >0 : 0
@@ -337,8 +337,8 @@ Point2D.prototype = {
 >                    : ^^^^^^
 >this.storage[0] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
 >        : ^^^
 >0 : 0
@@ -354,8 +354,8 @@ Point2D.prototype = {
         return this.storage[1];
 >this.storage[1] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
 >        : ^^^
 >1 : 1
@@ -376,8 +376,8 @@ Point2D.prototype = {
 >                    : ^^^^^^
 >this.storage[1] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
 >        : ^^^
 >1 : 1

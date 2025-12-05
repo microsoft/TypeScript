@@ -9,7 +9,7 @@ exportEqualMemberMissing_1.ts(3,23): error TS2339: Property 'static' does not ex
 !!! error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
     
 ==== exportEqualMemberMissing_0.ts (0 errors) ====
-    module server {
+    namespace server {
         export interface connectModule {
             (res, req, next): void;
         }

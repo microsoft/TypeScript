@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module m1c {
+////namespace m1c {
 ////    export interface I { foo(): void; }
 ////}
 ////var m1c = 1; // Should be allowed

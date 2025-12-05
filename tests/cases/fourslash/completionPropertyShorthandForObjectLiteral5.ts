@@ -1,3 +1,4 @@
+/// <reference path="fourslash.ts" />
 // @module: esnext
 
 // @Filename: /a.ts
@@ -9,7 +10,7 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "exportedConstant", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "exportedConstant", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: true,
     preferences: { includeCompletionsForModuleExports: true },
 });

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
 
 //// [variableDeclaratorResolvedDuringContextualTyping.ts]
-module WinJS {
+namespace WinJS {
     export interface ValueCallback {
         (value: any): any;
     }
@@ -66,7 +66,7 @@ module WinJS {
     }
 }
 
-module Services {
+namespace Services {
     export interface IRequestService {
         /**
          * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -84,14 +84,14 @@ module Services {
     }
 }
 
-module Errors {
+namespace Errors {
     export class ConnectionError /* extends Error */ {
         constructor(request: XMLHttpRequest) {
         }
     }
 }
 
-module Files {
+namespace Files {
     export interface IUploadResult {
         stat: string;
         isNew: boolean;
