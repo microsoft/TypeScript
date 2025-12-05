@@ -28,7 +28,7 @@ verify.completions({
         completion.undefinedVarEntry,
         {
             name: "foo",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "(alias) const foo: 0\nexport foo",
             kind: "alias",
@@ -42,7 +42,7 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 

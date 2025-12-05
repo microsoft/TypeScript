@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts] ////
 
 === collisionCodeGenModuleWithModuleChildren.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
     export var x = 3;
 >x : Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
 
-    module m1 {
+    namespace m1 {
 >m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 21))
 
         var M = 10;
@@ -19,14 +19,14 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
-    module m2 {
->m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 8, 10))
+    namespace m2 {
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 8, 13))
 
         class M {
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 18))
         }
         var p = x;
 >p : Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 12, 11))
@@ -34,18 +34,18 @@ module M {
 
         var p2 = new M();
 >p2 : Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 13, 11))
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 18))
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
-    module m3 {
->m3 : Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 17, 10))
+    namespace m3 {
+>m3 : Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 17, 13))
 
         function M() {
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 18))
         }
         var p = x;
 >p : Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 21, 11))
@@ -53,18 +53,18 @@ module M {
 
         var p2 = M();
 >p2 : Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 22, 11))
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 18))
     }
 }
 
-module M { // shouldnt be _M
+namespace M { // shouldnt be _M
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
-    module m3 {
->m3 : Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 26, 10))
+    namespace m3 {
+>m3 : Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 26, 13))
 
         interface M {
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 18))
         }
         var p = x;
 >p : Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 30, 11))
@@ -72,18 +72,18 @@ module M { // shouldnt be _M
 
         var p2: M;
 >p2 : Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 31, 11))
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 15))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 18))
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
-    module m4 {
->m4 : Symbol(m4, Decl(collisionCodeGenModuleWithModuleChildren.ts, 35, 10))
+    namespace m4 {
+>m4 : Symbol(m4, Decl(collisionCodeGenModuleWithModuleChildren.ts, 35, 13))
 
-        module M {
->M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 36, 15))
+        namespace M {
+>M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 36, 18))
 
             var p = x;
 >p : Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 38, 15))

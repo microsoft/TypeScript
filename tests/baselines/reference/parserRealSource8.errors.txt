@@ -138,7 +138,7 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
     
         export class AssignScopeContext {
             constructor (public scopeChain: ScopeChain,

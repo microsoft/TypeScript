@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts] ////
 
 === instancePropertiesInheritedIntoClassType.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+>C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 22))
 
         x: string;
 >x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
@@ -21,7 +21,7 @@ module NonGeneric {
 
         fn() { return this; }
 >fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
->this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+>this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 22))
 
         constructor(public a: number, private b: number) { }
 >a : Symbol(C.a, Decl(instancePropertiesInheritedIntoClassType.ts, 8, 20))
@@ -30,7 +30,7 @@ module NonGeneric {
 
     class D extends C { e: string; }
 >D : Symbol(D, Decl(instancePropertiesInheritedIntoClassType.ts, 9, 5))
->C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+>C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 22))
 >e : Symbol(D.e, Decl(instancePropertiesInheritedIntoClassType.ts, 11, 23))
 
     var d = new D(1, 2);
@@ -68,11 +68,11 @@ module NonGeneric {
 
 }
 
-module Generic {
+namespace Generic {
 >Generic : Symbol(Generic, Decl(instancePropertiesInheritedIntoClassType.ts, 20, 1))
 
     class C<T, U> {
->C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 16))
+>C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 19))
 >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 12))
 >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 14))
 
@@ -92,7 +92,7 @@ module Generic {
 
         fn() { return this; }
 >fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
->this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 16))
+>this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 19))
 
         constructor(public a: T, private b: U) { }
 >a : Symbol(C.a, Decl(instancePropertiesInheritedIntoClassType.ts, 30, 20))
@@ -105,7 +105,7 @@ module Generic {
 >D : Symbol(D, Decl(instancePropertiesInheritedIntoClassType.ts, 31, 5))
 >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 12))
 >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 14))
->C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 16))
+>C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 19))
 >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 12))
 >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 14))
 >e : Symbol(D.e, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 35))

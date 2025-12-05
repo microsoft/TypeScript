@@ -68,9 +68,9 @@ declare const filter: {
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
 >B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 21, 7))
 >as : Symbol(as, Decl(nonInferrableTypePropagation2.ts, 21, 53))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 21, 7))
 
     <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => ReadonlyArray<B>
@@ -81,9 +81,9 @@ declare const filter: {
 >B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 22, 5))
 >bs : Symbol(bs, Decl(nonInferrableTypePropagation2.ts, 22, 48))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
 
     <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>
@@ -92,9 +92,9 @@ declare const filter: {
 >Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
 >as : Symbol(as, Decl(nonInferrableTypePropagation2.ts, 23, 35))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
 
 };

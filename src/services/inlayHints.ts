@@ -582,6 +582,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isTypeParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     visitForDisplayParts(node.name);
                     if (node.constraint) {
@@ -597,6 +598,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isParameter);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
                     if (node.dotDotDotToken) {
                         parts.push({ text: "..." });

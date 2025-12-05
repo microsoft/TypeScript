@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class Binder {
         constructor (public checker: TypeChecker) { }
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {

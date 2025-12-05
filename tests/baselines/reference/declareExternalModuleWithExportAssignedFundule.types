@@ -15,7 +15,7 @@ declare module "express" {
 >express : any
 >        : ^^^
 
-    module express {
+    namespace express {
 >express : typeof express
 >        : ^^^^^^^^^^^^^^
 

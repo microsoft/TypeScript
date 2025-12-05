@@ -10,7 +10,7 @@ var exports = 1;
 var require = "require";
 >require : Symbol(require, Decl(collisionExportsRequireAndVar_externalmodule.ts, 3, 3))
 
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(collisionExportsRequireAndVar_externalmodule.ts, 3, 24))
 
     var exports = 0;
@@ -19,7 +19,7 @@ module m1 {
     var require = "require";
 >require : Symbol(require, Decl(collisionExportsRequireAndVar_externalmodule.ts, 6, 7))
 }
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(collisionExportsRequireAndVar_externalmodule.ts, 7, 1))
 
     export var exports = 0;
@@ -36,7 +36,7 @@ var exports = 0;
 var require = "require";
 >require : Symbol(require, Decl(collisionExportsRequireAndVar_globalFile.ts, 1, 3))
 
-module m3 {
+namespace m3 {
 >m3 : Symbol(m3, Decl(collisionExportsRequireAndVar_globalFile.ts, 1, 24))
 
     var exports = 0;
@@ -45,7 +45,7 @@ module m3 {
     var require = "require";
 >require : Symbol(require, Decl(collisionExportsRequireAndVar_globalFile.ts, 4, 7))
 }
-module m4 {
+namespace m4 {
 >m4 : Symbol(m4, Decl(collisionExportsRequireAndVar_globalFile.ts, 5, 1))
 
     export var exports = 0;

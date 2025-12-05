@@ -6,13 +6,13 @@ interface I {
     y;
 }
 
-declare module M {
+declare namespace M {
     export class C {
         public p:number;
     }
 }
 
-declare module M {
+declare namespace M {
     export extension class C {
         public pe:string;
     }

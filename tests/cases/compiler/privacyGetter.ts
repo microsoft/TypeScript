@@ -1,6 +1,6 @@
 // @target: ES5
 //@module: amd
-export module m1 {
+export namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -70,7 +70,7 @@ export module m1 {
     }
 }
 
-module m2 {
+namespace m2 {
     export class m2_C1_public {
         private f1() {
         }

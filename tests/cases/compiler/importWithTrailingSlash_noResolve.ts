@@ -1,5 +1,4 @@
 // @traceResolution: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /a.ts
 import foo from "./foo/";

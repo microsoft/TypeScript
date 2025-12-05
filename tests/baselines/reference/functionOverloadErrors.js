@@ -74,7 +74,7 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
     export function fn1();
     function fn1(n: string);
     function fn1() { } 

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////module m {
+////namespace m {
 ////    import foo = module('_foo');
 ////    var n: num/**/
 ////}

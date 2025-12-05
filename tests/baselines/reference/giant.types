@@ -244,7 +244,7 @@ interface I {
 >pa2 : any
 >    : ^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -472,7 +472,7 @@ module M {
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -489,7 +489,7 @@ module M {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -503,7 +503,7 @@ module M {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -516,7 +516,7 @@ module M {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
 >eV : any
@@ -742,7 +742,7 @@ module M {
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -759,7 +759,7 @@ module M {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -773,7 +773,7 @@ module M {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -786,7 +786,7 @@ module M {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
 >eaV : any
@@ -885,7 +885,7 @@ module M {
 >tgF : any
 >    : ^^^
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -902,7 +902,7 @@ module M {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -916,7 +916,7 @@ module M {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export var eV;
@@ -1143,7 +1143,7 @@ export interface eI {
 >pa2 : any
 >    : ^^^
 }
-export module eM {
+export namespace eM {
 >eM : typeof import("giant").eM
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1371,7 +1371,7 @@ export module eM {
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -1388,7 +1388,7 @@ export module eM {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -1402,7 +1402,7 @@ export module eM {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -1415,7 +1415,7 @@ export module eM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
 >eV : any
@@ -1641,7 +1641,7 @@ export module eM {
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -1658,7 +1658,7 @@ export module eM {
 >  : ^
 
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
 >eV : any
 >   : ^^^
@@ -1672,7 +1672,7 @@ export module eM {
 >   : ^^
 
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
 >eaV : any
 >    : ^^^
@@ -1685,7 +1685,7 @@ export module eM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
 >eaV : any
@@ -1784,7 +1784,7 @@ export module eM {
 >tgF : any
 >    : ^^^
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -1801,7 +1801,7 @@ export module eM {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -1815,7 +1815,7 @@ export module eM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export declare var eaV;
@@ -1915,7 +1915,7 @@ export declare class eaC {
 >tgF : any
 >    : ^^^
 }
-export declare module eaM {
+export declare namespace eaM {
 >eaM : typeof eaM
 >    : ^^^^^^^^^^
 
@@ -2075,7 +2075,7 @@ export declare module eaM {
 >pa2 : any
 >    : ^^^
     }
-    module M {
+    namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -2092,7 +2092,7 @@ export declare module eaM {
 >  : ^
 
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -2106,7 +2106,7 @@ export declare module eaM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
         export declare var eaV
 >eaV : any
 >    : ^^^
@@ -2119,7 +2119,7 @@ export declare module eaM {
 >eaC : eaC
 >    : ^^^
 
-        export declare module eaM { }
+        export declare namespace eaM { }
     }
     export var eV;
 >eV : any
@@ -2281,7 +2281,7 @@ export declare module eaM {
 >pa2 : any
 >    : ^^^
     }
-    export module eM {
+    export namespace eM {
 >eM : typeof eM
 >   : ^^^^^^^^^
 
@@ -2297,7 +2297,7 @@ export declare module eaM {
 >C : C
 >  : ^
 
-        module M { }
+        namespace M { }
         export var eV;
 >eV : any
 >   : ^^^
@@ -2311,6 +2311,6 @@ export declare module eaM {
 >   : ^^
 
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }

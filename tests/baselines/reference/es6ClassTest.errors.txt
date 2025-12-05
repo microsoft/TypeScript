@@ -37,7 +37,7 @@ es6ClassTest.ts(25,44): error TS1015: Parameter cannot have question mark and in
     
     var f = new Foo();
     
-    declare module AmbientMod {
+    declare namespace AmbientMod {
     	export class Provide {
     		foo:number;
     		zoo:string;

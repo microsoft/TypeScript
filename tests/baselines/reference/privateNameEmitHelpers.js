@@ -7,7 +7,7 @@ export class C {
     set #c(v: number) { this.#a += v; }
 }
 
-//// [tslib.d.ts]
+//// [index.d.ts]
 // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
 export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
 export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;

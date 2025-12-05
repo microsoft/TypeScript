@@ -98,25 +98,25 @@ var r6 = b.baz;
 >baz : Symbol(B.baz, Decl(mergeThreeInterfaces.ts, 29, 16))
 
 // basic non-generic and generic case inside a module
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergeThreeInterfaces.ts, 36, 15))
 
     interface A {
->A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
+>A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 13), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         foo: string;
 >foo : Symbol(A.foo, Decl(mergeThreeInterfaces.ts, 40, 17))
     }
 
     interface A {
->A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
+>A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 13), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         bar: number;
 >bar : Symbol(A.bar, Decl(mergeThreeInterfaces.ts, 44, 17))
     }
 
     interface A {
->A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
+>A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 13), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         baz: boolean;
 >baz : Symbol(A.baz, Decl(mergeThreeInterfaces.ts, 48, 17))
@@ -124,7 +124,7 @@ module M {
 
     var a: A;
 >a : Symbol(a, Decl(mergeThreeInterfaces.ts, 52, 7))
->A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
+>A : Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 13), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
     var r1 = a.foo;
 >r1 : Symbol(r1, Decl(mergeThreeInterfaces.ts, 53, 7))

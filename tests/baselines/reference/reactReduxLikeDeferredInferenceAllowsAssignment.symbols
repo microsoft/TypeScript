@@ -443,7 +443,7 @@ interface TestComponentProps extends OwnProps {
 >thunkAction : Symbol(TestComponentProps.thunkAction, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 132, 36))
 >param1 : Symbol(param1, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 133, 14))
 >param2 : Symbol(param2, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 133, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 class TestComponent extends Component<TestComponentProps> {}
 >TestComponent : Symbol(TestComponent, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 134, 1))
