@@ -1,21 +1,18 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolToLocation,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: with project references and compile on save", () => {
+describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project references and compile on save", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
     const usageLocation = `/user/username/projects/myproject/usage`;
     const dependencyTs: File = {
@@ -26,7 +23,7 @@ export function fn2() { }
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true, declarationDir: "../decls" },
             compileOnSave: true,
         }),
@@ -43,7 +40,7 @@ fn2();
     };
     const usageConfig: File = {
         path: `${usageLocation}/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compileOnSave: true,
             references: [{ path: "../dependency" }],
         }),
@@ -55,8 +52,8 @@ fn2();
     describe("when dependency project is not open", () => {
         describe("Of usageTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -79,8 +76,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -103,8 +100,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -133,8 +130,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -163,8 +160,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -204,8 +201,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -245,8 +242,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -275,8 +272,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to depenedency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -305,8 +302,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to depenedency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -346,8 +343,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -390,8 +387,8 @@ fn2();
 
         describe("Of dependencyTs in usage project", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -414,8 +411,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -438,8 +435,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -468,8 +465,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -498,8 +495,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -539,8 +536,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -580,8 +577,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -610,8 +607,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -640,8 +637,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -681,8 +678,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -727,8 +724,8 @@ fn2();
     describe("when the depedency file is open", () => {
         describe("Of usageTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -751,8 +748,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -775,8 +772,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -816,8 +813,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -857,8 +854,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency with file", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -898,8 +895,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -939,8 +936,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage with project", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -980,8 +977,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1021,8 +1018,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1062,8 +1059,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1105,8 +1102,8 @@ fn2();
 
         describe("Of dependencyTs in usage project", () => {
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -1129,8 +1126,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1170,8 +1167,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to dependency", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1211,8 +1208,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to usage", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1252,8 +1249,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to dependency", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1296,8 +1293,8 @@ fn2();
 
         describe("Of dependencyTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -1320,8 +1317,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
@@ -1344,8 +1341,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1385,8 +1382,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1426,8 +1423,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1467,8 +1464,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1508,8 +1505,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1549,8 +1546,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1590,8 +1587,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1631,8 +1628,8 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1675,11 +1672,11 @@ fn2();
     });
 });
 
-describe("unittests:: tsserver:: with project references and compile on save with external projects", () => {
+describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project references and compile on save with external projects", () => {
     it("compile on save emits same output as project build", () => {
         const tsbaseJson: File = {
             path: `/user/username/projects/myproject/tsbase.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compileOnSave: true,
                 compilerOptions: {
                     module: "none",
@@ -1690,7 +1687,7 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         const buttonClass = `/user/username/projects/myproject/buttonClass`;
         const buttonConfig: File = {
             path: `${buttonClass}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 extends: "../tsbase.json",
                 compilerOptions: {
                     outFile: "Source.js",
@@ -1711,7 +1708,7 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         const siblingClass = `/user/username/projects/myproject/SiblingClass`;
         const siblingConfig: File = {
             path: `${siblingClass}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 extends: "../tsbase.json",
                 references: [{
                     path: "../buttonClass/",
@@ -1731,12 +1728,12 @@ describe("unittests:: tsserver:: with project references and compile on save wit
     }
 }`,
         };
-        const host = createServerHost([libFile, tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
 
         // ts build should succeed
         ensureErrorFreeBuild(host, [siblingConfig.path]);
 
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([siblingSource], session);
 
         session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({

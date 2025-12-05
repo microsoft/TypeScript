@@ -1,2 +1,2 @@
-protected module M {
+protected namespace M {
 }

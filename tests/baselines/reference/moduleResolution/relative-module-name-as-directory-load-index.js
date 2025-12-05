@@ -3,7 +3,9 @@ Resolving "./foo" from /a/b/c.ts
 
 
 //// [/a/b/foo/package.json]
-{"main":"/c/d"}
+{
+  "main": "/c/d"
+}
 
 //// [/a/b/foo/index.d.ts]
 
@@ -19,13 +21,18 @@ Resolution:: {
     "/a/b/foo.ts",
     "/a/b/foo.tsx",
     "/a/b/foo.d.ts",
-    "/c/d",
+    "/a/b/foo.js",
+    "/a/b/foo.jsx",
     "/c/d.ts",
     "/c/d.tsx",
     "/c/d.d.ts",
+    "/c/d.js",
+    "/c/d.jsx",
     "/c/d/index.ts",
     "/c/d/index.tsx",
     "/c/d/index.d.ts",
+    "/c/d/index.js",
+    "/c/d/index.jsx",
     "/a/b/foo/index.ts",
     "/a/b/foo/index.tsx"
   ],
@@ -39,7 +46,9 @@ Resolving "./foo" from /a/b/c.ts with host that doesnt have directoryExists
 
 
 //// [/a/b/foo/package.json]
-{"main":"/c/d"}
+{
+  "main": "/c/d"
+}
 
 //// [/a/b/foo/index.d.ts]
 
@@ -55,13 +64,18 @@ Resolution:: {
     "/a/b/foo.ts",
     "/a/b/foo.tsx",
     "/a/b/foo.d.ts",
-    "/c/d",
+    "/a/b/foo.js",
+    "/a/b/foo.jsx",
     "/c/d.ts",
     "/c/d.tsx",
     "/c/d.d.ts",
+    "/c/d.js",
+    "/c/d.jsx",
     "/c/d/index.ts",
     "/c/d/index.tsx",
     "/c/d/index.d.ts",
+    "/c/d/index.js",
+    "/c/d/index.jsx",
     "/a/b/foo/index.ts",
     "/a/b/foo/index.tsx"
   ],

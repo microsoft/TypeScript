@@ -3,14 +3,18 @@
 === multipleExportDefault3.ts ===
 export default {
 >{    uhoh: "another default",} : { uhoh: string; }
+>                               : ^^^^^^^^^^^^^^^^^
 
     uhoh: "another default",
 >uhoh : string
+>     : ^^^^^^
 >"another default" : "another default"
+>                  : ^^^^^^^^^^^^^^^^^
 
 };
 
 export default class C { }
 >C : import("multipleExportDefault3").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

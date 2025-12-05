@@ -1,64 +1,87 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts] ////
 
 === TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts ===
-module A.B {
+namespace A.B {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
     export var x: number;
 >x : number
+>  : ^^^^^^
 }
 
 module A{ 
 >A : typeof A
+>  : ^^^^^^^^
 
-    module B {
+    namespace B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export var x: string;
 >x : string
+>  : ^^^^^^
     }
 }
 
 // ensure the right var decl is exported
 var x: number;
 >x : number
+>  : ^^^^^^
 
 var x = A.B.x;
 >x : number
+>  : ^^^^^^
 >A.B.x : number
+>      : ^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
-module X.Y.Z {
+namespace X.Y.Z {
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 
     export class Line {
 >Line : Line
+>     : ^^^^
 
         length: number;
 >length : number
+>       : ^^^^^^
     }
 }
 
-module X {
+namespace X {
 >X : typeof X
+>  : ^^^^^^^^
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
+>  : ^^^^^^^^
 
-        module Z {
+        namespace Z {
 >Z : typeof Z
+>  : ^^^^^^^^
 
             export class Line {
 >Line : Line
+>     : ^^^^
 
                 name: string;
 >name : string
+>     : ^^^^^^
             }
         }
     }
@@ -67,11 +90,17 @@ module X {
 // make sure merging works as expected
 var l: { length: number };
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >length : number
+>       : ^^^^^^
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >X : any
+>  : ^^^
 >Y : any
+>  : ^^^
 >Z : any
+>  : ^^^
 

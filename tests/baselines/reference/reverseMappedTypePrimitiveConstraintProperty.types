@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/reverseMappedTypePrimitiveConstraintProperty.ts] ////
+
+=== reverseMappedTypePrimitiveConstraintProperty.ts ===
+declare function test<
+>test : <T extends { prop: string; nested: { nestedProp: string; }; }>(obj: { [K in keyof T]: T[K]; }) => T
+>     : ^ ^^^^^^^^^                                                  ^^   ^^                         ^^^^^ 
+
+  T extends { prop: string; nested: { nestedProp: string } },
+>prop : string
+>     : ^^^^^^
+>nested : { nestedProp: string; }
+>       : ^^^^^^^^^^^^^^      ^^^
+>nestedProp : string
+>           : ^^^^^^
+
+>(obj: { [K in keyof T]: T[K] }): T;
+>obj : { [K in keyof T]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+const result = test({
+>result : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test({  prop: "foo", // this one should not widen to string  nested: {    nestedProp: "bar",  },  extra: "baz",}) : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test : <T extends { prop: string; nested: { nestedProp: string; }; }>(obj: { [K in keyof T]: T[K]; }) => T
+>     : ^ ^^^^^^^^^                                                  ^^   ^^                         ^^^^^ 
+>{  prop: "foo", // this one should not widen to string  nested: {    nestedProp: "bar",  },  extra: "baz",} : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  prop: "foo", // this one should not widen to string
+>prop : "foo"
+>     : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  nested: {
+>nested : { nestedProp: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>{    nestedProp: "bar",  } : { nestedProp: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    nestedProp: "bar",
+>nestedProp : string
+>           : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+  },
+  extra: "baz",
+>extra : string
+>      : ^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
+
+});
+

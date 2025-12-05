@@ -3,12 +3,19 @@
 === strictOptionalPropertiesErrors1.ts ===
 function test1(arg: [string, (boolean | number)?]) {}
 >test1 : (arg: [string, (boolean | number)?]) => void
+>      : ^   ^^                             ^^^^^^^^^
 >arg : [string, (number | boolean)?]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 test1(['foo', 'bar']);
 >test1(['foo', 'bar']) : void
->test1 : (arg: [string, (number | boolean)?]) => void
+>                      : ^^^^
+>test1 : (arg: [string, (boolean | number)?]) => void
+>      : ^   ^^                             ^^^^^^^^^
 >['foo', 'bar'] : [string, string]
+>               : ^^^^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 

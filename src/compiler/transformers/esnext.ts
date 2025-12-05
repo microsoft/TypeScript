@@ -6,7 +6,6 @@ import {
     BindingElement,
     Block,
     Bundle,
-    CaseOrDefaultClause,
     chainBundle,
     ClassDeclaration,
     Debug,
@@ -14,6 +13,7 @@ import {
     ExportAssignment,
     ExportSpecifier,
     Expression,
+    firstOrUndefined,
     ForOfStatement,
     ForStatement,
     GeneratedIdentifierFlags,
@@ -24,7 +24,6 @@ import {
     isArray,
     isBindingPattern,
     isBlock,
-    isCaseClause,
     isCustomPrologue,
     isExpression,
     isGeneratedIdentifier,
@@ -48,7 +47,6 @@ import {
     skipOuterExpressions,
     SourceFile,
     Statement,
-    SwitchStatement,
     SyntaxKind,
     TransformationContext,
     TransformFlags,
@@ -61,7 +59,7 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum UsingKind {
     None,
@@ -71,6 +69,11 @@ const enum UsingKind {
 
 /** @internal */
 export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
+
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -116,9 +119,6 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
             case SyntaxKind.ForOfStatement:
                 return visitForOfStatement(node as ForOfStatement);
-
-            case SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as SwitchStatement);
 
             default:
                 return visitEachChild(node, visitor, context);
@@ -301,11 +301,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             //
             // before handing the shallow transformation back to the visitor for an in-depth transformation.
             const forInitializer = node.initializer;
-            Debug.assertNode(forInitializer, isUsingVariableDeclarationList);
-            Debug.assert(forInitializer.declarations.length === 1, "ForInitializer may only have one declaration");
-
-            const forDecl = forInitializer.declarations[0];
-            Debug.assert(!forDecl.initializer, "ForInitializer may not have an initializer");
+            const forDecl = firstOrUndefined(forInitializer.declarations) || factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined));
 
             const isAwaitUsing = getUsingKindOfVariableDeclarationList(forInitializer) === UsingKind.Async;
             const temp = factory.getGeneratedNameForNode(forDecl.name);
@@ -334,72 +330,6 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 isStatement,
             );
         }
-        return visitEachChild(node, visitor, context);
-    }
-
-    function visitCaseOrDefaultClause(node: CaseOrDefaultClause, envBinding: Identifier) {
-        if (getUsingKindOfStatements(node.statements) !== UsingKind.None) {
-            if (isCaseClause(node)) {
-                return factory.updateCaseClause(
-                    node,
-                    visitNode(node.expression, visitor, isExpression),
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
-                );
-            }
-            else {
-                return factory.updateDefaultClause(
-                    node,
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
-                );
-            }
-        }
-        return visitEachChild(node, visitor, context);
-    }
-
-    function visitSwitchStatement(node: SwitchStatement) {
-        // given:
-        //
-        //  switch (expr) {
-        //    case expr:
-        //      using res = expr;
-        //  }
-        //
-        // produces:
-        //
-        //  const env_1 = { stack: [], error: void 0, hasError: false };
-        //  try {
-        //    switch(expr) {
-        //      case expr:
-        //        const res = __addDisposableResource(env_1, expr, false);
-        //    }
-        //  }
-        //  catch (e_1) {
-        //    env_1.error = e_1;
-        //    env_1.hasError = true;
-        //  }
-        //  finally {
-        //     __disposeResources(env_1);
-        //  }
-        //
-        const usingKind = getUsingKindOfCaseOrDefaultClauses(node.caseBlock.clauses);
-        if (usingKind) {
-            const envBinding = createEnvBinding();
-            return createDownlevelUsingStatements(
-                [
-                    factory.updateSwitchStatement(
-                        node,
-                        visitNode(node.expression, visitor, isExpression),
-                        factory.updateCaseBlock(
-                            node.caseBlock,
-                            node.caseBlock.clauses.map(clause => visitCaseOrDefaultClause(clause, envBinding)),
-                        ),
-                    ),
-                ],
-                envBinding,
-                usingKind === UsingKind.Async,
-            );
-        }
-
         return visitEachChild(node, visitor, context);
     }
 
@@ -863,16 +793,6 @@ function getUsingKindOfStatements(statements: readonly Statement[]): UsingKind {
     let result = UsingKind.None;
     for (const statement of statements) {
         const usingKind = getUsingKind(statement);
-        if (usingKind === UsingKind.Async) return UsingKind.Async;
-        if (usingKind > result) result = usingKind;
-    }
-    return result;
-}
-
-function getUsingKindOfCaseOrDefaultClauses(clauses: readonly CaseOrDefaultClause[]): UsingKind {
-    let result = UsingKind.None;
-    for (const clause of clauses) {
-        const usingKind = getUsingKindOfStatements(clause.statements);
         if (usingKind === UsingKind.Async) return UsingKind.Async;
         if (usingKind > result) result = usingKind;
     }

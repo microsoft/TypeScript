@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFilesForNodeNativeModules.ts] ////
+
+=== main.ts ===
+import mod = require("./dir/native.node");
+>mod : any
+>    : ^^^
+
+mod.doNativeThing("good");
+>mod.doNativeThing("good") : any
+>                          : ^^^
+>mod.doNativeThing : any
+>                  : ^^^
+>mod : any
+>    : ^^^
+>doNativeThing : any
+>              : ^^^
+>"good" : "good"
+>       : ^^^^^^
+

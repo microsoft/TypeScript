@@ -1,0 +1,14 @@
+b.ts(1,19): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+
+
+==== a.ts (0 errors) ====
+    export default function defer() {
+        console.log("defer from a");
+    }
+    
+==== b.ts (1 errors) ====
+    import defer from "a";
+                      ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+    
+    defer();

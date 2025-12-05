@@ -1,7 +1,22 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/workspaces/project/src/main.ts]
+export const x = 10;
+
+//// [/home/src/workspaces/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "amd",
+    "outFile": "theApp.js"
+  },
+  "references": [
+    {
+      "path": "../Util/Dates"
+    }
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -15,28 +30,29 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/src/main.ts]
-export const x = 10;
 
-//// [/src/project/tsconfig.json]
-{"compilerOptions":{"module":"amd","outFile":"theApp.js"},"references":[{"path":"../Util/Dates"}]}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc --p src/project
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m73[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m {"compilerOptions":{"module":"amd","outFile":"theApp.js"},"references":[{"path":"../Util/Dates"}]}
-[7m [0m [91m                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/Util/Dates' not found.
+
+[7m7[0m     {
+[7m [0m [91m    ~[0m
+[7m8[0m       "path": "../Util/Dates"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m9[0m     }
+[7m [0m [91m~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+Found 2 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 
-//// [/src/project/theApp.js]
+
+//// [/home/src/workspaces/project/theApp.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -45,3 +61,5 @@ define("main", ["require", "exports"], function (require, exports) {
 });
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

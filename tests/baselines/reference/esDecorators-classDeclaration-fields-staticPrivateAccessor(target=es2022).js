@@ -19,21 +19,23 @@ class D {
 
 //// [esDecorators-classDeclaration-fields-staticPrivateAccessor.js]
 let C = (() => {
-    let _staticExtraInitializers = [];
     let _static_private_field1_decorators;
     let _static_private_field1_initializers = [];
+    let _static_private_field1_extraInitializers = [];
     let _static_private_field1_descriptor;
     return class C {
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _static_private_field1_decorators = [dec];
-            __esDecorate(this, _static_private_field1_descriptor = { get: __setFunctionName(function () { return this.#field1_accessor_storage; }, "#field1", "get"), set: __setFunctionName(function (value) { this.#field1_accessor_storage = value; }, "#field1", "set") }, _static_private_field1_decorators, { kind: "accessor", name: "#field1", static: true, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } }, metadata: _metadata }, _static_private_field1_initializers, _staticExtraInitializers);
+            __esDecorate(this, _static_private_field1_descriptor = { get: __setFunctionName(function () { return this.#field1_accessor_storage; }, "#field1", "get"), set: __setFunctionName(function (value) { this.#field1_accessor_storage = value; }, "#field1", "set") }, _static_private_field1_decorators, { kind: "accessor", name: "#field1", static: true, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } }, metadata: _metadata }, _static_private_field1_initializers, _static_private_field1_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            __runInitializers(this, _staticExtraInitializers);
         }
         static #field1_accessor_storage = __runInitializers(this, _static_private_field1_initializers, 0);
         static get #field1() { return _static_private_field1_descriptor.get.call(this); }
         static set #field1(value) { return _static_private_field1_descriptor.set.call(this, value); }
+        static {
+            __runInitializers(this, _static_private_field1_extraInitializers);
+        }
     };
 })();
 let D = (() => {

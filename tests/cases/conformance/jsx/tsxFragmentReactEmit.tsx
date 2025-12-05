@@ -1,7 +1,7 @@
 //@filename: file.tsx
 //@jsx: react
 
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;

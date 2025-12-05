@@ -1,3 +1,3 @@
 /* Generated file to emulate the ts.CallHierarchy namespace. */
 
-export * from "../callHierarchy";
+export * from "../callHierarchy.js";

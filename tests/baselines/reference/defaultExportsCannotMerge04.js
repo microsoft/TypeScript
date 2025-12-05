@@ -17,8 +17,8 @@ export interface Foo {
 //// [defaultExportsCannotMerge04.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Foo;
 function Foo() {
 }
-exports.default = Foo;
 (function (Foo) {
 })(exports.Foo || (exports.Foo = {}));

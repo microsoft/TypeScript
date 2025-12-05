@@ -6,12 +6,12 @@ import {
     canHaveSymbol,
     CheckFlags,
     contains,
-    countWhere,
     createPrinterWithRemoveComments,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     Debug,
+    ElementFlags,
     EmitHint,
     emptyArray,
     Expression,
@@ -49,6 +49,7 @@ import {
     isPropertyAccessExpression,
     isSourceFile,
     isSourceFileJS,
+    isSpreadElement,
     isTaggedTemplateExpression,
     isTemplateHead,
     isTemplateLiteralToken,
@@ -77,6 +78,7 @@ import {
     skipTrivia,
     SourceFile,
     spacePart,
+    SpreadElement,
     Symbol,
     SymbolDisplayPart,
     symbolToDisplayParts,
@@ -85,10 +87,11 @@ import {
     TemplateExpression,
     TextSpan,
     tryCast,
+    TupleTypeReference,
     Type,
     TypeChecker,
     TypeParameter,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const enum InvocationKind {
     Call,
@@ -272,25 +275,22 @@ export interface ArgumentInfoForCompletions {
     readonly argumentCount: number;
 }
 /** @internal */
-export function getArgumentInfoForCompletions(node: Node, position: number, sourceFile: SourceFile): ArgumentInfoForCompletions | undefined {
-    const info = getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+export function getArgumentInfoForCompletions(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentInfoForCompletions | undefined {
+    const info = getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
     return !info || info.isTypeParameterList || info.invocation.kind !== InvocationKind.Call ? undefined
         : { invocation: info.invocation.node, argumentCount: info.argumentCount, argumentIndex: info.argumentIndex };
 }
 
-function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
-    const info = getArgumentOrParameterListAndIndex(node, sourceFile);
+function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
+    const info = getArgumentOrParameterListAndIndex(node, sourceFile, checker);
     if (!info) return undefined;
     const { list, argumentIndex } = info;
 
-    const argumentCount = getArgumentCount(list, /*ignoreTrailingComma*/ isInString(sourceFile, position, node));
-    if (argumentIndex !== 0) {
-        Debug.assertLessThan(argumentIndex, argumentCount);
-    }
+    const argumentCount = getArgumentCount(checker, list);
     const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
     return { list, argumentIndex, argumentCount, argumentsSpan };
 }
-function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile): { readonly list: Node; readonly argumentIndex: number; } | undefined {
+function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile, checker: TypeChecker): { readonly list: Node; readonly argumentIndex: number; } | undefined {
     if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
         // Find the list that starts right *after* the < or ( token.
         // If the user has just opened a list, consider this item 0.
@@ -304,7 +304,7 @@ function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile):
         //   - On the target of the call (parent.func)
         //   - On the 'new' keyword in a 'new' expression
         const list = findContainingList(node);
-        return list && { list, argumentIndex: getArgumentIndex(list, node) };
+        return list && { list, argumentIndex: getArgumentIndex(checker, list, node) };
     }
 }
 
@@ -312,7 +312,7 @@ function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile):
  * Returns relevant information for the argument list and the current argument if we are
  * in the argument of an invocation; returns undefined otherwise.
  */
-function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
+function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
     const { parent } = node;
     if (isCallOrNewExpression(parent)) {
         const invocation = parent;
@@ -331,7 +331,7 @@ function getImmediatelyContainingArgumentInfo(node: Node, position: number, sour
         //    Case 3:
         //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give signature help
         // Find out if 'node' is an argument, a type argument, or neither
-        const info = getArgumentOrParameterListInfo(node, position, sourceFile);
+        const info = getArgumentOrParameterListInfo(node, position, sourceFile, checker);
         if (!info) return undefined;
         const { list, argumentIndex, argumentCount, argumentsSpan } = info;
         const isTypeParameterList = !!parent.typeArguments && parent.typeArguments.pos === list.pos;
@@ -397,7 +397,7 @@ function getImmediatelyContainingArgumentInfo(node: Node, position: number, sour
 }
 
 function getImmediatelyContainingArgumentOrContextualParameterInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-    return tryGetParameterInfo(node, position, sourceFile, checker) || getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+    return tryGetParameterInfo(node, position, sourceFile, checker) || getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
 }
 
 function getHighestBinary(b: BinaryExpression): BinaryExpression {
@@ -452,7 +452,7 @@ function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, 
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
-            const info = getArgumentOrParameterListInfo(node, position, sourceFile);
+            const info = getArgumentOrParameterListInfo(node, position, sourceFile, checker);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
             const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
@@ -476,50 +476,67 @@ function chooseBetterSymbol(s: Symbol): Symbol {
         : s;
 }
 
-function getArgumentIndex(argumentsList: Node, node: Node) {
-    // The list we got back can include commas.  In the presence of errors it may
-    // also just have nodes without commas.  For example "Foo(a b c)" will have 3
-    // args without commas. We want to find what index we're at.  So we count
-    // forward until we hit ourselves, only incrementing the index if it isn't a
-    // comma.
-    //
-    // Note: the subtlety around trailing commas (in getArgumentCount) does not apply
-    // here.  That's because we're only walking forward until we hit the node we're
-    // on.  In that case, even if we're after the trailing comma, we'll still see
-    // that trailing comma in the list, and we'll have generated the appropriate
-    // arg index.
+function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
+    const spreadType = checker.getTypeAtLocation(node.expression);
+    if (checker.isTupleType(spreadType)) {
+        const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+        if (fixedLength === 0) {
+            return 0;
+        }
+        const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+        return firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+    }
+    return 0;
+}
+
+function getArgumentIndex(checker: TypeChecker, argumentsList: Node, node: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, node);
+}
+
+function getArgumentCount(checker: TypeChecker, argumentsList: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, /*node*/ undefined);
+}
+
+function getArgumentIndexOrCount(checker: TypeChecker, argumentsList: Node, node: Node | undefined) {
+    // The list we got back can include commas. In the presence of errors it may
+    // also just have nodes without commas. For example "Foo(a b c)" will have 3
+    // args without commas.
+    const args = argumentsList.getChildren();
     let argumentIndex = 0;
-    for (const child of argumentsList.getChildren()) {
-        if (child === node) {
-            break;
+    let skipComma = false;
+    for (const child of args) {
+        if (node && child === node) {
+            if (!skipComma && child.kind === SyntaxKind.CommaToken) {
+                argumentIndex++;
+            }
+            return argumentIndex;
+        }
+        if (isSpreadElement(child)) {
+            argumentIndex += getSpreadElementCount(child, checker);
+            skipComma = true;
+            continue;
         }
         if (child.kind !== SyntaxKind.CommaToken) {
             argumentIndex++;
+            skipComma = true;
+            continue;
         }
+        if (skipComma) {
+            skipComma = false;
+            continue;
+        }
+        argumentIndex++;
     }
-
-    return argumentIndex;
-}
-
-function getArgumentCount(argumentsList: Node, ignoreTrailingComma: boolean) {
+    if (node) {
+        return argumentIndex;
+    }
     // The argument count for a list is normally the number of non-comma children it has.
     // For example, if you have "Foo(a,b)" then there will be three children of the arg
-    // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
-    // is a small subtlety.  If you have "Foo(a,)", then the child list will just have
-    // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
+    // list 'a' '<comma>' 'b'. So, in this case the arg count will be 2. However, there
+    // is a small subtlety. If you have "Foo(a,)", then the child list will just have
+    // 'a' '<comma>'. So, in the case where the last child is a comma, we increase the
     // arg count by one to compensate.
-    //
-    // Note: this subtlety only applies to the last comma.  If you had "Foo(a,," then
-    // we'll have: 'a' '<comma>' '<missing>'
-    // That will give us 2 non-commas.  We then add one for the last comma, giving us an
-    // arg count of 3.
-    const listChildren = argumentsList.getChildren();
-
-    let argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
-    if (!ignoreTrailingComma && listChildren.length > 0 && last(listChildren).kind === SyntaxKind.CommaToken) {
-        argumentCount++;
-    }
-    return argumentCount;
+    return args.length && last(args).kind === SyntaxKind.CommaToken ? argumentIndex + 1 : argumentIndex;
 }
 
 // spanIndex is either the index for a given template span.
@@ -640,9 +657,6 @@ function createSignatureHelpItems(
     const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined) : emptyArray;
     const items = map(candidates, candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile));
 
-    if (argumentIndex !== 0) {
-        Debug.assertLessThan(argumentIndex, argumentCount);
-    }
     let selectedItemIndex = 0;
     let itemsSeen = 0;
     for (let i = 0; i < items.length; i++) {

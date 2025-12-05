@@ -1,0 +1,432 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_errorLocations1.ts] ////
+
+=== typeSatisfaction_errorLocations1.ts ===
+const obj1 = { a: 1 };
+>obj1 : { a: number; }
+>     : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const fn1 = (s: { a: true }) => {};
+>fn1 : (s: { a: true; }) => void
+>    : ^ ^^            ^^^^^^^^^
+>(s: { a: true }) => {} : (s: { a: true; }) => void
+>                       : ^ ^^            ^^^^^^^^^
+>s : { a: true; }
+>  : ^^^^^    ^^^
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+
+fn1({} satisfies unknown);
+>fn1({} satisfies unknown) : void
+>                          : ^^^^
+>fn1 : (s: { a: true; }) => void
+>    : ^ ^^            ^^^^^^^^^
+>{} satisfies unknown : {}
+>                     : ^^
+>{} : {}
+>   : ^^
+
+fn1({ a: 1 } satisfies unknown);
+>fn1({ a: 1 } satisfies unknown) : void
+>                                : ^^^^
+>fn1 : (s: { a: true; }) => void
+>    : ^ ^^            ^^^^^^^^^
+>{ a: 1 } satisfies unknown : { a: number; }
+>                           : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+fn1(obj1 satisfies unknown);
+>fn1(obj1 satisfies unknown) : void
+>                            : ^^^^
+>fn1 : (s: { a: true; }) => void
+>    : ^ ^^            ^^^^^^^^^
+>obj1 satisfies unknown : { a: number; }
+>                       : ^^^^^^^^^^^^^^
+>obj1 : { a: number; }
+>     : ^^^^^^^^^^^^^^
+
+class Cls1 {
+>Cls1 : Cls1
+>     : ^^^^
+
+  constructor(p: { a: true }) {}
+>p : { a: true; }
+>  : ^^^^^    ^^^
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+}
+new Cls1({} satisfies unknown);
+>new Cls1({} satisfies unknown) : Cls1
+>                               : ^^^^
+>Cls1 : typeof Cls1
+>     : ^^^^^^^^^^^
+>{} satisfies unknown : {}
+>                     : ^^
+>{} : {}
+>   : ^^
+
+new Cls1({ a: 1 } satisfies unknown);
+>new Cls1({ a: 1 } satisfies unknown) : Cls1
+>                                     : ^^^^
+>Cls1 : typeof Cls1
+>     : ^^^^^^^^^^^
+>{ a: 1 } satisfies unknown : { a: number; }
+>                           : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+new Cls1(obj1 satisfies unknown);
+>new Cls1(obj1 satisfies unknown) : Cls1
+>                                 : ^^^^
+>Cls1 : typeof Cls1
+>     : ^^^^^^^^^^^
+>obj1 satisfies unknown : { a: number; }
+>                       : ^^^^^^^^^^^^^^
+>obj1 : { a: number; }
+>     : ^^^^^^^^^^^^^^
+
+function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
+>fn2 : <T extends { a: true; }[]>(f: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^              ^^ ^^                    ^^^^^^^^^
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>f : (...args: T) => void
+>  : ^^^^    ^^ ^^^^^    
+>args : T
+>     : ^
+
+  f({ a: true } satisfies unknown);
+>f({ a: true } satisfies unknown) : void
+>                                 : ^^^^
+>f : (...args: T) => void
+>  : ^^^^    ^^ ^^^^^    
+>{ a: true } satisfies unknown : { a: boolean; }
+>                              : ^^^^^^^^^^^^^^^
+>{ a: true } : { a: boolean; }
+>            : ^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  const o = { a: true as const };
+>o : { a: true; }
+>  : ^^^^^^^^^^^^
+>{ a: true as const } : { a: true; }
+>                     : ^^^^^^^^^^^^
+>a : true
+>  : ^^^^
+>true as const : true
+>              : ^^^^
+>true : true
+>     : ^^^^
+
+  f(o satisfies unknown);
+>f(o satisfies unknown) : void
+>                       : ^^^^
+>f : (...args: T) => void
+>  : ^^^^    ^^ ^^^^^    
+>o satisfies unknown : { a: true; }
+>                    : ^^^^^^^^^^^^
+>o : { a: true; }
+>  : ^^^^^^^^^^^^
+}
+
+const tuple1: [boolean, boolean] = [true, 100 satisfies unknown];
+>tuple1 : [boolean, boolean]
+>       : ^^^^^^^^^^^^^^^^^^
+>[true, 100 satisfies unknown] : [true, number]
+>                              : ^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>100 satisfies unknown : 100
+>                      : ^^^
+>100 : 100
+>    : ^^^
+
+const obj2 = { a: 10, b: true } satisfies Record<string, number>;
+>obj2 : { a: number; b: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 10, b: true } satisfies Record<string, number> : { a: number; b: boolean; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 10, b: true } : { a: number; b: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+>b : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+const literal1 = 1 satisfies boolean;
+>literal1 : 1
+>         : ^
+>1 satisfies boolean : 1
+>                    : ^
+>1 : 1
+>  : ^
+
+const literal2: true = 1 satisfies number;
+>literal2 : true
+>         : ^^^^
+>true : true
+>     : ^^^^
+>1 satisfies number : 1
+>                   : ^
+>1 : 1
+>  : ^
+
+declare function fn3(...args: unknown[]): void;
+>fn3 : (...args: unknown[]) => void
+>    : ^^^^    ^^         ^^^^^    
+>args : unknown[]
+>     : ^^^^^^^^^
+
+fn3(10, ...([10, "20"] satisfies number[]));
+>fn3(10, ...([10, "20"] satisfies number[])) : void
+>                                            : ^^^^
+>fn3 : (...args: unknown[]) => void
+>    : ^^^^    ^^         ^^^^^    
+>10 : 10
+>   : ^^
+>...([10, "20"] satisfies number[]) : string | number
+>                                   : ^^^^^^^^^^^^^^^
+>([10, "20"] satisfies number[]) : (string | number)[]
+>                                : ^^^^^^^^^^^^^^^^^^^
+>[10, "20"] satisfies number[] : (string | number)[]
+>                              : ^^^^^^^^^^^^^^^^^^^
+>[10, "20"] : (string | number)[]
+>           : ^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>"20" : "20"
+>     : ^^^^
+
+const tuple2 = [10, "20"] as const;
+>tuple2 : readonly [10, "20"]
+>       : ^^^^^^^^^^^^^^^^^^^
+>[10, "20"] as const : readonly [10, "20"]
+>                    : ^^^^^^^^^^^^^^^^^^^
+>[10, "20"] : readonly [10, "20"]
+>           : ^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>"20" : "20"
+>     : ^^^^
+
+fn3(10, ...(tuple2 satisfies number[]));
+>fn3(10, ...(tuple2 satisfies number[])) : void
+>                                        : ^^^^
+>fn3 : (...args: unknown[]) => void
+>    : ^^^^    ^^         ^^^^^    
+>10 : 10
+>   : ^^
+>...(tuple2 satisfies number[]) : 10 | "20"
+>                               : ^^^^^^^^^
+>(tuple2 satisfies number[]) : readonly [10, "20"]
+>                            : ^^^^^^^^^^^^^^^^^^^
+>tuple2 satisfies number[] : readonly [10, "20"]
+>                          : ^^^^^^^^^^^^^^^^^^^
+>tuple2 : readonly [10, "20"]
+>       : ^^^^^^^^^^^^^^^^^^^
+
+declare function fn4(...args: number[]): void;
+>fn4 : (...args: number[]) => void
+>    : ^^^^    ^^        ^^^^^    
+>args : number[]
+>     : ^^^^^^^^
+
+fn4(10, ...(["10", "20"] satisfies readonly string[]));
+>fn4(10, ...(["10", "20"] satisfies readonly string[])) : void
+>                                                       : ^^^^
+>fn4 : (...args: number[]) => void
+>    : ^^^^    ^^        ^^^^^    
+>10 : 10
+>   : ^^
+>...(["10", "20"] satisfies readonly string[]) : string
+>                                              : ^^^^^^
+>(["10", "20"] satisfies readonly string[]) : string[]
+>                                           : ^^^^^^^^
+>["10", "20"] satisfies readonly string[] : string[]
+>                                         : ^^^^^^^^
+>["10", "20"] : string[]
+>             : ^^^^^^^^
+>"10" : "10"
+>     : ^^^^
+>"20" : "20"
+>     : ^^^^
+
+const tuple3 = ["10", "20"] as const;
+>tuple3 : readonly ["10", "20"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>["10", "20"] as const : readonly ["10", "20"]
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>["10", "20"] : readonly ["10", "20"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>"10" : "10"
+>     : ^^^^
+>"20" : "20"
+>     : ^^^^
+
+fn4(10, ...(tuple3 satisfies readonly string[]));
+>fn4(10, ...(tuple3 satisfies readonly string[])) : void
+>                                                 : ^^^^
+>fn4 : (...args: number[]) => void
+>    : ^^^^    ^^        ^^^^^    
+>10 : 10
+>   : ^^
+>...(tuple3 satisfies readonly string[]) : "20" | "10"
+>                                        : ^^^^^^^^^^^
+>(tuple3 satisfies readonly string[]) : readonly ["10", "20"]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^
+>tuple3 satisfies readonly string[] : readonly ["10", "20"]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^
+>tuple3 : readonly ["10", "20"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+function fn5(): number {
+>fn5 : () => number
+>    : ^^^^^^      
+
+  return "foo" satisfies unknown;
+>"foo" satisfies unknown : "foo"
+>                        : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+
+function fn6(): number {
+>fn6 : () => number
+>    : ^^^^^^      
+
+  return "foo" satisfies number;
+>"foo" satisfies number : "foo"
+>                       : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+
+((): { a: true } => ({}) satisfies unknown)();
+>((): { a: true } => ({}) satisfies unknown)() : { a: true; }
+>                                              : ^^^^^    ^^^
+>((): { a: true } => ({}) satisfies unknown) : () => { a: true; }
+>                                            : ^^^^^^            
+>(): { a: true } => ({}) satisfies unknown : () => { a: true; }
+>                                          : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>({}) satisfies unknown : {}
+>                       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+((): { a: true } => ({ a: 1 }) satisfies unknown)();
+>((): { a: true } => ({ a: 1 }) satisfies unknown)() : { a: true; }
+>                                                    : ^^^^^    ^^^
+>((): { a: true } => ({ a: 1 }) satisfies unknown) : () => { a: true; }
+>                                                  : ^^^^^^            
+>(): { a: true } => ({ a: 1 }) satisfies unknown : () => { a: true; }
+>                                                : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>({ a: 1 }) satisfies unknown : { a: number; }
+>                             : ^^^^^^^^^^^^^^
+>({ a: 1 }) : { a: number; }
+>           : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+((): { a: true } => obj1 satisfies unknown)();
+>((): { a: true } => obj1 satisfies unknown)() : { a: true; }
+>                                              : ^^^^^    ^^^
+>((): { a: true } => obj1 satisfies unknown) : () => { a: true; }
+>                                            : ^^^^^^            
+>(): { a: true } => obj1 satisfies unknown : () => { a: true; }
+>                                          : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>obj1 satisfies unknown : { a: number; }
+>                       : ^^^^^^^^^^^^^^
+>obj1 : { a: number; }
+>     : ^^^^^^^^^^^^^^
+
+((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+>((): { a: true } => (({}) satisfies unknown) satisfies unknown)() : { a: true; }
+>                                                                  : ^^^^^    ^^^
+>((): { a: true } => (({}) satisfies unknown) satisfies unknown) : () => { a: true; }
+>                                                                : ^^^^^^            
+>(): { a: true } => (({}) satisfies unknown) satisfies unknown : () => { a: true; }
+>                                                              : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>(({}) satisfies unknown) satisfies unknown : {}
+>                                           : ^^
+>(({}) satisfies unknown) : {}
+>                         : ^^
+>({}) satisfies unknown : {}
+>                       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();
+>((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)() : { a: true; }
+>                                                                    : ^^^^^    ^^^
+>((): { a: true } => ((({}) satisfies unknown)) satisfies unknown) : () => { a: true; }
+>                                                                  : ^^^^^^            
+>(): { a: true } => ((({}) satisfies unknown)) satisfies unknown : () => { a: true; }
+>                                                                : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>((({}) satisfies unknown)) satisfies unknown : {}
+>                                             : ^^
+>((({}) satisfies unknown)) : {}
+>                           : ^^
+>(({}) satisfies unknown) : {}
+>                         : ^^
+>({}) satisfies unknown : {}
+>                       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+

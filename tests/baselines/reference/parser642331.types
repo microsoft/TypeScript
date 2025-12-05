@@ -3,8 +3,10 @@
 === parser642331.ts ===
 class test {
 >test : test
+>     : ^^^^
 
     constructor (static) { }
 >static : any
+>       : ^^^
 }
 

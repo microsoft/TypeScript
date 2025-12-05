@@ -17,11 +17,9 @@ const [ax0Def, ax0, ax1Def, ax1, ax2Def, ax2, ay, bx0Def, bx0, by0, bx1, by1] = 
 const bxRanges = [bx0, bx1];
 const byRanges = [by0, by1];
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['ax0', 'ax1', 'ax2', 'bx0', 'bx1', 'ay', 'by0', 'by1'] },
-    { type: "findRenameLocations", markerOrRange: [ax0, ax2] },
-    { type: "findRenameLocations", markerOrRange: ax1 },
-    { type: "findRenameLocations", markerOrRange: bxRanges },
-    { type: "findRenameLocations", markerOrRange: ay },
-    { type: "findRenameLocations", markerOrRange: byRanges },
-);
+verify.baselineFindAllReferences('ax0', 'ax1', 'ax2', 'bx0', 'bx1', 'ay', 'by0', 'by1');
+verify.baselineRename([ax0, ax2]);
+verify.baselineRename(ax1);
+verify.baselineRename(bxRanges);
+verify.baselineRename(ay);
+verify.baselineRename(byRanges);

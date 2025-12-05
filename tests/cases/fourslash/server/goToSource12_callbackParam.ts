@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // Actual yargs doesn't work like this because the implementation package's
 // main entry exports a small function wrapper function whose return value
 // is derived from something imported from another file where all the
@@ -13,28 +12,28 @@
 // definition and say "well, maybe I can find a JS counterpart to this .d.ts
 // and just look for declarations called 'positional' in there."
 
-// @Filename: /node_modules/@types/yargs/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@types/yargs/package.json
 //// {
 ////     "name": "@types/yargs",
 ////     "version": "1.0.0",
 ////     "types": "./index.d.ts"
 //// }
 
-// @Filename: /node_modules/@types/yargs/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/yargs/index.d.ts
 //// export interface Yargs { positional(): Yargs; }
 //// export declare function command(command: string, cb: (yargs: Yargs) => void): void;
 
-// @Filename: /node_modules/yargs/package.json
+// @Filename: /home/src/workspaces/project/node_modules/yargs/package.json
 //// {
 ////     "name": "yargs",
 ////     "version": "1.0.0",
 ////     "main": "index.js"
 //// }
 
-// @Filename: /node_modules/yargs/index.js
+// @Filename: /home/src/workspaces/project/node_modules/yargs/index.js
 //// export function command(cmd, cb) { cb({ /*end*/positional: "This is obviously not even close to realistic" }); }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { command } from "yargs";
 //// command("foo", yargs => {
 ////     yargs.[|/*start*/positional|]();

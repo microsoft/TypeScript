@@ -1,5 +1,9 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: /a.ts
 ////export default function ad() {}
 ////export const a0 = 0;
@@ -21,6 +25,12 @@
 ////declare function e(): void;
 ////export = e;
 
+// @Filename: /disposable.d.ts
+////export declare class Disposable { }
+
+// @Filename: /disposable_global.d.ts
+////interface Disposable { }
+
 // @Filename: /user.ts
 ////import * as b from "./b";
 ////import { } from "./c";
@@ -31,6 +41,7 @@
 ////cd; cd; c0; c0;
 ////dd; dd; d0; d0; d1; d1;
 ////e; e;
+////class X extends Disposable { }
 
 goTo.file("/user.ts");
 verify.codeFixAll({
@@ -41,11 +52,13 @@ verify.codeFixAll({
 import bd, * as b from "./b";
 import cd, { c0 } from "./c";
 import dd, { d0, d1 } from "./d";
+import { Disposable } from "./disposable";
 import e = require("./e");
 
 ad; ad; a0; a0;
 bd; bd; b.b0; b.b0;
 cd; cd; c0; c0;
 dd; dd; d0; d0; d1; d1;
-e; e;`,
+e; e;
+class X extends Disposable { }`,
 });

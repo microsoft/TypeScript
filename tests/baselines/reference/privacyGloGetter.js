@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyGloGetter.ts] ////
 
 //// [privacyGloGetter.ts]
-module m1 {
+namespace m1 {
     export class C1_public {
         private f1() {
         }

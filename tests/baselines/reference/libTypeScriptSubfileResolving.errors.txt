@@ -14,3 +14,4 @@ index.ts(6,1): error TS2304: Cannot find name 'window'.
     window.localStorage
     ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
+    

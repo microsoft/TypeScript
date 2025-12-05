@@ -1,3 +1,98 @@
+// === Completions ===
+=== /tests/cases/fourslash/a.ts ===
+// /**
+//  * 
+//    ^
+// | ----------------------------------------------------------------------
+// | @abstract
+// | @access
+// | @alias
+// | @argument
+// | @async
+// | @augments
+// | @author
+// | @borrows
+// | @callback
+// | @class
+// | @classdesc
+// | @constant
+// | @constructor
+// | @constructs
+// | @copyright
+// | @default
+// | @deprecated
+// | @description
+// | @emits
+// | @enum
+// | @event
+// | @example
+// | @exports
+// | @extends
+// | @external
+// | @field
+// | @file
+// | @fileoverview
+// | @fires
+// | @function
+// | @generator
+// | @global
+// | @hideconstructor
+// | @host
+// | @ignore
+// | @implements
+// | @import
+// | @inheritdoc
+// | @inner
+// | @instance
+// | @interface
+// | @kind
+// | @lends
+// | @license
+// | @link
+// | @linkcode
+// | @linkplain
+// | @listens
+// | @member
+// | @memberof
+// | @method
+// | @mixes
+// | @module
+// | @name
+// | @namespace
+// | @overload
+// | @override
+// | @package
+// | @param
+// | @private
+// | @prop
+// | @property
+// | @protected
+// | @public
+// | @readonly
+// | @requires
+// | @returns
+// | @satisfies
+// | @see
+// | @since
+// | @static
+// | @summary
+// | @template
+// | @this
+// | @throws
+// | @todo
+// | @tutorial
+// | @type
+// | @typedef
+// | @var
+// | @variation
+// | @version
+// | @virtual
+// | @yields
+// | @param b 
+// | ----------------------------------------------------------------------
+//  */
+// function bb(b: string) {}
+
 === /tests/cases/fourslash/b.js ===
 // /**
 //  * 
@@ -39,6 +134,7 @@
 // | @host
 // | @ignore
 // | @implements
+// | @import
 // | @inheritdoc
 // | @inner
 // | @instance
@@ -132,6 +228,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -230,6 +327,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -322,6 +420,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -373,99 +472,6 @@
 // | ----------------------------------------------------------------------
 //  */
 // function zz(a = 3) {}
-
-=== /tests/cases/fourslash/a.ts ===
-// /**
-//  * 
-//    ^
-// | ----------------------------------------------------------------------
-// | @abstract
-// | @access
-// | @alias
-// | @argument
-// | @async
-// | @augments
-// | @author
-// | @borrows
-// | @callback
-// | @class
-// | @classdesc
-// | @constant
-// | @constructor
-// | @constructs
-// | @copyright
-// | @default
-// | @deprecated
-// | @description
-// | @emits
-// | @enum
-// | @event
-// | @example
-// | @exports
-// | @extends
-// | @external
-// | @field
-// | @file
-// | @fileoverview
-// | @fires
-// | @function
-// | @generator
-// | @global
-// | @hideconstructor
-// | @host
-// | @ignore
-// | @implements
-// | @inheritdoc
-// | @inner
-// | @instance
-// | @interface
-// | @kind
-// | @lends
-// | @license
-// | @link
-// | @linkcode
-// | @linkplain
-// | @listens
-// | @member
-// | @memberof
-// | @method
-// | @mixes
-// | @module
-// | @name
-// | @namespace
-// | @overload
-// | @override
-// | @package
-// | @param
-// | @private
-// | @prop
-// | @property
-// | @protected
-// | @public
-// | @readonly
-// | @requires
-// | @returns
-// | @satisfies
-// | @see
-// | @since
-// | @static
-// | @summary
-// | @template
-// | @this
-// | @throws
-// | @todo
-// | @tutorial
-// | @type
-// | @typedef
-// | @var
-// | @variation
-// | @version
-// | @virtual
-// | @yields
-// | @param b 
-// | ----------------------------------------------------------------------
-//  */
-// function bb(b: string) {}
 
 [
   {
@@ -942,6 +948,19 @@
           "displayParts": [
             {
               "text": "@implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "@import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@import",
               "kind": "text"
             }
           ],
@@ -1573,6 +1592,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -2050,6 +2074,19 @@
           "displayParts": [
             {
               "text": "@implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "@import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@import",
               "kind": "text"
             }
           ],
@@ -2681,6 +2718,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -3158,6 +3200,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -3789,6 +3844,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -4266,6 +4326,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -4897,6 +4970,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -5374,6 +5452,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -6005,6 +6096,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

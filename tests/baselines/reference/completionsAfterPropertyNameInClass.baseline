@@ -1,3 +1,4 @@
+// === Completions ===
 === /a.js ===
 // class C1 {
 //     async #fo
@@ -119,23 +120,27 @@
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "C2",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "fo",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -231,16 +236,19 @@
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "C2",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

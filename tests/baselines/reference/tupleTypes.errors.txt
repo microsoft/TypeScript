@@ -11,6 +11,7 @@ tupleTypes.ts(18,1): error TS2322: Type '[number, string, number]' is not assign
 tupleTypes.ts(35,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tupleTypes.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'tt2' must be of type 'undefined', but here has type 'string | number'.
 tupleTypes.ts(41,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
+  Source has 0 element(s) but target requires 2.
 tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Type 'string | number' is not assignable to type 'number'.
     Type 'string' is not assignable to type 'number'.
@@ -96,6 +97,7 @@ tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a rea
     tt = [];  // Error
     ~~
 !!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Source has 0 element(s) but target requires 2.
     
     var a: number[];
     var a1: [number, string];

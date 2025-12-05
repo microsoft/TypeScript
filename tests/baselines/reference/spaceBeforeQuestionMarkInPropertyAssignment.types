@@ -3,7 +3,11 @@
 === spaceBeforeQuestionMarkInPropertyAssignment.ts ===
 var x = {x ?: 1} // should not crash
 >x : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{x ?: 1} : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

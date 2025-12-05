@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates14.ts] ////
+
+=== unicodeExtendedEscapesInTemplates14.ts ===
+// Shouldn't work, negatives are not allowed.
+var x = `\u{-DDDD}`;
+>x : Symbol(x, Decl(unicodeExtendedEscapesInTemplates14.ts, 1, 3))
+

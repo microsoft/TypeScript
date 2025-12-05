@@ -1,0 +1,32 @@
+canFollowGetSetKeyword.ts(10,5): error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+canFollowGetSetKeyword.ts(11,5): error TS1005: ',' expected.
+canFollowGetSetKeyword.ts(14,5): error TS2552: Cannot find name 'set'. Did you mean 'Set'?
+canFollowGetSetKeyword.ts(15,5): error TS1005: ',' expected.
+
+
+==== canFollowGetSetKeyword.ts (4 errors) ====
+    class A {
+        get
+        *x() {}
+    }
+    class B {
+        set
+        *x() {}
+    }
+    const c = {
+        get
+        ~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+        *x() {}
+        ~
+!!! error TS1005: ',' expected.
+    };
+    const d = {
+        set
+        ~~~
+!!! error TS2552: Cannot find name 'set'. Did you mean 'Set'?
+!!! related TS2728 lib.es2015.collection.d.ts:--:--: 'Set' is declared here.
+        *x() {}
+        ~
+!!! error TS1005: ',' expected.
+    };

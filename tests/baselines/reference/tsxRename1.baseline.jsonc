@@ -1,6 +1,6 @@
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements {
 //         /*RENAME*/<|[|divRENAME|]: {
@@ -16,7 +16,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements {
 //         <|[|divRENAME|]: {

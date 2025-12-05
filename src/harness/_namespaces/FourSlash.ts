@@ -1,3 +1,3 @@
 /* Generated file to emulate the FourSlash namespace. */
 
-export * from "../fourslashImpl";
+export * from "../fourslashImpl.js";

@@ -1,0 +1,131 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration9.ts] ////
+
+=== index.js ===
+/**
+ * @param {Object} [config]
+ * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
+ */
+export function prepareConfig({
+>prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;}) => void
+>              : ^                             ^^^                    ^^^                                                     ^ ^^^^^^^^^
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : string[]
+>     : ^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {}) {
+>{} : {}
+>   : ^^
+
+    json // string[]
+>json : string[]
+>     : ^^^^^^^^
+}
+
+export function prepareConfigWithoutAnnotation({
+>prepareConfigWithoutAnnotation : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: any[]; }; }) => void
+>                               : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : any[]
+>     : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {}) {
+>{} : {}
+>   : ^^
+
+    json
+>json : any[]
+>     : ^^^^^
+}
+
+/** @type {(param: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+}) => void} */
+export const prepareConfigWithContextualSignature = ({
+>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                     : ^     ^^                                                                            ^^^^^    
+>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                                                                     : ^                             ^^^^^^^^^^^^^^^^^^^^^^^                                                     ^^^^^^^^    
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : string[]
+>     : ^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {})=>  {
+>{} : {}
+>   : ^^
+
+    json // string[]
+>json : string[]
+>     : ^^^^^^^^
+}
+
+// Additional repros from https://github.com/microsoft/TypeScript/issues/59936
+
+/**
+ * @param {{ a?: { json?: string[] }}} [config]
+ */
+function f1({ a: { json = [] } = {} } = {}) { return json }
+>f1 : ({ a: { json } }?: { a?: { json?: string[]; }; }) => string[]
+>   : ^               ^^^                             ^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>json : string[]
+>     : ^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>{} : {}
+>   : ^^
+>json : string[]
+>     : ^^^^^^^^
+
+/**
+ * @param {[[string[]?]?]} [x]
+ */
+function f2([[json = []] = []] = []) { return json }
+>f2 : ([[json]]?: [[string[]?]?]) => string[]
+>   : ^        ^^^              ^^^^^^^^^^^^^
+>json : string[]
+>     : ^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>[] : []
+>   : ^^
+>[] : []
+>   : ^^
+>json : string[]
+>     : ^^^^^^^^
+

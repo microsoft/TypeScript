@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisInModuleFunction1.ts] ////
 
 //// [thisInModuleFunction1.ts]
-module bar {
+namespace bar {
  export function bar() {
   return this;
  } 

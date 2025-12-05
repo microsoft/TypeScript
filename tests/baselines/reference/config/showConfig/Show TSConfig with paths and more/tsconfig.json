@@ -25,12 +25,14 @@
         },
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "resolvePackageJsonExports": false,
+        "resolvePackageJsonImports": false
     },
     "include": [
         "./src/**/*"
     ],
     "exclude": [
-        "./lib"
+        "/Show TSConfig with paths and more/lib"
     ]
 }

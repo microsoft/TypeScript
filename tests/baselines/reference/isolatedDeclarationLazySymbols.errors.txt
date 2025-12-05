@@ -1,0 +1,47 @@
+isolatedDeclarationLazySymbols.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationLazySymbols.ts(13,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+isolatedDeclarationLazySymbols.ts(16,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+isolatedDeclarationLazySymbols.ts(16,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationLazySymbols.ts(21,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+isolatedDeclarationLazySymbols.ts(22,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+
+
+==== isolatedDeclarationLazySymbols.ts (6 errors) ====
+    export function foo() {
+                    ~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 isolatedDeclarationLazySymbols.ts:1:17: Add a return type to the function declaration.
+    
+    }
+    
+    const o = {
+        ["prop.inner"]: "a",
+        prop: {
+            inner: "b",
+        }
+    } as const
+    
+    foo[o["prop.inner"]] ="A";
+    foo[o.prop.inner] = "B";
+    ~~~~~~~~~~~~~~~~~
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    
+    export class Foo {
+        [o["prop.inner"]] ="A"
+        ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ~~~~~~~~~~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+        [o.prop.inner] = "B"
+    }
+    
+    export let oo = {
+        [o['prop.inner']]:"A",
+        ~~~~~~~~~~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationLazySymbols.ts:20:12: Add a type annotation to the variable oo.
+        [o.prop.inner]: "B",
+        ~~~~~~~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationLazySymbols.ts:20:12: Add a type annotation to the variable oo.
+    }

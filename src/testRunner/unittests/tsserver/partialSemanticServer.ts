@@ -1,20 +1,18 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
+describe("unittests:: tsserver:: Semantic operations on partialSemanticServer::", () => {
     function setup() {
         const file1: File = {
             path: `/user/username/projects/myproject/a.ts`,
@@ -40,11 +38,11 @@ import { something } from "something";
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         return { host, session, file1, file2, file3, something, configFile };
     }
@@ -102,11 +100,11 @@ import { something } from "something";
         };
         const expectedErrorMessage = "')' expected.";
 
-        const host = createServerHost([file1, libFile, configFile]);
-        const session = createSession(host, {
+        const host = TestServerHost.createServerHost([file1, configFile]);
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
 
         const service = session.getProjectService();
@@ -119,8 +117,8 @@ import { something } from "something";
         };
         const response = session.executeCommandSeq(request).response as ts.server.protocol.SyntacticDiagnosticsSyncResponse["body"];
         assert.isDefined(response);
-        assert.equal(response!.length, 1);
-        assert.equal((response![0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
+        assert.equal(response.length, 1);
+        assert.equal((response[0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
 
         const project = service.inferredProjects[0];
         const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file1.path);
@@ -134,7 +132,7 @@ import { something } from "something";
     it("should not include auto type reference directives", () => {
         const { host, session, file1 } = setup();
         const atTypes: File = {
-            path: `/node_modules/@types/somemodule/index.d.ts`,
+            path: `/user/username/projects/myproject/node_modules/@types/somemodule/index.d.ts`,
             content: "export const something = 10;",
         };
         host.ensureFileOrFolder(atTypes);
@@ -167,11 +165,11 @@ function fooB() { }`,
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file1], session);
         baselineTsserverLogs("partialSemanticServer", "should not include referenced files from unopened files", session);
@@ -192,32 +190,33 @@ function fooB() { }`,
 
     it("should not create autoImportProvider or handle package jsons", () => {
         const angularFormsDts: File = {
-            path: "/node_modules/@angular/forms/forms.d.ts",
+            path: "/user/username/projects/myproject/node_modules/@angular/forms/forms.d.ts",
             content: "export declare class PatternValidator {}",
         };
         const angularFormsPackageJson: File = {
-            path: "/node_modules/@angular/forms/package.json",
+            path: "/user/username/projects/myproject/node_modules/@angular/forms/package.json",
             content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
         };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/user/username/projects/myproject/tsconfig.json",
             content: `{ "compilerOptions": { "module": "commonjs" } }`,
         };
         const packageJson: File = {
-            path: "/package.json",
+            path: "/user/username/projects/myproject/package.json",
             content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`,
         };
         const indexTs: File = {
-            path: "/index.ts",
+            path: "/user/username/projects/myproject/index.ts",
             content: "",
         };
-        const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const host = TestServerHost.createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
+        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([indexTs], session);
         const project = service.inferredProjects[0];
         assert.isFalse(project.autoImportProviderHost);
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         assert.deepEqual(project.getPackageJsonsForAutoImport(), ts.emptyArray);
         baselineTsserverLogs("partialSemanticServer", "should not create autoImportProvider or handle package jsons", session);
     });

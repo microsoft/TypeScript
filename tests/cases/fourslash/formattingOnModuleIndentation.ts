@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-////   module     Foo    {
-////     export    module    A  .   B  .   C     {      }/**/
+////   namespace     Foo    {
+////     export    namespace    A  .   B  .   C     {      }/**/
 ////                }
 
 format.document();
 goTo.bof();
-verify.currentLineContentIs("module Foo {");
+verify.currentLineContentIs("namespace Foo {");
 goTo.marker();
-verify.currentLineContentIs("    export module A.B.C { }");
+verify.currentLineContentIs("    export namespace A.B.C { }");
 goTo.eof();
 verify.currentLineContentIs("}");

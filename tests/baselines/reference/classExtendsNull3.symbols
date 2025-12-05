@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/classExtendsNull3.ts] ////
+
+=== classExtendsNull3.ts ===
+class C1 extends null {
+>C1 : Symbol(C1, Decl(classExtendsNull3.ts, 0, 0))
+
+  static method() {
+>method : Symbol(C1.method, Decl(classExtendsNull3.ts, 0, 23))
+
+    super.oops;
+  }
+}
+
+class C2 extends null {
+>C2 : Symbol(C2, Decl(classExtendsNull3.ts, 4, 1))
+
+  method() {
+>method : Symbol(C2.method, Decl(classExtendsNull3.ts, 6, 23))
+
+    super.oops;
+  }
+}

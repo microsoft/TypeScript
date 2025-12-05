@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/types/spread/spreadNonObject1.ts] ////
+
+=== spreadNonObject1.ts ===
+// https://github.com/microsoft/TypeScript/issues/45493
+
+type S = `${number}`;
+>S : `${number}`
+>  : ^^^^^^^^^^^
+
+const b = {
+>b : { c: void[]; }
+>  : ^^^^^^^^^^^^^^
+>{  c: (["4"] as S[]).map(function (s) {    const a = { ...s, y: 6 };  }),} : { c: void[]; }
+>                                                                           : ^^^^^^^^^^^^^^
+
+  c: (["4"] as S[]).map(function (s) {
+>c : void[]
+>  : ^^^^^^
+>(["4"] as S[]).map(function (s) {    const a = { ...s, y: 6 };  }) : void[]
+>                                                                   : ^^^^^^
+>(["4"] as S[]).map : <U>(callbackfn: (value: `${number}`, index: number, array: `${number}`[]) => U, thisArg?: any) => U[]
+>                   : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(["4"] as S[]) : `${number}`[]
+>               : ^^^^^^^^^^^^^
+>["4"] as S[] : `${number}`[]
+>             : ^^^^^^^^^^^^^
+>["4"] : "4"[]
+>      : ^^^^^
+>"4" : "4"
+>    : ^^^
+>map : <U>(callbackfn: (value: `${number}`, index: number, array: `${number}`[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>function (s) {    const a = { ...s, y: 6 };  } : (s: `${number}`) => void
+>                                               : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>s : `${number}`
+>  : ^^^^^^^^^^^
+
+    const a = { ...s, y: 6 };
+>a : any
+>  : ^^^
+>{ ...s, y: 6 } : any
+>               : ^^^
+>s : `${number}`
+>  : ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>6 : 6
+>  : ^
+
+  }),
+};
+

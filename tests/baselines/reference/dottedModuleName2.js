@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/dottedModuleName2.ts] ////
 
 //// [dottedModuleName2.ts]
-module A.B {
+namespace A.B {
  
   export var x = 1;
  
@@ -9,7 +9,7 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
  
   export var x = 1;
  

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module M {
+////namespace M {
 ////    interface A<T> {
 ////        (): string;
 ////        (x: T): T;

@@ -10,3 +10,4 @@ function foo(name) {
 >require : Symbol(require)
 >name : Symbol(name, Decl(a.js, 0, 13))
 }
+

@@ -7,6 +7,4 @@
 !!! error TS6142: Module './jsx' was resolved to '/jsx.jsx', but '--jsx' is not set.
     
 ==== /jsx.jsx (0 errors) ====
-    // Test the error message if we have `--allowJs` but not `--jsx`.
-    
     

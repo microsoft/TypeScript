@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
 // @declaration: true
-// @out: true
+// @outFile: true
 
 // @Filename: inputFile1.ts
-//// module m {
+//// namespace m {
 ////    export function foo() {
 ////        class C implements I { private a; }
 ////        interface I { }

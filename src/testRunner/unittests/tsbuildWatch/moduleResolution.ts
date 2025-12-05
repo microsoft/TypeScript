@@ -1,26 +1,20 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolutionCache",
         subScenario: "handles the cache correctly when two projects use different module resolution settings",
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [
                     { path: `/user/username/projects/myproject/project1/index.ts`, content: `import { foo } from "file";` },
                     { path: `/user/username/projects/myproject/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
                     {
                         path: `/user/username/projects/myproject/project1/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, types: ["foo", "bar"] },
                             files: ["index.ts"],
                         }),
@@ -29,7 +23,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     { path: `/user/username/projects/myproject/project2/file.d.ts`, content: "export const foo = 10;" },
                     {
                         path: `/user/username/projects/myproject/project2/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, types: ["foo"], moduleResolution: "classic" },
                             files: ["index.ts"],
                         }),
@@ -38,7 +32,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     { path: `/user/username/projects/myproject/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
                     {
                         path: `/user/username/projects/myproject/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             files: [],
                             references: [
                                 { path: "./project1" },
@@ -46,7 +40,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                             ],
                         }),
                     },
-                    libFile,
                 ],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -64,10 +57,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -82,7 +75,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             outDir: "build",
                             module: "node16",
@@ -100,7 +93,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
@@ -110,7 +103,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg2",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -121,7 +114,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
         edits: [
@@ -158,10 +150,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: `build mode watches for changes to package-json main fields`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -175,7 +167,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             outDir: "build",
                         },
@@ -184,7 +176,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
@@ -206,7 +198,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg2",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -216,7 +208,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
         edits: [

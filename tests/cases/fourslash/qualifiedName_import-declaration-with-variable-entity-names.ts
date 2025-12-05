@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-////module Alpha {
+////namespace Alpha {
 ////    export var [|{| "name" : "def" |}x|] = 100;
 ////}
 ////
-////module Beta {
+////namespace Beta {
 ////    import p = Alpha.[|{| "name" : "import" |}x|];
 ////}
 ////
@@ -13,7 +13,5 @@
 goTo.marker('import');
 verify.completions({ includes: { name: "x", text: "var Alpha.x: number" } });
 
-verify.baselineCommands(
-    { type: "documentHighlights", markerOrRange: "import" },
-    { type: "getDefinitionAtPosition", markerOrRange: "import" },
-);
+verify.baselineDocumentHighlights("import");
+verify.baselineGetDefinitionAtPosition("import");

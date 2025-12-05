@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedModuleDeclarationWithSharedExportedVar.ts] ////
 
 === mergedModuleDeclarationWithSharedExportedVar.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergedModuleDeclarationWithSharedExportedVar.ts, 0, 0), Decl(mergedModuleDeclarationWithSharedExportedVar.ts, 3, 1))
 
     export var v = 10;
@@ -10,7 +10,7 @@ module M {
     v;
 >v : Symbol(v, Decl(mergedModuleDeclarationWithSharedExportedVar.ts, 1, 14))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergedModuleDeclarationWithSharedExportedVar.ts, 0, 0), Decl(mergedModuleDeclarationWithSharedExportedVar.ts, 3, 1))
 
     v;

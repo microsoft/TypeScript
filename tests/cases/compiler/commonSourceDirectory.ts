@@ -1,6 +1,6 @@
 // Test that importing a file from `node_modules` does not affect calculation of the common source directory.
 // @noImplicitReferences: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @fullEmitPaths: true
 
 // @filename: /node_modules/foo/index.ts
@@ -12,7 +12,7 @@ declare module "bar" {
 }
 
 // @filename: /app/index.ts
-/// <reference path="../types/bar.d.ts"/>
+/// <reference path="../types/bar.d.ts" preserve="true" />
 import { x } from "foo";
 import { y } from "bar";
 x + y;

@@ -12,8 +12,8 @@ unionTypeConstructSignatures.ts(15,33): error TS2769: No overload matches this c
   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
 unionTypeConstructSignatures.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
-unionTypeConstructSignatures.ts(19,36): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
-unionTypeConstructSignatures.ts(20,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+unionTypeConstructSignatures.ts(19,36): error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
+unionTypeConstructSignatures.ts(20,36): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
 unionTypeConstructSignatures.ts(21,1): error TS2554: Expected 1 arguments, but got 0.
 unionTypeConstructSignatures.ts(24,1): error TS2554: Expected 1 arguments, but got 0.
 unionTypeConstructSignatures.ts(26,40): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -78,10 +78,10 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
     new unionOfDifferentParameterTypes(10);// error - no call signatures
                                        ~~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
     new unionOfDifferentParameterTypes("hello");// error - no call signatures
                                        ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
     new unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.

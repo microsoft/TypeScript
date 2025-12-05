@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyGloFunc.ts] ////
 
 === privacyGloFunc.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(privacyGloFunc.ts, 0, 0))
 
     export class C1_public {
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
         private f1() {
 >f1 : Symbol(C1_public.f1, Decl(privacyGloFunc.ts, 1, 28))
@@ -21,7 +21,7 @@ export module m1 {
 
         constructor (m1_c3_c1: C1_public);
 >m1_c3_c1 : Symbol(m1_c3_c1, Decl(privacyGloFunc.ts, 10, 21))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
         constructor (m1_c3_c2: C2_private); //error
 >m1_c3_c2 : Symbol(m1_c3_c2, Decl(privacyGloFunc.ts, 11, 21))
@@ -34,13 +34,13 @@ export module m1 {
         private f1_private(m1_c3_f1_arg: C1_public) {
 >f1_private : Symbol(C3_public.f1_private, Decl(privacyGloFunc.ts, 13, 9))
 >m1_c3_f1_arg : Symbol(m1_c3_f1_arg, Decl(privacyGloFunc.ts, 15, 27))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f2_public(m1_c3_f2_arg: C1_public) {
 >f2_public : Symbol(C3_public.f2_public, Decl(privacyGloFunc.ts, 16, 9))
 >m1_c3_f2_arg : Symbol(m1_c3_f2_arg, Decl(privacyGloFunc.ts, 18, 25))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f3_private(m1_c3_f3_arg: C2_private) {
@@ -59,14 +59,14 @@ export module m1 {
 >f5_private : Symbol(C3_public.f5_private, Decl(privacyGloFunc.ts, 25, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f6_public() {
 >f6_public : Symbol(C3_public.f6_public, Decl(privacyGloFunc.ts, 29, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f7_private() {
@@ -85,18 +85,18 @@ export module m1 {
 
         private f9_private(): C1_public {
 >f9_private : Symbol(C3_public.f9_private, Decl(privacyGloFunc.ts, 41, 9))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f10_public(): C1_public {
 >f10_public : Symbol(C3_public.f10_public, Decl(privacyGloFunc.ts, 45, 9))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f11_private(): C2_private {
@@ -121,7 +121,7 @@ export module m1 {
 
         constructor (m1_c4_c1: C1_public);
 >m1_c4_c1 : Symbol(m1_c4_c1, Decl(privacyGloFunc.ts, 61, 21))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
         constructor (m1_c4_c2: C2_private);
 >m1_c4_c2 : Symbol(m1_c4_c2, Decl(privacyGloFunc.ts, 62, 21))
@@ -133,13 +133,13 @@ export module m1 {
         private f1_private(m1_c4_f1_arg: C1_public) {
 >f1_private : Symbol(C4_private.f1_private, Decl(privacyGloFunc.ts, 64, 9))
 >m1_c4_f1_arg : Symbol(m1_c4_f1_arg, Decl(privacyGloFunc.ts, 65, 27))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f2_public(m1_c4_f2_arg: C1_public) {
 >f2_public : Symbol(C4_private.f2_public, Decl(privacyGloFunc.ts, 66, 9))
 >m1_c4_f2_arg : Symbol(m1_c4_f2_arg, Decl(privacyGloFunc.ts, 68, 25))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f3_private(m1_c4_f3_arg: C2_private) {
@@ -159,14 +159,14 @@ export module m1 {
 >f5_private : Symbol(C4_private.f5_private, Decl(privacyGloFunc.ts, 75, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f6_public() {
 >f6_public : Symbol(C4_private.f6_public, Decl(privacyGloFunc.ts, 80, 9))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f7_private() {
@@ -186,18 +186,18 @@ export module m1 {
 
         private f9_private(): C1_public {
 >f9_private : Symbol(C4_private.f9_private, Decl(privacyGloFunc.ts, 92, 9))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         public f10_public(): C1_public {
 >f10_public : Symbol(C4_private.f10_public, Decl(privacyGloFunc.ts, 97, 9))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
             return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
 
         private f11_private(): C2_private {
@@ -222,7 +222,7 @@ export module m1 {
 
         constructor (m1_c5_c: C1_public) {
 >m1_c5_c : Symbol(m1_c5_c, Decl(privacyGloFunc.ts, 113, 21))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
     }
     
@@ -231,7 +231,7 @@ export module m1 {
 
         constructor (m1_c6_c: C1_public) {
 >m1_c6_c : Symbol(m1_c6_c, Decl(privacyGloFunc.ts, 118, 21))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
         }
     }
     export class C7_public {
@@ -255,13 +255,13 @@ export module m1 {
     function f1_public(m1_f1_arg: C1_public) {
 >f1_public : Symbol(f1_public, Decl(privacyGloFunc.ts, 129, 5))
 >m1_f1_arg : Symbol(m1_f1_arg, Decl(privacyGloFunc.ts, 131, 23))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     export function f2_public(m1_f2_arg: C1_public) {
 >f2_public : Symbol(f2_public, Decl(privacyGloFunc.ts, 132, 5))
 >m1_f2_arg : Symbol(m1_f2_arg, Decl(privacyGloFunc.ts, 134, 30))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     function f3_public(m1_f3_arg: C2_private) {
@@ -281,14 +281,14 @@ export module m1 {
 >f5_public : Symbol(f5_public, Decl(privacyGloFunc.ts, 141, 5))
 
         return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     export function f6_public() {
 >f6_public : Symbol(f6_public, Decl(privacyGloFunc.ts, 146, 5))
 
         return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     function f7_public() {
@@ -308,18 +308,18 @@ export module m1 {
 
     function f9_private(): C1_public {
 >f9_private : Symbol(f9_private, Decl(privacyGloFunc.ts, 158, 5))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
         return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     export function f10_public(): C1_public {
 >f10_public : Symbol(f10_public, Decl(privacyGloFunc.ts, 163, 5))
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
 
         return new C1_public();
->C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 18))
+>C1_public : Symbol(C1_public, Decl(privacyGloFunc.ts, 0, 21))
     }
 
     function f11_private(): C2_private {
@@ -339,11 +339,11 @@ export module m1 {
     }
 }
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(privacyGloFunc.ts, 176, 1))
 
     export class m2_C1_public {
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
         private f() {
 >f : Symbol(m2_C1_public.f, Decl(privacyGloFunc.ts, 179, 31))
@@ -359,7 +359,7 @@ module m2 {
 
         constructor (m2_c3_c1: m2_C1_public);
 >m2_c3_c1 : Symbol(m2_c3_c1, Decl(privacyGloFunc.ts, 188, 21))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
         constructor (m2_c3_c2: m2_C2_private);
 >m2_c3_c2 : Symbol(m2_c3_c2, Decl(privacyGloFunc.ts, 189, 21))
@@ -372,13 +372,13 @@ module m2 {
         private f1_private(m2_c3_f1_arg: m2_C1_public) {
 >f1_private : Symbol(m2_C3_public.f1_private, Decl(privacyGloFunc.ts, 191, 9))
 >m2_c3_f1_arg : Symbol(m2_c3_f1_arg, Decl(privacyGloFunc.ts, 193, 27))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f2_public(m2_c3_f2_arg: m2_C1_public) {
 >f2_public : Symbol(m2_C3_public.f2_public, Decl(privacyGloFunc.ts, 194, 9))
 >m2_c3_f2_arg : Symbol(m2_c3_f2_arg, Decl(privacyGloFunc.ts, 196, 25))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f3_private(m2_c3_f3_arg: m2_C2_private) {
@@ -397,14 +397,14 @@ module m2 {
 >f5_private : Symbol(m2_C3_public.f5_private, Decl(privacyGloFunc.ts, 203, 9))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f6_public() {
 >f6_public : Symbol(m2_C3_public.f6_public, Decl(privacyGloFunc.ts, 207, 9))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f7_private() {
@@ -423,18 +423,18 @@ module m2 {
 
         private f9_private(): m2_C1_public {
 >f9_private : Symbol(m2_C3_public.f9_private, Decl(privacyGloFunc.ts, 219, 9))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f10_public(): m2_C1_public {
 >f10_public : Symbol(m2_C3_public.f10_public, Decl(privacyGloFunc.ts, 223, 9))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f11_private(): m2_C2_private {
@@ -459,7 +459,7 @@ module m2 {
 
         constructor (m2_c4_c1: m2_C1_public);
 >m2_c4_c1 : Symbol(m2_c4_c1, Decl(privacyGloFunc.ts, 239, 21))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
         constructor (m2_c4_c2: m2_C2_private);
 >m2_c4_c2 : Symbol(m2_c4_c2, Decl(privacyGloFunc.ts, 240, 21))
@@ -472,13 +472,13 @@ module m2 {
         private f1_private(m2_c4_f1_arg: m2_C1_public) {
 >f1_private : Symbol(m2_C4_private.f1_private, Decl(privacyGloFunc.ts, 242, 9))
 >m2_c4_f1_arg : Symbol(m2_c4_f1_arg, Decl(privacyGloFunc.ts, 244, 27))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f2_public(m2_c4_f2_arg: m2_C1_public) {
 >f2_public : Symbol(m2_C4_private.f2_public, Decl(privacyGloFunc.ts, 245, 9))
 >m2_c4_f2_arg : Symbol(m2_c4_f2_arg, Decl(privacyGloFunc.ts, 247, 25))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f3_private(m2_c4_f3_arg: m2_C2_private) {
@@ -498,14 +498,14 @@ module m2 {
 >f5_private : Symbol(m2_C4_private.f5_private, Decl(privacyGloFunc.ts, 254, 9))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f6_public() {
 >f6_public : Symbol(m2_C4_private.f6_public, Decl(privacyGloFunc.ts, 259, 9))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f7_private() {
@@ -525,18 +525,18 @@ module m2 {
 
         private f9_private(): m2_C1_public {
 >f9_private : Symbol(m2_C4_private.f9_private, Decl(privacyGloFunc.ts, 271, 9))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         public f10_public(): m2_C1_public {
 >f10_public : Symbol(m2_C4_private.f10_public, Decl(privacyGloFunc.ts, 276, 9))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
             return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
 
         private f11_private(): m2_C2_private {
@@ -561,7 +561,7 @@ module m2 {
 
         constructor (m2_c5_c: m2_C1_public) {
 >m2_c5_c : Symbol(m2_c5_c, Decl(privacyGloFunc.ts, 292, 21))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
     }
     
@@ -570,7 +570,7 @@ module m2 {
 
         constructor (m2_c6_c: m2_C1_public) {
 >m2_c6_c : Symbol(m2_c6_c, Decl(privacyGloFunc.ts, 297, 21))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
         }
     }
     export class m2_C7_public {
@@ -594,13 +594,13 @@ module m2 {
     function f1_public(m2_f1_arg: m2_C1_public) {
 >f1_public : Symbol(f1_public, Decl(privacyGloFunc.ts, 308, 5))
 >m2_f1_arg : Symbol(m2_f1_arg, Decl(privacyGloFunc.ts, 310, 23))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     export function f2_public(m2_f2_arg: m2_C1_public) {
 >f2_public : Symbol(f2_public, Decl(privacyGloFunc.ts, 311, 5))
 >m2_f2_arg : Symbol(m2_f2_arg, Decl(privacyGloFunc.ts, 313, 30))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     function f3_public(m2_f3_arg: m2_C2_private) {
@@ -620,14 +620,14 @@ module m2 {
 >f5_public : Symbol(f5_public, Decl(privacyGloFunc.ts, 320, 5))
 
         return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     export function f6_public() {
 >f6_public : Symbol(f6_public, Decl(privacyGloFunc.ts, 325, 5))
 
         return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     function f7_public() {
@@ -647,18 +647,18 @@ module m2 {
 
     function f9_private(): m2_C1_public {
 >f9_private : Symbol(f9_private, Decl(privacyGloFunc.ts, 337, 5))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
         return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     export function f10_public(): m2_C1_public {
 >f10_public : Symbol(f10_public, Decl(privacyGloFunc.ts, 342, 5))
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
 
         return new m2_C1_public();
->m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 11))
+>m2_C1_public : Symbol(m2_C1_public, Decl(privacyGloFunc.ts, 178, 14))
     }
 
     function f11_private(): m2_C2_private {

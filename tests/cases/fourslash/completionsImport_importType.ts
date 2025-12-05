@@ -17,7 +17,7 @@ verify.completions({
     includes: [
         {
             name: "C",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "class C",
             hasAction: true,
@@ -25,7 +25,7 @@ verify.completions({
         },
         {
             name: "T",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "type T = number",
             hasAction: true,
@@ -41,7 +41,7 @@ verify.completions({
 // Something with a value-side will get a normal import.
 verify.applyCodeActionFromCompletion("0", {
     name: "C",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent:
 `import { C } from "./a";
@@ -54,7 +54,7 @@ export const m = 0;
 // A pure type will get `import().T`
 verify.applyCodeActionFromCompletion("1", {
     name: "T",
-    source: "/a",
+    source: "./a",
     description: `Change 'T' to 'import("./a").T'`,
     newFileContent:
 `import { C } from "./a";

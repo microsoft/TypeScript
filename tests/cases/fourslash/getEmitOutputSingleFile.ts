@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputSingleFile.baseline
-// @out: outputDir/singleFile.js
+// @outFile: outputDir/singleFile.js
 
 // @Filename: inputFile1.ts
 //// var x: any;

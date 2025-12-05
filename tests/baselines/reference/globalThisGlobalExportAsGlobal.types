@@ -4,9 +4,12 @@
 // https://github.com/microsoft/TypeScript/issues/33754
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     export { globalThis as global }
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >global : typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^
 }
 
