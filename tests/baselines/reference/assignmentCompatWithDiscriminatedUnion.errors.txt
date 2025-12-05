@@ -6,14 +6,9 @@ assignmentCompatWithDiscriminatedUnion.ts(44,5): error TS2322: Type 'S' is not a
 assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
     Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
-assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
-  Type 'S' is not assignable to type '{ a: N; b: N; c: 2; }'.
-    Types of property 'c' are incompatible.
-      Type 'N' is not assignable to type '2'.
-        Type '0' is not assignable to type '2'.
 
 
-==== assignmentCompatWithDiscriminatedUnion.ts (3 errors) ====
+==== assignmentCompatWithDiscriminatedUnion.ts (2 errors) ====
     // see 'typeRelatedToDiscriminatedType' in checker.ts:
     
     // IteratorResult
@@ -107,12 +102,6 @@ assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not a
         // S *should* be assignable but the number of
         // combinations is too complex.
         t = s;
-        ~
-!!! error TS2322: Type 'S' is not assignable to type 'T'.
-!!! error TS2322:   Type 'S' is not assignable to type '{ a: N; b: N; c: 2; }'.
-!!! error TS2322:     Types of property 'c' are incompatible.
-!!! error TS2322:       Type 'N' is not assignable to type '2'.
-!!! error TS2322:         Type '0' is not assignable to type '2'.
     }
     
     // https://github.com/Microsoft/TypeScript/issues/14865
