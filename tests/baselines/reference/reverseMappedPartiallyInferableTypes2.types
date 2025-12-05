@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes2.ts] ////
+
+=== reverseMappedPartiallyInferableTypes2.ts ===
+declare function fn<T>(arg: {
+>fn : <T>(arg: { [K in keyof T]: T[K] & ((arg: string) => {}); }) => T
+>   : ^ ^^   ^^                                                 ^^^^^ 
+>arg : { [K in keyof T]: T[K] & ((arg: string) => {}); }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^  ^^^^
+
+  [K in keyof T]: T[K] & ((arg: string) => {});
+>arg : string
+>    : ^^^^^^
+
+}): T;
+
+const res1 = fn({
+>res1 : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>     : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>fn({  a: (arg) => arg,  b: (arg) => [arg],}) : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                             : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : <T>(arg: { [K in keyof T]: T[K] & ((arg: string) => {}); }) => T
+>   : ^ ^^   ^^                                                 ^^^^^ 
+>{  a: (arg) => arg,  b: (arg) => [arg],} : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                         : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => arg,
+>a : (arg: string) => string
+>  : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg : (arg: string) => string
+>             : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: (arg) => [arg],
+>b : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+});
+
+const res2 = fn({
+>res2 : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>     : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+>fn({  a: (arg: string) => arg,  b: (arg: string) => [arg],}) : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                             : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+>fn : <T>(arg: { [K in keyof T]: T[K] & ((arg: string) => {}); }) => T
+>   : ^ ^^   ^^                                                 ^^^^^ 
+>{  a: (arg: string) => arg,  b: (arg: string) => [arg],} : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                         : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+
+  a: (arg: string) => arg,
+>a : (arg: string) => string
+>  : ^   ^^      ^^^^^^^^^^^
+>(arg: string) => arg : (arg: string) => string
+>                     : ^   ^^      ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: (arg: string) => [arg],
+>b : (arg: string) => string[]
+>  : ^   ^^      ^^^^^^^^^^^^^
+>(arg: string) => [arg] : (arg: string) => string[]
+>                       : ^   ^^      ^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+});
+
+const res3 = fn({
+>res3 : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>     : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>fn({  a: (arg: string) => arg,  b: (arg) => [arg],}) : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                     : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : <T>(arg: { [K in keyof T]: T[K] & ((arg: string) => {}); }) => T
+>   : ^ ^^   ^^                                                 ^^^^^ 
+>{  a: (arg: string) => arg,  b: (arg) => [arg],} : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                 : ^^^^^^   ^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg: string) => arg,
+>a : (arg: string) => string
+>  : ^   ^^      ^^^^^^^^^^^
+>(arg: string) => arg : (arg: string) => string
+>                     : ^   ^^      ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: (arg) => [arg],
+>b : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+});
+
+const res4 = fn({
+>res4 : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>     : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+>fn({  a: (arg) => arg,  b: (arg: string) => [arg],}) : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                     : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+>fn : <T>(arg: { [K in keyof T]: T[K] & ((arg: string) => {}); }) => T
+>   : ^ ^^   ^^                                                 ^^^^^ 
+>{  a: (arg) => arg,  b: (arg: string) => [arg],} : { a: (arg: string) => string; b: (arg: string) => string[]; }
+>                                                 : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^
+
+  a: (arg) => arg,
+>a : (arg: string) => string
+>  : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg : (arg: string) => string
+>             : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: (arg: string) => [arg],
+>b : (arg: string) => string[]
+>  : ^   ^^      ^^^^^^^^^^^^^
+>(arg: string) => [arg] : (arg: string) => string[]
+>                       : ^   ^^      ^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+});
+

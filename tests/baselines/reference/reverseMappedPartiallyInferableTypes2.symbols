@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes2.ts] ////
+
+=== reverseMappedPartiallyInferableTypes2.ts ===
+declare function fn<T>(arg: {
+>fn : Symbol(fn, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 20))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 23))
+
+  [K in keyof T]: T[K] & ((arg: string) => {});
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes2.ts, 1, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 20))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 20))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes2.ts, 1, 3))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 1, 27))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 20))
+
+const res1 = fn({
+>res1 : Symbol(res1, Decl(reverseMappedPartiallyInferableTypes2.ts, 4, 5))
+>fn : Symbol(fn, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 0))
+
+  a: (arg) => arg,
+>a : Symbol(a, Decl(reverseMappedPartiallyInferableTypes2.ts, 4, 17))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 5, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 5, 6))
+
+  b: (arg) => [arg],
+>b : Symbol(b, Decl(reverseMappedPartiallyInferableTypes2.ts, 5, 18))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 6, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 6, 6))
+
+});
+
+const res2 = fn({
+>res2 : Symbol(res2, Decl(reverseMappedPartiallyInferableTypes2.ts, 9, 5))
+>fn : Symbol(fn, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 0))
+
+  a: (arg: string) => arg,
+>a : Symbol(a, Decl(reverseMappedPartiallyInferableTypes2.ts, 9, 17))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 10, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 10, 6))
+
+  b: (arg: string) => [arg],
+>b : Symbol(b, Decl(reverseMappedPartiallyInferableTypes2.ts, 10, 26))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 11, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 11, 6))
+
+});
+
+const res3 = fn({
+>res3 : Symbol(res3, Decl(reverseMappedPartiallyInferableTypes2.ts, 14, 5))
+>fn : Symbol(fn, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 0))
+
+  a: (arg: string) => arg,
+>a : Symbol(a, Decl(reverseMappedPartiallyInferableTypes2.ts, 14, 17))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 15, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 15, 6))
+
+  b: (arg) => [arg],
+>b : Symbol(b, Decl(reverseMappedPartiallyInferableTypes2.ts, 15, 26))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 16, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 16, 6))
+
+});
+
+const res4 = fn({
+>res4 : Symbol(res4, Decl(reverseMappedPartiallyInferableTypes2.ts, 19, 5))
+>fn : Symbol(fn, Decl(reverseMappedPartiallyInferableTypes2.ts, 0, 0))
+
+  a: (arg) => arg,
+>a : Symbol(a, Decl(reverseMappedPartiallyInferableTypes2.ts, 19, 17))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 20, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 20, 6))
+
+  b: (arg: string) => [arg],
+>b : Symbol(b, Decl(reverseMappedPartiallyInferableTypes2.ts, 20, 18))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 21, 6))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes2.ts, 21, 6))
+
+});
+

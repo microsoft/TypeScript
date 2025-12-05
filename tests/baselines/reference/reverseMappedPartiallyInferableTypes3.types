@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes3.ts] ////
+
+=== reverseMappedPartiallyInferableTypes3.ts ===
+declare function setup<TAction = {}>(arg: {
+>setup : <TAction = {}>(arg: { actions?: { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; }; }) => TAction
+>      : ^       ^^^^^^^   ^^                                                                                                    ^^^^^       
+>arg : { actions?: { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; }; }
+>    : ^^^^^^^^^^^^                                                                                     ^^^
+
+  actions?: {
+>actions : { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; } | undefined
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^      ^^          ^^    ^^                      ^^^^^    ^^^^^^^^^^^^^^^
+
+    [K in keyof TAction]: (
+      params: TAction[K],
+>params : TAction[K]
+>       : ^^^^^^^^^^
+
+      exec: (arg: TAction) => void,
+>exec : (arg: TAction) => void
+>     : ^   ^^       ^^^^^    
+>arg : TAction
+>    : ^^^^^^^
+
+    ) => void;
+  };
+}): TAction;
+
+const result1 = setup({
+>result1 : { first: { count: number; }; second: { foo: string; }; }
+>        : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup({  actions: {    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  },}) : { first: { count: number; }; second: { foo: string; }; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup : <TAction = {}>(arg: { actions?: { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; }; }) => TAction
+>      : ^       ^^^^^^^   ^^                                                                                                    ^^^^^       
+>{  actions: {    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  },} : { actions: { first: (params: { count: number; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; }; }
+>                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { first: (params: { count: number; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; }
+>        : ^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^
+>{    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  } : { first: (params: { count: number; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void; }
+>                                                                                                                : ^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^
+
+    first: (params: { count: number }, enqueue) => {},
+>first : (params: { count: number; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void
+>      : ^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>(params: { count: number }, enqueue) => {} : (params: { count: number; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void
+>                                           : ^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>params : { count: number; }
+>       : ^^^^^^^^^      ^^^
+>count : number
+>      : ^^^^^^
+>enqueue : (arg: { first: { count: number; }; second: { foo: string; }; }) => void
+>        : ^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    
+
+    second: (params: { foo: string }, enqueue) => {},
+>second : (params: { foo: string; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void
+>       : ^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>(params: { foo: string }, enqueue) => {} : (params: { foo: string; }, enqueue: (arg: { first: { count: number; }; second: { foo: string; }; }) => void) => void
+>                                         : ^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>params : { foo: string; }
+>       : ^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
+>enqueue : (arg: { first: { count: number; }; second: { foo: string; }; }) => void
+>        : ^   ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    
+
+  },
+});
+
+const result2 = setup({
+>result2 : { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }
+>        : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup({  actions: {    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  },}) : { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }
+>                                                                                                                                                                                : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup : <TAction = {}>(arg: { actions?: { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; }; }) => TAction
+>      : ^       ^^^^^^^   ^^                                                                                                    ^^^^^       
+>{  actions: {    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  },} : { actions: { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; }; }
+>                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; }
+>        : ^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^
+>{    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue) => {},    second: (params: { foo: string }, enqueue) => {},  } : { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; second: (params: { foo: string; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void; }
+>                                                                                                                                                           : ^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^^^^
+
+    foo: (params: { count: number }) => {},
+>foo : (params: { count: number; }) => void
+>    : ^      ^^                  ^^^^^^^^^
+>(params: { count: number }) => {} : (params: { count: number; }) => void
+>                                  : ^      ^^                  ^^^^^^^^^
+>params : { count: number; }
+>       : ^^^^^^^^^      ^^^
+>count : number
+>      : ^^^^^^
+
+    first: (params: { count: number }, enqueue) => {},
+>first : (params: { count: number; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void
+>      : ^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>(params: { count: number }, enqueue) => {} : (params: { count: number; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void
+>                                           : ^      ^^                  ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>params : { count: number; }
+>       : ^^^^^^^^^      ^^^
+>count : number
+>      : ^^^^^^
+>enqueue : (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void
+>        : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    
+
+    second: (params: { foo: string }, enqueue) => {},
+>second : (params: { foo: string; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void
+>       : ^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>(params: { foo: string }, enqueue) => {} : (params: { foo: string; }, enqueue: (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void) => void
+>                                         : ^      ^^                ^^       ^^^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^^^^^^^^^
+>params : { foo: string; }
+>       : ^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
+>enqueue : (arg: { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }) => void
+>        : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    
+
+  },
+});
+
+const result3 = setup({
+>result3 : { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }
+>        : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup({  actions: {    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue: (arg: never) => void) => {},    second: (params: { foo: string }, enqueue: (arg: never) => void) => {},  },}) : { foo: { count: number; }; first: { count: number; }; second: { foo: string; }; }
+>                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^
+>setup : <TAction = {}>(arg: { actions?: { [K in keyof TAction]: (params: TAction[K], exec: (arg: TAction) => void) => void; }; }) => TAction
+>      : ^       ^^^^^^^   ^^                                                                                                    ^^^^^       
+>{  actions: {    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue: (arg: never) => void) => {},    second: (params: { foo: string }, enqueue: (arg: never) => void) => {},  },} : { actions: { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: never) => void) => void; second: (params: { foo: string; }, enqueue: (arg: never) => void) => void; }; }
+>                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^                    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^                    ^^^^^^^^^^^^^^^
+
+  actions: {
+>actions : { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: never) => void) => void; second: (params: { foo: string; }, enqueue: (arg: never) => void) => void; }
+>        : ^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^                    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^                    ^^^^^^^^^^^^
+>{    foo: (params: { count: number }) => {},    first: (params: { count: number }, enqueue: (arg: never) => void) => {},    second: (params: { foo: string }, enqueue: (arg: never) => void) => {},  } : { foo: (params: { count: number; }) => void; first: (params: { count: number; }, enqueue: (arg: never) => void) => void; second: (params: { foo: string; }, enqueue: (arg: never) => void) => void; }
+>                                                                                                                                                                                                       : ^^^^^^^^      ^^                  ^^^^^^^^^^^^^^^^^^^      ^^                  ^^       ^^                    ^^^^^^^^^^^^^^^^^^^^      ^^                ^^       ^^                    ^^^^^^^^^^^^
+
+    foo: (params: { count: number }) => {},
+>foo : (params: { count: number; }) => void
+>    : ^      ^^                  ^^^^^^^^^
+>(params: { count: number }) => {} : (params: { count: number; }) => void
+>                                  : ^      ^^                  ^^^^^^^^^
+>params : { count: number; }
+>       : ^^^^^^^^^      ^^^
+>count : number
+>      : ^^^^^^
+
+    first: (params: { count: number }, enqueue: (arg: never) => void) => {},
+>first : (params: { count: number; }, enqueue: (arg: never) => void) => void
+>      : ^      ^^                  ^^       ^^                    ^^^^^^^^^
+>(params: { count: number }, enqueue: (arg: never) => void) => {} : (params: { count: number; }, enqueue: (arg: never) => void) => void
+>                                                                 : ^      ^^                  ^^       ^^                    ^^^^^^^^^
+>params : { count: number; }
+>       : ^^^^^^^^^      ^^^
+>count : number
+>      : ^^^^^^
+>enqueue : (arg: never) => void
+>        : ^   ^^     ^^^^^    
+>arg : never
+>    : ^^^^^
+
+    second: (params: { foo: string }, enqueue: (arg: never) => void) => {},
+>second : (params: { foo: string; }, enqueue: (arg: never) => void) => void
+>       : ^      ^^                ^^       ^^                    ^^^^^^^^^
+>(params: { foo: string }, enqueue: (arg: never) => void) => {} : (params: { foo: string; }, enqueue: (arg: never) => void) => void
+>                                                               : ^      ^^                ^^       ^^                    ^^^^^^^^^
+>params : { foo: string; }
+>       : ^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
+>enqueue : (arg: never) => void
+>        : ^   ^^     ^^^^^    
+>arg : never
+>    : ^^^^^
+
+  },
+});
+

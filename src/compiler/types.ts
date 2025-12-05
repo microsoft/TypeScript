@@ -6153,6 +6153,7 @@ export interface MappedSymbol extends TransientSymbol {
 
 /** @internal */
 export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
+    reverseMappedType: ReverseMappedType;
     propertyType: Type;
     mappedType: MappedType;
     constraintType: IndexType;
@@ -7156,6 +7157,8 @@ export interface InferenceContext {
     outerReturnMapper?: TypeMapper;               // Type mapper for inferences from return types of outer function (if any)
     inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
     intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    reverseMappedIntraExpressionInferenceScopeNodes?: Node[];
+    reverseMappedIntraExpressionInferenceSites?: IntraExpressionInferenceSite[][];
 }
 
 /** @internal */
