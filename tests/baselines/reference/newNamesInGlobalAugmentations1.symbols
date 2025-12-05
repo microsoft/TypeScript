@@ -3,9 +3,9 @@
 === f1.d.ts ===
 export {};
 
-declare module M.M1 {
+declare namespace M.M1 {
 >M : Symbol(M, Decl(f1.d.ts, 0, 10))
->M1 : Symbol(M1, Decl(f1.d.ts, 2, 17))
+>M1 : Symbol(M1, Decl(f1.d.ts, 2, 20))
 
     export let x: number;
 >x : Symbol(x, Decl(f1.d.ts, 3, 14))
@@ -14,7 +14,7 @@ declare global {
 >global : Symbol(global, Decl(f1.d.ts, 4, 1))
 
     interface SymbolConstructor {
->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(f1.d.ts, 5, 16))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(f1.d.ts, 5, 16))
 
         observable: symbol;
 >observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
@@ -30,7 +30,7 @@ declare global {
     export import X = M.M1.x;
 >X : Symbol(X, Decl(f1.d.ts, 10, 25))
 >M : Symbol(M, Decl(f1.d.ts, 0, 10))
->M1 : Symbol(M.M1, Decl(f1.d.ts, 2, 17))
+>M1 : Symbol(M.M1, Decl(f1.d.ts, 2, 20))
 >x : Symbol(X, Decl(f1.d.ts, 3, 14))
 }
 

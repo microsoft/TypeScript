@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/duplicateAnonymousModuleClasses.ts] ////
 
 === duplicateAnonymousModuleClasses.ts ===
-module F {
+namespace F {
 >F : typeof F
 >  : ^^^^^^^^
 
@@ -14,7 +14,7 @@ module F {
 }
 
 
-module F {
+namespace F {
 >F : typeof F
 >  : ^^^^^^^^
     
@@ -27,7 +27,7 @@ module F {
 
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -40,7 +40,7 @@ module Foo {
 }
 
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
     
@@ -53,11 +53,11 @@ module Foo {
 
 }
 
-module Gar {
+namespace Gar {
 >Gar : typeof Gar
 >    : ^^^^^^^^^^
 
-    module Foo {
+    namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -70,7 +70,7 @@ module Gar {
     }
 
 
-    module Foo {
+    namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
     

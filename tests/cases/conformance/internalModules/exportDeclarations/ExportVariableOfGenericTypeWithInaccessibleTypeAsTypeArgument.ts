@@ -1,4 +1,4 @@
-module A {
+namespace A {
     class B {
         id: number;
     }

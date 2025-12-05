@@ -4,7 +4,7 @@
 // two interfaces with the same root module should merge
 
 // root module now multiple module declarations
-module M2 {
+namespace M2 {
     export interface A {
         foo: string;
     }
@@ -14,7 +14,7 @@ module M2 {
     var r2 = a.bar;
 }
 
-module M2 {
+namespace M2 {
     export interface A {
         bar: number;
     }
@@ -30,8 +30,8 @@ module M2 {
 }
 
 // same as above but with an additional level of nesting and third module declaration
-module M2 {
-    export module M3 {
+namespace M2 {
+    export namespace M3 {
         export interface A {
             foo: string;
         }
@@ -42,8 +42,8 @@ module M2 {
     }
 }
 
-module M2 {
-    export module M3 {
+namespace M2 {
+    export namespace M3 {
         export interface A {
             bar: number;
         }
@@ -56,8 +56,8 @@ module M2 {
     }
 }
 
-module M2 {
-    export module M3 {
+namespace M2 {
+    export namespace M3 {
         export interface A {
             baz: boolean;
         }

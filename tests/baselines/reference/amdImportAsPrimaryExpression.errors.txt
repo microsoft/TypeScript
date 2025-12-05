@@ -1,0 +1,15 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== foo_1.ts (0 errors) ====
+    import foo = require("./foo_0");
+    if(foo.E1.A === 0){
+    	// Should cause runtime import - interesting optimization possibility, as gets inlined to 0.
+    }
+    
+==== foo_0.ts (0 errors) ====
+    export enum E1 {
+    	A,B,C
+    }
+    

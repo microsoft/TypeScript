@@ -39,7 +39,7 @@ var { a4, b4, c4 } = f15();
 >c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 13))
 >f15 : Symbol(f15, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 0, 89))
 
-module m {
+namespace m {
 >m : Symbol(m, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 27))
 
     export var { a4, b4, c4 } = f15();

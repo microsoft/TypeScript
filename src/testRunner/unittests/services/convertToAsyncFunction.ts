@@ -14,8 +14,7 @@ import {
 
 const libFile: File = {
     path: vfsWatch_LibFile.path,
-    content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
+    content: `interface Boolean {}
 interface Function {}
 interface IArguments {}
 interface Number { toExponential: any; }

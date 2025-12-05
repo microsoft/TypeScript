@@ -1,12 +1,12 @@
 /// <reference path="fourslash.ts" />
 
-//// declare module Thing { }
+//// declare namespace Thing { }
 //// 
-//// module Thing {
+//// namespace Thing {
 ////    var /**/x: Mode;
 //// }
 //// 
-//// module Thing {
+//// namespace Thing {
 ////   export class Mode { }
 //// }
 

@@ -3,7 +3,7 @@
 === ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts ===
 // https://github.com/microsoft/TypeScript/issues/7840
 
-declare module chrome.debugger {
+declare namespace chrome.debugger {
 >chrome : typeof chrome
 >       : ^^^^^^^^^^^^^
 >debugger : typeof debugger
@@ -28,11 +28,11 @@ export const tabId = chrome.debugger.tabId;
 >tabId : number
 >      : ^^^^^^
 
-declare module test.class {}
+declare namespace test.class {}
 
-declare module debugger {} // still an error
+declare namespace debugger {} // still an error
 >declare : any
 >        : ^^^
->module : any
->       : ^^^
+>namespace : any
+>          : ^^^
 

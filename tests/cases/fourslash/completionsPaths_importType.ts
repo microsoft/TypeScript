@@ -1,8 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @allowJs: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /ns.ts
 ////file content not read
 

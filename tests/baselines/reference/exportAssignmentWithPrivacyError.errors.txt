@@ -1,0 +1,22 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== exportAssignmentWithPrivacyError.ts (0 errors) ====
+    interface connectmodule {
+        (res, req, next): void;
+    }
+    interface connectexport {
+        use: (mod: connectmodule) => connectexport;
+        listen: (port: number) => void;
+    }
+    
+    var server: {
+        (): connectexport;
+        test1: connectmodule;
+        test2(): connectmodule;
+    };
+    
+    export = server;
+    
+    

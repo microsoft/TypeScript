@@ -48,7 +48,7 @@ interfaceWithMultipleBaseTypes.ts(60,15): error TS2430: Interface 'Derived5<T>' 
         }
     }
     
-    module Generic {
+    namespace Generic {
         interface Base1<T> {
             x: {
                 a: T;

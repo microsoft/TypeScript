@@ -153,13 +153,13 @@ function foo5(x: number | string | boolean) {
         }
     }
 }
-module m {
+namespace m {
 >m : Symbol(m, Decl(typeGuardsInFunctionAndModuleBlock.ts, 50, 1))
 
     var x: number | string | boolean;
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 37))
 
         var b = x; // new scope - number | boolean | string
@@ -193,15 +193,15 @@ module m {
         }
     }
 }
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(typeGuardsInFunctionAndModuleBlock.ts, 64, 1))
 
     var x: number | string | boolean;
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 
-    module m2.m3 {
+    namespace m2.m3 {
 >m2 : Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 37))
->m3 : Symbol(m3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 67, 14))
+>m3 : Symbol(m3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 67, 17))
 
         var b = x; // new scope - number | boolean | string
 >b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 68, 11))

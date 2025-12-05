@@ -15,7 +15,7 @@ functionNameConflicts.ts(24,10): error TS2389: Function implementation name must
     //Function and variable of the same name in same declaration space
     //Function overload with different name from implementation signature 
     
-    module M {
+    namespace M {
         function fn1() { }
                  ~~~
 !!! error TS2300: Duplicate identifier 'fn1'.

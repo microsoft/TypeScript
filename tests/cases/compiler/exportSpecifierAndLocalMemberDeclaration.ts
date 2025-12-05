@@ -1,5 +1,5 @@
 declare module "m2" {
-    module X {
+    namespace X {
         interface I { }
     }
     function Y();
