@@ -12,8 +12,8 @@ declare const f: { (x: string): number, a: "" } & { a: number }
 >  : ^^^^^^
 
 f()
->f() : any
->    : ^^^
+>f() : number
+>    : ^^^^^^
 >f : never
 >  : ^^^^^
 

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/inferenceFromUnionCombinedSingleSignature1.ts] ////
+
+=== inferenceFromUnionCombinedSingleSignature1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58468
+
+declare const fn: (() => void) | ((a: number) => void);
+>fn : Symbol(fn, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 2, 13))
+>a : Symbol(a, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 2, 35))
+
+declare const x: number;
+>x : Symbol(x, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 4, 13))
+
+declare const y: any;
+>y : Symbol(y, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 5, 13))
+
+fn.call(null, x);
+>fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 2, 13))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 4, 13))
+
+fn.call(null, y);
+>fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 2, 13))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(inferenceFromUnionCombinedSingleSignature1.ts, 5, 13))
+
+export {};
+
