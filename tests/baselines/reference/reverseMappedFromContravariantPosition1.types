@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/reverseMappedFromContravariantPosition1.ts] ////
+
+=== reverseMappedFromContravariantPosition1.ts ===
+declare function test1<T>(
+>test1 : <T>(cb: (arg: { [K in keyof T]: { prop: T[K]; }; }) => void) => T
+>      : ^ ^^  ^^                                                   ^^^^^ 
+
+  cb: (arg: { [K in keyof T]: { prop: T[K] } }) => void,
+>cb : (arg: { [K in keyof T]: { prop: T[K]; }; }) => void
+>   : ^   ^^                                    ^^^^^    
+>arg : { [K in keyof T]: { prop: T[K]; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+>prop : T[K]
+>     : ^^^^
+
+): T;
+
+type Arg = {
+>Arg : Arg
+>    : ^^^
+
+  a: {
+>a : { prop: number; }
+>  : ^^^^^^^^      ^^^
+
+    prop: number;
+>prop : number
+>     : ^^^^^^
+
+  };
+  b: {
+>b : { prop: boolean; }
+>  : ^^^^^^^^       ^^^
+
+    prop: boolean;
+>prop : boolean
+>     : ^^^^^^^
+
+  };
+};
+
+const result1 = test1((arg: Arg) => {});
+>result1 : { a: number; b: boolean; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1((arg: Arg) => {}) : { a: number; b: boolean; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1 : <T>(cb: (arg: { [K in keyof T]: { prop: T[K]; }; }) => void) => T
+>      : ^ ^^  ^^                                                   ^^^^^ 
+>(arg: Arg) => {} : (arg: Arg) => void
+>                 : ^   ^^   ^^^^^^^^^
+>arg : Arg
+>    : ^^^
+
