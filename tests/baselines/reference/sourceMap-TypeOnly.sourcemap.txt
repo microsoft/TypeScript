@@ -1,0 +1,18 @@
+===================================================================
+JsFile: sourceMap-TypeOnly.js
+mapUrl: sourceMap-TypeOnly.js.map
+sourceRoot: 
+sources: sourceMap-TypeOnly.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMap-TypeOnly.js
+sourceFile:sourceMap-TypeOnly.ts
+-------------------------------------------------------------------
+>>>"use strict";
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>//# sourceMappingURL=sourceMap-TypeOnly.js.map
