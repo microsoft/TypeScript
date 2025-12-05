@@ -204,7 +204,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
       "kind": "discover"
     }
@@ -212,7 +211,6 @@ TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslib
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -253,7 +251,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -278,7 +275,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
