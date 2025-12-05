@@ -251,3 +251,45 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
         }],
     });
 });
+
+describe("unittests:: tsbuild:: moduleResolution:: self-import in .d.ts with project reference redirect", () => {
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "self-import in .d.ts resolves to dist",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/packages/pkg1/package.json": jsonToReadableText({
+                    name: "pkg1",
+                    version: "1.0.0",
+                    main: "dist/index.js",
+                    types: "dist/index.d.ts",
+                    exports: {
+                        ".": {
+                            types: "./dist/index.d.ts",
+                            default: "./dist/index.js"
+                        }
+                    }
+                }),
+                "/home/src/workspaces/project/packages/pkg1/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "dist",
+                        rootDir: "src",
+                        module: "nodenext",
+                        moduleResolution: "nodenext"
+                    },
+                    include: ["src"]
+                }),
+                "/home/src/workspaces/project/packages/pkg1/src/index.ts": `export class C {}`,
+                "/home/src/workspaces/project/packages/pkg1/src/other.d.ts": dedent`
+                    import { C } from "pkg1";
+                    export declare const c: C;
+                `,
+                "/home/src/workspaces/project/packages/pkg1/src/usage.ts": dedent`
+                    import { c } from "./other";
+                    export const usage = c;
+                `
+            }),
+        commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
+    });
+});
