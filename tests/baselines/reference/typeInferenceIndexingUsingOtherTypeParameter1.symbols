@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/typeInferenceIndexingUsingOtherTypeParameter1.ts] ////
+
+=== typeInferenceIndexingUsingOtherTypeParameter1.ts ===
+type FieldValues = Record<string, any>;
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type UseControllerProps<
+>UseControllerProps : Symbol(UseControllerProps, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 39))
+
+  TFieldValues extends FieldValues = FieldValues,
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 24))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+
+  TName extends keyof TFieldValues = keyof TFieldValues,
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 3, 49))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 24))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 24))
+
+> = {
+  name: TName;
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 5, 5))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 3, 49))
+
+  defaultValue?: TFieldValues[TName];
+>defaultValue : Symbol(defaultValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 6, 14))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 2, 24))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 3, 49))
+
+};
+
+declare function useController<
+>useController : Symbol(useController, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 8, 2))
+
+  TFieldValues extends FieldValues = FieldValues,
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 31))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+>FieldValues : Symbol(FieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 0))
+
+  TName extends keyof TFieldValues = keyof TFieldValues,
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 11, 49))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 31))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 31))
+
+>(
+  props: UseControllerProps<TFieldValues, TName>,
+>props : Symbol(props, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 13, 2))
+>UseControllerProps : Symbol(UseControllerProps, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 0, 39))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 31))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 11, 49))
+
+): { name: TName; values: TFieldValues };
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 15, 4))
+>TName : Symbol(TName, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 11, 49))
+>values : Symbol(values, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 15, 17))
+>TFieldValues : Symbol(TFieldValues, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 10, 31))
+
+export const { name, values } = useController({
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 17, 14))
+>values : Symbol(values, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 17, 20))
+>useController : Symbol(useController, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 8, 2))
+
+  name: "test",
+>name : Symbol(name, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 17, 47))
+
+  defaultValue: "",
+>defaultValue : Symbol(defaultValue, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 18, 15))
+
+});
+
+declare function fn1<T, U>(arg: T[keyof T & keyof U], u: U): T;
+>fn1 : Symbol(fn1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 3))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>arg : Symbol(arg, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 27))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>u : Symbol(u, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 53))
+>U : Symbol(U, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 23))
+>T : Symbol(T, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 22, 21))
+
+const res1 = fn1("foo", { prop: 42 });
+>res1 : Symbol(res1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 24, 5))
+>fn1 : Symbol(fn1, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 20, 3))
+>prop : Symbol(prop, Decl(typeInferenceIndexingUsingOtherTypeParameter1.ts, 24, 25))
+

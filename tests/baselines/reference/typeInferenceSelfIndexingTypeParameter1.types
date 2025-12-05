@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter1.ts] ////
+
+=== typeInferenceSelfIndexingTypeParameter1.ts ===
+declare function fn1<T>(arg: T[keyof T]): T
+>fn1 : <T>(arg: T[keyof T]) => T
+>    : ^ ^^   ^^          ^^^^^ 
+>arg : T[keyof T]
+>    : ^^^^^^^^^^
+
+const res1 = fn1(["foo"]);
+>res1 : Record<string | number | symbol, string[]>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1(["foo"]) : Record<string | number | symbol, string[]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <T>(arg: T[keyof T]) => T
+>    : ^ ^^   ^^          ^^^^^ 
+>["foo"] : string[]
+>        : ^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+declare function fn2<T>(arg: T[keyof T & "a"]): T
+>fn2 : <T>(arg: T[keyof T & "a"]) => T
+>    : ^ ^^   ^^                ^^^^^ 
+>arg : T[keyof T & "a"]
+>    : ^^^^^^^^^^^^^^^^
+
+const res2 = fn2(["foo"]);
+>res2 : Record<"a", string[]>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>fn2(["foo"]) : Record<"a", string[]>
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>fn2 : <T>(arg: T[keyof T & "a"]) => T
+>    : ^ ^^   ^^                ^^^^^ 
+>["foo"] : string[]
+>        : ^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+

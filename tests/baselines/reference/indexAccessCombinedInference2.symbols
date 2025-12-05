@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/indexAccessCombinedInference2.ts] ////
+
+=== indexAccessCombinedInference2.ts ===
+type TLArrowShape = {
+>TLArrowShape : Symbol(TLArrowShape, Decl(indexAccessCombinedInference2.ts, 0, 0))
+
+  type: "arrow";
+>type : Symbol(type, Decl(indexAccessCombinedInference2.ts, 0, 21))
+
+  id: string;
+>id : Symbol(id, Decl(indexAccessCombinedInference2.ts, 1, 16))
+
+  x: number;
+>x : Symbol(x, Decl(indexAccessCombinedInference2.ts, 2, 13))
+
+  y: number;
+>y : Symbol(y, Decl(indexAccessCombinedInference2.ts, 3, 12))
+
+  props: {
+>props : Symbol(props, Decl(indexAccessCombinedInference2.ts, 4, 12))
+
+    dir: 1 | -1;
+>dir : Symbol(dir, Decl(indexAccessCombinedInference2.ts, 5, 10))
+
+  };
+};
+
+type NodeShape = {
+>NodeShape : Symbol(NodeShape, Decl(indexAccessCombinedInference2.ts, 8, 2))
+
+  type: "node";
+>type : Symbol(type, Decl(indexAccessCombinedInference2.ts, 10, 18))
+
+  id: string;
+>id : Symbol(id, Decl(indexAccessCombinedInference2.ts, 11, 15))
+
+  x: number;
+>x : Symbol(x, Decl(indexAccessCombinedInference2.ts, 12, 13))
+
+  y: number;
+>y : Symbol(y, Decl(indexAccessCombinedInference2.ts, 13, 12))
+
+  props: {
+>props : Symbol(props, Decl(indexAccessCombinedInference2.ts, 14, 12))
+
+    nodeType: string;
+>nodeType : Symbol(nodeType, Decl(indexAccessCombinedInference2.ts, 15, 10))
+
+  };
+};
+
+type TLShape = TLArrowShape | NodeShape;
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+>TLArrowShape : Symbol(TLArrowShape, Decl(indexAccessCombinedInference2.ts, 0, 0))
+>NodeShape : Symbol(NodeShape, Decl(indexAccessCombinedInference2.ts, 8, 2))
+
+export type TLShapePartial<T extends TLShape = TLShape> = T extends T
+>TLShapePartial : Symbol(TLShapePartial, Decl(indexAccessCombinedInference2.ts, 20, 40))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+
+  ? {
+      id: string;
+>id : Symbol(id, Decl(indexAccessCombinedInference2.ts, 23, 5))
+
+      type: T["type"];
+>type : Symbol(type, Decl(indexAccessCombinedInference2.ts, 24, 17))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+
+      props?: Partial<T["props"]>;
+>props : Symbol(props, Decl(indexAccessCombinedInference2.ts, 25, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+
+    } & Partial<Omit<T, "type" | "id" | "props">>
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 22, 27))
+
+  : never;
+
+declare class Editor {
+>Editor : Symbol(Editor, Decl(indexAccessCombinedInference2.ts, 28, 10))
+
+  updateShape<T extends TLShape = TLShape>(
+>updateShape : Symbol(Editor.updateShape, Decl(indexAccessCombinedInference2.ts, 30, 22))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 31, 14))
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+
+    partial: TLShapePartial<T> | null | undefined,
+>partial : Symbol(partial, Decl(indexAccessCombinedInference2.ts, 31, 43))
+>TLShapePartial : Symbol(TLShapePartial, Decl(indexAccessCombinedInference2.ts, 20, 40))
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 31, 14))
+
+  ): T;
+>T : Symbol(T, Decl(indexAccessCombinedInference2.ts, 31, 14))
+}
+
+declare const x: number;
+>x : Symbol(x, Decl(indexAccessCombinedInference2.ts, 36, 13))
+
+declare const y: number;
+>y : Symbol(y, Decl(indexAccessCombinedInference2.ts, 37, 13))
+
+declare const editor: Editor;
+>editor : Symbol(editor, Decl(indexAccessCombinedInference2.ts, 38, 13))
+>Editor : Symbol(Editor, Decl(indexAccessCombinedInference2.ts, 28, 10))
+
+declare const node1: NodeShape;
+>node1 : Symbol(node1, Decl(indexAccessCombinedInference2.ts, 40, 13))
+>NodeShape : Symbol(NodeShape, Decl(indexAccessCombinedInference2.ts, 8, 2))
+
+const node2 = editor.updateShape({ ...node1, x, y });
+>node2 : Symbol(node2, Decl(indexAccessCombinedInference2.ts, 41, 5))
+>editor.updateShape : Symbol(Editor.updateShape, Decl(indexAccessCombinedInference2.ts, 30, 22))
+>editor : Symbol(editor, Decl(indexAccessCombinedInference2.ts, 38, 13))
+>updateShape : Symbol(Editor.updateShape, Decl(indexAccessCombinedInference2.ts, 30, 22))
+>node1 : Symbol(node1, Decl(indexAccessCombinedInference2.ts, 40, 13))
+>x : Symbol(x, Decl(indexAccessCombinedInference2.ts, 41, 44))
+>y : Symbol(y, Decl(indexAccessCombinedInference2.ts, 41, 47))
+
+declare const shape1: TLShape;
+>shape1 : Symbol(shape1, Decl(indexAccessCombinedInference2.ts, 43, 13))
+>TLShape : Symbol(TLShape, Decl(indexAccessCombinedInference2.ts, 18, 2))
+
+const shape2 = editor.updateShape({ ...shape1, x, y });
+>shape2 : Symbol(shape2, Decl(indexAccessCombinedInference2.ts, 44, 5))
+>editor.updateShape : Symbol(Editor.updateShape, Decl(indexAccessCombinedInference2.ts, 30, 22))
+>editor : Symbol(editor, Decl(indexAccessCombinedInference2.ts, 38, 13))
+>updateShape : Symbol(Editor.updateShape, Decl(indexAccessCombinedInference2.ts, 30, 22))
+>shape1 : Symbol(shape1, Decl(indexAccessCombinedInference2.ts, 43, 13))
+>x : Symbol(x, Decl(indexAccessCombinedInference2.ts, 44, 46))
+>y : Symbol(y, Decl(indexAccessCombinedInference2.ts, 44, 49))
+

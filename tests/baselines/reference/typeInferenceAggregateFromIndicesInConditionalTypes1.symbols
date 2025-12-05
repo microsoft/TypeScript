@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesInConditionalTypes1.ts] ////
+
+=== typeInferenceAggregateFromIndicesInConditionalTypes1.ts ===
+type Foo = {
+>Foo : Symbol(Foo, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 0, 0))
+
+    a: string;
+>a : Symbol(a, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 0, 12))
+
+    b: number;
+>b : Symbol(b, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 1, 14))
+
+    c: boolean;
+>c : Symbol(c, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 2, 14))
+}
+
+type AC<T> = T extends { a: (infer R extends Record<string, any>)["_a"]; c: (infer R)["_c"] } ? R : never;
+>AC : Symbol(AC, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 4, 1))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 8))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 8))
+>a : Symbol(a, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 24))
+>R : Symbol(R, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 34), Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 82))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 72))
+>R : Symbol(R, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 34), Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 82))
+>R : Symbol(R, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 34), Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 82))
+
+type Result1 = AC<Foo>;
+>Result1 : Symbol(Result1, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 6, 106))
+>AC : Symbol(AC, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 4, 1))
+>Foo : Symbol(Foo, Decl(typeInferenceAggregateFromIndicesInConditionalTypes1.ts, 0, 0))
+

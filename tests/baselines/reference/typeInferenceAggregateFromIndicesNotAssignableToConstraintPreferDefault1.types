@@ -1,0 +1,241 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts ===
+type Term = NamedNode | BlankNode | Literal | Variable | BaseQuad;
+>Term : Term
+>     : ^^^^
+
+interface NamedNode<Iri extends string = string> {
+  termType: "NamedNode";
+>termType : "NamedNode"
+>         : ^^^^^^^^^^^
+
+  value: Iri;
+>value : Iri
+>      : ^^^
+}
+
+interface BlankNode {
+  termType: "BlankNode";
+>termType : "BlankNode"
+>         : ^^^^^^^^^^^
+
+  value: string;
+>value : string
+>      : ^^^^^^
+}
+
+interface Literal {
+  termType: "Literal";
+>termType : "Literal"
+>         : ^^^^^^^^^
+
+  value: string;
+>value : string
+>      : ^^^^^^
+
+  language: string;
+>language : string
+>         : ^^^^^^
+
+  direction?: "ltr" | "rtl" | "" | null;
+>direction : "" | "ltr" | "rtl" | null | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface Variable {
+  termType: "Variable";
+>termType : "Variable"
+>         : ^^^^^^^^^^
+
+  value: string;
+>value : string
+>      : ^^^^^^
+}
+
+type Quad_Subject = NamedNode | BlankNode | Quad | Variable;
+>Quad_Subject : Quad_Subject
+>             : ^^^^^^^^^^^^
+
+type Quad_Predicate = NamedNode | Variable;
+>Quad_Predicate : Quad_Predicate
+>               : ^^^^^^^^^^^^^^
+
+type Quad_Object = NamedNode | Literal | BlankNode | Quad | Variable;
+>Quad_Object : Quad_Object
+>            : ^^^^^^^^^^^
+
+interface BaseQuad {
+  termType: "Quad";
+>termType : "Quad"
+>         : ^^^^^^
+
+  value: "";
+>value : ""
+>      : ^^
+
+  subject: Term;
+>subject : Term
+>        : ^^^^
+
+  predicate: Term;
+>predicate : Term
+>          : ^^^^
+
+  object: Term;
+>object : Term
+>       : ^^^^
+}
+
+interface Quad extends BaseQuad {
+  subject: Quad_Subject;
+>subject : Quad_Subject
+>        : ^^^^^^^^^^^^
+
+  predicate: Quad_Predicate;
+>predicate : Quad_Predicate
+>          : ^^^^^^^^^^^^^^
+
+  object: Quad_Object;
+>object : Quad_Object
+>       : ^^^^^^^^^^^
+}
+
+declare class DataFactory {
+>DataFactory : DataFactory
+>            : ^^^^^^^^^^^
+
+  quad<Q extends BaseQuad = Quad>(
+>quad : <Q extends BaseQuad = Quad>(subject: Q["subject"], predicate: Q["predicate"], object: Q["object"]) => Q
+>     : ^ ^^^^^^^^^        ^^^^^^^^^       ^^            ^^         ^^              ^^      ^^           ^^^^^ 
+
+    subject: Q["subject"],
+>subject : Q["subject"]
+>        : ^^^^^^^^^^^^
+
+    predicate: Q["predicate"],
+>predicate : Q["predicate"]
+>          : ^^^^^^^^^^^^^^
+
+    object: Q["object"],
+>object : Q["object"]
+>       : ^^^^^^^^^^^
+
+  ): Q;
+  namedNode<Iri extends string = string>(value: Iri): NamedNode<Iri>;
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>value : Iri
+>      : ^^^
+
+  blankNode(value?: string): BlankNode;
+>blankNode : (value?: string) => BlankNode
+>          : ^     ^^^      ^^^^^         
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+}
+
+declare const factory: DataFactory;
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+
+const res1 = factory.quad(
+>res1 : Quad
+>     : ^^^^
+>factory.quad(  factory.namedNode("http://example.org/subject"),  factory.namedNode("http://example.org/predicate"),  factory.namedNode("http://example.org/object"),) : Quad
+>                                                                                                                                                                      : ^^^^
+>factory.quad : <Q extends BaseQuad = Quad>(subject: Q["subject"], predicate: Q["predicate"], object: Q["object"]) => Q
+>             : ^ ^^^^^^^^^        ^^^^^^^^^       ^^            ^^         ^^              ^^      ^^           ^^^^^ 
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>quad : <Q extends BaseQuad = Quad>(subject: Q["subject"], predicate: Q["predicate"], object: Q["object"]) => Q
+>     : ^ ^^^^^^^^^        ^^^^^^^^^       ^^            ^^         ^^              ^^      ^^           ^^^^^ 
+
+  factory.namedNode("http://example.org/subject"),
+>factory.namedNode("http://example.org/subject") : NamedNode<"http://example.org/subject">
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>factory.namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>                  : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>"http://example.org/subject" : "http://example.org/subject"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  factory.namedNode("http://example.org/predicate"),
+>factory.namedNode("http://example.org/predicate") : NamedNode<"http://example.org/predicate">
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>factory.namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>                  : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>"http://example.org/predicate" : "http://example.org/predicate"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  factory.namedNode("http://example.org/object"),
+>factory.namedNode("http://example.org/object") : NamedNode<"http://example.org/object">
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>factory.namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>                  : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>"http://example.org/object" : "http://example.org/object"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+);
+
+const res2 = factory.quad(
+>res2 : Quad
+>     : ^^^^
+>factory.quad(  factory.namedNode("http://example.org/subject"),  factory.blankNode("34"), // error  factory.namedNode("http://example.org/object"),) : Quad
+>                                                                                                                                                     : ^^^^
+>factory.quad : <Q extends BaseQuad = Quad>(subject: Q["subject"], predicate: Q["predicate"], object: Q["object"]) => Q
+>             : ^ ^^^^^^^^^        ^^^^^^^^^       ^^            ^^         ^^              ^^      ^^           ^^^^^ 
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>quad : <Q extends BaseQuad = Quad>(subject: Q["subject"], predicate: Q["predicate"], object: Q["object"]) => Q
+>     : ^ ^^^^^^^^^        ^^^^^^^^^       ^^            ^^         ^^              ^^      ^^           ^^^^^ 
+
+  factory.namedNode("http://example.org/subject"),
+>factory.namedNode("http://example.org/subject") : NamedNode<"http://example.org/subject">
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>factory.namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>                  : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>"http://example.org/subject" : "http://example.org/subject"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  factory.blankNode("34"), // error
+>factory.blankNode("34") : BlankNode
+>                        : ^^^^^^^^^
+>factory.blankNode : (value?: string) => BlankNode
+>                  : ^     ^^^      ^^^^^         
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>blankNode : (value?: string) => BlankNode
+>          : ^     ^^^      ^^^^^         
+>"34" : "34"
+>     : ^^^^
+
+  factory.namedNode("http://example.org/object"),
+>factory.namedNode("http://example.org/object") : NamedNode<"http://example.org/object">
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>factory.namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>                  : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>factory : DataFactory
+>        : ^^^^^^^^^^^
+>namedNode : <Iri extends string = string>(value: Iri) => NamedNode<Iri>
+>          : ^   ^^^^^^^^^      ^^^^^^^^^^^     ^^   ^^^^^              
+>"http://example.org/object" : "http://example.org/object"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+);
+

@@ -1,0 +1,206 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts ===
+type Term = NamedNode | BlankNode | Literal | Variable | BaseQuad;
+>Term : Symbol(Term, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 0))
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>BlankNode : Symbol(BlankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 5, 1))
+>Literal : Symbol(Literal, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 10, 1))
+>Variable : Symbol(Variable, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 17, 1))
+>BaseQuad : Symbol(BaseQuad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 26, 69))
+
+interface NamedNode<Iri extends string = string> {
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>Iri : Symbol(Iri, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 2, 20))
+
+  termType: "NamedNode";
+>termType : Symbol(NamedNode.termType, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 2, 50))
+
+  value: Iri;
+>value : Symbol(NamedNode.value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 3, 24))
+>Iri : Symbol(Iri, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 2, 20))
+}
+
+interface BlankNode {
+>BlankNode : Symbol(BlankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 5, 1))
+
+  termType: "BlankNode";
+>termType : Symbol(BlankNode.termType, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 7, 21))
+
+  value: string;
+>value : Symbol(BlankNode.value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 8, 24))
+}
+
+interface Literal {
+>Literal : Symbol(Literal, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 10, 1))
+
+  termType: "Literal";
+>termType : Symbol(Literal.termType, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 12, 19))
+
+  value: string;
+>value : Symbol(Literal.value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 13, 22))
+
+  language: string;
+>language : Symbol(Literal.language, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 14, 16))
+
+  direction?: "ltr" | "rtl" | "" | null;
+>direction : Symbol(Literal.direction, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 15, 19))
+}
+
+interface Variable {
+>Variable : Symbol(Variable, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 17, 1))
+
+  termType: "Variable";
+>termType : Symbol(Variable.termType, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 19, 20))
+
+  value: string;
+>value : Symbol(Variable.value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 20, 23))
+}
+
+type Quad_Subject = NamedNode | BlankNode | Quad | Variable;
+>Quad_Subject : Symbol(Quad_Subject, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 22, 1))
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>BlankNode : Symbol(BlankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 5, 1))
+>Quad : Symbol(Quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 34, 1))
+>Variable : Symbol(Variable, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 17, 1))
+
+type Quad_Predicate = NamedNode | Variable;
+>Quad_Predicate : Symbol(Quad_Predicate, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 24, 60))
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>Variable : Symbol(Variable, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 17, 1))
+
+type Quad_Object = NamedNode | Literal | BlankNode | Quad | Variable;
+>Quad_Object : Symbol(Quad_Object, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 25, 43))
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>Literal : Symbol(Literal, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 10, 1))
+>BlankNode : Symbol(BlankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 5, 1))
+>Quad : Symbol(Quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 34, 1))
+>Variable : Symbol(Variable, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 17, 1))
+
+interface BaseQuad {
+>BaseQuad : Symbol(BaseQuad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 26, 69))
+
+  termType: "Quad";
+>termType : Symbol(BaseQuad.termType, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 28, 20))
+
+  value: "";
+>value : Symbol(BaseQuad.value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 29, 19))
+
+  subject: Term;
+>subject : Symbol(BaseQuad.subject, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 30, 12))
+>Term : Symbol(Term, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 0))
+
+  predicate: Term;
+>predicate : Symbol(BaseQuad.predicate, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 31, 16))
+>Term : Symbol(Term, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 0))
+
+  object: Term;
+>object : Symbol(BaseQuad.object, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 32, 18))
+>Term : Symbol(Term, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 0))
+}
+
+interface Quad extends BaseQuad {
+>Quad : Symbol(Quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 34, 1))
+>BaseQuad : Symbol(BaseQuad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 26, 69))
+
+  subject: Quad_Subject;
+>subject : Symbol(Quad.subject, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 36, 33))
+>Quad_Subject : Symbol(Quad_Subject, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 22, 1))
+
+  predicate: Quad_Predicate;
+>predicate : Symbol(Quad.predicate, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 37, 24))
+>Quad_Predicate : Symbol(Quad_Predicate, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 24, 60))
+
+  object: Quad_Object;
+>object : Symbol(Quad.object, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 38, 28))
+>Quad_Object : Symbol(Quad_Object, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 25, 43))
+}
+
+declare class DataFactory {
+>DataFactory : Symbol(DataFactory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 40, 1))
+
+  quad<Q extends BaseQuad = Quad>(
+>quad : Symbol(DataFactory.quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 42, 27))
+>Q : Symbol(Q, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 7))
+>BaseQuad : Symbol(BaseQuad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 26, 69))
+>Quad : Symbol(Quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 34, 1))
+
+    subject: Q["subject"],
+>subject : Symbol(subject, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 34))
+>Q : Symbol(Q, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 7))
+
+    predicate: Q["predicate"],
+>predicate : Symbol(predicate, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 44, 26))
+>Q : Symbol(Q, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 7))
+
+    object: Q["object"],
+>object : Symbol(object, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 45, 30))
+>Q : Symbol(Q, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 7))
+
+  ): Q;
+>Q : Symbol(Q, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 43, 7))
+
+  namedNode<Iri extends string = string>(value: Iri): NamedNode<Iri>;
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>Iri : Symbol(Iri, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 12))
+>value : Symbol(value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 41))
+>Iri : Symbol(Iri, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 12))
+>NamedNode : Symbol(NamedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 0, 66))
+>Iri : Symbol(Iri, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 12))
+
+  blankNode(value?: string): BlankNode;
+>blankNode : Symbol(DataFactory.blankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 69))
+>value : Symbol(value, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 49, 12))
+>BlankNode : Symbol(BlankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 5, 1))
+}
+
+declare const factory: DataFactory;
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>DataFactory : Symbol(DataFactory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 40, 1))
+
+const res1 = factory.quad(
+>res1 : Symbol(res1, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 54, 5))
+>factory.quad : Symbol(DataFactory.quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 42, 27))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>quad : Symbol(DataFactory.quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 42, 27))
+
+  factory.namedNode("http://example.org/subject"),
+>factory.namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+
+  factory.namedNode("http://example.org/predicate"),
+>factory.namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+
+  factory.namedNode("http://example.org/object"),
+>factory.namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+
+);
+
+const res2 = factory.quad(
+>res2 : Symbol(res2, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 60, 5))
+>factory.quad : Symbol(DataFactory.quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 42, 27))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>quad : Symbol(DataFactory.quad, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 42, 27))
+
+  factory.namedNode("http://example.org/subject"),
+>factory.namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+
+  factory.blankNode("34"), // error
+>factory.blankNode : Symbol(DataFactory.blankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 69))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>blankNode : Symbol(DataFactory.blankNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 48, 69))
+
+  factory.namedNode("http://example.org/object"),
+>factory.namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+>factory : Symbol(factory, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 52, 13))
+>namedNode : Symbol(DataFactory.namedNode, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraintPreferDefault1.ts, 47, 7))
+
+);
+
