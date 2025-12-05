@@ -7,7 +7,6 @@ import (
 // Verify LogTree implements the expected interface
 type testLogger interface {
 	Log(msg ...any)
-	Write(msg string)
 }
 
 func TestLogTreeImplementsLogger(t *testing.T) {

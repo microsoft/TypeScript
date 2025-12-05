@@ -197,7 +197,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	if session.options.LoggingEnabled {
 		defer func() {
 			if r := recover(); r != nil {
-				session.logger.Write(logger.String())
+				session.logger.Log(logger.String())
 				panic(r)
 			}
 		}()

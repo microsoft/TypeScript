@@ -20,14 +20,14 @@ import { getLanguageForUri } from "./util";
 const codeLensShowLocationsCommandName = "typescript.native-preview.codeLens.showLocations";
 
 export class Client {
-    private outputChannel: vscode.OutputChannel;
-    private traceOutputChannel: vscode.OutputChannel;
+    private outputChannel: vscode.LogOutputChannel;
+    private traceOutputChannel: vscode.LogOutputChannel;
     private clientOptions: LanguageClientOptions;
     private client?: LanguageClient;
     private exe: ExeInfo | undefined;
     private onStartedCallbacks: Set<() => void> = new Set();
 
-    constructor(outputChannel: vscode.OutputChannel, traceOutputChannel: vscode.OutputChannel) {
+    constructor(outputChannel: vscode.LogOutputChannel, traceOutputChannel: vscode.LogOutputChannel) {
         this.outputChannel = outputChannel;
         this.traceOutputChannel = traceOutputChannel;
         this.clientOptions = {
@@ -127,6 +127,10 @@ export class Client {
         await this.client.start();
         vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
         this.onStartedCallbacks.forEach(callback => callback());
+
+        if (this.traceOutputChannel.logLevel !== vscode.LogLevel.Trace) {
+            this.traceOutputChannel.appendLine(`To see LSP trace output, set this output's log level to "Trace" (gear icon next to the dropdown).`);
+        }
 
         const codeLensLocationsCommand = vscode.commands.registerCommand(codeLensShowLocationsCommandName, (...args: unknown[]) => {
             if (args.length !== 3) {

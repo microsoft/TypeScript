@@ -13,7 +13,7 @@
         "url": "https://github.com/microsoft/typescript-go"
     },
     "engines": {
-        "vscode": "^1.100.0"
+        "vscode": "^1.106.0"
     },
     "capabilities": {
         "untrustedWorkspaces": {
@@ -119,10 +119,10 @@
         "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --minify"
     },
     "dependencies": {
-        "vscode-languageclient": "^9.0.1"
+        "vscode-languageclient": "^10.0.0-next.18"
     },
     "devDependencies": {
-        "@types/vscode": "^1.100.0",
+        "@types/vscode": "^1.106.0",
         "@vscode/vsce": "^3.7.0",
         "esbuild": "^0.27.0"
     }

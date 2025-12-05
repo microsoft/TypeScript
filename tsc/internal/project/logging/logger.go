@@ -8,12 +8,23 @@ import (
 )
 
 type Logger interface {
+	// Error logs an error message.
+	Error(msg ...any)
+	// Errorf logs a formatted error message.
+	Errorf(format string, args ...any)
+	// Warn logs a warning message.
+	Warn(msg ...any)
+	// Warnf logs a formatted warning message.
+	Warnf(format string, args ...any)
+	// Info logs an info message.
+	Info(msg ...any)
+	// Infof logs a formatted info message.
+	Infof(format string, args ...any)
 	// Log prints a line to the output writer with a header.
 	Log(msg ...any)
 	// Logf prints a formatted line to the output writer with a header.
 	Logf(format string, args ...any)
-	// Write prints the msg string to the output with no additional formatting, followed by a newline
-	Write(msg string)
+
 	// Verbose returns the logger instance if verbose logging is enabled, and otherwise returns nil.
 	// A nil logger created with `logging.NewLogger` is safe to call methods on.
 	Verbose() Logger
@@ -50,15 +61,6 @@ func (l *logger) Logf(format string, args ...any) {
 	fmt.Fprintf(l.writer, "%s %s\n", l.prefix(), fmt.Sprintf(format, args...))
 }
 
-func (l *logger) Write(msg string) {
-	if l == nil {
-		return
-	}
-	l.mu.Lock()
-	defer l.mu.Unlock()
-	fmt.Fprintln(l.writer, msg)
-}
-
 func (l *logger) Verbose() Logger {
 	if l == nil {
 		return nil
@@ -87,6 +89,30 @@ func (l *logger) SetVerbose(verbose bool) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.verbose = verbose
+}
+
+func (l *logger) Error(msg ...any) {
+	l.Log(msg...)
+}
+
+func (l *logger) Errorf(format string, args ...any) {
+	l.Logf(format, args...)
+}
+
+func (l *logger) Warn(msg ...any) {
+	l.Log(msg...)
+}
+
+func (l *logger) Warnf(format string, args ...any) {
+	l.Logf(format, args...)
+}
+
+func (l *logger) Info(msg ...any) {
+	l.Log(msg...)
+}
+
+func (l *logger) Infof(format string, args ...any) {
+	l.Logf(format, args...)
 }
 
 func NewLogger(output io.Writer) Logger {

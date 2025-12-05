@@ -24,7 +24,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/project/ata"
-	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"golang.org/x/sync/errgroup"
@@ -41,27 +40,17 @@ type ServerOptions struct {
 	TypingsLocation    string
 	ParseCache         *project.ParseCache
 	NpmInstall         func(cwd string, args []string) ([]byte, error)
-
-	// Test options
-	Client project.Client
-	Logger logging.Logger
 }
 
 func NewServer(opts *ServerOptions) *Server {
 	if opts.Cwd == "" {
 		panic("Cwd is required")
 	}
-	var logger logging.Logger
-	if opts.Logger != nil {
-		logger = opts.Logger
-	} else {
-		logger = logging.NewLogger(opts.Err)
-	}
-	return &Server{
+
+	s := &Server{
 		r:                     opts.In,
 		w:                     opts.Out,
 		stderr:                opts.Err,
-		logger:                logger,
 		requestQueue:          make(chan *lsproto.RequestMessage, 100),
 		outgoingQueue:         make(chan *lsproto.Message, 100),
 		pendingClientRequests: make(map[lsproto.ID]pendingClientRequest),
@@ -72,9 +61,11 @@ func NewServer(opts *ServerOptions) *Server {
 		typingsLocation:       opts.TypingsLocation,
 		parseCache:            opts.ParseCache,
 		npmInstall:            opts.NpmInstall,
-		client:                opts.Client,
 		initComplete:          make(chan struct{}),
 	}
+	s.logger = newLogger(s)
+
+	return s
 }
 
 var (
@@ -144,7 +135,8 @@ type Server struct {
 
 	stderr io.Writer
 
-	logger                  logging.Logger
+	logger                  *logger
+	initStarted             atomic.Bool
 	clientSeq               atomic.Int32
 	requestQueue            chan *lsproto.RequestMessage
 	outgoingQueue           chan *lsproto.Message
@@ -294,7 +286,7 @@ func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserPreferen
 	if err != nil {
 		return nil, fmt.Errorf("configure request failed: %w", err)
 	}
-	s.Log(fmt.Sprintf("\n\nconfiguration: %+v, %T\n\n", configs, configs))
+	s.logger.Infof("configuration: %+v, %T", configs, configs)
 	userPreferences := s.session.NewUserPreferences()
 	for _, item := range configs {
 		if parsed := userPreferences.Parse(item); parsed != nil {
@@ -509,7 +501,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 	if handler := handlers()[req.Method]; handler != nil {
 		return handler(s, ctx, req)
 	}
-	s.Log("unknown method", req.Method)
+	s.logger.Warn("unknown method", req.Method)
 	if req.ID != nil {
 		s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
 	}
@@ -878,11 +870,11 @@ func registerMultiProjectReferenceRequestHandler[Req lsproto.HasTextDocumentPosi
 func (s *Server) recover(req *lsproto.RequestMessage) {
 	if r := recover(); r != nil {
 		stack := debug.Stack()
-		s.Log("panic handling request", req.Method, r, string(stack))
+		s.logger.Error("panic handling request", req.Method, r, string(stack))
 		if req.ID != nil {
 			s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
 		} else {
-			s.Log("unhandled panic in notification", req.Method, r)
+			s.logger.Error("unhandled panic in notification", req.Method, r)
 		}
 	}
 }
@@ -892,15 +884,16 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 		return nil, lsproto.ErrorCodeInvalidRequest
 	}
 
-	s.initializeParams = params
-	s.clientCapabilities = resolveClientCapabilities(params.Capabilities)
+	s.initStarted.Store(true)
 
-	if _, err := fmt.Fprint(s.stderr, "Resolved client capabilities: "); err != nil {
+	s.initializeParams = params
+	s.clientCapabilities = lsproto.ResolveClientCapabilities(params.Capabilities)
+
+	capabilitiesJSON, err := jsonutil.MarshalIndent(&s.clientCapabilities, "", "\t")
+	if err != nil {
 		return nil, err
 	}
-	if err := jsonutil.MarshalIndentWrite(s.stderr, &s.clientCapabilities, "", "\t"); err != nil {
-		return nil, err
-	}
+	s.logger.Info("Resolved client capabilities: " + string(capabilitiesJSON))
 
 	s.positionEncoding = lsproto.PositionEncodingKindUTF16
 	if slices.Contains(s.clientCapabilities.General.PositionEncodings, lsproto.PositionEncodingKindUTF8) {
@@ -1387,10 +1380,6 @@ func (s *Server) handleCallHierarchyOutgoingCalls(
 	return languageService.ProvideCallHierarchyOutgoingCalls(ctx, params.Item)
 }
 
-func (s *Server) Log(msg ...any) {
-	fmt.Fprintln(s.stderr, msg...)
-}
-
 // !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
 func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, options *core.CompilerOptions) {
 	s.compilerOptionsForInferredProjects = options
@@ -1422,30 +1411,4 @@ func isBlockingMethod(method lsproto.Method) bool {
 
 func ptrTo[T any](v T) *T {
 	return &v
-}
-
-func resolveClientCapabilities(caps *lsproto.ClientCapabilities) lsproto.ResolvedClientCapabilities {
-	resolved := lsproto.ResolveClientCapabilities(caps)
-
-	// Some clients claim that push and pull diagnostics have different capabilities,
-	// including vscode-languageclient v9. Work around this by defaulting any missing
-	// pull diagnostic caps with the pull diagnostic equivalents.
-	//
-	// TODO: remove when we upgrade to vscode-languageclient v10, which fixes this issue.
-	publish := resolved.TextDocument.PublishDiagnostics
-	diagnostic := &resolved.TextDocument.Diagnostic
-	if !diagnostic.RelatedInformation && publish.RelatedInformation {
-		diagnostic.RelatedInformation = true
-	}
-	if !diagnostic.CodeDescriptionSupport && publish.CodeDescriptionSupport {
-		diagnostic.CodeDescriptionSupport = true
-	}
-	if !diagnostic.DataSupport && publish.DataSupport {
-		diagnostic.DataSupport = true
-	}
-	if len(diagnostic.TagSupport.ValueSet) == 0 && len(publish.TagSupport.ValueSet) > 0 {
-		diagnostic.TagSupport.ValueSet = publish.TagSupport.ValueSet
-	}
-
-	return resolved
 }

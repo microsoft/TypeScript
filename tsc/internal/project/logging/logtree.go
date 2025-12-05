@@ -74,14 +74,6 @@ func (c *LogTree) Logf(format string, args ...any) {
 	c.add(log)
 }
 
-func (c *LogTree) Write(msg string) {
-	if c == nil {
-		return
-	}
-	log := newLogEntry(nil, msg)
-	c.add(log)
-}
-
 func (c *LogTree) IsVerbose() bool {
 	return c.verbose
 }
@@ -98,6 +90,30 @@ func (c *LogTree) Verbose() Logger {
 		return nil
 	}
 	return c
+}
+
+func (c *LogTree) Error(msg ...any) {
+	c.Log(msg...)
+}
+
+func (c *LogTree) Errorf(format string, args ...any) {
+	c.Logf(format, args...)
+}
+
+func (c *LogTree) Warn(msg ...any) {
+	c.Log(msg...)
+}
+
+func (c *LogTree) Warnf(format string, args ...any) {
+	c.Logf(format, args...)
+}
+
+func (c *LogTree) Info(msg ...any) {
+	c.Log(msg...)
+}
+
+func (c *LogTree) Infof(format string, args ...any) {
+	c.Logf(format, args...)
 }
 
 func (c *LogTree) Embed(logs *LogTree) {

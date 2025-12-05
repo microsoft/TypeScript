@@ -535,9 +535,9 @@ func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	// !!! userPreferences/configuration updates
 	s.backgroundQueue.Enqueue(context.Background(), func(ctx context.Context) {
 		if s.options.LoggingEnabled {
-			s.logger.Write(newSnapshot.builderLogs.String())
+			s.logger.Log(newSnapshot.builderLogs.String())
 			s.logProjectChanges(oldSnapshot, newSnapshot)
-			s.logger.Write("")
+			s.logger.Log("")
 		}
 		if s.options.WatchEnabled {
 			if err := s.updateWatches(oldSnapshot, newSnapshot); err != nil && s.options.LoggingEnabled {
@@ -779,7 +779,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 			return true
 		})
 	}
-	s.logger.Write("\n======== Cache Statistics ========")
+	s.logger.Log("\n======== Cache Statistics ========")
 	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays))
 	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
