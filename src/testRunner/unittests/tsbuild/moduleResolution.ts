@@ -266,9 +266,9 @@ describe("unittests:: tsbuild:: moduleResolution:: self-import in .d.ts with pro
                     exports: {
                         ".": {
                             types: "./dist/index.d.ts",
-                            default: "./dist/index.js"
-                        }
-                    }
+                            default: "./dist/index.js",
+                        },
+                    },
                 }),
                 "/home/src/workspaces/project/packages/pkg1/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -276,9 +276,9 @@ describe("unittests:: tsbuild:: moduleResolution:: self-import in .d.ts with pro
                         outDir: "dist",
                         rootDir: "src",
                         module: "nodenext",
-                        moduleResolution: "nodenext"
+                        moduleResolution: "nodenext",
                     },
-                    include: ["src"]
+                    include: ["src"],
                 }),
                 "/home/src/workspaces/project/packages/pkg1/src/index.ts": `export class C {}`,
                 "/home/src/workspaces/project/packages/pkg1/src/other.d.ts": dedent`
@@ -288,7 +288,7 @@ describe("unittests:: tsbuild:: moduleResolution:: self-import in .d.ts with pro
                 "/home/src/workspaces/project/packages/pkg1/src/usage.ts": dedent`
                     import { c } from "./other";
                     export const usage = c;
-                `
+                `,
             }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
     });

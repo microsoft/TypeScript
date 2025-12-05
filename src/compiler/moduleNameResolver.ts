@@ -1484,7 +1484,8 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             if (redirectedReference) {
                 projectDir = getDirectoryPath(redirectedReference.sourceFile.fileName);
                 options = redirectedReference.commandLine.options;
-            } else {
+            }
+            else {
                 projectDir = getDirectoryPath(containingFile);
                 options = compilerOptions;
             }
@@ -1492,16 +1493,16 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             let currentDir = projectDir;
             let packageJsonInfo: PackageJsonInfoCacheEntry | undefined;
             while (currentDir) {
-                 const packageJsonPath = combinePaths(currentDir, "package.json");
-                 packageJsonInfo = cache?.getPackageJsonInfo(packageJsonPath);
-                 if (isPackageJsonInfo(packageJsonInfo)) break;
-                 const parent = getDirectoryPath(currentDir);
-                 if (parent === currentDir) break;
-                 currentDir = parent;
+                const packageJsonPath = combinePaths(currentDir, "package.json");
+                packageJsonInfo = cache?.getPackageJsonInfo(packageJsonPath);
+                if (isPackageJsonInfo(packageJsonInfo)) break;
+                const parent = getDirectoryPath(currentDir);
+                if (parent === currentDir) break;
+                currentDir = parent;
             }
 
             if (isPackageJsonInfo(packageJsonInfo) && packageJsonInfo.contents.packageJsonContent.name === moduleName) {
-                 if (options) {
+                if (options) {
                     let outputDts: string | undefined;
                     if (options.outFile) {
                         outputDts = changeAnyExtension(options.outFile, ".d.ts");
@@ -1510,16 +1511,16 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
                         const getCanonicalFileName = createGetCanonicalFileName(
                             typeof host.useCaseSensitiveFileNames === "function"
                                 ? host.useCaseSensitiveFileNames()
-                                : host.useCaseSensitiveFileNames ?? true
+                                : host.useCaseSensitiveFileNames ?? true,
                         );
 
                         let rootDir = options.rootDir;
                         if (!rootDir && redirectedReference) {
-                             rootDir = getCommonSourceDirectory(
+                            rootDir = getCommonSourceDirectory(
                                 options,
                                 () => redirectedReference.commandLine.fileNames,
                                 host.getCurrentDirectory ? host.getCurrentDirectory() : "",
-                                getCanonicalFileName
+                                getCanonicalFileName,
                             );
                         }
 
@@ -1533,7 +1534,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
                         result.resolvedModule.resolvedFileName = outputDts;
                         result.resolvedModule.extension = Extension.Dts;
                     }
-                 }
+                }
             }
         }
     }
