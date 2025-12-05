@@ -1,13 +1,13 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionPartialImplementation_1.ts ===
-// module A {
+// namespace A {
 //     <|export interface [|{| defId: 0 |}IA|] {
 //         y: string;
 //     }|>
 // }
 
 // === /tests/cases/fourslash/goToDefinitionPartialImplementation_2.ts ===
-// module A {
+// namespace A {
 //     <|export interface [|{| defId: 1 |}IA|] {
 //         x: number;
 //     }|>

@@ -11,7 +11,6 @@ export const x = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 12
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -46,7 +45,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 110
+//// [/user/username/projects/myproject/main.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -134,7 +133,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 110
+//// [/user/username/projects/myproject/main.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

@@ -1,11 +1,12 @@
 /// <reference path="../fourslash.ts"/>
 
-// This one uses --module=commonjs, so the export map is not followed.
+// This one uses --moduleResolution=node10, so the export map is not followed.
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs"
+////     "moduleResolution": "node10",
 ////   }
 //// }
 

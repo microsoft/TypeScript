@@ -34,11 +34,11 @@ var e = new E(1); // error
 >e : Symbol(e, Decl(classConstructorAccessibility.ts, 14, 3))
 >E : Symbol(E, Decl(classConstructorAccessibility.ts, 6, 1))
 
-module Generic {
+namespace Generic {
 >Generic : Symbol(Generic, Decl(classConstructorAccessibility.ts, 14, 17))
 
     class C<T> {
->C : Symbol(C, Decl(classConstructorAccessibility.ts, 16, 16))
+>C : Symbol(C, Decl(classConstructorAccessibility.ts, 16, 19))
 >T : Symbol(T, Decl(classConstructorAccessibility.ts, 17, 12))
 
         public constructor(public x: T) { }
@@ -66,7 +66,7 @@ module Generic {
 
     var c = new C(1);
 >c : Symbol(c, Decl(classConstructorAccessibility.ts, 29, 7))
->C : Symbol(C, Decl(classConstructorAccessibility.ts, 16, 16))
+>C : Symbol(C, Decl(classConstructorAccessibility.ts, 16, 19))
 
     var d = new D(1); // error
 >d : Symbol(d, Decl(classConstructorAccessibility.ts, 30, 7))

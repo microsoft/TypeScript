@@ -1,4 +1,4 @@
-declare module ng {
+declare namespace ng {
     interfaceICompiledExpression {
         (context: any, locals?: any): any;
         assign(context: any, value: any): any;

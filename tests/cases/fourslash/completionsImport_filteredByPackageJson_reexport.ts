@@ -40,13 +40,13 @@ verify.completions({
     completion.undefinedVarEntry,
     {
       name: "css",
-      source: "/node_modules/@emotion/core/index",
+      source: "@emotion/core",
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },
     {
       name: "css2",
-      source: "/node_modules/@emotion/core/index",
+      source: "@emotion/core",
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },

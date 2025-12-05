@@ -1,7 +1,7 @@
 // @verbatimModuleSyntax: true
 // @target: esnext
 // @module: esnext
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @esModuleInterop: true, false
 
 // @Filename: /decl.d.ts

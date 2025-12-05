@@ -7,3 +7,6 @@
 /// <reference lib="esnext.iterator" />
 /// <reference lib="esnext.promise" />
 /// <reference lib="esnext.float16" />
+/// <reference lib="esnext.error" />
+/// <reference lib="esnext.sharedmemory" />
+/// <reference lib="esnext.typedarrays" />

@@ -16,6 +16,6 @@ class B {
 
     constructor() { super(value => String(value)); }
 >value : Symbol(value, Decl(superCallFromClassThatHasNoBaseType1.ts, 7, 26))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >value : Symbol(value, Decl(superCallFromClassThatHasNoBaseType1.ts, 7, 26))
 }

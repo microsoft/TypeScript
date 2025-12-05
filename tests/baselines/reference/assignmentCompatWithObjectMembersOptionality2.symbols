@@ -18,12 +18,12 @@ class Derived2 extends Derived { baz: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 3, 27))
 >baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 5, 32))
 
-module TargetHasOptional {
+namespace TargetHasOptional {
 >TargetHasOptional : Symbol(TargetHasOptional, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 5, 47))
 
     // targets
     interface C {
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 7, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 7, 29))
 
         opt?: Base
 >opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 9, 17))
@@ -31,7 +31,7 @@ module TargetHasOptional {
     }
     var c: C;
 >c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 12, 7))
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 7, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 7, 29))
 
     var a: { opt?: Base; }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 14, 7))
@@ -133,12 +133,12 @@ module TargetHasOptional {
 >c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 12, 7))
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
 >SourceHasOptional : Symbol(SourceHasOptional, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 47, 1))
 
     // targets
     interface C {
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 49, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 49, 29))
 
         opt: Base
 >opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 51, 17))
@@ -146,7 +146,7 @@ module SourceHasOptional {
     }
     var c: C;
 >c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 54, 7))
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 49, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 49, 29))
 
     var a: { opt: Base; }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality2.ts, 56, 7))

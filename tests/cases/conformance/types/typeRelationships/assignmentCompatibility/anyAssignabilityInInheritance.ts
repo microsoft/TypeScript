@@ -64,7 +64,7 @@ declare function foo14(x: any): any;
 var r3 = foo3(a); // any
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 declare function foo15(x: typeof f): typeof f;
@@ -72,7 +72,7 @@ declare function foo15(x: any): any;
 var r3 = foo3(a); // any
 
 class CC { baz: string }
-module CC {
+namespace CC {
     export var bar = 1;
 }
 declare function foo16(x: CC): CC;

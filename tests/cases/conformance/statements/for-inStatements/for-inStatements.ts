@@ -64,7 +64,7 @@ var i: I;
 for (var x in i[42]) { } 
 
 
-module M {
+namespace M {
     export class X<T> {
         name:string
     }

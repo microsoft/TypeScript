@@ -2,11 +2,11 @@
 
 === isDeclarationVisibleNodeKinds.ts ===
 // Function types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator1(schema: any): <T>(data: T) => T {
->createValidator1 : Symbol(createValidator1, Decl(isDeclarationVisibleNodeKinds.ts, 1, 15))
+>createValidator1 : Symbol(createValidator1, Decl(isDeclarationVisibleNodeKinds.ts, 1, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 2, 37))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 2, 52))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 2, 55))
@@ -19,11 +19,11 @@ module schema {
 }
 
 // Constructor types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator2(schema: any): new <T>(data: T) => T {
->createValidator2 : Symbol(createValidator2, Decl(isDeclarationVisibleNodeKinds.ts, 8, 15))
+>createValidator2 : Symbol(createValidator2, Decl(isDeclarationVisibleNodeKinds.ts, 8, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 9, 37))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 9, 56))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 9, 59))
@@ -36,11 +36,11 @@ module schema {
 }
 
 // union types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
      export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
->createValidator3 : Symbol(createValidator3, Decl(isDeclarationVisibleNodeKinds.ts, 15, 15))
+>createValidator3 : Symbol(createValidator3, Decl(isDeclarationVisibleNodeKinds.ts, 15, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 16, 38))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 16, 68))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 16, 71))
@@ -53,11 +53,11 @@ module schema {
 }
 
 // Array types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
      export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
->createValidator4 : Symbol(createValidator4, Decl(isDeclarationVisibleNodeKinds.ts, 22, 15))
+>createValidator4 : Symbol(createValidator4, Decl(isDeclarationVisibleNodeKinds.ts, 22, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 23, 38))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 23, 59))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 23, 62))
@@ -71,11 +71,11 @@ module schema {
 
 
 // TypeLiterals
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator5(schema: any): { new <T>(data: T): T } {
->createValidator5 : Symbol(createValidator5, Decl(isDeclarationVisibleNodeKinds.ts, 30, 15))
+>createValidator5 : Symbol(createValidator5, Decl(isDeclarationVisibleNodeKinds.ts, 30, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 31, 37))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 31, 58))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 31, 61))
@@ -88,11 +88,11 @@ module schema {
 }
 
 // Tuple types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
->createValidator6 : Symbol(createValidator6, Decl(isDeclarationVisibleNodeKinds.ts, 37, 15))
+>createValidator6 : Symbol(createValidator6, Decl(isDeclarationVisibleNodeKinds.ts, 37, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 38, 37))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 38, 58))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 38, 61))
@@ -105,11 +105,11 @@ module schema {
 }
 
 // Paren Types
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
->createValidator7 : Symbol(createValidator7, Decl(isDeclarationVisibleNodeKinds.ts, 44, 15))
+>createValidator7 : Symbol(createValidator7, Decl(isDeclarationVisibleNodeKinds.ts, 44, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 45, 37))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 45, 57))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 45, 60))
@@ -122,13 +122,13 @@ module schema {
 }
 
 // Type reference
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
->createValidator8 : Symbol(createValidator8, Decl(isDeclarationVisibleNodeKinds.ts, 51, 15))
+>createValidator8 : Symbol(createValidator8, Decl(isDeclarationVisibleNodeKinds.ts, 51, 18))
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 52, 37))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 52, 60))
 >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 52, 63))
 >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 52, 60))
@@ -140,11 +140,11 @@ module schema {
 }
 
 
-module schema {
+namespace schema {
 >schema : Symbol(schema, Decl(isDeclarationVisibleNodeKinds.ts, 0, 0), Decl(isDeclarationVisibleNodeKinds.ts, 5, 1), Decl(isDeclarationVisibleNodeKinds.ts, 12, 1), Decl(isDeclarationVisibleNodeKinds.ts, 19, 1), Decl(isDeclarationVisibleNodeKinds.ts, 26, 1) ... and 4 more)
 
     export class T {
->T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 58, 15))
+>T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 58, 18))
 
         get createValidator9(): <T>(data: T) => T {
 >createValidator9 : Symbol(T.createValidator9, Decl(isDeclarationVisibleNodeKinds.ts, 59, 20))

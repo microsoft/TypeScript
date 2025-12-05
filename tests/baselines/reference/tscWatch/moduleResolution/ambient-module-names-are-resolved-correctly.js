@@ -46,7 +46,6 @@ promisify2();
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -73,8 +72,15 @@ CreatingProgramWith::
   options: {"noEmit":true,"traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/a.ts 250 undefined Source file
 ======== Resolving module 'mymodule' from '/home/src/workspaces/project/witha/a.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymodule' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/witha/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'mymodule' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/witha/node_modules/mymodule/package.json' does not exist.
 File '/home/src/workspaces/project/witha/node_modules/mymodule.ts' does not exist.
@@ -86,8 +92,15 @@ File '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts' exist
 Resolving real path for '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts', result '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'.
 ======== Module name 'mymodule' was successfully resolved to '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'. ========
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/witha/a.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.ts' does not exist.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.tsx' does not exist.
@@ -98,8 +111,7 @@ Directory '/home/src/workspaces/node_modules' does not exist, skipping all looku
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.js' does not exist.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.jsx' does not exist.
 Directory '/home/src/workspaces/project/node_modules' does not exist, skipping all lookups in it.
@@ -110,17 +122,24 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'mymoduleutils' was not resolved. ========
 File '/home/src/workspaces/project/witha/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/node_modules/package.json' does not exist.
-File '/home/src/workspaces/project/witha/package.json' does not exist.
-File '/home/src/workspaces/project/package.json' does not exist.
-File '/home/src/workspaces/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/b.ts 250 undefined Source file
 ======== Resolving module 'mymodule' from '/home/src/workspaces/project/withb/b.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymodule' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/withb/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'mymodule' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/withb/node_modules/mymodule/package.json' does not exist.
 File '/home/src/workspaces/project/withb/node_modules/mymodule.ts' does not exist.
@@ -132,8 +151,15 @@ File '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts' exist
 Resolving real path for '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts', result '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts'.
 ======== Module name 'mymodule' was successfully resolved to '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts'. ========
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/withb/b.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/withb/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/withb/node_modules/mymoduleutils.ts' does not exist.
 File '/home/src/workspaces/project/withb/node_modules/mymoduleutils.tsx' does not exist.
@@ -143,7 +169,7 @@ Resolution for module 'mymoduleutils' was found in cache from location '/home/sr
 ======== Module name 'mymoduleutils' was not resolved. ========
 File '/home/src/workspaces/project/withb/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/withb/node_modules/package.json' does not exist.
-File '/home/src/workspaces/project/withb/package.json' does not exist.
+File '/home/src/workspaces/project/withb/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
@@ -153,6 +179,10 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
@@ -216,6 +246,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/home/src/workspaces: *new*
+  {}
+/home/src/workspaces/project: *new*
   {}
 /home/src/workspaces/project/tsconfig.json: *new*
   {}
@@ -396,8 +430,15 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
 Reusing resolution of module 'mymodule' from '/home/src/workspaces/project/witha/a.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'.
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/witha/a.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.ts' does not exist.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.tsx' does not exist.
@@ -408,8 +449,7 @@ Directory '/home/src/workspaces/node_modules' does not exist, skipping all looku
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.js' does not exist.
 File '/home/src/workspaces/project/witha/node_modules/mymoduleutils.jsx' does not exist.
 Directory '/home/src/workspaces/project/node_modules' does not exist, skipping all lookups in it.
@@ -427,8 +467,15 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/withb/b.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspaces/project/withb/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json' does not exist.
 File '/home/src/workspaces/project/withb/node_modules/mymoduleutils.ts' does not exist.
@@ -497,6 +544,10 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/home/src/workspaces:
+  {}
+/home/src/workspaces/project:
   {}
 /home/src/workspaces/project/tsconfig.json:
   {}
