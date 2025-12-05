@@ -89,8 +89,7 @@ export function transpileDeclaration(input: string, transpileOptions: TranspileO
 //  at least a minimal `lib` available, since the checker will `any` their types without these defined.
 //  Late bound symbol names, in particular, are impossible to define without `Symbol` at least partially defined.
 // TODO: This should *probably* just load the full, real `lib` for the `target`.
-const barebonesLibContent = `/// <reference no-default-lib="true"/>
-interface Boolean {}
+const barebonesLibContent = `interface Boolean {}
 interface Function {}
 interface CallableFunction {}
 interface NewableFunction {}
@@ -152,6 +151,10 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         options.declarationMap = false;
     }
 
+    // When transpiling declartions, we need libs.
+    // getDefaultLibFileName will cause barebonesLib to be used.
+    options.noLib = !declaration;
+
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
     const compilerHost: CompilerHost = {
@@ -201,8 +204,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     let outputText: string | undefined;
     let sourceMapText: string | undefined;
 
-    const inputs = declaration ? [inputFileName, barebonesLibName] : [inputFileName];
-    const program = createProgram(inputs, options, compilerHost);
+    const program = createProgram([inputFileName], options, compilerHost);
 
     if (transpileOptions.reportDiagnostics) {
         addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));

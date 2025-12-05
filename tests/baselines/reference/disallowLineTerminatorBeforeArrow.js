@@ -56,7 +56,7 @@ foo(()
 foo(()
     => { return false; });
 
-module m {
+namespace m {
     class City {
         constructor(x: number, thing = ()
             => 100) {

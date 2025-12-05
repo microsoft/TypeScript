@@ -9,7 +9,7 @@ interface A<T extends Number> { // error
     y: T;
 }
 
-module M {
+namespace M {
     interface B<T extends A<Date>> {
         x: T;
     }
@@ -19,25 +19,25 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
     interface A<T extends Date> {
         x: T;
     }
 }
 
-module M2 {
+namespace M2 {
     interface A<T extends Number> { // ok, different declaration space from other M2.A
         y: T;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A<T extends Date> {
         x: T;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A<T extends Number> { // error
         y: T;
     }

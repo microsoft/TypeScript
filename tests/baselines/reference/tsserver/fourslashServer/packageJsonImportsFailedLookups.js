@@ -169,12 +169,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/d/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/c/d/e/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/c/d/e/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/c/d/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/c/d/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/c/d/e/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -260,18 +254,15 @@ watchedDirectoriesRecursive::
   {}
 /a/b/c/d/e/node_modules: *new*
   {}
-  {}
 /a/b/c/d/e/node_modules/@types: *new*
   {}
   {}
 /a/b/c/d/node_modules: *new*
   {}
-  {}
 /a/b/c/d/node_modules/@types: *new*
   {}
   {}
 /a/b/c/node_modules: *new*
-  {}
   {}
 /a/b/c/node_modules/@types: *new*
   {}
@@ -382,18 +373,15 @@ watchedDirectoriesRecursive::
   {}
 /a/b/c/d/e/node_modules:
   {}
-  {}
 /a/b/c/d/e/node_modules/@types:
   {}
   {}
 /a/b/c/d/node_modules:
   {}
-  {}
 /a/b/c/d/node_modules/@types:
   {}
   {}
 /a/b/c/node_modules:
-  {}
   {}
 /a/b/c/node_modules/@types:
   {}

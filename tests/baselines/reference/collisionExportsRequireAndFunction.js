@@ -7,7 +7,7 @@ export function exports() {
 export function require() {
     return "require";
 }
-module m1 {
+namespace m1 {
     function exports() {
         return 1;
     }
@@ -15,7 +15,7 @@ module m1 {
         return "require";
     }
 }
-module m2 {
+namespace m2 {
     export function exports() {
         return 1;
     }

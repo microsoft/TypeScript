@@ -1,6 +1,6 @@
 //@target: ES6
-module M {
-    module Symbol { }
+namespace M {
+    namespace Symbol { }
 
     class C {
         [Symbol.iterator]() { }

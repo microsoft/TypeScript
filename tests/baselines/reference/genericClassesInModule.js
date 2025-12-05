@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericClassesInModule.ts] ////
 
 //// [genericClassesInModule.ts]
-module Foo {
+namespace Foo {
 
     export class B<T>{ }
 

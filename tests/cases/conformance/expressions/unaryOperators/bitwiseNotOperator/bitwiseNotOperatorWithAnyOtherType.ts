@@ -19,7 +19,7 @@ class A {
         return a;
     }
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();

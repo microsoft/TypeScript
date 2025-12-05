@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts] ////
 
 === declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
-declare module A.B.Base {
+declare namespace A.B.Base {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -18,7 +18,7 @@ declare module A.B.Base {
 >   : ^^^^^^
     }
 }
-module X.Y.base {
+namespace X.Y.base {
 >X : typeof X
 >  : ^^^^^^^^
 >Y : typeof Y
@@ -50,7 +50,7 @@ module X.Y.base {
     }
 }
 
-module X.Y.base.Z {
+namespace X.Y.base.Z {
 >X : typeof X
 >  : ^^^^^^^^
 >Y : typeof Y

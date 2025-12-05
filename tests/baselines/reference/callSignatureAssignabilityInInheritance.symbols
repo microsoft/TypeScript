@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts] ////
 
 === callSignatureAssignabilityInInheritance.ts ===
-module CallSignature {
+namespace CallSignature {
 >CallSignature : Symbol(CallSignature, Decl(callSignatureAssignabilityInInheritance.ts, 0, 0))
 
     interface Base { // T
->Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 0, 22))
+>Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 0, 25))
 
         // M's
         (x: number): void;
@@ -19,7 +19,7 @@ module CallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(callSignatureAssignabilityInInheritance.ts, 5, 5))
->Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 0, 22))
+>Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 0, 25))
 
         // N's
         (x: number): number; // ok because base returns void
@@ -66,11 +66,11 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
 >MemberWithCallSignature : Symbol(MemberWithCallSignature, Decl(callSignatureAssignabilityInInheritance.ts, 31, 1))
 
     interface Base { // T
->Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 33, 32))
+>Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 33, 35))
 
         // M's
         a: (x: number) => void;
@@ -92,7 +92,7 @@ module MemberWithCallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(callSignatureAssignabilityInInheritance.ts, 39, 5))
->Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 33, 32))
+>Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance.ts, 33, 35))
 
         // N's
         a: (x: number) => number; // ok because base returns void

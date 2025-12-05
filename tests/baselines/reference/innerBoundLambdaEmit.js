@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/innerBoundLambdaEmit.ts] ////
 
 //// [innerBoundLambdaEmit.ts]
-module M {
+namespace M {
     export class Foo {
     }
     var bar = () => { };

@@ -1,0 +1,26 @@
+/index.ts(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'i-have-a-dir-and-main/dist/dir'.
+
+
+==== /node_modules/i-have-a-dir-and-main/package.json (0 errors) ====
+    {
+      "name": "i-have-a-dir-and-main",
+      "version": "1.0.0",
+      "type": "module",
+      "main": "dist/index.js"
+    }
+    
+==== /node_modules/i-have-a-dir-and-main/dist/index.d.ts (0 errors) ====
+    export declare const a = 1;
+    
+==== /node_modules/i-have-a-dir-and-main/dist/dir/index.d.ts (0 errors) ====
+    export declare const b = 2;
+    
+==== /package.json (0 errors) ====
+    { "type": "module" }
+    
+==== /index.ts (1 errors) ====
+    import 'i-have-a-dir-and-main' // ok
+    import 'i-have-a-dir-and-main/dist/dir' // error
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'i-have-a-dir-and-main/dist/dir'.
+    

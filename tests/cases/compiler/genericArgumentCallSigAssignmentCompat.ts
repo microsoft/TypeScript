@@ -1,4 +1,4 @@
-module Underscore {
+namespace Underscore {
     export interface Iterator<T, U> {
         (value: T, index: any, list: any): U;
     }

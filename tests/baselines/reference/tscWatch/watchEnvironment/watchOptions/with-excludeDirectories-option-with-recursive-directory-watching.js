@@ -28,7 +28,6 @@ export function temp(): string;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 20
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -52,7 +51,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 118
+//// [/user/username/projects/myproject/src/main.js] Inode:: 121
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -77,6 +76,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":20}
+/user/username/projects: *new*
+  {"inode":3}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -140,7 +141,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 120
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 123
 export function temp(): string;
 
 

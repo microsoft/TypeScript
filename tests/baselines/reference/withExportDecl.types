@@ -3,12 +3,15 @@
 === withExportDecl.ts ===
 var simpleVar;
 >simpleVar : any
+>          : ^^^
 
 export var exportedSimpleVar;
 >exportedSimpleVar : any
+>                  : ^^^
 
 var anotherVar: any;
 >anotherVar : any
+>           : ^^^
 
 var varWithSimpleType: number;
 >varWithSimpleType : number
@@ -68,12 +71,15 @@ export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
 
 declare var declaredVar;
 >declaredVar : any
+>            : ^^^
 
 declare var declareVar2
 >declareVar2 : any
+>            : ^^^
 
 declare var declaredVar;
 >declaredVar : any
+>            : ^^^
 
 declare var deckareVarWithType: number;
 >deckareVarWithType : number
@@ -161,7 +167,7 @@ export function exportedFunction() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -174,7 +180,7 @@ module m1 {
 >        : ^^^^^^^
     }
 }
-export declare module m2 {
+export declare namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -184,7 +190,7 @@ export declare module m2 {
 }
 
 
-export module m3 {
+export namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -206,6 +212,7 @@ export module m3 {
 
 export var eVar1, eVar2 = 10;
 >eVar1 : any
+>      : ^^^
 >eVar2 : number
 >      : ^^^^^^
 >10 : 10
@@ -213,6 +220,7 @@ export var eVar1, eVar2 = 10;
 
 var eVar22;
 >eVar22 : any
+>       : ^^^
 
 export var eVar3 = 10, eVar4, eVar5;
 >eVar3 : number
@@ -220,5 +228,7 @@ export var eVar3 = 10, eVar4, eVar5;
 >10 : 10
 >   : ^^
 >eVar4 : any
+>      : ^^^
 >eVar5 : any
+>      : ^^^
 

@@ -60,7 +60,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I5.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))
@@ -73,7 +73,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 5))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I6.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 24))
@@ -202,7 +202,7 @@ interface I14 {
 function f() { }
 >f : Symbol(f, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 85, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 88, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 85, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 88, 16))
 
     export var bar = 1;
@@ -225,7 +225,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
 >baz : Symbol(c.baz, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
 
     export var bar = 1;

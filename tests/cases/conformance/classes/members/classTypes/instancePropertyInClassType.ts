@@ -1,4 +1,4 @@
-module NonGeneric {
+namespace NonGeneric {
     class C {
         x: string;
         get y() {
@@ -18,7 +18,7 @@ module NonGeneric {
 
 }
 
-module Generic {
+namespace Generic {
     class C<T,U> {
         x: T;
         get y() {

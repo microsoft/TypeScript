@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/ambientModuleExports.ts] ////
 
 === ambientModuleExports.ts ===
-declare module Foo {
+declare namespace Foo {
 >Foo : Symbol(Foo, Decl(ambientModuleExports.ts, 0, 0))
 
 	function a():void;
->a : Symbol(a, Decl(ambientModuleExports.ts, 0, 20))
+>a : Symbol(a, Decl(ambientModuleExports.ts, 0, 23))
 
 	var b:number;
 >b : Symbol(b, Decl(ambientModuleExports.ts, 2, 4))
@@ -15,9 +15,9 @@ declare module Foo {
 }
 
 Foo.a();
->Foo.a : Symbol(Foo.a, Decl(ambientModuleExports.ts, 0, 20))
+>Foo.a : Symbol(Foo.a, Decl(ambientModuleExports.ts, 0, 23))
 >Foo : Symbol(Foo, Decl(ambientModuleExports.ts, 0, 0))
->a : Symbol(Foo.a, Decl(ambientModuleExports.ts, 0, 20))
+>a : Symbol(Foo.a, Decl(ambientModuleExports.ts, 0, 23))
 
 Foo.b;
 >Foo.b : Symbol(Foo.b, Decl(ambientModuleExports.ts, 2, 4))
@@ -30,11 +30,11 @@ var c = new Foo.C();
 >Foo : Symbol(Foo, Decl(ambientModuleExports.ts, 0, 0))
 >C : Symbol(Foo.C, Decl(ambientModuleExports.ts, 2, 14))
 
-declare module Foo2 {
+declare namespace Foo2 {
 >Foo2 : Symbol(Foo2, Decl(ambientModuleExports.ts, 8, 20))
 
     export function a(): void;
->a : Symbol(a, Decl(ambientModuleExports.ts, 10, 21))
+>a : Symbol(a, Decl(ambientModuleExports.ts, 10, 24))
 
     export var b: number;
 >b : Symbol(b, Decl(ambientModuleExports.ts, 12, 14))
@@ -44,9 +44,9 @@ declare module Foo2 {
 }
 
 Foo2.a();
->Foo2.a : Symbol(Foo2.a, Decl(ambientModuleExports.ts, 10, 21))
+>Foo2.a : Symbol(Foo2.a, Decl(ambientModuleExports.ts, 10, 24))
 >Foo2 : Symbol(Foo2, Decl(ambientModuleExports.ts, 8, 20))
->a : Symbol(Foo2.a, Decl(ambientModuleExports.ts, 10, 21))
+>a : Symbol(Foo2.a, Decl(ambientModuleExports.ts, 10, 24))
 
 Foo2.b;
 >Foo2.b : Symbol(Foo2.b, Decl(ambientModuleExports.ts, 12, 14))

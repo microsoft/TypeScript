@@ -30,7 +30,7 @@ function fn() {
 let x = Math.pow((3, 5), 2);
 >x : Symbol(x, Decl(commaOperatorLeftSideUnused.ts, 15, 3))
 >Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
 
 // Should error
@@ -146,7 +146,7 @@ xx = ((xx+= 4), xx);
 xx = (Math.pow(3, 2), 4);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 >Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
 
 xx = (void xx, 10);

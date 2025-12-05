@@ -5,7 +5,7 @@ declare function f();
 >f : typeof f
 >  : ^^^^^^^^
 
-declare module f { var x }
+declare namespace f { var x }
 >f : typeof f
 >  : ^^^^^^^^
 >x : any

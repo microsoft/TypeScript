@@ -60,7 +60,7 @@ declare enum E2 {
 }
 
 // Ambient module with initializers for values, bodies for functions / classes
-declare module M1 {
+declare namespace M1 {
 >M1 : Symbol(M1, Decl(ambientErrors.ts, 29, 1))
 
     var x = 3;
@@ -88,11 +88,11 @@ declare module M1 {
 }
 
 // Ambient external module not in the global module
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(ambientErrors.ts, 42, 1))
 
     declare module 'nope' { }
->'nope' : Symbol("nope", Decl(ambientErrors.ts, 45, 11))
+>'nope' : Symbol("nope", Decl(ambientErrors.ts, 45, 14))
 }
 
 // Ambient external module with a string literal name that isn't a top level external module name

@@ -1,10 +1,15 @@
 // @erasableSyntaxOnly: true
 // @noEmit: true
-// @filename: decl.d.ts
 
 // Diffs from the other test:
 // - Parameter properties are already banned in .d.ts files
 
+// @filename: index.d.cts
+declare function foo(): void;
+export = foo;
+
+
+// @filename: index.d.ts
 namespace IllegalBecauseInstantiated {
     export const m = 1;
 }
@@ -52,3 +57,17 @@ declare namespace AmbientStuff {
 
     import FineAlias = EnumInAmbientContext.B;
 }
+
+// @filename: commonjs.d.cts
+import foo = require("./other.cjs");
+export = foo;
+
+
+// @filename: other.d.cts
+declare function foo(): void;
+export = foo;
+
+
+// @filename: esm.d.mts
+declare const foo = 1234;
+export default foo;

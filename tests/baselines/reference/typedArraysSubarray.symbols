@@ -6,7 +6,7 @@ function int8ArraySubarray() {
 
     var arr = new Int8Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 1, 7))
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -29,7 +29,7 @@ function uint8ArraySubarray() {
 
     var arr = new Uint8Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 8, 7))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -52,7 +52,7 @@ function uint8ClampedArraySubarray() {
 
     var arr = new Uint8ClampedArray(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 15, 7))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
@@ -75,7 +75,7 @@ function int16ArraySubarray() {
 
     var arr = new Int16Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 22, 7))
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -98,7 +98,7 @@ function uint16ArraySubarray() {
 
     var arr = new Uint16Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 29, 7))
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -121,7 +121,7 @@ function int32ArraySubarray() {
 
     var arr = new Int32Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 36, 7))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -144,7 +144,7 @@ function uint32ArraySubarray() {
 
     var arr = new Uint32Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 43, 7))
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -167,7 +167,7 @@ function float32ArraySubarray() {
 
     var arr = new Float32Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 50, 7))
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
@@ -190,7 +190,7 @@ function float64ArraySubarray() {
 
     var arr = new Float64Array(10);
 >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 57, 7))
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     arr.subarray();
 >arr.subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
