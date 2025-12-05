@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring2.ts] ////
+
+=== useBeforeDeclaration_destructuring2.ts ===
+// https://github.com/microsoft/TypeScript/issues/58794
+
+export const fn1 = <const T,>({
+>fn1 : <const T>({ [length - 1]: finalItem, length, }: readonly T[]) => T | undefined
+>    : ^^^^^^^ ^^                                    ^^            ^^^^^             
+><const T,>({  [length - 1]: finalItem,  length,}: readonly T[]): T | undefined => {  return finalItem;} : <const T>({ [length - 1]: finalItem, length, }: readonly T[]) => T | undefined
+>                                                                                                        : ^^^^^^^ ^^                                    ^^            ^^^^^             
+
+  [length - 1]: finalItem,
+>length - 1 : number
+>           : ^^^^^^
+>length : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>finalItem : T
+>          : ^
+
+  length,
+>length : number
+>       : ^^^^^^
+
+}: readonly T[]): T | undefined => {
+  return finalItem;
+>finalItem : T
+>          : ^
+
+};
+
+export const fn2 = <const T,>({
+>fn2 : <const T>({ length, [length - 1]: finalItem, }: readonly T[]) => T | undefined
+>    : ^^^^^^^ ^^                                    ^^            ^^^^^             
+><const T,>({  length,  [length - 1]: finalItem,}: readonly T[]): T | undefined => {  return finalItem;} : <const T>({ length, [length - 1]: finalItem, }: readonly T[]) => T | undefined
+>                                                                                                        : ^^^^^^^ ^^                                    ^^            ^^^^^             
+
+  length,
+>length : number
+>       : ^^^^^^
+
+  [length - 1]: finalItem,
+>length - 1 : number
+>           : ^^^^^^
+>length : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>finalItem : T
+>          : ^
+
+}: readonly T[]): T | undefined => {
+  return finalItem;
+>finalItem : T
+>          : ^
+
+};
+
