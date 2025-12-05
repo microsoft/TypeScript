@@ -2812,7 +2812,9 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetExportOrImport(subTarget, subpath, pattern, key);
                         if (result) {
-                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            if (result.value) {
+                                traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            }
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
                         }
@@ -2846,7 +2848,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_scope_0_explicitly_maps_specifier_1_to_null, scope.packageDirectory, moduleName);
             }
-            return toSearchResult(/*value*/ undefined);
+            return { value: undefined };
         }
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);

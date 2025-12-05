@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
 
 === declFileModuleWithPropertyOfTypeModule.ts ===
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

@@ -112,7 +112,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     let l = 0;
     n = l;
 

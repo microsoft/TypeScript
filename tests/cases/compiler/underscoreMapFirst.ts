@@ -1,4 +1,4 @@
-declare module _ {
+declare namespace _ {
     interface Collection<T> { }
     interface List<T> extends Collection<T> {
         [index: number]: T;

@@ -7,7 +7,7 @@ module M
   export class C {  }
 >C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
 
-  export module C {
+  export namespace C {
 >C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
 
     export var C = M.C

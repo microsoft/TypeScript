@@ -7,10 +7,10 @@ client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
     export default a;
     
 ==== client.ts (2 errors) ====
-    export import defaultBinding from "server";
+    export import defaultBinding from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
     export var x = defaultBinding;
-    export import defaultBinding2 from "server"; // non referenced
+    export import defaultBinding2 from "./server"; // non referenced
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientFunctionWithTheSameNameAndCommonRoot.ts] ////
 
 === module.d.ts ===
-declare module Point {
+declare namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 

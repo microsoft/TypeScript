@@ -15,7 +15,7 @@ declare var window: Window;
 >window : Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 11))
 >Window : Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 1, 1))
 
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 27))
 
     var x = "test1";

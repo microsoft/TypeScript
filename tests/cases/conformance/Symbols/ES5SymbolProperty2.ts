@@ -1,5 +1,5 @@
 //@target: ES5
-module M {
+namespace M {
     var Symbol: any;
 
     export class C {

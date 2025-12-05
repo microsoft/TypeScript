@@ -9,6 +9,7 @@ declare function use(v: any): void;
 >use : (v: any) => void
 >    : ^ ^^   ^^^^^    
 >v : any
+>  : ^^^
 
 use(moduleB.value);
 >use(moduleB.value) : void

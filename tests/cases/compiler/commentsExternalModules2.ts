@@ -5,7 +5,7 @@
 
 // @Filename: commentsExternalModules2_0.ts
 /** Module comment*/
-export module m1 {
+export namespace m1 {
     /** b's comment*/
     export var b: number;
     /** foo's comment*/
@@ -13,7 +13,7 @@ export module m1 {
         return b;
     }
     /** m2 comments*/
-    export module m2 {
+    export namespace m2 {
         /** class comment;*/
         export class c {
         };
@@ -29,7 +29,7 @@ m1.fooExport();
 var myvar = new m1.m2.c();
 
 /** Module comment */
-export module m4 {
+export namespace m4 {
     /** b's comment */
     export var b: number;
     /** foo's comment
@@ -39,7 +39,7 @@ export module m4 {
     }
     /** m2 comments
     */
-    export module m2 {
+    export namespace m2 {
         /** class comment; */
         export class c {
         };

@@ -11,7 +11,7 @@ const enum E { X }
 >X : E.X
 >  : ^^^
 
-module A4 {
+namespace A4 {
 >A4 : typeof A4
 >   : ^^^^^^^^^
 
@@ -19,7 +19,7 @@ module A4 {
 >true : true
 >     : ^^^^
 
-    module A {
+    namespace A {
         const enum E { X }
 >E : E
 >  : ^

@@ -4,7 +4,7 @@ declare module "express" {
 
     function express(): express.ExpressServer;
 
-    module express {
+    namespace express {
 
         export interface ExpressServer {
 

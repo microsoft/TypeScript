@@ -23,7 +23,7 @@ class C {
     }
 }
 
-module M1.M2 {
+namespace M1.M2 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 >M2 : typeof M2

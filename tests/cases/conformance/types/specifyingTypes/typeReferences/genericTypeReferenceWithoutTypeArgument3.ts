@@ -15,7 +15,7 @@ declare function f(x: C): C;
 
 declare class D extends C {}
 
-declare module M {
+declare namespace M {
     export class E<T> { foo: T }
 }
 

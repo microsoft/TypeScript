@@ -226,7 +226,7 @@ var StaticArgumentsFn_Anonymous2 = class {
 // === Static properties on default exported classes ===
 
 // name
-module TestOnDefaultExportedClass_1 {
+namespace TestOnDefaultExportedClass_1 {
     class StaticName {
         static name: number; // error without useDefineForClassFields
         name: string; // ok
@@ -238,7 +238,7 @@ export class ExportedStaticName {
     [FunctionPropertyNames.name]: string; // ok
 }
 
-module TestOnDefaultExportedClass_2 {
+namespace TestOnDefaultExportedClass_2 {
     class StaticNameFn {
         static name() {} // error without useDefineForClassFields
         name() {} // ok
@@ -251,7 +251,7 @@ export class ExportedStaticNameFn {
 }
 
 // length
-module TestOnDefaultExportedClass_3 {
+namespace TestOnDefaultExportedClass_3 {
     export default class StaticLength {
         static length: number; // error without useDefineForClassFields
         length: string; // ok
@@ -263,7 +263,7 @@ export class ExportedStaticLength {
     [FunctionPropertyNames.length]: string; // ok
 }
 
-module TestOnDefaultExportedClass_4 {
+namespace TestOnDefaultExportedClass_4 {
     export default class StaticLengthFn {
         static length() {} // error without useDefineForClassFields
         length() {} // ok
@@ -276,7 +276,7 @@ export class ExportedStaticLengthFn {
 }
 
 // prototype
-module TestOnDefaultExportedClass_5 {
+namespace TestOnDefaultExportedClass_5 {
     export default class StaticPrototype {
         static prototype: number; // always an error
         prototype: string; // ok
@@ -288,7 +288,7 @@ export class ExportedStaticPrototype {
     [FunctionPropertyNames.prototype]: string; // ok
 }
 
-module TestOnDefaultExportedClass_6 {
+namespace TestOnDefaultExportedClass_6 {
     export default class StaticPrototypeFn {
         static prototype() {} // always an error
         prototype() {} // ok
@@ -301,7 +301,7 @@ export class ExportedStaticPrototypeFn {
 }
 
 // caller
-module TestOnDefaultExportedClass_7 {
+namespace TestOnDefaultExportedClass_7 {
     export default class StaticCaller {
         static caller: number; // error without useDefineForClassFields
         caller: string; // ok
@@ -313,7 +313,7 @@ export class ExportedStaticCaller {
     [FunctionPropertyNames.caller]: string; // ok
 }
 
-module TestOnDefaultExportedClass_8 {
+namespace TestOnDefaultExportedClass_8 {
     export default class StaticCallerFn {
         static caller() {} // error without useDefineForClassFields
         caller() {} // ok
@@ -326,7 +326,7 @@ export class ExportedStaticCallerFn {
 }
 
 // arguments
-module TestOnDefaultExportedClass_9 {
+namespace TestOnDefaultExportedClass_9 {
     export default class StaticArguments {
         static arguments: number; // error without useDefineForClassFields
         arguments: string; // ok
@@ -338,7 +338,7 @@ export class ExportedStaticArguments {
     [FunctionPropertyNames.arguments]: string; // ok
 }
 
-module TestOnDefaultExportedClass_10 {
+namespace TestOnDefaultExportedClass_10 {
     export default class StaticArgumentsFn {
         static arguments() {} // error without useDefineForClassFields
         arguments() {} // ok

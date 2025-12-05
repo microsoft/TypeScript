@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements { }
 //     interface ElementAttributesProperty { props; }
@@ -58,7 +58,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements { }
 //     interface ElementAttributesProperty { props; }

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
+// @resolveJsonModule: false
 
 // @Filename: /project/test.json
 ////not read

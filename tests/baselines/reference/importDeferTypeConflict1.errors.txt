@@ -12,7 +12,7 @@ b.ts(1,28): error TS2304: Cannot find name 'from'.
     }
     
 ==== b.ts (6 errors) ====
-    import type defer * as ns1 from "a";
+    import type defer * as ns1 from "./a";
                       ~
 !!! error TS1005: '=' expected.
                         ~~

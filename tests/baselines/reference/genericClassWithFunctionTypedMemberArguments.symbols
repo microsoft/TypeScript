@@ -4,11 +4,11 @@
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
 
-module ImmediatelyFix {
+namespace ImmediatelyFix {
 >ImmediatelyFix : Symbol(ImmediatelyFix, Decl(genericClassWithFunctionTypedMemberArguments.ts, 0, 0))
 
     class C<T> {
->C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 3, 23))
+>C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 3, 26))
 >T : Symbol(T, Decl(genericClassWithFunctionTypedMemberArguments.ts, 4, 12))
 
         foo<T>(x: (a: T) => T) {
@@ -26,7 +26,7 @@ module ImmediatelyFix {
 
     var c = new C<number>();
 >c : Symbol(c, Decl(genericClassWithFunctionTypedMemberArguments.ts, 10, 7))
->C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 3, 23))
+>C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 3, 26))
 
     var r = c.foo(<U>(x: U) => ''); // {}
 >r : Symbol(r, Decl(genericClassWithFunctionTypedMemberArguments.ts, 11, 7))
@@ -90,11 +90,11 @@ module ImmediatelyFix {
 >x : Symbol(x, Decl(genericClassWithFunctionTypedMemberArguments.ts, 23, 21))
 }
 
-module WithCandidates {
+namespace WithCandidates {
 >WithCandidates : Symbol(WithCandidates, Decl(genericClassWithFunctionTypedMemberArguments.ts, 24, 1))
 
     class C<T> {
->C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 26, 23))
+>C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 26, 26))
 >T : Symbol(T, Decl(genericClassWithFunctionTypedMemberArguments.ts, 27, 12))
 
         foo2<T, U>(x: T, cb: (a: T) => U) {
@@ -116,7 +116,7 @@ module WithCandidates {
 
     var c: C<number>;
 >c : Symbol(c, Decl(genericClassWithFunctionTypedMemberArguments.ts, 33, 7))
->C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 26, 23))
+>C : Symbol(C, Decl(genericClassWithFunctionTypedMemberArguments.ts, 26, 26))
 
     var r4 = c.foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
 >r4 : Symbol(r4, Decl(genericClassWithFunctionTypedMemberArguments.ts, 34, 7))
