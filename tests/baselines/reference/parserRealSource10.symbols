@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource10.ts, 0, 0))
 
     export enum TokenID {
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 
         // Keywords
         Any,
@@ -378,73 +378,73 @@ module TypeScript {
     noRegexTable[TokenID.Identifier] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
 
     noRegexTable[TokenID.StringLiteral] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
 
     noRegexTable[TokenID.NumberLiteral] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
 
     noRegexTable[TokenID.RegularExpressionLiteral] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
 
     noRegexTable[TokenID.This] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
 
     noRegexTable[TokenID.PlusPlus] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
 
     noRegexTable[TokenID.MinusMinus] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
 
     noRegexTable[TokenID.CloseParen] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
 
     noRegexTable[TokenID.CloseBracket] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
 
     noRegexTable[TokenID.CloseBrace] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
 
     noRegexTable[TokenID.True] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
 
     noRegexTable[TokenID.False] = true;
 >noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
 >TokenID.False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
 
     export enum OperatorPrecedence {
@@ -538,7 +538,7 @@ module TypeScript {
 
         constructor (public tokenId: TokenID, public reservation: Reservation,
 >tokenId : Symbol(TokenInfo.tokenId, Decl(parserRealSource10.ts, 175, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >reservation : Symbol(TokenInfo.reservation, Decl(parserRealSource10.ts, 175, 45))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
 
@@ -559,7 +559,7 @@ module TypeScript {
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >reservation : Symbol(reservation, Decl(parserRealSource10.ts, 181, 43))
 >binopPrecedence : Symbol(binopPrecedence, Decl(parserRealSource10.ts, 181, 64))
 
@@ -619,7 +619,7 @@ module TypeScript {
     setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Any : Symbol(TokenID.Any, Decl(parserRealSource10.ts, 6, 25))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Any : Symbol(TokenID.Any, Decl(parserRealSource10.ts, 6, 25))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -634,7 +634,7 @@ module TypeScript {
     setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Bool : Symbol(TokenID.Bool, Decl(parserRealSource10.ts, 8, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Bool : Symbol(TokenID.Bool, Decl(parserRealSource10.ts, 8, 12))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -649,7 +649,7 @@ module TypeScript {
     setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Break : Symbol(TokenID.Break, Decl(parserRealSource10.ts, 9, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Break : Symbol(TokenID.Break, Decl(parserRealSource10.ts, 9, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -664,7 +664,7 @@ module TypeScript {
     setTokenInfo(TokenID.Case, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "case", ErrorRecoverySet.SCase);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Case : Symbol(TokenID.Case, Decl(parserRealSource10.ts, 10, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Case : Symbol(TokenID.Case, Decl(parserRealSource10.ts, 10, 14))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -679,7 +679,7 @@ module TypeScript {
     setTokenInfo(TokenID.Catch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "catch", ErrorRecoverySet.Catch);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Catch : Symbol(TokenID.Catch, Decl(parserRealSource10.ts, 11, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Catch : Symbol(TokenID.Catch, Decl(parserRealSource10.ts, 11, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -694,7 +694,7 @@ module TypeScript {
     setTokenInfo(TokenID.Class, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "class", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Class : Symbol(TokenID.Class, Decl(parserRealSource10.ts, 12, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Class : Symbol(TokenID.Class, Decl(parserRealSource10.ts, 12, 14))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -709,7 +709,7 @@ module TypeScript {
     setTokenInfo(TokenID.Const, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "const", ErrorRecoverySet.Var);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Const : Symbol(TokenID.Const, Decl(parserRealSource10.ts, 13, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Const : Symbol(TokenID.Const, Decl(parserRealSource10.ts, 13, 14))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -724,7 +724,7 @@ module TypeScript {
     setTokenInfo(TokenID.Continue, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "continue", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Continue : Symbol(TokenID.Continue, Decl(parserRealSource10.ts, 14, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Continue : Symbol(TokenID.Continue, Decl(parserRealSource10.ts, 14, 14))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -739,7 +739,7 @@ module TypeScript {
     setTokenInfo(TokenID.Debugger, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.Debugger, "debugger", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Debugger : Symbol(TokenID.Debugger, Decl(parserRealSource10.ts, 15, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Debugger : Symbol(TokenID.Debugger, Decl(parserRealSource10.ts, 15, 17))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -754,7 +754,7 @@ module TypeScript {
     setTokenInfo(TokenID.Default, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "default", ErrorRecoverySet.SCase);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Default : Symbol(TokenID.Default, Decl(parserRealSource10.ts, 16, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Default : Symbol(TokenID.Default, Decl(parserRealSource10.ts, 16, 17))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -769,7 +769,7 @@ module TypeScript {
     setTokenInfo(TokenID.Delete, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Delete, "delete", ErrorRecoverySet.Prefix);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Delete : Symbol(TokenID.Delete, Decl(parserRealSource10.ts, 17, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Delete : Symbol(TokenID.Delete, Decl(parserRealSource10.ts, 17, 16))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -784,7 +784,7 @@ module TypeScript {
     setTokenInfo(TokenID.Do, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "do", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Do : Symbol(TokenID.Do, Decl(parserRealSource10.ts, 18, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Do : Symbol(TokenID.Do, Decl(parserRealSource10.ts, 18, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -799,7 +799,7 @@ module TypeScript {
     setTokenInfo(TokenID.Else, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "else", ErrorRecoverySet.Else);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Else : Symbol(TokenID.Else, Decl(parserRealSource10.ts, 19, 11))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Else : Symbol(TokenID.Else, Decl(parserRealSource10.ts, 19, 11))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -814,7 +814,7 @@ module TypeScript {
     setTokenInfo(TokenID.Enum, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "enum", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Enum : Symbol(TokenID.Enum, Decl(parserRealSource10.ts, 20, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Enum : Symbol(TokenID.Enum, Decl(parserRealSource10.ts, 20, 13))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -829,7 +829,7 @@ module TypeScript {
     setTokenInfo(TokenID.Export, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "export", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Export : Symbol(TokenID.Export, Decl(parserRealSource10.ts, 21, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Export : Symbol(TokenID.Export, Decl(parserRealSource10.ts, 21, 13))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -844,7 +844,7 @@ module TypeScript {
     setTokenInfo(TokenID.Extends, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "extends", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Extends : Symbol(TokenID.Extends, Decl(parserRealSource10.ts, 22, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Extends : Symbol(TokenID.Extends, Decl(parserRealSource10.ts, 22, 15))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -859,7 +859,7 @@ module TypeScript {
     setTokenInfo(TokenID.Declare, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "declare", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Declare : Symbol(TokenID.Declare, Decl(parserRealSource10.ts, 23, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Declare : Symbol(TokenID.Declare, Decl(parserRealSource10.ts, 23, 16))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -874,7 +874,7 @@ module TypeScript {
     setTokenInfo(TokenID.False, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "false", ErrorRecoverySet.RLit);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -889,7 +889,7 @@ module TypeScript {
     setTokenInfo(TokenID.Finally, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "finally", ErrorRecoverySet.Catch);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Finally : Symbol(TokenID.Finally, Decl(parserRealSource10.ts, 25, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Finally : Symbol(TokenID.Finally, Decl(parserRealSource10.ts, 25, 14))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -904,7 +904,7 @@ module TypeScript {
     setTokenInfo(TokenID.For, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "for", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.For : Symbol(TokenID.For, Decl(parserRealSource10.ts, 26, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >For : Symbol(TokenID.For, Decl(parserRealSource10.ts, 26, 16))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -919,7 +919,7 @@ module TypeScript {
     setTokenInfo(TokenID.Function, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "function", ErrorRecoverySet.Func);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Function : Symbol(TokenID.Function, Decl(parserRealSource10.ts, 27, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Function : Symbol(TokenID.Function, Decl(parserRealSource10.ts, 27, 12))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -934,7 +934,7 @@ module TypeScript {
     setTokenInfo(TokenID.Constructor, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "constructor", ErrorRecoverySet.Func);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Constructor : Symbol(TokenID.Constructor, Decl(parserRealSource10.ts, 28, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Constructor : Symbol(TokenID.Constructor, Decl(parserRealSource10.ts, 28, 17))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -949,7 +949,7 @@ module TypeScript {
     setTokenInfo(TokenID.Get, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "get", ErrorRecoverySet.Func);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Get : Symbol(TokenID.Get, Decl(parserRealSource10.ts, 29, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Get : Symbol(TokenID.Get, Decl(parserRealSource10.ts, 29, 20))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -964,7 +964,7 @@ module TypeScript {
     setTokenInfo(TokenID.Set, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "set", ErrorRecoverySet.Func);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Set : Symbol(TokenID.Set, Decl(parserRealSource10.ts, 46, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Set : Symbol(TokenID.Set, Decl(parserRealSource10.ts, 46, 15))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -979,7 +979,7 @@ module TypeScript {
     setTokenInfo(TokenID.If, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "if", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.If : Symbol(TokenID.If, Decl(parserRealSource10.ts, 30, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >If : Symbol(TokenID.If, Decl(parserRealSource10.ts, 30, 12))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -994,7 +994,7 @@ module TypeScript {
     setTokenInfo(TokenID.Implements, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "implements", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Implements : Symbol(TokenID.Implements, Decl(parserRealSource10.ts, 31, 11))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Implements : Symbol(TokenID.Implements, Decl(parserRealSource10.ts, 31, 11))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1009,7 +1009,7 @@ module TypeScript {
     setTokenInfo(TokenID.Import, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "import", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Import : Symbol(TokenID.Import, Decl(parserRealSource10.ts, 32, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Import : Symbol(TokenID.Import, Decl(parserRealSource10.ts, 32, 19))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1024,7 +1024,7 @@ module TypeScript {
     setTokenInfo(TokenID.In, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.In, OperatorPrecedence.None, NodeType.None, "in", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.In : Symbol(TokenID.In, Decl(parserRealSource10.ts, 33, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >In : Symbol(TokenID.In, Decl(parserRealSource10.ts, 33, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1039,7 +1039,7 @@ module TypeScript {
     setTokenInfo(TokenID.InstanceOf, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.InstOf, OperatorPrecedence.None, NodeType.None, "instanceof", ErrorRecoverySet.BinOp);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.InstanceOf : Symbol(TokenID.InstanceOf, Decl(parserRealSource10.ts, 34, 11))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >InstanceOf : Symbol(TokenID.InstanceOf, Decl(parserRealSource10.ts, 34, 11))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1054,7 +1054,7 @@ module TypeScript {
     setTokenInfo(TokenID.Interface, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "interface", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Interface : Symbol(TokenID.Interface, Decl(parserRealSource10.ts, 35, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Interface : Symbol(TokenID.Interface, Decl(parserRealSource10.ts, 35, 19))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1069,7 +1069,7 @@ module TypeScript {
     setTokenInfo(TokenID.Let, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "let", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Let : Symbol(TokenID.Let, Decl(parserRealSource10.ts, 36, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Let : Symbol(TokenID.Let, Decl(parserRealSource10.ts, 36, 18))
 >Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1084,7 +1084,7 @@ module TypeScript {
     setTokenInfo(TokenID.Module, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "module", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Module : Symbol(TokenID.Module, Decl(parserRealSource10.ts, 37, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Module : Symbol(TokenID.Module, Decl(parserRealSource10.ts, 37, 12))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1099,7 +1099,7 @@ module TypeScript {
     setTokenInfo(TokenID.New, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "new", ErrorRecoverySet.PreOp);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.New : Symbol(TokenID.New, Decl(parserRealSource10.ts, 38, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >New : Symbol(TokenID.New, Decl(parserRealSource10.ts, 38, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1114,7 +1114,7 @@ module TypeScript {
     setTokenInfo(TokenID.Number, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "number", ErrorRecoverySet.PrimType);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Number : Symbol(TokenID.Number, Decl(parserRealSource10.ts, 39, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Number : Symbol(TokenID.Number, Decl(parserRealSource10.ts, 39, 12))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1129,7 +1129,7 @@ module TypeScript {
     setTokenInfo(TokenID.Null, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "null", ErrorRecoverySet.RLit);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Null : Symbol(TokenID.Null, Decl(parserRealSource10.ts, 40, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Null : Symbol(TokenID.Null, Decl(parserRealSource10.ts, 40, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1144,7 +1144,7 @@ module TypeScript {
     setTokenInfo(TokenID.Package, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "package", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Package : Symbol(TokenID.Package, Decl(parserRealSource10.ts, 41, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Package : Symbol(TokenID.Package, Decl(parserRealSource10.ts, 41, 13))
 >Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1159,7 +1159,7 @@ module TypeScript {
     setTokenInfo(TokenID.Private, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "private", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Private : Symbol(TokenID.Private, Decl(parserRealSource10.ts, 42, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Private : Symbol(TokenID.Private, Decl(parserRealSource10.ts, 42, 16))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1174,7 +1174,7 @@ module TypeScript {
     setTokenInfo(TokenID.Protected, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "protected", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Protected : Symbol(TokenID.Protected, Decl(parserRealSource10.ts, 43, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Protected : Symbol(TokenID.Protected, Decl(parserRealSource10.ts, 43, 16))
 >Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1189,7 +1189,7 @@ module TypeScript {
     setTokenInfo(TokenID.Public, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "public", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Public : Symbol(TokenID.Public, Decl(parserRealSource10.ts, 44, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Public : Symbol(TokenID.Public, Decl(parserRealSource10.ts, 44, 18))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1204,7 +1204,7 @@ module TypeScript {
     setTokenInfo(TokenID.Return, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "return", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Return : Symbol(TokenID.Return, Decl(parserRealSource10.ts, 45, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Return : Symbol(TokenID.Return, Decl(parserRealSource10.ts, 45, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1219,7 +1219,7 @@ module TypeScript {
     setTokenInfo(TokenID.Static, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "static", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Static : Symbol(TokenID.Static, Decl(parserRealSource10.ts, 47, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Static : Symbol(TokenID.Static, Decl(parserRealSource10.ts, 47, 12))
 >Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1234,7 +1234,7 @@ module TypeScript {
     setTokenInfo(TokenID.String, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "string", ErrorRecoverySet.PrimType);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.String : Symbol(TokenID.String, Decl(parserRealSource10.ts, 48, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >String : Symbol(TokenID.String, Decl(parserRealSource10.ts, 48, 15))
 >Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1249,7 +1249,7 @@ module TypeScript {
     setTokenInfo(TokenID.Super, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "super", ErrorRecoverySet.RLit);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Super : Symbol(TokenID.Super, Decl(parserRealSource10.ts, 49, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Super : Symbol(TokenID.Super, Decl(parserRealSource10.ts, 49, 15))
 >Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1264,7 +1264,7 @@ module TypeScript {
     setTokenInfo(TokenID.Switch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "switch", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Switch : Symbol(TokenID.Switch, Decl(parserRealSource10.ts, 50, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Switch : Symbol(TokenID.Switch, Decl(parserRealSource10.ts, 50, 14))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1279,7 +1279,7 @@ module TypeScript {
     setTokenInfo(TokenID.This, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "this", ErrorRecoverySet.RLit);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1294,7 +1294,7 @@ module TypeScript {
     setTokenInfo(TokenID.Throw, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "throw", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Throw : Symbol(TokenID.Throw, Decl(parserRealSource10.ts, 52, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Throw : Symbol(TokenID.Throw, Decl(parserRealSource10.ts, 52, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1309,7 +1309,7 @@ module TypeScript {
     setTokenInfo(TokenID.True, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "true", ErrorRecoverySet.RLit);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1324,7 +1324,7 @@ module TypeScript {
     setTokenInfo(TokenID.Try, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "try", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Try : Symbol(TokenID.Try, Decl(parserRealSource10.ts, 54, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Try : Symbol(TokenID.Try, Decl(parserRealSource10.ts, 54, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1339,7 +1339,7 @@ module TypeScript {
     setTokenInfo(TokenID.TypeOf, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Typeof, "typeof", ErrorRecoverySet.Prefix);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.TypeOf : Symbol(TokenID.TypeOf, Decl(parserRealSource10.ts, 55, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >TypeOf : Symbol(TokenID.TypeOf, Decl(parserRealSource10.ts, 55, 12))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1354,7 +1354,7 @@ module TypeScript {
     setTokenInfo(TokenID.Var, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "var", ErrorRecoverySet.Var);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Var : Symbol(TokenID.Var, Decl(parserRealSource10.ts, 56, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Var : Symbol(TokenID.Var, Decl(parserRealSource10.ts, 56, 15))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1369,7 +1369,7 @@ module TypeScript {
     setTokenInfo(TokenID.Void, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Void, "void", ErrorRecoverySet.Prefix);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Void : Symbol(TokenID.Void, Decl(parserRealSource10.ts, 57, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Void : Symbol(TokenID.Void, Decl(parserRealSource10.ts, 57, 12))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1384,7 +1384,7 @@ module TypeScript {
     setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.With : Symbol(TokenID.With, Decl(parserRealSource10.ts, 58, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >With : Symbol(TokenID.With, Decl(parserRealSource10.ts, 58, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1399,7 +1399,7 @@ module TypeScript {
     setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.While : Symbol(TokenID.While, Decl(parserRealSource10.ts, 59, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >While : Symbol(TokenID.While, Decl(parserRealSource10.ts, 59, 13))
 >Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1414,7 +1414,7 @@ module TypeScript {
     setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
 >Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1429,7 +1429,7 @@ module TypeScript {
     setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1444,7 +1444,7 @@ module TypeScript {
     setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1459,7 +1459,7 @@ module TypeScript {
     setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1474,7 +1474,7 @@ module TypeScript {
     setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal);
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1490,7 +1490,7 @@ module TypeScript {
     setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon); // ;
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Semicolon : Symbol(TokenID.Semicolon, Decl(parserRealSource10.ts, 61, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Semicolon : Symbol(TokenID.Semicolon, Decl(parserRealSource10.ts, 61, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1505,7 +1505,7 @@ module TypeScript {
     setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen); // )
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1520,7 +1520,7 @@ module TypeScript {
     setTokenInfo(TokenID.CloseBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "]", ErrorRecoverySet.RBrack); // ]
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1535,7 +1535,7 @@ module TypeScript {
     setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly); // {
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.OpenBrace : Symbol(TokenID.OpenBrace, Decl(parserRealSource10.ts, 67, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >OpenBrace : Symbol(TokenID.OpenBrace, Decl(parserRealSource10.ts, 67, 21))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1550,7 +1550,7 @@ module TypeScript {
     setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly); // }
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1565,7 +1565,7 @@ module TypeScript {
     setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None); // ...
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.DotDotDot : Symbol(TokenID.DotDotDot, Decl(parserRealSource10.ts, 110, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >DotDotDot : Symbol(TokenID.DotDotDot, Decl(parserRealSource10.ts, 110, 12))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1581,7 +1581,7 @@ module TypeScript {
     setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma); // ,
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Comma : Symbol(TokenID.Comma, Decl(parserRealSource10.ts, 69, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Comma : Symbol(TokenID.Comma, Decl(parserRealSource10.ts, 69, 19))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1596,7 +1596,7 @@ module TypeScript {
     setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg); // =
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Equals : Symbol(TokenID.Equals, Decl(parserRealSource10.ts, 70, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Equals : Symbol(TokenID.Equals, Decl(parserRealSource10.ts, 70, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1611,7 +1611,7 @@ module TypeScript {
     setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp); // +=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.PlusEquals : Symbol(TokenID.PlusEquals, Decl(parserRealSource10.ts, 71, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >PlusEquals : Symbol(TokenID.PlusEquals, Decl(parserRealSource10.ts, 71, 15))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1626,7 +1626,7 @@ module TypeScript {
     setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp); // -=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.MinusEquals : Symbol(TokenID.MinusEquals, Decl(parserRealSource10.ts, 72, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >MinusEquals : Symbol(TokenID.MinusEquals, Decl(parserRealSource10.ts, 72, 19))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1641,7 +1641,7 @@ module TypeScript {
     setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp); // *=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.AsteriskEquals : Symbol(TokenID.AsteriskEquals, Decl(parserRealSource10.ts, 73, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >AsteriskEquals : Symbol(TokenID.AsteriskEquals, Decl(parserRealSource10.ts, 73, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1656,7 +1656,7 @@ module TypeScript {
     setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp); // /=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.SlashEquals : Symbol(TokenID.SlashEquals, Decl(parserRealSource10.ts, 74, 23))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >SlashEquals : Symbol(TokenID.SlashEquals, Decl(parserRealSource10.ts, 74, 23))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1671,7 +1671,7 @@ module TypeScript {
     setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp); // %=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.PercentEquals : Symbol(TokenID.PercentEquals, Decl(parserRealSource10.ts, 75, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >PercentEquals : Symbol(TokenID.PercentEquals, Decl(parserRealSource10.ts, 75, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1686,7 +1686,7 @@ module TypeScript {
     setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp); // &=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.AmpersandEquals : Symbol(TokenID.AmpersandEquals, Decl(parserRealSource10.ts, 76, 22))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >AmpersandEquals : Symbol(TokenID.AmpersandEquals, Decl(parserRealSource10.ts, 76, 22))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1701,7 +1701,7 @@ module TypeScript {
     setTokenInfo(TokenID.CaretEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgXor, OperatorPrecedence.None, NodeType.None, "^=", ErrorRecoverySet.BinOp); // ^=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.CaretEquals : Symbol(TokenID.CaretEquals, Decl(parserRealSource10.ts, 77, 24))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >CaretEquals : Symbol(TokenID.CaretEquals, Decl(parserRealSource10.ts, 77, 24))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1716,7 +1716,7 @@ module TypeScript {
     setTokenInfo(TokenID.BarEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgOr, OperatorPrecedence.None, NodeType.None, "|=", ErrorRecoverySet.BinOp); // |=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.BarEquals : Symbol(TokenID.BarEquals, Decl(parserRealSource10.ts, 78, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >BarEquals : Symbol(TokenID.BarEquals, Decl(parserRealSource10.ts, 78, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1731,7 +1731,7 @@ module TypeScript {
     setTokenInfo(TokenID.LessThanLessThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgLsh, OperatorPrecedence.None, NodeType.None, "<<=", ErrorRecoverySet.BinOp); // <<=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.LessThanLessThanEquals : Symbol(TokenID.LessThanLessThanEquals, Decl(parserRealSource10.ts, 79, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LessThanLessThanEquals : Symbol(TokenID.LessThanLessThanEquals, Decl(parserRealSource10.ts, 79, 18))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1746,7 +1746,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRsh, OperatorPrecedence.None, NodeType.None, ">>=", ErrorRecoverySet.BinOp); // >>=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 80, 31))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 80, 31))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1761,7 +1761,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRs2, OperatorPrecedence.None, NodeType.None, ">>>=", ErrorRecoverySet.BinOp); // >>>=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThanGreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 81, 37))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThanGreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 81, 37))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1776,7 +1776,7 @@ module TypeScript {
     setTokenInfo(TokenID.Question, Reservation.None, OperatorPrecedence.Conditional, NodeType.ConditionalExpression, OperatorPrecedence.None, NodeType.None, "?", ErrorRecoverySet.BinOp); // ?
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Question : Symbol(TokenID.Question, Decl(parserRealSource10.ts, 82, 48))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Question : Symbol(TokenID.Question, Decl(parserRealSource10.ts, 82, 48))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1791,7 +1791,7 @@ module TypeScript {
     setTokenInfo(TokenID.Colon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ":", ErrorRecoverySet.Colon); // :
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Colon : Symbol(TokenID.Colon, Decl(parserRealSource10.ts, 83, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Colon : Symbol(TokenID.Colon, Decl(parserRealSource10.ts, 83, 17))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1806,7 +1806,7 @@ module TypeScript {
     setTokenInfo(TokenID.BarBar, Reservation.None, OperatorPrecedence.LogicalOr, NodeType.LogOr, OperatorPrecedence.None, NodeType.None, "||", ErrorRecoverySet.BinOp); // ||
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.BarBar : Symbol(TokenID.BarBar, Decl(parserRealSource10.ts, 84, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >BarBar : Symbol(TokenID.BarBar, Decl(parserRealSource10.ts, 84, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1821,7 +1821,7 @@ module TypeScript {
     setTokenInfo(TokenID.AmpersandAmpersand, Reservation.None, OperatorPrecedence.LogicalAnd, NodeType.LogAnd, OperatorPrecedence.None, NodeType.None, "&&", ErrorRecoverySet.BinOp); // &&
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.AmpersandAmpersand : Symbol(TokenID.AmpersandAmpersand, Decl(parserRealSource10.ts, 85, 15))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >AmpersandAmpersand : Symbol(TokenID.AmpersandAmpersand, Decl(parserRealSource10.ts, 85, 15))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1836,7 +1836,7 @@ module TypeScript {
     setTokenInfo(TokenID.Bar, Reservation.None, OperatorPrecedence.BitwiseOr, NodeType.Or, OperatorPrecedence.None, NodeType.None, "|", ErrorRecoverySet.BinOp); // |
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Bar : Symbol(TokenID.Bar, Decl(parserRealSource10.ts, 86, 27))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Bar : Symbol(TokenID.Bar, Decl(parserRealSource10.ts, 86, 27))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1851,7 +1851,7 @@ module TypeScript {
     setTokenInfo(TokenID.Caret, Reservation.None, OperatorPrecedence.BitwiseExclusiveOr, NodeType.Xor, OperatorPrecedence.None, NodeType.None, "^", ErrorRecoverySet.BinOp); // ^
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Caret : Symbol(TokenID.Caret, Decl(parserRealSource10.ts, 87, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Caret : Symbol(TokenID.Caret, Decl(parserRealSource10.ts, 87, 12))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1866,7 +1866,7 @@ module TypeScript {
     setTokenInfo(TokenID.And, Reservation.None, OperatorPrecedence.BitwiseAnd, NodeType.And, OperatorPrecedence.None, NodeType.None, "&", ErrorRecoverySet.BinOp); // &
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.And : Symbol(TokenID.And, Decl(parserRealSource10.ts, 88, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >And : Symbol(TokenID.And, Decl(parserRealSource10.ts, 88, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1881,7 +1881,7 @@ module TypeScript {
     setTokenInfo(TokenID.EqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eq, OperatorPrecedence.None, NodeType.None, "==", ErrorRecoverySet.BinOp); // ==
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.EqualsEquals : Symbol(TokenID.EqualsEquals, Decl(parserRealSource10.ts, 89, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >EqualsEquals : Symbol(TokenID.EqualsEquals, Decl(parserRealSource10.ts, 89, 12))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1896,7 +1896,7 @@ module TypeScript {
     setTokenInfo(TokenID.ExclamationEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Ne, OperatorPrecedence.None, NodeType.None, "!=", ErrorRecoverySet.BinOp); // !=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.ExclamationEquals : Symbol(TokenID.ExclamationEquals, Decl(parserRealSource10.ts, 90, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >ExclamationEquals : Symbol(TokenID.ExclamationEquals, Decl(parserRealSource10.ts, 90, 21))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1911,7 +1911,7 @@ module TypeScript {
     setTokenInfo(TokenID.EqualsEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eqv, OperatorPrecedence.None, NodeType.None, "===", ErrorRecoverySet.BinOp); // ===
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.EqualsEqualsEquals : Symbol(TokenID.EqualsEqualsEquals, Decl(parserRealSource10.ts, 91, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >EqualsEqualsEquals : Symbol(TokenID.EqualsEqualsEquals, Decl(parserRealSource10.ts, 91, 26))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1926,7 +1926,7 @@ module TypeScript {
     setTokenInfo(TokenID.ExclamationEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.NEqv, OperatorPrecedence.None, NodeType.None, "!==", ErrorRecoverySet.BinOp); // !==
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.ExclamationEqualsEquals : Symbol(TokenID.ExclamationEqualsEquals, Decl(parserRealSource10.ts, 92, 27))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >ExclamationEqualsEquals : Symbol(TokenID.ExclamationEqualsEquals, Decl(parserRealSource10.ts, 92, 27))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1941,7 +1941,7 @@ module TypeScript {
     setTokenInfo(TokenID.LessThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Lt, OperatorPrecedence.None, NodeType.None, "<", ErrorRecoverySet.BinOp); // <
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.LessThan : Symbol(TokenID.LessThan, Decl(parserRealSource10.ts, 93, 32))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LessThan : Symbol(TokenID.LessThan, Decl(parserRealSource10.ts, 93, 32))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1956,7 +1956,7 @@ module TypeScript {
     setTokenInfo(TokenID.LessThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Le, OperatorPrecedence.None, NodeType.None, "<=", ErrorRecoverySet.BinOp); // <=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.LessThanEquals : Symbol(TokenID.LessThanEquals, Decl(parserRealSource10.ts, 94, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LessThanEquals : Symbol(TokenID.LessThanEquals, Decl(parserRealSource10.ts, 94, 17))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1971,7 +1971,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Gt, OperatorPrecedence.None, NodeType.None, ">", ErrorRecoverySet.BinOp); // >
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThan : Symbol(TokenID.GreaterThan, Decl(parserRealSource10.ts, 95, 23))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThan : Symbol(TokenID.GreaterThan, Decl(parserRealSource10.ts, 95, 23))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -1986,7 +1986,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Ge, OperatorPrecedence.None, NodeType.None, ">=", ErrorRecoverySet.BinOp); // >=
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThanEquals : Symbol(TokenID.GreaterThanEquals, Decl(parserRealSource10.ts, 96, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThanEquals : Symbol(TokenID.GreaterThanEquals, Decl(parserRealSource10.ts, 96, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2001,7 +2001,7 @@ module TypeScript {
     setTokenInfo(TokenID.LessThanLessThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Lsh, OperatorPrecedence.None, NodeType.None, "<<", ErrorRecoverySet.BinOp); // <<
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.LessThanLessThan : Symbol(TokenID.LessThanLessThan, Decl(parserRealSource10.ts, 97, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LessThanLessThan : Symbol(TokenID.LessThanLessThan, Decl(parserRealSource10.ts, 97, 26))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2016,7 +2016,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rsh, OperatorPrecedence.None, NodeType.None, ">>", ErrorRecoverySet.BinOp); // >>
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThan, Decl(parserRealSource10.ts, 98, 25))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThan, Decl(parserRealSource10.ts, 98, 25))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2031,7 +2031,7 @@ module TypeScript {
     setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rs2, OperatorPrecedence.None, NodeType.None, ">>>", ErrorRecoverySet.BinOp); // >>>
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.GreaterThanGreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThanGreaterThan, Decl(parserRealSource10.ts, 99, 31))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >GreaterThanGreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThanGreaterThan, Decl(parserRealSource10.ts, 99, 31))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2046,7 +2046,7 @@ module TypeScript {
     setTokenInfo(TokenID.Plus, Reservation.None, OperatorPrecedence.Additive, NodeType.Add, OperatorPrecedence.Unary, NodeType.Pos, "+", ErrorRecoverySet.AddOp); // +
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Plus : Symbol(TokenID.Plus, Decl(parserRealSource10.ts, 100, 42))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Plus : Symbol(TokenID.Plus, Decl(parserRealSource10.ts, 100, 42))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2061,7 +2061,7 @@ module TypeScript {
     setTokenInfo(TokenID.Minus, Reservation.None, OperatorPrecedence.Additive, NodeType.Sub, OperatorPrecedence.Unary, NodeType.Neg, "-", ErrorRecoverySet.AddOp); // -
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Minus : Symbol(TokenID.Minus, Decl(parserRealSource10.ts, 101, 13))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Minus : Symbol(TokenID.Minus, Decl(parserRealSource10.ts, 101, 13))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2076,7 +2076,7 @@ module TypeScript {
     setTokenInfo(TokenID.Asterisk, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mul, OperatorPrecedence.None, NodeType.None, "*", ErrorRecoverySet.BinOp); // *
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Asterisk : Symbol(TokenID.Asterisk, Decl(parserRealSource10.ts, 102, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Asterisk : Symbol(TokenID.Asterisk, Decl(parserRealSource10.ts, 102, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2091,7 +2091,7 @@ module TypeScript {
     setTokenInfo(TokenID.Slash, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Div, OperatorPrecedence.None, NodeType.None, "/", ErrorRecoverySet.BinOp); // /
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Slash : Symbol(TokenID.Slash, Decl(parserRealSource10.ts, 103, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Slash : Symbol(TokenID.Slash, Decl(parserRealSource10.ts, 103, 17))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2106,7 +2106,7 @@ module TypeScript {
     setTokenInfo(TokenID.Percent, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mod, OperatorPrecedence.None, NodeType.None, "%", ErrorRecoverySet.BinOp); // %
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Percent : Symbol(TokenID.Percent, Decl(parserRealSource10.ts, 104, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Percent : Symbol(TokenID.Percent, Decl(parserRealSource10.ts, 104, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2121,7 +2121,7 @@ module TypeScript {
     setTokenInfo(TokenID.Tilde, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Not, "~", ErrorRecoverySet.PreOp); // ~
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Tilde : Symbol(TokenID.Tilde, Decl(parserRealSource10.ts, 105, 16))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Tilde : Symbol(TokenID.Tilde, Decl(parserRealSource10.ts, 105, 16))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2136,7 +2136,7 @@ module TypeScript {
     setTokenInfo(TokenID.Exclamation, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.LogNot, "!", ErrorRecoverySet.PreOp); // !
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Exclamation : Symbol(TokenID.Exclamation, Decl(parserRealSource10.ts, 106, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Exclamation : Symbol(TokenID.Exclamation, Decl(parserRealSource10.ts, 106, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2151,7 +2151,7 @@ module TypeScript {
     setTokenInfo(TokenID.PlusPlus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.IncPre, "++", ErrorRecoverySet.PreOp); // ++
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2166,7 +2166,7 @@ module TypeScript {
     setTokenInfo(TokenID.MinusMinus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.DecPre, "--", ErrorRecoverySet.PreOp); // --
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2181,7 +2181,7 @@ module TypeScript {
     setTokenInfo(TokenID.OpenParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "(", ErrorRecoverySet.LParen); // (
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.OpenParen : Symbol(TokenID.OpenParen, Decl(parserRealSource10.ts, 63, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >OpenParen : Symbol(TokenID.OpenParen, Decl(parserRealSource10.ts, 63, 18))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2196,7 +2196,7 @@ module TypeScript {
     setTokenInfo(TokenID.OpenBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "[", ErrorRecoverySet.LBrack); // [
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.OpenBracket : Symbol(TokenID.OpenBracket, Decl(parserRealSource10.ts, 65, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >OpenBracket : Symbol(TokenID.OpenBracket, Decl(parserRealSource10.ts, 65, 19))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2211,7 +2211,7 @@ module TypeScript {
     setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot); // .
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.Dot : Symbol(TokenID.Dot, Decl(parserRealSource10.ts, 109, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Dot : Symbol(TokenID.Dot, Decl(parserRealSource10.ts, 109, 19))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2226,7 +2226,7 @@ module TypeScript {
     setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF); // EOF
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.EndOfFile : Symbol(TokenID.EndOfFile, Decl(parserRealSource10.ts, 112, 14))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >EndOfFile : Symbol(TokenID.EndOfFile, Decl(parserRealSource10.ts, 112, 14))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2241,7 +2241,7 @@ module TypeScript {
     setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None); // =>
 >setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
 >TokenID.EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
 >Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
 >Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
@@ -2256,7 +2256,7 @@ module TypeScript {
     export function lookupToken(tokenId: TokenID): TokenInfo {
 >lookupToken : Symbol(lookupToken, Decl(parserRealSource10.ts, 311, 171))
 >tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 313, 32))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >TokenInfo : Symbol(TokenInfo, Decl(parserRealSource10.ts, 172, 5))
 
         return tokenTable[tokenId];
@@ -2304,7 +2304,7 @@ module TypeScript {
 
         constructor (public tokenId: TokenID) {
 >tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
         }
 
         public toString() {
@@ -2317,7 +2317,7 @@ module TypeScript {
 >this.getText : Symbol(Token.getText, Decl(parserRealSource10.ts, 341, 9))
 >this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >getText : Symbol(Token.getText, Decl(parserRealSource10.ts, 341, 9))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
 >this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
@@ -2355,7 +2355,7 @@ module TypeScript {
 >this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
 >TokenID.LimKeyword : Symbol(TokenID.LimKeyword, Decl(parserRealSource10.ts, 122, 37))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LimKeyword : Symbol(TokenID.LimKeyword, Decl(parserRealSource10.ts, 122, 37))
 
                 return TokenClass.Keyword;
@@ -2411,7 +2411,7 @@ module TypeScript {
             super(TokenID.NumberLiteral);
 >super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
         }
 
@@ -2455,7 +2455,7 @@ module TypeScript {
             super(TokenID.StringLiteral);
 >super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
         }
 
@@ -2490,7 +2490,7 @@ module TypeScript {
             super(TokenID.Identifier);
 >super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
         }
         public getText(): string {
@@ -2518,7 +2518,7 @@ module TypeScript {
 
         constructor (tokenId: TokenID, public value: string) {
 >tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 406, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >value : Symbol(WhitespaceToken.value, Decl(parserRealSource10.ts, 406, 38))
 
             super(tokenId);
@@ -2552,7 +2552,7 @@ module TypeScript {
 
         constructor (tokenID: TokenID, public value: string, public isBlock: boolean, public startPos: number, public line: number, public endsLine: boolean) {
 >tokenID : Symbol(tokenID, Decl(parserRealSource10.ts, 420, 21))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >value : Symbol(CommentToken.value, Decl(parserRealSource10.ts, 420, 38))
 >isBlock : Symbol(CommentToken.isBlock, Decl(parserRealSource10.ts, 420, 60))
 >startPos : Symbol(CommentToken.startPos, Decl(parserRealSource10.ts, 420, 85))
@@ -2594,7 +2594,7 @@ module TypeScript {
             super(TokenID.RegularExpressionLiteral);
 >super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
 >TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
         }
 
@@ -2630,7 +2630,7 @@ module TypeScript {
 >i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
 >i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
 >TokenID.LimFixed : Symbol(TokenID.LimFixed, Decl(parserRealSource10.ts, 121, 12))
->TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 22))
 >LimFixed : Symbol(TokenID.LimFixed, Decl(parserRealSource10.ts, 121, 12))
 >i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
 

@@ -22,13 +22,13 @@ b;
 >  : ^^^^^^^
 
 import * as c from "./t1";
->c : typeof a
+>c : typeof c
 >  : ^^^^^^^^
 
 c.default;
 >c.default : "hello"
 >          : ^^^^^^^
->c : typeof a
+>c : typeof c
 >  : ^^^^^^^^
 >default : "hello"
 >        : ^^^^^^^
@@ -46,8 +46,8 @@ d;
 import e1, * as e2 from "./t1";
 >e1 : "hello"
 >   : ^^^^^^^
->e2 : typeof a
->   : ^^^^^^^^
+>e2 : typeof e2
+>   : ^^^^^^^^^
 
 e1;
 >e1 : "hello"
@@ -56,8 +56,8 @@ e1;
 e2.default;
 >e2.default : "hello"
 >           : ^^^^^^^
->e2 : typeof a
->   : ^^^^^^^^
+>e2 : typeof e2
+>   : ^^^^^^^^^
 >default : "hello"
 >        : ^^^^^^^
 
@@ -82,14 +82,14 @@ export { a, b, c, d, e1, e2, f1, f2 };
 >  : ^^^^^^^^
 >b : "hello"
 >  : ^^^^^^^
->c : typeof a
+>c : typeof c
 >  : ^^^^^^^^
 >d : "hello"
 >  : ^^^^^^^
 >e1 : "hello"
 >   : ^^^^^^^
->e2 : typeof a
->   : ^^^^^^^^
+>e2 : typeof e2
+>   : ^^^^^^^^^
 >f1 : "hello"
 >   : ^^^^^^^
 >f2 : "hello"

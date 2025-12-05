@@ -1,3 +1,3 @@
-declare module ambiModule {
+declare namespace ambiModule {
    interface i1 { };
 }

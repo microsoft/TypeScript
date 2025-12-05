@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/classImplementsImportedInterface.ts] ////
 
 === classImplementsImportedInterface.ts ===
-module M1 {
+namespace M1 {
     export interface I {
         foo();
 >foo : () => any
@@ -9,7 +9,7 @@ module M1 {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

@@ -23,7 +23,7 @@ a.test1(null, null, null);
 >      : ^^^^^^^^^^^^^^^^
 
 === declFileImportModuleWithExportAssignment_0.ts ===
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
 >res : any

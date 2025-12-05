@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts] ////
 
 === genericRecursiveImplicitConstructorErrors3.ts ===
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 0), Decl(genericRecursiveImplicitConstructorErrors3.ts, 5, 1))
 
     export class MemberName <A,B,C>{
->MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 22))
 >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 29))
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 31))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 33))
@@ -18,16 +18,16 @@ module TypeScript {
 >arg1 : Symbol(arg1, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 29))
 >arg2 : Symbol(arg2, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 39))
 >arg3 : Symbol(arg3, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 51))
->MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 22))
         }
     }
 }
  
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 0), Decl(genericRecursiveImplicitConstructorErrors3.ts, 5, 1))
 
     export class PullSymbol <A,B,C>{
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 22))
 >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 29))
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 31))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 33))
@@ -41,7 +41,7 @@ module TypeScript {
 >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 33))
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 35))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 37))
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 22))
 
         private _elementType: PullTypeSymbol = null;
 >_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
@@ -53,7 +53,7 @@ module TypeScript {
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 26))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 28))
 >scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 31))
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 22))
 >useConstraintInName : Symbol(useConstraintInName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 56))
 
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
@@ -73,7 +73,7 @@ module TypeScript {
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 33))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 35))
 >scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 38))
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 22))
 >useConstraintInName : Symbol(useConstraintInName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 63))
 >getPrettyTypeName : Symbol(getPrettyTypeName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 94))
 >getTypeParamMarkerInfo : Symbol(getTypeParamMarkerInfo, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 123))
@@ -112,7 +112,7 @@ module TypeScript {
 
                 return MemberName.create(elementMemberName, "", "[]");
 >MemberName.create : Symbol(MemberName.create, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 36))
->MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 22))
 >create : Symbol(MemberName.create, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 36))
 >elementMemberName : Symbol(elementMemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 19, 19))
             }

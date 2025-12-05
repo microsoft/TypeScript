@@ -1,8 +1,7 @@
 // @verbatimModuleSyntax: true
 // @target: esnext
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /a.ts
 interface I {}
 export = I;

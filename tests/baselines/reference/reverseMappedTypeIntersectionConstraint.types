@@ -585,18 +585,18 @@ declare function createXMachine<
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const child = () => Promise.resolve("foo");
->child : () => any
->      : ^^^^^^^^^
->() => Promise.resolve("foo") : () => any
->                             : ^^^^^^^^^
->Promise.resolve("foo") : any
->                       : ^^^
->Promise.resolve : any
->                : ^^^
->Promise : any
->        : ^^^
->resolve : any
->        : ^^^
+>child : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.resolve("foo") : () => Promise<string>
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve("foo") : Promise<string>
+>                       : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >"foo" : "foo"
 >      : ^^^^^
 
@@ -627,10 +627,10 @@ const config = createXMachine({
 >    : ^^^^^
 
       logic: typeof child;
->logic : () => any
->      : ^^^^^^^^^
->child : () => any
->      : ^^^^^^^^^
+>logic : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>child : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     };
   },

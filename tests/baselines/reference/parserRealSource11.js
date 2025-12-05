@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class ASTSpan {
         public minChar: number = -1;  // -1 = "undefined" or "compiler generated"
         public limChar: number = -1;  // -1 = "undefined" or "compiler generated"   

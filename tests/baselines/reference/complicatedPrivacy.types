@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/complicatedPrivacy.ts] ////
 
 === complicatedPrivacy.ts ===
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
-    export module m2 {
+    export namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -111,7 +111,7 @@ module m1 {
 
     }) {
     }
-    module m3 {
+    namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -159,11 +159,11 @@ class C2 {
 >   : ^^
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
-    export module m3 {
+    export namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -185,7 +185,7 @@ module m2 {
             }
         }
         
-        module m4 {
+        namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 
@@ -193,11 +193,11 @@ module m2 {
 >C : C
 >  : ^
             }
-            module m5 {
+            namespace m5 {
 >m5 : typeof m5
 >   : ^^^^^^^^^
                 
-                export module m6 {
+                export namespace m6 {
 >m6 : typeof m6
 >   : ^^^^^^^^^
 
@@ -218,7 +218,7 @@ module m2 {
     }
 }
 
-module mglo5 {
+namespace mglo5 {
     export interface i5 {
         f1(): string;
 >f1 : () => string

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts] ////
 
 === internalAliasVarInsideTopLevelModuleWithoutExport.ts ===
-export module a {
+export namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 

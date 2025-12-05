@@ -38,7 +38,7 @@ class ClassWithInitializer extends BaseErrClass {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(thisInInvalidContextsExternalModule.ts, 18, 1))
 
     //'this' in module variable

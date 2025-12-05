@@ -1,4 +1,4 @@
-declare module TypeScript {
+declare namespace TypeScript {
     interface IIndexable<T> {
         [s: string]: T;
     }
@@ -37,7 +37,7 @@ declare module TypeScript {
     }
 }
 
-declare module TypeScript {
+declare namespace TypeScript {
     interface IIndexable<T> {
         [s: string]: T;
     }

@@ -7,7 +7,7 @@
 //  Assign to a parameter
 //  Assign to an interface
 
-module M { }
+namespace M { }
 M = null; // Error
 
 class C { }

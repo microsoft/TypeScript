@@ -12,7 +12,7 @@ export default a;
 >  : ^^^^^^
 
 === client.ts ===
-export import defaultBinding, * as nameSpaceBinding  from "server";
+export import defaultBinding, * as nameSpaceBinding  from "./server";
 >defaultBinding : number
 >               : ^^^^^^
 >nameSpaceBinding : typeof nameSpaceBinding

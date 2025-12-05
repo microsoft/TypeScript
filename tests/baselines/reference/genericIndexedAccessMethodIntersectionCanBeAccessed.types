@@ -45,12 +45,12 @@ export const createService = <T>(
 >                                : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >Object.keys(ServiceCtr) : string[]
 >                        : ^^^^^^^^
->Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^        
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->keys : (o: object) => string[]
->     : ^ ^^      ^^^^^        
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >ServiceCtr : ExtendedService<T> & Service<T>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void

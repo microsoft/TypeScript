@@ -1,4 +1,4 @@
-module Test {
+namespace Test {
     class Mocked {
         myProp: string;
     }

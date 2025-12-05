@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/augmentExportEquals5.ts] ////
 
 === express.d.ts ===
-declare module Express {
+declare namespace Express {
     export interface Request { }
     export interface Response { }
     export interface Application { }
@@ -140,8 +140,8 @@ import * as e from "express";
 >  : ^^^^^^^^
 
 declare module "express" {
->"express" : typeof e
->          : ^^^^^^^^
+>"express" : typeof import("express")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Request {
         id: number;

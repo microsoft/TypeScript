@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
 
 === overloadResolutionOverNonCTLambdas.ts ===
-module Bugs {
+namespace Bugs {
 >Bugs : Symbol(Bugs, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 0))
 
   class A {
->A : Symbol(A, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 13))
+>A : Symbol(A, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 16))
   }
   
   // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
@@ -16,9 +16,9 @@ module Bugs {
 
     var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
 >result : Symbol(result, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 7))
->message.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >message : Symbol(message, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 16))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(match, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 55))
 >rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
 

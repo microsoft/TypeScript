@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
 
 === ModuleWithExportedAndNonExportedFunctions.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 0))
 
     export function fn(s: string) {
->fn : Symbol(fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 10))
+>fn : Symbol(fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 13))
 >s : Symbol(s, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 2, 23))
 
         return true;
@@ -48,9 +48,9 @@ var fn: (s: string) => boolean;
 
 var fn = A.fn;
 >fn : Symbol(fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 20, 3), Decl(ModuleWithExportedAndNonExportedFunctions.ts, 21, 3))
->A.fn : Symbol(A.fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 10))
+>A.fn : Symbol(A.fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 13))
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 0))
->fn : Symbol(A.fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 10))
+>fn : Symbol(A.fn, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 0, 13))
 
 var fng: <T, U>(s: T) => U;
 >fng : Symbol(fng, Decl(ModuleWithExportedAndNonExportedFunctions.ts, 23, 3), Decl(ModuleWithExportedAndNonExportedFunctions.ts, 24, 3))

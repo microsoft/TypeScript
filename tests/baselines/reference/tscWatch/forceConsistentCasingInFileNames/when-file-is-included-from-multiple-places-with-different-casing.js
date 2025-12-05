@@ -28,7 +28,6 @@ import * as xs4 from "./struct";
 export function foo(): void
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -336,6 +335,10 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/projects: *new*
+  {}
+/home/src/projects/project: *new*
+  {}
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts: *new*
   {}
 /home/src/projects/project/src/Struct.d.ts: *new*
