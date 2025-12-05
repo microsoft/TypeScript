@@ -1,8 +1,8 @@
-module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+module.ts(2,22): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
 
 ==== class.ts (0 errors) ====
-    module X.Y {
+    namespace X.Y {
         export class Point {
             constructor(x: number, y: number) {
                 this.x = x;
@@ -14,9 +14,9 @@ module.ts(2,19): error TS2433: A namespace declaration cannot be in a different 
     }
     
 ==== module.ts (1 errors) ====
-    module X.Y {
-        export module Point {
-                      ~~~~~
+    namespace X.Y {
+        export namespace Point {
+                         ~~~~~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
             export var Origin = new Point(0, 0);
         }
@@ -33,7 +33,7 @@ module.ts(2,19): error TS2433: A namespace declaration cannot be in a different 
         id: string;
     }
     
-    module A {
+    namespace A {
         export var Instance = new A();
     }
     

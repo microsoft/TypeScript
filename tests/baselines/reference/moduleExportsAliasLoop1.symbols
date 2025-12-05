@@ -9,6 +9,6 @@ exports.fn2 = Math.min;
 >exports : Symbol(fn2, Decl(x.js, 0, 14))
 >fn2 : Symbol(fn2, Decl(x.js, 0, 14))
 >Math.min : Symbol(fn2, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >min : Symbol(fn2, Decl(lib.es5.d.ts, --, --))
 

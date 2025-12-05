@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts] ////
 
 === exportImportCanSubstituteConstEnumForValue.ts ===
-module MsPortalFx.ViewModels.Dialogs {
+namespace MsPortalFx.ViewModels.Dialogs {
 >MsPortalFx : typeof MsPortalFx
 >           : ^^^^^^^^^^^^^^^^^
 >ViewModels : typeof ViewModels
@@ -90,7 +90,7 @@ module MsPortalFx.ViewModels.Dialogs {
 }
 
 
-module MsPortalFx.ViewModels {
+namespace MsPortalFx.ViewModels {
 >MsPortalFx : typeof MsPortalFx
 >           : ^^^^^^^^^^^^^^^^^
 >ViewModels : typeof ViewModels

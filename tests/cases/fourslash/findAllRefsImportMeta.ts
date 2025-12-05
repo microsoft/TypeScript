@@ -4,7 +4,6 @@
 
 // @module: esnext
 // @Filename: foo.ts
-/////// <reference no-default-lib="true"/>
 /////// <reference path='./bar.d.ts' />
 ////import./**/meta;
 ////import.[|meta|];
@@ -14,7 +13,6 @@
 ////}
 
 // @Filename: baz.ts
-/////// <reference no-default-lib="true"/>
 /////// <reference path='./bar.d.ts' />
 ////let x = import
 ////  .  // hai :)

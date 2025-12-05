@@ -1,12 +1,12 @@
 // @declaration: true
 
 // @Filename: A.ts
-module A { export interface I {} }
+namespace A { export interface I {} }
 
 // @Filename: B.ts
 ///<reference path="A.ts" preserve="true" />
-module A { ; }
-module B {
+namespace A { ; }
+namespace B {
 	export function f(): A.I { return null; }
 }
 

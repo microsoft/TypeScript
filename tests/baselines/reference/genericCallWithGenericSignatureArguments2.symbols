@@ -4,11 +4,11 @@
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
 
-module onlyT {
+namespace onlyT {
 >onlyT : Symbol(onlyT, Decl(genericCallWithGenericSignatureArguments2.ts, 0, 0))
 
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 14))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 17))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 20))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 24))
@@ -32,20 +32,20 @@ module onlyT {
     var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
 >r1 : Symbol(r1, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 7))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 13))
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 14))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 17))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 33))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 51))
 
     function other2<T extends Date>(x: T) {
 >other2 : Symbol(other2, Decl(genericCallWithGenericSignatureArguments2.ts, 9, 69))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 20))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 36))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 20))
 
         var r7 = foo((a: T) => a, (b: T) => b); // T => T
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 12, 11))
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 14))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 3, 17))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 12, 22))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 11, 20))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 12, 22))
@@ -57,7 +57,7 @@ module onlyT {
         var r9 = r7(new Date()); // should be ok
 >r9 : Symbol(r9, Decl(genericCallWithGenericSignatureArguments2.ts, 14, 11))
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 12, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var r10 = r7(1); // error
 >r10 : Symbol(r10, Decl(genericCallWithGenericSignatureArguments2.ts, 15, 11))
@@ -67,7 +67,7 @@ module onlyT {
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : Symbol(foo2, Decl(genericCallWithGenericSignatureArguments2.ts, 16, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 34))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
@@ -90,7 +90,7 @@ module onlyT {
     function other3<T extends RegExp>(x: T) {
 >other3 : Symbol(other3, Decl(genericCallWithGenericSignatureArguments2.ts, 21, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 20))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 23, 20))
 
@@ -161,11 +161,11 @@ module onlyT {
 >A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
 }
 
-module TU {
+namespace TU {
 >TU : Symbol(TU, Decl(genericCallWithGenericSignatureArguments2.ts, 37, 1))
 
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 11))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 14))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 17))
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 19))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 23))
@@ -190,20 +190,20 @@ module TU {
     var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
 >r1 : Symbol(r1, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 7))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 13))
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 11))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 14))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 33))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 51))
 
     function other2<T extends Date>(x: T) {
 >other2 : Symbol(other2, Decl(genericCallWithGenericSignatureArguments2.ts, 45, 69))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 20))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 36))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 20))
 
         var r7 = foo((a: T) => a, (b: T) => b); 
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 48, 11))
->foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 11))
+>foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments2.ts, 39, 14))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 48, 22))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 47, 20))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 48, 22))
@@ -214,7 +214,7 @@ module TU {
         var r9 = r7(new Date()); 
 >r9 : Symbol(r9, Decl(genericCallWithGenericSignatureArguments2.ts, 49, 11))
 >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 48, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var r10 = r7(1); 
 >r10 : Symbol(r10, Decl(genericCallWithGenericSignatureArguments2.ts, 50, 11))
@@ -224,9 +224,9 @@ module TU {
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
 >foo2 : Symbol(foo2, Decl(genericCallWithGenericSignatureArguments2.ts, 51, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 33))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 50))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 54))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
@@ -249,7 +249,7 @@ module TU {
     function other3<T extends RegExp>(x: T) {
 >other3 : Symbol(other3, Decl(genericCallWithGenericSignatureArguments2.ts, 56, 5))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 20))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 38))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 58, 20))
 

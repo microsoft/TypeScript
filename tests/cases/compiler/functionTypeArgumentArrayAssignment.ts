@@ -1,4 +1,4 @@
-module test {
+namespace test {
     interface Array<T> {
         foo: T;
         length: number;

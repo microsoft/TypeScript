@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDeferInvalidStandalone.ts] ////
+
+=== b.ts ===
+import.defer;
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+
+(import.defer)("a");
+>(import.defer)("a") : any
+>                    : ^^^
+>(import.defer) : any
+>               : ^^^
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+>"a" : "a"
+>    : ^^^
+
+Function(import.defer);
+>Function(import.defer) : Function
+>                       : ^^^^^^^^
+>Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+
+import.defer
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+

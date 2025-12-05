@@ -3,7 +3,7 @@ tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be a
 
 
 ==== tsxSpreadChildrenInvalidType.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

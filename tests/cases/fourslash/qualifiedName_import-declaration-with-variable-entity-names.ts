@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-////module Alpha {
+////namespace Alpha {
 ////    export var [|{| "name" : "def" |}x|] = 100;
 ////}
 ////
-////module Beta {
+////namespace Beta {
 ////    import p = Alpha.[|{| "name" : "import" |}x|];
 ////}
 ////

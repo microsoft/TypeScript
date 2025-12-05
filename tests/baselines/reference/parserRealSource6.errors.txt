@@ -68,7 +68,7 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
         export class TypeCollectionContext {
             public script: Script = null;
                            ~~~~~~

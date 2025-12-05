@@ -233,7 +233,7 @@ export namespace Compiler {
     export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
     // Cache of lib files from "built/local"
-    export let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
+    export let libFileNameSourceFileMap: Map<string, { file: ts.SourceFile; stringified: string; }> | undefined;
 
     export function getDefaultLibrarySourceFile(fileName: string = defaultLibFileName): ts.SourceFile | undefined {
         if (!isDefaultLibraryFile(fileName)) {
@@ -241,16 +241,19 @@ export namespace Compiler {
         }
 
         if (!libFileNameSourceFileMap) {
+            const file = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest);
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest),
+                [defaultLibFileName]: { file, stringified: JSON.stringify(file.text) },
             }));
         }
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest));
+            const file = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest);
+            sourceFile = { file, stringified: JSON.stringify(file.text) };
+            libFileNameSourceFileMap.set(fileName, sourceFile);
         }
-        return sourceFile;
+        return sourceFile.file;
     }
 
     export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -418,6 +421,10 @@ export namespace Compiler {
         // Files from tests\lib that are requested by "@libFiles"
         if (options.libFiles) {
             for (const fileName of options.libFiles.split(",")) {
+                if (fileName === "lib.d.ts" && !options.noLib) {
+                    // Hack from Corsa.
+                    continue;
+                }
                 programFileNames.push(vpath.combine(vfs.testLibFolder, fileName));
             }
         }

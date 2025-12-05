@@ -7,11 +7,11 @@ exportDeclarationInInternalModule.ts(13,19): error TS1141: String literal expect
     
     class Aaa extends Bbb { }
     
-    module Aaa {
+    namespace Aaa {
         export class SomeType { }
     }
     
-    module Bbb {
+    namespace Bbb {
         export class SomeType { }
     
         export * from Aaa;      // this line causes the nullref

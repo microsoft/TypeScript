@@ -1302,7 +1302,7 @@ export namespace Core {
         const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
-        const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
+        const searchMeaning = node && options.use !== FindReferencesUse.Rename ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
@@ -2679,9 +2679,10 @@ export namespace Core {
             return firstDefined(symbol.declarations, declaration =>
                 firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
                     const type = checker.getTypeAtLocation(typeReference);
-                    const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                    const propertySymbol = type.symbol && checker.getPropertyOfType(type, propertyName);
                     // Visit the typeReference as well to see if it directly or indirectly uses that property
-                    return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
+                    // When `propertySymbol` is missing continue the recursion through parents as some parent up the chain might be an abstract class that implements interface having the property
+                    return propertySymbol && firstDefined(checker.getRootSymbols(propertySymbol), cb) || type.symbol && recur(type.symbol);
                 }));
         }
     }

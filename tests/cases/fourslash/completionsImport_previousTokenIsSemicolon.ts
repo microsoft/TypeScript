@@ -11,7 +11,7 @@ verify.completions({
     marker: "",
     includes: {
         name: "foo",
-        source: "/a",
+        source: "./a",
         sourceDisplay: "./a",
         text: "function foo(): void",
         kind: "function",

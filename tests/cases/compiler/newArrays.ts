@@ -1,4 +1,4 @@
-module M {
+namespace M {
 	class Foo {}
 	class Gar {
 		public fa: Foo[];

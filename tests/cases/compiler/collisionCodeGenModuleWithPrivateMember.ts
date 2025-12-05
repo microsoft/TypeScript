@@ -1,4 +1,4 @@
-module m1 {
+namespace m1 {
     class m1 {
     }
     var x = new m1();

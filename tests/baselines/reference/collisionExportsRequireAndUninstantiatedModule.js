@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts] ////
 
 //// [collisionExportsRequireAndUninstantiatedModule.ts]
-export module require { // no error 
+export namespace require { // no error 
     export interface I {
     }
 }
 export function foo(): require.I {
     return null;
 }
-export module exports { // no error
+export namespace exports { // no error
     export interface I {
     }
 }

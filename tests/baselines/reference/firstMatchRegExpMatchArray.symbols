@@ -3,8 +3,8 @@
 === firstMatchRegExpMatchArray.ts ===
 const match = ''.match(/ /)
 >match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
->''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 if (match !== null) {
 >match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))

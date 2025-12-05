@@ -18,7 +18,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 
         var inner = outer;   // Error: outer not visible
 

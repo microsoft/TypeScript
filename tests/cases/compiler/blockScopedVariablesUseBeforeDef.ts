@@ -150,3 +150,11 @@ function wrapI2() {
         yield 1;
     })();
 }
+
+function foo18() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
+}

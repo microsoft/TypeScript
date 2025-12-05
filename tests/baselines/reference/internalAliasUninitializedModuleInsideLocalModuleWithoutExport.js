@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts] ////
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts]
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export interface I {
             foo();
         }
     }
 }
 
-export module c {
+export namespace c {
     import b = a.b;
     export var x: b.I;
     x.foo();

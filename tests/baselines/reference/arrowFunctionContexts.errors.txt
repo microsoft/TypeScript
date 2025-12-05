@@ -47,13 +47,13 @@ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in cu
     }
     
     // Arrow function as module variable initializer
-    module M {
+    namespace M {
         export var a = (s) => '';
         var b = (s) => s;
     }
     
     // Repeat above for module members that are functions? (necessary to redo all of them?)
-    module M2 {
+    namespace M2 {
         // Arrow function used in with statement
         with (window) {
         ~~~~~~~~~~~~~
@@ -94,7 +94,7 @@ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in cu
         }
     
         // Arrow function as module variable initializer
-        module M {
+        namespace M {
             export var a = (s) => '';
             var b = (s) => s;
         }
