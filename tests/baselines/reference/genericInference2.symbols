@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/genericInference2.ts] ////
 
 === genericInference2.ts ===
-    declare module ko { 
+    declare namespace ko { 
 >ko : Symbol(ko, Decl(genericInference2.ts, 0, 0))
 
        export interface Observable<T> { 
->Observable : Symbol(Observable, Decl(genericInference2.ts, 0, 23))
+>Observable : Symbol(Observable, Decl(genericInference2.ts, 0, 26))
 >T : Symbol(T, Decl(genericInference2.ts, 1, 35))
 
            (): T; 
@@ -30,7 +30,7 @@
 >T : Symbol(T, Decl(genericInference2.ts, 8, 34))
 >value : Symbol(value, Decl(genericInference2.ts, 8, 37))
 >T : Symbol(T, Decl(genericInference2.ts, 8, 34))
->Observable : Symbol(Observable, Decl(genericInference2.ts, 0, 23))
+>Observable : Symbol(Observable, Decl(genericInference2.ts, 0, 26))
 >T : Symbol(T, Decl(genericInference2.ts, 8, 34))
     } 
     var o = { 

@@ -14,7 +14,6 @@ import { aNumber } from "./a.js";
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -40,8 +39,6 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/b.ts"]
   options: {"checkJs":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
@@ -64,8 +61,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/user/username/projects/myproject/a.js: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
@@ -156,8 +151,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 //// [/user/username/projects/myproject/b.js] file written with same contents
 
 PolledWatches::
-/user/username/projects/myproject/a.js:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:

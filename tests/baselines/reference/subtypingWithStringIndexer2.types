@@ -33,7 +33,7 @@ interface B2 extends A {
 >  : ^^^^^^
 }
 
-module Generics {
+namespace Generics {
     interface A<T extends Derived> {
         [x: string]: T;
 >x : string

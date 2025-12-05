@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export var x = 'hello world'
     var y = 12;
 }

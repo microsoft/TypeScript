@@ -2,7 +2,7 @@ classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of an ab
 
 
 ==== classAbstractInAModule.ts (1 errors) ====
-    module M {
+    namespace M {
         export abstract class A {}
         export class B extends A {}
     }

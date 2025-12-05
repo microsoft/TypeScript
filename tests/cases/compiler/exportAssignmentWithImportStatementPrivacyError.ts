@@ -1,5 +1,5 @@
 //@module: amd
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
     }
@@ -10,7 +10,7 @@ module m2 {
 
 }
 
-module M {
+namespace M {
     export var server: {
         (): m2.connectExport;
         test1: m2.connectModule;

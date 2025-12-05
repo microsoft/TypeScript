@@ -37,7 +37,7 @@ create((arg) => ({
   onStart: () => ({ time: new Date() }),
 >onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 11, 18))
 >time : Symbol(time, Decl(InferFromReturnsInContextSensitive1.ts, 12, 19))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   onEnd: (context) => {},
 >onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 12, 40))
@@ -56,7 +56,7 @@ create((arg) => ({
   onStart: () => ({ time: new Date() }),
 >onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 17, 25))
 >time : Symbol(time, Decl(InferFromReturnsInContextSensitive1.ts, 18, 19))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 }));
 

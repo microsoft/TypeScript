@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/complicatedPrivacy.ts] ////
 
 === complicatedPrivacy.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(complicatedPrivacy.ts, 0, 0))
 
-    export module m2 {
->m2 : Symbol(m2, Decl(complicatedPrivacy.ts, 0, 11))
+    export namespace m2 {
+>m2 : Symbol(m2, Decl(complicatedPrivacy.ts, 0, 14))
 
 
         export function f1(c1: C1) {
->f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 1, 22))
+>f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 1, 25))
 >c1 : Symbol(c1, Decl(complicatedPrivacy.ts, 4, 27))
 >C1 : Symbol(C1, Decl(complicatedPrivacy.ts, 50, 5))
         }
@@ -89,11 +89,11 @@ module m1 {
 
     }) {
     }
-    module m3 {
+    namespace m3 {
 >m3 : Symbol(m3, Decl(complicatedPrivacy.ts, 42, 5))
 
         function f2(f1: C1) {
->f2 : Symbol(f2, Decl(complicatedPrivacy.ts, 43, 15))
+>f2 : Symbol(f2, Decl(complicatedPrivacy.ts, 43, 18))
 >f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 44, 20))
 >C1 : Symbol(C1, Decl(complicatedPrivacy.ts, 50, 5))
         }
@@ -134,17 +134,17 @@ class C2 {
 >C2 : Symbol(C2, Decl(complicatedPrivacy.ts, 64, 1))
 }
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(complicatedPrivacy.ts, 67, 1))
 
-    export module m3 {
->m3 : Symbol(m3, Decl(complicatedPrivacy.ts, 69, 11))
+    export namespace m3 {
+>m3 : Symbol(m3, Decl(complicatedPrivacy.ts, 69, 14))
 
         export class c_pr  implements mglo5.i5, mglo5.i6 {
->c_pr : Symbol(c_pr, Decl(complicatedPrivacy.ts, 70, 22))
->mglo5.i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 14))
+>c_pr : Symbol(c_pr, Decl(complicatedPrivacy.ts, 70, 25))
+>mglo5.i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 17))
 >mglo5 : Symbol(mglo5, Decl(complicatedPrivacy.ts, 92, 1))
->i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 14))
+>i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 17))
 >mglo5 : Symbol(mglo5, Decl(complicatedPrivacy.ts, 92, 1))
 
             f1() {
@@ -154,23 +154,23 @@ module m2 {
             }
         }
         
-        module m4 {
+        namespace m4 {
 >m4 : Symbol(m4, Decl(complicatedPrivacy.ts, 76, 9))
 
             class C {
->C : Symbol(C, Decl(complicatedPrivacy.ts, 78, 19))
+>C : Symbol(C, Decl(complicatedPrivacy.ts, 78, 22))
             }
-            module m5 {
+            namespace m5 {
 >m5 : Symbol(m5, Decl(complicatedPrivacy.ts, 80, 13))
                 
-                export module m6 {
->m6 : Symbol(m6, Decl(complicatedPrivacy.ts, 81, 23))
+                export namespace m6 {
+>m6 : Symbol(m6, Decl(complicatedPrivacy.ts, 81, 26))
 
                     function f1() {
->f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 83, 34))
+>f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 83, 37))
 
                         return new C();
->C : Symbol(C, Decl(complicatedPrivacy.ts, 78, 19))
+>C : Symbol(C, Decl(complicatedPrivacy.ts, 78, 22))
                     }
                 }
             }
@@ -179,11 +179,11 @@ module m2 {
     }
 }
 
-module mglo5 {
+namespace mglo5 {
 >mglo5 : Symbol(mglo5, Decl(complicatedPrivacy.ts, 92, 1))
 
     export interface i5 {
->i5 : Symbol(i5, Decl(complicatedPrivacy.ts, 94, 14))
+>i5 : Symbol(i5, Decl(complicatedPrivacy.ts, 94, 17))
 
         f1(): string;
 >f1 : Symbol(i5.f1, Decl(complicatedPrivacy.ts, 95, 25))

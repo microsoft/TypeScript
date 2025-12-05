@@ -5559,12 +5559,15 @@ namespace Parser {
             return parseFunctionBlock(SignatureFlags.IgnoreMissingOpenBrace | (isAsync ? SignatureFlags.Await : SignatureFlags.None));
         }
 
+        const savedYieldContext = inYieldContext();
+        setYieldContext(false);
         const savedTopLevel = topLevel;
         topLevel = false;
         const node = isAsync
             ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction))
             : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(allowReturnTypeInArrowFunction));
         topLevel = savedTopLevel;
+        setYieldContext(savedYieldContext);
         return node;
     }
 
@@ -7502,7 +7505,11 @@ namespace Parser {
             case SyntaxKind.LetKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.UsingKeyword:
+                return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.AwaitKeyword:
+                if (!isAwaitUsingDeclaration()) {
+                    break;
+                }
                 return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.FunctionKeyword:
                 return parseFunctionDeclaration(pos, hasJSDoc, modifiersIn);
@@ -7531,17 +7538,16 @@ namespace Parser {
                     default:
                         return parseExportDeclaration(pos, hasJSDoc, modifiersIn);
                 }
-            default:
-                if (modifiersIn) {
-                    // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
-                    // would follow. For recovery and error reporting purposes, return an incomplete declaration.
-                    const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                    setTextRangePos(missing, pos);
-                    (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
-                    return missing;
-                }
-                return undefined!; // TODO: GH#18217
         }
+        if (modifiersIn) {
+            // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
+            // would follow. For recovery and error reporting purposes, return an incomplete declaration.
+            const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+            setTextRangePos(missing, pos);
+            (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
+            return missing;
+        }
+        return undefined!; // TODO: GH#18217
     }
 
     function nextTokenIsStringLiteral() {
@@ -7674,7 +7680,9 @@ namespace Parser {
                 flags |= NodeFlags.Using;
                 break;
             case SyntaxKind.AwaitKeyword:
-                Debug.assert(isAwaitUsingDeclaration());
+                if (!isAwaitUsingDeclaration()) {
+                    break;
+                }
                 flags |= NodeFlags.AwaitUsing;
                 nextToken();
                 break;
@@ -8432,7 +8440,7 @@ namespace Parser {
 
     function tryParseImportAttributes() {
         const currentToken = token();
-        if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
+        if (currentToken === SyntaxKind.WithKeyword || (currentToken === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak())) {
             return parseImportAttributes(currentToken);
         }
     }
@@ -10614,7 +10622,6 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
     context.typeReferenceDirectives = [];
     context.libReferenceDirectives = [];
     context.amdDependencies = [];
-    context.hasNoDefaultLib = false;
     context.pragmas!.forEach((entryOrList, key) => { // TODO: GH#18217
         // TODO: The below should be strongly type-guarded and not need casts/explicit annotations, since entryOrList is related to
         // key and key is constrained to a union; but it's not (see GH#21483 for at least partial fix) :(
@@ -10627,7 +10634,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                     const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
                     const preserve = _preserve === "true" ? true : undefined;
                     if (arg.arguments["no-default-lib"] === "true") {
-                        context.hasNoDefaultLib = true;
+                        // This has been removed; parse but ignore it.
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);

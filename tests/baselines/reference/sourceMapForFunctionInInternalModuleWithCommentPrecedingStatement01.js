@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts] ////
 
 //// [sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts]
-module Q {
+namespace Q {
     function P() {
         // Test this
         var a = 1;

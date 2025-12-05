@@ -21,7 +21,7 @@ verify.completions({
     includes: ["aBcdef", "a_bcdef", "BDF"].map(name =>
         ({
             name,
-            source: "/a",
+            source: "./a",
             text: `function ${name}(): void`,
             hasAction: true,
             kind: "function",

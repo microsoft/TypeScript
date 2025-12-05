@@ -1,0 +1,237 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion3.ts] ////
+
+=== inferenceContextualReturnTypeUnion3.ts ===
+declare function deprecate<T extends Function>(
+>deprecate : <T extends Function>(fn: T, msg: string, code?: string) => T
+>          : ^ ^^^^^^^^^        ^^  ^^ ^^   ^^      ^^    ^^^      ^^^^^ 
+
+  fn: T,
+>fn : T
+>   : ^
+
+  msg: string,
+>msg : string
+>    : ^^^^^^
+
+  code?: string,
+>code : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+): T;
+
+const soonFrozenObjectDeprecation = <T extends object>(
+>soonFrozenObjectDeprecation : <T extends object>(obj: T, name: string, code: string, note?: string) => T
+>                            : ^ ^^^^^^^^^      ^^   ^^ ^^    ^^      ^^    ^^      ^^    ^^^^^^^^^^^^^^ 
+><T extends object>(  obj: T,  name: string,  code: string,  note = "",): T => {  const message = `${name} will be frozen in future, all modifications are deprecated.${    note && `\n${note}`  }`;  return new Proxy(obj, {    set: deprecate(      (target, property, value, receiver) =>        Reflect.set(target, property, value, receiver),      message,      code,    ),    defineProperty: deprecate(      (target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor),      message,      code,    ),    deleteProperty: deprecate(      (target, property) => Reflect.deleteProperty(target, property),      message,      code,    ),    setPrototypeOf: deprecate(      (target, proto) => Reflect.setPrototypeOf(target, proto),      message,      code,    ),  });} : <T extends object>(obj: T, name: string, code: string, note?: string) => T
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       : ^ ^^^^^^^^^      ^^   ^^ ^^    ^^      ^^    ^^      ^^    ^^^^^^^^^^^^^^ 
+
+  obj: T,
+>obj : T
+>    : ^
+
+  name: string,
+>name : string
+>     : ^^^^^^
+
+  code: string,
+>code : string
+>     : ^^^^^^
+
+  note = "",
+>note : string
+>     : ^^^^^^
+>"" : ""
+>   : ^^
+
+): T => {
+  const message = `${name} will be frozen in future, all modifications are deprecated.${
+>message : string
+>        : ^^^^^^
+>`${name} will be frozen in future, all modifications are deprecated.${    note && `\n${note}`  }` : string
+>                                                                                                  : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+    note && `\n${note}`
+>note && `\n${note}` : string
+>                    : ^^^^^^
+>note : string
+>     : ^^^^^^
+>`\n${note}` : string
+>            : ^^^^^^
+>note : string
+>     : ^^^^^^
+
+  }`;
+  return new Proxy(obj, {
+>new Proxy(obj, {    set: deprecate(      (target, property, value, receiver) =>        Reflect.set(target, property, value, receiver),      message,      code,    ),    defineProperty: deprecate(      (target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor),      message,      code,    ),    deleteProperty: deprecate(      (target, property) => Reflect.deleteProperty(target, property),      message,      code,    ),    setPrototypeOf: deprecate(      (target, proto) => Reflect.setPrototypeOf(target, proto),      message,      code,    ),  }) : T
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^
+>Proxy : ProxyConstructor
+>      : ^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>{    set: deprecate(      (target, property, value, receiver) =>        Reflect.set(target, property, value, receiver),      message,      code,    ),    defineProperty: deprecate(      (target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor),      message,      code,    ),    deleteProperty: deprecate(      (target, property) => Reflect.deleteProperty(target, property),      message,      code,    ),    setPrototypeOf: deprecate(      (target, proto) => Reflect.setPrototypeOf(target, proto),      message,      code,    ),  } : { set: (target: T, property: string | symbol, value: any, receiver: any) => boolean; defineProperty: (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean; deleteProperty: (target: T, property: string | symbol) => boolean; setPrototypeOf: (target: T, proto: object | null) => boolean; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^^^^     ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    set: deprecate(
+>set : (target: T, property: string | symbol, value: any, receiver: any) => boolean
+>    : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^     ^^^^^^^        ^^^^^^^^^^^^^^^^^
+>deprecate(      (target, property, value, receiver) =>        Reflect.set(target, property, value, receiver),      message,      code,    ) : (target: T, property: string | symbol, value: any, receiver: any) => boolean
+>                                                                                                                                            : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^     ^^^^^^^        ^^^^^^^^^^^^^^^^^
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
+>          : ^^^^^^^^^^^^^        ^^  ^^   ^^   ^^      ^^    ^^^      ^^^^^   
+
+      (target, property, value, receiver) =>
+>(target, property, value, receiver) =>        Reflect.set(target, property, value, receiver) : (target: T, property: string | symbol, value: any, receiver: any) => boolean
+>                                                                                             : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^     ^^^^^^^        ^^^^^^^^^^^^^^^^^
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+>value : any
+>receiver : any
+
+        Reflect.set(target, property, value, receiver),
+>Reflect.set(target, property, value, receiver) : boolean
+>                                               : ^^^^^^^
+>Reflect.set : { <T_1 extends object, P extends PropertyKey>(target: T_1, propertyKey: P, value: P extends keyof T_1 ? T_1[P] : any, receiver?: any): boolean; (target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean; }
+>            : ^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^   ^^           ^^ ^^     ^^                                  ^^        ^^^   ^^^       ^^^      ^^      ^^           ^^           ^^     ^^   ^^        ^^^   ^^^       ^^^
+>Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
+>set : { <T_1 extends object, P extends PropertyKey>(target: T_1, propertyKey: P, value: P extends keyof T_1 ? T_1[P] : any, receiver?: any): boolean; (target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean; }
+>    : ^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^   ^^           ^^ ^^     ^^                                  ^^        ^^^   ^^^       ^^^      ^^      ^^           ^^           ^^     ^^   ^^        ^^^   ^^^       ^^^
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+>value : any
+>receiver : any
+
+      message,
+>message : string
+>        : ^^^^^^
+
+      code,
+>code : string
+>     : ^^^^^^
+
+    ),
+    defineProperty: deprecate(
+>defineProperty : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
+>               : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate(      (target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor),      message,      code,    ) : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
+>                                                                                                                                             : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
+>          : ^^^^^^^^^^^^^        ^^  ^^   ^^   ^^      ^^    ^^^      ^^^^^   
+
+      (target, property, descriptor) =>
+>(target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor) : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
+>                                                                                              : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+>descriptor : PropertyDescriptor
+>           : ^^^^^^^^^^^^^^^^^^
+
+        Reflect.defineProperty(target, property, descriptor),
+>Reflect.defineProperty(target, property, descriptor) : boolean
+>                                                     : ^^^^^^^
+>Reflect.defineProperty : (target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => boolean
+>                       : ^      ^^      ^^           ^^           ^^          ^^                                  ^^^^^       
+>Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
+>defineProperty : (target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => boolean
+>               : ^      ^^      ^^           ^^           ^^          ^^                                  ^^^^^       
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+>descriptor : PropertyDescriptor
+>           : ^^^^^^^^^^^^^^^^^^
+
+      message,
+>message : string
+>        : ^^^^^^
+
+      code,
+>code : string
+>     : ^^^^^^
+
+    ),
+    deleteProperty: deprecate(
+>deleteProperty : (target: T, property: string | symbol) => boolean
+>               : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate(      (target, property) => Reflect.deleteProperty(target, property),      message,      code,    ) : (target: T, property: string | symbol) => boolean
+>                                                                                                              : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
+>          : ^^^^^^^^^^^^^        ^^  ^^   ^^   ^^      ^^    ^^^      ^^^^^   
+
+      (target, property) => Reflect.deleteProperty(target, property),
+>(target, property) => Reflect.deleteProperty(target, property) : (target: T, property: string | symbol) => boolean
+>                                                               : ^      ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+>Reflect.deleteProperty(target, property) : boolean
+>                                         : ^^^^^^^
+>Reflect.deleteProperty : (target: object, propertyKey: PropertyKey) => boolean
+>                       : ^      ^^      ^^           ^^           ^^^^^       
+>Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
+>deleteProperty : (target: object, propertyKey: PropertyKey) => boolean
+>               : ^      ^^      ^^           ^^           ^^^^^       
+>target : T
+>       : ^
+>property : string | symbol
+>         : ^^^^^^^^^^^^^^^
+
+      message,
+>message : string
+>        : ^^^^^^
+
+      code,
+>code : string
+>     : ^^^^^^
+
+    ),
+    setPrototypeOf: deprecate(
+>setPrototypeOf : (target: T, proto: object | null) => boolean
+>               : ^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate(      (target, proto) => Reflect.setPrototypeOf(target, proto),      message,      code,    ) : (target: T, proto: object | null) => boolean
+>                                                                                                        : ^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
+>          : ^^^^^^^^^^^^^        ^^  ^^   ^^   ^^      ^^    ^^^      ^^^^^   
+
+      (target, proto) => Reflect.setPrototypeOf(target, proto),
+>(target, proto) => Reflect.setPrototypeOf(target, proto) : (target: T, proto: object | null) => boolean
+>                                                         : ^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : T
+>       : ^
+>proto : object | null
+>      : ^^^^^^^^^^^^^
+>Reflect.setPrototypeOf(target, proto) : boolean
+>                                      : ^^^^^^^
+>Reflect.setPrototypeOf : (target: object, proto: object | null) => boolean
+>                       : ^      ^^      ^^     ^^             ^^^^^       
+>Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
+>setPrototypeOf : (target: object, proto: object | null) => boolean
+>               : ^      ^^      ^^     ^^             ^^^^^       
+>target : T
+>       : ^
+>proto : object | null
+>      : ^^^^^^^^^^^^^
+
+      message,
+>message : string
+>        : ^^^^^^
+
+      code,
+>code : string
+>     : ^^^^^^
+
+    ),
+  });
+};

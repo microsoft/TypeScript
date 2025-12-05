@@ -12,7 +12,7 @@ enum TopLevelEnum {
 >     : ^^^
 }
 
-module ModuleEnum {
+namespace ModuleEnum {
 >ModuleEnum : typeof ModuleEnum
 >           : ^^^^^^^^^^^^^^^^^
 

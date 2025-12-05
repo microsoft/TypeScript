@@ -39,7 +39,7 @@ verify.completions(
             completion.undefinedVarEntry,
             {
                 name: "unique",
-                source: "/a",
+                source: "./a",
                 sourceDisplay: "./a",
                 text: "(alias) const unique: 0\nexport unique",
                 hasAction: true,

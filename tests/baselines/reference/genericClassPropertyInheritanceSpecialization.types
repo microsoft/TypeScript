@@ -134,7 +134,7 @@ interface KnockoutObservableArrayStatic {
 >      : ^^^
 }
 
-declare module ko {
+declare namespace ko {
 >ko : typeof ko
 >   : ^^^^^^^^^
 
@@ -143,7 +143,7 @@ declare module ko {
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-module Portal.Controls.Validators {
+namespace Portal.Controls.Validators {
 >Portal : typeof Portal
 >       : ^^^^^^^^^^^^^
 >Controls : typeof Controls
@@ -188,7 +188,7 @@ module Portal.Controls.Validators {
     }
 }
 
-module PortalFx.ViewModels.Controls.Validators {
+namespace PortalFx.ViewModels.Controls.Validators {
 >PortalFx : typeof PortalFx
 >         : ^^^^^^^^^^^^^^^
 >ViewModels : typeof ViewModels

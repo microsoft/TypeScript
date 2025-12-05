@@ -31,8 +31,8 @@ module.exports = alias
 
 === importer.js ===
 import('./bug28014')
->import('./bug28014') : Promise<{ (): void; version: 1; }>
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./bug28014') : Promise<{ default: { (): void; version: 1; }; version: 1; }>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./bug28014' : "./bug28014"
 >             : ^^^^^^^^^^^^
 

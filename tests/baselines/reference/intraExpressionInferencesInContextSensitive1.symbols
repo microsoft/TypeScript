@@ -37,7 +37,7 @@ create((arg) => ({
 >onStart : Symbol(onStart, Decl(intraExpressionInferencesInContextSensitive1.ts, 9, 18))
 >arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 10, 12))
 >time : Symbol(time, Decl(intraExpressionInferencesInContextSensitive1.ts, 10, 22))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   onEnd: (context) => {},
 >onEnd : Symbol(onEnd, Decl(intraExpressionInferencesInContextSensitive1.ts, 10, 43))

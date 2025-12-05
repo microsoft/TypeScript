@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember18.ts ===
+// const entityKind = Symbol.for("drizzle:entityKind");
+// 
+// abstract class MySqlColumn {
+//   <|readonly [|[entityKind]|]: string = "MySqlColumn";|>
+// }
+// 
+// export class MySqlVarBinary extends MySqlColumn {
+//   /*GOTO DEF*/override readonly [entityKind]: string = "MySqlVarBinary";
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "[entityKind]",
+    "containerName": "MySqlColumn",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

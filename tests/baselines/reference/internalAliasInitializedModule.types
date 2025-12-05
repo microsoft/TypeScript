@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/internalAliasInitializedModule.ts] ////
 
 === internalAliasInitializedModule.ts ===
-module a {
+namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
-    export module b {
+    export namespace b {
 >b : typeof b
 >  : ^^^^^^^^
 
@@ -16,7 +16,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

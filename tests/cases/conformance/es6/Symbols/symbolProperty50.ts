@@ -1,5 +1,5 @@
 //@target: ES6
-module M {
+namespace M {
     interface Symbol { }
 
     class C {

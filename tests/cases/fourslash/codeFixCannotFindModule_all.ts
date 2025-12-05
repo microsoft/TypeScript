@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @noImplicitAny: true
 
 // @Filename: /node_modules/abs/index.js

@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall1.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== genericCallAtYieldExpressionInGenericCall1.ts ===
+declare const inner: {
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
+>      : ^ ^^     ^^ ^^^^^                                                                                               
+
+  <A>(value: A): {
+>value : A
+>      : ^
+
+    (): A;
+    [Symbol.iterator](): {
+>[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }
+>                  : ^^^^^^                                                              
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+      next(...args: ReadonlyArray<any>): IteratorResult<any, A>;
+>next : (...args: ReadonlyArray<any>) => IteratorResult<any, A>
+>     : ^^^^    ^^                  ^^^^^                      
+>args : readonly any[]
+>     : ^^^^^^^^^^^^^^
+
+    };
+  };
+};
+
+declare function outer<A>(body: (value: A) => Generator<any, any, any>): void;
+>outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+>      : ^ ^^    ^^                                      ^^^^^    
+>body : (value: A) => Generator<any, any, any>
+>     : ^     ^^ ^^^^^                        
+>value : A
+>      : ^
+
+outer(function* <T>(value: T) {
+>outer(function* <T>(value: T) {  const result = yield* inner(value); // ok}) : void
+>                                                                             : ^^^^
+>outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+>      : ^ ^^    ^^                                      ^^^^^    
+>function* <T>(value: T) {  const result = yield* inner(value); // ok} : <T>(value: T) => Generator<never, void, never>
+>                                                                      : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : T
+>      : ^
+
+  const result = yield* inner(value); // ok
+>result : T
+>       : ^
+>yield* inner(value) : T
+>                    : ^
+>inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
+>      : ^ ^^     ^^ ^^^^^                                                                                               
+>value : T
+>      : ^
+
+});
+
+outer(function* <T>(value: T) {
+>outer(function* <T>(value: T) {  const x = inner(value);  const result = yield* x; // ok}) : void
+>                                                                                           : ^^^^
+>outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+>      : ^ ^^    ^^                                      ^^^^^    
+>function* <T>(value: T) {  const x = inner(value);  const result = yield* x; // ok} : <T>(value: T) => Generator<any, void, any>
+>                                                                                    : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : T
+>      : ^
+
+  const x = inner(value);
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
+>      : ^ ^^     ^^ ^^^^^                                                                                               
+>value : T
+>      : ^
+
+  const result = yield* x; // ok
+>result : T
+>       : ^
+>yield* x : T
+>         : ^
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+});
+
+declare const inner2: {
+>inner2 : <A>(value: A) => () => A
+>       : ^ ^^     ^^ ^^^^^       
+
+  <A>(value: A): () => A;
+>value : A
+>      : ^
+
+};
+
+outer(function* <T>(value: T) {
+>outer(function* <T>(value: T) {  const result = yield* inner2(value); // error}) : void
+>                                                                                 : ^^^^
+>outer : <A>(body: (value: A) => Generator<any, any, any>) => void
+>      : ^ ^^    ^^                                      ^^^^^    
+>function* <T>(value: T) {  const result = yield* inner2(value); // error} : <T>(value: T) => Generator<never, void, never>
+>                                                                          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : T
+>      : ^
+
+  const result = yield* inner2(value); // error
+>result : any
+>       : ^^^
+>yield* inner2(value) : any
+>                     : ^^^
+>inner2(value) : () => T
+>              : ^^^^^^^
+>inner2 : <A>(value: A) => () => A
+>       : ^ ^^     ^^ ^^^^^       
+>value : T
+>      : ^
+
+});
+

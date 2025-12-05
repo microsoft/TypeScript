@@ -7,7 +7,7 @@ enum foo { A }
 >A : foo.A
 >  : ^^^^^
 
-module foo {
+namespace foo {
     const enum E { X }
 >E : E
 >  : ^

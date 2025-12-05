@@ -17,7 +17,7 @@ var require = "require";
 >"require" : "require"
 >          : ^^^^^^^^^
 
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -33,7 +33,7 @@ module m1 {
 >"require" : "require"
 >          : ^^^^^^^^^
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -63,7 +63,7 @@ var require = "require";
 >"require" : "require"
 >          : ^^^^^^^^^
 
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -79,7 +79,7 @@ module m3 {
 >"require" : "require"
 >          : ^^^^^^^^^
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

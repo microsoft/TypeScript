@@ -36,7 +36,7 @@ function id<T>(x: T) {
 
 const result = id`hello world`;
 
-//// [tslib.d.ts]
+//// [index.d.ts]
 export declare function __extends(d: Function, b: Function): void;
 export declare function __assign(t: any, ...sources: any[]): any;
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;

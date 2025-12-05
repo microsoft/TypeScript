@@ -119,6 +119,7 @@ export * from "./unittests/tsc/composite.js";
 export * from "./unittests/tsc/declarationEmit.js";
 export * from "./unittests/tsc/extends.js";
 export * from "./unittests/tsc/forceConsistentCasingInFileNames.js";
+export * from "./unittests/tsc/ignoreConfig.js";
 export * from "./unittests/tsc/incremental.js";
 export * from "./unittests/tsc/libraryResolution.js";
 export * from "./unittests/tsc/listFilesOnly.js";

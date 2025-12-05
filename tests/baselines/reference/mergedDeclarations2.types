@@ -20,7 +20,7 @@ enum Foo {
 >  : ^^^
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

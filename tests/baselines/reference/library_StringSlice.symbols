@@ -5,21 +5,21 @@
 String.prototype.slice();
 >String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 >String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 
 String.prototype.slice(0);
 >String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 >String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 
 String.prototype.slice(0,1);
 >String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 >String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 

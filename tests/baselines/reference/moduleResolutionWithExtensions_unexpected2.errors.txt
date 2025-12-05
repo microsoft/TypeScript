@@ -1,0 +1,14 @@
+/a.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of 'foo'.
+
+
+==== /a.ts (1 errors) ====
+    import "foo";
+           ~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'foo'.
+    
+==== /node_modules/foo/foo.js (0 errors) ====
+    This file is not read.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "types": "foo.js" }
+    

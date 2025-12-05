@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts] ////
 
 //// [genericCallToOverloadedMethodWithOverloadedArguments.ts]
-module m1 {
+namespace m1 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
     }
@@ -14,7 +14,7 @@ module m1 {
 
 //////////////////////////////////////
 
-module m2 {
+namespace m2 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
     }
@@ -28,7 +28,7 @@ module m2 {
 
 //////////////////////////////////////
 
-module m3 {
+namespace m3 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -42,7 +42,7 @@ module m3 {
 
 //////////////////////////////////////
 
-module m4 {
+namespace m4 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -57,7 +57,7 @@ module m4 {
 
 //////////////////////////////////////
 
-module m5 {
+namespace m5 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -73,7 +73,7 @@ module m5 {
 
 //////////////////////////////////////
 
-module m6 {
+namespace m6 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;

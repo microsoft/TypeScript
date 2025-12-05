@@ -3,7 +3,7 @@
 //// [importedModuleClassNameClash.ts]
 import foo = m1;
  
-export module m1 { }
+export namespace m1 { }
  
 class foo { }
 
