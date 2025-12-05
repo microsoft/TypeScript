@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 # Ensure scripts are run with pipefail. See:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
@@ -60,6 +61,10 @@ jobs:
           npx hereby configure-nightly
           npx hereby LKG
           node ./scripts/addPackageJsonGitHead.mjs package.json
-          npm publish --tag next
+          npm --version
+          # update npm to latest for build provenance feature on publish
+          npm install -g npm
+          npm --version
+          npm publish --provenance --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
