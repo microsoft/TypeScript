@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/weakTypeIntersections1.ts] ////
+
+=== weakTypeIntersections1.ts ===
+interface EmptyInterface {}
+interface EmptyInterface2 {}
+
+interface Foo {
+  a: string;
+>a : string
+>  : ^^^^^^
+}
+interface Bar {
+  b: string;
+>b : string
+>  : ^^^^^^
+}
+
+const m1: Partial<Foo> & ThisType<{ x: string }> = () => null; // error
+>m1 : Partial<Foo> & ThisType<{ x: string; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>x : string
+>  : ^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+const m2: Partial<Foo> = () => null; // error
+>m2 : Partial<Foo>
+>   : ^^^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+const m3: Partial<Foo> & EmptyInterface = () => null; // error
+>m3 : Partial<Foo> & EmptyInterface
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+const m4: EmptyInterface & EmptyInterface2 = () => null; // ok
+>m4 : EmptyInterface & EmptyInterface2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+const m5: Partial<Foo> & Partial<Bar> = () => null; // error
+>m5 : Partial<Foo> & Partial<Bar>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/56995
+declare function fun0(arg: () => Foo & ThisType<Foo>): void;
+>fun0 : { (arg: () => Foo & ThisType<Foo>): void; (arg: Partial<Foo> & ThisType<Foo>): void; }
+>     : ^^^   ^^                         ^^^    ^^^   ^^                            ^^^    ^^^
+>arg : () => Foo & ThisType<Foo>
+>    : ^^^^^^                   
+
+declare function fun0(arg: Partial<Foo> & ThisType<Foo>): void;
+>fun0 : { (arg: () => Foo & ThisType<Foo>): void; (arg: Partial<Foo> & ThisType<Foo>): void; }
+>     : ^^^   ^^                         ^^^    ^^^   ^^                            ^^^    ^^^
+>arg : Partial<Foo> & ThisType<Foo>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+fun0({ a: "1" }); // ok
+>fun0({ a: "1" }) : void
+>                 : ^^^^
+>fun0 : { (arg: () => Foo & ThisType<Foo>): void; (arg: Partial<Foo> & ThisType<Foo>): void; }
+>     : ^^^   ^^                         ^^^    ^^^   ^^                            ^^^    ^^^
+>{ a: "1" } : { a: string; }
+>           : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"1" : "1"
+>    : ^^^
+
+fun0(() => ({ a: "1" })); // ok
+>fun0(() => ({ a: "1" })) : void
+>                         : ^^^^
+>fun0 : { (arg: () => Foo & ThisType<Foo>): void; (arg: Partial<Foo> & ThisType<Foo>): void; }
+>     : ^^^   ^^                         ^^^    ^^^   ^^                            ^^^    ^^^
+>() => ({ a: "1" }) : () => { a: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>({ a: "1" }) : { a: string; }
+>             : ^^^^^^^^^^^^^^
+>{ a: "1" } : { a: string; }
+>           : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"1" : "1"
+>    : ^^^
+
+fun0(() => ({ a: 1 })); // error
+>fun0(() => ({ a: 1 })) : void
+>                       : ^^^^
+>fun0 : { (arg: () => Foo & ThisType<Foo>): void; (arg: Partial<Foo> & ThisType<Foo>): void; }
+>     : ^^^   ^^                         ^^^    ^^^   ^^                            ^^^    ^^^
+>() => ({ a: 1 }) : () => { a: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>({ a: 1 }) : { a: number; }
+>           : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
