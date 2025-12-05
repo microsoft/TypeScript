@@ -178,17 +178,17 @@ function identifyBeast(beast: Beast) {
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
 
             if (beast.legs === 4) {
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 
                 log(`pegasus - 4 legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
             }
             else if (beast.legs === 2) {
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 
                 log(`bird - 2 legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
@@ -196,9 +196,9 @@ function identifyBeast(beast: Beast) {
             else {
                 log(`unknown - ${beast.legs} legs, wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
             }
         }
 
@@ -206,9 +206,9 @@ function identifyBeast(beast: Beast) {
         else {
             log(`manbearpig - ${beast.legs} legs, no wings`);
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 48, 1))
->beast.legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>beast.legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 64, 23))
->legs : Symbol(Legged.legs, Decl(typeGuardIntersectionTypes.ts, 56, 21))
+>legs : Symbol(legs, Decl(typeGuardIntersectionTypes.ts, 55, 38), Decl(typeGuardIntersectionTypes.ts, 56, 21))
         }
     }
 
@@ -257,3 +257,57 @@ function beastFoo(beast: Object) {
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 99, 18))
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/58518
+
+interface A_58518 {
+>A_58518 : Symbol(A_58518, Decl(typeGuardIntersectionTypes.ts, 110, 1))
+
+  label?: string;
+>label : Symbol(A_58518.label, Decl(typeGuardIntersectionTypes.ts, 114, 19))
+
+  a?: string;
+>a : Symbol(A_58518.a, Decl(typeGuardIntersectionTypes.ts, 115, 17))
+}
+
+interface B_58518 {
+>B_58518 : Symbol(B_58518, Decl(typeGuardIntersectionTypes.ts, 117, 1))
+
+  label?: string;
+>label : Symbol(B_58518.label, Decl(typeGuardIntersectionTypes.ts, 119, 19))
+
+  b: boolean;
+>b : Symbol(B_58518.b, Decl(typeGuardIntersectionTypes.ts, 120, 17))
+}
+
+function isB_58518(thing: object): thing is B_58518 {
+>isB_58518 : Symbol(isB_58518, Decl(typeGuardIntersectionTypes.ts, 122, 1))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 124, 19))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 124, 19))
+>B_58518 : Symbol(B_58518, Decl(typeGuardIntersectionTypes.ts, 117, 1))
+
+  return "b" in thing;
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 124, 19))
+}
+
+function test_58518(thing: A_58518) {
+>test_58518 : Symbol(test_58518, Decl(typeGuardIntersectionTypes.ts, 126, 1))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 128, 20))
+>A_58518 : Symbol(A_58518, Decl(typeGuardIntersectionTypes.ts, 110, 1))
+
+  thing.a;
+>thing.a : Symbol(A_58518.a, Decl(typeGuardIntersectionTypes.ts, 115, 17))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 128, 20))
+>a : Symbol(A_58518.a, Decl(typeGuardIntersectionTypes.ts, 115, 17))
+
+  if (isB_58518(thing)) {
+>isB_58518 : Symbol(isB_58518, Decl(typeGuardIntersectionTypes.ts, 122, 1))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 128, 20))
+
+    thing.a;
+>thing.a : Symbol(A_58518.a, Decl(typeGuardIntersectionTypes.ts, 115, 17))
+>thing : Symbol(thing, Decl(typeGuardIntersectionTypes.ts, 128, 20))
+>a : Symbol(A_58518.a, Decl(typeGuardIntersectionTypes.ts, 115, 17))
+  }
+}
+
