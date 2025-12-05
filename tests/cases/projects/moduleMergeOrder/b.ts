@@ -1,2 +1,2 @@
-module Test {}
+namespace Test {}
 

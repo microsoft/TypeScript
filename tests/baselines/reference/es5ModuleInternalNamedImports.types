@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es5ModuleInternalNamedImports.ts] ////
 
 === es5ModuleInternalNamedImports.ts ===
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -20,14 +20,14 @@ export module M {
 >    : ^^^
 
     // instantiated module
-    export module M_M { var x; }
+    export namespace M_M { var x; }
 >M_M : typeof M_M
 >    : ^^^^^^^^^^
 >x : any
 >  : ^^^
 
     // uninstantiated module
-    export module M_MU { }
+    export namespace M_MU { }
     // function
     export function M_F() { }
 >M_F : () => void

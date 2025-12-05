@@ -1,4 +1,4 @@
-// @jsx: react,react-jsx,react-jsxdev
+// @jsx: react,react-jsx,react-jsxdev,preserve
 // @filename: one.tsx
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */

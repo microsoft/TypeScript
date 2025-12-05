@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/returnTypeParameterWithModules.ts] ////
 
 //// [returnTypeParameterWithModules.ts]
-module M1 {
+namespace M1 {
     export function reduce<A>(ar, f, e?): Array<A> {
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
     };
 };
-module M2 {
+namespace M2 {
   import A = M1
   export function compose() {
         A.reduce(arguments, compose2);

@@ -1,4 +1,4 @@
-module _this { //Error
+namespace _this { //Error
     class c {
     }
 }

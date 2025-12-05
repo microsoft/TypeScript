@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @filename: /node_modules/test/index.js
 ////export const x = 1;
 

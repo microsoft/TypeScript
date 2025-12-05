@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements {
 //         div: {
@@ -14,7 +14,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
+  // declare namespace JSX {
   //     interface Element { }
   //     interface IntrinsicElements {
   //         div: {

@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @target: esnext
+// @moduleResolution: bundler
 
 // @Filename: /a.ts
 //// export class A {}
@@ -13,7 +14,7 @@
 goTo.file('/b.ts');
 verify.applyCodeActionFromCompletion('', {
   name: 'B',
-  source: '/a',
+  source: './a',
   description: `Update import from "./a"`,
   preferences: {
     includeCompletionsForModuleExports: true,

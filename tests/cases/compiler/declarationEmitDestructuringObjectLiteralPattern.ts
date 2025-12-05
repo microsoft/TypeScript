@@ -18,6 +18,6 @@ function f15() {
 }
 var { a4, b4, c4 } = f15();
 
-module m {
+namespace m {
     export var { a4, b4, c4 } = f15();
 }

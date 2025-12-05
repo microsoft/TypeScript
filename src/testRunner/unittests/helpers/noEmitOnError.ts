@@ -1,10 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    FsContents,
-    libContent,
-} from "./contents.js";
-import {
     noChangeRun,
     verifyTsc,
 } from "./tsc.js";
@@ -12,19 +8,15 @@ import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "./tscWatch.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-function getFsContentsForNoEmitOnError(
+function getSysForNoEmitOnError(
     mainErrorContent: string,
     outFile: boolean,
     declaration: true | undefined,
     incremental: true | undefined,
-): FsContents {
-    return {
+) {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/noEmitOnError/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 ...outFile ? { outFile: "../dev-build.js", module: "amd" } : { outDir: "./dev-build" },
@@ -43,15 +35,14 @@ function getFsContentsForNoEmitOnError(
             console.log("hi");
             export { }
         `,
-        [libFile.path]: libContent,
-    };
+    }, { currentDirectory: "/user/username/projects/noEmitOnError" });
 }
 
 function forEachNoEmitOnErrorScenario(
     subScenario: string,
     action: (
         subScenario: string,
-        fsContents: (mainErrorContent: string) => FsContents,
+        fsContents: (mainErrorContent: string) => TestServerHost,
     ) => void,
 ) {
     for (const outFile of [false, true]) {
@@ -60,7 +51,7 @@ function forEachNoEmitOnErrorScenario(
                 action(
                     `${outFile ? "outFile" : "multiFile"}/${subScenario}${declaration ? " with declaration" : ""}${incremental ? " with incremental" : ""}`,
                     mainErrorContent =>
-                        getFsContentsForNoEmitOnError(
+                        getSysForNoEmitOnError(
                             mainErrorContent,
                             outFile,
                             declaration,
@@ -111,29 +102,22 @@ function getNoEmitOnErrorErrorsType(): [subScenario: string, mainErrorContent: s
     ];
 }
 
-export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
+export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]): void {
     getNoEmitOnErrorErrorsType().forEach(([subScenario, mainErrorContent, fixedErrorContent]) =>
         forEachNoEmitOnErrorScenario(
             subScenario,
-            (subScenario, fsContents) => {
+            (subScenario, sys) => {
                 describe(subScenario, () => {
                     verifyTsc({
                         scenario: "noEmitOnError",
                         subScenario,
-                        fs: () =>
-                            loadProjectFromFiles(
-                                fsContents(mainErrorContent),
-                                {
-                                    cwd: "/user/username/projects/noEmitOnError",
-                                    executingFilePath: libFile.path,
-                                },
-                            ),
+                        sys: () => sys(mainErrorContent),
                         commandLineArgs,
                         edits: [
                             noChangeRun,
                             {
                                 caption: "Fix error",
-                                edit: fs => fs.writeFileSync("src/main.ts", fixedErrorContent, "utf-8"),
+                                edit: sys => sys.writeFile("src/main.ts", fixedErrorContent),
                             },
                             noChangeRun,
                         ],
@@ -145,20 +129,16 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
     );
 }
 
-export function forEachNoEmitOnErrorScenarioTscWatch(commandLineArgs: string[]) {
+export function forEachNoEmitOnErrorScenarioTscWatch(commandLineArgs: string[]): void {
     const errorTypes = getNoEmitOnErrorErrorsType();
     forEachNoEmitOnErrorScenario(
         "noEmitOnError",
-        (subScenario, fsContents) =>
+        (subScenario, sys) =>
             verifyTscWatch({
                 scenario: "noEmitOnError",
                 subScenario,
                 commandLineArgs: [...commandLineArgs, "--w"],
-                sys: () =>
-                    createWatchedSystem(
-                        fsContents(errorTypes[0][1]),
-                        { currentDirectory: "/user/username/projects/noEmitOnError" },
-                    ),
+                sys: () => sys(errorTypes[0][1]),
                 edits: getEdits(errorTypes),
             }),
     );

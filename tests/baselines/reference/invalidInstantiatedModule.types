@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
 
 === invalidInstantiatedModule.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -20,7 +20,7 @@ module M {
 >  : ^
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

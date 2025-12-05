@@ -1,5 +1,7 @@
-currentDirectory:: C:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: C:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: C:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: C:\home\src\Library\Caches\typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [C:/temp/test/project1/index.ts]
 export function myFunc() {
@@ -52,8 +54,8 @@ myFunc();
 }
 
 //// [C:/temp/test/node_modules/project1] symlink(c:/temp/test/project1)
-//// [C:/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+
+//// [C:/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -78,8 +80,17 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/index.ts ProjectRootPath: undefined:: Result: c:/temp/test/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/project1/tsconfig.json, currentDirectory: c:/temp/test/project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/tsconfig.json 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: c:/temp/test/project1/tsconfig.json : {
+ "rootNames": [
+  "c:/temp/test/project1/index.ts"
+ ],
+ "options": {
+  "composite": true,
+  "configFilePath": "c:/temp/test/project1/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -90,19 +101,10 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for c:/temp/test/project1/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: c:/temp/test/project1/tsconfig.json : {
- "rootNames": [
-  "c:/temp/test/project1/index.ts"
- ],
- "options": {
-  "composite": true,
-  "configFilePath": "c:/temp/test/project1/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1 1 undefined Config: c:/temp/test/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1 1 undefined Config: c:/temp/test/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/temp/test/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
@@ -112,11 +114,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/temp/test/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	C:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/temp/test/project1/index.ts SVC-1-0 "export function myFunc() {\n}\n"
 
 
-	../../../a/lib/lib.d.ts
+	../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -151,7 +153,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -187,7 +189,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/tsconfig.json ProjectRootPath: undefined:: Result: c:/temp/test/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/tsconfig.json, currentDirectory: c:/temp/test
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/tsconfig.json 2000 undefined Project: c:/temp/test/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project1/tsconfig.json' (Configured)
@@ -223,7 +225,7 @@ c:/temp/test/project1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-C:/a/lib/lib.d.ts: *new*
+C:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 c:/temp/test/project1/package.json: *new*
   {}
@@ -240,13 +242,15 @@ Projects::
 c:/temp/test/project1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
-C:/a/lib/lib.d.ts *new*
+C:/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         c:/temp/test/project1/tsconfig.json
@@ -383,7 +387,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/project2/tsconfig.json, currentDirectory: c:/temp/test/project2
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -396,10 +400,16 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project2/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/temp/test/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2 0 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/project1/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
@@ -410,12 +420,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/temp/test/project2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	C:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	C:/temp/test/project1/index.ts SVC-1-0 "export function myFunc() {\n}\n"
 	c:/temp/test/project2/index.ts Text-1 "import { myFunc } from 'project1'\nmyFunc();\n"
 
 
-	../../../a/lib/lib.d.ts
+	../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../project1/index.ts
 	  Imported via 'project1' from file 'index.ts' with packageId 'project1/index.ts@1.0.0'
@@ -451,7 +461,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -588,11 +598,17 @@ c:/temp/test/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-C:/a/lib/lib.d.ts:
+C:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+c:/temp: *new*
+  {}
+c:/temp/test: *new*
   {}
 c:/temp/test/project1/package.json:
   {}
 c:/temp/test/project1/tsconfig.json:
+  {}
+c:/temp/test/project2: *new*
   {}
 c:/temp/test/project2/index.ts: *new*
   {}
@@ -615,6 +631,7 @@ c:/temp/test/project1/tsconfig.json (Configured) *changed*
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         c:/temp/test/project1/index.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -625,9 +642,10 @@ c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 
 ScriptInfos::
-C:/a/lib/lib.d.ts *changed*
+C:/home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         c:/temp/test/project1/tsconfig.json

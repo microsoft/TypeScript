@@ -1,0 +1,68 @@
+// === Completions ===
+=== /tests/cases/fourslash/file1.ts ===
+// const a: "aa" | "bb" = ""
+//                         ^
+// | ----------------------------------------------------------------------
+// | aa
+// | bb
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 24,
+      "name": ""
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 24,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "aa",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 24,
+            "length": 0
+          },
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "aa",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "bb",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 24,
+            "length": 0
+          },
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "bb",
+              "kind": "text"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

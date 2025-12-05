@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/innerModExport2.ts] ////
 
 //// [innerModExport2.ts]
-module Outer {
+namespace Outer {
 
     // inner mod 1
     var non_export_var: number;

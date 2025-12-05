@@ -7,6 +7,7 @@ import {
     BindingElement,
     BindingPattern,
     BreakOrContinueStatement,
+    CallExpression,
     CancellationToken,
     canHaveDecorators,
     canUsePropertyAccess,
@@ -63,7 +64,6 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
-    fileContainsPackageImport,
     filter,
     find,
     findAncestor,
@@ -174,7 +174,7 @@ import {
     isIdentifierPart,
     isIdentifierStart,
     isIdentifierText,
-    isImportableFile,
+    isImportable,
     isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -256,7 +256,6 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
-    isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
@@ -273,7 +272,6 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
-    JsTyping,
     JsxAttribute,
     JsxAttributes,
     JsxClosingElement,
@@ -304,6 +302,7 @@ import {
     ModuleReference,
     NamedImportBindings,
     newCaseClauseTracker,
+    NewExpression,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -336,13 +335,13 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
     setEmitFlags,
     setSnippetElement,
-    shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
     SignatureKind,
     singleElementArray,
@@ -433,6 +432,12 @@ export const SortText = {
     },
 };
 
+/** All commit characters, valid when `isNewIdentifierLocation` is false. */
+const allCommitCharacters = [".", ",", ";"];
+
+/** Commit characters valid at expression positions where we could be inside a parameter list. */
+const noCommaCommitCharacters = [".", ";"];
+
 /**
  * Special values for `CompletionInfo['source']` used to disambiguate
  * completion items with the same `name`. (Each completion item must
@@ -476,7 +481,7 @@ export const enum SymbolOriginInfoKind {
     ComputedPropertyName = 1 << 9,
 
     SymbolMemberNoExport = SymbolMember,
-    SymbolMemberExport   = SymbolMember | Export,
+    SymbolMemberExport   = SymbolMember | ResolvedExport,
 }
 
 /** @internal */
@@ -530,7 +535,7 @@ function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolO
 }
 
 function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoResolvedExport {
-    return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
+    return !!(origin && origin.kind & SymbolOriginInfoKind.ResolvedExport);
 }
 
 function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
@@ -691,7 +696,7 @@ export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): st
     if (isNewIdentifierLocation) {
         return [];
     }
-    return [".", ",", ";"];
+    return allCommitCharacters;
 }
 
 /** @internal */
@@ -1295,6 +1300,7 @@ function completionInfoFromData(
         insideJsDocTagTypeExpression,
         symbolToSortTextMap,
         hasUnresolvedAutoImports,
+        defaultCommitCharacters,
     } = completionData;
     let literals = completionData.literals;
 
@@ -1413,7 +1419,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
-        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+        defaultCommitCharacters: defaultCommitCharacters ?? getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1883,9 +1889,16 @@ function createCompletionEntry(
     if (parentNamedImportOrExport) {
         const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
         if (!isIdentifierText(name, languageVersion)) {
-            insertText = JSON.stringify(name);
+            insertText = quotePropertyName(sourceFile, preferences, name);
+
             if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
-                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                // check if it is import { ^here as name } from '...'
+                // we have to access the scanner here to check if it is { ^here as name } or { ^here, as, name }.
+                scanner.setText(sourceFile.text);
+                scanner.resetTokenState(position);
+                if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
+                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                }
             }
         }
         else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
@@ -2608,11 +2621,11 @@ function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion
 }
 
 function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-    if (originIsExport(origin)) {
-        return stripQuotes(origin.moduleSymbol.name);
-    }
     if (originIsResolvedExport(origin)) {
         return origin.moduleSpecifier;
+    }
+    if (originIsExport(origin)) {
+        return stripQuotes(origin.moduleSymbol.name);
     }
     if (origin?.kind === SymbolOriginInfoKind.ThisType) {
         return CompletionSource.ThisProperty;
@@ -2652,7 +2665,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false,
 ): UniqueNameSet {
     const start = timestamp();
-    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken, location);
+    const closestSymbolDeclaration = getClosestSymbolDeclaration(contextToken, location);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2724,65 +2737,76 @@ export function getCompletionEntriesFromSymbols(
 
     function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
         let allFlags = symbol.flags;
-        if (!isSourceFile(location)) {
-            // export = /**/ here we want to get all meanings, so any symbol is ok
-            if (isExportAssignment(location.parent)) {
-                return true;
-            }
-            // Filter out variables from their own initializers
-            // `const a = /* no 'a' here */`
-            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
+        // export = /**/ here we want to get all meanings, so any symbol is ok
+        if (location.parent && isExportAssignment(location.parent)) {
+            return true;
+        }
+        // Filter out variables from their own initializers
+        // `const a = /* no 'a' here */`
+        if (closestSymbolDeclaration && tryCast(closestSymbolDeclaration, isVariableDeclaration)) {
+            if (symbol.valueDeclaration === closestSymbolDeclaration) {
                 return false;
             }
+            // const { a } = /* no 'a' here */;
+            if (isBindingPattern(closestSymbolDeclaration.name) && closestSymbolDeclaration.name.elements.some(e => e === symbol.valueDeclaration)) {
+                return false;
+            }
+        }
 
-            // Filter out parameters from their own initializers
-            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
-            // `function f<T = /* no 'T' here */>(a: T) { }`
-            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
-            if (
-                variableOrParameterDeclaration && symbolDeclaration && (
-                    (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
-                    (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
-                )
-            ) {
-                const symbolDeclarationPos = symbolDeclaration.pos;
-                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
-                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
-                    variableOrParameterDeclaration.parent.typeParameters;
-                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
+        // Filter out current and latter parameters from defaults
+        // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+        // `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
+        const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+        if (closestSymbolDeclaration && symbolDeclaration) {
+            if (isParameter(closestSymbolDeclaration) && isParameter(symbolDeclaration)) {
+                const parameters = closestSymbolDeclaration.parent.parameters;
+                if (symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < parameters.end) {
                     return false;
                 }
             }
-
-            // External modules can have global export declarations that will be
-            // available as global keywords in all scopes. But if the external module
-            // already has an explicit export and user only wants to user explicit
-            // module imports then the global keywords will be filtered out so auto
-            // import suggestions will win in the completion
-            const symbolOrigin = skipAlias(symbol, typeChecker);
-            // We only want to filter out the global keywords
-            // Auto Imports are not available for scripts so this conditional is always false
-            if (
-                !!sourceFile.externalModuleIndicator
-                && !compilerOptions.allowUmdGlobalAccess
-                && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
-                && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
-                    || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
-            ) {
-                return false;
+            else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
+                if (closestSymbolDeclaration === symbolDeclaration && contextToken?.kind === SyntaxKind.ExtendsKeyword) {
+                    // filter out the directly self-recursive type parameters
+                    // `type A<K extends /* no 'K' here*/> = K`
+                    return false;
+                }
+                if (isInTypeParameterDefault(contextToken) && !isInferTypeNode(closestSymbolDeclaration.parent)) {
+                    const typeParameters = closestSymbolDeclaration.parent.typeParameters;
+                    if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
+                        return false;
+                    }
+                }
             }
+        }
 
-            allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
+        // External modules can have global export declarations that will be
+        // available as global keywords in all scopes. But if the external module
+        // already has an explicit export and user only wants to user explicit
+        // module imports then the global keywords will be filtered out so auto
+        // import suggestions will win in the completion
+        const symbolOrigin = skipAlias(symbol, typeChecker);
+        // We only want to filter out the global keywords
+        // Auto Imports are not available for scripts so this conditional is always false
+        if (
+            !!sourceFile.externalModuleIndicator
+            && !compilerOptions.allowUmdGlobalAccess
+            && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
+            && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
+                || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)
+        ) {
+            return false;
+        }
 
-            // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
-            if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
-                return !!(allFlags & SymbolFlags.Namespace);
-            }
+        allFlags |= getCombinedLocalAndExportSymbolFlags(symbolOrigin);
 
-            if (isTypeOnlyLocation) {
-                // It's a type, but you can reach it by namespace.type as well
-                return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
-            }
+        // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+        if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
+            return !!(allFlags & SymbolFlags.Namespace);
+        }
+
+        if (isTypeOnlyLocation) {
+            // It's a type, but you can reach it by namespace.type as well
+            return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
         }
 
         // expressions are value space (which includes the value namespaces)
@@ -3198,6 +3222,7 @@ interface CompletionData {
     readonly importStatementCompletion?: ImportStatementCompletionInfo;
     readonly hasUnresolvedAutoImports?: boolean;
     readonly flags: CompletionInfoFlags;
+    readonly defaultCommitCharacters: string[] | undefined;
 }
 type Request =
     | { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag; }
@@ -3391,6 +3416,7 @@ function getCompletionData(
     let keywordFilters = KeywordCompletionFilters.None;
     let isNewIdentifierLocation = false;
     let flags = CompletionInfoFlags.None;
+    let defaultCommitCharacters: string[] | undefined;
 
     if (contextToken) {
         const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken, sourceFile);
@@ -3417,7 +3443,7 @@ function getCompletionData(
         if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
-                ? keywordCompletionData(keywordFilters, isJsOnlyLocation, isNewIdentifierDefinitionLocation())
+                ? keywordCompletionData(keywordFilters, isJsOnlyLocation, computeCommitCharactersAndIsNewIdentifier().isNewIdentifierLocation)
                 : undefined;
         }
 
@@ -3562,7 +3588,7 @@ function getCompletionData(
     let importSpecifierResolver: codefix.ImportSpecifierResolver | undefined;
     const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
     const symbolToSortTextMap: SymbolSortTextMap = [];
-    const seenPropertySymbols = new Map<SymbolId, true>();
+    const seenPropertySymbols = new Set<SymbolId>();
     const isTypeOnlyLocation = isTypeOnlyCompletion();
     const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
         return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
@@ -3599,17 +3625,20 @@ function getCompletionData(
     }
 
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-    const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
+    const contextualTypeOrConstraint = previousToken && (
+        getContextualType(previousToken, position, sourceFile, typeChecker) ??
+            getConstraintOfTypeArgumentProperty(previousToken, typeChecker)
+    );
 
     // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
     // for strings getStringLiteralCompletions handles completions
     const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
     const literals = !isLiteralExpected ? [] : mapDefined(
-        contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+        contextualTypeOrConstraint && (contextualTypeOrConstraint.isUnion() ? contextualTypeOrConstraint.types : [contextualTypeOrConstraint]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined,
     );
 
-    const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
+    const recommendedCompletion = previousToken && contextualTypeOrConstraint && getRecommendedCompletion(previousToken, contextualTypeOrConstraint, typeChecker);
     return {
         kind: CompletionDataKind.Data,
         symbols,
@@ -3634,6 +3663,7 @@ function getCompletionData(
         importStatementCompletion,
         hasUnresolvedAutoImports,
         flags,
+        defaultCommitCharacters,
     };
 
     type JSDocTagWithTypeExpression =
@@ -3686,7 +3716,10 @@ function getCompletionData(
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
         if (isEntityName(node) || isImportType || isPropertyAccessExpression(node)) {
             const isNamespaceName = isModuleDeclaration(node.parent);
-            if (isNamespaceName) isNewIdentifierLocation = true;
+            if (isNamespaceName) {
+                isNewIdentifierLocation = true;
+                defaultCommitCharacters = [];
+            }
             let symbol = typeChecker.getSymbolAtLocation(node);
             if (symbol) {
                 symbol = skipAlias(symbol, typeChecker);
@@ -3768,9 +3801,13 @@ function getCompletionData(
     }
 
     function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
-        isNewIdentifierLocation = !!type.getStringIndexType();
+        if (type.getStringIndexType()) {
+            isNewIdentifierLocation = true;
+            defaultCommitCharacters = [];
+        }
         if (isRightOfQuestionDot && some(type.getCallSignatures())) {
             isNewIdentifierLocation = true;
+            defaultCommitCharacters ??= allCommitCharacters; // Only invalid commit character here would be `(`.
         }
 
         const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
@@ -3816,6 +3853,10 @@ function getCompletionData(
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
+
+                // Symbol completions should have lower priority since they represent computed property access
+                symbolToSortTextMap[getSymbolId(firstAccessibleSymbol)] = SortText.GlobalsOrKeywords;
+
                 const moduleSymbol = firstAccessibleSymbol.parent;
                 if (
                     !moduleSymbol ||
@@ -3945,7 +3986,7 @@ function getCompletionData(
 
         // Get all entities in the current scope.
         completionKind = CompletionKind.Global;
-        isNewIdentifierLocation = isNewIdentifierDefinitionLocation();
+        ({ isNewIdentifierLocation, defaultCommitCharacters } = computeCommitCharactersAndIsNewIdentifier());
 
         if (previousToken !== contextToken) {
             Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
@@ -4146,10 +4187,6 @@ function getCompletionData(
                         return charactersFuzzyMatchInString(symbolName, lowerCaseTokenText);
                     },
                     (info, symbolName, isFromAmbientModule, exportMapKey) => {
-                        if (detailsEntryId && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name))) {
-                            return;
-                        }
-
                         // Do a relatively cheap check to bail early if all re-exports are non-importable
                         // due to file location or package.json dependency filtering. For non-node16+
                         // module resolution modes, getting past this point guarantees that we'll be
@@ -4178,6 +4215,10 @@ function getCompletionData(
                             ({ exportInfo = info[0], moduleSpecifier } = result);
                         }
 
+                        if (detailsEntryId && (detailsEntryId.source !== moduleSpecifier && !some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name)))) {
+                            return;
+                        }
+
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                         const symbol = isDefaultExport && getLocalSymbolForExportDefault(Debug.checkDefined(exportInfo.symbol)) || Debug.checkDefined(exportInfo.symbol);
 
@@ -4202,19 +4243,11 @@ function getCompletionData(
         );
 
         function isImportableExportInfo(info: SymbolExportInfo) {
-            const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
-            if (!moduleFile) {
-                const moduleName = stripQuotes(info.moduleSymbol.name);
-                if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
-                    return false;
-                }
-                return (packageJsonFilter?.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson)) ?? true)
-                    || fileContainsPackageImport(sourceFile, moduleName);
-            }
-            return isImportableFile(
+            return isImportable(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                 sourceFile,
-                moduleFile,
+                tryCast(info.moduleSymbol.valueDeclaration, isSourceFile),
+                info.moduleSymbol,
                 preferences,
                 packageJsonFilter,
                 getModuleSpecifierResolutionHost(info.isFromPackageJson),
@@ -4344,7 +4377,7 @@ function getCompletionData(
         return false;
     }
 
-    function isNewIdentifierDefinitionLocation(): boolean {
+    function computeCommitCharactersAndIsNewIdentifier(): { defaultCommitCharacters: string[]; isNewIdentifierLocation: boolean; } {
         if (contextToken) {
             const containingNodeKind = contextToken.parent.kind;
             const tokenKind = keywordForNode(contextToken);
@@ -4352,62 +4385,118 @@ function getCompletionData(
             // dprint-ignore
             switch (tokenKind) {
                 case SyntaxKind.CommaToken:
-                    return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
-                        || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
-                        || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
-                        || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
-                        || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
-                        || containingNodeKind === SyntaxKind.FunctionType                 // var x: (s: string, list|
-                        || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { x, |
-
+                    switch (containingNodeKind) {
+                        case SyntaxKind.CallExpression:                                               // func( a, |
+                        case SyntaxKind.NewExpression: {                                              // new C(a, |
+                            const expression = (contextToken.parent as CallExpression | NewExpression).expression;
+                            if (getLineAndCharacterOfPosition(sourceFile, expression.end).line !==
+                                getLineAndCharacterOfPosition(sourceFile, position).line) {           // func\n(a, |
+                                return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                            }
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        }
+                        case SyntaxKind.BinaryExpression:                                             // const x = (a, |
+                            return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                                                  // constructor( a, | /* public, protected, private keywords are allowed here, so show completion */
+                        case SyntaxKind.FunctionType:                                                 // var x: (s: string, list|
+                        case SyntaxKind.ObjectLiteralExpression:                                      // const obj = { x, |
+                        return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        case SyntaxKind.ArrayLiteralExpression:                                       // [a, |
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
                 case SyntaxKind.OpenParenToken:
-                    return containingNodeKind === SyntaxKind.CallExpression               // func( |
-                        || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
-                        || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                        || containingNodeKind === SyntaxKind.ParenthesizedExpression      // const x = (a|
-                        || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
-
+                    switch (containingNodeKind) {
+                        case SyntaxKind.CallExpression:                                               // func( |
+                        case SyntaxKind.NewExpression: {                                              // new C(a|
+                            const expression = (contextToken.parent as CallExpression | NewExpression).expression;
+                            if (getLineAndCharacterOfPosition(sourceFile, expression.end).line !==
+                                getLineAndCharacterOfPosition(sourceFile, position).line) {           // func\n( |
+                                return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                            }
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        }
+                        case SyntaxKind.ParenthesizedExpression:                                      // const x = (a|
+                            return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                                                  // constructor( |
+                        case SyntaxKind.ParenthesizedType:                                            // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
                 case SyntaxKind.OpenBracketToken:
-                    return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |
-                        || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
-                        || containingNodeKind === SyntaxKind.ComputedPropertyName;         // [ |    /* this can become an index signature */
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ArrayLiteralExpression:                                       // [ |
+                        case SyntaxKind.IndexSignature:                                               // [ | : string ]
+                        case SyntaxKind.TupleType:                                                    // [ | : string ]
+                        case SyntaxKind.ComputedPropertyName:                                         // [ |    /* this can become an index signature */
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
-                case SyntaxKind.ModuleKeyword:                                            // module |
-                case SyntaxKind.NamespaceKeyword:                                         // namespace |
-                case SyntaxKind.ImportKeyword:                                            // import |
-                    return true;
+                case SyntaxKind.ModuleKeyword:                                                        // module |
+                case SyntaxKind.NamespaceKeyword:                                                     // namespace |
+                case SyntaxKind.ImportKeyword:                                                        // import |
+                    return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
 
                 case SyntaxKind.DotToken:
-                    return containingNodeKind === SyntaxKind.ModuleDeclaration;           // module A.|
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ModuleDeclaration:                                            // module A.|
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.OpenBraceToken:
-                    return containingNodeKind === SyntaxKind.ClassDeclaration             // class A { |
-                        || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { |
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ClassDeclaration:                                             // class A { |
+                        case SyntaxKind.ObjectLiteralExpression:                                      // const obj = { |
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.EqualsToken:
-                    return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
-                        || containingNodeKind === SyntaxKind.BinaryExpression;            // x = a|
+                    switch (containingNodeKind) {
+                        case SyntaxKind.VariableDeclaration:                                          // const x = a|
+                        case SyntaxKind.BinaryExpression:                                             // x = a|
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.TemplateHead:
-                    return containingNodeKind === SyntaxKind.TemplateExpression;          // `aa ${|
+                    return {
+                        defaultCommitCharacters: allCommitCharacters,
+                        isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
+                    };
 
                 case SyntaxKind.TemplateMiddle:
-                    return containingNodeKind === SyntaxKind.TemplateSpan;                // `aa ${10} dd ${|
+                    return  {
+                        defaultCommitCharacters: allCommitCharacters,
+                        isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateSpan       // `aa ${10} dd ${|
+                    };
 
                 case SyntaxKind.AsyncKeyword:
-                    return containingNodeKind === SyntaxKind.MethodDeclaration            // const obj = { async c|()
-                        || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment; // const obj = { async c|
+                    return (containingNodeKind === SyntaxKind.MethodDeclaration                       // const obj = { async c|()
+                        || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment)             // const obj = { async c|
+                        ? { defaultCommitCharacters: [], isNewIdentifierLocation: true }
+                        : { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
 
                 case SyntaxKind.AsteriskToken:
-                    return containingNodeKind === SyntaxKind.MethodDeclaration;           // const obj = { * c|
+                    return containingNodeKind === SyntaxKind.MethodDeclaration                        // const obj = { * c|
+                        ? { defaultCommitCharacters: [], isNewIdentifierLocation: true }
+                        : { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
             }
 
             if (isClassMemberCompletionKeyword(tokenKind)) {
-                return true;
+                return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
             }
         }
 
-        return false;
+        return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
     }
 
     function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
@@ -4884,7 +4973,10 @@ function getCompletionData(
                 return !isFromObjectTypeDeclaration(contextToken);
 
             case SyntaxKind.Identifier: {
-                if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                if ((
+                    containingNodeKind === SyntaxKind.ImportSpecifier ||
+                    containingNodeKind === SyntaxKind.ExportSpecifier
+                ) &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
                 ) {
@@ -5676,11 +5768,13 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
     return undefined;
 }
 
-function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+/** @internal */
+export function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
     if (!node) return undefined;
 
-    if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
-        return checker.getTypeArgumentConstraint(node);
+    if (isTypeNode(node)) {
+        const constraint = checker.getTypeArgumentConstraint(node);
+        if (constraint) return constraint;
     }
 
     const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
@@ -5689,10 +5783,19 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
             return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
+        case SyntaxKind.ColonToken:
+            if (node.parent.kind === SyntaxKind.PropertySignature) {
+                // The cursor is at a property value location like `Foo<{ x: | }`.
+                // `t` already refers to the appropriate property type.
+                return t;
+            }
+            break;
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
             return t;
+        case SyntaxKind.OpenBracketToken:
+            return checker.getElementTypeOfArrayType(t);
     }
 }
 
@@ -5926,20 +6029,39 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableOrParameterDeclaration(contextToken: Node | undefined, location: Node) {
+function getClosestSymbolDeclaration(contextToken: Node | undefined, location: Node) {
     if (!contextToken) return;
 
-    const possiblyParameterDeclaration = findAncestor(contextToken, node =>
+    let closestDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
             : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
 
-    const possiblyVariableDeclaration = findAncestor(location, node =>
-        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
-            ? "quit"
-            : isVariableDeclaration(node));
+    if (!closestDeclaration) {
+        closestDeclaration = findAncestor(location, node =>
+            isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+                ? "quit"
+                : isVariableDeclaration(node));
+    }
+    return closestDeclaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+}
 
-    return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+function isInTypeParameterDefault(contextToken: Node | undefined) {
+    if (!contextToken) {
+        return false;
+    }
+
+    let node = contextToken;
+    let parent = contextToken.parent;
+    while (parent) {
+        if (isTypeParameterDeclaration(parent)) {
+            return parent.default === node || node.kind === SyntaxKind.EqualsToken;
+        }
+        node = parent;
+        parent = parent.parent;
+    }
+
+    return false;
 }
 
 function isArrowFunctionBody(node: Node) {
@@ -5950,14 +6072,14 @@ function isArrowFunctionBody(node: Node) {
 }
 
 /** True if symbol is a type or a module containing at least one type. */
-function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {
+function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Set<Symbol>()): boolean {
     // Since an alias can be merged with a local declaration, we need to test both the alias and its target.
     // This code used to just test the result of `skipAlias`, but that would ignore any locally introduced meanings.
     return nonAliasCanBeReferencedAtTypeLocation(symbol) || nonAliasCanBeReferencedAtTypeLocation(skipAlias(symbol.exportSymbol || symbol, checker));
 
     function nonAliasCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
         return !!(symbol.flags & SymbolFlags.Type) || checker.isUnknownSymbol(symbol) ||
-            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, getSymbolId(symbol)) &&
+            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, symbol) &&
                 checker.getExportsOfModule(symbol).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
     }
 }

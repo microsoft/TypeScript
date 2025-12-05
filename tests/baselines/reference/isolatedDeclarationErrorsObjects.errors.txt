@@ -8,7 +8,7 @@ isolatedDeclarationErrorsObjects.ts(29,9): error TS9008: Method must have an exp
 isolatedDeclarationErrorsObjects.ts(32,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(40,9): error TS7032: Property 'singleSetterBad' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 isolatedDeclarationErrorsObjects.ts(40,25): error TS7006: Parameter 'value' implicitly has an 'any' type.
-isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(64,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(65,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(66,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
@@ -97,7 +97,7 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
                             ~~~~~
 !!! error TS7006: Parameter 'value' implicitly has an 'any' type.
                             ~~~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
 !!! related TS9033 isolatedDeclarationErrorsObjects.ts:40:9: Add a type to parameter of the set accessor declaration.
     
         get getSetBad() { return 0 },

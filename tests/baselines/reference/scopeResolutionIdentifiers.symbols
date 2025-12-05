@@ -6,7 +6,7 @@
 var s: string;
 >s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 2, 3))
 
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(scopeResolutionIdentifiers.ts, 2, 14))
 
     export var s: number;
@@ -20,7 +20,7 @@ module M1 {
 >n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 5, 7), Decl(scopeResolutionIdentifiers.ts, 6, 7))
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(scopeResolutionIdentifiers.ts, 7, 1))
 
     var s: number;
@@ -53,7 +53,7 @@ class C {
 
     s: Date;
 >s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     n = this.s;
 >n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
@@ -72,17 +72,17 @@ class C {
 
         var p: Date;
 >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(scopeResolutionIdentifiers.ts, 28, 1))
 
     var s: any;
 >s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 31, 7))
 
-    module M4 {
+    namespace M4 {
 >M4 : Symbol(M4, Decl(scopeResolutionIdentifiers.ts, 31, 15))
 
         var n = s;

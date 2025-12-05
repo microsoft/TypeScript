@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts ===
+type ComponentType<P> = (p: P) => any;
+>ComponentType : ComponentType<P>
+>              : ^^^^^^^^^^^^^^^^
+>p : P
+>  : ^
+
+type ComponentProps<C> = C extends ComponentType<infer P> ? P : never;
+>ComponentProps : ComponentProps<C>
+>               : ^^^^^^^^^^^^^^^^^
+
+type Attrs<P, A extends Partial<P>> = A;
+>Attrs : A
+>      : ^
+
+interface StyledFunction<
+  C extends ComponentType<any>,
+  O extends object = {},
+  A extends keyof any = never,
+> {
+  attrs<
+>attrs : <U, NewA extends Partial<ComponentProps<C> & U> & { [others: string]: any; } = {}>(attrs: Attrs<ComponentProps<C> & U, NewA>) => StyledFunction<C, O & NewA, A | keyof NewA>
+>      : ^ ^^    ^^^^^^^^^                                                           ^^^^^^^     ^^                                  ^^^^^                                           
+
+    U,
+    NewA extends Partial<ComponentProps<C> & U> & {
+      [others: string]: any;
+>others : string
+>       : ^^^^^^
+
+    } = {},
+  >(
+    attrs: Attrs<ComponentProps<C> & U, NewA>,
+>attrs : NewA
+>      : ^^^^
+
+  ): StyledFunction<C, O & NewA, A | keyof NewA>;
+}
+
+interface StyledInterface {
+  <C extends ComponentType<any>>(component: C): StyledFunction<C>;
+>component : C
+>          : ^
+}
+
+declare const styled: StyledInterface;
+>styled : StyledInterface
+>       : ^^^^^^^^^^^^^^^
+
+interface BaseProps {
+  as?: "select" | "input";
+>as : "select" | "input" | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare const Flex: (props: BaseProps) => null;
+>Flex : (props: BaseProps) => null
+>     : ^     ^^         ^^^^^    
+>props : BaseProps
+>      : ^^^^^^^^^
+
+export const StyledSelect = styled(Flex).attrs({
+>StyledSelect : StyledFunction<(props: BaseProps) => null, { as: "select"; }, "as">
+>             : ^^^^^^^^^^^^^^^^     ^^         ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled(Flex).attrs({  as: "select",}) : StyledFunction<(props: BaseProps) => null, { as: "select"; }, "as">
+>                                      : ^^^^^^^^^^^^^^^^     ^^         ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled(Flex).attrs : <U, NewA extends Partial<BaseProps & U> & { [others: string]: any; } = {}>(attrs: NewA) => StyledFunction<(props: BaseProps) => null, {} & NewA, keyof NewA>
+>                   : ^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^         ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>styled(Flex) : StyledFunction<(props: BaseProps) => null, {}, never>
+>             : ^^^^^^^^^^^^^^^^     ^^         ^^^^^    ^^^^^^^^^^^^
+>styled : StyledInterface
+>       : ^^^^^^^^^^^^^^^
+>Flex : (props: BaseProps) => null
+>     : ^     ^^         ^^^^^    
+>attrs : <U, NewA extends Partial<BaseProps & U> & { [others: string]: any; } = {}>(attrs: NewA) => StyledFunction<(props: BaseProps) => null, {} & NewA, keyof NewA>
+>      : ^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^         ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>{  as: "select",} : { as: "select"; }
+>                  : ^^^^^^^^^^^^^^^^^
+
+  as: "select",
+>as : "select"
+>   : ^^^^^^^^
+>"select" : "select"
+>         : ^^^^^^^^
+
+});
+

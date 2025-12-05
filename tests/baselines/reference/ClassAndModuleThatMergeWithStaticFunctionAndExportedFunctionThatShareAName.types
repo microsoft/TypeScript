@@ -26,7 +26,7 @@ class Point {
 >  : ^
 }
 
-module Point {
+namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
@@ -36,7 +36,7 @@ module Point {
 }
 
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -65,7 +65,7 @@ module A {
 >  : ^
     }
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 

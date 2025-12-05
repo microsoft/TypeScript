@@ -1,0 +1,158 @@
+//// [tests/cases/conformance/es2024/sharedMemory.ts] ////
+
+=== sharedMemory.ts ===
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
+>sab : SharedArrayBuffer
+>    : ^^^^^^^^^^^^^^^^^
+>new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024) : SharedArrayBuffer
+>                                                           : ^^^^^^^^^^^^^^^^^
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Int32Array.BYTES_PER_ELEMENT * 1024 : number
+>                                    : ^^^^^^
+>Int32Array.BYTES_PER_ELEMENT : number
+>                             : ^^^^^^
+>Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>BYTES_PER_ELEMENT : number
+>                  : ^^^^^^
+>1024 : 1024
+>     : ^^^^
+
+const int32 = new Int32Array(sab);
+>int32 : Int32Array<SharedArrayBuffer>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Int32Array(sab) : Int32Array<SharedArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>sab : SharedArrayBuffer
+>    : ^^^^^^^^^^^^^^^^^
+
+const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
+>sab64 : SharedArrayBuffer
+>      : ^^^^^^^^^^^^^^^^^
+>new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024) : SharedArrayBuffer
+>                                                              : ^^^^^^^^^^^^^^^^^
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigInt64Array.BYTES_PER_ELEMENT * 1024 : number
+>                                       : ^^^^^^
+>BigInt64Array.BYTES_PER_ELEMENT : number
+>                                : ^^^^^^
+>BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>BYTES_PER_ELEMENT : number
+>                  : ^^^^^^
+>1024 : 1024
+>     : ^^^^
+
+const int64 = new BigInt64Array(sab64);
+>int64 : BigInt64Array<SharedArrayBuffer>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(sab64) : BigInt64Array<SharedArrayBuffer>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>sab64 : SharedArrayBuffer
+>      : ^^^^^^^^^^^^^^^^^
+
+const waitValue = Atomics.wait(int32, 0, 0);
+>waitValue : "ok" | "not-equal" | "timed-out"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Atomics.wait(int32, 0, 0) : "ok" | "not-equal" | "timed-out"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Atomics.wait : { (typedArray: Int32Array<ArrayBufferLike>, index: number, value: number, timeout?: number): "ok" | "not-equal" | "timed-out"; (typedArray: BigInt64Array<ArrayBufferLike>, index: number, value: bigint, timeout?: number): "ok" | "not-equal" | "timed-out"; }
+>             : ^^^          ^^                           ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^          ^^                              ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^
+>Atomics : Atomics
+>        : ^^^^^^^
+>wait : { (typedArray: Int32Array<ArrayBufferLike>, index: number, value: number, timeout?: number): "ok" | "not-equal" | "timed-out"; (typedArray: BigInt64Array<ArrayBufferLike>, index: number, value: bigint, timeout?: number): "ok" | "not-equal" | "timed-out"; }
+>     : ^^^          ^^                           ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^          ^^                              ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^
+>int32 : Int32Array<SharedArrayBuffer>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+const { async, value } = Atomics.waitAsync(int32, 0, 0);
+>async : boolean
+>      : ^^^^^^^
+>value : "not-equal" | "timed-out" | Promise<"ok" | "timed-out">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Atomics.waitAsync(int32, 0, 0) : { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }
+>                               : ^^^^^^^^^     ^^^^^^^^^                         ^^^^^^^^^^^^^^^    ^^^^^^^^^                           ^^^
+>Atomics.waitAsync : { (typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; (typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; }
+>                  : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
+>Atomics : Atomics
+>        : ^^^^^^^
+>waitAsync : { (typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; (typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; }
+>          : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
+>int32 : Int32Array<SharedArrayBuffer>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0));
+>async : any
+>      : ^^^
+>async64 : boolean
+>        : ^^^^^^^
+>value : any
+>      : ^^^
+>value64 : "not-equal" | "timed-out" | Promise<"ok" | "timed-out">
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Atomics.waitAsync(int64, 0, BigInt(0)) : { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }
+>                                       : ^^^^^^^^^     ^^^^^^^^^                         ^^^^^^^^^^^^^^^    ^^^^^^^^^                           ^^^
+>Atomics.waitAsync : { (typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; (typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; }
+>                  : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
+>Atomics : Atomics
+>        : ^^^^^^^
+>waitAsync : { (typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; (typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; }; }
+>          : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
+>int64 : BigInt64Array<SharedArrayBuffer>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>BigInt(0) : bigint
+>          : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+const main = async () => {
+>main : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
+>async () => {    if (async) {        await value;    }    if (async64) {        await value64;    }} : () => Promise<void>
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^
+
+    if (async) {
+>async : boolean
+>      : ^^^^^^^
+
+        await value;
+>await value : "ok" | "timed-out"
+>            : ^^^^^^^^^^^^^^^^^^
+>value : Promise<"ok" | "timed-out">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    if (async64) {
+>async64 : boolean
+>        : ^^^^^^^
+
+        await value64;
+>await value64 : "ok" | "timed-out"
+>              : ^^^^^^^^^^^^^^^^^^
+>value64 : Promise<"ok" | "timed-out">
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+main();
+>main() : Promise<void>
+>       : ^^^^^^^^^^^^^
+>main : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
+

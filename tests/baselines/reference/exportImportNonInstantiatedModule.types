@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/exportImportNonInstantiatedModule.ts] ////
 
 === exportImportNonInstantiatedModule.ts ===
-module A {
+namespace A {
     export interface I { x: number }
 >x : number
 >  : ^^^^^^
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

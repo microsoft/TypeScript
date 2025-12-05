@@ -1,4 +1,5 @@
 // @allowJS: true
+// @target: esnext
 // @suppressOutputPathCheck: true
 // @strictNullChecks: true
 
@@ -14,6 +15,12 @@ var N;
 
 /** @type {number} */
 var n;
+
+/** @type {BigInt} */
+var BI;
+
+/** @type {bigint} */
+var bi;
 
 /** @type {Boolean} */
 var B;
@@ -76,6 +83,8 @@ var N: number;
 var n: number
 var B: boolean;
 var b: boolean;
+var BI: bigint;
+var bi: bigint;
 var V :void;
 var v: void;
 var U: undefined;

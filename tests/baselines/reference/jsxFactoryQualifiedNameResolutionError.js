@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/jsxFactoryQualifiedNameResolutionError.ts] ////
 
 //// [test.tsx]
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         [s: string]: any;
     }

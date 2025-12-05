@@ -1,4 +1,4 @@
-module m2 {
+namespace m2 {
     export import mExported = require("mExported");
     export var c1 = new mExported.me.class1;
     export function f1() {

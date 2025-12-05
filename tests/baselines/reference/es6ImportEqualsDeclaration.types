@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es6ImportEqualsDeclaration.ts] ////
 
 === client.ts ===
-import a = require("server");
+import a = require("./server");
 >a : number
 >  : ^^^^^^
 

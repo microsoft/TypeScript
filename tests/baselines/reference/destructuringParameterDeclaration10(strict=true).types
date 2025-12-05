@@ -1,0 +1,99 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration10.ts] ////
+
+=== destructuringParameterDeclaration10.ts ===
+export function prepareConfig({
+>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>              : ^                             ^^^                                                                            ^^^^^^^^^
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : string[]
+>     : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+}: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+>additionalFiles : Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+} = {}) {
+>{} : {}
+>   : ^^
+
+    json // string[]
+>json : string[]
+>     : ^^^^^^^^
+}
+
+export function prepareConfigWithoutAnnotation({
+>prepareConfigWithoutAnnotation : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
+>                               : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : never[]
+>     : ^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {}) {
+>{} : {}
+>   : ^^
+
+    json
+>json : never[]
+>     : ^^^^^^^
+}
+
+export const prepareConfigWithContextualSignature: (param:{
+>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                     : ^     ^^                                                                            ^^^^^    
+>param : { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }
+>      : ^^^^^^^^^^^^^^^^^^^^                                                     ^^^
+
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+>additionalFiles : Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}) => void = ({
+>({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                                                                     : ^                             ^^^^^^^^^^^^^^^^^^^^^^^                                                     ^^^^^^^^^^^^
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : string[]
+>     : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {}) => {
+>{} : {}
+>   : ^^
+
+    json // string[]
+>json : string[]
+>     : ^^^^^^^^
+}
+

@@ -1,6 +1,17 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/a.ts]
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+lib.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
+lib.decorators.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
+lib.decorators.legacy.d.ts-Text
+
+//// [/home/src/workspaces/project/a.ts]
 import 'react';
 declare module 'react' {
   export function useBlah(): void;  
@@ -8,19 +19,10 @@ declare module 'react' {
 0;
 use
 
-//// [/lib.d.ts]
-lib.d.ts-Text
-
-//// [/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
-//// [/node_modules/@types/react/index.d.ts]
+//// [/home/src/workspaces/project/node_modules/@types/react/index.d.ts]
 export function useState(): void;
 
-//// [/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 { "compilerOptions": { "module": "esnext" } }
 
 
@@ -29,66 +31,75 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/tsconfig.json"
+        "file": "/home/src/workspaces/project/tsconfig.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
+ "rootNames": [
+  "/home/src/workspaces/project/a.ts"
+ ],
+ "options": {
+  "module": 99,
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /tsconfig.json to open"
+        "projectName": "/home/src/workspaces/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/tsconfig.json to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
- "rootNames": [
-  "/a.ts",
-  "/lib.d.ts",
-  "/lib.decorators.d.ts",
-  "/lib.decorators.legacy.d.ts"
- ],
- "options": {
-  "module": 99,
-  "configFilePath": "/tsconfig.json"
- }
-}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
-	/a.ts Text-1 "import 'react';\ndeclare module 'react' {\n  export function useBlah(): void;  \n}\n0;\nuse"
-	/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
+	/home/src/workspaces/project/a.ts Text-1 "import 'react';\ndeclare module 'react' {\n  export function useBlah(): void;  \n}\n0;\nuse"
 
 
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
+	../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	node_modules/@types/react/index.d.ts
 	  Imported via 'react' from file 'a.ts'
 	  Entry point for implicit type library 'react'
 	a.ts
-	  Matched by default include pattern '**/*'
-	lib.d.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -98,7 +109,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -107,36 +118,49 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/home/src/workspaces/project/tsconfig.json",
+        "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"esnext\" } }"
-	/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"esnext\" } }"
+	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
 
 
-	lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
 	node_modules/@types/react/index.d.ts
 	  Entry point for implicit type library 'react'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -145,7 +169,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -160,61 +184,91 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/a.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts: *new*
-  {"pollingInterval":500}
-/node_modules/@types/react/index.d.ts: *new*
-  {"pollingInterval":500}
-/node_modules/@types/react/package.json: *new*
+/home/src/workspaces/package.json: *new*
   {"pollingInterval":2000}
   {"pollingInterval":2000}
-/tsconfig.json: *new*
+/home/src/workspaces/project/a.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
+watchedDirectories::
+/home/src/workspaces: *new*
+  {}
+/home/src/workspaces/project: *new*
+  {}
+
 watchedDirectoriesRecursive::
-: *new*
+/home/src/workspaces/node_modules/@types: *new*
+  {}
+  {}
+/home/src/workspaces/project: *new*
+  {}
+/home/src/workspaces/project/node_modules: *new*
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types: *new*
+  {}
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *new*
+    autoImportProviderHost: false
+/home/src/workspaces/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
 
 ScriptInfos::
-/a.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib.d.ts *new*
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts *new*
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open) *new*
+/home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -224,13 +278,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request",
       "arguments": {
-        "file": "/a.ts"
+        "file": "/home/src/workspaces/project/a.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -239,10 +293,10 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -253,64 +307,94 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/node_modules/@types/react/index.d.ts:
-  {"pollingInterval":500}
-/node_modules/@types/react/package.json:
+/home/src/workspaces/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":2000}
-/tsconfig.json:
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
 watchedFiles *deleted*::
-/a.ts:
+/home/src/workspaces/project/a.ts:
   {"pollingInterval":500}
 
+watchedDirectories::
+/home/src/workspaces:
+  {}
+/home/src/workspaces/project:
+  {}
+
 watchedDirectoriesRecursive::
-:
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+    autoImportProviderHost: false
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
 
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -335,12 +419,22 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 2,
       "success": true
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 6,
         "offset": 4
       },
@@ -353,7 +447,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1027,12 +1121,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -1040,12 +1141,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -1068,6 +1176,16 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
@@ -1093,7 +1211,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 6,
         "offset": 4
       },
@@ -1105,7 +1223,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1779,12 +1897,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -1792,12 +1917,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -1825,11 +1957,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request",
       "arguments": {
-        "file": "/a.ts"
+        "file": "/home/src/workspaces/project/a.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -1838,10 +1970,10 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -1855,7 +1987,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 7,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 1,
         "endLine": 3,
@@ -1877,37 +2009,38 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -1917,7 +2050,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 8,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 1,
         "endLine": 3,
@@ -1936,31 +2069,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -1970,7 +2103,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 2,
         "key": " "
@@ -1991,7 +2124,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 10,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 2,
         "endLine": 3,
@@ -2010,31 +2143,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-3 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2044,7 +2177,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 3,
         "key": " "
@@ -2065,7 +2198,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 3,
         "endLine": 3,
@@ -2084,31 +2217,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-4 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2118,7 +2251,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 4,
         "key": "e"
@@ -2139,7 +2272,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 14,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 4,
         "endLine": 3,
@@ -2158,31 +2291,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-5 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2192,7 +2325,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 15,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 5,
         "key": "x"
@@ -2213,7 +2346,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 16,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 5,
         "endLine": 3,
@@ -2232,31 +2365,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-6 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2266,7 +2399,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 17,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 6,
         "key": "p"
@@ -2287,7 +2420,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 18,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 6,
         "endLine": 3,
@@ -2306,31 +2439,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-7 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2340,7 +2473,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 19,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 7,
         "key": "o"
@@ -2361,7 +2494,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 20,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 7,
         "endLine": 3,
@@ -2380,31 +2513,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-8 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2414,7 +2547,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 21,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 8,
         "key": "r"
@@ -2435,7 +2568,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 22,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 8,
         "endLine": 3,
@@ -2454,31 +2587,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-9 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2488,7 +2621,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 23,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 9,
         "key": "t"
@@ -2509,7 +2642,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 24,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 9,
         "endLine": 3,
@@ -2528,31 +2661,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-10 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2562,7 +2695,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 25,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 10,
         "key": " "
@@ -2583,7 +2716,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 26,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 10,
         "endLine": 3,
@@ -2602,31 +2735,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-11 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2636,7 +2769,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 27,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 11,
         "key": "f"
@@ -2657,7 +2790,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 28,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 11,
         "endLine": 3,
@@ -2676,31 +2809,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-12 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2710,7 +2843,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 29,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 12,
         "key": "u"
@@ -2731,7 +2864,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 30,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 12,
         "endLine": 3,
@@ -2750,31 +2883,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-13 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2784,7 +2917,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 31,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 13,
         "key": "n"
@@ -2805,7 +2938,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 32,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 13,
         "endLine": 3,
@@ -2824,31 +2957,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-14 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2858,7 +2991,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 33,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 14,
         "key": "c"
@@ -2879,7 +3012,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 34,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 14,
         "endLine": 3,
@@ -2898,31 +3031,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-15 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -2932,7 +3065,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 35,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 15,
         "key": "t"
@@ -2953,7 +3086,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 36,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 15,
         "endLine": 3,
@@ -2972,31 +3105,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-16 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3006,7 +3139,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 37,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 16,
         "key": "i"
@@ -3027,7 +3160,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 38,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 16,
         "endLine": 3,
@@ -3046,31 +3179,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-17 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3080,7 +3213,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 39,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 17,
         "key": "o"
@@ -3101,7 +3234,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 40,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 17,
         "endLine": 3,
@@ -3120,31 +3253,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-18 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3154,7 +3287,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 41,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 18,
         "key": "n"
@@ -3175,7 +3308,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 42,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 18,
         "endLine": 3,
@@ -3194,31 +3327,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-19 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3228,7 +3361,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 43,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 19,
         "key": " "
@@ -3249,7 +3382,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 44,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 19,
         "endLine": 3,
@@ -3268,31 +3401,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-20 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3302,7 +3435,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 45,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 20,
         "key": "u"
@@ -3323,7 +3456,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 46,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 20,
         "endLine": 3,
@@ -3342,31 +3475,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-21 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3376,7 +3509,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 47,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 21,
         "key": "s"
@@ -3397,7 +3530,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 48,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 21,
         "endLine": 3,
@@ -3416,31 +3549,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-22 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3450,7 +3583,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 49,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 22,
         "key": "e"
@@ -3471,7 +3604,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 50,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 22,
         "endLine": 3,
@@ -3490,31 +3623,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-23 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3524,7 +3657,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 51,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 23,
         "key": "Y"
@@ -3545,7 +3678,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 52,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 23,
         "endLine": 3,
@@ -3564,31 +3697,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-24 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3598,7 +3731,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 53,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 24,
         "key": "e"
@@ -3619,7 +3752,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 54,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 24,
         "endLine": 3,
@@ -3638,31 +3771,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-25 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3672,7 +3805,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 55,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 25,
         "key": "s"
@@ -3693,7 +3826,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 56,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 25,
         "endLine": 3,
@@ -3712,31 +3845,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-26 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3746,7 +3879,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 57,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 26,
         "key": "("
@@ -3767,7 +3900,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 58,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 26,
         "endLine": 3,
@@ -3786,31 +3919,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-27 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3820,7 +3953,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 59,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 27,
         "key": ")"
@@ -3841,7 +3974,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 60,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 27,
         "endLine": 3,
@@ -3860,31 +3993,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-28 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3894,7 +4027,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 61,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 28,
         "key": ":"
@@ -3915,7 +4048,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 62,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 28,
         "endLine": 3,
@@ -3934,31 +4067,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-29 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -3968,7 +4101,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 63,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 29,
         "key": " "
@@ -3989,7 +4122,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 64,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 29,
         "endLine": 3,
@@ -4008,31 +4141,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-30 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -4042,7 +4175,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 65,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 30,
         "key": "t"
@@ -4063,7 +4196,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 66,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 30,
         "endLine": 3,
@@ -4082,31 +4215,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-31 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -4116,7 +4249,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 67,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 31,
         "key": "r"
@@ -4137,7 +4270,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 68,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 31,
         "endLine": 3,
@@ -4156,31 +4289,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-32 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -4190,7 +4323,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 69,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 32,
         "key": "u"
@@ -4211,7 +4344,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 70,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 32,
         "endLine": 3,
@@ -4230,31 +4363,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.ts (Open) *changed*
     version: SVC-2-33 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.json
-        /dev/null/inferredProject1*
-/tsconfig.json (Open)
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -4264,7 +4397,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 71,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 3,
         "offset": 33,
         "key": "e"
@@ -4305,21 +4438,21 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 73,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 6,
         "offset": 4
       },
       "command": "completionInfo"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
-	/a.ts SVC-2-33 "import 'react';\ndeclare module 'react' {\n  export function useYes(): true\n}\n0;\nuse"
-	/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export function useState(): void;"
+	/home/src/workspaces/project/a.ts SVC-2-33 "import 'react';\ndeclare module 'react' {\n  export function useYes(): true\n}\n0;\nuse"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -4329,7 +4462,7 @@ Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5006,12 +5139,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -5019,12 +5159,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -5052,10 +5199,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5082,7 +5230,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 75,
       "type": "request",
       "arguments": {
-        "file": "/a.ts",
+        "file": "/home/src/workspaces/project/a.ts",
         "line": 6,
         "offset": 4
       },
@@ -5094,7 +5242,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -5768,12 +5916,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {
@@ -5781,12 +5936,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
-              "fileName": "/node_modules/@types/react/index.d.ts"
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
           {

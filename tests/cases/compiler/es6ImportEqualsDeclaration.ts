@@ -5,4 +5,4 @@ var a = 10;
 export = a;
 
 // @filename: client.ts
-import a = require("server");
+import a = require("./server");

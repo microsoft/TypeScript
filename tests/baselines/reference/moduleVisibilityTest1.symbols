@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/moduleVisibilityTest1.ts] ////
 
 === moduleVisibilityTest1.ts ===
-module OuterMod {
+namespace OuterMod {
 >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
 
 	export function someExportedOuterFunc() { return -1; }
->someExportedOuterFunc : Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 17))
+>someExportedOuterFunc : Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 20))
 
-	export module OuterInnerMod {
+	export namespace OuterInnerMod {
 >OuterInnerMod : Symbol(OuterInnerMod, Decl(moduleVisibilityTest1.ts, 1, 55))
 
 		export function someExportedOuterInnerFunc() { return "foo"; }
->someExportedOuterInnerFunc : Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 30))
+>someExportedOuterInnerFunc : Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 33))
 	}
 }
 
@@ -20,14 +20,14 @@ import OuterInnerAlias = OuterMod.OuterInnerMod;
 >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
 >OuterInnerMod : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 1, 55))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVisibilityTest1.ts, 8, 48), Decl(moduleVisibilityTest1.ts, 50, 1))
 
-	export module InnerMod {
->InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 10, 10))
+	export namespace InnerMod {
+>InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 10, 13))
 
 		export function someExportedInnerFunc() { return -2; }
->someExportedInnerFunc : Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 25))
+>someExportedInnerFunc : Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 28))
 	}
 
 	export enum E {
@@ -72,21 +72,21 @@ module M {
 
 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
 >someMethodThatCallsAnOuterMethod : Symbol(C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 34, 31))
->OuterInnerAlias.someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 30))
+>OuterInnerAlias.someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 33))
 >OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 6, 1))
->someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 30))
+>someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 3, 33))
 
 		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
 >someMethodThatCallsAnInnerMethod : Symbol(C.someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest1.ts, 35, 98))
->InnerMod.someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 25))
->InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 10, 10))
->someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 25))
+>InnerMod.someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 28))
+>InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 10, 13))
+>someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 12, 28))
 
 		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
 >someMethodThatCallsAnOuterInnerMethod : Symbol(C.someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest1.ts, 36, 86))
->OuterMod.someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 17))
+>OuterMod.someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 20))
 >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
->someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 17))
+>someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 0, 20))
 
 		public someMethod() { return 0; }
 >someMethod : Symbol(C.someMethod, Decl(moduleVisibilityTest1.ts, 37, 91))
@@ -110,7 +110,7 @@ module M {
 >someModuleFunction : Symbol(someModuleFunction, Decl(moduleVisibilityTest1.ts, 47, 23))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVisibilityTest1.ts, 8, 48), Decl(moduleVisibilityTest1.ts, 50, 1))
 
 	export var c = x;

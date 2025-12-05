@@ -12,7 +12,7 @@ var obj = {
 
 };
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(symbolProperty56.ts, 2, 2))
 
     var Symbol: {};

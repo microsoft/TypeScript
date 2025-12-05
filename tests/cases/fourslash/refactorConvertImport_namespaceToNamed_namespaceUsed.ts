@@ -1,5 +1,9 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 /////*a*/import * as m from "m";/*b*/
 ////m.a;
 ////m;

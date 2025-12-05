@@ -78,7 +78,7 @@ f.pubProp; // should work
 >pubProp : number
 >        : ^^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

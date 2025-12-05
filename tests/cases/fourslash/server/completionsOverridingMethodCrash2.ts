@@ -1,13 +1,13 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "nodenext"
 ////   }
 //// }
 
-// @Filename: /utils.ts
+// @Filename: /home/src/workspaces/project/utils.ts
 //// export class Element {
 ////     // ...
 //// }
@@ -16,7 +16,7 @@
 ////     abstract render(): Element;
 //// }
 
-// @Filename: /classes.ts
+// @Filename: /home/src/workspaces/project/classes.ts
 //// import { Component } from "./utils.js";
 //// 
 //// export class MyComponent extends Component {
@@ -45,7 +45,7 @@ verify.completions({
     ]
 });
 
-goTo.file("/utils.ts");
+goTo.file("/home/src/workspaces/project/utils.ts");
 goTo.marker("");
 edit.backspace();
 

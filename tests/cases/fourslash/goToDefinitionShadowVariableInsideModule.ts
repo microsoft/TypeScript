@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module shdModule {
+////namespace shdModule {
 ////    var /*shadowVariableDefinition*/shdVar;
 ////    /*shadowVariableReference*/shdVar = 1;
 ////}

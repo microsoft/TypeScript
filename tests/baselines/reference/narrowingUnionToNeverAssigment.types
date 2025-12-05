@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/narrowingUnionToNeverAssigment.ts] ////
+
+=== narrowingUnionToNeverAssigment.ts ===
+type Variants = "a" | "b" | "c" | "d";
+>Variants : Variants
+>         : ^^^^^^^^
+
+
+function fx1(x: Variants) {
+>fx1 : (x: Variants) => void
+>    : ^ ^^        ^^^^^^^^^
+>x : Variants
+>  : ^^^^^^^^
+
+    if (x === "a" || x === "b") {        
+>x === "a" || x === "b" : boolean
+>                       : ^^^^^^^
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : Variants
+>  : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>x === "b" : boolean
+>          : ^^^^^^^
+>x : "b" | "c" | "d"
+>  : ^^^^^^^^^^^^^^^
+>"b" : "b"
+>    : ^^^
+    }
+    else {
+        const y: never = x;
+>y : never
+>  : ^^^^^
+>x : "c" | "d"
+>  : ^^^^^^^^^
+    }
+}
+

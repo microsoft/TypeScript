@@ -4,7 +4,7 @@
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 
-module NonGenericParameter {
+namespace NonGenericParameter {
 >NonGenericParameter : Symbol(NonGenericParameter, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 0, 0))
 
     var a: {
@@ -40,11 +40,11 @@ module NonGenericParameter {
 >b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 7))
 }
 
-module GenericParameter {
+namespace GenericParameter {
 >GenericParameter : Symbol(GenericParameter, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 15, 1))
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
->foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 25))
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 28))
 >T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 18))
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 21))
 >x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 31))
@@ -65,7 +65,7 @@ module GenericParameter {
 
     var r6 = foo5(a); // ok
 >r6 : Symbol(r6, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 23, 7))
->foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 25))
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 28))
 >a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 7))
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {

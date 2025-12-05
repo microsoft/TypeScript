@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/dottedModuleName2.ts] ////
 
 === dottedModuleName2.ts ===
-module A.B {
+namespace A.B {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -17,7 +17,7 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
 >AA : typeof AA
 >   : ^^^^^^^^^
 >B : typeof B

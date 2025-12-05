@@ -1,13 +1,13 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-module A {
+namespace A {
     export class Calculator {
         public handelChar() {
         }
     }
 }
 
-module B {
+namespace B {
     import a = A;
 }

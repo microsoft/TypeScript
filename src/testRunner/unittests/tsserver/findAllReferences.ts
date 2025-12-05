@@ -4,15 +4,15 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: services:: findAllReferences", () => {
+describe("unittests:: tsserver:: services:: findAllReferences::", () => {
     it("does not try to open a file in a project that was updated and no longer has the file", () => {
         const files: File[] = [
             {
-                path: "/packages/babel-loader/tsconfig.json",
+                path: "/home/src/projects/project/packages/babel-loader/tsconfig.json",
                 content: `
 {
     "compilerOptions": {
@@ -30,13 +30,13 @@ describe("unittests:: tsserver:: services:: findAllReferences", () => {
 `,
             },
             {
-                path: "/packages/babel-loader/src/index.ts",
+                path: "/home/src/projects/project/packages/babel-loader/src/index.ts",
                 content: `
 import type { Foo } from "../../core/src/index.js";
 `,
             },
             {
-                path: "/packages/core/tsconfig.json",
+                path: "/home/src/projects/project/packages/core/tsconfig.json",
                 content: `
 {
     "compilerOptions": {
@@ -53,7 +53,7 @@ import type { Foo } from "../../core/src/index.js";
 `,
             },
             {
-                path: "/packages/core/src/index.ts",
+                path: "/home/src/projects/project/packages/core/src/index.ts",
                 content: `
 import { Bar } from "./loading-indicator.js";
 export type Foo = {};
@@ -63,7 +63,7 @@ const bar: Bar = {
 `,
             },
             {
-                path: "/packages/core/src/loading-indicator.ts",
+                path: "/home/src/projects/project/packages/core/src/loading-indicator.ts",
                 content: `
 export interface Bar {
     prop: number;
@@ -74,7 +74,7 @@ const bar: Bar = {
 `,
             },
         ];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -126,7 +126,7 @@ const bar: Bar = {
         const loadingIndicatorScriptInfo = session.getProjectService().getScriptInfo(files[3].path)!;
         // At this point, we haven't updated `babel-loader` project yet,
         // so `babel-loader` is still a containing project of `loading-indicator` file.
-        assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/packages/babel-loader/tsconfig.json"));
+        assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/home/src/projects/project/packages/babel-loader/tsconfig.json"));
         // When calling find all references,
         // we shouldn't crash due to using outdated information on a file's containig projects.
         session.executeCommandSeq<protocol.ReferencesRequest>({

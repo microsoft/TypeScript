@@ -6,15 +6,15 @@
 // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
 // Boolean primitive type.
 
-module test {
+namespace test {
 >test : Symbol(test, Decl(instanceofOperator.ts, 0, 0))
 
     class Object { }
->Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 13))
+>Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 16))
 
     var obj: Object;
 >obj : Symbol(obj, Decl(instanceofOperator.ts, 7, 7))
->Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 13))
+>Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 16))
 
 
 
@@ -25,14 +25,14 @@ module test {
 >obj : Symbol(obj, Decl(instanceofOperator.ts, 7, 7))
 
     Object instanceof obj;
->Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 13))
+>Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 16))
 >obj : Symbol(obj, Decl(instanceofOperator.ts, 7, 7))
 
     // Error on left hand side
     null instanceof null;
     obj instanceof Object;
 >obj : Symbol(obj, Decl(instanceofOperator.ts, 7, 7))
->Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 13))
+>Object : Symbol(Object, Decl(instanceofOperator.ts, 5, 16))
 
     undefined instanceof undefined;
 >undefined : Symbol(undefined)
