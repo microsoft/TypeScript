@@ -1,0 +1,621 @@
+//// [tests/cases/compiler/thislessFunctionsNotContextSensitive1.ts] ////
+
+=== thislessFunctionsNotContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62204
+
+declare function TestConfig<const TConfig extends { a?: any; b?: any; c?: any }>(
+>TestConfig : Symbol(TestConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 0, 0))
+>TConfig : Symbol(TConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 28))
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 51))
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 60))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 69))
+
+  config: TConfig,
+>config : Symbol(config, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 81))
+>TConfig : Symbol(TConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 28))
+
+  test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false,
+>test : Symbol(test, Decl(thislessFunctionsNotContextSensitive1.ts, 3, 18))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>TConfig : Symbol(TConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 2, 28))
+
+): void;
+
+TestConfig(
+>TestConfig : Symbol(TestConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 0, 0))
+  {
+    a: "hello",
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 8, 3))
+
+    b: function () {
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 9, 15))
+
+      return 123;
+    },
+  },
+  true,
+);
+
+TestConfig(
+>TestConfig : Symbol(TestConfig, Decl(thislessFunctionsNotContextSensitive1.ts, 0, 0))
+  {
+    a: "hello",
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 18, 3))
+
+    b: function () {
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 19, 15))
+
+      return 123;
+    },
+  },
+  false, // error
+);
+
+// https://github.com/microsoft/TypeScript/issues/60986
+interface SubscribeFieldOptions<Event> {
+>SubscribeFieldOptions : Symbol(SubscribeFieldOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 25, 2))
+>Event : Symbol(Event, Decl(thislessFunctionsNotContextSensitive1.ts, 28, 32))
+
+  subscribe: () => Event;
+>subscribe : Symbol(SubscribeFieldOptions.subscribe, Decl(thislessFunctionsNotContextSensitive1.ts, 28, 40))
+>Event : Symbol(Event, Decl(thislessFunctionsNotContextSensitive1.ts, 28, 32))
+
+  resolve: (event: Event) => number;
+>resolve : Symbol(SubscribeFieldOptions.resolve, Decl(thislessFunctionsNotContextSensitive1.ts, 29, 25))
+>event : Symbol(event, Decl(thislessFunctionsNotContextSensitive1.ts, 30, 12))
+>Event : Symbol(Event, Decl(thislessFunctionsNotContextSensitive1.ts, 28, 32))
+}
+
+declare function defineOptions<Event>(
+>defineOptions : Symbol(defineOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 31, 1))
+>Event : Symbol(Event, Decl(thislessFunctionsNotContextSensitive1.ts, 33, 31))
+
+  options: SubscribeFieldOptions<Event>,
+>options : Symbol(options, Decl(thislessFunctionsNotContextSensitive1.ts, 33, 38))
+>SubscribeFieldOptions : Symbol(SubscribeFieldOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 25, 2))
+>Event : Symbol(Event, Decl(thislessFunctionsNotContextSensitive1.ts, 33, 31))
+
+): void;
+
+defineOptions({
+>defineOptions : Symbol(defineOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 31, 1))
+
+  resolve: (event) => event, // number
+>resolve : Symbol(resolve, Decl(thislessFunctionsNotContextSensitive1.ts, 37, 15))
+>event : Symbol(event, Decl(thislessFunctionsNotContextSensitive1.ts, 38, 12))
+>event : Symbol(event, Decl(thislessFunctionsNotContextSensitive1.ts, 38, 12))
+
+  subscribe() {
+>subscribe : Symbol(subscribe, Decl(thislessFunctionsNotContextSensitive1.ts, 38, 28))
+
+    return 123;
+  },
+});
+
+defineOptions({
+>defineOptions : Symbol(defineOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 31, 1))
+
+  resolve: (event) => event, // number
+>resolve : Symbol(resolve, Decl(thislessFunctionsNotContextSensitive1.ts, 44, 15))
+>event : Symbol(event, Decl(thislessFunctionsNotContextSensitive1.ts, 45, 12))
+>event : Symbol(event, Decl(thislessFunctionsNotContextSensitive1.ts, 45, 12))
+
+  subscribe: function () {
+>subscribe : Symbol(subscribe, Decl(thislessFunctionsNotContextSensitive1.ts, 45, 28))
+
+    return 123;
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/58630
+
+export type StateFunction<State> = (s: State, ...args: any[]) => any;
+>StateFunction : Symbol(StateFunction, Decl(thislessFunctionsNotContextSensitive1.ts, 49, 3))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 26))
+>s : Symbol(s, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 36))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 26))
+>args : Symbol(args, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 45))
+
+export type VuexStoreOptions<State, Modules> = {
+>VuexStoreOptions : Symbol(VuexStoreOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 69))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 29))
+>Modules : Symbol(Modules, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 35))
+
+  state?: State | (() => State) | { (): State };
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 48))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 29))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 29))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 29))
+
+  mutations?: Record<string, StateFunction<State>>;
+>mutations : Symbol(mutations, Decl(thislessFunctionsNotContextSensitive1.ts, 56, 48))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>StateFunction : Symbol(StateFunction, Decl(thislessFunctionsNotContextSensitive1.ts, 49, 3))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 29))
+
+  modules?: {
+>modules : Symbol(modules, Decl(thislessFunctionsNotContextSensitive1.ts, 57, 51))
+
+    [k in keyof Modules]: VuexStoreOptions<Modules[k], never>;
+>k : Symbol(k, Decl(thislessFunctionsNotContextSensitive1.ts, 59, 5))
+>Modules : Symbol(Modules, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 35))
+>VuexStoreOptions : Symbol(VuexStoreOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 69))
+>Modules : Symbol(Modules, Decl(thislessFunctionsNotContextSensitive1.ts, 55, 35))
+>k : Symbol(k, Decl(thislessFunctionsNotContextSensitive1.ts, 59, 5))
+
+  };
+};
+
+export function createStore<
+>createStore : Symbol(createStore, Decl(thislessFunctionsNotContextSensitive1.ts, 61, 2))
+
+  State extends Record<string, unknown>,
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 63, 28))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  Modules extends Record<string, Record<string, unknown>>,
+>Modules : Symbol(Modules, Decl(thislessFunctionsNotContextSensitive1.ts, 64, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+>(options: VuexStoreOptions<State, Modules>) {}
+>options : Symbol(options, Decl(thislessFunctionsNotContextSensitive1.ts, 66, 2))
+>VuexStoreOptions : Symbol(VuexStoreOptions, Decl(thislessFunctionsNotContextSensitive1.ts, 53, 69))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 63, 28))
+>Modules : Symbol(Modules, Decl(thislessFunctionsNotContextSensitive1.ts, 64, 40))
+
+const store = createStore({
+>store : Symbol(store, Decl(thislessFunctionsNotContextSensitive1.ts, 68, 5))
+>createStore : Symbol(createStore, Decl(thislessFunctionsNotContextSensitive1.ts, 61, 2))
+
+  state() {
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 68, 27))
+
+    return { bar2: 1 };
+>bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 70, 12))
+
+  },
+  mutations: { inc: (state123) => state123.bar2++ },
+>mutations : Symbol(mutations, Decl(thislessFunctionsNotContextSensitive1.ts, 71, 4))
+>inc : Symbol(inc, Decl(thislessFunctionsNotContextSensitive1.ts, 72, 14))
+>state123 : Symbol(state123, Decl(thislessFunctionsNotContextSensitive1.ts, 72, 21))
+>state123.bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 70, 12))
+>state123 : Symbol(state123, Decl(thislessFunctionsNotContextSensitive1.ts, 72, 21))
+>bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 70, 12))
+
+  modules: {
+>modules : Symbol(modules, Decl(thislessFunctionsNotContextSensitive1.ts, 72, 52))
+
+    foo: {
+>foo : Symbol(foo, Decl(thislessFunctionsNotContextSensitive1.ts, 73, 12))
+
+      state() {
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 74, 10))
+
+        return { bar2: 1 };
+>bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 76, 16))
+
+      },
+      mutations: { inc: (state) => state.bar2++ },
+>mutations : Symbol(mutations, Decl(thislessFunctionsNotContextSensitive1.ts, 77, 8))
+>inc : Symbol(inc, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 18))
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 25))
+>state.bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 76, 16))
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 25))
+>bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 76, 16))
+
+    },
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/57572
+
+type C = <Methods, Attached = (methods: Methods) => void>(options: {
+>C : Symbol(C, Decl(thislessFunctionsNotContextSensitive1.ts, 81, 3))
+>Methods : Symbol(Methods, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 10))
+>Attached : Symbol(Attached, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 18))
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 31))
+>Methods : Symbol(Methods, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 10))
+>options : Symbol(options, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 58))
+
+  methods: Methods;
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 68))
+>Methods : Symbol(Methods, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 10))
+
+  attached: Attached;
+>attached : Symbol(attached, Decl(thislessFunctionsNotContextSensitive1.ts, 86, 19))
+>Attached : Symbol(Attached, Decl(thislessFunctionsNotContextSensitive1.ts, 85, 18))
+
+}) => any;
+
+var Component: C = () => {};
+>Component : Symbol(Component, Decl(thislessFunctionsNotContextSensitive1.ts, 90, 3))
+>C : Symbol(C, Decl(thislessFunctionsNotContextSensitive1.ts, 81, 3))
+
+Component({
+>Component : Symbol(Component, Decl(thislessFunctionsNotContextSensitive1.ts, 90, 3))
+
+  attached(methods) {
+>attached : Symbol(attached, Decl(thislessFunctionsNotContextSensitive1.ts, 92, 11))
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 93, 11))
+
+    methods.bbb(); // ok
+>methods.bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 96, 12))
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 93, 11))
+>bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 96, 12))
+
+  },
+  methods: {
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 95, 4))
+
+    bbb() {},
+>bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 96, 12))
+
+  },
+});
+
+Component({
+>Component : Symbol(Component, Decl(thislessFunctionsNotContextSensitive1.ts, 90, 3))
+
+  attached(methods) {
+>attached : Symbol(attached, Decl(thislessFunctionsNotContextSensitive1.ts, 101, 11))
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 102, 11))
+
+    methods.bbb(); // ok
+>methods.bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 105, 12))
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 102, 11))
+>bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 105, 12))
+
+  },
+  methods: {
+>methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 104, 4))
+
+    bbb: () => {},
+>bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 105, 12))
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/56067
+
+declare function create56067<
+>create56067 : Symbol(create56067, Decl(thislessFunctionsNotContextSensitive1.ts, 108, 3))
+
+  State extends Record<string, any>,
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 112, 29))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  Data extends Record<string, any>,
+>Data : Symbol(Data, Decl(thislessFunctionsNotContextSensitive1.ts, 113, 36))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  Actions extends (state: State, data: Data) => Record<string, any>,
+>Actions : Symbol(Actions, Decl(thislessFunctionsNotContextSensitive1.ts, 114, 35))
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 115, 19))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 112, 29))
+>data : Symbol(data, Decl(thislessFunctionsNotContextSensitive1.ts, 115, 32))
+>Data : Symbol(Data, Decl(thislessFunctionsNotContextSensitive1.ts, 113, 36))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+>(args: { getState: () => State; actions: Actions; getData: () => Data }): void;
+>args : Symbol(args, Decl(thislessFunctionsNotContextSensitive1.ts, 116, 2))
+>getState : Symbol(getState, Decl(thislessFunctionsNotContextSensitive1.ts, 116, 9))
+>State : Symbol(State, Decl(thislessFunctionsNotContextSensitive1.ts, 112, 29))
+>actions : Symbol(actions, Decl(thislessFunctionsNotContextSensitive1.ts, 116, 32))
+>Actions : Symbol(Actions, Decl(thislessFunctionsNotContextSensitive1.ts, 114, 35))
+>getData : Symbol(getData, Decl(thislessFunctionsNotContextSensitive1.ts, 116, 50))
+>Data : Symbol(Data, Decl(thislessFunctionsNotContextSensitive1.ts, 113, 36))
+
+create56067({
+>create56067 : Symbol(create56067, Decl(thislessFunctionsNotContextSensitive1.ts, 108, 3))
+
+  getState() {
+>getState : Symbol(getState, Decl(thislessFunctionsNotContextSensitive1.ts, 118, 13))
+
+    return { a: 1 };
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 120, 12))
+
+  },
+  getData: () => {
+>getData : Symbol(getData, Decl(thislessFunctionsNotContextSensitive1.ts, 121, 4))
+
+    return { b: 2 };
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 123, 12))
+
+  },
+  actions(state, data) {
+>actions : Symbol(actions, Decl(thislessFunctionsNotContextSensitive1.ts, 124, 4))
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 125, 10))
+>data : Symbol(data, Decl(thislessFunctionsNotContextSensitive1.ts, 125, 16))
+
+    state // { a: number }
+>state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 125, 10))
+
+    data; // { b: number }
+>data : Symbol(data, Decl(thislessFunctionsNotContextSensitive1.ts, 125, 16))
+
+    return {
+      z: 1,
+>z : Symbol(z, Decl(thislessFunctionsNotContextSensitive1.ts, 128, 12))
+
+    };
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/55489
+type NonStringIterable<T> = 
+>NonStringIterable : Symbol(NonStringIterable, Decl(thislessFunctionsNotContextSensitive1.ts, 132, 3))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 135, 23))
+
+  T extends string ? never : T extends Iterable<any> ? T : never;
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 135, 23))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 135, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 135, 23))
+
+declare function doSomething<T>(value: NonStringIterable<T>): T;
+>doSomething : Symbol(doSomething, Decl(thislessFunctionsNotContextSensitive1.ts, 136, 65))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 138, 29))
+>value : Symbol(value, Decl(thislessFunctionsNotContextSensitive1.ts, 138, 32))
+>NonStringIterable : Symbol(NonStringIterable, Decl(thislessFunctionsNotContextSensitive1.ts, 132, 3))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 138, 29))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 138, 29))
+
+const o = { foo() {} };
+>o : Symbol(o, Decl(thislessFunctionsNotContextSensitive1.ts, 140, 5))
+>foo : Symbol(foo, Decl(thislessFunctionsNotContextSensitive1.ts, 140, 11))
+
+doSomething('value'); // error
+>doSomething : Symbol(doSomething, Decl(thislessFunctionsNotContextSensitive1.ts, 136, 65))
+
+doSomething(['v']); // ok
+>doSomething : Symbol(doSomething, Decl(thislessFunctionsNotContextSensitive1.ts, 136, 65))
+
+doSomething([o]); // ok
+>doSomething : Symbol(doSomething, Decl(thislessFunctionsNotContextSensitive1.ts, 136, 65))
+>o : Symbol(o, Decl(thislessFunctionsNotContextSensitive1.ts, 140, 5))
+
+doSomething([{ foo() {} }]); // ok
+>doSomething : Symbol(doSomething, Decl(thislessFunctionsNotContextSensitive1.ts, 136, 65))
+>foo : Symbol(foo, Decl(thislessFunctionsNotContextSensitive1.ts, 145, 14))
+
+// https://github.com/microsoft/TypeScript/issues/55124
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(thislessFunctionsNotContextSensitive1.ts, 145, 28))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 148, 12))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 148, 12))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 148, 12))
+
+type ExtractFields<Options> = Values<{
+>ExtractFields : Symbol(ExtractFields, Decl(thislessFunctionsNotContextSensitive1.ts, 148, 28))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 149, 19))
+>Values : Symbol(Values, Decl(thislessFunctionsNotContextSensitive1.ts, 145, 28))
+
+  [K in keyof Options]: Options[K] extends object ? keyof Options[K] : never;
+>K : Symbol(K, Decl(thislessFunctionsNotContextSensitive1.ts, 150, 3))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 149, 19))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 149, 19))
+>K : Symbol(K, Decl(thislessFunctionsNotContextSensitive1.ts, 150, 3))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 149, 19))
+>K : Symbol(K, Decl(thislessFunctionsNotContextSensitive1.ts, 150, 3))
+
+}>;
+type SetType<Options> = {
+>SetType : Symbol(SetType, Decl(thislessFunctionsNotContextSensitive1.ts, 151, 3))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 152, 13))
+
+  [key: string]: any;
+>key : Symbol(key, Decl(thislessFunctionsNotContextSensitive1.ts, 153, 3))
+
+  target?: ExtractFields<Options>;
+>target : Symbol(target, Decl(thislessFunctionsNotContextSensitive1.ts, 153, 21))
+>ExtractFields : Symbol(ExtractFields, Decl(thislessFunctionsNotContextSensitive1.ts, 148, 28))
+>Options : Symbol(Options, Decl(thislessFunctionsNotContextSensitive1.ts, 152, 13))
+
+};
+
+declare function test55124<OptionsData extends SetType<OptionsData>>(
+>test55124 : Symbol(test55124, Decl(thislessFunctionsNotContextSensitive1.ts, 155, 2))
+>OptionsData : Symbol(OptionsData, Decl(thislessFunctionsNotContextSensitive1.ts, 157, 27))
+>SetType : Symbol(SetType, Decl(thislessFunctionsNotContextSensitive1.ts, 151, 3))
+>OptionsData : Symbol(OptionsData, Decl(thislessFunctionsNotContextSensitive1.ts, 157, 27))
+
+  options: OptionsData,
+>options : Symbol(options, Decl(thislessFunctionsNotContextSensitive1.ts, 157, 69))
+>OptionsData : Symbol(OptionsData, Decl(thislessFunctionsNotContextSensitive1.ts, 157, 27))
+
+): void;
+
+test55124({
+>test55124 : Symbol(test55124, Decl(thislessFunctionsNotContextSensitive1.ts, 155, 2))
+
+  target: "$test4", // ok
+>target : Symbol(target, Decl(thislessFunctionsNotContextSensitive1.ts, 161, 11))
+
+  data1: {
+>data1 : Symbol(data1, Decl(thislessFunctionsNotContextSensitive1.ts, 162, 19))
+
+    $test1: 111,
+>$test1 : Symbol($test1, Decl(thislessFunctionsNotContextSensitive1.ts, 163, 10))
+
+    $test2: null,
+>$test2 : Symbol($test2, Decl(thislessFunctionsNotContextSensitive1.ts, 164, 16))
+
+  },
+  data2: {
+>data2 : Symbol(data2, Decl(thislessFunctionsNotContextSensitive1.ts, 166, 4))
+
+    $test3: {},
+>$test3 : Symbol($test3, Decl(thislessFunctionsNotContextSensitive1.ts, 167, 10))
+
+    $test4: () => {},
+>$test4 : Symbol($test4, Decl(thislessFunctionsNotContextSensitive1.ts, 168, 15))
+
+    $test5() {},
+>$test5 : Symbol($test5, Decl(thislessFunctionsNotContextSensitive1.ts, 169, 21))
+
+  },
+});
+
+test55124({
+>test55124 : Symbol(test55124, Decl(thislessFunctionsNotContextSensitive1.ts, 155, 2))
+
+  target: "$test6", // error
+>target : Symbol(target, Decl(thislessFunctionsNotContextSensitive1.ts, 174, 11))
+
+  data1: {
+>data1 : Symbol(data1, Decl(thislessFunctionsNotContextSensitive1.ts, 175, 19))
+
+    $test1: 111,
+>$test1 : Symbol($test1, Decl(thislessFunctionsNotContextSensitive1.ts, 176, 10))
+
+    $test2: null,
+>$test2 : Symbol($test2, Decl(thislessFunctionsNotContextSensitive1.ts, 177, 16))
+
+  },
+  data2: {
+>data2 : Symbol(data2, Decl(thislessFunctionsNotContextSensitive1.ts, 179, 4))
+
+    $test3: {},
+>$test3 : Symbol($test3, Decl(thislessFunctionsNotContextSensitive1.ts, 180, 10))
+
+    $test4: () => {},
+>$test4 : Symbol($test4, Decl(thislessFunctionsNotContextSensitive1.ts, 181, 15))
+
+    $test5() {},
+>$test5 : Symbol($test5, Decl(thislessFunctionsNotContextSensitive1.ts, 182, 21))
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/53924
+function test53924<T = unknown>(options: { a: (c: T) => void; b: () => T }) {}
+>test53924 : Symbol(test53924, Decl(thislessFunctionsNotContextSensitive1.ts, 185, 3))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 19))
+>options : Symbol(options, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 32))
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 42))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 47))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 19))
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 61))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 188, 19))
+
+test53924({
+>test53924 : Symbol(test53924, Decl(thislessFunctionsNotContextSensitive1.ts, 185, 3))
+
+  a: (c) => {
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 190, 11))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 191, 6))
+
+    c; // number;
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 191, 6))
+
+  },
+  b: () => 123,
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 193, 4))
+
+});
+
+test53924({
+>test53924 : Symbol(test53924, Decl(thislessFunctionsNotContextSensitive1.ts, 185, 3))
+
+  b: () => 123,
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 197, 11))
+
+  a: (c) => {
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 198, 15))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 199, 6))
+
+    return c; // number
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 199, 6))
+
+  },
+});
+
+test53924({
+>test53924 : Symbol(test53924, Decl(thislessFunctionsNotContextSensitive1.ts, 185, 3))
+
+  b() {
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 204, 11))
+
+    return 123;
+  },
+  a(c) {
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 207, 4))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 208, 4))
+
+    return c; // number
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 208, 4))
+
+  },
+});
+
+test53924({
+>test53924 : Symbol(test53924, Decl(thislessFunctionsNotContextSensitive1.ts, 185, 3))
+
+  a(c) {
+>a : Symbol(a, Decl(thislessFunctionsNotContextSensitive1.ts, 213, 11))
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 214, 4))
+
+    return c; // number
+>c : Symbol(c, Decl(thislessFunctionsNotContextSensitive1.ts, 214, 4))
+
+  },
+  b() {
+>b : Symbol(b, Decl(thislessFunctionsNotContextSensitive1.ts, 216, 4))
+
+    return 123;
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/50258
+declare function monitor<T extends (...args: any) => any>(
+>monitor : Symbol(monitor, Decl(thislessFunctionsNotContextSensitive1.ts, 220, 3))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 25))
+>args : Symbol(args, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 36))
+
+  extractor: (...args: Parameters<T>) => Record<string, unknown>,
+>extractor : Symbol(extractor, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 58))
+>args : Symbol(args, Decl(thislessFunctionsNotContextSensitive1.ts, 224, 14))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  executor: T,
+>executor : Symbol(executor, Decl(thislessFunctionsNotContextSensitive1.ts, 224, 65))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 25))
+
+): (...args: Parameters<T>) => ReturnType<T>;
+>args : Symbol(args, Decl(thislessFunctionsNotContextSensitive1.ts, 226, 4))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(thislessFunctionsNotContextSensitive1.ts, 223, 25))
+
+monitor(
+>monitor : Symbol(monitor, Decl(thislessFunctionsNotContextSensitive1.ts, 220, 3))
+
+  (p) => ({ p }), // { p: number }
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 229, 3))
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 229, 11))
+
+  (p: number) => p,
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 230, 3))
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 230, 3))
+
+);
+monitor(
+>monitor : Symbol(monitor, Decl(thislessFunctionsNotContextSensitive1.ts, 220, 3))
+
+  (p) => ({ p }), // { p: number }
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 233, 3))
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 233, 11))
+
+  function (p: number) {
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 234, 12))
+
+    return p;
+>p : Symbol(p, Decl(thislessFunctionsNotContextSensitive1.ts, 234, 12))
+
+  },
+);
+
