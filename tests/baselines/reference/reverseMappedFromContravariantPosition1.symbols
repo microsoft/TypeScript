@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/reverseMappedFromContravariantPosition1.ts] ////
+
+=== reverseMappedFromContravariantPosition1.ts ===
+declare function test1<T>(
+>test1 : Symbol(test1, Decl(reverseMappedFromContravariantPosition1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedFromContravariantPosition1.ts, 0, 23))
+
+  cb: (arg: { [K in keyof T]: { prop: T[K] } }) => void,
+>cb : Symbol(cb, Decl(reverseMappedFromContravariantPosition1.ts, 0, 26))
+>arg : Symbol(arg, Decl(reverseMappedFromContravariantPosition1.ts, 1, 7))
+>K : Symbol(K, Decl(reverseMappedFromContravariantPosition1.ts, 1, 15))
+>T : Symbol(T, Decl(reverseMappedFromContravariantPosition1.ts, 0, 23))
+>prop : Symbol(prop, Decl(reverseMappedFromContravariantPosition1.ts, 1, 31))
+>T : Symbol(T, Decl(reverseMappedFromContravariantPosition1.ts, 0, 23))
+>K : Symbol(K, Decl(reverseMappedFromContravariantPosition1.ts, 1, 15))
+
+): T;
+>T : Symbol(T, Decl(reverseMappedFromContravariantPosition1.ts, 0, 23))
+
+type Arg = {
+>Arg : Symbol(Arg, Decl(reverseMappedFromContravariantPosition1.ts, 2, 5))
+
+  a: {
+>a : Symbol(a, Decl(reverseMappedFromContravariantPosition1.ts, 4, 12))
+
+    prop: number;
+>prop : Symbol(prop, Decl(reverseMappedFromContravariantPosition1.ts, 5, 6))
+
+  };
+  b: {
+>b : Symbol(b, Decl(reverseMappedFromContravariantPosition1.ts, 7, 4))
+
+    prop: boolean;
+>prop : Symbol(prop, Decl(reverseMappedFromContravariantPosition1.ts, 8, 6))
+
+  };
+};
+
+const result1 = test1((arg: Arg) => {});
+>result1 : Symbol(result1, Decl(reverseMappedFromContravariantPosition1.ts, 13, 5))
+>test1 : Symbol(test1, Decl(reverseMappedFromContravariantPosition1.ts, 0, 0))
+>arg : Symbol(arg, Decl(reverseMappedFromContravariantPosition1.ts, 13, 23))
+>Arg : Symbol(Arg, Decl(reverseMappedFromContravariantPosition1.ts, 2, 5))
+
