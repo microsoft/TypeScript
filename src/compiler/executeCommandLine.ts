@@ -614,20 +614,27 @@ function executeCommandLineWorker(
             }
         }
     }
-    else if (commandLine.fileNames.length === 0) {
+    else if (!commandLine.options.ignoreConfig || commandLine.fileNames.length === 0) {
         const searchPath = normalizePath(sys.getCurrentDirectory());
         configFileName = findConfigFile(searchPath, fileName => sys.fileExists(fileName));
-    }
-
-    if (commandLine.fileNames.length === 0 && !configFileName) {
-        if (commandLine.options.showConfig) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+        // if (!commandLine.options.ignoreConfig) {
+        if (commandLine.fileNames.length !== 0) {
+            if (configFileName) {
+                // Error to not specify config file
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
         }
-        else {
-            printVersion(sys);
-            printHelp(sys, commandLine);
+        else if (!configFileName) {
+            if (commandLine.options.showConfig) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+            }
+            else {
+                printVersion(sys);
+                printHelp(sys, commandLine);
+            }
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     const currentDirectory = sys.getCurrentDirectory();
