@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/noSilentNeverTypeLeak2.ts] ////
+
+=== noSilentNeverTypeLeak2.ts ===
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(noSilentNeverTypeLeak2.ts, 0, 0))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak2.ts, 0, 12))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak2.ts, 0, 12))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak2.ts, 0, 12))
+
+interface ParameterizedObject {
+>ParameterizedObject : Symbol(ParameterizedObject, Decl(noSilentNeverTypeLeak2.ts, 0, 28))
+
+  type: string;
+>type : Symbol(ParameterizedObject.type, Decl(noSilentNeverTypeLeak2.ts, 2, 31))
+
+  params?: unknown;
+>params : Symbol(ParameterizedObject.params, Decl(noSilentNeverTypeLeak2.ts, 3, 15))
+}
+
+type ActionFunction<TParams, TAction extends ParameterizedObject> = {
+>ActionFunction : Symbol(ActionFunction, Decl(noSilentNeverTypeLeak2.ts, 5, 1))
+>TParams : Symbol(TParams, Decl(noSilentNeverTypeLeak2.ts, 7, 20))
+>TAction : Symbol(TAction, Decl(noSilentNeverTypeLeak2.ts, 7, 28))
+>ParameterizedObject : Symbol(ParameterizedObject, Decl(noSilentNeverTypeLeak2.ts, 0, 28))
+
+  (params: TParams): void;
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 8, 3))
+>TParams : Symbol(TParams, Decl(noSilentNeverTypeLeak2.ts, 7, 20))
+
+  _out_TAction?: TAction;
+>_out_TAction : Symbol(_out_TAction, Decl(noSilentNeverTypeLeak2.ts, 8, 26))
+>TAction : Symbol(TAction, Decl(noSilentNeverTypeLeak2.ts, 7, 28))
+
+};
+
+type ToParameterizedObject<TParameterizedMap> = Values<{
+>ToParameterizedObject : Symbol(ToParameterizedObject, Decl(noSilentNeverTypeLeak2.ts, 10, 2))
+>TParameterizedMap : Symbol(TParameterizedMap, Decl(noSilentNeverTypeLeak2.ts, 12, 27))
+>Values : Symbol(Values, Decl(noSilentNeverTypeLeak2.ts, 0, 0))
+
+  [K in keyof TParameterizedMap & string]: {
+>K : Symbol(K, Decl(noSilentNeverTypeLeak2.ts, 13, 3))
+>TParameterizedMap : Symbol(TParameterizedMap, Decl(noSilentNeverTypeLeak2.ts, 12, 27))
+
+    type: K;
+>type : Symbol(type, Decl(noSilentNeverTypeLeak2.ts, 13, 44))
+>K : Symbol(K, Decl(noSilentNeverTypeLeak2.ts, 13, 3))
+
+    params: TParameterizedMap[K];
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 14, 12))
+>TParameterizedMap : Symbol(TParameterizedMap, Decl(noSilentNeverTypeLeak2.ts, 12, 27))
+>K : Symbol(K, Decl(noSilentNeverTypeLeak2.ts, 13, 3))
+
+  };
+}>;
+
+declare function enqueueActions<TParams, TAction extends ParameterizedObject>(
+>enqueueActions : Symbol(enqueueActions, Decl(noSilentNeverTypeLeak2.ts, 17, 3))
+>TParams : Symbol(TParams, Decl(noSilentNeverTypeLeak2.ts, 19, 32))
+>TAction : Symbol(TAction, Decl(noSilentNeverTypeLeak2.ts, 19, 40))
+>ParameterizedObject : Symbol(ParameterizedObject, Decl(noSilentNeverTypeLeak2.ts, 0, 28))
+
+  collect: (params: TParams) => void,
+>collect : Symbol(collect, Decl(noSilentNeverTypeLeak2.ts, 19, 78))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 20, 12))
+>TParams : Symbol(TParams, Decl(noSilentNeverTypeLeak2.ts, 19, 32))
+
+): ActionFunction<TParams, TAction>;
+>ActionFunction : Symbol(ActionFunction, Decl(noSilentNeverTypeLeak2.ts, 5, 1))
+>TParams : Symbol(TParams, Decl(noSilentNeverTypeLeak2.ts, 19, 32))
+>TAction : Symbol(TAction, Decl(noSilentNeverTypeLeak2.ts, 19, 40))
+
+declare function setup<TActions>(actions: {
+>setup : Symbol(setup, Decl(noSilentNeverTypeLeak2.ts, 21, 36))
+>TActions : Symbol(TActions, Decl(noSilentNeverTypeLeak2.ts, 23, 23))
+>actions : Symbol(actions, Decl(noSilentNeverTypeLeak2.ts, 23, 33))
+
+  [K in keyof TActions]: ActionFunction<
+>K : Symbol(K, Decl(noSilentNeverTypeLeak2.ts, 24, 3))
+>TActions : Symbol(TActions, Decl(noSilentNeverTypeLeak2.ts, 23, 23))
+>ActionFunction : Symbol(ActionFunction, Decl(noSilentNeverTypeLeak2.ts, 5, 1))
+
+    TActions[K],
+>TActions : Symbol(TActions, Decl(noSilentNeverTypeLeak2.ts, 23, 23))
+>K : Symbol(K, Decl(noSilentNeverTypeLeak2.ts, 24, 3))
+
+    ToParameterizedObject<TActions>
+>ToParameterizedObject : Symbol(ToParameterizedObject, Decl(noSilentNeverTypeLeak2.ts, 10, 2))
+>TActions : Symbol(TActions, Decl(noSilentNeverTypeLeak2.ts, 23, 23))
+
+  >;
+}): void;
+
+setup({
+>setup : Symbol(setup, Decl(noSilentNeverTypeLeak2.ts, 21, 36))
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : Symbol(doStuff, Decl(noSilentNeverTypeLeak2.ts, 30, 7))
+>enqueueActions : Symbol(enqueueActions, Decl(noSilentNeverTypeLeak2.ts, 17, 3))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 31, 27))
+
+});
+
+setup({
+>setup : Symbol(setup, Decl(noSilentNeverTypeLeak2.ts, 21, 36))
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : Symbol(doStuff, Decl(noSilentNeverTypeLeak2.ts, 34, 7))
+>enqueueActions : Symbol(enqueueActions, Decl(noSilentNeverTypeLeak2.ts, 17, 3))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 35, 27))
+
+  doOtherStuff: (params: string) => {},
+>doOtherStuff : Symbol(doOtherStuff, Decl(noSilentNeverTypeLeak2.ts, 35, 50))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 36, 17))
+
+});
+
+setup({
+>setup : Symbol(setup, Decl(noSilentNeverTypeLeak2.ts, 21, 36))
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : Symbol(doStuff, Decl(noSilentNeverTypeLeak2.ts, 39, 7))
+>enqueueActions : Symbol(enqueueActions, Decl(noSilentNeverTypeLeak2.ts, 17, 3))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 40, 27))
+
+  doOtherStuff: (params) => {},
+>doOtherStuff : Symbol(doOtherStuff, Decl(noSilentNeverTypeLeak2.ts, 40, 50))
+>params : Symbol(params, Decl(noSilentNeverTypeLeak2.ts, 41, 17))
+
+});

@@ -1,0 +1,152 @@
+//// [tests/cases/compiler/noSilentNeverTypeLeak2.ts] ////
+
+=== noSilentNeverTypeLeak2.ts ===
+type Values<T> = T[keyof T];
+>Values : Values<T>
+>       : ^^^^^^^^^
+
+interface ParameterizedObject {
+  type: string;
+>type : string
+>     : ^^^^^^
+
+  params?: unknown;
+>params : unknown
+>       : ^^^^^^^
+}
+
+type ActionFunction<TParams, TAction extends ParameterizedObject> = {
+>ActionFunction : ActionFunction<TParams, TAction>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  (params: TParams): void;
+>params : TParams
+>       : ^^^^^^^
+
+  _out_TAction?: TAction;
+>_out_TAction : TAction | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+
+};
+
+type ToParameterizedObject<TParameterizedMap> = Values<{
+>ToParameterizedObject : ToParameterizedObject<TParameterizedMap>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof TParameterizedMap & string]: {
+    type: K;
+>type : K
+>     : ^
+
+    params: TParameterizedMap[K];
+>params : TParameterizedMap[K]
+>       : ^^^^^^^^^^^^^^^^^^^^
+
+  };
+}>;
+
+declare function enqueueActions<TParams, TAction extends ParameterizedObject>(
+>enqueueActions : <TParams, TAction extends ParameterizedObject>(collect: (params: TParams) => void) => ActionFunction<TParams, TAction>
+>               : ^       ^^       ^^^^^^^^^                   ^^       ^^                         ^^^^^                                
+
+  collect: (params: TParams) => void,
+>collect : (params: TParams) => void
+>        : ^      ^^       ^^^^^    
+>params : TParams
+>       : ^^^^^^^
+
+): ActionFunction<TParams, TAction>;
+
+declare function setup<TActions>(actions: {
+>setup : <TActions>(actions: { [K in keyof TActions]: ActionFunction<TActions[K], ToParameterizedObject<TActions>>; }) => void
+>      : ^        ^^       ^^                                                                                        ^^^^^    
+>actions : { [K in keyof TActions]: ActionFunction<TActions[K], ToParameterizedObject<TActions>>; }
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof TActions]: ActionFunction<
+    TActions[K],
+    ToParameterizedObject<TActions>
+  >;
+}): void;
+
+setup({
+>setup({  doStuff: enqueueActions((params: number) => {}),}) : void
+>                                                            : ^^^^
+>setup : <TActions>(actions: { [K in keyof TActions]: ActionFunction<TActions[K], ToParameterizedObject<TActions>>; }) => void
+>      : ^        ^^       ^^                                                                                        ^^^^^    
+>{  doStuff: enqueueActions((params: number) => {}),} : { doStuff: ActionFunction<number, never>; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : ActionFunction<number, never>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((params: number) => {}) : ActionFunction<number, never>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TParams, TAction extends ParameterizedObject>(collect: (params: TParams) => void) => ActionFunction<TParams, TAction>
+>               : ^       ^^       ^^^^^^^^^                   ^^       ^^                         ^^^^^                                
+>(params: number) => {} : (params: number) => void
+>                       : ^      ^^      ^^^^^^^^^
+>params : number
+>       : ^^^^^^
+
+});
+
+setup({
+>setup({  doStuff: enqueueActions((params: number) => {}),  doOtherStuff: (params: string) => {},}) : void
+>                                                                                                   : ^^^^
+>setup : <TActions>(actions: { [K in keyof TActions]: ActionFunction<TActions[K], ToParameterizedObject<TActions>>; }) => void
+>      : ^        ^^       ^^                                                                                        ^^^^^    
+>{  doStuff: enqueueActions((params: number) => {}),  doOtherStuff: (params: string) => {},} : { doStuff: ActionFunction<number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>; doOtherStuff: (params: string) => void; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : ActionFunction<number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((params: number) => {}) : ActionFunction<number, ToParameterizedObject<{ doStuff: unknown; doOtherStuff: string; }>>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TParams, TAction extends ParameterizedObject>(collect: (params: TParams) => void) => ActionFunction<TParams, TAction>
+>               : ^       ^^       ^^^^^^^^^                   ^^       ^^                         ^^^^^                                
+>(params: number) => {} : (params: number) => void
+>                       : ^      ^^      ^^^^^^^^^
+>params : number
+>       : ^^^^^^
+
+  doOtherStuff: (params: string) => {},
+>doOtherStuff : (params: string) => void
+>             : ^      ^^      ^^^^^^^^^
+>(params: string) => {} : (params: string) => void
+>                       : ^      ^^      ^^^^^^^^^
+>params : string
+>       : ^^^^^^
+
+});
+
+setup({
+>setup({  doStuff: enqueueActions((params: number) => {}),  doOtherStuff: (params) => {},}) : void
+>                                                                                           : ^^^^
+>setup : <TActions>(actions: { [K in keyof TActions]: ActionFunction<TActions[K], ToParameterizedObject<TActions>>; }) => void
+>      : ^        ^^       ^^                                                                                        ^^^^^    
+>{  doStuff: enqueueActions((params: number) => {}),  doOtherStuff: (params) => {},} : { doStuff: ActionFunction<number, never>; doOtherStuff: (params: unknown) => void; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+
+  doStuff: enqueueActions((params: number) => {}),
+>doStuff : ActionFunction<number, never>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions((params: number) => {}) : ActionFunction<number, never>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enqueueActions : <TParams, TAction extends ParameterizedObject>(collect: (params: TParams) => void) => ActionFunction<TParams, TAction>
+>               : ^       ^^       ^^^^^^^^^                   ^^       ^^                         ^^^^^                                
+>(params: number) => {} : (params: number) => void
+>                       : ^      ^^      ^^^^^^^^^
+>params : number
+>       : ^^^^^^
+
+  doOtherStuff: (params) => {},
+>doOtherStuff : (params: unknown) => void
+>             : ^      ^^^^^^^^^^^^^^^^^^
+>(params) => {} : (params: unknown) => void
+>               : ^      ^^^^^^^^^^^^^^^^^^
+>params : unknown
+>       : ^^^^^^^
+
+});
