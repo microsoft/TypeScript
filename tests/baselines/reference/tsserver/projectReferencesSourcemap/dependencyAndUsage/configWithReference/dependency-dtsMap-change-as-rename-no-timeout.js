@@ -887,6 +887,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1085,10 +1088,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before write /user/username/projects/myproject/decls/FnS.d.ts.map
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/main/tsconfig.json *new*
-2: /user/username/projects/myproject/dependency/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json *new*
+3: /user/username/projects/myproject/dependency/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1166,13 +1170,14 @@ Before request
 }
 
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/main/tsconfig.json *deleted*
-2: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
-3: *ensureProjectForOpenFiles* *deleted*
-4: /user/username/projects/myproject/main/tsconfig.json *new*
-5: /user/username/projects/myproject/dependency/tsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+2: /user/username/projects/myproject/main/tsconfig.json *deleted*
+3: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+4: *ensureProjectForOpenFiles* *deleted*
+1: undefined
+5: /user/username/projects/myproject/main/tsconfig.json *new*
+6: /user/username/projects/myproject/dependency/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
@@ -1334,6 +1339,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+1: undefined
+5: /user/username/projects/myproject/main/tsconfig.json
+6: /user/username/projects/myproject/dependency/tsconfig.json
+7: *ensureProjectForOpenFiles*
+8: undefined *new*
 
 Before request
 

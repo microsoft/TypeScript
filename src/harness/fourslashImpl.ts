@@ -840,6 +840,35 @@ export class TestState {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
+    public verifyGoToDefinitionInferredIndex(expectedDefinitionMarkerName: string): void {
+        const result = this.getGoToDefinitionAndBoundSpan();
+        const expectedMarker = this.getMarkerByName(expectedDefinitionMarkerName);
+
+        if (!result.definitions || result.definitions.length === 0) {
+            this.raiseError(`Expected definitions to be present, but got none.`);
+        }
+
+        if (result.inferredIndex === undefined) {
+            this.raiseError(`Expected inferredIndex to be defined, but it was undefined.`);
+        }
+
+        const inferredDef = result.definitions[result.inferredIndex];
+        if (!inferredDef) {
+            this.raiseError(`inferredIndex ${result.inferredIndex} is out of bounds for definitions array of length ${result.definitions.length}.`);
+        }
+
+        // Check if the inferred definition points to the expected marker location
+        if (
+            inferredDef.fileName !== expectedMarker.fileName ||
+            inferredDef.textSpan.start !== expectedMarker.position
+        ) {
+            this.raiseError(
+                `Expected inferredIndex to point to marker "${expectedDefinitionMarkerName}" at ${expectedMarker.fileName}:${expectedMarker.position}, ` +
+                    `but it points to ${inferredDef.fileName}:${inferredDef.textSpan.start}.`,
+            );
+        }
+    }
+
     private renderMarkers(markers: { text: string; fileName: string; position: number; }[], useTerminalBoldSequence = true) {
         const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
         return filesToDisplay.map(fileName => {

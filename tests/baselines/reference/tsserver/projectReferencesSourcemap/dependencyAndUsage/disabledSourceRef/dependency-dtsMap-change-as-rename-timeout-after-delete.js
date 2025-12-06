@@ -931,6 +931,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -1104,16 +1107,18 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/dependency/tsconfig.json
-3: /user/username/projects/myproject/main/tsconfig.json
-4: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/dependency/tsconfig.json *new*
-3: /user/username/projects/myproject/main/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json *new*
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1277,9 +1282,9 @@ Before request
 
 
 Timeout callback:: count: 3
-5: /user/username/projects/myproject/dependency/tsconfig.json *new*
-7: /user/username/projects/myproject/main/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+6: /user/username/projects/myproject/dependency/tsconfig.json *new*
+8: /user/username/projects/myproject/main/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1389,6 +1394,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+6: /user/username/projects/myproject/dependency/tsconfig.json
+8: /user/username/projects/myproject/main/tsconfig.json
+9: *ensureProjectForOpenFiles*
+10: undefined *new*
+
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 3
@@ -1497,6 +1508,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+6: /user/username/projects/myproject/dependency/tsconfig.json
+8: /user/username/projects/myproject/main/tsconfig.json
+9: *ensureProjectForOpenFiles*
+10: undefined
+11: undefined *new*
 
 Before request
 

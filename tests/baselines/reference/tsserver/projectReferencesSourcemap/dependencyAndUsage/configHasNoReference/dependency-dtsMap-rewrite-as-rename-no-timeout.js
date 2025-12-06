@@ -913,6 +913,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -1089,10 +1092,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before write /user/username/projects/myproject/decls/FnS.d.ts.map
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/dependency/tsconfig.json *new*
-3: /user/username/projects/myproject/main/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json *new*
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1163,13 +1167,14 @@ Before request
 {"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
 
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
-3: /user/username/projects/myproject/main/tsconfig.json *deleted*
-4: *ensureProjectForOpenFiles* *deleted*
-5: /user/username/projects/myproject/dependency/tsconfig.json *new*
-7: /user/username/projects/myproject/main/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+2: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+4: /user/username/projects/myproject/main/tsconfig.json *deleted*
+5: *ensureProjectForOpenFiles* *deleted*
+1: undefined
+6: /user/username/projects/myproject/dependency/tsconfig.json *new*
+8: /user/username/projects/myproject/main/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
@@ -1365,6 +1370,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+1: undefined
+6: /user/username/projects/myproject/dependency/tsconfig.json
+8: /user/username/projects/myproject/main/tsconfig.json
+9: *ensureProjectForOpenFiles*
+10: undefined *new*
 
 Before request
 

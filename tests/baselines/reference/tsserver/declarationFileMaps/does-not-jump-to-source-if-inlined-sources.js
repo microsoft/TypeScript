@@ -279,6 +279,9 @@ FsWatchesRecursive::
 /home/src/projects/project/b:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
@@ -400,6 +403,10 @@ FsWatchesRecursive::
   {}
 /home/src/projects/project/b:
   {}
+
+Timeout callback:: count: 2
+1: undefined
+2: undefined *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*

@@ -913,6 +913,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -1363,6 +1366,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+1: undefined
+2: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1414,6 +1421,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 3
+1: undefined
+2: undefined
+3: undefined *new*
 
 Before request
 
@@ -1467,6 +1479,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+1: undefined
+2: undefined
+3: undefined
+4: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1518,6 +1536,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+1: undefined
+2: undefined
+3: undefined
+4: undefined
+5: undefined *new*
 
 Before request
 

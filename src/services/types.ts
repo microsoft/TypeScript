@@ -1257,6 +1257,7 @@ export interface DefinitionInfo extends DocumentSpan {
 
 export interface DefinitionInfoAndBoundSpan {
     definitions?: readonly DefinitionInfo[];
+    inferredIndex?: number;
     textSpan: TextSpan;
 }
 

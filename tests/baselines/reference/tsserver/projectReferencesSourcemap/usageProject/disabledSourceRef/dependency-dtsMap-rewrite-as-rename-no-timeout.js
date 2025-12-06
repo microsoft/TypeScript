@@ -723,6 +723,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -777,9 +780,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before write /user/username/projects/myproject/decls/FnS.d.ts.map
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 3
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
@@ -837,11 +841,12 @@ Before request
 {"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
 
 
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json *deleted*
-2: *ensureProjectForOpenFiles* *deleted*
-3: /user/username/projects/myproject/main/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 3
+2: /user/username/projects/myproject/main/tsconfig.json *deleted*
+3: *ensureProjectForOpenFiles* *deleted*
+1: undefined
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
@@ -1026,3 +1031,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 4
+1: undefined
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: undefined *new*

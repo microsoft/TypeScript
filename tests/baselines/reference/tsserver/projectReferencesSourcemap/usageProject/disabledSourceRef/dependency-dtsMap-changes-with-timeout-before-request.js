@@ -723,6 +723,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -772,9 +775,10 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
-Before running Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json
-2: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 3
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
 {
   "version": 3,
@@ -788,9 +792,10 @@ Before running Timeout callback:: count: 2
 }
 
 
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 3
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
@@ -947,6 +952,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+4: undefined *new*
+
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
@@ -1046,6 +1054,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+4: undefined
+5: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1097,6 +1109,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 3
+4: undefined
+5: undefined
+6: undefined *new*
 
 Before request
 
@@ -1150,6 +1167,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+4: undefined
+5: undefined
+6: undefined
+7: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1201,3 +1224,10 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+4: undefined
+5: undefined
+6: undefined
+7: undefined
+8: undefined *new*

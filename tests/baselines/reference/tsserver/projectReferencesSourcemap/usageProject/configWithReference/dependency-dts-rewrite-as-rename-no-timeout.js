@@ -682,14 +682,18 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before write /user/username/projects/myproject/decls/FnS.d.ts
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
 
-Timeout callback:: count: 1
-1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 2
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
@@ -704,9 +708,10 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
-Timeout callback:: count: 1
-1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 2
+2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: undefined
+3: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -758,8 +763,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Timeout callback:: count: 0
-2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+Timeout callback:: count: 1
+3: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: undefined
 
 Before request
 
@@ -812,3 +818,7 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 2
+1: undefined
+4: undefined *new*

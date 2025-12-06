@@ -723,6 +723,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -778,10 +781,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before write /user/username/projects/myproject/decls/FnS.d.ts
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/main/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
-3: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
@@ -842,11 +846,12 @@ export declare function fn6(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
-Timeout callback:: count: 3
-3: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 4
+4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json
+3: *ensureProjectForOpenFiles*
+5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
@@ -949,10 +954,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Timeout callback:: count: 2
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-2: *ensureProjectForOpenFiles*
+Timeout callback:: count: 3
+5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json
+3: *ensureProjectForOpenFiles*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
@@ -1047,3 +1053,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json
+3: *ensureProjectForOpenFiles*
+6: undefined *new*

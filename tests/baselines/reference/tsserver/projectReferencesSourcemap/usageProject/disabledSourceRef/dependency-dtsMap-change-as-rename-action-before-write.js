@@ -723,6 +723,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -777,9 +780,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 3
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
@@ -947,6 +951,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/main/tsconfig.json
+3: *ensureProjectForOpenFiles*
+4: undefined *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -967,11 +977,13 @@ Before request
 }
 
 
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/main/tsconfig.json *deleted*
-2: *ensureProjectForOpenFiles* *deleted*
-3: /user/username/projects/myproject/main/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+2: /user/username/projects/myproject/main/tsconfig.json *deleted*
+3: *ensureProjectForOpenFiles* *deleted*
+1: undefined
+4: undefined
+5: /user/username/projects/myproject/main/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*

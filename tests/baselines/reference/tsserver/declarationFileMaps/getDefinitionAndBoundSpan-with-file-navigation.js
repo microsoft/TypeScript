@@ -990,6 +990,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+2: /home/src/projects/project/b/tsconfig.json
+3: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

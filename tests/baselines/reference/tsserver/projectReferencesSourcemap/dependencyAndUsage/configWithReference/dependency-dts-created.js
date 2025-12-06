@@ -879,6 +879,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1088,10 +1091,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Timeout callback:: count: 3
-3: /user/username/projects/myproject/dependency/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
-5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 4
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1163,10 +1167,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Timeout callback:: count: 2
-5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-3: /user/username/projects/myproject/dependency/tsconfig.json
-4: *ensureProjectForOpenFiles*
+Timeout callback:: count: 3
+6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json
+5: *ensureProjectForOpenFiles*
 
 Before request
 
@@ -1220,6 +1225,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json
+5: *ensureProjectForOpenFiles*
+7: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1271,6 +1282,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json
+5: *ensureProjectForOpenFiles*
+7: undefined
+8: undefined *new*
 
 Before request
 
@@ -1324,6 +1342,14 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 6
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json
+5: *ensureProjectForOpenFiles*
+7: undefined
+8: undefined
+9: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1375,6 +1401,15 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 7
+1: undefined
+4: /user/username/projects/myproject/dependency/tsconfig.json
+5: *ensureProjectForOpenFiles*
+7: undefined
+8: undefined
+9: undefined
+10: undefined *new*
 
 Before request
 

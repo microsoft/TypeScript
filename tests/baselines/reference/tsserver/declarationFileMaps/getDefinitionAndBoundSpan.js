@@ -943,6 +943,10 @@ FsWatchesRecursive::
 /home/src/projects/project/b:
   {}
 
+Timeout callback:: count: 2
+2: /home/src/projects/project/b/tsconfig.json
+3: undefined *new*
+
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1

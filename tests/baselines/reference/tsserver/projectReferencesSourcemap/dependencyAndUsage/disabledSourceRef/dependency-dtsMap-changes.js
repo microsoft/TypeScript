@@ -931,6 +931,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 1
+1: undefined *new*
+
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -1116,10 +1119,11 @@ Before request
 }
 
 
-Timeout callback:: count: 3
-1: /user/username/projects/myproject/dependency/tsconfig.json *new*
-3: /user/username/projects/myproject/main/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 4
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json *new*
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1341,6 +1345,13 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 5
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1392,6 +1403,14 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 6
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: undefined
+7: undefined *new*
 
 Before request
 
@@ -1445,6 +1464,15 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 7
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: undefined
+7: undefined
+8: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1496,6 +1524,16 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 8
+1: undefined
+2: /user/username/projects/myproject/dependency/tsconfig.json
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: undefined
+7: undefined
+8: undefined
+9: undefined *new*
 
 Before request
 
