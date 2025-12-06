@@ -12575,14 +12575,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
         }
         else if (
-            isParameter(declaration)
-            || isPropertyDeclaration(declaration)
+            isPropertyDeclaration(declaration)
             || isPropertySignature(declaration)
             || isVariableDeclaration(declaration)
             || isBindingElement(declaration)
             || isJSDocPropertyLikeTag(declaration)
         ) {
             type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
+        }
+        else if (isParameter(declaration)) {
+            type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
+            if (declaration.dotDotDotToken) {
+                type = normalizeNoInferSpread(type);
+            }
         }
         // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.
         // Re-dispatch based on valueDeclaration.kind instead.
@@ -12807,7 +12812,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfInstantiatedSymbol(symbol: Symbol): Type {
         const links = getSymbolLinks(symbol);
-        return links.type || (links.type = instantiateType(getTypeOfSymbol(links.target!), links.mapper));
+        if (!links.type) {
+            const declaration = links.target!.valueDeclaration;
+            let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper);
+            if (declaration && isParameter(declaration) && declaration.dotDotDotToken) {
+                type = normalizeNoInferSpread(type);
+            }
+            links.type = type;
+        }
+        return links.type;
     }
 
     function getWriteTypeOfInstantiatedSymbol(symbol: Symbol): Type {
@@ -17865,6 +17878,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createTypeReference(target, elementTypes);
         }
         if (target.combinedFlags & ElementFlags.Variadic) {
+            elementTypes = sameMap(elementTypes, (t, i) => {
+                return target.elementFlags[i] & ElementFlags.Variadic ? normalizeNoInferSpread(t) : t;
+            });
             // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
             const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
             if (unionIndex >= 0) {
@@ -17949,6 +17965,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             expandedFlags.push(flags);
             expandedDeclarations.push(declaration);
         }
+    }
+
+    function normalizeNoInferSpread(type: Type): Type {
+        if (!isNoInferType(type)) {
+            return type;
+        }
+        return mapType((type as SubstitutionType).baseType, t => {
+            if (!isTupleType(t)) {
+                return getNoInferType(type);
+            }
+            return createTupleType(
+                map(getElementTypes(t), getNoInferType),
+                t.target.elementFlags,
+                t.target.readonly,
+                t.target.labeledElementDeclarations,
+            );
+        });
     }
 
     function sliceTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
