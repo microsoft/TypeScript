@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/jsxFragmentChildrenCheck.tsx] ////
+
+=== node_modules/@test/jsx-runtime/index.d.ts ===
+export const jsx: any;
+>jsx : Symbol(jsx, Decl(index.d.ts, 0, 12))
+
+export const jsxs: any;
+>jsxs : Symbol(jsxs, Decl(index.d.ts, 1, 12))
+
+type JsxElement =
+>JsxElement : Symbol(JsxElement, Decl(index.d.ts, 1, 23))
+
+  | JsxElementArray
+>JsxElementArray : Symbol(JsxElementArray, Decl(index.d.ts, 7, 36))
+
+  | undefined
+  | string
+  | ((arg: { foo: "bar" }) => void);
+>arg : Symbol(arg, Decl(index.d.ts, 7, 6))
+>foo : Symbol(foo, Decl(index.d.ts, 7, 12))
+
+interface JsxElementArray extends Array<JsxElement> {}
+>JsxElementArray : Symbol(JsxElementArray, Decl(index.d.ts, 7, 36))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>JsxElement : Symbol(JsxElement, Decl(index.d.ts, 1, 23))
+
+interface FragmentProps {
+>FragmentProps : Symbol(FragmentProps, Decl(index.d.ts, 8, 54))
+
+  children?: JsxElement;
+>children : Symbol(FragmentProps.children, Decl(index.d.ts, 10, 25))
+>JsxElement : Symbol(JsxElement, Decl(index.d.ts, 1, 23))
+}
+
+export const Fragment: (props: FragmentProps) => any;
+>Fragment : Symbol(Fragment, Decl(index.d.ts, 14, 12))
+>props : Symbol(props, Decl(index.d.ts, 14, 24))
+>FragmentProps : Symbol(FragmentProps, Decl(index.d.ts, 8, 54))
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 14, 53))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 16, 16))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 17, 17))
+
+      div: any;
+>div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 18, 33))
+
+      span: any;
+>span : Symbol(IntrinsicElements.span, Decl(index.d.ts, 19, 15))
+    }
+  }
+}
+
+=== index.tsx ===
+import { Fragment } from "@test/jsx-runtime";
+>Fragment : Symbol(Fragment, Decl(index.tsx, 0, 8))
+
+// This should pass - using explicit Fragment
+<Fragment>
+>Fragment : Symbol(Fragment, Decl(index.tsx, 0, 8))
+
+  {"ok"}
+  {({ foo }) => "also ok"}
+>foo : Symbol(foo, Decl(index.tsx, 5, 5))
+
+</Fragment>;
+>Fragment : Symbol(Fragment, Decl(index.tsx, 0, 8))
+
+// This should also pass - using <> syntax should be equivalent
+<>
+  {"ok"}
+  {({ foo }) => "should also be ok"}
+>foo : Symbol(foo, Decl(index.tsx, 11, 5))
+
+</>;
+
