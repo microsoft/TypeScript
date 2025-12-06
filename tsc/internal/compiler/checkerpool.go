@@ -16,6 +16,7 @@ type CheckerPool interface {
 	GetChecker(ctx context.Context) (*checker.Checker, func())
 	GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
 	GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
+	ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker))
 	Files(checker *checker.Checker) iter.Seq[*ast.SourceFile]
 }
 
@@ -97,7 +98,7 @@ func (p *checkerPool) createCheckers() {
 
 // Runs `cb` for each checker in the pool concurrently, locking and unlocking checker mutexes as it goes,
 // making it safe to call `ForEachCheckerParallel` from many threads simultaneously.
-func (p *checkerPool) ForEachCheckerParallel(cb func(idx int, c *checker.Checker)) {
+func (p *checkerPool) ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker)) {
 	p.createCheckers()
 	wg := core.NewWorkGroup(p.program.SingleThreaded())
 	for idx, checker := range p.checkers {

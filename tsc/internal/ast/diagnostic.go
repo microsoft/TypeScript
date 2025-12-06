@@ -195,17 +195,11 @@ func getDiagnosticPath(d *Diagnostic) string {
 }
 
 func EqualDiagnostics(d1, d2 *Diagnostic) bool {
-	if d1 == d2 {
-		return true
-	}
 	return EqualDiagnosticsNoRelatedInfo(d1, d2) &&
 		slices.EqualFunc(d1.RelatedInformation(), d2.RelatedInformation(), EqualDiagnostics)
 }
 
 func EqualDiagnosticsNoRelatedInfo(d1, d2 *Diagnostic) bool {
-	if d1 == d2 {
-		return true
-	}
 	return getDiagnosticPath(d1) == getDiagnosticPath(d2) &&
 		d1.Loc() == d2.Loc() &&
 		d1.Code() == d2.Code() &&
@@ -214,9 +208,6 @@ func EqualDiagnosticsNoRelatedInfo(d1, d2 *Diagnostic) bool {
 }
 
 func equalMessageChain(c1, c2 *Diagnostic) bool {
-	if c1 == c2 {
-		return true
-	}
 	return c1.Code() == c2.Code() &&
 		slices.Equal(c1.MessageArgs(), c2.MessageArgs()) &&
 		slices.EqualFunc(c1.MessageChain(), c2.MessageChain(), equalMessageChain)
@@ -267,9 +258,6 @@ func compareRelatedInfo(r1, r2 []*Diagnostic) int {
 }
 
 func CompareDiagnostics(d1, d2 *Diagnostic) int {
-	if d1 == d2 {
-		return 0
-	}
 	c := strings.Compare(getDiagnosticPath(d1), getDiagnosticPath(d2))
 	if c != 0 {
 		return c
