@@ -1,0 +1,137 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedAccessViaExplicitThisParameter.ts] ////
+
+=== protectedAccessViaExplicitThisParameter.ts ===
+// Accessing base class protected methods via explicit 'this' parameter
+// Should compile when 'this' type is a derived class
+
+class Base {
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+
+  protected baseMethod() {
+>baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+
+    return "Base.baseMethod";
+  }
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+
+  protected override baseMethod() {
+>baseMethod : Symbol(Derived.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 9, 28))
+
+    return "Derived.baseMethod";
+  }
+
+  // Test case 1: Static block with explicit 'this' parameter
+  static {
+    this.prototype.baseMethod = function(this: Derived) {
+>this.prototype.baseMethod : Symbol(Derived.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 9, 28))
+>this.prototype : Symbol(Derived.prototype)
+>this : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+>prototype : Symbol(Derived.prototype)
+>baseMethod : Symbol(Derived.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 9, 28))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 16, 41))
+>Derived : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+
+      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived
+>Base.prototype.baseMethod.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Base.prototype.baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>Base.prototype : Symbol(Base.prototype)
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+>prototype : Symbol(Base.prototype)
+>baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 16, 41))
+
+      return "override";
+    }
+  }
+
+  // Test case 2: Regular method with explicit 'this' parameter
+  testExplicitThis() {
+>testExplicitThis : Symbol(Derived.testExplicitThis, Decl(protectedAccessViaExplicitThisParameter.ts, 20, 3))
+
+    const fn = function(this: Derived) {
+>fn : Symbol(fn, Decl(protectedAccessViaExplicitThisParameter.ts, 24, 9))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 24, 24))
+>Derived : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+
+      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived
+>Base.prototype.baseMethod.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Base.prototype.baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>Base.prototype : Symbol(Base.prototype)
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+>prototype : Symbol(Base.prototype)
+>baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 24, 24))
+
+    };
+    fn.call(this);
+>fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(protectedAccessViaExplicitThisParameter.ts, 24, 9))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+  }
+
+  // Test case 3: Should still error with wrong explicit 'this' type
+  testWrongExplicitThis() {
+>testWrongExplicitThis : Symbol(Derived.testWrongExplicitThis, Decl(protectedAccessViaExplicitThisParameter.ts, 28, 3))
+
+    const fn = function(this: Base) {
+>fn : Symbol(fn, Decl(protectedAccessViaExplicitThisParameter.ts, 32, 9))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 32, 24))
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+
+      Base.prototype.baseMethod.call(this); // Error: this: Base, not compatible
+>Base.prototype.baseMethod.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Base.prototype.baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>Base.prototype : Symbol(Base.prototype)
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+>prototype : Symbol(Base.prototype)
+>baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 32, 24))
+
+    };
+  }
+}
+
+// Test case 4: Should error without derived relationship
+class Unrelated {
+>Unrelated : Symbol(Unrelated, Decl(protectedAccessViaExplicitThisParameter.ts, 36, 1))
+
+  testUnrelated() {
+>testUnrelated : Symbol(Unrelated.testUnrelated, Decl(protectedAccessViaExplicitThisParameter.ts, 39, 17))
+
+    const fn = function(this: Unrelated) {
+>fn : Symbol(fn, Decl(protectedAccessViaExplicitThisParameter.ts, 41, 9))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 41, 24))
+>Unrelated : Symbol(Unrelated, Decl(protectedAccessViaExplicitThisParameter.ts, 36, 1))
+
+      Base.prototype.baseMethod.call(this); // Error: Unrelated not related to Base
+>Base.prototype.baseMethod.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Base.prototype.baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>Base.prototype : Symbol(Base.prototype)
+>Base : Symbol(Base, Decl(protectedAccessViaExplicitThisParameter.ts, 0, 0))
+>prototype : Symbol(Base.prototype)
+>baseMethod : Symbol(Base.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 3, 12))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(protectedAccessViaExplicitThisParameter.ts, 41, 24))
+
+    };
+  }
+}
+
+// Test case 5: Should still error for external access
+const instance = new Derived();
+>instance : Symbol(instance, Decl(protectedAccessViaExplicitThisParameter.ts, 48, 5))
+>Derived : Symbol(Derived, Decl(protectedAccessViaExplicitThisParameter.ts, 7, 1))
+
+instance.baseMethod(); // Error: external access to protected member
+>instance.baseMethod : Symbol(Derived.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 9, 28))
+>instance : Symbol(instance, Decl(protectedAccessViaExplicitThisParameter.ts, 48, 5))
+>baseMethod : Symbol(Derived.baseMethod, Decl(protectedAccessViaExplicitThisParameter.ts, 9, 28))
+
