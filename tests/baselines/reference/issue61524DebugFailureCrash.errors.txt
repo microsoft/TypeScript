@@ -1,0 +1,28 @@
+issue61524DebugFailureCrash.ts(10,37): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+issue61524DebugFailureCrash.ts(11,9): error TS2769: No overload matches this call.
+
+
+==== issue61524DebugFailureCrash.ts (2 errors) ====
+    // Exact reproduction from https://github.com/microsoft/TypeScript/issues/61524
+    // This code causes "Debug Failure. No error for last overload signature"
+    
+    type Generic<T> = T extends any[] ? T[number] : T[keyof T];
+    
+    export function testFn<A extends Record<string, any>>(
+        obj: A,
+        cb: (b: Generic<Partial<A>>) => any
+    ) {
+        for (const [key, val] of Object.entries(obj)) {
+                                        ~~~~~~~
+!!! error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+            cb(val as Generic<A>);
+            ~~
+!!! error TS2769: No overload matches this call.
+        }
+    }
+    
+    // Usage that triggers the crash
+    testFn(
+        { foo: "bar", num: 42 },
+        (val) => console.log(val)  // Type inference here causes the issue
+    );
