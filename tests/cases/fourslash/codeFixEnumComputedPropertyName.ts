@@ -1,0 +1,17 @@
+/// <reference path='fourslash.ts' />
+
+// @Filename: test.ts
+////enum CHAR {
+////    [|['\t']|] = 0x09,
+////    ['\n'] = 0x0A,
+////}
+
+goTo.file("test.ts");
+verify.codeFix({
+    description: "Remove unnecessary computed property name syntax",
+    newFileContent: `enum CHAR {
+    "\\t" = 0x09,
+    ['\\n'] = 0x0A,
+}`,
+    index: 0,
+});
