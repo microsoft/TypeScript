@@ -2646,7 +2646,7 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
 }
 
 function loadModuleFromImports(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    if (moduleName === "#" || startsWith(moduleName, "#/")) {
+    if (moduleName === "#") {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Invalid_import_specifier_0_has_no_possible_resolutions, moduleName);
         }
