@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/tripleSlashAttributeOrder.ts] ////
+
+=== /foo.d.ts ===
+declare const foo: number;
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 13))
+
+=== /index.ts ===
+/// <reference resolution-mode="import" path="./foo.d.ts" />
+foo;
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 13))
+
