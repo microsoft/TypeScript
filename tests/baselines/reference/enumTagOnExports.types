@@ -7,8 +7,8 @@ exports.a = {};
 >               : ^^
 >exports.a : typeof a
 >          : ^^^^^^^^
->exports : typeof import("enumTagOnExports")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./enumTagOnExports")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : typeof a
 >  : ^^^^^^^^
 >{} : {}

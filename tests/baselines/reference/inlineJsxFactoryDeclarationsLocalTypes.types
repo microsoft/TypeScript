@@ -312,26 +312,26 @@ import { dom } from "./renderer"
 >    : ^^^^^^               
 
 import prerendered, {MySFC, MyClass, tree} from "./component";
->prerendered : import("renderer2").predom.JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
->      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prerendered : import("./renderer2").predom.JSX.Element
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
->tree : import("renderer2").predom.JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tree : import("./renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let elem = prerendered;
->elem : import("renderer2").predom.JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->prerendered : import("renderer2").predom.JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>elem : import("./renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prerendered : import("./renderer2").predom.JSX.Element
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 elem = <h></h>; // Expect assignability error here
 >elem = <h></h> : dom.JSX.Element
 >               : ^^^^^^^^^^^^^^^
->elem : import("renderer2").predom.JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>elem : import("./renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><h></h> : dom.JSX.Element
 >        : ^^^^^^^^^^^^^^^
 >h : any
@@ -538,8 +538,8 @@ const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >            : ^^^^^^^^^^^^^^^
 ><MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC> : dom.JSX.Element
 >                                                                          : ^^^^^^^^^^^^^^^
->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
->      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -572,8 +572,8 @@ const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >  : ^^^^^^
 >6 : 6
 >  : ^
->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
->      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
+>      : ^     ^^                                          ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Should fail, nondom isn't allowed as children of dom
 const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
@@ -591,10 +591,10 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 >  : ^^^^^^
 >2 : 2
 >  : ^
->tree : import("renderer2").predom.JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->tree : import("renderer2").predom.JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tree : import("./renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tree : import("./renderer2").predom.JSX.Element
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 >       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 

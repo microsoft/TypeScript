@@ -2,20 +2,20 @@
 
 === /index.ts ===
 import { use } from "foo/use";
->use : (o: import("/node_modules/foo/index").C) => void
->    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^    
+>use : (o: import("foo").C) => void
+>    : ^ ^^       ^^^^^  ^^^^^^    
 
 import { o } from "a";
->o : import("/node_modules/foo/index").C
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : import("foo").C
+>  : ^^^^^^^^^^^^^^^
 
 use(o);
 >use(o) : void
 >       : ^^^^
->use : (o: import("/node_modules/foo/index").C) => void
->    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^    
->o : import("/node_modules/foo/index").C
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>use : (o: import("foo").C) => void
+>    : ^ ^^       ^^^^^  ^^^^^^    
+>o : import("foo").C
+>  : ^^^^^^^^^^^^^^^
 
 === /node_modules/a/node_modules/foo/index.d.ts ===
 export class C {

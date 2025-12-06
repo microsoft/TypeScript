@@ -8,8 +8,8 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >          : ^^^
 >Another : typeof SomeClass
 >        : ^^^^^^^^^^^^^^^^
->require('./lib') : typeof import("lib")
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./lib') : typeof import("./lib")
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./lib' : "./lib"
 >        : ^^^^^^^

@@ -4,7 +4,7 @@
 const LazySet = require("./LazySet");
 >LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
+>"./LazySet" : Symbol("./LazySet", Decl(LazySet.js, 0, 0))
 
 /** @type {LazySet} */
 const stringSet = undefined;

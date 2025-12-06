@@ -6566,9 +6566,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             cb: (context: NodeBuilderContext) => T,
             out?: WriterContextOut,
         ): T | undefined {
-            const moduleResolverHost = tracker?.trackSymbol ? tracker.moduleResolverHost :
-                (internalFlags || InternalNodeBuilderFlags.None) & InternalNodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
-                undefined;
+            const moduleResolverHost = tracker?.moduleResolverHost ?? createBasicNodeBuilderModuleSpecifierResolutionHost(host);
             flags = flags || NodeBuilderFlags.None;
             const maxTruncationLength = maximumLength ||
                 (flags & NodeBuilderFlags.NoTruncation ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);

@@ -42,7 +42,7 @@
    {
     "kind": "module",
     "name": "Foo",
-    "containerName": "\"/ns\"",
+    "containerName": "\"./ns\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
@@ -123,7 +123,7 @@
    {
     "kind": "module",
     "name": "Foo",
-    "containerName": "\"/ns\"",
+    "containerName": "\"./ns\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,

@@ -89,7 +89,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/a\"",
+    "name": "module \"./a\"",
     "displayParts": [
      {
       "text": "module",
@@ -100,7 +100,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      }
     ]
@@ -447,7 +447,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/b\"",
+    "name": "module \"./b\"",
     "displayParts": [
      {
       "text": "module",
@@ -458,7 +458,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/b\"",
+      "text": "\"./b\"",
       "kind": "stringLiteral"
      }
     ]
@@ -639,7 +639,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/c\"",
+    "name": "module \"./c\"",
     "displayParts": [
      {
       "text": "module",
@@ -650,7 +650,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/c\"",
+      "text": "\"./c\"",
       "kind": "stringLiteral"
      }
     ]
@@ -901,7 +901,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/d\"",
+    "name": "module \"./d\"",
     "displayParts": [
      {
       "text": "module",
@@ -912,7 +912,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/d\"",
+      "text": "\"./d\"",
       "kind": "stringLiteral"
      }
     ]
@@ -972,7 +972,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/e\"",
+    "name": "module \"./e\"",
     "displayParts": [
      {
       "text": "module",
@@ -983,7 +983,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/e\"",
+      "text": "\"./e\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1108,7 +1108,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/f\"",
+    "name": "module \"./f\"",
     "displayParts": [
      {
       "text": "module",
@@ -1119,7 +1119,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/f\"",
+      "text": "\"./f\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1150,7 +1150,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/g\"",
+    "name": "module \"./g\"",
     "displayParts": [
      {
       "text": "module",
@@ -1161,7 +1161,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/g\"",
+      "text": "\"./g\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1192,7 +1192,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/g\"",
+    "name": "module \"./g\"",
     "displayParts": [
      {
       "text": "module",
@@ -1203,7 +1203,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/g\"",
+      "text": "\"./g\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1234,7 +1234,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/g\"",
+    "name": "module \"./g\"",
     "displayParts": [
      {
       "text": "module",
@@ -1245,7 +1245,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/g\"",
+      "text": "\"./g\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1426,7 +1426,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/h\"",
+    "name": "module \"./h\"",
     "displayParts": [
      {
       "text": "module",
@@ -1437,7 +1437,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/h\"",
+      "text": "\"./h\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1688,7 +1688,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/i\"",
+    "name": "module \"./i\"",
     "displayParts": [
      {
       "text": "module",
@@ -1699,7 +1699,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/i\"",
+      "text": "\"./i\"",
       "kind": "stringLiteral"
      }
     ]
@@ -1762,7 +1762,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/j\"",
+    "name": "module \"./j\"",
     "displayParts": [
      {
       "text": "module",
@@ -1773,7 +1773,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/j\"",
+      "text": "\"./j\"",
       "kind": "stringLiteral"
      }
     ]

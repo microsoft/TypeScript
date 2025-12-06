@@ -5,7 +5,7 @@ const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : Symbol(taskGroups, Decl(index.js, 0, 7))
 >taskNameToGroup : Symbol(taskNameToGroup, Decl(index.js, 0, 18))
 >require : Symbol(require)
->'./module.js' : Symbol("module", Decl(module.js, 0, 0))
+>'./module.js' : Symbol("./module.js", Decl(module.js, 0, 0))
 
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 

@@ -7,6 +7,6 @@ export var X;
 >X : any
 
 export as namespace N
->N : typeof import("exportAsNamespace")
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>N : typeof import("./exportAsNamespace")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

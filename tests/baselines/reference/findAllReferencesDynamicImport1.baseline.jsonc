@@ -24,7 +24,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/foo\"",
+    "name": "module \"./foo\"",
     "displayParts": [
      {
       "text": "module",
@@ -35,7 +35,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/tests/cases/fourslash/foo\"",
+      "text": "\"./foo\"",
       "kind": "stringLiteral"
      }
     ]
@@ -62,7 +62,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var x: Promise<typeof import(\"/tests/cases/fourslash/foo\")>",
+    "name": "var x: Promise<typeof import(\"./foo\")>",
     "displayParts": [
      {
       "text": "var",
@@ -109,7 +109,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "\"/tests/cases/fourslash/foo\"",
+      "text": "\"./foo\"",
       "kind": "stringLiteral"
      },
      {
@@ -144,7 +144,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/foo\"",
+    "name": "module \"./foo\"",
     "displayParts": [
      {
       "text": "module",
@@ -155,7 +155,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/tests/cases/fourslash/foo\"",
+      "text": "\"./foo\"",
       "kind": "stringLiteral"
      }
     ]

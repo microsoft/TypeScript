@@ -8,7 +8,7 @@
    {
     "kind": "function",
     "name": "bar",
-    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "containerName": "\"./foo\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false

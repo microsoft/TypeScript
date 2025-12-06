@@ -42,7 +42,7 @@
    {
     "kind": "function",
     "name": "f",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false
@@ -70,7 +70,7 @@
    {
     "kind": "const",
     "name": "x",
-    "containerName": "\"/a\"",
+    "containerName": "\"./a\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false

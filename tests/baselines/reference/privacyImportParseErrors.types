@@ -1773,8 +1773,8 @@ namespace m2 {
 }
 
 export namespace m3 {
->m3 : typeof import("privacyImportParseErrors").m3
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m3 : typeof import("./privacyImportParseErrors").m3
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     import m3 = require("use_glo_M1_public");
 >m3 : any

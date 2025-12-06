@@ -6,20 +6,20 @@ declare module "file1" {
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 
     function foo(): void;
->foo : typeof import("file1.d.ts")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : typeof import("file1")
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
     namespace foo {
->foo : typeof import("file1.d.ts")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : typeof import("file1")
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
         export var v: number;
 >v : number
 >  : ^^^^^^
     }
     export = foo;
->foo : typeof import("file1.d.ts")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : typeof import("file1")
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 
