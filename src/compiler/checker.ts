@@ -1765,7 +1765,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const node = getParseTreeNode(nodeIn, isJsxAttributeLike);
             return node && getContextualTypeForJsxAttribute(node, /*contextFlags*/ undefined);
         },
-        isContextSensitive,
+        containsContextSensitive,
         getTypeOfPropertyOfContextualType,
         getFullyQualifiedName,
         getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
@@ -6221,7 +6221,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {
-        return symbol && !!symbol.valueDeclaration && isExpression(symbol.valueDeclaration) && !isContextSensitive(symbol.valueDeclaration);
+        return symbol && !!symbol.valueDeclaration && isExpression(symbol.valueDeclaration) && !containsContextSensitive(symbol.valueDeclaration);
     }
 
     function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
@@ -13008,7 +13008,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.ConditionalType: {
                     const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
-                    if ((kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction || isObjectLiteralMethod(node)) && isContextSensitive(node as Expression | MethodDeclaration)) {
+                    if ((kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction || isObjectLiteralMethod(node)) && containsContextSensitive(node as Expression | MethodDeclaration)) {
                         const signature = firstOrUndefined(getSignaturesOfType(getTypeOfSymbol(getSymbolOfDeclaration(node as FunctionLikeDeclaration)), SignatureKind.Call));
                         if (signature && signature.typeParameters) {
                             return [...(outerTypeParameters || emptyArray), ...signature.typeParameters];
@@ -21112,45 +21112,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createIndexInfo(info.keyType, instantiateType(info.type, mapper), info.isReadonly, info.declaration, info.components);
     }
 
-    // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
-    // that is subject to contextual typing.
-    function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild): boolean {
+    function containsContextRelatedNode(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild, predicate: (node: Node) => boolean): boolean {
         Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.FunctionDeclaration: // Function declarations can have context when annotated with a jsdoc @type
-                return isContextSensitiveFunctionLikeDeclaration(node as FunctionExpression | ArrowFunction | MethodDeclaration);
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                return predicate(node);
             case SyntaxKind.ObjectLiteralExpression:
-                return some((node as ObjectLiteralExpression).properties, isContextSensitive);
+                return some((node as ObjectLiteralExpression).properties, p => containsContextRelatedNode(p, predicate));
             case SyntaxKind.ArrayLiteralExpression:
-                return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                return some((node as ArrayLiteralExpression).elements, e => containsContextRelatedNode(e, predicate));
             case SyntaxKind.ConditionalExpression:
-                return isContextSensitive((node as ConditionalExpression).whenTrue) ||
-                    isContextSensitive((node as ConditionalExpression).whenFalse);
+                return containsContextRelatedNode((node as ConditionalExpression).whenTrue, predicate) ||
+                    containsContextRelatedNode((node as ConditionalExpression).whenFalse, predicate);
             case SyntaxKind.BinaryExpression:
                 return ((node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken || (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
-                    (isContextSensitive((node as BinaryExpression).left) || isContextSensitive((node as BinaryExpression).right));
+                    (containsContextRelatedNode((node as BinaryExpression).left, predicate) || containsContextRelatedNode((node as BinaryExpression).right, predicate));
             case SyntaxKind.PropertyAssignment:
-                return isContextSensitive((node as PropertyAssignment).initializer);
+                return containsContextRelatedNode((node as PropertyAssignment).initializer, predicate);
             case SyntaxKind.ParenthesizedExpression:
-                return isContextSensitive((node as ParenthesizedExpression).expression);
+                return containsContextRelatedNode((node as ParenthesizedExpression).expression, predicate);
             case SyntaxKind.JsxAttributes:
-                return some((node as JsxAttributes).properties, isContextSensitive) || isJsxOpeningElement(node.parent) && some(node.parent.parent.children, isContextSensitive);
+                return some((node as JsxAttributes).properties, p => containsContextRelatedNode(p, predicate)) || isJsxOpeningElement(node.parent) && some(node.parent.parent.children, c => containsContextRelatedNode(c, predicate));
             case SyntaxKind.JsxAttribute: {
-                // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
                 const { initializer } = node as JsxAttribute;
-                return !!initializer && isContextSensitive(initializer);
+                return !!initializer && containsContextRelatedNode(initializer, predicate);
             }
             case SyntaxKind.JsxExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
                 const { expression } = node as JsxExpression;
-                return !!expression && isContextSensitive(expression);
+                return !!expression && containsContextRelatedNode(expression, predicate);
             }
         }
 
         return false;
+    }
+
+    // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
+    // that is subject to contextual typing.
+    function containsContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild): boolean {
+        return containsContextRelatedNode(node, isContextSensitiveFunctionOrObjectLiteralMethod);
+    }
+
+    function containsContextSensitiveOrCallOrNewExpression(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild): boolean {
+        return containsContextRelatedNode(node, n => isContextSensitiveFunctionOrObjectLiteralMethod(n) || isCallOrNewExpression(n));
     }
 
     function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
@@ -21162,9 +21171,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         if (node.body.kind !== SyntaxKind.Block) {
-            return isContextSensitive(node.body);
+            return containsContextSensitive(node.body);
         }
-        return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression));
+        return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && containsContextSensitive(statement.expression));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -33282,7 +33291,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const type = checkExpressionForMutableLocation(e, checkMode, forceTuple);
                 elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                 elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
-                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
+                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(e)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
                     addIntraExpressionInferenceSite(inferenceContext, e, type);
@@ -33523,7 +33532,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (
                     contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
-                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)
+                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && containsContextSensitiveOrCallOrNewExpression(memberDecl)
                 ) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
@@ -33762,7 +33771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                         }
                     }
-                    if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
+                    if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(attributeDecl)) {
                         const inferenceContext = getInferenceContext(attributes);
                         Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
                         const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
@@ -36525,7 +36534,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For a decorator, no arguments are susceptible to contextual typing due to the fact
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-        if (!isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive)) {
+        if (!isDecorator && !isSingleNonGenericCandidate && some(args, containsContextSensitive)) {
             argCheckMode = CheckMode.SkipContextSensitive;
         }
 
@@ -39515,7 +39524,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // The identityMapper object is used to indicate that function expressions are wildcards
-        if (checkMode && checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node)) {
+        if (checkMode && checkMode & CheckMode.SkipContextSensitive && containsContextSensitive(node)) {
             // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
             if (!getEffectiveReturnTypeNode(node) && !hasContextSensitiveParameters(node)) {
                 // Return plain anyFunctionType if there is no possibility we'll make inferences from the return type
@@ -39560,7 +39569,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!signature) {
                     return;
                 }
-                if (isContextSensitive(node)) {
+                if (containsContextSensitive(node)) {
                     if (contextualSignature) {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
