@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsdocTypeofParameterConsistency.ts] ////
+
+=== jsdocTypeofParameterConsistency.js ===
+/**
+ * @template T  
+ * @param {T} a
+ * @return {typeof a}
+ */
+function f(a) {
+>f : <T>(a: T) => typeof a
+>  : ^ ^^ ^^ ^^^^^        
+>a : T
+>  : ^
+
+    return a;
+>a : T
+>  : ^
+}
+
+/**
+ * @template T
+ * @param {T} b  
+ * @return {typeof b}
+ */
+function g(b) {
+>g : <T>(b: T) => typeof b
+>  : ^ ^^ ^^ ^^^^^        
+>b : T
+>  : ^
+
+    return b;
+>b : T
+>  : ^
+}
