@@ -695,3 +695,7 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         t.cool;
     };
     
+    type IndexedNever<T> = never[keyof T];
+    type IndexedAny<T> = any[keyof T];
+    type IndexedUnknown<T> = unknown[keyof T];
+    

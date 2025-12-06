@@ -3450,3 +3450,15 @@ const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, 
 
 };
 
+type IndexedNever<T> = never[keyof T];
+>IndexedNever : never
+>             : ^^^^^
+
+type IndexedAny<T> = any[keyof T];
+>IndexedAny : any
+>           : ^^^
+
+type IndexedUnknown<T> = unknown[keyof T];
+>IndexedUnknown : unknown
+>               : ^^^^^^^
+
