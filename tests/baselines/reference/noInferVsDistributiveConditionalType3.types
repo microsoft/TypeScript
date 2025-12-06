@@ -1,0 +1,196 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferVsDistributiveConditionalType3.ts] ////
+
+=== noInferVsDistributiveConditionalType3.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/51831
+
+type NoMatchAll<K> = Exclude<K, "_">
+>NoMatchAll : NoMatchAll<K>
+>           : ^^^^^^^^^^^^^
+
+type Union<T extends object> = {
+>Union : Union<T>
+>      : ^^^^^^^^
+
+  [P in keyof T]: ({ [Q in "kind"]: P } & T[P]) extends infer U ? { [Q in keyof U]: U[Q] } : never
+}[keyof T]
+type UnionMap<U extends { kind: string }> = { [K in U["kind"]]: U extends { kind: K } ? U : never }
+>UnionMap : UnionMap<U>
+>         : ^^^^^^^^^^^
+>kind : string
+>     : ^^^^^^
+>kind : K
+>     : ^
+
+type ExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]: (u1: UnionMap<T>[K]) => R };
+>ExhaustivePattern : ExhaustivePattern<T, R>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>kind : string
+>     : ^^^^^^
+>u1 : UnionMap<T>[K]
+>   : ^^^^^^^^^^^^^^
+
+type NonExhaustivePattern<T extends { kind: string }, R> = { [K in T["kind"] as NoMatchAll<K>]?: (u2: UnionMap<T>[K]) => R } & {_: (union: T) => R};
+>NonExhaustivePattern : NonExhaustivePattern<T, R>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : string
+>     : ^^^^^^
+>u2 : UnionMap<T>[K]
+>   : ^^^^^^^^^^^^^^
+>_ : (union: T) => R
+>  : ^     ^^ ^^^^^ 
+>union : T
+>      : ^
+
+type Pattern<T extends { kind: string }, R> = ExhaustivePattern<T, R> | NonExhaustivePattern<T, R>;
+>Pattern : Pattern<T, R>
+>        : ^^^^^^^^^^^^^
+>kind : string
+>     : ^^^^^^
+
+function match<U extends { kind: string }, T>(union: U, pattern: Pattern<NoInfer<U>, T>): T {
+>match : <U extends { kind: string; }, T>(union: U, pattern: Pattern<NoInfer<U>, T>) => T
+>      : ^ ^^^^^^^^^                 ^^ ^^     ^^ ^^       ^^                      ^^^^^ 
+>kind : string
+>     : ^^^^^^
+>union : U
+>      : ^
+>pattern : Pattern<NoInfer<U>, T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if((pattern as any)[union.kind]) {
+>(pattern as any)[union.kind] : any
+>(pattern as any) : any
+>pattern as any : any
+>pattern : Pattern<NoInfer<U>, T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>union.kind : string
+>           : ^^^^^^
+>union : U
+>      : ^
+>kind : string
+>     : ^^^^^^
+
+    return (pattern as any)[union.kind](union as U) as T
+>(pattern as any)[union.kind](union as U) as T : T
+>                                              : ^
+>(pattern as any)[union.kind](union as U) : any
+>(pattern as any)[union.kind] : any
+>(pattern as any) : any
+>pattern as any : any
+>pattern : Pattern<NoInfer<U>, T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>union.kind : string
+>           : ^^^^^^
+>union : U
+>      : ^
+>kind : string
+>     : ^^^^^^
+>union as U : U
+>           : ^
+>union : U
+>      : ^
+  }
+  return (pattern as any)["_"](union as U) as T
+>(pattern as any)["_"](union as U) as T : T
+>                                       : ^
+>(pattern as any)["_"](union as U) : any
+>(pattern as any)["_"] : any
+>(pattern as any) : any
+>pattern as any : any
+>pattern : Pattern<NoInfer<U>, T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>"_" : "_"
+>    : ^^^
+>union as U : U
+>           : ^
+>union : U
+>      : ^
+}
+
+type ValueType = Union<{
+>ValueType : ValueType
+>          : ^^^^^^^^^
+
+  String: {value: string},
+>String : { value: string; }
+>       : ^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+
+  Number: {value: number},
+>Number : { value: number; }
+>       : ^^^^^^^^^      ^^^
+>value : number
+>      : ^^^^^^
+
+  Boolean: {value: boolean},
+>Boolean : { value: boolean; }
+>        : ^^^^^^^^^       ^^^
+>value : boolean
+>      : ^^^^^^^
+
+  Date: {value: Date}
+>Date : { value: Date; }
+>     : ^^^^^^^^^    ^^^
+>value : Date
+>      : ^^^^
+
+}>
+
+function main(value: ValueType) {
+>main : (value: ValueType) => void
+>     : ^     ^^         ^^^^^^^^^
+>value : ValueType
+>      : ^^^^^^^^^
+
+  let test1 = match(value, {
+>test1 : string
+>      : ^^^^^^
+>match(value, {    String: ({value}) => value,    Number: ({value}) => value.toString(),    _: (token) => "Unknown"  }) : string
+>                                                                                                                       : ^^^^^^
+>match : <U extends { kind: string; }, T>(union: U, pattern: Pattern<NoInfer<U>, T>) => T
+>      : ^ ^^^^^^^^^                 ^^ ^^     ^^ ^^       ^^                      ^^^^^ 
+>value : ValueType
+>      : ^^^^^^^^^
+>{    String: ({value}) => value,    Number: ({value}) => value.toString(),    _: (token) => "Unknown"  } : { String: ({ value }: { kind: "String"; value: string; }) => string; Number: ({ value }: { kind: "Number"; value: number; }) => string; _: (token: NoInfer<ValueType>) => string; }
+>                                                                                                         : ^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    String: ({value}) => value,
+>String : ({ value }: { kind: "String"; value: string; }) => string
+>       : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>({value}) => value : ({ value }: { kind: "String"; value: string; }) => string
+>                   : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>value : string
+>      : ^^^^^^
+
+    Number: ({value}) => value.toString(),
+>Number : ({ value }: { kind: "Number"; value: number; }) => string
+>       : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>({value}) => value.toString() : ({ value }: { kind: "Number"; value: number; }) => string
+>                              : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>value.toString() : string
+>                 : ^^^^^^
+>value.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
+>value : number
+>      : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+    _: (token) => "Unknown"
+>_ : (token: NoInfer<ValueType>) => string
+>  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(token) => "Unknown" : (token: NoInfer<ValueType>) => string
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>token : NoInfer<ValueType>
+>      : ^^^^^^^^^^^^^^^^^^
+>"Unknown" : "Unknown"
+>          : ^^^^^^^^^
+
+  });
+}
+
