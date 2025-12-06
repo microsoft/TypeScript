@@ -6308,6 +6308,7 @@ export interface NodeLinks {
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
     instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
     nonExistentPropCheckCache?: Set<string>;
+    completionArgumentIndex?: number;       // Temporary storage for argument index being completed during intellisense
 }
 
 /** @internal */
