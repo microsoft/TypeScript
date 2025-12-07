@@ -20,7 +20,7 @@
    {
     "kind": "property",
     "name": "id",
-    "containerName": "",
+    "containerName": "__type",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
