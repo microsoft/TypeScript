@@ -111,8 +111,9 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		p.finishReparsedNode(importDeclaration, tag)
 		p.reparseList = append(p.reparseList, importDeclaration)
 	case ast.KindJSDocOverloadTag:
-		if fun, ok := getFunctionLikeHost(parent); ok {
-			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, fun, jsDoc, tag, fun.Modifiers()))
+		// Create overload signatures only for function, method, and constructor declarations outside object literals
+		if (ast.IsFunctionDeclaration(parent) || ast.IsMethodDeclaration(parent) || ast.IsConstructorDeclaration(parent)) && p.parsingContexts&(1<<PCObjectLiteralMembers) == 0 {
+			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, parent, jsDoc, tag, parent.Modifiers()))
 		}
 	}
 }
@@ -121,14 +122,10 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	var signature *ast.Node
 	clonedModifiers := p.factory.DeepCloneReparseModifiers(modifiers)
 	switch fun.Kind {
-	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction:
+	case ast.KindFunctionDeclaration:
 		signature = p.factory.NewFunctionDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
-	case ast.KindMethodDeclaration, ast.KindMethodSignature:
+	case ast.KindMethodDeclaration:
 		signature = p.factory.NewMethodDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil, nil)
-	case ast.KindGetAccessor:
-		signature = p.factory.NewGetAccessorDeclaration(clonedModifiers, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
-	case ast.KindSetAccessor:
-		signature = p.factory.NewSetAccessorDeclaration(clonedModifiers, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
 	case ast.KindConstructor:
 		signature = p.factory.NewConstructorDeclaration(clonedModifiers, nil, nil, nil, nil, nil)
 	case ast.KindJSDocCallbackTag:
@@ -323,7 +320,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 				return
 			}
 		}
-		if fun, ok := getFunctionLikeHost(parent); ok {
+		if fun := getFunctionLikeHost(parent); fun != nil {
 			noTypedParams := core.Every(fun.Parameters(), func(param *ast.Node) bool { return param.Type() == nil })
 			if fun.TypeParameterList() == nil && fun.Type() == nil && noTypedParams && tag.TypeExpression() != nil {
 				fun.FunctionLikeData().FullSignature = p.factory.DeepCloneReparse(tag.TypeExpression().Type())
@@ -386,7 +383,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		}
 	case ast.KindJSDocTemplateTag:
-		if fun, ok := getFunctionLikeHost(parent); ok {
+		if fun := getFunctionLikeHost(parent); fun != nil {
 			if fun.TypeParameters() == nil && fun.FunctionLikeData().FullSignature == nil {
 				fun.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, nil /*tagWithTypeParameters*/)
 				p.finishMutatedNode(fun)
@@ -405,7 +402,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		}
 	case ast.KindJSDocParameterTag:
-		if fun, ok := getFunctionLikeHost(parent); ok && fun.FunctionLikeData().FullSignature == nil {
+		if fun := getFunctionLikeHost(parent); fun != nil && fun.FunctionLikeData().FullSignature == nil {
 			parameterTag := tag.AsJSDocParameterOrPropertyTag()
 			if param, ok := findMatchingParameter(fun, parameterTag, jsDoc); ok {
 				if param.Type == nil && parameterTag.TypeExpression != nil {
@@ -420,7 +417,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		}
 	case ast.KindJSDocThisTag:
-		if fun, ok := getFunctionLikeHost(parent); ok {
+		if fun := getFunctionLikeHost(parent); fun != nil {
 			params := fun.Parameters()
 			if len(params) == 0 || params[0].Name().Kind != ast.KindThisKeyword {
 				thisParam := p.factory.NewParameterDeclaration(
@@ -447,7 +444,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		}
 	case ast.KindJSDocReturnTag:
-		if fun, ok := getFunctionLikeHost(parent); ok && fun.FunctionLikeData().FullSignature == nil {
+		if fun := getFunctionLikeHost(parent); fun != nil && fun.FunctionLikeData().FullSignature == nil {
 			if fun.Type() == nil && tag.TypeExpression() != nil {
 				fun.FunctionLikeData().Type = p.factory.DeepCloneReparse(tag.TypeExpression().Type())
 				p.finishMutatedNode(fun)
@@ -570,7 +567,7 @@ func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterTag, j
 	return nil, false
 }
 
-func getFunctionLikeHost(host *ast.Node) (*ast.Node, bool) {
+func getFunctionLikeHost(host *ast.Node) *ast.Node {
 	fun := host
 	if host.Kind == ast.KindVariableStatement && host.AsVariableStatement().DeclarationList != nil {
 		for _, declaration := range host.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
@@ -593,9 +590,9 @@ func getFunctionLikeHost(host *ast.Node) (*ast.Node, bool) {
 		}
 	}
 	if ast.IsFunctionLike(fun) {
-		return fun, true
+		return fun
 	}
-	return nil, false
+	return nil
 }
 
 func (p *Parser) makeNewCast(t *ast.TypeNode, e *ast.Node, isAssertion bool) *ast.Node {

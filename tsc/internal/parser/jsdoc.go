@@ -133,7 +133,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullSta
 	// +3 for leading `/**`
 	p.scanner.ResetPos(start + 3)
 	p.setContextFlags(ast.NodeFlagsJSDoc, true)
-	p.parsingContexts = p.parsingContexts | ParsingContexts(PCJSDocComment)
+	p.parsingContexts |= 1 << PCJSDocComment
 
 	comment := p.parseJSDocCommentWorker(start, end, fullStart, initialIndent)
 	// move jsdoc diagnostics to jsdocDiagnostics -- for JS files only

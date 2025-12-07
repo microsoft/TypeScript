@@ -5,7 +5,6 @@
 
  //// [jsFileAlternativeUseOfOverloadTag.d.ts]
 -declare namespace example1 {
-+declare function Example1(value: any): any;
 +declare const example1: {
      /**
       * @overload Example1(value)
@@ -58,8 +57,6 @@
 -declare namespace example3 {
 +    constructor: (value: any, options: any) => void;
 +};
-+declare function Example2(value: any, secretAccessKey: any, sessionToken: any): any;
-+declare function Example2(): any;
 +declare const example2: {
 +    /**
 +     * Example 2
@@ -81,13 +78,12 @@
 +     */
 +    constructor: () => void;
 +};
-+declare function evaluate(): any;
 +type callback = (error: any, result: any) => any;
 +declare const example3: {
      /**
       * @overload evaluate(options = {}, [callback])
       *   Evaluate something
-@@= skipped -63, +48 lines =@@
+@@= skipped -63, +44 lines =@@
       *     @param result [String]
       *   @see callback
       */

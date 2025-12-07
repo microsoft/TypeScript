@@ -106,7 +106,6 @@ const example3 = {
 
 
 //// [jsFileAlternativeUseOfOverloadTag.d.ts]
-declare function Example1(value: any): any;
 declare const example1: {
     /**
      * @overload Example1(value)
@@ -115,8 +114,6 @@ declare const example1: {
      */
     constructor: (value: any, options: any) => void;
 };
-declare function Example2(value: any, secretAccessKey: any, sessionToken: any): any;
-declare function Example2(): any;
 declare const example2: {
     /**
      * Example 2
@@ -138,7 +135,6 @@ declare const example2: {
      */
     constructor: () => void;
 };
-declare function evaluate(): any;
 type callback = (error: any, result: any) => any;
 declare const example3: {
     /**

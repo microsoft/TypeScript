@@ -345,7 +345,7 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	if eof.Kind != ast.KindEndOfFile {
 		panic("Expected end of file token from scanner.")
 	}
-	if len(p.reparseList) > 0 {
+	if len(p.reparseList) != 0 {
 		statements = append(statements, p.reparseList...)
 		p.reparseList = nil
 	}
@@ -504,7 +504,7 @@ func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser
 	for i := 0; !p.isListTerminator(kind); i++ {
 		if p.isListElement(kind, false /*inErrorRecovery*/) {
 			elt := parseElement(p, len(list))
-			if len(p.reparseList) > 0 {
+			if len(p.reparseList) != 0 {
 				for _, e := range p.reparseList {
 					// Propagate @typedef type alias declarations outwards to a context that permits them.
 					if (ast.IsJSTypeAliasDeclaration(e) || ast.IsJSImportDeclaration(e)) && kind != PCSourceElements && kind != PCBlockStatements {
