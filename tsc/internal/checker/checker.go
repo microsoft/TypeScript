@@ -15800,7 +15800,7 @@ func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) resolveIndirectionAlias(source *ast.Symbol, target *ast.Symbol) *ast.Symbol {
-	result := c.resolveAlias(target)
+	result := c.getMergedSymbol(c.resolveAlias(target))
 	if targetLinks := c.aliasSymbolLinks.Get(target); targetLinks.typeOnlyDeclaration != nil {
 		if sourceLinks := c.aliasSymbolLinks.Get(source); sourceLinks.typeOnlyDeclaration == nil {
 			sourceLinks.typeOnlyDeclaration = targetLinks.typeOnlyDeclaration
