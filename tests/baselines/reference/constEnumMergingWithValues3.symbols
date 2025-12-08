@@ -5,11 +5,11 @@ enum foo { A }
 >foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 0, 14))
 >A : Symbol(foo.A, Decl(m1.ts, 0, 10))
 
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 0, 14))
 
     const enum E { X }
->E : Symbol(E, Decl(m1.ts, 1, 12))
+>E : Symbol(E, Decl(m1.ts, 1, 15))
 >X : Symbol(E.X, Decl(m1.ts, 2, 18))
 }
 

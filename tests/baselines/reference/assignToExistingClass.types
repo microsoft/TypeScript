@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignToExistingClass.ts] ////
 
 === assignToExistingClass.ts ===
-module Test {
+namespace Test {
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 

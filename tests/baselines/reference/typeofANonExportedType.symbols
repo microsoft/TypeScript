@@ -64,7 +64,7 @@ export var r5: typeof i2;
 >r5 : Symbol(r5, Decl(typeofANonExportedType.ts, 19, 10), Decl(typeofANonExportedType.ts, 20, 10))
 >i2 : Symbol(i2, Decl(typeofANonExportedType.ts, 18, 3))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(typeofANonExportedType.ts, 20, 25))
 
     export var foo = '';
@@ -124,7 +124,7 @@ export var r12: typeof r12;
 function foo() { }
 >foo : Symbol(foo, Decl(typeofANonExportedType.ts, 41, 27), Decl(typeofANonExportedType.ts, 43, 18))
 
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(typeofANonExportedType.ts, 41, 27), Decl(typeofANonExportedType.ts, 43, 18))
 
     export var y = 1;

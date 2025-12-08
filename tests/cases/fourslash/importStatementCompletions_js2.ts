@@ -9,6 +9,8 @@
 // @target: es2020
 // @checkJs: true
 // @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 // @noEmit: true
 
 // @Filename: /node_modules/react/index.d.ts

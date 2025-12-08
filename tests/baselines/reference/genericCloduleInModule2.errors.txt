@@ -2,15 +2,15 @@ genericCloduleInModule2.ts(14,8): error TS2314: Generic type 'B<T>' requires 1 t
 
 
 ==== genericCloduleInModule2.ts (1 errors) ====
-    module A {
+    namespace A {
         export class B<T> {
             foo() { }
             static bar() { }
         }
     }
     
-    module A {
-        export module B {
+    namespace A {
+        export namespace B {
             export var x = 1;
         }
     }

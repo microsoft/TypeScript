@@ -1,6 +1,6 @@
 // === findRenameLocations ===
 // === /tests/cases/fourslash/a.ts ===
-// module SomeModule { <|export class /*RENAME*/[|SomeClassRENAME|] { }|> }
+// namespace SomeModule { <|export class /*RENAME*/[|SomeClassRENAME|] { }|> }
 // export = SomeModule;
 
 // === /tests/cases/fourslash/b.ts ===
@@ -11,7 +11,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/a.ts ===
-// module SomeModule { <|export class [|SomeClassRENAME|] { }|> }
+// namespace SomeModule { <|export class [|SomeClassRENAME|] { }|> }
 // export = SomeModule;
 
 // === /tests/cases/fourslash/b.ts ===

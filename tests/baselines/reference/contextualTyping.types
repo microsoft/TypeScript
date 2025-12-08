@@ -54,7 +54,7 @@ class C1T5 {
 }
 
 // CONTEXT: Module property declaration
-module C2T5 {
+namespace C2T5 {
 >C2T5 : typeof C2T5
 >     : ^^^^^^^^^^^
 
@@ -337,7 +337,7 @@ class C4T5 {
 }
 
 // CONTEXT: Module property assignment
-module C5T5 {
+namespace C5T5 {
 >C5T5 : typeof C5T5
 >     : ^^^^^^^^^^^
 

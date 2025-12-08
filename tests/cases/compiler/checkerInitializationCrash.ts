@@ -1,5 +1,5 @@
 // @module: esnext
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @esModuleInterop: true
 
 // @Filename: /node_modules/@fullcalendar/react/index.d.ts
