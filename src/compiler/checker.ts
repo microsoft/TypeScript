@@ -32631,7 +32631,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // types as well as arguments to the left in a function call.
                 return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
             }
-            if (inferenceContext?.returnMapper) {
+            if (!(contextFlags! & ContextFlags.SkipReturnMapper) && inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
                 // incorporate inferences made from the return type in a function call. We remove
                 // the 'boolean' type from the contextual type such that contextually typed boolean
@@ -33226,6 +33226,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isSpreadElement(parent) && isCallOrNewExpression(parent.parent);
     }
 
+    function givesTupleContext(type: Type | undefined) {
+        return !!type && someType(type, t => isTupleLikeType(t) || isGenericMappedType(t) && !t.nameType && !!getHomomorphicTypeVariable(t.target as MappedType || t));
+    }
+
     function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
         const elements = node.elements;
         const elementCount = elements.length;
@@ -33235,7 +33239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
-        const inTupleContext = isSpreadIntoCallOrNew(node) || !!contextualType && someType(contextualType, t => isTupleLikeType(t) || isGenericMappedType(t) && !t.nameType && !!getHomomorphicTypeVariable(t.target as MappedType || t));
+        const inTupleContext = isSpreadIntoCallOrNew(node) || givesTupleContext(contextualType) || givesTupleContext(getApparentTypeOfContextualType(node, ContextFlags.SkipReturnMapper));
 
         let hasOmittedExpression = false;
         for (let i = 0; i < elementCount; i++) {

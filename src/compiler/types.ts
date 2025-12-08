@@ -5520,6 +5520,7 @@ export const enum ContextFlags {
     NoConstraints  = 1 << 1, // Don't obtain type variable constraints
     Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
     SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
+    SkipReturnMapper = 1 << 4,
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
