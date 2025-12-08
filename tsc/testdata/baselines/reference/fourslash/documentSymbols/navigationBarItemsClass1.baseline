@@ -1,0 +1,8 @@
+// === Document Symbols ===
+// === /navigationBarItemsClass1.ts ===
+// <|function [|{| name: Foo, kind: Function |}Foo|]() {}|>
+// <|class [|{| name: Foo, kind: Class |}Foo|] {}|>
+
+// === Details ===
+(Function) Foo
+(Class) Foo

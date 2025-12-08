@@ -1,0 +1,41 @@
+// === Document Symbols ===
+// === /navigationBarItemsModules1.ts ===
+// <|declare module [|{| name: "X.Y.Z", kind: Namespace |}"X.Y.Z"|] {}|>
+// 
+// <|declare module [|{| name: "X2.Y2.Z2", kind: Namespace |}'X2.Y2.Z2'|] {}|>
+// 
+// <|declare module [|{| name: "foo", kind: Namespace |}"foo"|];|>
+// 
+// <|module [|{| name: A.B.C, kind: Namespace |}A.B.C|] {
+//     export var <|[|{| name: x, kind: Variable |}x|]|>;
+// }|>
+// 
+// <|module [|{| name: A.B, kind: Namespace |}A.B|] {
+//     export var <|[|{| name: y, kind: Variable |}y|]|>;
+// }|>
+// 
+// <|module [|{| name: A, kind: Namespace |}A|] {
+//     export var <|[|{| name: z, kind: Variable |}z|]|>;
+// }|>
+// 
+// module A {
+//     <|module [|{| name: B, kind: Namespace |}B|] {
+//         <|module [|{| name: C, kind: Namespace |}C|] {
+//             declare var <|[|{| name: x, kind: Variable |}x|]|>;
+//         }|>
+//     }|>
+// }
+
+// === Details ===
+(Namespace) "X.Y.Z"
+(Namespace) "X2.Y2.Z2"
+(Namespace) "foo"
+(Namespace) A.B.C
+  (Variable) x
+(Namespace) A.B
+  (Variable) y
+(Namespace) A
+  (Variable) z
+  (Namespace) B
+    (Namespace) C
+      (Variable) x

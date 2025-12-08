@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /a.js ===
-// [|module.exports = <|function [|f|]() {}|]|>
+// [|module.exports = <|function [|f|]() {}|>|]
 
 // === /b.js ===
 // const f = require("./a");
@@ -10,7 +10,7 @@
 
 // === goToDefinition ===
 // === /a.js ===
-// [|module.exports = <|function [|f|]() {}|]|>
+// [|module.exports = <|function [|f|]() {}|>|]
 
 // === /bar.ts ===
 // import f = require("./a");

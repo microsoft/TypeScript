@@ -94,6 +94,11 @@ function parseFileContent(filename: string, content: string): GoTest | undefined
             goTest.commands.push(...result);
         }
     }
+    if (goTest.commands.length === 0) {
+        console.error(`No commands parsed in file: ${filename}`);
+        unparsedFiles.push(filename);
+        return undefined;
+    }
     return goTest;
 }
 
@@ -237,6 +242,10 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "outliningSpansInCurrentFile":
                 case "outliningHintSpansInCurrentFile":
                     return parseOutliningSpansArgs(callExpression.arguments);
+                case "navigationTree":
+                    return parseVerifyNavTree(callExpression.arguments);
+                case "navigationBar":
+                    return []; // Deprecated.
             }
         }
         // `goTo....`
@@ -2273,6 +2282,13 @@ function parseVerifyNavigateToArg(arg: ts.Expression): string | undefined {
     }`;
 }
 
+function parseVerifyNavTree(args: readonly ts.Expression[]): [VerifyNavTreeCmd] | undefined {
+    // Ignore arguments and use baseline tests intead.
+    return [{
+        kind: "verifyNavigationTree",
+    }];
+}
+
 function parseNavToItem(arg: ts.Expression): string | undefined {
     let item = getNodeOfKind(arg, ts.isObjectLiteralExpression);
     if (!item) {
@@ -2348,11 +2364,15 @@ function getSymbolKind(kind: ts.Expression): string | undefined {
         console.error(`Expected string literal for symbol kind, got ${kind.getText()}`);
         return undefined;
     }
-    switch (result.text) {
+    return getSymbolKindWorker(result.text);
+}
+
+function getSymbolKindWorker(kind: string): string {
+    switch (kind) {
         case "script":
             return "SymbolKindFile";
         case "module":
-            return "SymbolKindModule";
+            return "SymbolKindNamespace";
         case "class":
         case "local class":
             return "SymbolKindClass";
@@ -2400,6 +2420,8 @@ function getSymbolKind(kind: ts.Expression): string | undefined {
             return "SymbolKindModule";
         case "string":
             return "SymbolKindString";
+        case "type":
+            return "SymbolKindClass";
         default:
             return "SymbolKindVariable";
     }
@@ -2567,6 +2589,10 @@ interface VerifyOutliningSpansCmd {
     foldingRangeKind?: string;
 }
 
+interface VerifyNavTreeCmd {
+    kind: "verifyNavigationTree";
+}
+
 type Cmd =
     | VerifyCompletionsCmd
     | VerifyApplyCodeActionFromCompletionCmd
@@ -2587,6 +2613,7 @@ type Cmd =
     | VerifyBaselineRenameCmd
     | VerifyRenameInfoCmd
     | VerifyNavToCmd
+    | VerifyNavTreeCmd
     | VerifyBaselineInlayHintsCmd
     | VerifyImportFixAtPositionCmd
     | VerifyDiagnosticsCmd
@@ -2894,6 +2921,8 @@ function generateCmd(cmd: Cmd): string {
             return generateNoSignatureHelpForTriggerReason(cmd);
         case "verifyOutliningSpans":
             return generateVerifyOutliningSpans(cmd);
+        case "verifyNavigationTree":
+            return `f.VerifyBaselineDocumentSymbol(t)`;
         default:
             let neverCommand: never = cmd;
             throw new Error(`Unknown command kind: ${neverCommand as Cmd["kind"]}`);

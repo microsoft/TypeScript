@@ -1,0 +1,63 @@
+// === Document Symbols ===
+// === /navbar01.ts ===
+// // Interface
+// <|interface [|{| name: IPoint, kind: Interface |}IPoint|] {
+//     <|[|{| name: getDist, kind: Method |}getDist|](): number;|>
+//     <|[|{| name: new(), kind: Constructor |}|]new(): IPoint;|>
+//     <|[|{| name: (), kind: Method |}|](): any;|>
+//     <|[|{| name: [], kind: Property |}|][x:string]: number;|>
+//     <|[|{| name: prop, kind: Property |}prop|]: string;|>
+// }|>
+// 
+// /// Module
+// <|module [|{| name: Shapes, kind: Namespace |}Shapes|] {
+//     // Class
+//     <|export class [|{| name: Point, kind: Class |}Point|] implements IPoint {
+//         <|[|{| name: constructor, kind: Constructor |}|]constructor (<|public [|{| name: x, kind: Property |}x|]: number|>, <|public [|{| name: y, kind: Property |}y|]: number|>) { }|>
+// 
+//         // Instance member
+//         <|[|{| name: getDist, kind: Method |}getDist|]() { return Math.sqrt(this.x * this.x + this.y * this.y); }|>
+// 
+//         // Getter
+//         <|get [|{| name: value, kind: Property |}value|](): number { return 0; }|>
+// 
+//         // Setter
+//         <|set [|{| name: value, kind: Property |}value|](newValue: number) { return; }|>
+// 
+//         // Static member
+//         <|static [|{| name: origin, kind: Property |}origin|] = new Point(0, 0);|>
+// 
+//         // Static method
+//         <|private static [|{| name: getOrigin, kind: Method |}getOrigin|]() { return Point.origin;}|>
+//     }|>
+// 
+//     <|enum [|{| name: Values, kind: Enum |}Values|] { <|[|{| name: value1, kind: EnumMember |}value1|]|>, <|[|{| name: value2, kind: EnumMember |}value2|]|>, <|[|{| name: value3, kind: EnumMember |}value3|]|> }|>
+// }|>
+// 
+// // Local variables
+// var <|[|{| name: p, kind: Variable |}p|]: IPoint = new Shapes.Point(3, 4)|>;
+// var <|[|{| name: dist, kind: Variable |}dist|] = p.getDist()|>;
+
+// === Details ===
+(Interface) IPoint
+  (Method) getDist
+  (Constructor) new()
+  (Method) ()
+  (Property) []
+  (Property) prop
+(Namespace) Shapes
+  (Class) Point
+    (Constructor) constructor
+    (Property) x
+    (Property) y
+    (Method) getDist
+    (Property) value
+    (Property) value
+    (Property) origin
+    (Method) getOrigin
+  (Enum) Values
+    (EnumMember) value1
+    (EnumMember) value2
+    (EnumMember) value3
+(Variable) p
+(Variable) dist

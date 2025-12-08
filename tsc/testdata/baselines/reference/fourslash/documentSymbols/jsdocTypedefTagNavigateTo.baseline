@@ -1,0 +1,13 @@
+// === Document Symbols ===
+// === /jsDocTypedef_form2.js ===
+// /** <|@typedef {(string | number)} [|{| name: NumberLike, kind: Class |}NumberLike|]|> */
+// /** @typedef {(string | number | string[])} */
+// var <|[|{| name: NumberLike2, kind: Variable |}NumberLike2|]|>;
+// 
+// /** @type {NumberLike} */
+// var <|[|{| name: numberLike, kind: Variable |}numberLike|]|>;
+
+// === Details ===
+(Class) NumberLike
+(Variable) NumberLike2
+(Variable) numberLike

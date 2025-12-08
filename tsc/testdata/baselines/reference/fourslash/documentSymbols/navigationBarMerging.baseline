@@ -1,0 +1,67 @@
+// === Document Symbols ===
+// === /file1.ts ===
+// <|module [|{| name: a, kind: Namespace |}a|] {
+//     <|function [|{| name: foo, kind: Function |}foo|]() {}|>
+// }|>
+// <|module [|{| name: b, kind: Namespace |}b|] {
+//     <|function [|{| name: foo, kind: Function |}foo|]() {}|>
+// }|>
+// module a {
+//     <|function [|{| name: bar, kind: Function |}bar|]() {}|>
+// }
+
+// === Details ===
+(Namespace) a
+  (Function) foo
+  (Function) bar
+(Namespace) b
+  (Function) foo
+
+
+
+
+// === Document Symbols ===
+// === /file2.ts ===
+// <|module [|{| name: a, kind: Namespace |}a|] {}|>
+// <|function [|{| name: a, kind: Function |}a|]() {}|>
+
+// === Details ===
+(Namespace) a
+(Function) a
+
+
+
+
+// === Document Symbols ===
+// === /file3.ts ===
+// <|module [|{| name: a, kind: Namespace |}a|] {
+//     <|interface [|{| name: A, kind: Interface |}A|] {
+//         <|[|{| name: foo, kind: Property |}foo|]: number;|>
+//     }|>
+// }|>
+// module a {
+//     <|interface [|{| name: A, kind: Interface |}A|] {
+//         <|[|{| name: bar, kind: Property |}bar|]: number;|>
+//     }|>
+// }
+
+// === Details ===
+(Namespace) a
+  (Interface) A
+    (Property) foo
+  (Interface) A
+    (Property) bar
+
+
+
+
+// === Document Symbols ===
+// === /file4.ts ===
+// <|module [|{| name: A, kind: Namespace |}A|] { export var <|[|{| name: x, kind: Variable |}x|]|>; }|>
+// <|module [|{| name: A.B, kind: Namespace |}A.B|] { export var <|[|{| name: y, kind: Variable |}y|]|>; }|>
+
+// === Details ===
+(Namespace) A
+  (Variable) x
+(Namespace) A.B
+  (Variable) y

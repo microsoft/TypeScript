@@ -1,0 +1,29 @@
+// === Document Symbols ===
+// === /navigationBarItemsFunctions.ts ===
+// <|function [|{| name: foo, kind: Function |}foo|]() {
+//     var <|[|{| name: x, kind: Variable |}x|] = 10|>;
+//     <|function [|{| name: bar, kind: Function |}bar|]() {
+//         var <|[|{| name: y, kind: Variable |}y|] = 10|>;
+//         <|function [|{| name: biz, kind: Function |}biz|]() {
+//             var <|[|{| name: z, kind: Variable |}z|] = 10|>;
+//         }|>
+//         <|function [|{| name: qux, kind: Function |}qux|]() {
+//             // A function with an empty body should not be top level
+//         }|>
+//     }|>
+// }|>
+// 
+// <|function [|{| name: baz, kind: Function |}baz|]() {
+//     var <|[|{| name: v, kind: Variable |}v|] = 10|>;
+// }|>
+
+// === Details ===
+(Function) foo
+  (Variable) x
+  (Function) bar
+    (Variable) y
+    (Function) biz
+      (Variable) z
+    (Function) qux
+(Function) baz
+  (Variable) v

@@ -1,0 +1,18 @@
+// === Document Symbols ===
+// === /navigationBarMerging_grandchildren.ts ===
+// // Should not merge grandchildren with property assignments
+// const <|[|{| name: o, kind: Variable |}o|] = {
+//     <|[|{| name: a, kind: Property |}a|]: {
+//         <|[|{| name: m, kind: Method |}m|]() {}|>,
+//     }|>,
+//     <|[|{| name: b, kind: Property |}b|]: {
+//         <|[|{| name: m, kind: Method |}m|]() {}|>,
+//     }|>,
+// }|>
+
+// === Details ===
+(Variable) o
+  (Property) a
+    (Method) m
+  (Property) b
+    (Method) m

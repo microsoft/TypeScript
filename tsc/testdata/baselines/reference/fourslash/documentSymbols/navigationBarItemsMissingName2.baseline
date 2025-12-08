@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /navigationBarItemsMissingName2.ts ===
+// /**
+//  * This is a class.
+//  */
+// <|[|{| name: <class>, kind: Class |}|]class /* But it has no name! */ {
+//     <|[|{| name: foo, kind: Method |}foo|]() {}|>
+// }|>
+
+// === Details ===
+(Class) <class>
+  (Method) foo

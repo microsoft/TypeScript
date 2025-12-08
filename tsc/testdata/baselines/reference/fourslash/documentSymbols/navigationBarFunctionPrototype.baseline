@@ -1,0 +1,27 @@
+// === Document Symbols ===
+// === /foo.js ===
+// <|function [|{| name: f, kind: Function |}f|]() {}|>
+// <|f.prototype.[|{| name: x, kind: Variable |}x|]|> = 0;
+// <|f.[|{| name: y, kind: Variable |}y|]|> = 0;
+// <|f.prototype.[|{| name: method, kind: Variable |}method|]|> = <|[|{| name: method, kind: Function |}|]function () {}|>;
+// Object.defineProperty(f, 'staticProp', { 
+//     <|[|{| name: set, kind: Property |}set|]: function() {}|>, 
+//     <|[|{| name: get, kind: Property |}get|]: function(){
+//     }|> 
+// });
+// Object.defineProperty(f.prototype, 'name', { 
+//     <|[|{| name: set, kind: Property |}set|]: function() {}|>, 
+//     <|[|{| name: get, kind: Property |}get|]: function(){
+//     }|> 
+// }); 
+
+// === Details ===
+(Function) f
+  (Variable) x
+  (Variable) y
+  (Variable) method
+    (Function) method
+(Property) set
+(Property) get
+(Property) set
+(Property) get

@@ -1,0 +1,8 @@
+// === Document Symbols ===
+// === /foo.js ===
+// <|function [|{| name: Foo, kind: Function |}Foo|]() {}|>
+// <|class [|{| name: Foo, kind: Class |}Foo|] {}|>
+
+// === Details ===
+(Function) Foo
+(Class) Foo

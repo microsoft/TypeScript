@@ -1,0 +1,19 @@
+// === Document Symbols ===
+// === /navigationBarAnonymousClassAndFunctionExpressions3.ts ===
+// describe('foo', <|[|{| name: describe() callback, kind: Function |}|]() => {
+//     test(`a ${1} b ${2}`, <|[|{| name: test() callback, kind: Function |}|]() => {}|>)
+// }|>)
+// 
+// const <|[|{| name: a, kind: Variable |}a|] = 1|>;
+// const <|[|{| name: b, kind: Variable |}b|] = 2|>;
+// describe('foo', <|[|{| name: describe() callback, kind: Function |}|]() => {
+//     test(`a ${a} b {b}`, <|[|{| name: test() callback, kind: Function |}|]() => {}|>)
+// }|>)
+
+// === Details ===
+(Function) describe() callback
+  (Function) test() callback
+(Variable) a
+(Variable) b
+(Function) describe() callback
+  (Function) test() callback

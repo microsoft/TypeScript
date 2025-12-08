@@ -1,0 +1,10 @@
+// === Document Symbols ===
+// === /navigationBarItemsMissingName1.ts ===
+// export function
+// <|class [|{| name: C, kind: Class |}C|] {
+//     <|[|{| name: foo, kind: Method |}foo|]() {}|>
+// }|>
+
+// === Details ===
+(Class) C
+  (Method) foo

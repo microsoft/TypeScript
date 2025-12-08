@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /getNavigationBarItems.ts ===
+// <|class [|{| name: C, kind: Class |}C|] {
+//     <|[|{| name: foo, kind: Property |}foo|];|>
+//     <|[|{| name: "bar", kind: Property |}["bar"]|]: string;|>
+// }|>
+
+// === Details ===
+(Class) C
+  (Property) foo
+  (Property) "bar"

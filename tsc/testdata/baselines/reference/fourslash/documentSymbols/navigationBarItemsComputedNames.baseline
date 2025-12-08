@@ -1,0 +1,34 @@
+// === Document Symbols ===
+// === /navigationBarItemsComputedNames.ts ===
+// <|const enum [|{| name: E, kind: Enum |}E|] {
+// 	<|[|{| name: A, kind: EnumMember |}A|] = 'A'|>,
+// }|>
+// const <|[|{| name: a, kind: Variable |}a|] = ''|>;
+// 
+// <|class [|{| name: C, kind: Class |}C|] {
+//     <|[|{| name: [a], kind: Method |}[a]|]() {
+//         return 1;
+//     }|>
+// 
+//     <|[|{| name: [E.A], kind: Method |}[E.A]|]() {
+//         return 1;
+//     }|>
+// 
+//     <|[|{| name: 1, kind: Method |}[1]|]() {
+//         return 1;
+//     }|>,
+// 
+//     <|[|{| name: "foo", kind: Method |}["foo"]|]() {
+//         return 1;
+//     }|>,
+// }|>
+
+// === Details ===
+(Enum) E
+  (EnumMember) A
+(Variable) a
+(Class) C
+  (Method) [a]
+  (Method) [E.A]
+  (Method) 1
+  (Method) "foo"

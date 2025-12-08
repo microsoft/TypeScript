@@ -1,0 +1,20 @@
+// === Document Symbols ===
+// === /foo.js ===
+// <|function [|{| name: A, kind: Function |}A|]() {}|>
+// <|A.[|{| name: B, kind: Variable |}B|]|> = <|[|{| name: B, kind: Function |}|]function () {  }|> 
+// A.B.prototype.d = <|[|{| name: d, kind: Function |}|]function () {  }|>  
+// Object.defineProperty(A.B.prototype, "x", {
+//     <|[|{| name: get, kind: Method |}get|]() {}|>
+// })
+// <|A.prototype.[|{| name: D, kind: Variable |}D|]|> = <|[|{| name: D, kind: Function |}|]function () {  }|> 
+// A.prototype.D.prototype.d = <|[|{| name: d, kind: Function |}|]function () {  }|> 
+
+// === Details ===
+(Function) A
+  (Variable) B
+    (Function) B
+  (Variable) D
+    (Function) D
+(Function) d
+(Method) get
+(Function) d

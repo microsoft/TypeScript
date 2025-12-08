@@ -1,0 +1,23 @@
+// === Document Symbols ===
+// === /navigationBarItemsMultilineStringIdentifiers2.ts ===
+// <|function [|{| name: f, kind: Function |}f|](p1: () => any, p2: string) { }|>
+// f(<|[|{| name: f() callback, kind: Function |}|]() => { }|>, `line1\
+// line2\
+// line3`);
+// 
+// <|class [|{| name: c1, kind: Class |}c1|] {
+//     <|const [|{| name: a, kind: Property |}a|] = ' '|><|[|{| name: "line1        line2", kind: Property |}'line1\
+//         line2'|];|>
+// }|>
+// 
+// f(<|[|{| name: f() callback, kind: Function |}|]() => { }|>, `unterminated backtick 1
+// unterminated backtick 2
+// unterminated backtick 3
+
+// === Details ===
+(Function) f
+(Function) f() callback
+(Class) c1
+  (Property) a
+  (Property) "line1        line2"
+(Function) f() callback

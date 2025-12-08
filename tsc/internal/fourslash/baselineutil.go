@@ -35,6 +35,7 @@ const (
 	signatureHelpCmd            baselineCommand = "SignatureHelp"
 	smartSelectionCmd           baselineCommand = "Smart Selection"
 	codeLensesCmd               baselineCommand = "Code Lenses"
+	documentSymbolsCmd          baselineCommand = "Document Symbols"
 )
 
 type baselineCommand string
@@ -71,7 +72,7 @@ func getBaselineFileName(t *testing.T, command baselineCommand) string {
 
 func getBaselineExtension(command baselineCommand) string {
 	switch command {
-	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd:
+	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd, documentSymbolsCmd:
 		return "baseline"
 	case callHierarchyCmd:
 		return "callHierarchy.txt"
@@ -472,11 +473,49 @@ func (f *FourslashTest) textOfFile(fileName string) (string, bool) {
 	return f.vfs.ReadFile(fileName)
 }
 
+type detailKind int
+
+const (
+	detailKindMarker       detailKind = iota // /*MARKER*/
+	detailKindContextStart                   // <|
+	detailKindTextStart                      // [|
+	detailKindTextEnd                        // |]
+	detailKindContextEnd                     // |>
+)
+
+func (k detailKind) isEnd() bool {
+	return k == detailKindContextEnd || k == detailKindTextEnd
+}
+
+func (k detailKind) isStart() bool {
+	return k == detailKindContextStart || k == detailKindTextStart
+}
+
 type baselineDetail struct {
 	pos            lsproto.Position
 	positionMarker string
 	span           *documentSpan
-	kind           string
+	kind           detailKind
+}
+
+func (d *baselineDetail) getRange() lsproto.Range {
+	switch d.kind {
+	case detailKindContextStart:
+		return *d.span.contextSpan
+	case detailKindContextEnd:
+		return *d.span.contextSpan
+	case detailKindTextStart:
+		return d.span.textSpan
+	case detailKindTextEnd:
+		return d.span.textSpan
+	case detailKindMarker:
+		return lsproto.Range{
+			Start: d.pos,
+			End:   d.pos,
+		}
+	default:
+		panic("unknown detail kind")
+	}
 }
 
 func (f *FourslashTest) getBaselineContentForFile(
@@ -504,7 +543,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 				pos:            span.contextSpan.Start,
 				positionMarker: "<|",
 				span:           &span,
-				kind:           "contextStart",
+				kind:           detailKindContextStart,
 			})
 
 			// Check if context span starts after text span
@@ -519,8 +558,8 @@ func (f *FourslashTest) getBaselineContentForFile(
 			startMarker += options.getLocationData(span)
 		}
 		details = append(details,
-			&baselineDetail{pos: span.textSpan.Start, positionMarker: startMarker, span: &span, kind: "textStart"},
-			&baselineDetail{pos: span.textSpan.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: "textEnd"},
+			&baselineDetail{pos: span.textSpan.Start, positionMarker: startMarker, span: &span, kind: detailKindTextStart},
+			&baselineDetail{pos: span.textSpan.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: detailKindTextEnd},
 		)
 
 		if span.contextSpan != nil {
@@ -528,7 +567,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 				pos:            span.contextSpan.End,
 				positionMarker: "|>",
 				span:           &span,
-				kind:           "contextEnd",
+				kind:           detailKindContextEnd,
 			})
 		}
 
@@ -566,37 +605,69 @@ func (f *FourslashTest) getBaselineContentForFile(
 		}
 	}
 
+	// Our preferred way to write markers is
+	// /*MARKER*/[| some text |]
+	// [| some /*MARKER*/ text |]
+	// [| some text |]/*MARKER*/
 	slices.SortStableFunc(details, func(d1, d2 *baselineDetail) int {
-		return lsproto.ComparePositions(d1.pos, d2.pos)
+		c := lsproto.ComparePositions(d1.pos, d2.pos)
+		if c != 0 || d1.kind == detailKindMarker && d2.kind == detailKindMarker {
+			return c
+		}
+
+		// /*MARKER*/[| some text |]
+		if d1.kind == detailKindMarker && d2.kind.isStart() {
+			return -1
+		}
+		if d2.kind == detailKindMarker && d1.kind.isStart() {
+			return 1
+		}
+
+		// [| some text |]/*MARKER*/
+		if d1.kind == detailKindMarker && d2.kind.isEnd() {
+			return 1
+		}
+		if d2.kind == detailKindMarker && d1.kind.isEnd() {
+			return -1
+		}
+
+		// [||] or <||>
+		if d1.span == d2.span {
+			return int(d1.kind - d2.kind)
+		}
+
+		// ...|><|...
+		if d1.kind.isStart() && d2.kind.isEnd() {
+			return 1
+		}
+		if d1.kind.isEnd() && d2.kind.isStart() {
+			return -1
+		}
+
+		// <| ... [| ... |]|>
+		if d1.kind.isEnd() && d2.kind.isEnd() {
+			c := lsproto.ComparePositions(d2.getRange().Start, d1.getRange().Start)
+			if c != 0 {
+				return c
+			}
+			return int(d1.kind - d2.kind)
+		}
+
+		// <|[| ... |] ... |>
+		if d1.kind.isStart() && d2.kind.isStart() {
+			c := lsproto.ComparePositions(d2.getRange().End, d2.getRange().End)
+			if c != 0 {
+				return c
+			}
+			return int(d1.kind - d2.kind)
+		}
+
+		return 0
 	})
 	// !!! if canDetermineContextIdInline
 
 	textWithContext := newTextWithContext(fileName, content)
-
-	// Our preferred way to write marker is
-	// /*MARKER*/[| some text |]
-	// [| some /*MARKER*/ text |]
-	// [| some text |]/*MARKER*/
-	// Stable sort should handle first two cases but with that marker will be before rangeEnd if locations match
-	// So we will defer writing marker in this case by checking and finding index of rangeEnd if same
-	var deferredMarkerIndex *int
-
 	for index, detail := range details {
-		if detail.span == nil && deferredMarkerIndex == nil {
-			// If this is marker position and its same as textEnd and/or contextEnd we want to write marker after those
-			for matchingEndPosIndex := index + 1; matchingEndPosIndex < len(details); matchingEndPosIndex++ {
-				// Defer after the location if its same as rangeEnd
-				if details[matchingEndPosIndex].pos == detail.pos && strings.HasSuffix(details[matchingEndPosIndex].kind, "End") {
-					deferredMarkerIndex = ptrTo(matchingEndPosIndex)
-				}
-				// Dont defer further than already determined
-				break
-			}
-			// Defer writing marker position to deffered marker index
-			if deferredMarkerIndex != nil {
-				continue
-			}
-		}
 		textWithContext.add(detail)
 		textWithContext.pos = detail.pos
 		// Prefix
@@ -607,13 +678,13 @@ func (f *FourslashTest) getBaselineContentForFile(
 		textWithContext.newContent.WriteString(detail.positionMarker)
 		if detail.span != nil {
 			switch detail.kind {
-			case "textStart":
+			case detailKindTextStart:
 				var text string
 				if contextId, ok := spanToContextId[*detail.span]; ok {
 					isAfterContextStart := false
 					for textStartIndex := index - 1; textStartIndex >= 0; textStartIndex-- {
 						textStartDetail := details[textStartIndex]
-						if textStartDetail.kind == "contextStart" && textStartDetail.span == detail.span {
+						if textStartDetail.kind == detailKindContextStart && textStartDetail.span == detail.span {
 							isAfterContextStart = true
 							break
 						}
@@ -634,17 +705,10 @@ func (f *FourslashTest) getBaselineContentForFile(
 				if text != "" {
 					textWithContext.newContent.WriteString(`{ ` + text + ` |}`)
 				}
-			case "contextStart":
+			case detailKindContextStart:
 				if canDetermineContextIdInline {
 					spanToContextId[*detail.span] = len(spanToContextId)
 				}
-			}
-
-			if deferredMarkerIndex != nil && *deferredMarkerIndex == index {
-				// Write the marker
-				textWithContext.newContent.WriteString(options.markerName)
-				deferredMarkerIndex = nil
-				detail = details[0] // Marker detail
 			}
 		}
 		if suffix, ok := detailSuffixes[detail]; ok {
@@ -714,7 +778,7 @@ func (t *textWithContext) add(detail *baselineDetail) {
 	if t.content == "" && detail == nil {
 		panic("Unsupported")
 	}
-	if detail == nil || (detail.kind != "textEnd" && detail.kind != "contextEnd") {
+	if detail == nil || (detail.kind != detailKindTextEnd && detail.kind != detailKindContextEnd) {
 		// Calculate pos to location number of lines
 		posLineIndex := t.lineInfo
 		if t.posInfo == nil || *t.posInfo != t.pos {

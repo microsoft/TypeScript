@@ -238,3 +238,20 @@ func LowerFirstChar(str string) string {
 	}
 	return str
 }
+
+func TruncateByRunes(str string, maxLength int) string {
+	if len(str) < maxLength {
+		return str
+	}
+	if maxLength <= 0 {
+		return ""
+	}
+	var runeCount int
+	for i := range str {
+		runeCount++
+		if runeCount >= maxLength {
+			return str[:i]
+		}
+	}
+	return str
+}

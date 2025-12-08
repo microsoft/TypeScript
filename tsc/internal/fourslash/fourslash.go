@@ -167,6 +167,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		testfs[filePath] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, rootDir))
 	}
 
+	// !!! use default compiler options for inferred project as base
 	compilerOptions := &core.CompilerOptions{
 		SkipDefaultLibCheck: core.TSTrue,
 	}
@@ -479,6 +480,19 @@ var (
 	defaultHoverCapabilities = &lsproto.HoverClientCapabilities{
 		ContentFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
 	}
+	defaultSignatureHelpCapabilities = &lsproto.SignatureHelpClientCapabilities{
+		SignatureInformation: &lsproto.ClientSignatureInformationOptions{
+			DocumentationFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
+			ParameterInformation: &lsproto.ClientSignatureParameterInformationOptions{
+				LabelOffsetSupport: ptrTrue,
+			},
+			ActiveParameterSupport: ptrTrue,
+		},
+		ContextSupport: ptrTrue,
+	}
+	defaultDocumentSymbolCapabilities = &lsproto.DocumentSymbolClientCapabilities{
+		HierarchicalDocumentSymbolSupport: ptrTrue,
+	}
 )
 
 func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lsproto.ClientCapabilities {
@@ -536,16 +550,10 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 		capabilitiesWithDefaults.TextDocument.Hover = defaultHoverCapabilities
 	}
 	if capabilitiesWithDefaults.TextDocument.SignatureHelp == nil {
-		capabilitiesWithDefaults.TextDocument.SignatureHelp = &lsproto.SignatureHelpClientCapabilities{
-			SignatureInformation: &lsproto.ClientSignatureInformationOptions{
-				DocumentationFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
-				ParameterInformation: &lsproto.ClientSignatureParameterInformationOptions{
-					LabelOffsetSupport: ptrTrue,
-				},
-				ActiveParameterSupport: ptrTrue,
-			},
-			ContextSupport: ptrTrue,
-		}
+		capabilitiesWithDefaults.TextDocument.SignatureHelp = defaultSignatureHelpCapabilities
+	}
+	if capabilitiesWithDefaults.TextDocument.DocumentSymbol == nil {
+		capabilitiesWithDefaults.TextDocument.DocumentSymbol = defaultDocumentSymbolCapabilities
 	}
 	return &capabilitiesWithDefaults
 }
@@ -2989,7 +2997,7 @@ func (f *FourslashTest) getCurrentPositionPrefix() string {
 	if f.lastKnownMarkerName != nil {
 		return fmt.Sprintf("At marker '%s': ", *f.lastKnownMarkerName)
 	}
-	return fmt.Sprintf("At position (Ln %d, Col %d): ", f.currentCaretPosition.Line, f.currentCaretPosition.Character)
+	return fmt.Sprintf("At position %s(Ln %d, Col %d): ", f.activeFilename, f.currentCaretPosition.Line, f.currentCaretPosition.Character)
 }
 
 func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames []string) {
@@ -3663,5 +3671,64 @@ func verifyIncludesSymbols(
 			t.Fatalf("%s: Expected symbol '%s' at location '%v' not found", prefix, sym.Name, sym.Location)
 		}
 		assertDeepEqual(t, actualSym, sym, fmt.Sprintf("%s: Symbol '%s' at location '%v' mismatch", prefix, sym.Name, sym.Location))
+	}
+}
+
+func (f *FourslashTest) VerifyBaselineDocumentSymbol(t *testing.T) {
+	params := &lsproto.DocumentSymbolParams{
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+		},
+	}
+	result := sendRequest(t, f, lsproto.TextDocumentDocumentSymbolInfo, params)
+	uri := lsconv.FileNameToDocumentURI(f.activeFilename)
+	spansToSymbol := make(map[documentSpan]*lsproto.DocumentSymbol)
+	if result.DocumentSymbols != nil {
+		for _, symbol := range *result.DocumentSymbols {
+			collectDocumentSymbolSpans(uri, symbol, spansToSymbol)
+		}
+	}
+	f.addResultToBaseline(
+		t,
+		documentSymbolsCmd,
+		f.getBaselineForSpansWithFileContents(slices.Collect(maps.Keys(spansToSymbol)), baselineFourslashLocationsOptions{
+			getLocationData: func(span documentSpan) string {
+				symbol := spansToSymbol[span]
+				return fmt.Sprintf("{| name: %s, kind: %s |}", symbol.Name, symbol.Kind.String())
+			},
+		}),
+	)
+
+	var detailsBuilder strings.Builder
+	if result.DocumentSymbols != nil {
+		writeDocumentSymbolDetails(*result.DocumentSymbols, 0, &detailsBuilder)
+	}
+	f.writeToBaseline(documentSymbolsCmd, "\n\n// === Details ===\n"+detailsBuilder.String())
+}
+
+func writeDocumentSymbolDetails(symbols []*lsproto.DocumentSymbol, indent int, builder *strings.Builder) {
+	for _, symbol := range symbols {
+		fmt.Fprintf(builder, "%s(%s) %s\n", strings.Repeat("  ", indent), symbol.Kind.String(), symbol.Name)
+		if symbol.Children != nil {
+			writeDocumentSymbolDetails(*symbol.Children, indent+1, builder)
+		}
+	}
+}
+
+func collectDocumentSymbolSpans(
+	uri lsproto.DocumentUri,
+	symbol *lsproto.DocumentSymbol,
+	spansToSymbol map[documentSpan]*lsproto.DocumentSymbol,
+) {
+	span := documentSpan{
+		uri:         uri,
+		textSpan:    symbol.SelectionRange,
+		contextSpan: &symbol.Range,
+	}
+	spansToSymbol[span] = symbol
+	if symbol.Children != nil {
+		for _, child := range *symbol.Children {
+			collectDocumentSymbolSpans(uri, child, spansToSymbol)
+		}
 	}
 }

@@ -1,0 +1,48 @@
+// === Document Symbols ===
+// === /navigationBarAnonymousClassAndFunctionExpressions.ts ===
+// global.cls = <|[|{| name: cls, kind: Class |}|]class { }|>;
+// (<|[|{| name: <function>, kind: Function |}|]function() {
+//     const <|[|{| name: x, kind: Variable |}x|] = () => {
+//         // Presence of inner function causes x to be a top-level function.
+//         <|function [|{| name: xx, kind: Function |}xx|]() {}|>
+//     }|>;
+//     const <|[|{| name: y, kind: Variable |}y|] = {
+//         // This is not a top-level function (contains nothing, but shows up in childItems of its parent.)
+//         <|[|{| name: foo, kind: Property |}foo|]: function() {}|>
+//     }|>;
+//     (<|function [|{| name: nest, kind: Function |}nest|]() {
+//         <|function [|{| name: moreNest, kind: Function |}moreNest|]() {}|>
+//     }|>)();
+// }|>)();
+// (<|[|{| name: <function>, kind: Function |}|]function() { // Different anonymous functions are not merged
+//     // These will only show up as childItems.
+//     <|function [|{| name: z, kind: Function |}z|]() {}|>
+//     console.log(<|[|{| name: console.log() callback, kind: Function |}|]function() {}|>)
+//     describe("this", 'function', `is a function`, `with template literal ${"a"}`, <|[|{| name: describe() callback, kind: Function |}|]() => {}|>);
+//     [].map(<|[|{| name: map() callback, kind: Function |}|]() => {}|>);
+// }|>)
+// (<|function [|{| name: classes, kind: Function |}classes|]() {
+//     // Classes show up in top-level regardless of whether they have names or inner declarations.
+//     const <|[|{| name: cls2, kind: Variable |}cls2|] = class { }|>;
+//     console.log(<|class [|{| name: cls3, kind: Class |}cls3|] {}|>);
+//     (<|[|{| name: <class>, kind: Class |}|]class { }|>);
+// }|>)
+
+// === Details ===
+(Class) cls
+(Function) <function>
+  (Variable) x
+    (Function) xx
+  (Variable) y
+    (Property) foo
+  (Function) nest
+    (Function) moreNest
+(Function) <function>
+  (Function) z
+  (Function) console.log() callback
+  (Function) describe() callback
+  (Function) map() callback
+(Function) classes
+  (Variable) cls2
+  (Class) cls3
+  (Class) <class>
