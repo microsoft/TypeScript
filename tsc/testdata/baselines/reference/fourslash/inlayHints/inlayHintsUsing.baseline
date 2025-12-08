@@ -1,0 +1,55 @@
+// === Inlay Hints ===
+using _defer = {
+            ^
+{
+  "position": {
+    "line": 0,
+    "character": 12
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "Symbol"
+    },
+    {
+      "value": "."
+    },
+    {
+      "value": "dispose"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

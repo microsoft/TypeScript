@@ -1,0 +1,61 @@
+// === Inlay Hints ===
+let foo = {
+       ^
+{
+  "position": {
+    "line": 6,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "MySymbol"
+    },
+    {
+      "value": "["
+    },
+    {
+      "value": "\"my dispose\""
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": "]"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
