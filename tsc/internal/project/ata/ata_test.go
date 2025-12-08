@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -617,5 +618,49 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, commanderTypesFile != nil, "commander types should be installed")
 		emberComponentTypesFile := program.GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/ember__component/index.d.ts")
 		assert.Assert(t, emberComponentTypesFile != nil, "ember__component types should be installed")
+	})
+
+	// Test that ATA works correctly when `WatchEnabled` is false but `TypingsLocation` is set.
+	// Previously if `WatchEnabled` was false but `TypingsLocation` was set, ATA would run but
+	// crash when cloning file-watcher data for a new snapshot.
+	t.Run("ATA with WatchEnabled false should not panic", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": ``,
+			"/user/username/projects/project/package.json": `{
+				"name": "test",
+				"dependencies": {
+					"jquery": "^3.1.0"
+				}
+			}`,
+		}
+
+		session, utils := projecttestutil.SetupWithOptionsAndTypingsInstaller(files, &project.SessionOptions{
+			CurrentDirectory:   "/",
+			DefaultLibraryPath: bundled.LibPath(),
+			TypingsLocation:    projecttestutil.TestTypingsLocation,
+			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:       false,
+			LoggingEnabled:     true,
+		}, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"jquery": `declare const $: { x: number }`,
+			},
+		})
+
+		// Open a file to trigger project creation and ATA.
+		session.DidOpenFile(context.Background(), lsproto.DocumentUri("file:///user/username/projects/project/app.js"), 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+
+		// ATA should have run
+		calls := utils.NpmExecutor().NpmInstallCalls()
+		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
+
+		// Getting the language service should not panic after
+		// applying ATA changes and grabbing the latest snapshot.
+		ls, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///user/username/projects/project/app.js"))
+		assert.NilError(t, err)
+		assert.Assert(t, ls != nil)
 	})
 }

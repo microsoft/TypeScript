@@ -118,6 +118,9 @@ func (w *WatchedFiles[T]) WatchKind() lsproto.WatchKind {
 }
 
 func (w *WatchedFiles[T]) Clone(input T) *WatchedFiles[T] {
+	if w == nil {
+		return nil
+	}
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	return &WatchedFiles[T]{

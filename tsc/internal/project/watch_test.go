@@ -18,3 +18,11 @@ func TestGetPathComponentsForWatching(t *testing.T) {
 	assert.DeepEqual(t, getPathComponentsForWatching("/home", ""), []string{"/home"})
 	assert.DeepEqual(t, getPathComponentsForWatching("/home/andrew/project", ""), []string{"/home/andrew", "project"})
 }
+
+func TestNilWatchedFilesClone(t *testing.T) {
+	t.Parallel()
+
+	var w *WatchedFiles[int]
+	result := w.Clone(42)
+	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
+}
