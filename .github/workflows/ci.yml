@@ -316,17 +316,23 @@ jobs:
         working-directory: ./pr
 
       - run: npm ci
+        id: base-npm-ci
+        continue-on-error: true
         working-directory: ./base
 
       - run: npx hereby lkg
         working-directory: ./pr
 
       - run: npx hereby lkg
+        id: base-lkg
+        continue-on-error: true
+        if: ${{ steps.base-npm-ci.outcome == 'success' }}
         working-directory: ./base
 
       - run: |
           echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
           node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
+        if: ${{ steps.base-lkg.outcome == 'success' }}
 
   misc:
     runs-on: ubuntu-latest
