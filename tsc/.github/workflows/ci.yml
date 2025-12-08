@@ -54,7 +54,7 @@ jobs:
 
   test:
     strategy:
-      fail-fast: false
+      fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         config:
           - os: ubuntu-latest
@@ -172,7 +172,7 @@ jobs:
 
   lint:
     strategy:
-      fail-fast: false
+      fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         config:
           - os: ubuntu-latest
