@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/node/nodeModulesPackageImportsRootWildcardNode16.ts] ////
+
+=== src/foo.ts ===
+export const foo = "foo";
+>foo : Symbol(foo, Decl(foo.ts, 0, 12))
+
+=== index.ts ===
+// esm format file
+import { foo } from "#/foo.js";
+>foo : Symbol(foo, Decl(index.ts, 1, 8))
+
+foo;
+>foo : Symbol(foo, Decl(index.ts, 1, 8))
+

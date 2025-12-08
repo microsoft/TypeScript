@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: node18
+// @module: nodenext
 
 // @Filename: /package.json
 //// {

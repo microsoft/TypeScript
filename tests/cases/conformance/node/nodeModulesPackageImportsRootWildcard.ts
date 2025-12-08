@@ -1,4 +1,4 @@
-// @module: node16,node18,node20,nodenext
+// @module: nodenext
 // @declaration: true
 // @traceResolution: true
 // @filename: package.json
