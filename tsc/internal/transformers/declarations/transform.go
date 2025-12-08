@@ -2,6 +2,9 @@ package declarations
 
 import (
 	"fmt"
+	"iter"
+	"slices"
+	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -66,7 +69,7 @@ type DeclarationTransformer struct {
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
 func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
 	resolver := host.GetEmitResolver()
-	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), resolver: resolver}
+	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)
 	tx := &DeclarationTransformer{
@@ -84,6 +87,75 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 
 func (tx *DeclarationTransformer) GetDiagnostics() []*ast.Diagnostic {
 	return tx.state.diagnostics
+}
+
+func (tx *DeclarationTransformer) shouldStripInternal(node *ast.Node) bool {
+	return tx.state.stripInternal && node != nil && tx.isInternalDeclaration(node, tx.state.currentSourceFile)
+}
+
+func (tx *DeclarationTransformer) isInternalDeclaration(node *ast.Node, sourceFile *ast.SourceFile) bool {
+	if node == nil {
+		return false
+	}
+	parseTreeNode := tx.EmitContext().MostOriginal(node)
+	if !ast.IsParseTreeNode(parseTreeNode) {
+		return false
+	}
+	if parseTreeNode.Kind == ast.KindParameter {
+		params := parseTreeNode.Parent.Parameters()
+		paramIdx := slices.IndexFunc(params, func(p *ast.ParameterDeclarationNode) bool {
+			return p.AsNode() == parseTreeNode
+		})
+		var previousSibling *ast.Node
+		if paramIdx > 0 {
+			previousSibling = params[paramIdx-1].AsNode()
+		}
+
+		text := sourceFile.Text()
+		var commentRanges []ast.CommentRange
+
+		if previousSibling != nil {
+			// to handle
+			// ... parameters, /** @internal */
+			// public param: string
+			trailingPos := scanner.SkipTriviaEx(text, previousSibling.End()+1, &scanner.SkipTriviaOptions{StopAtComments: true})
+			for comment := range scanner.GetTrailingCommentRanges(tx.Factory().AsNodeFactory(), text, trailingPos) {
+				commentRanges = append(commentRanges, comment)
+			}
+			for comment := range scanner.GetLeadingCommentRanges(tx.Factory().AsNodeFactory(), text, node.Pos()) {
+				commentRanges = append(commentRanges, comment)
+			}
+		} else {
+			trailingPos := scanner.SkipTriviaEx(text, node.Pos(), &scanner.SkipTriviaOptions{StopAtComments: true})
+			for comment := range scanner.GetTrailingCommentRanges(tx.Factory().AsNodeFactory(), text, trailingPos) {
+				commentRanges = append(commentRanges, comment)
+			}
+		}
+
+		if len(commentRanges) > 0 {
+			return hasInternalAnnotation(commentRanges[len(commentRanges)-1], sourceFile)
+		}
+		return false
+	}
+
+	for commentRange := range tx.getLeadingCommentRangesOfNode(parseTreeNode, sourceFile) {
+		if hasInternalAnnotation(commentRange, sourceFile) {
+			return true
+		}
+	}
+	return false
+}
+
+func (tx *DeclarationTransformer) getLeadingCommentRangesOfNode(node *ast.Node, sourceFile *ast.SourceFile) iter.Seq[ast.CommentRange] {
+	if node == nil || node.Kind == ast.KindJsxText {
+		return nil
+	}
+	return scanner.GetLeadingCommentRanges(tx.Factory().AsNodeFactory(), sourceFile.Text(), node.Pos())
+}
+
+func hasInternalAnnotation(commentRange ast.CommentRange, sourceFile *ast.SourceFile) bool {
+	comment := sourceFile.Text()[commentRange.Pos():commentRange.End()]
+	return strings.Contains(comment, "@internal")
 }
 
 const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals |
@@ -377,8 +449,9 @@ func (tx *DeclarationTransformer) getTypeReferences() (result []*ast.FileReferen
 }
 
 func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.Node {
-	// !!! TODO: stripInternal support?
-	// if (shouldStripInternal(input)) return nil
+	if tx.shouldStripInternal(input) {
+		return nil
+	}
 	if ast.IsDeclaration(input) {
 		if isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, input) {
 			return nil
@@ -903,8 +976,9 @@ func (tx *DeclarationTransformer) transformMethodDeclaration(input *ast.MethodDe
 }
 
 func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *ast.Node {
-	// !!! TODO: stripInternal support?
-	// if (shouldStripInternal(input)) return nil
+	if tx.shouldStripInternal(input) {
+		return nil
+	}
 	switch input.Kind {
 	case ast.KindExportDeclaration:
 		if ast.IsSourceFile(input.Parent) {
@@ -1132,8 +1206,9 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 		// Remove duplicates of the current statement from the deferred work queue (this was done via orderedRemoveItem in strada - why? to ensure the same backing array? microop?)
 		tx.state.lateMarkedStatements = core.Filter(tx.state.lateMarkedStatements, func(node *ast.Node) bool { return node != input })
 	}
-	// !!! TODO: stripInternal support?
-	// if (shouldStripInternal(input)) return;
+	if tx.shouldStripInternal(input) {
+		return nil
+	}
 	if input.Kind == ast.KindImportEqualsDeclaration {
 		return tx.transformImportEqualsDeclaration(input.AsImportEqualsDeclaration())
 	}
@@ -1338,11 +1413,9 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 	if ctor != nil {
 		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
 		for _, param := range ctor.AsConstructorDeclaration().Parameters.Nodes {
-			if !ast.HasSyntacticModifier(param, ast.ModifierFlagsParameterPropertyModifier) {
+			if !ast.HasSyntacticModifier(param, ast.ModifierFlagsParameterPropertyModifier) || tx.shouldStripInternal(param) {
 				continue
 			}
-			// !!! TODO: stripInternal support?
-			// if (shouldStripInternal(param)) { continue }
 			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param)
 			if param.Name().Kind == ast.KindIdentifier {
 				updated := tx.Factory().NewPropertyDeclaration(
@@ -1505,8 +1578,9 @@ func (tx *DeclarationTransformer) transformEnumDeclaration(input *ast.EnumDeclar
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		tx.Factory().NewNodeList(core.MapNonNil(input.Members.Nodes, func(m *ast.Node) *ast.Node {
-			// !!! TODO: stripInternal support?
-			// if (shouldStripInternal(m)) return;
+			if tx.shouldStripInternal(m) {
+				return nil
+			}
 
 			// !!! TODO: isolatedDeclarations support
 			// if (

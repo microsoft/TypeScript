@@ -204,6 +204,7 @@ type SymbolTrackerSharedState struct {
 	getSymbolAccessibilityDiagnostic GetSymbolAccessibilityDiagnostic
 	errorNameNode                    *ast.Node
 	isolatedDeclarations             bool
+	stripInternal                    bool
 	currentSourceFile                *ast.SourceFile
 	resolver                         printer.EmitResolver
 	reportExpandoFunctionErrors      func(node *ast.Node)
