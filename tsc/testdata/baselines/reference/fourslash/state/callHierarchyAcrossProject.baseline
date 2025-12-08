@@ -1,0 +1,612 @@
+UseCaseSensitiveFileNames: true
+//// [/projects/container/compositeExec/index.ts] *new* 
+import { createModelReference } from "../lib";
+function openElementsAtEditor2() {
+  createModelReference();
+}
+//// [/projects/container/compositeExec/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/exec/index.ts] *new* 
+import { createModelReference } from "../lib";
+function openElementsAtEditor1() {
+  createModelReference();
+}
+//// [/projects/container/exec/tsconfig.json] *new* 
+{
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/lib/bar.ts] *new* 
+import { createModelReference } from "./index";
+function openElementsAtEditor() {
+  createModelReference();
+}
+//// [/projects/container/lib/baz.ts] *new* 
+import { createModelReference } from "./index";
+function registerDefaultLanguageCommand() {
+  createModelReference();
+}
+//// [/projects/container/lib/index.ts] *new* 
+export function createModelReference() {}
+//// [/projects/container/lib/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	references: [],
+	files: [
+		"index.ts",
+		"bar.ts",
+		"baz.ts"
+	],
+}
+//// [/projects/container/tsconfig.json] *new* 
+{
+	"files": [],
+	"include": [],
+	"references": [
+		{ "path": "./exec" },
+		{ "path": "./compositeExec" },
+	],
+}
+//// [/projects/temp/temp.ts] *new* 
+let x = 10
+//// [/projects/temp/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export function createModelReference() {}"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/lib/tsconfig.json] *new*
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+    /projects/container/lib/baz.ts    
+  [/projects/container/tsconfig.json] *new*
+Open Files::
+  [/projects/container/lib/index.ts] *new*
+    /projects/container/lib/tsconfig.json  (default) 
+Config::
+  [/projects/container/lib/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/lib/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] *new*
+    NearestConfigFileName: /projects/container/lib/tsconfig.json
+    Ancestors:
+      /projects/container/lib/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json       
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/lib/tsconfig.json] 
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+    /projects/container/lib/baz.ts    
+  [/projects/container/tsconfig.json] 
+  [/projects/temp/tsconfig.json] *new*
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/lib/tsconfig.json  (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/lib/tsconfig.json] 
+    RetainingProjects:
+      /projects/container/lib/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+  [/projects/temp/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] 
+    NearestConfigFileName: /projects/container/lib/tsconfig.json
+    Ancestors:
+      /projects/container/lib/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json       
+  [/projects/temp/temp.ts] *new*
+    NearestConfigFileName: /projects/temp/tsconfig.json
+
+{
+  "method": "textDocument/prepareCallHierarchy",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 16
+    }
+  }
+}
+
+{
+  "method": "callHierarchy/incomingCalls",
+  "params": {
+    "item": {
+      "name": "createModelReference",
+      "kind": 12,
+      "uri": "file:///projects/container/lib/index.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 41
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 0,
+          "character": 16
+        },
+        "end": {
+          "line": 0,
+          "character": 36
+        }
+      }
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/exec/tsconfig.json] *new*
+    /projects/container/lib/index.ts   
+    /projects/container/exec/index.ts  
+  [/projects/container/lib/tsconfig.json] 
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+    /projects/container/lib/baz.ts    
+  [/projects/container/tsconfig.json] *modified*
+  [/projects/temp/tsconfig.json] 
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/container/lib/index.ts] *modified*
+    /projects/container/compositeExec/tsconfig.json  *new*
+    /projects/container/exec/tsconfig.json           *new*
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] 
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+      /projects/container/tsconfig.json                
+  [/projects/container/exec/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/exec/tsconfig.json  
+      /projects/container/tsconfig.json       
+  [/projects/container/lib/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /projects/container/compositeExec/tsconfig.json  *new*
+      /projects/container/exec/tsconfig.json           *new*
+      /projects/container/lib/tsconfig.json            
+      /projects/container/tsconfig.json                *new*
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+  [/projects/container/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/tsconfig.json  
+  [/projects/temp/tsconfig.json] 
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+
+{
+  "method": "callHierarchy/outgoingCalls",
+  "params": {
+    "item": {
+      "name": "createModelReference",
+      "kind": 12,
+      "uri": "file:///projects/container/lib/index.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 41
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 0,
+          "character": 16
+        },
+        "end": {
+          "line": 0,
+          "character": 36
+        }
+      }
+    }
+  }
+}
+
+{
+  "method": "callHierarchy/incomingCalls",
+  "params": {
+    "item": {
+      "name": "openElementsAtEditor2",
+      "kind": 12,
+      "uri": "file:///projects/container/compositeExec/index.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 1
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 30
+        }
+      }
+    }
+  }
+}
+
+{
+  "method": "callHierarchy/incomingCalls",
+  "params": {
+    "item": {
+      "name": "openElementsAtEditor1",
+      "kind": 12,
+      "uri": "file:///projects/container/exec/index.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 1
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 30
+        }
+      }
+    }
+  }
+}
+
+{
+  "method": "callHierarchy/incomingCalls",
+  "params": {
+    "item": {
+      "name": "openElementsAtEditor",
+      "kind": 12,
+      "uri": "file:///projects/container/lib/bar.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 1
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 29
+        }
+      }
+    }
+  }
+}
+
+{
+  "method": "callHierarchy/incomingCalls",
+  "params": {
+    "item": {
+      "name": "registerDefaultLanguageCommand",
+      "kind": 12,
+      "uri": "file:///projects/container/lib/baz.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 1
+        }
+      },
+      "selectionRange": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 39
+        }
+      }
+    }
+  }
+}
+
+
+
+
+// === Call Hierarchy ===
+╭ name: createModelReference
+├ kind: function
+├ file: /projects/container/lib/index.ts
+├ span:
+│ ╭ /projects/container/lib/index.ts:1:1-1:42
+│ │ 1: export function createModelReference() {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /projects/container/lib/index.ts:1:17-1:37
+│ │ 1: export function createModelReference() {}
+│ │                    ^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: openElementsAtEditor2
+│ │ ├ kind: function
+│ │ ├ file: /projects/container/compositeExec/index.ts
+│ │ ├ span:
+│ │ │ ╭ /projects/container/compositeExec/index.ts:2:1-4:2
+│ │ │ │ 2: function openElementsAtEditor2() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /projects/container/compositeExec/index.ts:2:10-2:31
+│ │ │ │ 2: function openElementsAtEditor2() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /projects/container/compositeExec/index.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+│ ╭ from:
+│ │ ╭ name: openElementsAtEditor1
+│ │ ├ kind: function
+│ │ ├ file: /projects/container/exec/index.ts
+│ │ ├ span:
+│ │ │ ╭ /projects/container/exec/index.ts:2:1-4:2
+│ │ │ │ 2: function openElementsAtEditor1() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /projects/container/exec/index.ts:2:10-2:31
+│ │ │ │ 2: function openElementsAtEditor1() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /projects/container/exec/index.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+│ ╭ from:
+│ │ ╭ name: openElementsAtEditor
+│ │ ├ kind: function
+│ │ ├ file: /projects/container/lib/bar.ts
+│ │ ├ span:
+│ │ │ ╭ /projects/container/lib/bar.ts:2:1-4:2
+│ │ │ │ 2: function openElementsAtEditor() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /projects/container/lib/bar.ts:2:10-2:30
+│ │ │ │ 2: function openElementsAtEditor() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /projects/container/lib/bar.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+│ ╭ from:
+│ │ ╭ name: registerDefaultLanguageCommand
+│ │ ├ kind: function
+│ │ ├ file: /projects/container/lib/baz.ts
+│ │ ├ span:
+│ │ │ ╭ /projects/container/lib/baz.ts:2:1-4:2
+│ │ │ │ 2: function registerDefaultLanguageCommand() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /projects/container/lib/baz.ts:2:10-2:40
+│ │ │ │ 2: function registerDefaultLanguageCommand() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /projects/container/lib/baz.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+╰ outgoing: none
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  
+    /projects/container/exec/tsconfig.json           
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  
+    /projects/container/exec/tsconfig.json           
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] *closed*
+  [/projects/temp/temp.ts] 
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/exec/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts   
+    /projects/container/exec/index.ts  
+  [/projects/container/lib/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+    /projects/container/lib/baz.ts    
+  [/projects/container/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+  [/projects/container/exec/tsconfig.json] *deleted*
+  [/projects/container/lib/tsconfig.json] *deleted*
+  [/projects/container/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] *deleted*
+  [/projects/temp/temp.ts] 
+    NearestConfigFileName: /projects/temp/tsconfig.json

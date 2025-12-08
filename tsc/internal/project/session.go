@@ -464,7 +464,7 @@ func (s *Session) GetLanguageService(ctx context.Context, uri lsproto.DocumentUr
 	return languageService, nil
 }
 
-func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) (*Project, *ls.LanguageService, []*Project, error) {
+func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) (*Project, *ls.LanguageService, []ls.Project, error) {
 	snapshot, project, defaultLs, err := s.getSnapshotAndDefaultProject(ctx, uri)
 	if err != nil {
 		return nil, nil, nil, err
@@ -474,7 +474,7 @@ func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri 
 	return project, defaultLs, allProjects, nil
 }
 
-func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) ([]*Project, error) {
+func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) ([]ls.Project, error) {
 	snapshot := s.getSnapshot(
 		ctx,
 		ResourceRequest{Documents: []lsproto.DocumentUri{uri}},
@@ -505,7 +505,7 @@ func (s *Session) GetLanguageServiceForProjectWithFile(ctx context.Context, proj
 func (s *Session) GetSnapshotLoadingProjectTree(
 	ctx context.Context,
 	// If null, all project trees need to be loaded, otherwise only those that are referenced
-	requestedProjectTrees map[tspath.Path]struct{},
+	requestedProjectTrees *collections.Set[tspath.Path],
 ) *Snapshot {
 	snapshot := s.getSnapshot(
 		ctx,

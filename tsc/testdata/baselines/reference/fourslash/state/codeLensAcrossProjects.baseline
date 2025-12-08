@@ -1,0 +1,770 @@
+UseCaseSensitiveFileNames: true
+//// [/projects/container/compositeExec/index.ts] *new* 
+import { Pointable } from "../lib";
+class Point2 implements Pointable {
+  getX(): number {
+    return 0;
+  }
+  getY(): number {
+    return 0;
+  }
+}
+//// [/projects/container/compositeExec/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/exec/index.ts] *new* 
+import { Pointable } from "../lib";
+class Point1 implements Pointable {
+  getX(): number {
+    return 0;
+  }
+  getY(): number {
+    return 0;
+  }
+}
+//// [/projects/container/exec/tsconfig.json] *new* 
+{
+	"files": ["./index.ts"],
+	"references": [
+		{ "path": "../lib" },
+	],
+}
+//// [/projects/container/lib/bar.ts] *new* 
+import { Pointable } from "./index";
+class Point implements Pointable {
+  getX(): number {
+    return 0;
+  }
+  getY(): number {
+    return 0;
+  }
+}
+//// [/projects/container/lib/index.ts] *new* 
+
+export interface Pointable {
+  getX(): number;
+  getY(): number;
+}
+export const val = 42;
+//// [/projects/container/lib/tsconfig.json] *new* 
+{
+	"compilerOptions": {
+		"composite": true,
+	},
+	references: [],
+	files: [
+		"index.ts",
+		"bar.ts"
+	],
+}
+//// [/projects/container/tsconfig.json] *new* 
+{
+	"files": [],
+	"include": [],
+	"references": [
+		{ "path": "./exec" },
+		{ "path": "./compositeExec" },
+	],
+}
+
+//// [/projects/temp/temp.ts] *new* 
+let x = 10
+//// [/projects/temp/tsconfig.json] *new* 
+{}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "\nexport interface Pointable {\n  getX(): number;\n  getY(): number;\n}\nexport const val = 42;"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/lib/tsconfig.json] *new*
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+  [/projects/container/tsconfig.json] *new*
+Open Files::
+  [/projects/container/lib/index.ts] *new*
+    /projects/container/lib/tsconfig.json  (default) 
+Config::
+  [/projects/container/lib/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/lib/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] *new*
+    NearestConfigFileName: /projects/container/lib/tsconfig.json
+    Ancestors:
+      /projects/container/lib/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json       
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/lib/tsconfig.json] 
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+  [/projects/container/tsconfig.json] 
+  [/projects/temp/tsconfig.json] *new*
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/lib/tsconfig.json  (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/lib/tsconfig.json] 
+    RetainingProjects:
+      /projects/container/lib/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+  [/projects/temp/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] 
+    NearestConfigFileName: /projects/container/lib/tsconfig.json
+    Ancestors:
+      /projects/container/lib/tsconfig.json  /projects/container/tsconfig.json 
+      /projects/container/tsconfig.json       
+  [/projects/temp/temp.ts] *new*
+    NearestConfigFileName: /projects/temp/tsconfig.json
+
+{
+  "method": "workspace/didChangeConfiguration",
+  "params": {
+    "settings": {
+      "typescript": {
+        "QuotePreference": "",
+        "LazyConfiguredProjectsFromExternalProject": false,
+        "MaximumHoverLength": 0,
+        "IncludeCompletionsForModuleExports": null,
+        "IncludeCompletionsForImportStatements": null,
+        "IncludeAutomaticOptionalChainCompletions": null,
+        "IncludeCompletionsWithSnippetText": null,
+        "IncludeCompletionsWithClassMemberSnippets": null,
+        "IncludeCompletionsWithObjectLiteralMethodSnippets": null,
+        "JsxAttributeCompletionStyle": "",
+        "ImportModuleSpecifierPreference": "",
+        "ImportModuleSpecifierEnding": "",
+        "IncludePackageJsonAutoImports": "",
+        "AutoImportSpecifierExcludeRegexes": [],
+        "AutoImportFileExcludePatterns": [],
+        "PreferTypeOnlyAutoImports": false,
+        "OrganizeImportsIgnoreCase": null,
+        "OrganizeImportsCollation": false,
+        "OrganizeImportsLocale": "",
+        "OrganizeImportsNumericCollation": false,
+        "OrganizeImportsAccentCollation": false,
+        "OrganizeImportsCaseFirst": 0,
+        "OrganizeImportsTypeOrder": 0,
+        "AllowTextChangesInNewFiles": false,
+        "UseAliasesForRename": null,
+        "AllowRenameOfImportPath": false,
+        "ProvideRefactorNotApplicableReason": false,
+        "InlayHints": {
+          "IncludeInlayParameterNameHints": "",
+          "IncludeInlayParameterNameHintsWhenArgumentMatchesName": false,
+          "IncludeInlayFunctionParameterTypeHints": false,
+          "IncludeInlayVariableTypeHints": false,
+          "IncludeInlayVariableTypeHintsWhenTypeMatchesName": false,
+          "IncludeInlayPropertyDeclarationTypeHints": false,
+          "IncludeInlayFunctionLikeReturnTypeHints": false,
+          "IncludeInlayEnumMemberValueHints": false
+        },
+        "CodeLens": {
+          "ReferencesCodeLensEnabled": true,
+          "ImplementationsCodeLensEnabled": true,
+          "ReferencesCodeLensShowOnAllFunctions": true,
+          "ImplementationsCodeLensShowOnInterfaceMethods": true,
+          "ImplementationsCodeLensShowOnAllClassMethods": true
+        },
+        "ExcludeLibrarySymbolsInNavTo": false,
+        "DisableSuggestions": false,
+        "DisableLineTextInReferences": false,
+        "DisplayPartsForJSDoc": false,
+        "ReportStyleChecksAsWarnings": false
+      }
+    }
+  }
+}
+
+{
+  "method": "textDocument/codeLens",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 1,
+        "character": 17
+      },
+      "end": {
+        "line": 4,
+        "character": 1
+      }
+    },
+    "data": {
+      "kind": "references",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/exec/tsconfig.json] *new*
+    /projects/container/lib/index.ts   
+    /projects/container/exec/index.ts  
+  [/projects/container/lib/tsconfig.json] 
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+  [/projects/container/tsconfig.json] *modified*
+  [/projects/temp/tsconfig.json] 
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/container/lib/index.ts] *modified*
+    /projects/container/compositeExec/tsconfig.json  *new*
+    /projects/container/exec/tsconfig.json           *new*
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] 
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/compositeExec/tsconfig.json  
+      /projects/container/tsconfig.json                
+  [/projects/container/exec/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/exec/tsconfig.json  
+      /projects/container/tsconfig.json       
+  [/projects/container/lib/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /projects/container/compositeExec/tsconfig.json  *new*
+      /projects/container/exec/tsconfig.json           *new*
+      /projects/container/lib/tsconfig.json            
+      /projects/container/tsconfig.json                *new*
+    RetainingOpenFiles:
+      /projects/container/lib/index.ts  
+  [/projects/container/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/container/tsconfig.json  
+  [/projects/temp/tsconfig.json] 
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/compositeExec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point2 implements [|Pointable|] {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/exec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point1 implements [|Pointable|] {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/lib/bar.ts ===
+// import { Pointable } from "./index";
+// class Point implements [|Pointable|] {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/lib/index.ts ===
+// 
+// export interface /*CODELENS: 3 references*/Pointable {
+//   getX(): number;
+//   getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 1,
+        "character": 17
+      },
+      "end": {
+        "line": 4,
+        "character": 1
+      }
+    },
+    "data": {
+      "kind": "implementations",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/compositeExec/index.ts ===
+// import { Pointable } from "../lib";
+// class [|Point2|] implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/exec/index.ts ===
+// import { Pointable } from "../lib";
+// class [|Point1|] implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/lib/bar.ts ===
+// import { Pointable } from "./index";
+// class [|Point|] implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+// --- (line: 6) skipped ---
+
+// === /projects/container/lib/index.ts ===
+// 
+// export interface /*CODELENS: 3 implementations*/Pointable {
+//   getX(): number;
+//   getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 2,
+        "character": 17
+      }
+    },
+    "data": {
+      "kind": "references",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/lib/index.ts ===
+// 
+// export interface Pointable {
+//   /*CODELENS: 0 references*/getX(): number;
+//   getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 2,
+        "character": 17
+      }
+    },
+    "data": {
+      "kind": "implementations",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/compositeExec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point2 implements Pointable {
+//   [|getX|](): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 7) skipped ---
+
+// === /projects/container/exec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point1 implements Pointable {
+//   [|getX|](): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 7) skipped ---
+
+// === /projects/container/lib/bar.ts ===
+// import { Pointable } from "./index";
+// class Point implements Pointable {
+//   [|getX|](): number {
+//     return 0;
+//   }
+//   getY(): number {
+// --- (line: 7) skipped ---
+
+// === /projects/container/lib/index.ts ===
+// 
+// export interface Pointable {
+//   /*CODELENS: 3 implementations*/getX(): number;
+//   getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 3,
+        "character": 2
+      },
+      "end": {
+        "line": 3,
+        "character": 17
+      }
+    },
+    "data": {
+      "kind": "references",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/lib/index.ts ===
+// 
+// export interface Pointable {
+//   getX(): number;
+//   /*CODELENS: 0 references*/getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 3,
+        "character": 2
+      },
+      "end": {
+        "line": 3,
+        "character": 17
+      }
+    },
+    "data": {
+      "kind": "implementations",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/compositeExec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point2 implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+//   [|getY|](): number {
+//     return 0;
+//   }
+// }
+
+// === /projects/container/exec/index.ts ===
+// import { Pointable } from "../lib";
+// class Point1 implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+//   [|getY|](): number {
+//     return 0;
+//   }
+// }
+
+// === /projects/container/lib/bar.ts ===
+// import { Pointable } from "./index";
+// class Point implements Pointable {
+//   getX(): number {
+//     return 0;
+//   }
+//   [|getY|](): number {
+//     return 0;
+//   }
+// }
+
+// === /projects/container/lib/index.ts ===
+// 
+// export interface Pointable {
+//   getX(): number;
+//   /*CODELENS: 3 implementations*/getY(): number;
+// }
+// export const val = 42;
+{
+  "method": "codeLens/resolve",
+  "params": {
+    "range": {
+      "start": {
+        "line": 5,
+        "character": 13
+      },
+      "end": {
+        "line": 5,
+        "character": 21
+      }
+    },
+    "data": {
+      "kind": "references",
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+
+
+
+// === Code Lenses ===
+// === /projects/container/lib/index.ts ===
+// 
+// export interface Pointable {
+//   getX(): number;
+//   getY(): number;
+// }
+// export const /*CODELENS: 0 references*/val = 42;
+{
+  "method": "textDocument/codeLens",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+{
+  "method": "workspace/didChangeConfiguration",
+  "params": {
+    "settings": {
+      "typescript": {
+        "QuotePreference": "",
+        "LazyConfiguredProjectsFromExternalProject": false,
+        "MaximumHoverLength": 0,
+        "IncludeCompletionsForModuleExports": true,
+        "IncludeCompletionsForImportStatements": true,
+        "IncludeAutomaticOptionalChainCompletions": null,
+        "IncludeCompletionsWithSnippetText": true,
+        "IncludeCompletionsWithClassMemberSnippets": null,
+        "IncludeCompletionsWithObjectLiteralMethodSnippets": null,
+        "JsxAttributeCompletionStyle": "",
+        "ImportModuleSpecifierPreference": "",
+        "ImportModuleSpecifierEnding": "",
+        "IncludePackageJsonAutoImports": "",
+        "AutoImportSpecifierExcludeRegexes": [],
+        "AutoImportFileExcludePatterns": [],
+        "PreferTypeOnlyAutoImports": false,
+        "OrganizeImportsIgnoreCase": null,
+        "OrganizeImportsCollation": false,
+        "OrganizeImportsLocale": "",
+        "OrganizeImportsNumericCollation": false,
+        "OrganizeImportsAccentCollation": false,
+        "OrganizeImportsCaseFirst": 0,
+        "OrganizeImportsTypeOrder": 0,
+        "AllowTextChangesInNewFiles": false,
+        "UseAliasesForRename": null,
+        "AllowRenameOfImportPath": true,
+        "ProvideRefactorNotApplicableReason": true,
+        "InlayHints": {
+          "IncludeInlayParameterNameHints": "",
+          "IncludeInlayParameterNameHintsWhenArgumentMatchesName": false,
+          "IncludeInlayFunctionParameterTypeHints": false,
+          "IncludeInlayVariableTypeHints": false,
+          "IncludeInlayVariableTypeHintsWhenTypeMatchesName": false,
+          "IncludeInlayPropertyDeclarationTypeHints": false,
+          "IncludeInlayFunctionLikeReturnTypeHints": false,
+          "IncludeInlayEnumMemberValueHints": false
+        },
+        "CodeLens": {
+          "ReferencesCodeLensEnabled": false,
+          "ImplementationsCodeLensEnabled": false,
+          "ReferencesCodeLensShowOnAllFunctions": false,
+          "ImplementationsCodeLensShowOnInterfaceMethods": false,
+          "ImplementationsCodeLensShowOnAllClassMethods": false
+        },
+        "ExcludeLibrarySymbolsInNavTo": true,
+        "DisableSuggestions": false,
+        "DisableLineTextInReferences": true,
+        "DisplayPartsForJSDoc": true,
+        "ReportStyleChecksAsWarnings": true
+      }
+    }
+  }
+}
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  
+    /projects/container/exec/tsconfig.json           
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] 
+    /projects/container/compositeExec/tsconfig.json  
+    /projects/container/exec/tsconfig.json           
+    /projects/container/lib/tsconfig.json            (default) 
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/container/lib/index.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/container/lib/index.ts] *closed*
+  [/projects/temp/temp.ts] 
+    /projects/temp/tsconfig.json  (default) 
+
+{
+  "method": "textDocument/didClose",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts"
+    }
+  }
+}
+
+Open Files::
+  [/projects/temp/temp.ts] *closed*
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/temp/temp.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "let x = 10"
+    }
+  }
+}
+
+Projects::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts            
+    /projects/container/compositeExec/index.ts  
+  [/projects/container/exec/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts   
+    /projects/container/exec/index.ts  
+  [/projects/container/lib/tsconfig.json] *deleted*
+    /projects/container/lib/index.ts  
+    /projects/container/lib/bar.ts    
+  [/projects/container/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    /projects/temp/temp.ts  
+Open Files::
+  [/projects/temp/temp.ts] *new*
+    /projects/temp/tsconfig.json  (default) 
+Config::
+  [/projects/container/compositeExec/tsconfig.json] *deleted*
+  [/projects/container/exec/tsconfig.json] *deleted*
+  [/projects/container/lib/tsconfig.json] *deleted*
+  [/projects/container/tsconfig.json] *deleted*
+  [/projects/temp/tsconfig.json] 
+    RetainingProjects:
+      /projects/temp/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/temp/temp.ts  
+Config File Names::
+  [/projects/container/lib/index.ts] *deleted*
+  [/projects/temp/temp.ts] 
+    NearestConfigFileName: /projects/temp/tsconfig.json

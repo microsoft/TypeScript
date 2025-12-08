@@ -66,6 +66,14 @@ type HasTextDocumentPosition interface {
 	TextDocumentPosition() Position
 }
 
+type HasLocations interface {
+	GetLocations() *[]Location
+}
+
+type HasLocation interface {
+	GetLocation() Location
+}
+
 type URI string // !!!
 
 type Method string

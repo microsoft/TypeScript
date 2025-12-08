@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -93,8 +94,8 @@ func (c *ProjectCollection) InferredProject() *Project {
 	return c.inferredProject
 }
 
-func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []*Project {
-	var projects []*Project
+func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Project {
+	var projects []ls.Project
 	for _, project := range c.ConfiguredProjects() {
 		if project.containsFile(path) {
 			projects = append(projects, project)

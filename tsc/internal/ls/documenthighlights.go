@@ -5,7 +5,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -52,7 +51,7 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 
 func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, position int, node *ast.Node, program *compiler.Program, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
 	options := refOptions{use: referenceUseNone}
-	referenceEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, []*ast.SourceFile{sourceFile}, options, &collections.Set[string]{})
+	referenceEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, []*ast.SourceFile{sourceFile}, options)
 	if referenceEntries == nil {
 		return nil
 	}

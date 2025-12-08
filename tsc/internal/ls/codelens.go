@@ -54,51 +54,27 @@ func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsp
 	}, nil
 }
 
-func (l *LanguageService) ResolveCodeLens(ctx context.Context, codeLens *lsproto.CodeLens, showLocationsCommandName *string) (*lsproto.CodeLens, error) {
+func (l *LanguageService) ResolveCodeLens(ctx context.Context, codeLens *lsproto.CodeLens, showLocationsCommandName *string, orchestrator CrossProjectOrchestrator) (*lsproto.CodeLens, error) {
 	uri := codeLens.Data.Uri
-	_, sourceFile := l.tryGetProgramAndFile(uri.FileName())
-	if sourceFile == nil ||
-		l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(sourceFile.End())).Line < codeLens.Range.Start.Line {
-		// This can happen if a codeLens/resolve request comes in after a program change.
-		// While it's true that handlers should latch onto a specific snapshot
-		// while processing requests, we just set `Data.Uri` based on
-		// some older snapshot's contents. The content could have been modified,
-		// or the file itself could have been removed from the session entirely.
-		// Note this won't bail out on every change, but will prevent crashing
-		// based on non-existent files and line maps from shortened files.
-		return codeLens, lsproto.ErrorCodeContentModified
-	}
-
-	textDoc := lsproto.TextDocumentIdentifier{
-		Uri: uri,
-	}
+	textDoc := lsproto.TextDocumentIdentifier{Uri: uri}
 	locale := locale.FromContext(ctx)
 	var locs []lsproto.Location
 	var lensTitle string
 	switch codeLens.Data.Kind {
 	case lsproto.CodeLensKindReferences:
-		origNode, symbolsAndEntries, ok := l.ProvideSymbolsAndEntries(ctx, uri, codeLens.Range.Start, false /*isRename*/)
-		if ok {
-			references, err := l.ProvideReferencesFromSymbolAndEntries(
-				ctx,
-				&lsproto.ReferenceParams{
-					TextDocument: textDoc,
-					Position:     codeLens.Range.Start,
-					Context: &lsproto.ReferenceContext{
-						// Don't include the declaration in the references count.
-						IncludeDeclaration: false,
-					},
-				},
-				origNode,
-				symbolsAndEntries,
-			)
-			if err != nil {
-				return nil, err
-			}
-
-			if references.Locations != nil {
-				locs = *references.Locations
-			}
+		referencesResp, err := l.ProvideReferences(ctx, &lsproto.ReferenceParams{
+			TextDocument: textDoc,
+			Position:     codeLens.Range.Start,
+			Context: &lsproto.ReferenceContext{
+				// Don't include the declaration in the references count.
+				IncludeDeclaration: false,
+			},
+		}, orchestrator)
+		if err != nil {
+			return nil, err
+		}
+		if referencesResp.Locations != nil {
+			locs = *referencesResp.Locations
 		}
 
 		if len(locs) == 1 {
@@ -107,19 +83,20 @@ func (l *LanguageService) ResolveCodeLens(ctx context.Context, codeLens *lsproto
 			lensTitle = diagnostics.X_0_references.Localize(locale, len(locs))
 		}
 	case lsproto.CodeLensKindImplementations:
-		// "Force" link support to be false so that we only get `Locations` back,
-		// and don't include the "current" node in the results.
-		findImplsOptions := provideImplementationsOpts{
-			requireLocationsResult: true,
-			dropOriginNodes:        true,
-		}
+
 		implementations, err := l.provideImplementationsEx(
 			ctx,
 			&lsproto.ImplementationParams{
 				TextDocument: textDoc,
 				Position:     codeLens.Range.Start,
 			},
-			findImplsOptions,
+			// "Force" link support to be false so that we only get `Locations` back,
+			// and don't include the "current" node in the results.
+			symbolEntryTransformOptions{
+				requireLocationsResult: true,
+				dropOriginNodes:        true,
+			},
+			orchestrator,
 		)
 		if err != nil {
 			return nil, err

@@ -109,6 +109,13 @@ type Location struct {
 	Range Range `json:"range"`
 }
 
+func (s Location) GetLocation() Location {
+	return Location{
+		Uri:   s.Uri,
+		Range: s.Range,
+	}
+}
+
 var _ json.UnmarshalerFrom = (*Location)(nil)
 
 func (s *Location) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
@@ -1809,6 +1816,13 @@ type CallHierarchyItem struct {
 	// A data entry field that is preserved between a call hierarchy prepare and
 	// incoming calls or outgoing calls requests.
 	Data *CallHierarchyItemData `json:"data,omitzero"`
+}
+
+func (s CallHierarchyItem) GetLocation() Location {
+	return Location{
+		Uri:   s.Uri,
+		Range: s.Range,
+	}
 }
 
 var _ json.UnmarshalerFrom = (*CallHierarchyItem)(nil)
@@ -3770,6 +3784,13 @@ type TypeHierarchyItem struct {
 	// type hierarchy in the server, helping improve the performance on
 	// resolving supertypes and subtypes.
 	Data *TypeHierarchyItemData `json:"data,omitzero"`
+}
+
+func (s TypeHierarchyItem) GetLocation() Location {
+	return Location{
+		Uri:   s.Uri,
+		Range: s.Range,
+	}
 }
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyItem)(nil)
@@ -11914,6 +11935,13 @@ type LocationLink struct {
 	// The range that should be selected and revealed when this link is being followed, e.g the name of a function.
 	// Must be contained by the `targetRange`. See also `DocumentSymbol#range`
 	TargetSelectionRange Range `json:"targetSelectionRange"`
+}
+
+func (s LocationLink) GetLocation() Location {
+	return Location{
+		Uri:   s.TargetUri,
+		Range: s.TargetRange,
+	}
 }
 
 var _ json.UnmarshalerFrom = (*LocationLink)(nil)
@@ -27073,6 +27101,10 @@ func (o *LocationOrLocationsOrDefinitionLinksOrNull) UnmarshalJSONFrom(dec *json
 	return fmt.Errorf("invalid LocationOrLocationsOrDefinitionLinksOrNull: %s", data)
 }
 
+func (o LocationOrLocationsOrDefinitionLinksOrNull) GetLocations() *[]Location {
+	return o.Locations
+}
+
 type FoldingRangesOrNull struct {
 	FoldingRanges *[]*FoldingRange
 }
@@ -27161,6 +27193,10 @@ func (o *LocationOrLocationsOrDeclarationLinksOrNull) UnmarshalJSONFrom(dec *jso
 		return nil
 	}
 	return fmt.Errorf("invalid LocationOrLocationsOrDeclarationLinksOrNull: %s", data)
+}
+
+func (o LocationOrLocationsOrDeclarationLinksOrNull) GetLocations() *[]Location {
+	return o.Locations
 }
 
 type SelectionRangesOrNull struct {
@@ -27913,6 +27949,10 @@ func (o *LocationsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		return nil
 	}
 	return fmt.Errorf("invalid LocationsOrNull: %s", data)
+}
+
+func (o LocationsOrNull) GetLocations() *[]Location {
+	return o.Locations
 }
 
 type DocumentHighlightsOrNull struct {

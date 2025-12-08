@@ -412,7 +412,7 @@ func (b *ProjectCollectionBuilder) DidRequestProject(projectId tspath.Path, logg
 	}
 }
 
-func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectsReferenced map[tspath.Path]struct{}, logger *logging.LogTree) {
+func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *ProjectTreeRequest, logger *logging.LogTree) {
 	startTime := time.Now()
 
 	var currentProjects []tspath.Path
@@ -428,10 +428,10 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectsReferenced map
 			if entry, ok := b.configuredProjects.Load(projectId); ok {
 				// If this project has potential project reference for any of the project we are loading ancestor tree for
 				// load this project first
-				if project := entry.Value(); project != nil && (projectsReferenced == nil || project.hasPotentialProjectReference(projectsReferenced)) {
+				if project := entry.Value(); project != nil && (projectTreeRequest.IsAllProjects() || project.hasPotentialProjectReference(projectTreeRequest)) {
 					b.updateProgram(entry, logger)
 				}
-				b.ensureProjectTree(wg, entry, projectsReferenced, &seenProjects, logger)
+				b.ensureProjectTree(wg, entry, projectTreeRequest, &seenProjects, logger)
 			}
 		})
 	}
@@ -439,14 +439,14 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectsReferenced map
 
 	if logger != nil {
 		elapsed := time.Since(startTime)
-		logger.Log(fmt.Sprintf("Completed project tree request for %v in %v", maps.Keys(projectsReferenced), elapsed))
+		logger.Log(fmt.Sprintf("Completed project tree request for %v in %v", projectTreeRequest.Projects(), elapsed))
 	}
 }
 
 func (b *ProjectCollectionBuilder) ensureProjectTree(
 	wg core.WorkGroup,
 	entry *dirty.SyncMapEntry[tspath.Path, *Project],
-	projectsReferenced map[tspath.Path]struct{},
+	projectTreeRequest *ProjectTreeRequest,
 	seenProjects *collections.SyncSet[tspath.Path],
 	logger *logging.LogTree,
 ) {
@@ -475,11 +475,10 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 	}
 	for _, childConfig := range children {
 		wg.Queue(func() {
-			if projectsReferenced != nil && program.RangeResolvedProjectReferenceInChildConfig(
+			if !projectTreeRequest.IsAllProjects() && program.RangeResolvedProjectReferenceInChildConfig(
 				childConfig,
 				func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-					_, isReferenced := projectsReferenced[referencePath]
-					return !isReferenced
+					return !projectTreeRequest.IsProjectReferenced(referencePath)
 				}) {
 				return
 			}
@@ -489,7 +488,7 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 			b.updateProgram(childProjectEntry, logger)
 
 			// Ensure children for this project
-			b.ensureProjectTree(wg, childProjectEntry, projectsReferenced, seenProjects, logger)
+			b.ensureProjectTree(wg, childProjectEntry, projectTreeRequest, seenProjects, logger)
 		})
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/project/logging"
@@ -85,6 +86,8 @@ type Project struct {
 	// typingsFiles are the root files added by the typings installer.
 	typingsFiles []string
 }
+
+var _ ls.Project = (*Project)(nil)
 
 func NewConfiguredProject(
 	configFileName string,
@@ -288,16 +291,16 @@ func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
 	p.potentialProjectReferences.Add(configFilePath)
 }
 
-func (p *Project) hasPotentialProjectReference(references map[tspath.Path]struct{}) bool {
+func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {
 	if p.CommandLine != nil {
 		for _, path := range p.CommandLine.ResolvedProjectReferencePaths() {
-			if _, has := references[p.toPath(path)]; has {
+			if projectTreeRequest.IsProjectReferenced(p.toPath(path)) {
 				return true
 			}
 		}
 	} else if p.potentialProjectReferences != nil {
 		for path := range p.potentialProjectReferences.Keys() {
-			if _, has := references[path]; has {
+			if projectTreeRequest.IsProjectReferenced(path) {
 				return true
 			}
 		}
