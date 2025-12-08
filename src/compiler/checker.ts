@@ -21155,7 +21155,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node) || !!(getFunctionFlags(node) & FunctionFlags.Generator && node.body && forEachYieldExpression(node.body as Block, isContextSensitive));
+        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node) || hasContextSensitiveYieldExpression(node);
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -21166,6 +21166,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isContextSensitive(node.body);
         }
         return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression));
+    }
+
+    function hasContextSensitiveYieldExpression(node: FunctionLikeDeclaration): boolean {
+        // yield expressions can be context sensitive in situations like:
+        //
+        // declare function test(gen: () => Generator<(arg: number) => string, void, void>): void;
+        //
+        // test(function* () {
+        //   yield (arg) => String(arg);
+        // });
+        return !!(getFunctionFlags(node) & FunctionFlags.Generator && node.body && forEachYieldExpression(node.body as Block, isContextSensitive));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
