@@ -685,7 +685,7 @@ func (p *UserPreferences) set(name string, value any) {
 		p.InlayHints.IncludeInlayParameterNameHints = parseInlayParameterNameHints(value)
 	case "includeinlayparameternamehintswhenargumentmatchesname":
 		p.InlayHints.IncludeInlayParameterNameHintsWhenArgumentMatchesName = parseBoolWithDefault(value, false)
-	case "includeinlayfunctionparametertypeHints":
+	case "includeinlayfunctionparametertypehints":
 		p.InlayHints.IncludeInlayFunctionParameterTypeHints = parseBoolWithDefault(value, false)
 	case "includeinlayvariabletypehints":
 		p.InlayHints.IncludeInlayVariableTypeHints = parseBoolWithDefault(value, false)
