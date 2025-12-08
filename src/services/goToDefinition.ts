@@ -316,11 +316,8 @@ function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: N
         const contextualType = element && typeChecker.getContextualType(element.parent);
         if (contextualType) {
             let properties = getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false);
-            if (properties.length === 1) {
-                const declaration = properties[0].valueDeclaration;
-                const withoutNodeInferencesType = declaration && isObjectLiteralExpression(declaration.parent) && isObjectLiteralElementLike(declaration) && declaration.name === node ?
-                    typeChecker.getContextualType(element.parent, ContextFlags.IgnoreNodeInferences) :
-                    undefined;
+            if (some(properties, p => !!(p.valueDeclaration && isObjectLiteralExpression(p.valueDeclaration.parent) && isObjectLiteralElementLike(p.valueDeclaration) && p.valueDeclaration.name === node))) {
+                const withoutNodeInferencesType = typeChecker.getContextualType(element.parent, ContextFlags.IgnoreNodeInferences);
                 if (withoutNodeInferencesType) {
                     const withoutNodeInferencesProperties = getPropertySymbolsFromContextualType(element, typeChecker, withoutNodeInferencesType, /*unionSymbolOk*/ false);
                     if (withoutNodeInferencesProperties.length) {
