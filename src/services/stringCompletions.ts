@@ -553,7 +553,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         }
     }
 
-    function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
+    function fromContextualType(contextFlags: ContextFlags = ContextFlags.IgnoreNodeInferences): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
         const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
@@ -611,7 +611,7 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     const contextualType = checker.getContextualType(objectLiteralExpression);
     if (!contextualType) return undefined;
 
-    const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.Completions);
+    const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.IgnoreNodeInferences);
     const symbols = getPropertiesForObjectExpression(
         contextualType,
         completionsType,
