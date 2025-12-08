@@ -434,7 +434,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 const uniques = new Set<string>();
                 const stringLiteralTypes = concatenate(
                     getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.None), uniques),
-                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.Completions), uniques),
+                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.IgnoreNodeInferences), uniques),
                 );
                 return toStringLiteralCompletionsFromTypes(stringLiteralTypes);
             }
