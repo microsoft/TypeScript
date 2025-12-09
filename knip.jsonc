@@ -16,7 +16,6 @@
         "src/testRunner/_namespaces/Harness.ts",
 
         // The rest of the entry files, mostly to track used dependencies:
-        ".eslint-plugin-local.cjs",
         ".gulp.js",
         "scripts/eslint/{rules,tests}/*.cjs",
         "scripts/*.{cjs,mjs}"
