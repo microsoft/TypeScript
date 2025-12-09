@@ -91,6 +91,14 @@ func HasSuffix(s string, suffix string, caseSensitive bool) bool {
 	return strings.EqualFold(s[len(s)-len(suffix):], suffix)
 }
 
+func HasPrefixAndSuffixWithoutOverlap(s string, prefix string, suffix string, caseSensitive bool) bool {
+	if len(prefix)+len(suffix) > len(s) {
+		return false
+	}
+
+	return HasPrefix(s, prefix, caseSensitive) && HasSuffix(s, suffix, caseSensitive)
+}
+
 func CompareStringsCaseInsensitiveThenSensitive(a, b string) Comparison {
 	cmp := CompareStringsCaseInsensitive(a, b)
 	if cmp != ComparisonEqual {

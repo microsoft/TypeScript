@@ -256,3 +256,53 @@ func TestContainsIgnoredPath(t *testing.T) {
 		})
 	}
 }
+
+func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
+	t.Parallel()
+	t.Run("with exports pattern", func(t *testing.T) {
+		t.Parallel()
+
+		tests := []struct {
+			name           string
+			targetFilePath string
+			expected       string
+		}{
+			{
+				name:           "match",
+				targetFilePath: "/pkg/src/things/thing1/index.ts",
+				expected:       "./src/things/thing1",
+			},
+			{
+				name:           "mismatch with matching leading and trailing strings",
+				targetFilePath: "/pkg/src/things/index.ts",
+				expected:       "",
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+				result := tryGetModuleNameFromExportsOrImports(
+					&core.CompilerOptions{},
+					&mockModuleSpecifierGenerationHost{},
+					tt.targetFilePath,
+					"/pkg",
+					"./src/things/*",
+					packagejson.ExportsOrImports{
+						JSONValue: packagejson.JSONValue{
+							Type:  packagejson.JSONValueTypeString,
+							Value: "./src/things/*/index.js",
+						},
+					},
+					[]string{},
+					MatchingModePattern,
+					false,
+					false,
+				)
+				if result != tt.expected {
+					t.Errorf("tryGetModuleNameFromExportsOrImports(targetFilePath = %q) = %v, expected %v", tt.targetFilePath, result, tt.expected)
+				}
+			})
+		}
+	})
+}

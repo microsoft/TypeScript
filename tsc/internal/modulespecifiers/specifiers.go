@@ -1207,23 +1207,23 @@ func tryGetModuleNameFromExportsOrImports(
 		case MatchingModePattern:
 			leadingSlice, trailingSlice, _ := strings.Cut(pathOrPattern, "*")
 			caseSensitive := host.UseCaseSensitiveFileNames()
-			if canTryTsExtension && stringutil.HasPrefix(targetFilePath, leadingSlice, caseSensitive) && stringutil.HasSuffix(targetFilePath, trailingSlice, caseSensitive) {
+			if canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
 				return replaceFirstStar(packageName, starReplacement)
 			}
-			if len(extensionSwappedTarget) > 0 && stringutil.HasPrefix(extensionSwappedTarget, leadingSlice, caseSensitive) && stringutil.HasSuffix(extensionSwappedTarget, trailingSlice, caseSensitive) {
+			if len(extensionSwappedTarget) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(extensionSwappedTarget, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := extensionSwappedTarget[len(leadingSlice) : len(extensionSwappedTarget)-len(trailingSlice)]
 				return replaceFirstStar(packageName, starReplacement)
 			}
-			if !canTryTsExtension && stringutil.HasPrefix(targetFilePath, leadingSlice, caseSensitive) && stringutil.HasSuffix(targetFilePath, trailingSlice, caseSensitive) {
+			if !canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
 				return replaceFirstStar(packageName, starReplacement)
 			}
-			if len(outputFile) > 0 && stringutil.HasPrefix(outputFile, leadingSlice, caseSensitive) && stringutil.HasSuffix(outputFile, trailingSlice, caseSensitive) {
+			if len(outputFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(outputFile, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := outputFile[len(leadingSlice) : len(outputFile)-len(trailingSlice)]
 				return replaceFirstStar(packageName, starReplacement)
 			}
-			if len(declarationFile) > 0 && stringutil.HasPrefix(declarationFile, leadingSlice, caseSensitive) && stringutil.HasSuffix(declarationFile, trailingSlice, caseSensitive) {
+			if len(declarationFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(declarationFile, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := declarationFile[len(leadingSlice) : len(declarationFile)-len(trailingSlice)]
 				substituted := replaceFirstStar(packageName, starReplacement)
 				jsExtension := tryGetJSExtensionForFile(declarationFile, options)
