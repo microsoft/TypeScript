@@ -1,0 +1,18 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== file.tsx (0 errors) ====
+    import React = require('react')
+    
+    interface MyComponentProp {
+        values: string;
+    }
+    
+    function MyComponent<T = MyComponentProp>(attr: T) {
+        return <div>attr.values</div>
+    }
+    
+    // OK
+    let i = <MyComponent values />;  // We infer type arguments here
+    let i1 = <MyComponent values="Hello"/>;

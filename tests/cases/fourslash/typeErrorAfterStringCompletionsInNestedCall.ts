@@ -25,7 +25,7 @@
 
 goTo.marker("1");
 edit.insert(`x`)
-verify.completions({ exact: ["MORNING", "LUNCH_TIME", "ALOHA"] });
+verify.completions({ exact: ["ALOHAx", "MORNING", "LUNCH_TIME", "ALOHA"] });
 verify.getSemanticDiagnostics([{
     code: 2322,
     message: `Type 'RaiseActionObject<{ type: "ALOHAx"; }>' is not assignable to type 'RaiseActionObject<GreetingEvent>'.\n  Type '{ type: "ALOHAx"; }' is not assignable to type 'GreetingEvent'.\n    Type '{ type: "ALOHAx"; }' is not assignable to type '{ type: "ALOHA"; }'.\n      Types of property 'type' are incompatible.\n        Type '"ALOHAx"' is not assignable to type '"ALOHA"'.`,

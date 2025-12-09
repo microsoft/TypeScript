@@ -178,7 +178,7 @@ function f(n: () => void) { }
 >n : () => void
 >  : ^^^^^^    
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

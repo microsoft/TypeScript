@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
 
 === moduleWithStatementsOfEveryKind.ts ===
-module A {
+namespace A {
 >A : typeof globalThis.A
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -40,7 +40,7 @@ module A {
 >   : ^^^^^^
     }
 
-    module Module {
+    namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 
@@ -122,7 +122,7 @@ module A {
     }
 }
 
-module Y {
+namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
@@ -161,7 +161,7 @@ module Y {
 >   : ^^^^^^
     }
 
-    export module Module {
+    export namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 

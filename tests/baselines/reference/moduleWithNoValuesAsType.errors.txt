@@ -4,20 +4,20 @@ moduleWithNoValuesAsType.ts(15,8): error TS2709: Cannot use namespace 'C' as a t
 
 
 ==== moduleWithNoValuesAsType.ts (3 errors) ====
-    module A { }
+    namespace A { }
     var a: A; // error
            ~
 !!! error TS2709: Cannot use namespace 'A' as a type.
     
-    module B {
+    namespace B {
         interface I {}
     }
     var b: B; // error
            ~
 !!! error TS2709: Cannot use namespace 'B' as a type.
     
-    module C {
-        module M {
+    namespace C {
+        namespace M {
             interface I {}
         }
     }

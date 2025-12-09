@@ -9,7 +9,7 @@ Type Count: 1,000
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -18550,16 +18550,16 @@ module TypeScript {
 >     : ^^^^^^^^
 >this.content.split("\n") : string[]
 >                         : ^^^^^^^^
->this.content.split : (separator: string | RegExp, limit?: number) => string[]
->                   : ^         ^^               ^^     ^^^      ^^^^^        
+>this.content.split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>                   : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
 >     : ^^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; (splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[]; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^        ^^                                                             ^^     ^^^      ^^^        ^^^
 >"\n" : "\n"
 >     : ^^^^
 
@@ -18602,8 +18602,8 @@ module TypeScript {
 >  : ^^^^^^
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
->this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >this.text[i] : string
 >             : ^^^^^^
 >this.text : string[]
@@ -18614,8 +18614,8 @@ module TypeScript {
 >     : ^^^^^^^^
 >i : number
 >  : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""
@@ -18638,16 +18638,16 @@ module TypeScript {
 >                                         : ^^^^^^
 >this.content.replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
->this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
 >     : ^^^^
 >content : string
 >        : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^           ^^                                                                   ^^            ^^      ^^^      ^^^           ^^                                                                                                      ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""

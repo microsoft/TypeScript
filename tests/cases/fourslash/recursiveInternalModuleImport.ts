@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// module M {
+//// namespace M {
 ////     import A = B;
 ////     import /**/B = A;
 //// }

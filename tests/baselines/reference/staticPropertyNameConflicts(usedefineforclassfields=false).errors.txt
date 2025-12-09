@@ -388,7 +388,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     // === Static properties on default exported classes ===
     
     // name
-    module TestOnDefaultExportedClass_1 {
+    namespace TestOnDefaultExportedClass_1 {
         class StaticName {
             static name: number; // error without useDefineForClassFields
                    ~~~~
@@ -404,7 +404,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
         [FunctionPropertyNames.name]: string; // ok
     }
     
-    module TestOnDefaultExportedClass_2 {
+    namespace TestOnDefaultExportedClass_2 {
         class StaticNameFn {
             static name() {} // error without useDefineForClassFields
                    ~~~~
@@ -421,7 +421,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     // length
-    module TestOnDefaultExportedClass_3 {
+    namespace TestOnDefaultExportedClass_3 {
         export default class StaticLength {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -439,7 +439,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
         [FunctionPropertyNames.length]: string; // ok
     }
     
-    module TestOnDefaultExportedClass_4 {
+    namespace TestOnDefaultExportedClass_4 {
         export default class StaticLengthFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -458,7 +458,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     // prototype
-    module TestOnDefaultExportedClass_5 {
+    namespace TestOnDefaultExportedClass_5 {
         export default class StaticPrototype {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -476,7 +476,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
         [FunctionPropertyNames.prototype]: string; // ok
     }
     
-    module TestOnDefaultExportedClass_6 {
+    namespace TestOnDefaultExportedClass_6 {
         export default class StaticPrototypeFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -499,7 +499,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     // caller
-    module TestOnDefaultExportedClass_7 {
+    namespace TestOnDefaultExportedClass_7 {
         export default class StaticCaller {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -517,7 +517,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
         [FunctionPropertyNames.caller]: string; // ok
     }
     
-    module TestOnDefaultExportedClass_8 {
+    namespace TestOnDefaultExportedClass_8 {
         export default class StaticCallerFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -536,7 +536,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
     }
     
     // arguments
-    module TestOnDefaultExportedClass_9 {
+    namespace TestOnDefaultExportedClass_9 {
         export default class StaticArguments {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -554,7 +554,7 @@ staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments
         [FunctionPropertyNames.arguments]: string; // ok
     }
     
-    module TestOnDefaultExportedClass_10 {
+    namespace TestOnDefaultExportedClass_10 {
         export default class StaticArgumentsFn {
                ~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.

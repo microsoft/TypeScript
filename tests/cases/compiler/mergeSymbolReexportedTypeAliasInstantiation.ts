@@ -1,5 +1,4 @@
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: main.ts
 import {Row2, C} from '.'
 const x: ((rowData: Row2<string>) => unknown) = (rowData: Row2<any>) => (null)

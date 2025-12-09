@@ -36,11 +36,11 @@ var x = new UserServices().getUserName();
 >            : ^^^^^^      
 
 === file1.ts ===
-module App {
+namespace App {
 >App : typeof App
 >    : ^^^^^^^^^^
 
-    export module Services {
+    export namespace Services {
 >Services : typeof Services
 >         : ^^^^^^^^^^^^^^^
 

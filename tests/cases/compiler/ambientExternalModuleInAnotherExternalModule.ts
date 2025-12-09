@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 
 class D { }
 export = D;

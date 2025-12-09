@@ -3,11 +3,11 @@
 === duplicateStringIndexers.ts ===
 // it is an error to have duplicate index signatures of the same kind in a type
 
-module test {
+namespace test {
 >test : Symbol(test, Decl(duplicateStringIndexers.ts, 0, 0))
 
     interface Number {
->Number : Symbol(Number, Decl(duplicateStringIndexers.ts, 2, 13))
+>Number : Symbol(Number, Decl(duplicateStringIndexers.ts, 2, 16))
 
         [x: string]: string;
 >x : Symbol(x, Decl(duplicateStringIndexers.ts, 4, 9))

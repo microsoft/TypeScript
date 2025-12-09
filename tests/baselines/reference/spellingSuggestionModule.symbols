@@ -13,9 +13,9 @@ declare module 'barfoo' { export const x: number; }
 
 barfoo;
 
-declare module farboo { export const x: number; }
+declare namespace farboo { export const x: number; }
 >farboo : Symbol(farboo, Decl(spellingSuggestionModule.ts, 4, 7))
->x : Symbol(x, Decl(spellingSuggestionModule.ts, 6, 36))
+>x : Symbol(x, Decl(spellingSuggestionModule.ts, 6, 39))
 
 faroo;
 
