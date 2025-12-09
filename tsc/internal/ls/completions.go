@@ -2967,6 +2967,37 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 			return typeChecker.GetContextualTypeForJsxAttribute(parent.Parent)
 		}
 		return nil
+	case ast.KindOpenBracketToken:
+		// When completing after `[` in an array literal (e.g., `[/*here*/]`),
+		// we should provide contextual type for the first element
+		if ast.IsArrayLiteralExpression(parent) {
+			contextualArrayType := typeChecker.GetContextualType(parent, checker.ContextFlagsNone)
+			if contextualArrayType != nil {
+				// Get the type for the first element (index 0)
+				return typeChecker.GetContextualTypeForArrayElement(contextualArrayType, 0)
+			}
+		}
+		return nil
+	case ast.KindCommaToken:
+		// When completing after `,` in an array literal (e.g., `[x, /*here*/]`),
+		// we should provide contextual type for the element after the comma
+		if ast.IsArrayLiteralExpression(parent) {
+			contextualArrayType := typeChecker.GetContextualType(parent, checker.ContextFlagsNone)
+			if contextualArrayType != nil {
+				// Count how many elements come before the cursor position
+				arrayLiteral := parent.AsArrayLiteralExpression()
+				elementIndex := 0
+				for _, elem := range arrayLiteral.Elements.Nodes {
+					if elem.Pos() < position {
+						elementIndex++
+					} else {
+						break
+					}
+				}
+				return typeChecker.GetContextualTypeForArrayElement(contextualArrayType, elementIndex)
+			}
+		}
+		return nil
 	case ast.KindQuestionToken:
 		// When completing after `?` in a ternary conditional (e.g., `foo(a ? /*here*/)`),
 		// we need to look at the parent conditional expression to find the contextual type.
