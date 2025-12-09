@@ -699,7 +699,7 @@ func (s *Server) getLanguageServiceAndCrossProjectOrchestrator(ctx context.Conte
 func (s *Server) recover(req *lsproto.RequestMessage) {
 	if r := recover(); r != nil {
 		stack := debug.Stack()
-		s.logger.Error("panic handling request", req.Method, r, string(stack))
+		s.logger.Errorf("panic handling request %s: %v\n%s", req.Method, r, string(stack))
 		if req.ID != nil {
 			s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
 		} else {
