@@ -122,8 +122,8 @@
         "vscode-languageclient": "^10.0.0-next.18"
     },
     "devDependencies": {
-        "@types/vscode": "^1.106.0",
-        "@vscode/vsce": "^3.7.0",
-        "esbuild": "^0.27.0"
+        "@types/vscode": "^1.106.1",
+        "@vscode/vsce": "^3.7.1",
+        "esbuild": "^0.27.1"
     }
 }

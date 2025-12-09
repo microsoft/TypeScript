@@ -251,7 +251,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-golang.org/x/sync v0.18.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sync v0.19.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -266,7 +266,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/sys v0.38.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sys v0.39.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -294,7 +294,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/term v0.37.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/term v0.38.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -309,7 +309,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/text v0.31.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/text v0.32.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 (c) (c) A

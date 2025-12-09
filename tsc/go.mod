@@ -8,19 +8,19 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/peter-evans/patience v0.3.0
 	github.com/zeebo/xxh3 v1.0.2
-	golang.org/x/sync v0.18.0
-	golang.org/x/sys v0.38.0
-	golang.org/x/term v0.37.0
-	golang.org/x/text v0.31.0
+	golang.org/x/sync v0.19.0
+	golang.org/x/sys v0.39.0
+	golang.org/x/term v0.38.0
+	golang.org/x/text v0.32.0
 	gotest.tools/v3 v3.5.2
 )
 
 require (
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/matryer/moq v0.6.0 // indirect
-	golang.org/x/mod v0.29.0 // indirect
-	golang.org/x/tools v0.38.0 // indirect
-	mvdan.cc/gofumpt v0.9.1 // indirect
+	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/tools v0.40.0 // indirect
+	mvdan.cc/gofumpt v0.9.2 // indirect
 )
 
 tool (
