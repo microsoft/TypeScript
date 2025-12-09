@@ -46,6 +46,7 @@ jobs:
           - os: ubuntu-latest
             node-version: '22'
             bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '22'
             bundle: true
@@ -58,6 +59,7 @@ jobs:
           - os: ubuntu-latest
             node-version: '20'
             bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '20'
             bundle: true
@@ -70,6 +72,7 @@ jobs:
           - os: ubuntu-latest
             node-version: '18'
             bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '18'
             bundle: true
@@ -82,6 +85,7 @@ jobs:
           - os: ubuntu-latest
             node-version: '16'
             bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '16'
             bundle: true
@@ -218,6 +222,8 @@ jobs:
         run: npx dprint check
 
   browser-integration:
+    if: ${{ github.event_name != 'merge_group' }}
+
     runs-on: ubuntu-latest
 
     steps:
