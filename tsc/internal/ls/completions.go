@@ -1369,7 +1369,10 @@ func (l *LanguageService) getCompletionData(
 		if importAttributes.AsImportAttributes().Attributes != nil {
 			elements = importAttributes.AsImportAttributes().Attributes.Nodes
 		}
-		existing := collections.NewSetFromItems(core.Map(elements, (*ast.Node).Text)...)
+		attributeNames := core.Map(elements, func(el *ast.Node) string {
+			return el.AsImportAttribute().Name().Text()
+		})
+		existing := collections.NewSetFromItems(attributeNames...)
 		uniques := core.Filter(
 			typeChecker.GetApparentProperties(typeChecker.GetTypeAtLocation(importAttributes)),
 			func(symbol *ast.Symbol) bool {
