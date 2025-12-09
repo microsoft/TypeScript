@@ -1,5 +1,5 @@
 // === findRenameLocations ===
 // === /b.js ===
 // export {
-//    /*RENAME*/foo
+//    /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|]
 // } from './a';

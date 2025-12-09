@@ -8,6 +8,9 @@
 // 
 // var c = new [|Class|]();
 
+// === /c.ts ===
+// export { [|Class|] } from "./a";
+
 
 
 // === findAllReferences ===
@@ -20,6 +23,9 @@
 // 
 // var c = new [|Class|]();
 
+// === /c.ts ===
+// export { [|Class|] } from "./a";
+
 
 
 // === findAllReferences ===
@@ -31,3 +37,6 @@
 // import { [|Class|] } from "./a";
 // 
 // var c = new /*FIND ALL REFS*/[|Class|]();
+
+// === /c.ts ===
+// export { [|Class|] } from "./a";

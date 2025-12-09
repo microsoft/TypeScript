@@ -2,5 +2,9 @@
 // @useAliasesForRename: false
 
 // === /a.ts ===
-// const [|nameRENAME|] = {};
-// export { name/*RENAME*/ };
+// const name = {};
+// export { /*START PREFIX*/name as [|nameRENAME|]/*RENAME*/ };
+
+// === /b.ts ===
+// import { [|nameRENAME|] } from './a';
+// const x = [|nameRENAME|].toString();

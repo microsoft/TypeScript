@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /a.js ===
 // function [|f|]() { }
-// export { f }
+// export { [|f|] }
 
 // === /b.js ===
 // const { [|f|] } = require('./a')

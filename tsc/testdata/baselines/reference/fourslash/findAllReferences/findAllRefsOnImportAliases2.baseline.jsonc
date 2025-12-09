@@ -7,7 +7,7 @@
 // var c = new [|C2|]();
 
 // === /c.ts ===
-// export { [|Class|] as C3 } from "./a";
+// export { [|Class|] as [|C3|] } from "./a";
 
 
 
@@ -20,7 +20,7 @@
 // var c = new [|C2|]();
 
 // === /c.ts ===
-// export { [|Class|] as C3 } from "./a";
+// export { [|Class|] as [|C3|] } from "./a";
 
 
 
@@ -33,7 +33,7 @@
 // var c = new [|C2|]();
 
 // === /c.ts ===
-// export { /*FIND ALL REFS*/[|Class|] as C3 } from "./a";
+// export { /*FIND ALL REFS*/[|Class|] as [|C3|] } from "./a";
 
 
 
@@ -53,4 +53,4 @@
 
 // === findAllReferences ===
 // === /c.ts ===
-// export { Class as /*FIND ALL REFS*/C3 } from "./a";
+// export { Class as /*FIND ALL REFS*/[|C3|] } from "./a";

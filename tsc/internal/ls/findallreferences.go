@@ -1528,14 +1528,12 @@ func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, s
 	state := newState(sourceFiles, sourceFilesSet, node, checker /*, cancellationToken*/, searchMeaning, options)
 
 	var exportSpecifier *ast.Node
-	if !isForRenameWithPrefixAndSuffixText(options) || len(symbol.Declarations) == 0 {
+	if isForRenameWithPrefixAndSuffixText(options) && len(symbol.Declarations) != 0 {
 		exportSpecifier = core.Find(symbol.Declarations, ast.IsExportSpecifier)
 	}
 	if exportSpecifier != nil {
-		// !!! not implemented
-
 		// When renaming at an export specifier, rename the export and not the thing being exported.
-		// state.getReferencesAtExportSpecifier(exportSpecifier.Name(), symbol, exportSpecifier.AsExportSpecifier(), state.createSearch(node, originalSymbol, comingFromUnknown /*comingFrom*/, "", nil), true /*addReferencesHere*/, true /*alwaysGetReferences*/)
+		state.getReferencesAtExportSpecifier(exportSpecifier.Name(), symbol, exportSpecifier.AsExportSpecifier(), state.createSearch(node, originalSymbol, ImpExpKindUnknown /*comingFrom*/, "", nil), true /*addReferencesHere*/, true /*alwaysGetReferences*/)
 	} else if node != nil && node.Kind == ast.KindDefaultKeyword && symbol.Name == ast.InternalSymbolNameDefault && symbol.Parent != nil {
 		state.addReference(node, symbol, entryKindNode)
 		state.searchForImportsOfExport(node, symbol, &ExportInfo{exportingModuleSymbol: symbol.Parent, exportKind: ExportKindDefault})
@@ -1583,22 +1581,21 @@ type refState struct {
 	result                       []*SymbolAndEntries
 	inheritsFromCache            map[inheritKey]bool
 	seenContainingTypeReferences collections.Set[*ast.Node] // node seen tracker
-	// seenReExportRHS           *collections.Set[*ast.Node] // node seen tracker
-	importTracker           ImportTracker
-	symbolToReferences      map[*ast.Symbol]*SymbolAndEntries
-	sourceFileToSeenSymbols map[*ast.SourceFile]*collections.Set[*ast.Symbol]
+	seenReExportRHS              collections.Set[*ast.Node] // node seen tracker
+	importTracker                ImportTracker
+	symbolToReferences           map[*ast.Symbol]*SymbolAndEntries
+	sourceFileToSeenSymbols      map[*ast.SourceFile]*collections.Set[*ast.Symbol]
 }
 
 func newState(sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
 	return &refState{
-		sourceFiles:       sourceFiles,
-		sourceFilesSet:    sourceFilesSet,
-		specialSearchKind: getSpecialSearchKind(node),
-		checker:           checker,
-		searchMeaning:     searchMeaning,
-		options:           options,
-		inheritsFromCache: map[inheritKey]bool{},
-		// seenReExportRHS:           &collections.Set[*ast.Node]{},
+		sourceFiles:             sourceFiles,
+		sourceFilesSet:          sourceFilesSet,
+		specialSearchKind:       getSpecialSearchKind(node),
+		checker:                 checker,
+		searchMeaning:           searchMeaning,
+		options:                 options,
+		inheritsFromCache:       map[inheritKey]bool{},
 		symbolToReferences:      map[*ast.Symbol]*SymbolAndEntries{},
 		sourceFileToSeenSymbols: map[*ast.SourceFile]*collections.Set[*ast.Symbol]{},
 	}
@@ -1911,9 +1908,7 @@ func (state *refState) getReferencesAtLocation(sourceFile *ast.SourceFile, posit
 	}
 
 	if parent.Kind == ast.KindExportSpecifier {
-		// !!! not implemented
-		// debug.Assert(referenceLocation.Kind == ast.KindIdentifier || referenceLocation.Kind == ast.KindStringLiteral)
-		// state.getReferencesAtExportSpecifier(referenceLocation /* Identifier | StringLiteral*/, referenceSymbol, parent.AsExportSpecifier(), search, addReferencesHere, false /*alwaysGetReferences*/)
+		state.getReferencesAtExportSpecifier(referenceLocation, referenceSymbol, parent.AsExportSpecifier(), search, addReferencesHere, false /*alwaysGetReferences*/)
 		return
 	}
 
@@ -2031,6 +2026,82 @@ func (state *refState) getImportOrExportReferences(referenceLocation *ast.Node, 
 		}
 	} else {
 		state.searchForImportsOfExport(referenceLocation, importOrExport.symbol, importOrExport.exportInfo)
+	}
+}
+
+func (state *refState) markSeenReExportRHS(node *ast.Node) bool {
+	return state.seenReExportRHS.AddIfAbsent(node)
+}
+
+func (state *refState) getReferencesAtExportSpecifier(
+	referenceLocation *ast.Node,
+	referenceSymbol *ast.Symbol,
+	exportSpecifier *ast.ExportSpecifier,
+	search *refSearch,
+	addReferencesHere bool,
+	alwaysGetReferences bool,
+) {
+	debug.Assert(!alwaysGetReferences || state.options.useAliasesForRename, "If alwaysGetReferences is true, then prefix/suffix text must be enabled")
+
+	exportDeclaration := exportSpecifier.Parent.Parent.AsExportDeclaration()
+	propertyName := exportSpecifier.PropertyName
+	name := exportSpecifier.Name()
+	localSymbol := getLocalSymbolForExportSpecifier(referenceLocation.AsIdentifier(), referenceSymbol, exportSpecifier, state.checker)
+
+	if !alwaysGetReferences && !search.includes(localSymbol) {
+		return
+	}
+
+	addRef := func() {
+		if addReferencesHere {
+			state.addReference(referenceLocation, localSymbol, entryKindNode)
+		}
+	}
+
+	if propertyName == nil {
+		// Don't rename at `export { default } from "m";`. (but do continue to search for imports of the re-export)
+		if !(state.options.use == referenceUseRename && ast.ModuleExportNameIsDefault(name)) {
+			addRef()
+		}
+	} else if referenceLocation == propertyName.AsNode() {
+		// For `export { foo as bar } from "baz"`, "`foo`" will be added from the singleReferences for import searches of the original export.
+		// For `export { foo as bar };`, where `foo` is a local, so add it now.
+		if exportDeclaration.ModuleSpecifier == nil {
+			addRef()
+		}
+
+		if addReferencesHere && state.options.use != referenceUseRename && state.markSeenReExportRHS(name) {
+			exportSymbol := exportSpecifier.AsNode().Symbol()
+			debug.Assert(exportSymbol != nil, "exportSpecifier.Symbol() should not be nil")
+			state.addReference(name, exportSymbol, entryKindNode)
+		}
+	} else {
+		if state.markSeenReExportRHS(referenceLocation) {
+			addRef()
+		}
+	}
+
+	// For `export { foo as bar }`, rename `foo`, but not `bar`.
+	if !isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences {
+		isDefaultExport := ast.ModuleExportNameIsDefault(referenceLocation) || ast.ModuleExportNameIsDefault(exportSpecifier.Name())
+		exportKind := ExportKindNamed
+		if isDefaultExport {
+			exportKind = ExportKindDefault
+		}
+		exportSymbol := exportSpecifier.AsNode().Symbol()
+		debug.Assert(exportSymbol != nil, "exportSpecifier.Symbol() should not be nil")
+		exportInfo := getExportInfo(exportSymbol, exportKind, state.checker)
+		if exportInfo != nil {
+			state.searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo)
+		}
+	}
+
+	// At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
+	if search.comingFrom != ImpExpKindExport && exportDeclaration.ModuleSpecifier != nil && propertyName == nil && !isForRenameWithPrefixAndSuffixText(state.options) {
+		imported := state.checker.GetExportSpecifierLocalTargetSymbol(exportSpecifier.AsNode())
+		if imported != nil {
+			state.searchForImportedSymbol(imported)
+		}
 	}
 }
 

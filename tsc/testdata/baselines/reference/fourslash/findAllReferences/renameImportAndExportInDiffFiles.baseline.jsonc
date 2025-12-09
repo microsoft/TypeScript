@@ -4,7 +4,7 @@
 
 // === /b.ts ===
 // import { [|a|] } from './a';
-// export { a };
+// export { [|a|] };
 
 
 
@@ -14,7 +14,7 @@
 
 // === /b.ts ===
 // import { /*FIND ALL REFS*/[|a|] } from './a';
-// export { a };
+// export { [|a|] };
 
 
 
@@ -24,4 +24,4 @@
 
 // === /b.ts ===
 // import { [|a|] } from './a';
-// export { /*FIND ALL REFS*/a };
+// export { /*FIND ALL REFS*/[|a|] };

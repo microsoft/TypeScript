@@ -8,10 +8,12 @@
 // }
 // declare module "a" {
 //     import * as [|N|] from "mod";
-//     export { N }; // Renaming N here would rename
+//     export { [|N|] }; // Renaming N here would rename
 // }
 // declare module "b" {
-// --- (line: 12) skipped ---
+//     import { [|N|] } from "a";
+//     export const y: typeof [|N|].x;
+// }
 
 
 
@@ -25,10 +27,12 @@
 // }
 // declare module "a" {
 //     import * as /*FIND ALL REFS*/[|N|] from "mod";
-//     export { N }; // Renaming N here would rename
+//     export { [|N|] }; // Renaming N here would rename
 // }
 // declare module "b" {
-// --- (line: 12) skipped ---
+//     import { [|N|] } from "a";
+//     export const y: typeof [|N|].x;
+// }
 
 
 
@@ -42,7 +46,7 @@
 // }
 // declare module "a" {
 //     import * as [|N|] from "mod";
-//     export { N }; // Renaming N here would rename
+//     export { [|N|] }; // Renaming N here would rename
 // }
 // declare module "b" {
 //     import { /*FIND ALL REFS*/[|N|] } from "a";

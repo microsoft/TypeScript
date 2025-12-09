@@ -354,12 +354,15 @@
 
 
 // === findAllReferences ===
+// === /i.ts ===
+// export class [|I|] {}
+
 // === /main.ts ===
 // --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
-// /*FIND ALL REFS*/export type { I } from "./i";
+// /*FIND ALL REFS*/export type { [|I|] } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
@@ -368,12 +371,15 @@
 
 
 // === findAllReferences ===
+// === /i.ts ===
+// export class [|I|] {}
+
 // === /main.ts ===
 // --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
-// export /*FIND ALL REFS*/type { I } from "./i";
+// export /*FIND ALL REFS*/type { [|I|] } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
@@ -446,7 +452,7 @@
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
-// export type { j1, j2 /*FIND ALL REFS*/as j3 } from "./j";
+// export type { j1, j2 /*FIND ALL REFS*/as [|j3|] } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
 // type Z2 = 2;
@@ -462,7 +468,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type [|Z1|] = 1;
-// /*FIND ALL REFS*/export type { Z1 };
+// /*FIND ALL REFS*/export type { [|Z1|] };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
@@ -476,7 +482,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type [|Z1|] = 1;
-// export /*FIND ALL REFS*/type { Z1 };
+// export /*FIND ALL REFS*/type { [|Z1|] };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
@@ -509,7 +515,7 @@
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
-// export type { z2, z3 /*FIND ALL REFS*/as z4 };
+// export type { z2, z3 /*FIND ALL REFS*/as [|z4|] };
 
 
 

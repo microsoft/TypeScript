@@ -616,8 +616,12 @@ func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.
 	if resMsg == nil {
 		t.Fatalf(prefix+"Nil response received for %s request", info.Method)
 	}
+	resp := resMsg.AsResponse()
+	if resp.Error != nil {
+		t.Fatalf(prefix+"%s request returned error: %s", info.Method, resp.Error.String())
+	}
 	if !resultOk {
-		t.Fatalf(prefix+"Unexpected %s response type: %T", info.Method, resMsg.AsResponse().Result)
+		t.Fatalf(prefix+"Unexpected %s response type: %T", info.Method, resp.Result)
 	}
 	return result
 }

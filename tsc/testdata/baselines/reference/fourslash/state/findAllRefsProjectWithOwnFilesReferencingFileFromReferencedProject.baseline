@@ -396,12 +396,17 @@ Config File Names::
 
 
 // === findAllReferences ===
+// === /myproject/own/main.ts ===
+// import { [|foo|] } from '../target/src/main';
+// [|foo|]();
+// export function bar() {}
+
 // === /myproject/src/helpers/functions.ts ===
 // export function [|foo|]() { return 1; }
 
 // === /myproject/src/main.ts ===
 // import { [|foo|] } from './helpers/functions';
-// export { /*FIND ALL REFS*/foo };
+// export { /*FIND ALL REFS*/[|foo|] };
 {
   "method": "textDocument/didClose",
   "params": {
@@ -506,9 +511,14 @@ Config::
 // export function bar() {}
 // 
 
+// === /myproject/own/main.ts ===
+// import { [|foo|] } from '../target/src/main';
+// [|foo|]();
+// export function bar() {}
+
 // === /myproject/src/helpers/functions.ts ===
 // export function [|foo|]() { return 1; }
 
 // === /myproject/src/main.ts ===
 // import { [|foo|] } from './helpers/functions';
-// export { foo };
+// export { [|foo|] };

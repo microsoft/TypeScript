@@ -3,4 +3,8 @@
 
 // === /a.ts ===
 // const name = {};
-// export { name as name/*RENAME*/ };
+// export { name as [|nameRENAME|]/*RENAME*/ };
+
+// === /b.ts ===
+// import { [|nameRENAME|] } from './a';
+// const x = [|nameRENAME|].toString();

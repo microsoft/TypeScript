@@ -1041,6 +1041,78 @@ import * as shared from "../../shared/dist"
 	}
 }
 
+func TestFindAllRefsReExportInMultiProjectSolution(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	content := `
+// @stateBaseline: true
+// @Filename: /tsconfig.base.json
+{
+	"compilerOptions": {
+		"rootDir": ".",
+		"outDir": "target",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"composite": true,
+		"declaration": true,
+		"strict": true
+	},
+	"include": []
+}
+// @Filename: /tsconfig.json
+{
+	"extends": "./tsconfig.base.json",
+	"references": [
+		{ "path": "project-a" },
+		{ "path": "project-b" },
+		{ "path": "project-c" },
+	]
+}
+// @Filename: /project-a/tsconfig.json
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"]
+}
+// @Filename: /project-a/private.ts
+export const /*symbolA*/symbolA = 'some-symbol';
+console.log(symbolA);
+// @Filename: /project-a/public.ts
+export { symbolA } from './private';
+// @Filename: /project-b/tsconfig.json
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"]
+}
+// @Filename: /project-b/public.ts
+export const /*symbolB*/symbolB = 'symbol-b';
+// @Filename: /project-c/tsconfig.json
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"],
+	"references": [
+		{ "path": "../project-a" },
+		{ "path": "../project-b" },
+	]
+}
+// @Filename: /project-c/index.ts
+import { symbolB } from '../project-b/public';
+import { /*symbolAUsage*/symbolA } from '../project-a/public';
+console.log(symbolB);
+console.log(symbolA);
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	// Find all refs for symbolA - should find definition in private.ts, re-export in public.ts, and usage in project-c/index.ts
+	f.VerifyBaselineFindAllReferences(t, "symbolA")
+
+	// Find all refs for symbolB - should find definition and usage (no re-export involved)
+	f.VerifyBaselineFindAllReferences(t, "symbolB")
+
+	// Find all refs from the usage site - should also work
+	f.VerifyBaselineFindAllReferences(t, "symbolAUsage")
+}
+
 func TestFindAllRefsDeclarationInOtherProject(t *testing.T) {
 	t.Parallel()
 	type testCase struct {

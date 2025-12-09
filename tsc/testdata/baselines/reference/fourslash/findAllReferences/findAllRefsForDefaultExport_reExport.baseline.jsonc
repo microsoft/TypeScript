@@ -3,6 +3,12 @@
 // const /*FIND ALL REFS*/[|foo|] = 1;
 // export default [|foo|];
 
+// === /re-export-dep.ts ===
+// import [|fooDefault|] from "./re-export";
+
+// === /re-export.ts ===
+// export { [|default|] } from "./export";
+
 
 
 // === findAllReferences ===
@@ -10,14 +16,34 @@
 // const [|foo|] = 1;
 // export default /*FIND ALL REFS*/[|foo|];
 
+// === /re-export-dep.ts ===
+// import [|fooDefault|] from "./re-export";
 
-
-// === findAllReferences ===
 // === /re-export.ts ===
-// export { /*FIND ALL REFS*/default } from "./export";
+// export { [|default|] } from "./export";
 
 
 
 // === findAllReferences ===
+// === /export.ts ===
+// const [|foo|] = 1;
+// export default [|foo|];
+
+// === /re-export-dep.ts ===
+// import [|fooDefault|] from "./re-export";
+
+// === /re-export.ts ===
+// export { /*FIND ALL REFS*/[|default|] } from "./export";
+
+
+
+// === findAllReferences ===
+// === /export.ts ===
+// const [|foo|] = 1;
+// export default [|foo|];
+
 // === /re-export-dep.ts ===
 // import /*FIND ALL REFS*/[|fooDefault|] from "./re-export";
+
+// === /re-export.ts ===
+// export { [|default|] } from "./export";

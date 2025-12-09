@@ -504,7 +504,7 @@ Config File Names::
 
 // === /myproject/src/main.ts ===
 // import { [|foo|] } from './helpers/functions';
-// export { /*FIND ALL REFS*/foo };
+// export { /*FIND ALL REFS*/[|foo|] };
 {
   "method": "textDocument/didClose",
   "params": {
@@ -594,4 +594,4 @@ Config::
 
 // === /myproject/src/main.ts ===
 // import { [|foo|] } from './helpers/functions';
-// export { foo };
+// export { [|foo|] };

@@ -4,18 +4,18 @@
 
 // === /b.ts ===
 // import { [|aRENAME|] } from './a';
-// export { a };
+// export { [|aRENAME|] as a/*END SUFFIX*/ };
 
 
 
 // === findRenameLocations ===
 // === /b.ts ===
 // import { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] } from './a';
-// export { a };
+// export { [|aRENAME|] as a/*END SUFFIX*/ };
 
 
 
 // === findRenameLocations ===
 // === /b.ts ===
-// import { /*START PREFIX*/a as [|aRENAME|] } from './a';
-// export { /*RENAME*/a };
+// import { a } from './a';
+// export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };

@@ -53,4 +53,4 @@
 
 // === findRenameLocations ===
 // === /c.ts ===
-// export { Class as /*RENAME*/C3 } from "./a";
+// export { Class as /*RENAME*/[|C3RENAME|] } from "./a";

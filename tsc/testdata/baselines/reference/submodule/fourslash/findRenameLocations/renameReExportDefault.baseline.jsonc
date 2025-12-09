@@ -1,7 +1,7 @@
 // === findRenameLocations ===
 // === /a.ts ===
 // export { default } from "./b";
-// export { default as /*RENAME*/b } from "./b";
+// export { default as /*RENAME*/[|bRENAME|] } from "./b";
 // export { default as bee } from "./b";
 // import { default as b } from "./b";
 // import { default as bee } from "./b";
@@ -34,7 +34,7 @@
 // === findRenameLocations ===
 // === /a.ts ===
 // export { default } from "./b";
-// export { default as b } from "./b";
+// export { default as [|bRENAME|] } from "./b";
 // export { default as bee } from "./b";
 // import { default as [|bRENAME|] } from "./b";
 // import { default as bee } from "./b";
@@ -49,7 +49,7 @@
 // === findRenameLocations ===
 // === /a.ts ===
 // export { default } from "./b";
-// export { default as b } from "./b";
+// export { default as [|bRENAME|] } from "./b";
 // export { default as bee } from "./b";
 // import { default as [|bRENAME|] } from "./b";
 // import { default as bee } from "./b";

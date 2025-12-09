@@ -8,14 +8,14 @@
 // === documentHighlights ===
 // === /1.ts ===
 // type A = 1;
-// export { /*HIGHLIGHTS*/A as B };
+// export { /*HIGHLIGHTS*/[|A|] as [|B|] };
 
 
 
 // === documentHighlights ===
 // === /1.ts ===
 // type A = 1;
-// export { A as /*HIGHLIGHTS*/B };
+// export { A as /*HIGHLIGHTS*/[|B|] };
 
 
 
@@ -31,7 +31,7 @@
 // === /2.ts ===
 // type A = 1;
 // let /*HIGHLIGHTS*/[|A|]: A = 1;
-// export { A as B };
+// export { [|A|] as [|B|] };
 
 
 
@@ -47,7 +47,7 @@
 // === /2.ts ===
 // type A = 1;
 // let [|A|]: A = 1;
-// export { /*HIGHLIGHTS*/A as B };
+// export { /*HIGHLIGHTS*/[|A|] as [|B|] };
 
 
 
@@ -55,7 +55,7 @@
 // === /2.ts ===
 // type A = 1;
 // let A: A = 1;
-// export { A as /*HIGHLIGHTS*/B };
+// export { A as /*HIGHLIGHTS*/[|B|] };
 
 
 
@@ -71,7 +71,7 @@
 // === /3.ts ===
 // type A = 1;
 // let /*HIGHLIGHTS*/[|A|]: A = 1;
-// export type { A as B };
+// export type { [|A|] as [|B|] };
 
 
 
@@ -87,7 +87,7 @@
 // === /3.ts ===
 // type A = 1;
 // let [|A|]: A = 1;
-// export type { /*HIGHLIGHTS*/A as B };
+// export type { /*HIGHLIGHTS*/[|A|] as [|B|] };
 
 
 
@@ -95,4 +95,4 @@
 // === /3.ts ===
 // type A = 1;
 // let A: A = 1;
-// export type { A as /*HIGHLIGHTS*/B };
+// export type { A as /*HIGHLIGHTS*/[|B|] };
