@@ -66,4 +66,19 @@ func TestCompletionsInArrayLiteralWithContextualType(t *testing.T) {
 			},
 		},
 	})
+
+	// Test 4: Completions after `]` in a tuple should not crash (issue #2296)
+	// When completing after the closing bracket, we're outside the array literal
+	// so we shouldn't be getting contextual types for array elements
+	const content4 = `let x: [number] = [123]/*d*/;`
+	f4, done4 := fourslash.NewFourslash(t, nil /*capabilities*/, content4)
+	defer done4()
+	// Just verify that completions don't crash - accept any completion list
+	f4.VerifyCompletions(t, "d", &fourslash.CompletionsExpectedList{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{},
+	})
 }
