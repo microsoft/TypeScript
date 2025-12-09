@@ -671,16 +671,34 @@ func (c *Checker) GetContextualDeclarationsForObjectLiteralElement(objectLiteral
 	return result
 }
 
-// GetContextualTypeForArrayElement returns the contextual type for an element at the given index
+// GetContextualTypeForArrayLiteralAtPosition returns the contextual type for an element at the given position
 // in an array with the given contextual type.
-func (c *Checker) GetContextualTypeForArrayElement(contextualArrayType *Type, elementIndex int) *Type {
+func (c *Checker) GetContextualTypeForArrayLiteralAtPosition(contextualArrayType *Type, arrayLiteral *ast.Node, position int) *Type {
 	if contextualArrayType == nil {
 		return nil
 	}
-	// Pass -1 for length, firstSpreadIndex, and lastSpreadIndex since we don't have
-	// access to the actual array literal. This falls back to getting the iterated type
-	// or checking numeric properties, which is appropriate for completion contexts.
-	return c.getContextualTypeForElementExpression(contextualArrayType, elementIndex, -1, -1, -1)
+	firstSpreadIndex, lastSpreadIndex := -1, -1
+	elementIndex := 0
+	elements := arrayLiteral.Elements()
+	for i, elem := range elements {
+		if elem.Pos() < position {
+			elementIndex++
+		}
+		if ast.IsSpreadElement(elem) {
+			if firstSpreadIndex == -1 {
+				firstSpreadIndex = i
+			}
+			lastSpreadIndex = i
+		}
+	}
+	// The array may be incomplete, so we don't know its final length.
+	return c.getContextualTypeForElementExpression(
+		contextualArrayType,
+		elementIndex,
+		-1, /*length*/
+		firstSpreadIndex,
+		lastSpreadIndex,
+	)
 }
 
 var knownGenericTypeNames = map[string]struct{}{
