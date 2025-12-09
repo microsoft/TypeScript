@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/locale"
@@ -140,8 +141,10 @@ func NewCompilerDiagnostic(message *diagnostics.Message, args ...any) *Diagnosti
 }
 
 type DiagnosticsCollection struct {
-	fileDiagnostics    map[string][]*Diagnostic
-	nonFileDiagnostics []*Diagnostic
+	fileDiagnostics          map[string][]*Diagnostic
+	fileDiagnosticsSorted    collections.Set[string]
+	nonFileDiagnostics       []*Diagnostic
+	nonFileDiagnosticsSorted bool
 }
 
 func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) {
@@ -150,18 +153,20 @@ func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) {
 		if c.fileDiagnostics == nil {
 			c.fileDiagnostics = make(map[string][]*Diagnostic)
 		}
-		c.fileDiagnostics[fileName] = core.InsertSorted(c.fileDiagnostics[fileName], diagnostic, CompareDiagnostics)
+		c.fileDiagnostics[fileName] = append(c.fileDiagnostics[fileName], diagnostic)
+		c.fileDiagnosticsSorted.Delete(fileName)
 	} else {
-		c.nonFileDiagnostics = core.InsertSorted(c.nonFileDiagnostics, diagnostic, CompareDiagnostics)
+		c.nonFileDiagnostics = append(c.nonFileDiagnostics, diagnostic)
+		c.nonFileDiagnosticsSorted = false
 	}
 }
 
 func (c *DiagnosticsCollection) Lookup(diagnostic *Diagnostic) *Diagnostic {
 	var diagnostics []*Diagnostic
 	if diagnostic.File() != nil {
-		diagnostics = c.fileDiagnostics[diagnostic.File().FileName()]
+		diagnostics = c.GetDiagnosticsForFile(diagnostic.File().FileName())
 	} else {
-		diagnostics = c.nonFileDiagnostics
+		diagnostics = c.GetGlobalDiagnostics()
 	}
 	if i, ok := slices.BinarySearchFunc(diagnostics, diagnostic, CompareDiagnostics); ok {
 		return diagnostics[i]
@@ -170,10 +175,18 @@ func (c *DiagnosticsCollection) Lookup(diagnostic *Diagnostic) *Diagnostic {
 }
 
 func (c *DiagnosticsCollection) GetGlobalDiagnostics() []*Diagnostic {
+	if !c.nonFileDiagnosticsSorted {
+		slices.SortStableFunc(c.nonFileDiagnostics, CompareDiagnostics)
+		c.nonFileDiagnosticsSorted = true
+	}
 	return c.nonFileDiagnostics
 }
 
 func (c *DiagnosticsCollection) GetDiagnosticsForFile(fileName string) []*Diagnostic {
+	if !c.fileDiagnosticsSorted.Has(fileName) {
+		slices.SortStableFunc(c.fileDiagnostics[fileName], CompareDiagnostics)
+		c.fileDiagnosticsSorted.Add(fileName)
+	}
 	return c.fileDiagnostics[fileName]
 }
 
