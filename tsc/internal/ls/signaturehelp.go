@@ -670,10 +670,12 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 		if onlyUseSyntacticOwners && !isSyntacticOwner(startingToken, info.invocation.callInvocation.node, sourceFile) {
 			return nil
 		}
+
 		resolvedSignature, candidates := checker.GetResolvedSignatureForSignatureHelp(info.invocation.callInvocation.node, info.argumentCount, c)
 		if len(candidates) == 0 {
 			return nil
 		}
+
 		return &CandidateOrTypeInfo{
 			candidateInfo: &candidateInfo{
 				candidates:        candidates,
@@ -687,9 +689,11 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 		if ast.IsIdentifier(called) {
 			container = called.Parent
 		}
+
 		if onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, container) {
 			return nil
 		}
+
 		candidates := getPossibleGenericSignatures(called, info.argumentCount, c)
 		if len(candidates) != 0 {
 			return &CandidateOrTypeInfo{
@@ -699,11 +703,17 @@ func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFi
 				},
 			}
 		}
-		symbol := c.GetSymbolAtLocation(called)
-		return &CandidateOrTypeInfo{
-			typeInfo: symbol,
+
+		if symbol := c.GetSymbolAtLocation(called); symbol != nil {
+			return &CandidateOrTypeInfo{
+				typeInfo: symbol,
+			}
 		}
+
+		// This can happen in the case of an unresolved symbol.
+		return nil
 	}
+
 	if info.invocation.contextualInvocation != nil {
 		return &CandidateOrTypeInfo{
 			candidateInfo: &candidateInfo{
