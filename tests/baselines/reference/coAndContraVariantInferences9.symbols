@@ -1,0 +1,232 @@
+//// [tests/cases/compiler/coAndContraVariantInferences9.ts] ////
+
+=== coAndContraVariantInferences9.ts ===
+// https://github.com/microsoft/TypeScript/issues/59656
+
+interface Observable<T> {
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 2, 21))
+
+  pipe<A>(op: OperatorFunction<T, A>): Observable<A>;
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>A : Symbol(A, Decl(coAndContraVariantInferences9.ts, 3, 7))
+>op : Symbol(op, Decl(coAndContraVariantInferences9.ts, 3, 10))
+>OperatorFunction : Symbol(OperatorFunction, Decl(coAndContraVariantInferences9.ts, 7, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 2, 21))
+>A : Symbol(A, Decl(coAndContraVariantInferences9.ts, 3, 7))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>A : Symbol(A, Decl(coAndContraVariantInferences9.ts, 3, 7))
+}
+interface UnaryFunction<T, R> {
+>UnaryFunction : Symbol(UnaryFunction, Decl(coAndContraVariantInferences9.ts, 4, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 5, 24))
+>R : Symbol(R, Decl(coAndContraVariantInferences9.ts, 5, 26))
+
+  (source: T): R;
+>source : Symbol(source, Decl(coAndContraVariantInferences9.ts, 6, 3))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 5, 24))
+>R : Symbol(R, Decl(coAndContraVariantInferences9.ts, 5, 26))
+}
+interface OperatorFunction<T, R>
+>OperatorFunction : Symbol(OperatorFunction, Decl(coAndContraVariantInferences9.ts, 7, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 8, 27))
+>R : Symbol(R, Decl(coAndContraVariantInferences9.ts, 8, 29))
+
+  extends UnaryFunction<Observable<T>, Observable<R>> {}
+>UnaryFunction : Symbol(UnaryFunction, Decl(coAndContraVariantInferences9.ts, 4, 1))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 8, 27))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>R : Symbol(R, Decl(coAndContraVariantInferences9.ts, 8, 29))
+
+interface MonoTypeOperatorFunction<T> extends OperatorFunction<T, T> {}
+>MonoTypeOperatorFunction : Symbol(MonoTypeOperatorFunction, Decl(coAndContraVariantInferences9.ts, 9, 56))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 10, 35))
+>OperatorFunction : Symbol(OperatorFunction, Decl(coAndContraVariantInferences9.ts, 7, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 10, 35))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 10, 35))
+
+declare function tap<T>(next: (value: T) => void): MonoTypeOperatorFunction<T>;
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 11, 21))
+>next : Symbol(next, Decl(coAndContraVariantInferences9.ts, 11, 24))
+>value : Symbol(value, Decl(coAndContraVariantInferences9.ts, 11, 31))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 11, 21))
+>MonoTypeOperatorFunction : Symbol(MonoTypeOperatorFunction, Decl(coAndContraVariantInferences9.ts, 9, 56))
+>T : Symbol(T, Decl(coAndContraVariantInferences9.ts, 11, 21))
+
+declare const obs1: Observable<{
+>obs1 : Symbol(obs1, Decl(coAndContraVariantInferences9.ts, 13, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 13, 32))
+
+}>;
+function test1(): Observable<{}> {
+>test1 : Symbol(test1, Decl(coAndContraVariantInferences9.ts, 15, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  return obs1.pipe(tap((arg) => {}));
+>obs1.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs1 : Symbol(obs1, Decl(coAndContraVariantInferences9.ts, 13, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 17, 24))
+}
+
+declare const obs2: Observable<{
+>obs2 : Symbol(obs2, Decl(coAndContraVariantInferences9.ts, 20, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 20, 32))
+
+}>;
+function test2(): Observable<{}> {
+>test2 : Symbol(test2, Decl(coAndContraVariantInferences9.ts, 22, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  return obs2.pipe(tap((arg) => {}));
+>obs2.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs2 : Symbol(obs2, Decl(coAndContraVariantInferences9.ts, 20, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 24, 24))
+}
+
+declare const obs3: Observable<{
+>obs3 : Symbol(obs3, Decl(coAndContraVariantInferences9.ts, 27, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 27, 32))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences9.ts, 28, 15))
+
+}>;
+function test3(): Observable<{}> {
+>test3 : Symbol(test3, Decl(coAndContraVariantInferences9.ts, 30, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  return obs3.pipe(tap((arg) => {}));
+>obs3.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs3 : Symbol(obs3, Decl(coAndContraVariantInferences9.ts, 27, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 32, 24))
+}
+
+declare const obs4: Observable<{
+>obs4 : Symbol(obs4, Decl(coAndContraVariantInferences9.ts, 35, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 35, 32))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences9.ts, 36, 16))
+
+}>;
+function test4(): Observable<{ prop?: string }> {
+>test4 : Symbol(test4, Decl(coAndContraVariantInferences9.ts, 38, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 39, 30))
+
+  return obs4.pipe(tap((arg) => {}));
+>obs4.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs4 : Symbol(obs4, Decl(coAndContraVariantInferences9.ts, 35, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 40, 24))
+}
+
+declare const obs5: Observable<{
+>obs5 : Symbol(obs5, Decl(coAndContraVariantInferences9.ts, 43, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 43, 32))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences9.ts, 44, 15))
+
+}>;
+function test5(): Observable<{ prop: string }> {
+>test5 : Symbol(test5, Decl(coAndContraVariantInferences9.ts, 46, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 47, 30))
+
+  return obs5.pipe(tap((arg) => {}));
+>obs5.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs5 : Symbol(obs5, Decl(coAndContraVariantInferences9.ts, 43, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 48, 24))
+}
+
+declare const obs6: Observable<{
+>obs6 : Symbol(obs6, Decl(coAndContraVariantInferences9.ts, 51, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 51, 32))
+
+  prop2?: number;
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences9.ts, 52, 15))
+
+}>;
+function test6(): Observable<{ prop2?: number }> {
+>test6 : Symbol(test6, Decl(coAndContraVariantInferences9.ts, 54, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+>prop2 : Symbol(prop2, Decl(coAndContraVariantInferences9.ts, 55, 30))
+
+  return obs6.pipe(tap((arg) => {}));
+>obs6.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs6 : Symbol(obs6, Decl(coAndContraVariantInferences9.ts, 51, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 56, 24))
+}
+
+declare const obs7: Observable<{
+>obs7 : Symbol(obs7, Decl(coAndContraVariantInferences9.ts, 59, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 59, 32))
+
+}>;
+function test7(): Observable<any> {
+>test7 : Symbol(test7, Decl(coAndContraVariantInferences9.ts, 61, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  return obs7.pipe(tap((arg) => {}));
+>obs7.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs7 : Symbol(obs7, Decl(coAndContraVariantInferences9.ts, 59, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 63, 24))
+}
+
+declare const obs8: Observable<{
+>obs8 : Symbol(obs8, Decl(coAndContraVariantInferences9.ts, 66, 13))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  prop?: string;
+>prop : Symbol(prop, Decl(coAndContraVariantInferences9.ts, 66, 32))
+
+}>;
+function test8(): Observable<unknown> {
+>test8 : Symbol(test8, Decl(coAndContraVariantInferences9.ts, 68, 3))
+>Observable : Symbol(Observable, Decl(coAndContraVariantInferences9.ts, 0, 0))
+
+  return obs8.pipe(tap((arg) => {}));
+>obs8.pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>obs8 : Symbol(obs8, Decl(coAndContraVariantInferences9.ts, 66, 13))
+>pipe : Symbol(Observable.pipe, Decl(coAndContraVariantInferences9.ts, 2, 25))
+>tap : Symbol(tap, Decl(coAndContraVariantInferences9.ts, 10, 71))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences9.ts, 70, 24))
+}
+
