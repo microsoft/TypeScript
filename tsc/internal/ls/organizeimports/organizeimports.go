@@ -124,7 +124,7 @@ func getImportKindOrder(s1 *ast.Statement) int {
 	}
 }
 
-// compareImportsOrRequireStatements compares two import or require statements for sorting
+// CompareImportsOrRequireStatements compares two import or require statements for sorting
 func CompareImportsOrRequireStatements(s1 *ast.Statement, s2 *ast.Statement, comparer func(a, b string) int) int {
 	if cmp := compareModuleSpecifiersWorker(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer); cmp != 0 {
 		return cmp
@@ -172,14 +172,14 @@ func GetNamedImportSpecifierComparer(preferences *lsutil.UserPreferences, compar
 	}
 }
 
-// getImportSpecifierInsertionIndex finds the insertion index for a new import specifier
+// GetImportSpecifierInsertionIndex finds the insertion index for a new import specifier
 func GetImportSpecifierInsertionIndex(sortedImports []*ast.Node, newImport *ast.Node, comparer func(s1, s2 *ast.Node) int) int {
 	return core.FirstResult(core.BinarySearchUniqueFunc(sortedImports, func(mid int, value *ast.Node) int {
 		return comparer(value, newImport)
 	}))
 }
 
-// getOrganizeImportsStringComparerWithDetection detects the string comparer to use based on existing imports
+// GetOrganizeImportsStringComparerWithDetection detects the string comparer to use based on existing imports
 func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences *lsutil.UserPreferences) (comparer func(a, b string) int, isSorted bool) {
 	result := detectModuleSpecifierCaseBySort([][]*ast.Statement{originalImportDecls}, getComparers(preferences))
 	return result.comparer, result.isSorted

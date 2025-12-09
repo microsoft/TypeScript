@@ -256,7 +256,7 @@ func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.Sourc
 		nodeEndLine := scanner.ComputeLineOfPosition(lineStarts, node.End())
 		for comment := range scanner.GetTrailingCommentRanges(t.NodeFactory, sourceFile.Text(), node.End()) {
 			// Single line can break the loop as trivia will only be this line.
-			// Comments on subsequest lines are also ignored.
+			// Comments on subsequent lines are also ignored.
 			if comment.Kind == ast.KindSingleLineCommentTrivia || scanner.ComputeLineOfPosition(lineStarts, comment.Pos()) > nodeEndLine {
 				break
 			}

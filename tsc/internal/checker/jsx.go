@@ -1030,7 +1030,7 @@ func (c *Checker) getJsxManagedAttributesFromLocatedAttributes(context *ast.Node
 
 func (c *Checker) instantiateAliasOrInterfaceWithDefaults(managedSym *ast.Symbol, typeArguments []*Type, inJavaScript bool) *Type {
 	declaredManagedType := c.getDeclaredTypeOfSymbol(managedSym)
-	// fetches interface type, or initializes symbol links type parmaeters
+	// fetches interface type, or initializes symbol links type parameters
 	if managedSym.Flags&ast.SymbolFlagsTypeAlias != 0 {
 		params := c.typeAliasLinks.Get(managedSym).typeParameters
 		if len(params) >= len(typeArguments) {

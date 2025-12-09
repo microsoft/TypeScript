@@ -45,7 +45,7 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 	if len(documentHighlights) == 0 {
 		documentHighlights = l.getSyntacticDocumentHighlights(node, sourceFile)
 	}
-	// if nil is passed here we never generate an error, just pass an empty higlight
+	// if nil is passed here we never generate an error, just pass an empty highlight
 	return lsproto.DocumentHighlightsOrNull{DocumentHighlights: &documentHighlights}, nil
 }
 
