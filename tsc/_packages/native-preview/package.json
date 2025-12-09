@@ -27,7 +27,7 @@
     "type": "module",
     "preferUnplugged": true,
     "engines": {
-        "node": ">=20.6.0"
+        "node": ">=16.20.0"
     },
     "bin": {
         "tsgo": "./bin/tsgo.js"

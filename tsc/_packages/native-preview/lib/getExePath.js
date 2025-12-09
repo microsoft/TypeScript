@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import module from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,16 +22,23 @@ export default function getExePath() {
     else {
         // We're actually running from an installed package.
         const platformPackageName = "@typescript/" + expectedPackage;
-        let packageJson;
         try {
-            // v20.6.0, v18.19.0
-            packageJson = import.meta.resolve(platformPackageName + "/package.json");
+            if (typeof import.meta.resolve === "undefined") {
+                // v16.20.1
+                const require = module.createRequire(import.meta.url);
+                const packageJson = require.resolve(platformPackageName + "/package.json");
+                exeDir = path.join(path.dirname(packageJson), "lib");
+            }
+            else {
+                // v20.6.0, v18.19.0
+                const packageJson = import.meta.resolve(platformPackageName + "/package.json");
+                const packageJsonPath = fileURLToPath(packageJson);
+                exeDir = path.join(path.dirname(packageJsonPath), "lib");
+            }
         }
         catch (e) {
             throw new Error("Unable to resolve " + platformPackageName + ". Either your platform is unsupported, or you are missing the package on disk.");
         }
-        const packageJsonPath = fileURLToPath(packageJson);
-        exeDir = path.join(path.dirname(packageJsonPath), "lib");
     }
 
     const exe = path.join(exeDir, "tsgo" + (process.platform === "win32" ? ".exe" : ""));
