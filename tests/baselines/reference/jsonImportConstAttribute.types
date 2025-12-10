@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/jsonImportConstAttribute.ts] ////
+
+=== /config.json ===
+{
+>{    "appLocales": ["FR", "BE"],    "enabled": true,    "count": 42} : { appLocales: string[]; enabled: boolean; count: number; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "appLocales": ["FR", "BE"],
+>"appLocales" : string[]
+>             : ^^^^^^^^
+>["FR", "BE"] : string[]
+>             : ^^^^^^^^
+>"FR" : "FR"
+>     : ^^^^
+>"BE" : "BE"
+>     : ^^^^
+
+    "enabled": true,
+>"enabled" : boolean
+>          : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    "count": 42
+>"count" : number
+>        : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+=== /main.ts ===
+// Without const attribute - types should be widened
+import config from "./config.json" with { type: "json" };
+>config : { appLocales: string[]; enabled: boolean; count: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+
+// With const attribute - types should preserve literal types
+import constConfig from "./config.json" with { type: "json", const: "true" };
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+>const : error
+
+// Test widened types (without const)
+type Locales = typeof config.appLocales;        // Should be string[]
+>Locales : string[]
+>        : ^^^^^^^^
+>config.appLocales : string[]
+>                  : ^^^^^^^^
+>config : { appLocales: string[]; enabled: boolean; count: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : string[]
+>           : ^^^^^^^^
+
+type Enabled = typeof config.enabled;           // Should be boolean
+>Enabled : boolean
+>        : ^^^^^^^
+>config.enabled : boolean
+>               : ^^^^^^^
+>config : { appLocales: string[]; enabled: boolean; count: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enabled : boolean
+>        : ^^^^^^^
+
+type Count = typeof config.count;               // Should be number
+>Count : number
+>      : ^^^^^^
+>config.count : number
+>             : ^^^^^^
+>config : { appLocales: string[]; enabled: boolean; count: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+
+// Test literal types (with const)
+type ConstLocales = typeof constConfig.appLocales;  // Should be readonly ["FR", "BE"]
+>ConstLocales : readonly ["FR", "BE"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>constConfig.appLocales : readonly ["FR", "BE"]
+>                       : ^^^^^^^^^^^^^^^^^^^^^
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+type ConstEnabled = typeof constConfig.enabled;      // Should be true
+>ConstEnabled : true
+>             : ^^^^
+>constConfig.enabled : true
+>                    : ^^^^
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enabled : true
+>        : ^^^^
+
+type ConstCount = typeof constConfig.count;          // Should be 42
+>ConstCount : 42
+>           : ^^
+>constConfig.count : 42
+>                  : ^^
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>count : 42
+>      : ^^
+
+// Verify the types work as expected
+const locale: "FR" | "BE" = constConfig.appLocales[0];  // Should work with const
+>locale : "FR" | "BE"
+>       : ^^^^^^^^^^^
+>constConfig.appLocales[0] : "FR"
+>                          : ^^^^
+>constConfig.appLocales : readonly ["FR", "BE"]
+>                       : ^^^^^^^^^^^^^^^^^^^^^
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+const enabledTrue: true = constConfig.enabled;           // Should work with const
+>enabledTrue : true
+>            : ^^^^
+>true : true
+>     : ^^^^
+>constConfig.enabled : true
+>                    : ^^^^
+>constConfig : { readonly appLocales: readonly ["FR", "BE"]; readonly enabled: true; readonly count: 42; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>enabled : true
+>        : ^^^^
+
+// These should error without const (uncomment to verify errors)
+// const localeError: "FR" | "BE" = config.appLocales[0];  // Error: string not assignable to "FR" | "BE"
+// const enabledError: true = config.enabled;               // Error: boolean not assignable to true
+
+

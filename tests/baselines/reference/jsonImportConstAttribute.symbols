@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/jsonImportConstAttribute.ts] ////
+
+=== /config.json ===
+{
+    "appLocales": ["FR", "BE"],
+>"appLocales" : Symbol("appLocales", Decl(config.json, 0, 1))
+
+    "enabled": true,
+>"enabled" : Symbol("enabled", Decl(config.json, 1, 31))
+
+    "count": 42
+>"count" : Symbol("count", Decl(config.json, 2, 20))
+}
+
+=== /main.ts ===
+// Without const attribute - types should be widened
+import config from "./config.json" with { type: "json" };
+>config : Symbol(config, Decl(main.ts, 1, 6))
+
+// With const attribute - types should preserve literal types
+import constConfig from "./config.json" with { type: "json", const: "true" };
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+
+// Test widened types (without const)
+type Locales = typeof config.appLocales;        // Should be string[]
+>Locales : Symbol(Locales, Decl(main.ts, 4, 77))
+>config.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>config : Symbol(config, Decl(main.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+
+type Enabled = typeof config.enabled;           // Should be boolean
+>Enabled : Symbol(Enabled, Decl(main.ts, 7, 40))
+>config.enabled : Symbol("enabled", Decl(config.json, 1, 31))
+>config : Symbol(config, Decl(main.ts, 1, 6))
+>enabled : Symbol("enabled", Decl(config.json, 1, 31))
+
+type Count = typeof config.count;               // Should be number
+>Count : Symbol(Count, Decl(main.ts, 8, 37))
+>config.count : Symbol("count", Decl(config.json, 2, 20))
+>config : Symbol(config, Decl(main.ts, 1, 6))
+>count : Symbol("count", Decl(config.json, 2, 20))
+
+// Test literal types (with const)
+type ConstLocales = typeof constConfig.appLocales;  // Should be readonly ["FR", "BE"]
+>ConstLocales : Symbol(ConstLocales, Decl(main.ts, 9, 33))
+>constConfig.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+
+type ConstEnabled = typeof constConfig.enabled;      // Should be true
+>ConstEnabled : Symbol(ConstEnabled, Decl(main.ts, 12, 50))
+>constConfig.enabled : Symbol("enabled", Decl(config.json, 1, 31))
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+>enabled : Symbol("enabled", Decl(config.json, 1, 31))
+
+type ConstCount = typeof constConfig.count;          // Should be 42
+>ConstCount : Symbol(ConstCount, Decl(main.ts, 13, 47))
+>constConfig.count : Symbol("count", Decl(config.json, 2, 20))
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+>count : Symbol("count", Decl(config.json, 2, 20))
+
+// Verify the types work as expected
+const locale: "FR" | "BE" = constConfig.appLocales[0];  // Should work with const
+>locale : Symbol(locale, Decl(main.ts, 17, 5))
+>constConfig.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>0 : Symbol(0)
+
+const enabledTrue: true = constConfig.enabled;           // Should work with const
+>enabledTrue : Symbol(enabledTrue, Decl(main.ts, 18, 5))
+>constConfig.enabled : Symbol("enabled", Decl(config.json, 1, 31))
+>constConfig : Symbol(constConfig, Decl(main.ts, 4, 6))
+>enabled : Symbol("enabled", Decl(config.json, 1, 31))
+
+// These should error without const (uncomment to verify errors)
+// const localeError: "FR" | "BE" = config.appLocales[0];  // Error: string not assignable to "FR" | "BE"
+// const enabledError: true = config.enabled;               // Error: boolean not assignable to true
+
+
