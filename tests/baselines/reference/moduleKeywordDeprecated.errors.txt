@@ -1,0 +1,34 @@
+foo.ts(2,8): suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+foo.ts(3,8): suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+foo.ts(3,12): suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+
+
+==== foo.ts (3 errors) ====
+    // Error
+    module notok { }
+           ~~~~~
+!!! suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+    module not.ok { }
+           ~~~
+!!! suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+               ~~
+!!! suggestion TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+    
+    // OK
+    declare module fine { }
+    declare module also.fine { }
+    
+    // Still the only way to do it
+    declare module "good" { }
+    
+==== decl.d.ts (0 errors) ====
+    // OK since these are ambient
+    declare module foo { }
+    declare module foo.bar { }
+    
+    // Still the only way to do it
+    declare module "alsogood" { }
+    
+    export module exported { }
+    export module exported.sub { }
+    
