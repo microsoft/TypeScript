@@ -1,0 +1,646 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesNestedGenericCall1.ts] ////
+
+=== intraExpressionInferencesNestedGenericCall1.ts ===
+interface FastifyTypeProvider {
+  readonly input: unknown;
+>input : unknown
+>      : ^^^^^^^
+
+  readonly output: unknown;
+>output : unknown
+>       : ^^^^^^^
+}
+
+export interface FastifyTypeProviderDefault extends FastifyTypeProvider {}
+
+type CallTypeProvider<F extends FastifyTypeProvider, I> = (F & {
+>CallTypeProvider : CallTypeProvider<F, I>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+  input: I;
+>input : I
+>      : ^
+
+})["output"];
+type UndefinedToUnknown<T> = [T] extends [undefined] ? unknown : T;
+>UndefinedToUnknown : UndefinedToUnknown<T>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+
+interface RouteGenericInterface {
+  Querystring?: unknown;
+>Querystring : unknown
+>            : ^^^^^^^
+}
+
+interface FastifySchema {
+  querystring?: unknown;
+>querystring : unknown
+>            : ^^^^^^^
+
+  headers?: unknown;
+>headers : unknown
+>        : ^^^^^^^
+}
+
+interface FastifyRequestType<Querystring = unknown> {
+  query: Querystring;
+>query : Querystring
+>      : ^^^^^^^^^^^
+}
+
+type ResolveRequestQuerystring<
+>ResolveRequestQuerystring : ResolveRequestQuerystring<TypeProvider, SchemaCompiler>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TypeProvider extends FastifyTypeProvider,
+  SchemaCompiler extends FastifySchema,
+> = UndefinedToUnknown<
+  CallTypeProvider<TypeProvider, SchemaCompiler["querystring"]>
+>;
+
+interface ResolveFastifyRequestType<
+  TypeProvider extends FastifyTypeProvider,
+  SchemaCompiler extends FastifySchema,
+> {
+  query: ResolveRequestQuerystring<TypeProvider, SchemaCompiler>;
+>query : UndefinedToUnknown<CallTypeProvider<TypeProvider, SchemaCompiler["querystring"]>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface FastifyRequest<
+  RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
+  SchemaCompiler extends FastifySchema = FastifySchema,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
+  RequestType extends FastifyRequestType = ResolveFastifyRequestType<
+    TypeProvider,
+    SchemaCompiler
+  >,
+> {
+  query: RequestType["query"];
+>query : RequestType["query"]
+>      : ^^^^^^^^^^^^^^^^^^^^
+}
+
+interface RouteOptions<
+  RouteGeneric extends RouteGenericInterface,
+  SchemaCompiler extends FastifySchema,
+  TypeProvider extends FastifyTypeProvider,
+> {
+  schema?: SchemaCompiler;
+>schema : SchemaCompiler | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onRequest?: (
+>onRequest : ((request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>) => void) | undefined
+>          : ^^       ^^                                                          ^^^^^    ^^^^^^^^^^^^^
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider, ResolveFastifyRequestType<TypeProvider, SchemaCompiler>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) => void;
+  method: "GET" | "POST";
+>method : "GET" | "POST"
+>       : ^^^^^^^^^^^^^^
+
+  url: string;
+>url : string
+>    : ^^^^^^
+
+  handler: (
+>handler : (request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>) => void
+>        : ^       ^^                                                          ^^^^^    
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider, ResolveFastifyRequestType<TypeProvider, SchemaCompiler>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) => void;
+}
+
+interface FastifyInstance<TypeProvider extends FastifyTypeProvider> {
+  route<
+>route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>) => void
+>      : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^                                                        ^^^^^    
+
+    RouteGeneric extends RouteGenericInterface,
+    SchemaCompiler extends FastifySchema,
+  >(
+    opts: RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>,
+>opts : RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ): void;
+}
+
+type Type<Output> = {
+>Type : Type<Output>
+>     : ^^^^^^^^^^^^
+
+  _output: Output;
+>_output : Output
+>        : ^^^^^^
+
+};
+
+declare function string(): Type<string>;
+>string : () => Type<string>
+>       : ^^^^^^            
+
+interface ZodTypeProvider extends FastifyTypeProvider {
+  output: this["input"] extends { _output: unknown }
+>output : this["input"] extends { _output: unknown; } ? this["input"]["_output"] : never
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_output : unknown
+>        : ^^^^^^^
+
+    ? this["input"]["_output"]
+    : never;
+}
+
+const verifyAuth =
+>verifyAuth : <T extends FastifyRequest>() => (req: T) => void
+>           : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
+
+  <T extends FastifyRequest>() =>
+><T extends FastifyRequest>() =>  (req: T) => {} : <T extends FastifyRequest>() => (req: T) => void
+>                                                : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
+
+  (req: T) => {};
+>(req: T) => {} : (req: T) => void
+>               : ^   ^^ ^^^^^^^^^
+>req : T
+>    : ^
+
+declare const server: FastifyInstance<ZodTypeProvider>;
+>server : FastifyInstance<ZodTypeProvider>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+server.route({
+>server.route({  url: "/config",  method: "GET",  schema: {    querystring: string(),  },  onRequest: verifyAuth(),  handler: async (req) => {    const query: string = req.query;  },}) : void
+>                                                                                                                                                                                        : ^^^^
+>server.route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, ZodTypeProvider>) => void
+>             : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>server : FastifyInstance<ZodTypeProvider>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, ZodTypeProvider>) => void
+>      : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>{  url: "/config",  method: "GET",  schema: {    querystring: string(),  },  onRequest: verifyAuth(),  handler: async (req) => {    const query: string = req.query;  },} : { url: string; method: "GET"; schema: { querystring: Type<string>; }; onRequest: (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void; handler: (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  url: "/config",
+>url : string
+>    : ^^^^^^
+>"/config" : "/config"
+>          : ^^^^^^^^^
+
+  method: "GET",
+>method : "GET"
+>       : ^^^^^
+>"GET" : "GET"
+>      : ^^^^^
+
+  schema: {
+>schema : { querystring: Type<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    querystring: string(),  } : { querystring: Type<string>; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    querystring: string(),
+>querystring : Type<string>
+>            : ^^^^^^^^^^^^
+>string() : Type<string>
+>         : ^^^^^^^^^^^^
+>string : () => Type<string>
+>       : ^^^^^^            
+
+  },
+  onRequest: verifyAuth(),
+>onRequest : (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void
+>          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>verifyAuth() : (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void
+>             : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>verifyAuth : <T extends FastifyRequest>() => (req: T) => void
+>           : ^ ^^^^^^^^^              ^^^^^^^^      ^^^^^^^^^
+
+  handler: async (req) => {
+>handler : (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async (req) => {    const query: string = req.query;  } : (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>
+>                                                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const query: string = req.query;
+>query : string
+>      : ^^^^^^
+>req.query : string
+>          : ^^^^^^
+>req : FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>query : string
+>      : ^^^^^^
+
+  },
+});
+
+interface Container<V> {
+  v: V;
+>v : V
+>  : ^
+}
+
+declare function makeWith<Key, Value>(options: {
+>makeWith : <Key, Value>(options: { readonly lookup: (key: Key) => Value; readonly timeToLive: (exit: Container<Value>) => number; }) => [Key, Value]
+>         : ^   ^^     ^^       ^^                                                                                                  ^^^^^            
+>options : { readonly lookup: (key: Key) => Value; readonly timeToLive: (exit: Container<Value>) => number; }
+>        : ^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^                                  ^^^
+
+  readonly lookup: (key: Key) => Value;
+>lookup : (key: Key) => Value
+>       : ^   ^^   ^^^^^     
+>key : Key
+>    : ^^^
+
+  readonly timeToLive: (exit: Container<Value>) => number;
+>timeToLive : (exit: Container<Value>) => number
+>           : ^    ^^                ^^^^^      
+>exit : Container<Value>
+>     : ^^^^^^^^^^^^^^^^
+
+}): [Key, Value];
+
+declare function fn<A, R>(fn: (arg: A) => R): (arg: A) => R;
+>fn : <A, R>(fn: (arg: A) => R) => (arg: A) => R
+>   : ^ ^^ ^^  ^^             ^^^^^             
+>fn : (arg: A) => R
+>   : ^   ^^ ^^^^^ 
+>arg : A
+>    : ^
+>arg : A
+>    : ^
+
+const result1 = makeWith({
+>result1 : [string, string]
+>        : ^^^^^^^^^^^^^^^^
+>makeWith({  lookup: fn((key: string) => key),  timeToLive: () => 10,}) : [string, string]
+>                                                                       : ^^^^^^^^^^^^^^^^
+>makeWith : <Key, Value>(options: { readonly lookup: (key: Key) => Value; readonly timeToLive: (exit: Container<Value>) => number; }) => [Key, Value]
+>         : ^   ^^     ^^       ^^                                                                                                  ^^^^^            
+>{  lookup: fn((key: string) => key),  timeToLive: () => 10,} : { lookup: (arg: string) => string; timeToLive: () => number; }
+>                                                             : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  lookup: fn((key: string) => key),
+>lookup : (arg: string) => string
+>       : ^   ^^^^^^^^^^^^^^^^^^^
+>fn((key: string) => key) : (arg: string) => string
+>                         : ^   ^^^^^^^^^^^^^^^^^^^
+>fn : <A, R>(fn: (arg: A) => R) => (arg: A) => R
+>   : ^ ^^ ^^  ^^             ^^^^^             
+>(key: string) => key : (key: string) => string
+>                     : ^   ^^      ^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>key : string
+>    : ^^^^^^
+
+  timeToLive: () => 10,
+>timeToLive : () => number
+>           : ^^^^^^^^^^^^
+>() => 10 : () => number
+>         : ^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+});
+
+const result2 = makeWith({
+>result2 : [string, string]
+>        : ^^^^^^^^^^^^^^^^
+>makeWith({  lookup: fn((key: string) => key),  timeToLive: (exit) => exit.v.length,}) : [string, string]
+>                                                                                      : ^^^^^^^^^^^^^^^^
+>makeWith : <Key, Value>(options: { readonly lookup: (key: Key) => Value; readonly timeToLive: (exit: Container<Value>) => number; }) => [Key, Value]
+>         : ^   ^^     ^^       ^^                                                                                                  ^^^^^            
+>{  lookup: fn((key: string) => key),  timeToLive: (exit) => exit.v.length,} : { lookup: (arg: string) => string; timeToLive: (exit: Container<string>) => number; }
+>                                                                            : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  lookup: fn((key: string) => key),
+>lookup : (arg: string) => string
+>       : ^   ^^^^^^^^^^^^^^^^^^^
+>fn((key: string) => key) : (arg: string) => string
+>                         : ^   ^^^^^^^^^^^^^^^^^^^
+>fn : <A, R>(fn: (arg: A) => R) => (arg: A) => R
+>   : ^ ^^ ^^  ^^             ^^^^^             
+>(key: string) => key : (key: string) => string
+>                     : ^   ^^      ^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>key : string
+>    : ^^^^^^
+
+  timeToLive: (exit) => exit.v.length,
+>timeToLive : (exit: Container<string>) => number
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(exit) => exit.v.length : (exit: Container<string>) => number
+>                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exit : Container<string>
+>     : ^^^^^^^^^^^^^^^^^
+>exit.v.length : number
+>              : ^^^^^^
+>exit.v : string
+>       : ^^^^^^
+>exit : Container<string>
+>     : ^^^^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+});
+
+// https://github.com/microsoft/TypeScript/issues/53776
+function deferQuery<TData>({}: {
+>deferQuery : <TData>({}: { queryFn: () => Promise<TData>; onSuccess: (data: TData) => void; }) => void
+>           : ^     ^^  ^^                                                                    ^^^^^^^^^
+
+  queryFn: () => Promise<TData>;
+>queryFn : () => Promise<TData>
+>        : ^^^^^^              
+
+  onSuccess: (data: TData) => void;
+>onSuccess : (data: TData) => void
+>          : ^    ^^     ^^^^^    
+>data : TData
+>     : ^^^^^
+
+}) {}
+
+export function decorate<TParams extends unknown[], TResult>(
+>decorate : <TParams extends unknown[], TResult>(func: (...params: TParams) => Promise<TResult>, ...params: TParams) => () => Promise<TResult>
+>         : ^       ^^^^^^^^^         ^^       ^^    ^^                                        ^^^^^      ^^       ^^^^^                      
+
+  func: (...params: TParams) => Promise<TResult>,
+>func : (...params: TParams) => Promise<TResult>
+>     : ^^^^      ^^       ^^^^^                
+>params : TParams
+>       : ^^^^^^^
+
+  ...params: TParams
+>params : TParams
+>       : ^^^^^^^
+
+): () => Promise<TResult> {
+  return () => {
+>() => {    return func(...params);  } : () => Promise<TResult>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^
+
+    return func(...params);
+>func(...params) : Promise<TResult>
+>                : ^^^^^^^^^^^^^^^^
+>func : (...params: TParams) => Promise<TResult>
+>     : ^^^^      ^^       ^^^^^                
+>...params : unknown
+>          : ^^^^^^^
+>params : TParams
+>       : ^^^^^^^
+
+  };
+}
+
+type ArbitraryData = {
+>ArbitraryData : ArbitraryData
+>              : ^^^^^^^^^^^^^
+
+  property: string;
+>property : string
+>         : ^^^^^^
+
+};
+
+export function getArbitraryData(_id: number): Promise<ArbitraryData[]> {
+>getArbitraryData : (_id: number) => Promise<ArbitraryData[]>
+>                 : ^   ^^      ^^^^^                        
+>_id : number
+>    : ^^^^^^
+
+  return Promise.resolve([{ property: "123" }]);
+>Promise.resolve([{ property: "123" }]) : Promise<{ property: string; }[]>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>[{ property: "123" }] : { property: string; }[]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ property: "123" } : { property: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^
+>property : string
+>         : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+}
+
+deferQuery({
+>deferQuery({  queryFn: decorate(getArbitraryData, 10),  onSuccess(data) {    data.forEach((item) => {});  },}) : void
+>                                                                                                               : ^^^^
+>deferQuery : <TData>({}: { queryFn: () => Promise<TData>; onSuccess: (data: TData) => void; }) => void
+>           : ^     ^^  ^^                                                                    ^^^^^^^^^
+>{  queryFn: decorate(getArbitraryData, 10),  onSuccess(data) {    data.forEach((item) => {});  },} : { queryFn: () => Promise<ArbitraryData[]>; onSuccess(data: ArbitraryData[]): void; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  queryFn: decorate(getArbitraryData, 10),
+>queryFn : () => Promise<ArbitraryData[]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>decorate(getArbitraryData, 10) : () => Promise<ArbitraryData[]>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>decorate : <TParams extends unknown[], TResult>(func: (...params: TParams) => Promise<TResult>, ...params: TParams) => () => Promise<TResult>
+>         : ^       ^^^^^^^^^         ^^       ^^    ^^                                        ^^^^^      ^^       ^^^^^                      
+>getArbitraryData : (_id: number) => Promise<ArbitraryData[]>
+>                 : ^   ^^      ^^^^^                        
+>10 : 10
+>   : ^^
+
+  onSuccess(data) {
+>onSuccess : (data: ArbitraryData[]) => void
+>          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data : ArbitraryData[]
+>     : ^^^^^^^^^^^^^^^
+
+    data.forEach((item) => {});
+>data.forEach((item) => {}) : void
+>                           : ^^^^
+>data.forEach : (callbackfn: (value: ArbitraryData, index: number, array: ArbitraryData[]) => void, thisArg?: any) => void
+>             : ^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>data : ArbitraryData[]
+>     : ^^^^^^^^^^^^^^^
+>forEach : (callbackfn: (value: ArbitraryData, index: number, array: ArbitraryData[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(item) => {} : (item: ArbitraryData) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>item : ArbitraryData
+>     : ^^^^^^^^^^^^^
+
+  },
+});
+
+const getData = decorate(getArbitraryData, 10);
+>getData : () => Promise<ArbitraryData[]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>decorate(getArbitraryData, 10) : () => Promise<ArbitraryData[]>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>decorate : <TParams extends unknown[], TResult>(func: (...params: TParams) => Promise<TResult>, ...params: TParams) => () => Promise<TResult>
+>         : ^       ^^^^^^^^^         ^^       ^^    ^^                                        ^^^^^      ^^       ^^^^^                      
+>getArbitraryData : (_id: number) => Promise<ArbitraryData[]>
+>                 : ^   ^^      ^^^^^                        
+>10 : 10
+>   : ^^
+
+deferQuery({
+>deferQuery({  queryFn: getData,  onSuccess(data) {    data.forEach((item) => {});  },}) : void
+>                                                                                        : ^^^^
+>deferQuery : <TData>({}: { queryFn: () => Promise<TData>; onSuccess: (data: TData) => void; }) => void
+>           : ^     ^^  ^^                                                                    ^^^^^^^^^
+>{  queryFn: getData,  onSuccess(data) {    data.forEach((item) => {});  },} : { queryFn: () => Promise<ArbitraryData[]>; onSuccess(data: ArbitraryData[]): void; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  queryFn: getData,
+>queryFn : () => Promise<ArbitraryData[]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getData : () => Promise<ArbitraryData[]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onSuccess(data) {
+>onSuccess : (data: ArbitraryData[]) => void
+>          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data : ArbitraryData[]
+>     : ^^^^^^^^^^^^^^^
+
+    data.forEach((item) => {});
+>data.forEach((item) => {}) : void
+>                           : ^^^^
+>data.forEach : (callbackfn: (value: ArbitraryData, index: number, array: ArbitraryData[]) => void, thisArg?: any) => void
+>             : ^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>data : ArbitraryData[]
+>     : ^^^^^^^^^^^^^^^
+>forEach : (callbackfn: (value: ArbitraryData, index: number, array: ArbitraryData[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(item) => {} : (item: ArbitraryData) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>item : ArbitraryData
+>     : ^^^^^^^^^^^^^
+
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/52114
+export type ActionReducer<State> = (state: State | undefined) => State;
+>ActionReducer : ActionReducer<State>
+>              : ^^^^^^^^^^^^^^^^^^^^
+>state : State | undefined
+>      : ^^^^^^^^^^^^^^^^^
+
+export function createReducer<State>(
+>createReducer : <State>(initialState: State) => ActionReducer<State>
+>              : ^     ^^            ^^     ^^^^^                    
+
+  initialState: State,
+>initialState : State
+>             : ^^^^^
+
+): ActionReducer<State> {
+  return {} as any;
+>{} as any : any
+>{} : {}
+>   : ^^
+}
+
+export function createFeature<State>(config: {
+>createFeature : <State>(config: { reducer: ActionReducer<State>; selectors: (state: State) => unknown; }) => void
+>              : ^     ^^      ^^                                                                        ^^^^^^^^^
+>config : { reducer: ActionReducer<State>; selectors: (state: State) => unknown; }
+>       : ^^^^^^^^^^^                    ^^^^^^^^^^^^^                         ^^^
+
+  reducer: ActionReducer<State>;
+>reducer : ActionReducer<State>
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  selectors: (state: State) => unknown;
+>selectors : (state: State) => unknown
+>          : ^     ^^     ^^^^^       
+>state : State
+>      : ^^^^^
+
+}) {}
+
+createFeature({
+>createFeature({  reducer: createReducer(""),  selectors: (state) => ({}),}) : void
+>                                                                            : ^^^^
+>createFeature : <State>(config: { reducer: ActionReducer<State>; selectors: (state: State) => unknown; }) => void
+>              : ^     ^^      ^^                                                                        ^^^^^^^^^
+>{  reducer: createReducer(""),  selectors: (state) => ({}),} : { reducer: ActionReducer<string>; selectors: (state: string) => {}; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  reducer: createReducer(""),
+>reducer : ActionReducer<string>
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>createReducer("") : ActionReducer<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+>createReducer : <State>(initialState: State) => ActionReducer<State>
+>              : ^     ^^            ^^     ^^^^^                    
+>"" : ""
+>   : ^^
+
+  selectors: (state) => ({}),
+>selectors : (state: string) => {}
+>          : ^     ^^^^^^^^^^^^^^^
+>(state) => ({}) : (state: string) => {}
+>                : ^     ^^^^^^^^^^^^^^^
+>state : string
+>      : ^^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+});
+
+const reducer = createReducer(true);
+>reducer : ActionReducer<boolean>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>createReducer(true) : ActionReducer<boolean>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>createReducer : <State>(initialState: State) => ActionReducer<State>
+>              : ^     ^^            ^^     ^^^^^                    
+>true : true
+>     : ^^^^
+
+createFeature({
+>createFeature({  reducer,  selectors: (state) => ({}),}) : void
+>                                                         : ^^^^
+>createFeature : <State>(config: { reducer: ActionReducer<State>; selectors: (state: State) => unknown; }) => void
+>              : ^     ^^      ^^                                                                        ^^^^^^^^^
+>{  reducer,  selectors: (state) => ({}),} : { reducer: ActionReducer<boolean>; selectors: (state: boolean) => {}; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^
+
+  reducer,
+>reducer : ActionReducer<boolean>
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+  selectors: (state) => ({}),
+>selectors : (state: boolean) => {}
+>          : ^     ^^^^^^^^^^^^^^^^
+>(state) => ({}) : (state: boolean) => {}
+>                : ^     ^^^^^^^^^^^^^^^^
+>state : boolean
+>      : ^^^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+});
+
+export {};
+
