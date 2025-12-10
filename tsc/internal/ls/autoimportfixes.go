@@ -308,7 +308,7 @@ func (ls *LanguageService) getNewImports(
 		// even though it's not an error, it would add unnecessary runtime emit.
 		topLevelTypeOnly := (defaultImport == nil || needsTypeOnly(defaultImport.addAsTypeOnly)) &&
 			core.Every(namedImports, func(i *Import) bool { return needsTypeOnly(i.addAsTypeOnly) }) ||
-			(compilerOptions.VerbatimModuleSyntax.IsTrue() || ls.UserPreferences().PreferTypeOnlyAutoImports) &&
+			(compilerOptions.VerbatimModuleSyntax.IsTrue() || ls.UserPreferences().PreferTypeOnlyAutoImports == core.TSTrue) &&
 				(defaultImport == nil || defaultImport.addAsTypeOnly != AddAsTypeOnlyNotAllowed) &&
 				!core.Some(namedImports, func(i *Import) bool { return i.addAsTypeOnly == AddAsTypeOnlyNotAllowed })
 
@@ -364,5 +364,5 @@ func needsTypeOnly(addAsTypeOnly AddAsTypeOnly) bool {
 }
 
 func shouldUseTypeOnly(addAsTypeOnly AddAsTypeOnly, preferences *lsutil.UserPreferences) bool {
-	return needsTypeOnly(addAsTypeOnly) || addAsTypeOnly != AddAsTypeOnlyNotAllowed && preferences.PreferTypeOnlyAutoImports
+	return needsTypeOnly(addAsTypeOnly) || addAsTypeOnly != AddAsTypeOnlyNotAllowed && preferences.PreferTypeOnlyAutoImports == core.TSTrue
 }

@@ -155,7 +155,7 @@ export declare const d: {
 export declare const e: typeof import("inner/mjs");
 //// [other.d.cts]
 export declare const a: Promise<{
-    default: typeof import("./index.cts");
+    default: typeof import("./index.cjs");
 }>;
 export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>;
 export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;

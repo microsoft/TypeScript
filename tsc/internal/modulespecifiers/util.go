@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -14,6 +15,16 @@ import (
 	"github.com/microsoft/typescript-go/internal/semver"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
+)
+
+type regexPatternCacheKey struct {
+	pattern string
+	opts    regexp2.RegexOptions
+}
+
+var (
+	regexPatternCacheMu sync.RWMutex
+	regexPatternCache   = make(map[regexPatternCacheKey]*regexp2.Regexp)
 )
 
 func isNonGlobalAmbientModule(node *ast.Node) bool {
@@ -36,16 +47,78 @@ func PathIsBareSpecifier(path string) bool {
 
 func isExcludedByRegex(moduleSpecifier string, excludes []string) bool {
 	for _, pattern := range excludes {
-		compiled, err := regexp2.Compile(pattern, regexp2.None)
-		if err != nil {
+		re := stringToRegex(pattern)
+		if re == nil {
 			continue
 		}
-		match, _ := compiled.MatchString(moduleSpecifier)
+		match, _ := re.MatchString(moduleSpecifier)
 		if match {
 			return true
 		}
 	}
 	return false
+}
+
+func stringToRegex(pattern string) *regexp2.Regexp {
+	options := regexp2.RegexOptions(regexp2.ECMAScript)
+
+	if len(pattern) > 2 && pattern[0] == '/' {
+		lastSlash := strings.LastIndex(pattern, "/")
+		if lastSlash > 0 {
+			hasUnescapedMiddleSlash := false
+			for i := 1; i < lastSlash; i++ {
+				if pattern[i] == '/' && (i == 0 || pattern[i-1] != '\\') {
+					hasUnescapedMiddleSlash = true
+					break
+				}
+			}
+
+			if !hasUnescapedMiddleSlash {
+				flags := pattern[lastSlash+1:]
+				pattern = pattern[1:lastSlash]
+
+				for _, flag := range flags {
+					switch flag {
+					case 'i':
+						options |= regexp2.IgnoreCase
+					case 'u':
+						options |= regexp2.Unicode
+					}
+				}
+			}
+		}
+	}
+	key := regexPatternCacheKey{pattern, options}
+
+	regexPatternCacheMu.RLock()
+	re, ok := regexPatternCache[key]
+	regexPatternCacheMu.RUnlock()
+	if ok {
+		return re
+	}
+
+	regexPatternCacheMu.Lock()
+	defer regexPatternCacheMu.Unlock()
+
+	re, ok = regexPatternCache[key]
+	if ok {
+		return re
+	}
+
+	if len(regexPatternCache) > 1000 {
+		clear(regexPatternCache)
+	}
+
+	pattern = strings.Clone(pattern)
+	key.pattern = pattern
+
+	compiled, err := regexp2.Compile(pattern, options)
+	if err != nil {
+		regexPatternCache[key] = nil
+		return nil
+	}
+	regexPatternCache[key] = compiled
+	return compiled
 }
 
 /**
@@ -157,7 +230,7 @@ func getPathsRelativeToRootDirs(path string, rootDirs []string, useCaseSensitive
 	var results []string
 	for _, rootDir := range rootDirs {
 		relativePath := getRelativePathIfInSameVolume(path, rootDir, useCaseSensitiveFileNames)
-		if len(relativePath) > 0 && isPathRelativeToParent(relativePath) {
+		if !isPathRelativeToParent(relativePath) {
 			results = append(results, relativePath)
 		}
 	}

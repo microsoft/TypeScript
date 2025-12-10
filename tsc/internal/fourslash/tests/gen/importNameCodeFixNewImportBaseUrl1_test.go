@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -33,5 +34,5 @@ f1();`,
 		`import { f1 } from "b/x";
 
 f1();`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{ImportModuleSpecifierPreference: "non-relative"})
 }

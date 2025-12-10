@@ -1440,6 +1440,114 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 	}
 }
 
+func (f *FourslashTest) VerifyImportFixModuleSpecifiers(
+	t *testing.T,
+	markerName string,
+	expectedModuleSpecifiers []string,
+	preferences *lsutil.UserPreferences,
+) {
+	f.GoToMarker(t, markerName)
+
+	if preferences != nil {
+		reset := f.ConfigureWithReset(t, preferences)
+		defer reset()
+	}
+
+	// Get diagnostics at the current position to find errors that need import fixes
+	diagParams := &lsproto.DocumentDiagnosticParams{
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+		},
+	}
+	diagResult := sendRequest(t, f, lsproto.TextDocumentDiagnosticInfo, diagParams)
+
+	var diagnostics []*lsproto.Diagnostic
+	if diagResult.FullDocumentDiagnosticReport != nil && diagResult.FullDocumentDiagnosticReport.Items != nil {
+		diagnostics = diagResult.FullDocumentDiagnosticReport.Items
+	}
+
+	params := &lsproto.CodeActionParams{
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+		},
+		Range: lsproto.Range{
+			Start: f.currentCaretPosition,
+			End:   f.currentCaretPosition,
+		},
+		Context: &lsproto.CodeActionContext{
+			Diagnostics: diagnostics,
+		},
+	}
+	result := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
+
+	// Extract module specifiers from import fix code actions
+	var actualModuleSpecifiers []string
+	if result.CommandOrCodeActionArray != nil {
+		for _, item := range *result.CommandOrCodeActionArray {
+			if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == lsproto.CodeActionKindQuickFix {
+				if item.CodeAction.Edit != nil && item.CodeAction.Edit.Changes != nil {
+					for _, changeEdits := range *item.CodeAction.Edit.Changes {
+						for _, edit := range changeEdits {
+							moduleSpec := extractModuleSpecifier(edit.NewText)
+							if moduleSpec != "" {
+								if !slices.Contains(actualModuleSpecifiers, moduleSpec) {
+									actualModuleSpecifiers = append(actualModuleSpecifiers, moduleSpec)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Compare results
+	if len(actualModuleSpecifiers) != len(expectedModuleSpecifiers) {
+		t.Fatalf("Expected %d module specifiers, got %d.\nExpected: %v\nActual: %v",
+			len(expectedModuleSpecifiers), len(actualModuleSpecifiers),
+			expectedModuleSpecifiers, actualModuleSpecifiers)
+	}
+
+	for i, expected := range expectedModuleSpecifiers {
+		if i >= len(actualModuleSpecifiers) || actualModuleSpecifiers[i] != expected {
+			t.Fatalf("Module specifier mismatch at index %d.\nExpected: %v\nActual: %v",
+				i, expectedModuleSpecifiers, actualModuleSpecifiers)
+		}
+	}
+}
+
+func extractModuleSpecifier(text string) string {
+	// Try to match: from "..." or from '...'
+	if idx := strings.Index(text, "from \""); idx != -1 {
+		start := idx + 6 // len("from \"")
+		if end := strings.Index(text[start:], "\""); end != -1 {
+			return text[start : start+end]
+		}
+	}
+	if idx := strings.Index(text, "from '"); idx != -1 {
+		start := idx + 6 // len("from '")
+		if end := strings.Index(text[start:], "'"); end != -1 {
+			return text[start : start+end]
+		}
+	}
+
+	// Try to match: require("...") or require('...')
+	if idx := strings.Index(text, "require(\""); idx != -1 {
+		start := idx + 9 // len("require(\"")
+		if end := strings.Index(text[start:], "\""); end != -1 {
+			return text[start : start+end]
+		}
+	}
+	if idx := strings.Index(text, "require('"); idx != -1 {
+		start := idx + 9 // len("require('")
+		if end := strings.Index(text[start:], "'"); end != -1 {
+			return text[start : start+end]
+		}
+	}
+
+	return ""
+}
+
 func (f *FourslashTest) VerifyBaselineFindAllReferences(
 	t *testing.T,
 	markers ...string,
@@ -3008,6 +3116,11 @@ func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames
 	reset := f.ConfigureWithReset(t, &lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
+		ImportModuleSpecifierEnding:           f.userPreferences.ImportModuleSpecifierEnding,
+		ImportModuleSpecifierPreference:       f.userPreferences.ImportModuleSpecifierPreference,
+		AutoImportFileExcludePatterns:         f.userPreferences.AutoImportFileExcludePatterns,
+		AutoImportSpecifierExcludeRegexes:     f.userPreferences.AutoImportSpecifierExcludeRegexes,
+		PreferTypeOnlyAutoImports:             f.userPreferences.PreferTypeOnlyAutoImports,
 	})
 	defer reset()
 

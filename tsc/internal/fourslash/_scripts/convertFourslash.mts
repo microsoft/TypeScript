@@ -184,6 +184,9 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                 case "importFixAtPosition":
                     // `verify.importFixAtPosition(...)`
                     return parseImportFixAtPositionArgs(callExpression.arguments);
+                case "importFixModuleSpecifiers":
+                    // `verify.importFixModuleSpecifiers(...)`
+                    return parseImportFixModuleSpecifiersArgs(callExpression.arguments);
                 case "quickInfoAt":
                 case "quickInfoExists":
                 case "quickInfoIs":
@@ -616,6 +619,53 @@ function parseImportFixAtPositionArgs(args: readonly ts.Expression[]): VerifyImp
         kind: "verifyImportFixAtPosition",
         expectedTexts,
         preferences: preferences || "nil /*preferences*/",
+    }];
+}
+
+function parseImportFixModuleSpecifiersArgs(args: readonly ts.Expression[]): [VerifyImportFixModuleSpecifiersCmd] | undefined {
+    if (args.length < 2 || args.length > 3) {
+        console.error(`Expected 2-3 arguments in verify.importFixModuleSpecifiers, got ${args.length}`);
+        return undefined;
+    }
+
+    const markerArg = getStringLiteralLike(args[0]);
+    if (!markerArg) {
+        console.error(`Expected string literal for marker in verify.importFixModuleSpecifiers, got ${args[0].getText()}`);
+        return undefined;
+    }
+    const markerName = getGoStringLiteral(markerArg.text);
+
+    const arrayArg = getArrayLiteralExpression(args[1]);
+    if (!arrayArg) {
+        console.error(`Expected array literal for module specifiers in verify.importFixModuleSpecifiers, got ${args[1].getText()}`);
+        return undefined;
+    }
+
+    const moduleSpecifiers: string[] = [];
+    for (const elem of arrayArg.elements) {
+        const strElem = getStringLiteralLike(elem);
+        if (!strElem) {
+            console.error(`Expected string literal in module specifiers array, got ${elem.getText()}`);
+            return undefined;
+        }
+        moduleSpecifiers.push(getGoStringLiteral(strElem.text));
+    }
+
+    let preferences = "nil /*preferences*/";
+    if (args.length > 2 && ts.isObjectLiteralExpression(args[2])) {
+        const parsedPrefs = parseUserPreferences(args[2]);
+        if (!parsedPrefs) {
+            console.error(`Unrecognized user preferences in verify.importFixModuleSpecifiers: ${args[2].getText()}`);
+            return undefined;
+        }
+        preferences = parsedPrefs;
+    }
+
+    return [{
+        kind: "verifyImportFixModuleSpecifiers",
+        markerName,
+        moduleSpecifiers,
+        preferences,
     }];
 }
 
@@ -1419,6 +1469,45 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string | undefin
                     break;
                 case "quotePreference":
                     preferences.push(`QuotePreference: lsutil.QuotePreference(${prop.initializer.getText()})`);
+                    break;
+                case "autoImportSpecifierExcludeRegexes":
+                    const regexArrayArg = getArrayLiteralExpression(prop.initializer);
+                    if (!regexArrayArg) {
+                        return undefined;
+                    }
+                    const regexes: string[] = [];
+                    for (const elem of regexArrayArg.elements) {
+                        const strElem = getStringLiteralLike(elem);
+                        if (!strElem) {
+                            return undefined;
+                        }
+                        regexes.push(getGoStringLiteral(strElem.text));
+                    }
+                    preferences.push(`AutoImportSpecifierExcludeRegexes: []string{${regexes.join(", ")}}`);
+                    break;
+                case "importModuleSpecifierPreference":
+                    if (!ts.isStringLiteralLike(prop.initializer)) {
+                        return undefined;
+                    }
+                    preferences.push(`ImportModuleSpecifierPreference: ${prop.initializer.getText()}`);
+                    break;
+                case "importModuleSpecifierEnding":
+                    if (!ts.isStringLiteralLike(prop.initializer)) {
+                        return undefined;
+                    }
+                    preferences.push(`ImportModuleSpecifierEnding: ${prop.initializer.getText()}`);
+                    break;
+                case "includePackageJsonAutoImports":
+                    if (!ts.isStringLiteralLike(prop.initializer)) {
+                        return undefined;
+                    }
+                    preferences.push(`IncludePackageJsonAutoImports: ${prop.initializer.getText()}`);
+                    break;
+                case "allowRenameOfImportPath":
+                    preferences.push(`AllowRenameOfImportPath: ${prop.initializer.getText()}`);
+                    break;
+                case "preferTypeOnlyAutoImports":
+                    preferences.push(`PreferTypeOnlyAutoImports: ${prop.initializer.getText()}`);
                     break;
                 case "autoImportFileExcludePatterns":
                     const arrayArg = getArrayLiteralExpression(prop.initializer);
@@ -2508,6 +2597,13 @@ interface VerifyImportFixAtPositionCmd {
     preferences: string;
 }
 
+interface VerifyImportFixModuleSpecifiersCmd {
+    kind: "verifyImportFixModuleSpecifiers";
+    markerName: string;
+    moduleSpecifiers: string[];
+    preferences: string;
+}
+
 interface GoToCmd {
     kind: "goTo";
     // !!! `selectRange` and `rangeStart` require parsing variables and `test.ranges()[n]`
@@ -2616,6 +2712,7 @@ type Cmd =
     | VerifyNavTreeCmd
     | VerifyBaselineInlayHintsCmd
     | VerifyImportFixAtPositionCmd
+    | VerifyImportFixModuleSpecifiersCmd
     | VerifyDiagnosticsCmd
     | VerifyBaselineDiagnosticsCmd
     | VerifyOutliningSpansCmd;
@@ -2737,6 +2834,13 @@ function generateImportFixAtPosition({ expectedTexts, preferences }: VerifyImpor
         return `f.VerifyImportFixAtPosition(t, []string{}, ${preferences})`;
     }
     return `f.VerifyImportFixAtPosition(t, []string{\n${expectedTexts.join(",\n")},\n}, ${preferences})`;
+}
+
+function generateImportFixModuleSpecifiers({ markerName, moduleSpecifiers, preferences }: VerifyImportFixModuleSpecifiersCmd): string {
+    const specifiersArray = moduleSpecifiers.length === 0
+        ? "[]string{}"
+        : `[]string{${moduleSpecifiers.join(", ")}}`;
+    return `f.VerifyImportFixModuleSpecifiers(t, ${markerName}, ${specifiersArray}, ${preferences})`;
 }
 
 function generateSignatureHelpExpected(opts: VerifySignatureHelpOptions): string {
@@ -2904,6 +3008,8 @@ function generateCmd(cmd: Cmd): string {
             return generateBaselineInlayHints(cmd);
         case "verifyImportFixAtPosition":
             return generateImportFixAtPosition(cmd);
+        case "verifyImportFixModuleSpecifiers":
+            return generateImportFixModuleSpecifiers(cmd);
         case "verifyDiagnostics":
             const funcName = cmd.isSuggestion ? "VerifySuggestionDiagnostics" : "VerifyNonSuggestionDiagnostics";
             return `f.${funcName}(t, ${cmd.arg})`;

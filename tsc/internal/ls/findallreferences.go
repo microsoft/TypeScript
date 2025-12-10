@@ -736,6 +736,9 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	defer done()
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
+		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && tryGetImportFromModuleSpecifier(entry.node) != nil {
+			continue
+		}
 		textEdit := &lsproto.TextEdit{
 			Range:   *l.getRangeOfEntry(entry),
 			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, checker),

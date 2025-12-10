@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/binder"
@@ -23,6 +24,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type SymbolExportInfo struct {
@@ -1378,16 +1380,19 @@ func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
 func forEachExternalModuleToImportFrom(
 	ch *checker.Checker,
 	program *compiler.Program,
+	preferences *lsutil.UserPreferences,
 	// useAutoImportProvider bool,
 	cb func(module *ast.Symbol, moduleFile *ast.SourceFile, checker *checker.Checker, isFromPackageJson bool),
 ) {
-	// !!! excludePatterns
-	// excludePatterns := preferences.autoImportFileExcludePatterns && getIsExcludedPatterns(preferences, useCaseSensitiveFileNames)
+	var excludePatterns []*regexp2.Regexp
+	if preferences.AutoImportFileExcludePatterns != nil {
+		excludePatterns = getIsExcludedPatterns(preferences, program.UseCaseSensitiveFileNames())
+	}
 
 	forEachExternalModule(
 		ch,
 		program.GetSourceFiles(),
-		// !!! excludePatterns,
+		excludePatterns,
 		func(module *ast.Symbol, file *ast.SourceFile) {
 			cb(module, file, ch, false)
 		},
@@ -1409,24 +1414,73 @@ func forEachExternalModuleToImportFrom(
 	// }
 }
 
+func getIsExcludedPatterns(preferences *lsutil.UserPreferences, useCaseSensitiveFileNames bool) []*regexp2.Regexp {
+	if preferences.AutoImportFileExcludePatterns == nil {
+		return nil
+	}
+	var patterns []*regexp2.Regexp
+	for _, spec := range preferences.AutoImportFileExcludePatterns {
+		pattern := vfs.GetSubPatternFromSpec(spec, "", vfs.UsageExclude, vfs.WildcardMatcher{})
+		if pattern != "" {
+			if re := vfs.GetRegexFromPattern(pattern, useCaseSensitiveFileNames); re != nil {
+				patterns = append(patterns, re)
+			}
+		}
+	}
+	return patterns
+}
+
 func forEachExternalModule(
 	ch *checker.Checker,
 	allSourceFiles []*ast.SourceFile,
-	// excludePatterns []RegExp,
+	excludePatterns []*regexp2.Regexp,
 	cb func(moduleSymbol *ast.Symbol, sourceFile *ast.SourceFile),
 ) {
-	// !!! excludePatterns
-	// isExcluded := excludePatterns && getIsExcluded(excludePatterns, host)
+	var isExcluded func(*ast.SourceFile) bool = func(_ *ast.SourceFile) bool { return false }
+	if excludePatterns != nil {
+		isExcluded = getIsExcluded(excludePatterns)
+	}
 
 	for _, ambient := range ch.GetAmbientModules() {
-		if !strings.Contains(ambient.Name, "*") /*  && !(excludePatterns && ambient.Declarations.every(func (d){ return isExcluded(d.getSourceFile())})) */ {
+		if !strings.Contains(ambient.Name, "*") && !(excludePatterns != nil && core.Every(ambient.Declarations, func(d *ast.Node) bool {
+			return isExcluded(ast.GetSourceFileOfNode(d))
+		})) {
 			cb(ambient, nil /*sourceFile*/)
 		}
 	}
 	for _, sourceFile := range allSourceFiles {
-		if ast.IsExternalOrCommonJSModule(sourceFile) /* && !isExcluded(sourceFile) */ {
+		if ast.IsExternalOrCommonJSModule(sourceFile) && !isExcluded(sourceFile) {
 			cb(ch.GetMergedSymbol(sourceFile.Symbol), sourceFile)
 		}
+	}
+}
+
+func getIsExcluded(excludePatterns []*regexp2.Regexp) func(sourceFile *ast.SourceFile) bool {
+	// !!! SymlinkCache
+	// const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
+	return func(sourceFile *ast.SourceFile) bool {
+		fileName := sourceFile.FileName()
+		for _, p := range excludePatterns {
+			if matched, _ := p.MatchString(fileName); matched {
+				return true
+			}
+		}
+		// !! SymlinkCache
+		// if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
+		//     let dir = getDirectoryPath(fileName);
+		//     return forEachAncestorDirectoryStoppingAtGlobalCache(
+		//         host,
+		//         getDirectoryPath(path),
+		//         dirPath => {
+		//             const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
+		//             if (symlinks) {
+		//                 return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
+		//             }
+		//             dir = getDirectoryPath(dir);
+		//         },
+		//     ) ?? false;
+		// }
+		return false
 	}
 }
 

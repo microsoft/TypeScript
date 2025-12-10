@@ -1,0 +1,40 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestAutoImportProvider_importsMap4(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
+// @Filename: /home/src/workspaces/project/package.json
+{
+  "type": "module",
+  "imports": {
+    "#is-browser": {
+      "types": "./dist/env/browser.d.ts",
+      "default": "./dist/env/browser.js"
+    }
+  }
+}
+// @Filename: /home/src/workspaces/project/src/env/browser.ts
+export const isBrowser = true;
+// @Filename: /home/src/workspaces/project/src/a.ts
+isBrowser/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.MarkTestAsStradaServer()
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"#is-browser"}, nil /*preferences*/)
+}
