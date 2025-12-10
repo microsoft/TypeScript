@@ -1,0 +1,241 @@
+//// [tests/cases/conformance/importAttributes/importAttributesConstJson.ts] ////
+
+=== config.json ===
+{
+>{    "appLocales": ["FR", "BE"],    "debug": true,    "count": 42,    "settings": {        "theme": "dark",        "notifications": false    }} : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "appLocales": ["FR", "BE"],
+>"appLocales" : string[]
+>             : ^^^^^^^^
+>["FR", "BE"] : string[]
+>             : ^^^^^^^^
+>"FR" : "FR"
+>     : ^^^^
+>"BE" : "BE"
+>     : ^^^^
+
+    "debug": true,
+>"debug" : boolean
+>        : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    "count": 42,
+>"count" : number
+>        : ^^^^^^
+>42 : 42
+>   : ^^
+
+    "settings": {
+>"settings" : { theme: string; notifications: boolean; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        "theme": "dark",        "notifications": false    } : { theme: string; notifications: boolean; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        "theme": "dark",
+>"theme" : string
+>        : ^^^^^^
+>"dark" : "dark"
+>       : ^^^^^^
+
+        "notifications": false
+>"notifications" : boolean
+>                : ^^^^^^^
+>false : false
+>      : ^^^^^
+    }
+}
+
+=== without-const.ts ===
+// Without const attribute, types should be widened
+import data from "./config.json" with { type: "json" };
+>data : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+
+// Should be string[], not ("FR" | "BE")[]
+export const locales = data.appLocales;
+>locales : string[]
+>        : ^^^^^^^^
+>data.appLocales : string[]
+>                : ^^^^^^^^
+>data : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : string[]
+>           : ^^^^^^^^
+
+// Should be boolean, not true
+export const debug = data.debug;
+>debug : boolean
+>      : ^^^^^^^
+>data.debug : boolean
+>           : ^^^^^^^
+>data : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>debug : boolean
+>      : ^^^^^^^
+
+// Should be number, not 42
+export const count = data.count;
+>count : number
+>      : ^^^^^^
+>data.count : number
+>           : ^^^^^^
+>data : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>count : number
+>      : ^^^^^^
+
+// Should be string, not "dark"
+export const theme = data.settings.theme;
+>theme : string
+>      : ^^^^^^
+>data.settings.theme : string
+>                    : ^^^^^^
+>data.settings : { theme: string; notifications: boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data : { appLocales: string[]; debug: boolean; count: number; settings: { theme: string; notifications: boolean; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>settings : { theme: string; notifications: boolean; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>theme : string
+>      : ^^^^^^
+
+=== with-const.ts ===
+// With const: "true" attribute, types should preserve literal types
+import data from "./config.json" with { type: "json", const: "true" };
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+>const : error
+
+// Should be readonly ["FR", "BE"], not string[]
+export const locales = data.appLocales;
+>locales : readonly ["FR", "BE"]
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>data.appLocales : readonly ["FR", "BE"]
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+// Should be true, not boolean
+export const debug = data.debug;
+>debug : true
+>      : ^^^^
+>data.debug : true
+>           : ^^^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>debug : true
+>      : ^^^^
+
+// Should be 42, not number
+export const count = data.count;
+>count : 42
+>      : ^^
+>data.count : 42
+>           : ^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>count : 42
+>      : ^^
+
+// Should be "dark", not string
+export const theme = data.settings.theme;
+>theme : "dark"
+>      : ^^^^^^
+>data.settings.theme : "dark"
+>                    : ^^^^^^
+>data.settings : { readonly theme: "dark"; readonly notifications: false; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>settings : { readonly theme: "dark"; readonly notifications: false; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>theme : "dark"
+>      : ^^^^^^
+
+=== with-const-namespace.ts ===
+// Test namespace import with const: "true"
+import * as ns from "./config.json" with { type: "json", const: "true" };
+>ns : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+>const : error
+
+// Should preserve literal types through namespace import
+export const locales = ns.appLocales;
+>locales : readonly ["FR", "BE"]
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>ns.appLocales : readonly ["FR", "BE"]
+>              : ^^^^^^^^^^^^^^^^^^^^^
+>ns : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+
+export const debug = ns.debug;
+>debug : true
+>      : ^^^^
+>ns.debug : true
+>         : ^^^^
+>ns : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>debug : true
+>      : ^^^^
+
+=== type-assertions.ts ===
+// Test that const attribute produces types compatible with literal type assertions
+import data from "./config.json" with { type: "json", const: "true" };
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : error
+>const : error
+
+type AppLocale = "FR" | "BE";
+>AppLocale : AppLocale
+>          : ^^^^^^^^^
+
+// This should work - appLocales should be a tuple of literal types
+const locale: AppLocale = data.appLocales[0];
+>locale : AppLocale
+>       : ^^^^^^^^^
+>data.appLocales[0] : "FR"
+>                   : ^^^^
+>data.appLocales : readonly ["FR", "BE"]
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+// Function that requires specific literal types
+function setLocale(locale: "FR" | "BE"): void {}
+>setLocale : (locale: "FR" | "BE") => void
+>          : ^      ^^           ^^^^^    
+>locale : "FR" | "BE"
+>       : ^^^^^^^^^^^
+
+// This should work with const import
+setLocale(data.appLocales[0]);
+>setLocale(data.appLocales[0]) : void
+>                              : ^^^^
+>setLocale : (locale: "FR" | "BE") => void
+>          : ^      ^^           ^^^^^    
+>data.appLocales[0] : "FR"
+>                   : ^^^^
+>data.appLocales : readonly ["FR", "BE"]
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>data : { readonly appLocales: readonly ["FR", "BE"]; readonly debug: true; readonly count: 42; readonly settings: { readonly theme: "dark"; readonly notifications: false; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>appLocales : readonly ["FR", "BE"]
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+

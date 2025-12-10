@@ -1515,6 +1515,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
     var isInferencePartiallyBlocked = false;
+    var inConstImportContext = false;
     var withinUnreachableCode = false;
     var reportedUnreachableNodes: Set<Node> | undefined;
 
@@ -3652,6 +3653,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             default:
                 return undefined;
         }
+    }
+
+    /**
+     * Returns true if the import or export declaration has a `const: true` attribute.
+     * This is used for JSON modules to preserve literal types instead of widening them.
+     * Example: import data from "./data.json" with { type: "json", const: true };
+     */
+    function hasConstImportAttribute(node: ImportDeclaration | ExportDeclaration | JSDocImportTag): boolean {
+        const attributes = node.attributes;
+        if (!attributes) {
+            return false;
+        }
+        for (const attr of attributes.elements) {
+            const name = getNameFromImportAttribute(attr);
+            if (name === "const") {
+                // Support both `const: true` (boolean literal) and `const: "true"` (string literal)
+                if (attr.value.kind === SyntaxKind.TrueKeyword) {
+                    return true;
+                }
+                if (isStringLiteral(attr.value) && attr.value.text === "true") {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
@@ -12783,19 +12809,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return errorType;
             }
             const targetSymbol = resolveAlias(symbol);
-            const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontRecursivelyResolve*/ true);
+            const aliasDeclaration = symbol.declarations && getDeclarationOfAliasSymbol(symbol);
+            const exportSymbol = aliasDeclaration && getTargetOfAliasDeclaration(aliasDeclaration, /*dontRecursivelyResolve*/ true);
             const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
+
+            // Check if this is a JSON import with const: true attribute
+            const importDeclaration = aliasDeclaration && getAnyImportSyntax(aliasDeclaration);
+            const hasConstAttribute = importDeclaration && (isImportDeclaration(importDeclaration) || isJSDocImportTag(importDeclaration)) && hasConstImportAttribute(importDeclaration);
+            const targetFile = targetSymbol && getSourceFileOfModule(targetSymbol);
+            const isJsonModule = targetFile && isJsonSourceFile(targetFile);
 
             // It only makes sense to get the type of a value symbol. If the result of resolving
             // the alias is not a value, then it has no type. To get the type associated with a
             // type symbol, call getDeclaredTypeOfSymbol.
             // This check is important because without it, a call to getTypeOfSymbol could end
             // up recursively calling getTypeOfAlias, causing a stack overflow.
-            links.type ??= exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
-                : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
-                : declaredType ? declaredType
-                : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
-                : errorType;
+            if (exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length) {
+                links.type ??= getFlowTypeFromCommonJSExport(exportSymbol);
+            }
+            else if (isDuplicatedCommonJSExport(symbol.declarations)) {
+                links.type ??= autoType;
+            }
+            else if (declaredType) {
+                links.type ??= declaredType;
+            }
+            else if (getSymbolFlags(targetSymbol) & SymbolFlags.Value) {
+                // For JSON modules with const: true attribute, use non-widened literal types
+                if (hasConstAttribute && isJsonModule && targetFile.statements.length) {
+                    const savedInConstImportContext = inConstImportContext;
+                    inConstImportContext = true;
+                    links.type ??= getRegularTypeOfLiteralType(checkExpression(targetFile.statements[0].expression));
+                    inConstImportContext = savedInConstImportContext;
+                }
+                else {
+                    links.type ??= getTypeOfSymbol(targetSymbol);
+                }
+            }
+            else {
+                links.type ??= errorType;
+            }
 
             if (!popTypeResolution()) {
                 reportCircularityError(exportSymbol ?? symbol);
@@ -41414,6 +41466,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstContext(node: Expression): boolean {
         const parent = node.parent;
+        // Check if we're in a const import context (e.g., import from "./data.json" with { const: "true" })
+        if (inConstImportContext) {
+            return true;
+        }
         return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
             isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
             isValidConstAssertionArgument(node) && isConstTypeVariable(getContextualType(node, ContextFlags.None)) ||

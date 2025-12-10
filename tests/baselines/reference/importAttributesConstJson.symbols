@@ -1,0 +1,143 @@
+//// [tests/cases/conformance/importAttributes/importAttributesConstJson.ts] ////
+
+=== config.json ===
+{
+    "appLocales": ["FR", "BE"],
+>"appLocales" : Symbol("appLocales", Decl(config.json, 0, 1))
+
+    "debug": true,
+>"debug" : Symbol("debug", Decl(config.json, 1, 31))
+
+    "count": 42,
+>"count" : Symbol("count", Decl(config.json, 2, 18))
+
+    "settings": {
+>"settings" : Symbol("settings", Decl(config.json, 3, 16))
+
+        "theme": "dark",
+>"theme" : Symbol("theme", Decl(config.json, 4, 17))
+
+        "notifications": false
+>"notifications" : Symbol("notifications", Decl(config.json, 5, 24))
+    }
+}
+
+=== without-const.ts ===
+// Without const attribute, types should be widened
+import data from "./config.json" with { type: "json" };
+>data : Symbol(data, Decl(without-const.ts, 1, 6))
+
+// Should be string[], not ("FR" | "BE")[]
+export const locales = data.appLocales;
+>locales : Symbol(locales, Decl(without-const.ts, 4, 12))
+>data.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>data : Symbol(data, Decl(without-const.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+
+// Should be boolean, not true
+export const debug = data.debug;
+>debug : Symbol(debug, Decl(without-const.ts, 7, 12))
+>data.debug : Symbol("debug", Decl(config.json, 1, 31))
+>data : Symbol(data, Decl(without-const.ts, 1, 6))
+>debug : Symbol("debug", Decl(config.json, 1, 31))
+
+// Should be number, not 42
+export const count = data.count;
+>count : Symbol(count, Decl(without-const.ts, 10, 12))
+>data.count : Symbol("count", Decl(config.json, 2, 18))
+>data : Symbol(data, Decl(without-const.ts, 1, 6))
+>count : Symbol("count", Decl(config.json, 2, 18))
+
+// Should be string, not "dark"
+export const theme = data.settings.theme;
+>theme : Symbol(theme, Decl(without-const.ts, 13, 12))
+>data.settings.theme : Symbol("theme", Decl(config.json, 4, 17))
+>data.settings : Symbol("settings", Decl(config.json, 3, 16))
+>data : Symbol(data, Decl(without-const.ts, 1, 6))
+>settings : Symbol("settings", Decl(config.json, 3, 16))
+>theme : Symbol("theme", Decl(config.json, 4, 17))
+
+=== with-const.ts ===
+// With const: "true" attribute, types should preserve literal types
+import data from "./config.json" with { type: "json", const: "true" };
+>data : Symbol(data, Decl(with-const.ts, 1, 6))
+
+// Should be readonly ["FR", "BE"], not string[]
+export const locales = data.appLocales;
+>locales : Symbol(locales, Decl(with-const.ts, 4, 12))
+>data.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>data : Symbol(data, Decl(with-const.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+
+// Should be true, not boolean
+export const debug = data.debug;
+>debug : Symbol(debug, Decl(with-const.ts, 7, 12))
+>data.debug : Symbol("debug", Decl(config.json, 1, 31))
+>data : Symbol(data, Decl(with-const.ts, 1, 6))
+>debug : Symbol("debug", Decl(config.json, 1, 31))
+
+// Should be 42, not number
+export const count = data.count;
+>count : Symbol(count, Decl(with-const.ts, 10, 12))
+>data.count : Symbol("count", Decl(config.json, 2, 18))
+>data : Symbol(data, Decl(with-const.ts, 1, 6))
+>count : Symbol("count", Decl(config.json, 2, 18))
+
+// Should be "dark", not string
+export const theme = data.settings.theme;
+>theme : Symbol(theme, Decl(with-const.ts, 13, 12))
+>data.settings.theme : Symbol("theme", Decl(config.json, 4, 17))
+>data.settings : Symbol("settings", Decl(config.json, 3, 16))
+>data : Symbol(data, Decl(with-const.ts, 1, 6))
+>settings : Symbol("settings", Decl(config.json, 3, 16))
+>theme : Symbol("theme", Decl(config.json, 4, 17))
+
+=== with-const-namespace.ts ===
+// Test namespace import with const: "true"
+import * as ns from "./config.json" with { type: "json", const: "true" };
+>ns : Symbol(ns, Decl(with-const-namespace.ts, 1, 6))
+
+// Should preserve literal types through namespace import
+export const locales = ns.appLocales;
+>locales : Symbol(locales, Decl(with-const-namespace.ts, 4, 12))
+>ns.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>ns : Symbol(ns, Decl(with-const-namespace.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+
+export const debug = ns.debug;
+>debug : Symbol(debug, Decl(with-const-namespace.ts, 5, 12))
+>ns.debug : Symbol("debug", Decl(config.json, 1, 31))
+>ns : Symbol(ns, Decl(with-const-namespace.ts, 1, 6))
+>debug : Symbol("debug", Decl(config.json, 1, 31))
+
+=== type-assertions.ts ===
+// Test that const attribute produces types compatible with literal type assertions
+import data from "./config.json" with { type: "json", const: "true" };
+>data : Symbol(data, Decl(type-assertions.ts, 1, 6))
+
+type AppLocale = "FR" | "BE";
+>AppLocale : Symbol(AppLocale, Decl(type-assertions.ts, 1, 70))
+
+// This should work - appLocales should be a tuple of literal types
+const locale: AppLocale = data.appLocales[0];
+>locale : Symbol(locale, Decl(type-assertions.ts, 6, 5))
+>AppLocale : Symbol(AppLocale, Decl(type-assertions.ts, 1, 70))
+>data.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>data : Symbol(data, Decl(type-assertions.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>0 : Symbol(0)
+
+// Function that requires specific literal types
+function setLocale(locale: "FR" | "BE"): void {}
+>setLocale : Symbol(setLocale, Decl(type-assertions.ts, 6, 45))
+>locale : Symbol(locale, Decl(type-assertions.ts, 9, 19))
+
+// This should work with const import
+setLocale(data.appLocales[0]);
+>setLocale : Symbol(setLocale, Decl(type-assertions.ts, 6, 45))
+>data.appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>data : Symbol(data, Decl(type-assertions.ts, 1, 6))
+>appLocales : Symbol("appLocales", Decl(config.json, 0, 1))
+>0 : Symbol(0)
+
+
