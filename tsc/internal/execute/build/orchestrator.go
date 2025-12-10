@@ -61,6 +61,8 @@ type Orchestrator struct {
 	tasks  *collections.SyncMap[tspath.Path, *BuildTask]
 	order  []string
 	errors []*ast.Diagnostic
+	// Semaphore to limit concurrent builds
+	buildSemaphore chan struct{}
 
 	errorSummaryReporter tsc.DiagnosticsReporter
 	watchStatusReporter  tsc.DiagnosticReporter
@@ -395,6 +397,10 @@ func NewOrchestrator(opts Options) *Orchestrator {
 		orchestrator.watchStatusReporter = tsc.CreateWatchStatusReporter(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions, opts.Testing)
 	} else {
 		orchestrator.errorSummaryReporter = tsc.CreateReportErrorSummary(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions)
+	}
+	// If we want to build more than one project at a time, create a semaphore to limit concurrency
+	if builders := opts.Command.BuildOptions.Builders; builders != nil {
+		orchestrator.buildSemaphore = make(chan struct{}, *builders)
 	}
 	return orchestrator
 }

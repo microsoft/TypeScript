@@ -142,7 +142,7 @@ func (p *commandLineParser) parseStrings(args []string) {
 			inputOptionName := getInputOptionName(s)
 			opt := p.optionsMap.GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
 			if opt != nil {
-				i = p.parseOptionValue(args, i, opt, nil)
+				i = p.parseOptionValue(args, i, opt, p.workerDiagnostics.OptionTypeMismatchDiagnostic)
 			} else {
 				watchOpt := WatchNameMap.GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
 				if watchOpt != nil {
@@ -256,9 +256,6 @@ func (p *commandLineParser) parseOptionValue(
 		// Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
 		if i >= len(args) {
 			if opt.Kind != "boolean" {
-				if diag == nil {
-					diag = p.workerDiagnostics.OptionTypeMismatchDiagnostic
-				}
 				p.errors = append(p.errors, ast.NewCompilerDiagnostic(diag, opt.Name, getCompilerOptionValueTypeString(opt)))
 				if opt.Kind == "list" {
 					p.options.Set(opt.Name, []string{})
@@ -276,7 +273,13 @@ func (p *commandLineParser) parseOptionValue(
 				// !!! Make sure this parseInt matches JS parseInt
 				num, e := strconv.Atoi(args[i])
 				if e == nil {
-					p.options.Set(opt.Name, num)
+					if num >= opt.minValue {
+						p.options.Set(opt.Name, num)
+					} else {
+						p.errors = append(p.errors, ast.NewCompilerDiagnostic(diagnostics.Option_0_requires_value_to_be_greater_than_1, opt.Name, strconv.Itoa(opt.minValue)))
+					}
+				} else {
+					p.errors = append(p.errors, ast.NewCompilerDiagnostic(diag, opt.Name, "number"))
 				}
 				i++
 			case "boolean":

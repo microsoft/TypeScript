@@ -35,6 +35,14 @@
         "category": "Message",
         "code": 100008
     },
+    "Set the number of projects to build concurrently.": {
+        "category": "Message",
+        "code": 100009
+    },
+    "all, unless --singleThreaded is passed.": {
+        "category": "Message",
+        "code": 100010
+    },
     "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
@@ -74,5 +82,9 @@
     "Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided.": {
         "category": "Error",
         "code": 5074
+    },
+    "Option '{0}' requires value to be greater than '{1}'.": {
+        "category": "Error",
+        "code": 5002
     }
 }

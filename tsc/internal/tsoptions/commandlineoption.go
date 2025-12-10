@@ -38,6 +38,9 @@ type CommandLineOption struct {
 	// What kind of extra validation `validateJsonOptionValue` should do
 	extraValidation extraValidation
 
+	// checks that option with number type has value >= minValue
+	minValue int
+
 	// true or undefined
 	// used for configDirTemplateSubstitutionOptions
 	allowConfigDirTemplateSubstitution bool

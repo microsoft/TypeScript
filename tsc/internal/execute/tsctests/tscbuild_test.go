@@ -3,6 +3,7 @@ package tsctests
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -2174,7 +2175,7 @@ func TestBuildProjectsBuilding(t *testing.T) {
 		return files
 	}
 
-	getTestCases := func(pkgCount int) []*tscInput {
+	getTestCases := func(pkgCount int, builders int) []*tscInput {
 		edits := []*tscEdit{
 			{
 				caption: "dts doesn't change",
@@ -2200,20 +2201,34 @@ func TestBuildProjectsBuilding(t *testing.T) {
 				edits:           edits,
 			},
 			{
+				subScenario:     fmt.Sprintf(`when there are %d projects in a solution with --builders %d`, pkgCount, builders),
+				files:           files(pkgCount),
+				cwd:             "/user/username/projects/myproject",
+				commandLineArgs: []string{"-b", "-v", "--builders", strconv.Itoa(builders)},
+				edits:           edits,
+			},
+			{
 				subScenario:     fmt.Sprintf(`when there are %d projects in a solution`, pkgCount),
 				files:           files(pkgCount),
 				cwd:             "/user/username/projects/myproject",
 				commandLineArgs: []string{"-b", "-w", "-v"},
 				edits:           edits,
 			},
+			{
+				subScenario:     fmt.Sprintf(`when there are %d projects in a solution with --builders %d`, pkgCount, builders),
+				files:           files(pkgCount),
+				cwd:             "/user/username/projects/myproject",
+				commandLineArgs: []string{"-b", "-w", "-v", "--builders", strconv.Itoa(builders)},
+				edits:           edits,
+			},
 		}
 	}
 
 	testCases := slices.Concat(
-		getTestCases(3),
-		getTestCases(5),
-		getTestCases(8),
-		getTestCases(23),
+		getTestCases(3, 1),
+		getTestCases(5, 2),
+		getTestCases(8, 3),
+		getTestCases(23, 3),
 	)
 
 	for _, test := range testCases {
