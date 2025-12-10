@@ -178,7 +178,7 @@ func (t *Tracker) InsertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node,
 // InsertModifierBefore inserts a modifier token (like 'type') before a node with a trailing space.
 func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.Kind, before *ast.Node) {
 	pos := astnav.GetStartOfNode(before, sourceFile, false)
-	token := sourceFile.GetOrCreateToken(modifier, pos, pos, before.Parent)
+	token := sourceFile.GetOrCreateToken(modifier, pos, pos, before.Parent, ast.TokenFlagsNone)
 	t.InsertNodeAt(sourceFile, core.TextPos(pos), token, NodeOptions{Suffix: " "})
 }
 
@@ -262,7 +262,7 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 		endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(after.End()))
 		t.ReplaceRange(sourceFile,
 			lsproto.Range{Start: endPos, End: endPos},
-			sourceFile.GetOrCreateToken(ast.KindSemicolonToken, after.End(), after.End(), after.Parent),
+			sourceFile.GetOrCreateToken(ast.KindSemicolonToken, after.End(), after.End(), after.Parent, ast.TokenFlagsNone),
 			NodeOptions{},
 		)
 	}
@@ -347,7 +347,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 
 	// insert separator immediately following the 'after' node to preserve comments in trailing trivia
 	// !!! formatcontext
-	t.ReplaceRange(sourceFile, lsproto.Range{Start: end, End: end}, sourceFile.GetOrCreateToken(separator, after.End(), after.End()+len(separatorString), after.Parent), NodeOptions{})
+	t.ReplaceRange(sourceFile, lsproto.Range{Start: end, End: end}, sourceFile.GetOrCreateToken(separator, after.End(), after.End()+len(separatorString), after.Parent, ast.TokenFlagsNone), NodeOptions{})
 	// use the same indentation as 'after' item
 	indentation := format.FindFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, t.formatSettings)
 	// insert element before the line break on the line that contains 'after' element

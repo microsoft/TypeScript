@@ -10781,6 +10781,7 @@ type SourceFile struct {
 
 	tokenCacheMu     sync.Mutex
 	tokenCache       map[core.TextRange]*Node
+	tokenFactory     *NodeFactory
 	declarationMapMu sync.Mutex
 	declarationMap   map[string][]*Node
 }
@@ -10942,6 +10943,7 @@ func (node *SourceFile) GetOrCreateToken(
 	pos int,
 	end int,
 	parent *Node,
+	flags TokenFlags,
 ) *TokenNode {
 	node.tokenCacheMu.Lock()
 	defer node.tokenCacheMu.Unlock()
@@ -10959,11 +10961,55 @@ func (node *SourceFile) GetOrCreateToken(
 		return token
 	}
 
-	token := newNode(kind, &Token{}, NodeFactoryHooks{})
+	token := createToken(kind, node, pos, end, flags)
 	token.Loc = loc
 	token.Parent = parent
 	node.tokenCache[loc] = token
 	return token
+}
+
+// `kind` should be a token kind.
+func createToken(kind Kind, file *SourceFile, pos, end int, flags TokenFlags) *Node {
+	if file.tokenFactory == nil {
+		file.tokenFactory = NewNodeFactory(NodeFactoryHooks{})
+	}
+	text := file.text[pos:end]
+	switch kind {
+	case KindNumericLiteral:
+		literal := file.tokenFactory.NewNumericLiteral(text)
+		literal.AsNumericLiteral().TokenFlags = flags & TokenFlagsNumericLiteralFlags
+		return literal
+	case KindBigIntLiteral:
+		literal := file.tokenFactory.NewBigIntLiteral(text)
+		literal.AsBigIntLiteral().TokenFlags = flags & TokenFlagsNumericLiteralFlags
+		return literal
+	case KindStringLiteral:
+		literal := file.tokenFactory.NewStringLiteral(text)
+		literal.AsStringLiteral().TokenFlags = flags & TokenFlagsStringLiteralFlags
+		return literal
+	case KindJsxText, KindJsxTextAllWhiteSpaces:
+		return file.tokenFactory.NewJsxText(text, kind == KindJsxTextAllWhiteSpaces)
+	case KindRegularExpressionLiteral:
+		literal := file.tokenFactory.NewRegularExpressionLiteral(text)
+		literal.AsRegularExpressionLiteral().TokenFlags = flags & TokenFlagsRegularExpressionLiteralFlags
+		return literal
+	case KindNoSubstitutionTemplateLiteral:
+		literal := file.tokenFactory.NewNoSubstitutionTemplateLiteral(text)
+		literal.AsNoSubstitutionTemplateLiteral().TokenFlags = flags & TokenFlagsTemplateLiteralLikeFlags
+		return literal
+	case KindTemplateHead:
+		return file.tokenFactory.NewTemplateHead(text, "" /*rawText*/, flags&TokenFlagsTemplateLiteralLikeFlags)
+	case KindTemplateMiddle:
+		return file.tokenFactory.NewTemplateMiddle(text, "" /*rawText*/, flags&TokenFlagsTemplateLiteralLikeFlags)
+	case KindTemplateTail:
+		return file.tokenFactory.NewTemplateTail(text, "" /*rawText*/, flags&TokenFlagsTemplateLiteralLikeFlags)
+	case KindIdentifier:
+		return file.tokenFactory.NewIdentifier(text)
+	case KindPrivateIdentifier:
+		return file.tokenFactory.NewPrivateIdentifier(text)
+	default: // Punctuation and keywords
+		return file.tokenFactory.NewToken(kind)
+	}
 }
 
 func IsSourceFile(node *Node) bool {

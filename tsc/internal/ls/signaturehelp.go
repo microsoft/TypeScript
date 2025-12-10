@@ -1241,7 +1241,7 @@ func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sour
 			token := scanner.Token()
 			tokenFullStart := scanner.TokenFullStart()
 			tokenEnd := scanner.TokenEnd()
-			tokens = append(tokens, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, nodeListParent))
+			tokens = append(tokens, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, nodeListParent, scanner.TokenFlags()))
 			left = tokenEnd
 		}
 	}

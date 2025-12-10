@@ -752,7 +752,7 @@ func nodeEndsWith(n *ast.Node, expectedLastToken ast.Kind, sourceFile *ast.Sourc
 		tokenKind := scanner.Token()
 		tokenFullStart := scanner.TokenFullStart()
 		tokenEnd := scanner.TokenEnd()
-		token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, n)
+		token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, n, scanner.TokenFlags())
 		lastNodeAndTokens = append(lastNodeAndTokens, token)
 		startPos = tokenEnd
 		scanner.Scan()
@@ -1571,7 +1571,7 @@ func getChildrenFromNonJSDocNode(node *ast.Node, sourceFile *ast.SourceFile) []*
 			token := scanner.Token()
 			tokenFullStart := scanner.TokenFullStart()
 			tokenEnd := scanner.TokenEnd()
-			children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node))
+			children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node, scanner.TokenFlags()))
 			pos = tokenEnd
 			scanner.Scan()
 		}
@@ -1583,7 +1583,7 @@ func getChildrenFromNonJSDocNode(node *ast.Node, sourceFile *ast.SourceFile) []*
 		token := scanner.Token()
 		tokenFullStart := scanner.TokenFullStart()
 		tokenEnd := scanner.TokenEnd()
-		children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node))
+		children = append(children, sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, node, scanner.TokenFlags()))
 		pos = tokenEnd
 		scanner.Scan()
 	}

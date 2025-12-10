@@ -25,7 +25,7 @@ func GetLastChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		tokenKind := scanner.Token()
 		tokenFullStart := scanner.TokenFullStart()
 		tokenEnd := scanner.TokenEnd()
-		lastToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node)
+		lastToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node, scanner.TokenFlags())
 		startPos = tokenEnd
 		scanner.Scan()
 	}
@@ -108,7 +108,7 @@ func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		tokenKind := scanner.Token()
 		tokenFullStart := scanner.TokenFullStart()
 		tokenEnd := scanner.TokenEnd()
-		firstToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node)
+		firstToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node, scanner.TokenFlags())
 	}
 
 	if firstToken != nil {
