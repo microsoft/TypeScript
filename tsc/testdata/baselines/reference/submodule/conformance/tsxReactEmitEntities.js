@@ -35,6 +35,6 @@ React.createElement("div", { attr: "{\u2026}\\" });
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
 React.createElement("div", { attr: "&#0123;&hellip;&#x7D;\"" });
 // Preserves single quotes
-React.createElement("div", { attr: "\"" });
+React.createElement("div", { attr: '"' });
 // https://github.com/microsoft/TypeScript/issues/35732
 React.createElement("div", null, "\uD83D\uDC08\uD83D\uDC15\uD83D\uDC07\uD83D\uDC11");

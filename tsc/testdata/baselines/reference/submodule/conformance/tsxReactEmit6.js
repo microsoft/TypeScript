@@ -34,7 +34,7 @@ var M;
     // Should emit M.React.createElement
     //  and M.React.__spread
     var foo;
-    var spread1 = React.createElement("div", Object.assign({ x: "" }, foo, { y: "" }));
+    var spread1 = React.createElement("div", Object.assign({ x: '' }, foo, { y: '' }));
     // Quotes
     var x = React.createElement("div", null, "This \"quote\" thing");
 })(M || (M = {}));

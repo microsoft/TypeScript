@@ -529,6 +529,8 @@ func (tx *JSXTransformer) transformJsxAttributeInitializer(node *ast.Node) *ast.
 		// Need to be escaped to be handled correctly in a normal string
 		res := tx.Factory().NewStringLiteral(decodeEntities(node.Text()))
 		res.Loc = node.Loc
+		// Preserve the original quote style (single vs double quotes)
+		res.AsStringLiteral().TokenFlags = node.AsStringLiteral().TokenFlags
 		return res
 	}
 	if node.Kind == ast.KindJsxExpression {
