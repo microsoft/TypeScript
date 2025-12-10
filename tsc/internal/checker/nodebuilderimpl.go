@@ -155,7 +155,7 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		imprt := root.AsImportTypeNode()
 		// then move qualifiers
 		ids := getAccessStack(ref)
-		var qualifier *ast.Node
+		qualifier := root.AsImportTypeNode().Qualifier
 		for _, id := range ids {
 			if qualifier != nil {
 				qualifier = b.f.NewQualifiedName(qualifier, id)
