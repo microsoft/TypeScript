@@ -61,25 +61,6 @@ foo.bar;`
 	}
 }
 
-func TestCheckSrcCompiler(t *testing.T) {
-	t.Parallel()
-
-	repo.SkipIfNoTypeScriptSubmodule(t)
-	fs := osvfs.FS()
-	fs = bundled.WrapFS(fs)
-
-	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
-
-	host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, nil, host, nil)
-	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
-	p := compiler.NewProgram(compiler.ProgramOptions{
-		Config: parsed,
-		Host:   host,
-	})
-	p.CheckSourceFiles(t.Context(), nil)
-}
-
 func BenchmarkNewChecker(b *testing.B) {
 	repo.SkipIfNoTypeScriptSubmodule(b)
 	fs := osvfs.FS()

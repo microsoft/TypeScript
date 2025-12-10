@@ -1283,34 +1283,6 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 	traverse(body)
 }
 
-func SkipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions, host Program, ignoreNoCheck bool) bool {
-	return (!ignoreNoCheck && options.NoCheck.IsTrue()) ||
-		options.SkipLibCheck.IsTrue() && sourceFile.IsDeclarationFile ||
-		options.SkipDefaultLibCheck.IsTrue() && host.IsSourceFileDefaultLibrary(sourceFile.Path()) ||
-		host.IsSourceFromProjectReference(sourceFile.Path()) ||
-		!canIncludeBindAndCheckDiagnostics(sourceFile, options)
-}
-
-func canIncludeBindAndCheckDiagnostics(sourceFile *ast.SourceFile, options *core.CompilerOptions) bool {
-	if sourceFile.CheckJsDirective != nil && !sourceFile.CheckJsDirective.Enabled {
-		return false
-	}
-
-	if sourceFile.ScriptKind == core.ScriptKindTS || sourceFile.ScriptKind == core.ScriptKindTSX || sourceFile.ScriptKind == core.ScriptKindExternal {
-		return true
-	}
-
-	isJS := sourceFile.ScriptKind == core.ScriptKindJS || sourceFile.ScriptKind == core.ScriptKindJSX
-	isCheckJS := isJS && ast.IsCheckJSEnabledForFile(sourceFile, options)
-	isPlainJS := ast.IsPlainJSFile(sourceFile, options.CheckJs)
-
-	// By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
-	// - plain JS: .js files with no // ts-check and checkJs: undefined
-	// - check JS: .js files with either // ts-check or checkJs: true
-	// - external: files that are added by plugins
-	return isPlainJS || isCheckJS || sourceFile.ScriptKind == core.ScriptKindDeferred
-}
-
 func getEnclosingContainer(node *ast.Node) *ast.Node {
 	return ast.FindAncestor(node.Parent, func(n *ast.Node) bool {
 		return binder.GetContainerFlags(n)&binder.ContainerFlagsIsContainer != 0

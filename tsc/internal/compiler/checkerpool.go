@@ -2,7 +2,6 @@ package compiler
 
 import (
 	"context"
-	"iter"
 	"slices"
 	"sync"
 
@@ -12,17 +11,13 @@ import (
 )
 
 type CheckerPool interface {
-	Count() int
 	GetChecker(ctx context.Context) (*checker.Checker, func())
 	GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
 	GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
-	ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker))
-	Files(checker *checker.Checker) iter.Seq[*ast.SourceFile]
 }
 
 type checkerPool struct {
-	checkerCount int
-	program      *Program
+	program *Program
 
 	createCheckersOnce sync.Once
 	checkers           []*checker.Checker
@@ -43,32 +38,26 @@ func newCheckerPool(program *Program) *checkerPool {
 	checkerCount = max(min(checkerCount, len(program.files), 256), 1)
 
 	pool := &checkerPool{
-		program:      program,
-		checkerCount: checkerCount,
-		checkers:     make([]*checker.Checker, checkerCount),
-		locks:        make([]*sync.Mutex, checkerCount),
+		program:  program,
+		checkers: make([]*checker.Checker, checkerCount),
+		locks:    make([]*sync.Mutex, checkerCount),
 	}
 
 	return pool
 }
 
-func (p *checkerPool) Count() int {
-	return p.checkerCount
-}
-
 func (p *checkerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
 	p.createCheckers()
-	checker := p.fileAssociations[file]
-	return checker, noop
+	return p.fileAssociations[file], noop
 }
 
 func (p *checkerPool) GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
-	c, done := p.GetCheckerForFile(ctx, file)
+	p.createCheckers()
+	c := p.fileAssociations[file]
 	idx := slices.Index(p.checkers, c)
 	p.locks[idx].Lock()
 	return c, sync.OnceFunc(func() {
 		p.locks[idx].Unlock()
-		done()
 	})
 }
 
@@ -80,8 +69,9 @@ func (p *checkerPool) GetChecker(ctx context.Context) (*checker.Checker, func())
 
 func (p *checkerPool) createCheckers() {
 	p.createCheckersOnce.Do(func() {
+		checkerCount := len(p.checkers)
 		wg := core.NewWorkGroup(p.program.SingleThreaded())
-		for i := range p.checkerCount {
+		for i := range checkerCount {
 			wg.Queue(func() {
 				p.checkers[i], p.locks[i] = checker.NewChecker(p.program)
 			})
@@ -91,14 +81,14 @@ func (p *checkerPool) createCheckers() {
 
 		p.fileAssociations = make(map[*ast.SourceFile]*checker.Checker, len(p.program.files))
 		for i, file := range p.program.files {
-			p.fileAssociations[file] = p.checkers[i%p.checkerCount]
+			p.fileAssociations[file] = p.checkers[i%checkerCount]
 		}
 	})
 }
 
 // Runs `cb` for each checker in the pool concurrently, locking and unlocking checker mutexes as it goes,
-// making it safe to call `ForEachCheckerParallel` from many threads simultaneously.
-func (p *checkerPool) ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker)) {
+// making it safe to call `forEachCheckerParallel` from many threads simultaneously.
+func (p *checkerPool) forEachCheckerParallel(cb func(idx int, c *checker.Checker)) {
 	p.createCheckers()
 	wg := core.NewWorkGroup(p.program.SingleThreaded())
 	for idx, checker := range p.checkers {
@@ -109,19 +99,6 @@ func (p *checkerPool) ForEachCheckerParallel(ctx context.Context, cb func(idx in
 		})
 	}
 	wg.RunAndWait()
-}
-
-func (p *checkerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] {
-	checkerIndex := slices.Index(p.checkers, checker)
-	return func(yield func(*ast.SourceFile) bool) {
-		for i, file := range p.program.files {
-			if i%p.checkerCount == checkerIndex {
-				if !yield(file) {
-					return
-				}
-			}
-		}
-	}
 }
 
 func noop() {}

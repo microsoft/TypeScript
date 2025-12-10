@@ -540,7 +540,6 @@ type Program interface {
 	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
-	IsSourceFromProjectReference(path tspath.Path) bool
 	IsSourceFileDefaultLibrary(path tspath.Path) bool
 	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
@@ -930,8 +929,6 @@ func NewChecker(program Program) (*Checker, *sync.Mutex) {
 	c.unionTypes = make(map[string]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[string]*Type)
-	c.diagnostics = ast.DiagnosticsCollection{}
-	c.suggestionDiagnostics = ast.DiagnosticsCollection{}
 	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
@@ -2092,13 +2089,6 @@ func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.Sy
 	}
 	// return nil if we can't find a symbol
 	return nil
-}
-
-func (c *Checker) CheckSourceFile(ctx context.Context, sourceFile *ast.SourceFile) {
-	if SkipTypeChecking(sourceFile, c.compilerOptions, c.program, false) {
-		return
-	}
-	c.checkSourceFile(ctx, sourceFile)
 }
 
 func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFile) {
@@ -13507,30 +13497,20 @@ func (c *Checker) getDiagnostics(ctx context.Context, sourceFile *ast.SourceFile
 	c.checkNotCanceled()
 	isSuggestionDiagnostics := collection == &c.suggestionDiagnostics
 
-	files := c.files
-	if sourceFile != nil {
-		files = []*ast.SourceFile{sourceFile}
+	c.checkSourceFile(ctx, sourceFile)
+	if c.wasCanceled {
+		return nil
 	}
 
-	for _, file := range files {
-		c.CheckSourceFile(ctx, file)
-		if c.wasCanceled {
-			return nil
-		}
-
-		// Check unused identifiers as suggestions if we're collecting suggestion diagnostics
-		// and they are not configured as errors
-		if isSuggestionDiagnostics && !file.IsDeclarationFile &&
-			!(c.compilerOptions.NoUnusedLocals.IsTrue() || c.compilerOptions.NoUnusedParameters.IsTrue()) {
-			links := c.sourceFileLinks.Get(file)
-			c.checkUnusedIdentifiers(links.identifierCheckNodes)
-		}
+	// Check unused identifiers as suggestions if we're collecting suggestion diagnostics
+	// and they are not configured as errors
+	if isSuggestionDiagnostics && !sourceFile.IsDeclarationFile &&
+		!(c.compilerOptions.NoUnusedLocals.IsTrue() || c.compilerOptions.NoUnusedParameters.IsTrue()) {
+		links := c.sourceFileLinks.Get(sourceFile)
+		c.checkUnusedIdentifiers(links.identifierCheckNodes)
 	}
 
-	if sourceFile != nil {
-		return collection.GetDiagnosticsForFile(sourceFile.FileName())
-	}
-	return collection.GetDiagnostics()
+	return collection.GetDiagnosticsForFile(sourceFile.FileName())
 }
 
 func (c *Checker) GetGlobalDiagnostics() []*ast.Diagnostic {

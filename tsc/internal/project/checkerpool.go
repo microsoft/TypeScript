@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 	"fmt"
-	"iter"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -80,7 +79,7 @@ func (p *CheckerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFil
 // GetCheckerForFileExclusive is the same as GetCheckerForFile but also locks a mutex associated with the checker.
 // Call `done` to free the lock.
 func (p *CheckerPool) GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
-	panic("unimplemented") // implement if used by LS
+	return p.GetCheckerForFile(ctx, file)
 }
 
 func (p *CheckerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {
@@ -88,38 +87,6 @@ func (p *CheckerPool) GetChecker(ctx context.Context) (*checker.Checker, func())
 	defer p.mu.Unlock()
 	checker, index := p.getCheckerLocked(core.GetRequestID(ctx))
 	return checker, p.createRelease(core.GetRequestID(ctx), index, checker)
-}
-
-func (p *CheckerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] {
-	panic("unimplemented")
-}
-
-func (p *CheckerPool) Count() int {
-	return p.maxCheckers
-}
-
-func (p *CheckerPool) ForEachCheckerParallel(ctx context.Context, cb func(idx int, c *checker.Checker)) {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-
-	requestID := core.GetRequestID(ctx)
-	if requestID == "" {
-		panic("cannot call ForEachCheckerParallel on a project.checkerPool without a request ID")
-	}
-
-	// A request can only access one checker
-	if c, release := p.getRequestCheckerLocked(requestID); c != nil {
-		defer release()
-		cb(0, c)
-		return
-	}
-
-	// TODO: Does this ever work without deadlocking? `p.GetChecker` also tries to lock this mutex.
-	// Should this just be a panic?
-	c, release := p.GetChecker(ctx)
-	defer release()
-	cb(0, c)
-	return
 }
 
 func (p *CheckerPool) getCheckerLocked(requestID string) (*checker.Checker, int) {

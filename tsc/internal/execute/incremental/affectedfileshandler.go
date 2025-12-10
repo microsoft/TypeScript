@@ -59,7 +59,7 @@ func (h *affectedFilesHandler) removeSemanticDiagnosticsOf(path tspath.Path) {
 func (h *affectedFilesHandler) removeDiagnosticsOfLibraryFiles() {
 	h.cleanedDiagnosticsOfLibFiles.Do(func() {
 		for _, file := range h.program.GetSourceFiles() {
-			if h.program.program.IsSourceFileDefaultLibrary(file.Path()) && !checker.SkipTypeChecking(file, h.program.snapshot.options, h.program.program, true) {
+			if h.program.program.IsSourceFileDefaultLibrary(file.Path()) && !h.program.program.SkipTypeChecking(file, true) {
 				h.removeSemanticDiagnosticsOf(file.Path())
 			}
 		}
