@@ -19,7 +19,7 @@
 //// declare function toString<A, E, R>(fa: Effect<A, E, R>): Effect<string, E, R>;
 //// declare function test<A, E>(fa: Effect<A, E, never>): Effect<A, E, never>;
 ////
-//// effect./*1*/pipe(toString, [|test|]);
+//// export default effect./*1*/pipe(toString, [|test|]);
 
 verify.quickInfoAt("1", `(method) Effect<number, never, "@BLANK">.pipe<Effect<number, never, "@BLANK">, Effect<string, never, "@BLANK">, Effect<string, never, never>>(this: Effect<number, never, "@BLANK">, f: (a: Effect<number, never, "@BLANK">) => Effect<string, never, "@BLANK">, f2: (b: Effect<string, never, "@BLANK">) => Effect<string, never, never>): Effect<string, never, never> (+1 overload)`);
 
