@@ -2,7 +2,7 @@ circularModuleImports.ts(5,5): error TS2303: Circular definition of import alias
 
 
 ==== circularModuleImports.ts (1 errors) ====
-    module M
+    namespace M
      
     {
      

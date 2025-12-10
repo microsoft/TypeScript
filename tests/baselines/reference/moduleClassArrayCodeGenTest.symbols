@@ -3,7 +3,7 @@
 === moduleClassArrayCodeGenTest.ts ===
 // Invalid code gen for Array of Module class
 
-module M
+namespace M
 >M : Symbol(M, Decl(moduleClassArrayCodeGenTest.ts, 0, 0))
 {
     export class A { }
