@@ -423,7 +423,7 @@ func (s *Snapshot) dispose(session *Session) {
 	for _, project := range s.ProjectCollection.Projects() {
 		if project.Program != nil && session.programCounter.Deref(project.Program) {
 			for _, file := range project.Program.SourceFiles() {
-				session.parseCache.Deref(file)
+				session.parseCache.Deref(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
 			}
 		}
 	}

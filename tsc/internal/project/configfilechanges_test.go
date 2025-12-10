@@ -19,10 +19,11 @@ func TestConfigFileChanges(t *testing.T) {
 	}
 
 	files := map[string]any{
-		"/tsconfig.base.json":   `{"compilerOptions": {"strict": true}}`,
-		"/src/tsconfig.json":    `{"extends": "../tsconfig.base.json", "compilerOptions": {"target": "es6"}, "references": [{"path": "../utils"}]}`,
-		"/src/index.ts":         `console.log("Hello, world!");`,
-		"/src/subfolder/foo.ts": `export const foo = "bar";`,
+		"/tsconfig.more-base.json": `{}`,
+		"/tsconfig.base.json":      `{"extends": "../tsconfig.more-base.json", "compilerOptions": {"strict": true}}`,
+		"/src/tsconfig.json":       `{"extends": "../tsconfig.base.json", "compilerOptions": {"target": "es6"}, "references": [{"path": "../utils"}]}`,
+		"/src/index.ts":            `console.log("Hello, world!");`,
+		"/src/subfolder/foo.ts":    `export const foo = "bar";`,
 
 		"/utils/tsconfig.json": `{"compilerOptions": {"composite": true}}`,
 		"/utils/index.ts":      `console.log("Hello, test!");`,
@@ -64,6 +65,25 @@ func TestConfigFileChanges(t *testing.T) {
 		ls, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse)
+	})
+
+	t.Run("should update project on doubly extended config file change", func(t *testing.T) {
+		t.Parallel()
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		err := utils.FS().WriteFile("/tsconfig.more-base.json", `{"compilerOptions": {"verbatimModuleSyntax": true}}`, false /*writeByteOrderMark*/)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Uri:  lsproto.DocumentUri("file:///tsconfig.more-base.json"),
+				Type: lsproto.FileChangeTypeChanged,
+			},
+		})
+
+		ls, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().Options().VerbatimModuleSyntax, core.TSTrue)
 	})
 
 	t.Run("should update project on referenced config file change", func(t *testing.T) {

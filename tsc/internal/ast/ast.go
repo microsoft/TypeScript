@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 // Visitor
@@ -10779,6 +10780,7 @@ type SourceFile struct {
 
 	// Fields set by language service
 
+	Hash             xxh3.Uint128
 	tokenCacheMu     sync.Mutex
 	tokenCache       map[core.TextRange]*Node
 	tokenFactory     *NodeFactory

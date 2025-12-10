@@ -126,7 +126,7 @@ func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.Sourc
 	c.ensureAlive()
 	c.seenFiles.Add(opts.Path)
 	if fh := c.fs.GetFileByPath(opts.FileName, opts.Path); fh != nil {
-		return c.builder.parseCache.Acquire(fh, opts, fh.Kind())
+		return c.builder.parseCache.Acquire(NewParseCacheKey(opts, fh.Hash(), fh.Kind()), fh)
 	}
 	return nil
 }

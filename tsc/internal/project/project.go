@@ -331,7 +331,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				if file.Path() != p.dirtyFilePath {
 					// UpdateProgram only called host.GetSourceFile for the dirty file.
 					// Increment ref count for all other files.
-					p.host.builder.parseCache.Ref(file)
+					p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
 				}
 			}
 		}

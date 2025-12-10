@@ -24,11 +24,11 @@ type extendedConfigCacheEntry struct {
 var _ tsoptions.ExtendedConfigCache = (*ExtendedConfigCache)(nil)
 
 // GetExtendedConfig implements tsoptions.ExtendedConfigCache.
-func (e *ExtendedConfigCache) GetExtendedConfig(fileName string, path tspath.Path, parse func() *tsoptions.ExtendedConfigCacheEntry) *tsoptions.ExtendedConfigCacheEntry {
+func (e *ExtendedConfigCache) GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []string, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
 	entry, loaded := e.loadOrStoreNewLockedEntry(path)
 	defer entry.mu.Unlock()
 	if !loaded {
-		entry.ExtendedConfigCacheEntry = parse()
+		entry.ExtendedConfigCacheEntry = tsoptions.ParseExtendedConfig(fileName, path, resolutionStack, host, e)
 	}
 	return entry.ExtendedConfigCacheEntry
 }

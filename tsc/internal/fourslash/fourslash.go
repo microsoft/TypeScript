@@ -138,11 +138,10 @@ func newLSPPipe() (*lspReader, *lspWriter) {
 
 const rootDir = "/"
 
-var parseCache = project.ParseCache{
-	Options: project.ParseCacheOptions{
-		DisableDeletion: true,
-	},
-}
+var parseCache = project.NewParseCache(project.RefCountCacheOptions{
+	DisableDeletion: true,
+},
+)
 
 func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, content string) (*FourslashTest, func()) {
 	repo.SkipIfNoTypeScriptSubmodule(t)
@@ -217,7 +216,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		FS:                 fs,
 		DefaultLibraryPath: bundled.LibPath(),
 
-		ParseCache: &parseCache,
+		ParseCache: parseCache,
 	})
 
 	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName string) *lsconv.LSPLineMap {
