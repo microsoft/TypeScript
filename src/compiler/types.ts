@@ -6526,7 +6526,7 @@ export const enum ObjectFlags {
     /** @internal */
     ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
     /** @internal */
-    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
+    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType, or it's a context free `returnTypeOnly`
     /** @internal */
     CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
     /** @internal */

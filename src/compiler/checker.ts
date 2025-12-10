@@ -21143,9 +21143,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { initializer } = node as JsxAttribute;
                 return !!initializer && isContextSensitive(initializer);
             }
-            case SyntaxKind.JsxExpression: {
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.YieldExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
-                const { expression } = node as JsxExpression;
+                const { expression } = node as JsxExpression | YieldExpression;
                 return !!expression && isContextSensitive(expression);
             }
         }
@@ -21154,7 +21155,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node);
+        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node) || hasContextSensitiveYieldExpression(node);
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -21165,6 +21166,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isContextSensitive(node.body);
         }
         return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression));
+    }
+
+    function hasContextSensitiveYieldExpression(node: FunctionLikeDeclaration): boolean {
+        // yield expressions can be context sensitive in situations like:
+        //
+        // declare function test(gen: () => Generator<(arg: number) => string, void, void>): void;
+        //
+        // test(function* () {
+        //   yield (arg) => String(arg);
+        // });
+        return !!(getFunctionFlags(node) & FunctionFlags.Generator && node.body && forEachYieldExpression(node.body as Block, isContextSensitive));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -32629,7 +32641,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
-                return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                const type = instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type;
+                }
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
@@ -32637,9 +32652,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the 'boolean' type from the contextual type such that contextually typed boolean
                 // literals actually end up widening to 'boolean' (see #48363).
                 const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
-                return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
-                    filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                    type;
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                        filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                        type;
+                }
             }
         }
         return contextualType;

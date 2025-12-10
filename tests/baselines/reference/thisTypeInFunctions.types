@@ -203,8 +203,8 @@ function implicitThis(n: number): number {
 let impl: I = {
 >impl : I
 >     : ^
->{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(this: void): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
->                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
+>                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 
     a: 12,
 >a : number
@@ -225,8 +225,8 @@ let impl: I = {
 >  : ^^^
 
     explicitVoid1() { return 12; },
->explicitVoid1 : (this: void) => number
->              : ^    ^^    ^^^^^^^^^^^
+>explicitVoid1 : () => number
+>              : ^^^^^^^^^^^^
 >12 : 12
 >   : ^^
 
@@ -271,16 +271,16 @@ let impl: I = {
     },
 }
 impl.explicitVoid1 = function () { return 12; };
->impl.explicitVoid1 = function () { return 12; } : (this: void) => number
->                                                : ^    ^^    ^^^^^^^^^^^
+>impl.explicitVoid1 = function () { return 12; } : () => number
+>                                                : ^^^^^^^^^^^^
 >impl.explicitVoid1 : (this: void) => number
 >                   : ^    ^^    ^^^^^      
 >impl : I
 >     : ^
 >explicitVoid1 : (this: void) => number
 >              : ^    ^^    ^^^^^      
->function () { return 12; } : (this: void) => number
->                           : ^    ^^    ^^^^^^^^^^^
+>function () { return 12; } : () => number
+>                           : ^^^^^^^^^^^^
 >12 : 12
 >   : ^^
 
@@ -736,8 +736,8 @@ let anyToSpecified: (this: { y: number }, x: number) => number = function(x: num
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->function(x: number): number { return x + 12; } : (this: { y: number; }, x: number) => number
->                                               : ^    ^^              ^^ ^^      ^^^^^      
+>function(x: number): number { return x + 12; } : (x: number) => number
+>                                               : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x + 12 : number
