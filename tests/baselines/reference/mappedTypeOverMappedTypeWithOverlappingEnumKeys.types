@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts] ////
+
+=== mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts ===
+// https://github.com/microsoft/TypeScript/issues/41700
+
+enum EnumA {
+>EnumA : EnumA
+>      : ^^^^^
+
+    A = 'A',
+>A : EnumA.A
+>  : ^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+    B = 'B',
+>B : EnumA.B
+>  : ^^^^^^^
+>'B' : "B"
+>    : ^^^
+}
+
+// A second enum with at least one key also in EnumA
+enum EnumB {
+>EnumB : EnumB
+>      : ^^^^^
+
+    B = 'B',
+>B : EnumB.B
+>  : ^^^^^^^
+>'B' : "B"
+>    : ^^^
+
+    C = 'C',
+>C : EnumB.C
+>  : ^^^^^^^
+>'C' : "C"
+>    : ^^^
+}
+
+type Mapped = {
+>Mapped : Mapped
+>       : ^^^^^^
+
+    [k in EnumA|EnumB]: string;
+};
+
+// Should work
+const partial: Partial<Mapped> = {
+>partial : Partial<Mapped>
+>        : ^^^^^^^^^^^^^^^
+>{    [EnumA.B]: 'value',} : { B: string; }
+>                          : ^^^^^^^^^^^^^^
+
+    [EnumA.B]: 'value',
+>[EnumA.B] : string
+>          : ^^^^^^
+>EnumA.B : EnumA.B
+>        : ^^^^^^^
+>EnumA : typeof EnumA
+>      : ^^^^^^^^^^^^
+>B : EnumA.B
+>  : ^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+};
+
