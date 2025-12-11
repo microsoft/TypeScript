@@ -4079,7 +4079,7 @@ func setMemberDeclaredBySpreadAssignment(declaration *ast.Node, members *collect
 		t = typeChecker.GetTypeOfSymbolAtLocation(symbol, expression)
 	}
 	var properties []*ast.Symbol
-	if t != nil {
+	if t != nil && t.Flags()&checker.TypeFlagsStructuredType != 0 {
 		properties = t.AsStructuredType().Properties()
 	}
 	for _, property := range properties {
