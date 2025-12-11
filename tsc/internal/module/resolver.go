@@ -532,7 +532,7 @@ func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
 }
 
 func (r *resolutionState) loadModuleFromImports() *resolved {
-	if r.name == "#" || strings.HasPrefix(r.name, "#/") {
+	if r.name == "#" || (strings.HasPrefix(r.name, "#/") && (r.features&NodeResolutionFeaturesImportsPatternRoot) == 0) {
 		if r.tracer != nil {
 			r.tracer.write(diagnostics.Invalid_import_specifier_0_has_no_possible_resolutions, r.name)
 		}

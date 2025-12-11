@@ -33,12 +33,15 @@ const (
 	NodeResolutionFeaturesSelfName
 	NodeResolutionFeaturesExports
 	NodeResolutionFeaturesExportsPatternTrailers
+	// allowing `#/` root imports in package.json imports field
+	// not supported until mass adoption - https://github.com/nodejs/node/pull/60864
+	NodeResolutionFeaturesImportsPatternRoot
 
 	NodeResolutionFeaturesNone            NodeResolutionFeatures = 0
-	NodeResolutionFeaturesAll                                    = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
+	NodeResolutionFeaturesAll                                    = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers | NodeResolutionFeaturesImportsPatternRoot
 	NodeResolutionFeaturesNode16Default                          = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
 	NodeResolutionFeaturesNodeNextDefault                        = NodeResolutionFeaturesAll
-	NodeResolutionFeaturesBundlerDefault                         = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
+	NodeResolutionFeaturesBundlerDefault                         = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers | NodeResolutionFeaturesImportsPatternRoot
 )
 
 type PackageId struct {
