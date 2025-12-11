@@ -35,6 +35,9 @@ Print this message.
 [94m--help, -?[39m
 
 
+[94m--ignoreConfig[39m
+Ignore the tsconfig found and build with commandline options and files.
+
 [94m--init[39m
 Initializes a TypeScript project and creates a tsconfig.json file.
 

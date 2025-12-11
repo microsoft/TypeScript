@@ -823,6 +823,7 @@ export const enum NodeFlags {
     JsonFile                                       = 1 << 27, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 28, // If a type was cached for node at any point
     /** @internal */ Deprecated                    = 1 << 29, // If has '@deprecated' JSDoc tag
+    /** @internal */ Unreachable                   = 1 << 30, // If node is unreachable according to the binder
 
     BlockScoped = Let | Const | Using,
     Constant = Const | Using,
@@ -5514,11 +5515,11 @@ export const enum IntersectionFlags {
 // dprint-ignore
 /** @internal */
 export const enum ContextFlags {
-    None           = 0,
-    Signature      = 1 << 0, // Obtaining contextual signature
-    NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-    Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
-    SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
+    None                 = 0,
+    Signature            = 1 << 0, // Obtaining contextual signature
+    NoConstraints        = 1 << 1, // Don't obtain type variable constraints
+    IgnoreNodeInferences = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for, for example, completions
+    SkipBindingPatterns  = 1 << 3, // Ignore contextual types applied by binding patterns
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -6525,7 +6526,7 @@ export const enum ObjectFlags {
     /** @internal */
     ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
     /** @internal */
-    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
+    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType, or it's a context free `returnTypeOnly`
     /** @internal */
     CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
     /** @internal */
@@ -7551,6 +7552,7 @@ export interface CompilerOptions {
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
     /** @internal */ showConfig?: boolean;
+    /** @internal */ ignoreConfig?: boolean;
     useDefineForClassFields?: boolean;
     /** @internal */ tscBuild?: boolean;
 
