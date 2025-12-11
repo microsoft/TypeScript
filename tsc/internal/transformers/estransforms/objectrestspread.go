@@ -778,7 +778,7 @@ func (ch *objectRestSpreadTransformer) flattenArrayBindingOrAssignmentPattern(pa
 		} else if ast.IsOmittedExpression(element) {
 			continue
 		} else if ast.GetRestIndicatorOfBindingOrAssignmentElement(element) == nil {
-			rhsValue := ch.Factory().NewElementAccessExpression(value, nil, ch.Factory().NewNumericLiteral(strconv.Itoa(i)), ast.NodeFlagsNone)
+			rhsValue := ch.Factory().NewElementAccessExpression(value, nil, ch.Factory().NewNumericLiteral(strconv.Itoa(i), ast.TokenFlagsNone), ast.NodeFlagsNone)
 			ch.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
 		} else if i == numElements-1 {
 			rhsValue := ch.Factory().NewArraySliceCall(value, i)

@@ -25,9 +25,9 @@ class C236 {
 >C236 : Symbol(C236, Decl(numericClassMembers1.ts, 8, 1))
 
     '0.0' = 1;
->'0.0' : Symbol(C236["0.0"], Decl(numericClassMembers1.ts, 10, 12))
+>'0.0' : Symbol(C236['0.0'], Decl(numericClassMembers1.ts, 10, 12))
 
     '0' = 2;
->'0' : Symbol(C236["0"], Decl(numericClassMembers1.ts, 11, 14))
+>'0' : Symbol(C236['0'], Decl(numericClassMembers1.ts, 11, 14))
 }
 

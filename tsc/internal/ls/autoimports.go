@@ -1564,7 +1564,7 @@ func (l *LanguageService) codeActionForFixWorker(
 		}
 
 		if fix.useRequire {
-			declarations = getNewRequires(changeTracker, fix.moduleSpecifier, defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
+			declarations = getNewRequires(changeTracker, fix.moduleSpecifier, getQuotePreference(sourceFile, l.UserPreferences()), defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		} else {
 			declarations = l.getNewImports(changeTracker, fix.moduleSpecifier, getQuotePreference(sourceFile, l.UserPreferences()), defaultImport, namedImports, namespaceLikeImport, l.GetProgram().Options())
 		}
@@ -1598,12 +1598,16 @@ func (l *LanguageService) codeActionForFixWorker(
 func getNewRequires(
 	changeTracker *change.Tracker,
 	moduleSpecifier string,
+	quotePreference quotePreference,
 	defaultImport *Import,
 	namedImports []*Import,
 	namespaceLikeImport *Import,
 	compilerOptions *core.CompilerOptions,
 ) []*ast.Statement {
-	quotedModuleSpecifier := changeTracker.NodeFactory.NewStringLiteral(moduleSpecifier)
+	quotedModuleSpecifier := changeTracker.NodeFactory.NewStringLiteral(
+		moduleSpecifier,
+		core.IfElse(quotePreference == quotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone),
+	)
 	var statements []*ast.Statement
 
 	// const { default: foo, bar, etc } = require('./mod');

@@ -298,10 +298,10 @@ func (ls *LanguageService) getNewImports(
 	namespaceLikeImport *Import, // { importKind: ImportKind.CommonJS | ImportKind.Namespace; }
 	compilerOptions *core.CompilerOptions,
 ) []*ast.Statement {
-	moduleSpecifierStringLiteral := ct.NodeFactory.NewStringLiteral(moduleSpecifier)
-	if quotePreference == quotePreferenceSingle {
-		moduleSpecifierStringLiteral.AsStringLiteral().TokenFlags |= ast.TokenFlagsSingleQuote
-	}
+	moduleSpecifierStringLiteral := ct.NodeFactory.NewStringLiteral(
+		moduleSpecifier,
+		core.IfElse(quotePreference == quotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone),
+	)
 	var statements []*ast.Statement // []AnyImportSyntax
 	if defaultImport != nil || len(namedImports) > 0 {
 		// `verbatimModuleSyntax` should prefer top-level `import type` -

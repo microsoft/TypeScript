@@ -17363,7 +17363,7 @@ func (c *Checker) getSyntheticElementAccess(node *ast.Node) *ast.Node {
 	parentAccess := c.getParentElementAccess(node)
 	if parentAccess != nil && getFlowNodeOfNode(parentAccess) != nil {
 		if propName, ok := c.getDestructuringPropertyName(node); ok {
-			literal := c.factory.NewStringLiteral(propName)
+			literal := c.factory.NewStringLiteral(propName, ast.TokenFlagsNone)
 			literal.Loc = node.Loc
 			lhsExpr := parentAccess
 			if !ast.IsLeftHandSideExpression(parentAccess) {

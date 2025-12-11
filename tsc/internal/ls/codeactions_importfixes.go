@@ -562,7 +562,7 @@ func promoteImportClause(
 					outputpaths.GetOutputExtension(moduleText, compilerOptions.Jsx),
 				)
 				// Replace the module specifier with the new extension
-				newStringLiteral := changes.NewStringLiteral(changedExtension)
+				newStringLiteral := changes.NewStringLiteral(changedExtension, moduleSpecifier.AsStringLiteral().TokenFlags)
 				changes.ReplaceNode(sourceFile, moduleSpecifier, newStringLiteral, nil)
 			}
 		}

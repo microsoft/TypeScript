@@ -56,7 +56,7 @@ class A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility.ts, 24, 1))
 
     public '1': Base;
->'1' : Symbol(A3["1"], Decl(subtypingWithObjectMembersAccessibility.ts, 26, 10))
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembersAccessibility.ts, 26, 10))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersAccessibility.ts, 0, 0))
 }
 
@@ -65,6 +65,6 @@ class B3 extends A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility.ts, 24, 1))
 
     private '1': Derived; // error
->'1' : Symbol(B3["1"], Decl(subtypingWithObjectMembersAccessibility.ts, 30, 21))
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembersAccessibility.ts, 30, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersAccessibility.ts, 4, 1))
 }

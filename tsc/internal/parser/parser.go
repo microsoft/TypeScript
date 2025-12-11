@@ -3562,7 +3562,7 @@ func (p *Parser) parseTemplateHead(isTaggedTemplate bool) *ast.Node {
 		p.reScanTemplateToken(false /*isTaggedTemplate*/)
 	}
 	pos := p.nodePos()
-	result := p.factory.NewTemplateHead(p.scanner.TokenValue(), p.getTemplateLiteralRawText(2 /*endLength*/), p.scanner.TokenFlags()&ast.TokenFlagsTemplateLiteralLikeFlags)
+	result := p.factory.NewTemplateHead(p.scanner.TokenValue(), p.getTemplateLiteralRawText(2 /*endLength*/), p.scanner.TokenFlags())
 	p.nextToken()
 	return p.finishNode(result, pos)
 }
@@ -3606,9 +3606,9 @@ func (p *Parser) parseTemplateMiddleOrTail() *ast.Node {
 	pos := p.nodePos()
 	var result *ast.Node
 	if p.token == ast.KindTemplateMiddle {
-		result = p.factory.NewTemplateMiddle(p.scanner.TokenValue(), p.getTemplateLiteralRawText(2 /*endLength*/), p.scanner.TokenFlags()&ast.TokenFlagsTemplateLiteralLikeFlags)
+		result = p.factory.NewTemplateMiddle(p.scanner.TokenValue(), p.getTemplateLiteralRawText(2 /*endLength*/), p.scanner.TokenFlags())
 	} else {
-		result = p.factory.NewTemplateTail(p.scanner.TokenValue(), p.getTemplateLiteralRawText(1 /*endLength*/), p.scanner.TokenFlags()&ast.TokenFlagsTemplateLiteralLikeFlags)
+		result = p.factory.NewTemplateTail(p.scanner.TokenValue(), p.getTemplateLiteralRawText(1 /*endLength*/), p.scanner.TokenFlags())
 	}
 	p.nextToken()
 	return p.finishNode(result, pos)
@@ -5646,20 +5646,15 @@ func (p *Parser) parseLiteralExpression(intern bool) *ast.Node {
 	var result *ast.Node
 	switch p.token {
 	case ast.KindStringLiteral:
-		result = p.factory.NewStringLiteral(text)
-		result.AsStringLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsStringLiteralFlags
+		result = p.factory.NewStringLiteral(text, tokenFlags)
 	case ast.KindNumericLiteral:
-		result = p.factory.NewNumericLiteral(text)
-		result.AsNumericLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsNumericLiteralFlags
+		result = p.factory.NewNumericLiteral(text, tokenFlags)
 	case ast.KindBigIntLiteral:
-		result = p.factory.NewBigIntLiteral(text)
-		result.AsBigIntLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsNumericLiteralFlags
+		result = p.factory.NewBigIntLiteral(text, tokenFlags)
 	case ast.KindRegularExpressionLiteral:
-		result = p.factory.NewRegularExpressionLiteral(text)
-		result.AsRegularExpressionLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsRegularExpressionLiteralFlags
+		result = p.factory.NewRegularExpressionLiteral(text, tokenFlags)
 	case ast.KindNoSubstitutionTemplateLiteral:
-		result = p.factory.NewNoSubstitutionTemplateLiteral(text)
-		result.AsNoSubstitutionTemplateLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsTemplateLiteralLikeFlags
+		result = p.factory.NewNoSubstitutionTemplateLiteral(text, tokenFlags)
 	default:
 		panic("Unhandled case in parseLiteralExpression")
 	}

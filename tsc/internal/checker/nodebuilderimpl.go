@@ -757,11 +757,11 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 
 	var expression *ast.Expression
 	if startsWithSingleOrDoubleQuote(symbolName) && symbol.Flags&ast.SymbolFlagsEnumMember == 0 {
-		expression = b.newStringLiteral(stringutil.UnquoteString(symbolName))
+		expression = b.newStringLiteralEx(stringutil.UnquoteString(symbolName), symbolName[0] == '\'')
 	} else if jsnum.FromString(symbolName).String() == symbolName {
 		// TODO: the follwing in strada would assert if the number is negative, but no such assertion exists here
 		// Moreover, what's even guaranteeing the name *isn't* -1 here anyway? Needs double-checking.
-		expression = b.f.NewNumericLiteral(symbolName)
+		expression = b.f.NewNumericLiteral(symbolName, ast.TokenFlagsNone)
 	}
 	if expression == nil {
 		expression = b.f.NewIdentifier(symbolName)
@@ -2088,12 +2088,9 @@ func (b *NodeBuilderImpl) createPropertyNameNodeForIdentifierOrLiteral(name stri
 		return b.f.NewIdentifier(name)
 	}
 	if !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && jsnum.FromString(name) >= 0 {
-		return b.f.NewNumericLiteral(name)
+		return b.f.NewNumericLiteral(name, ast.TokenFlagsNone)
 	}
-	result := b.f.NewStringLiteral(name)
-	if singleQuote {
-		result.AsStringLiteral().TokenFlags |= ast.TokenFlagsSingleQuote
-	}
+	result := b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
 	return result
 }
 
@@ -2157,14 +2154,11 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 			name = nameType.AsLiteralType().value.(string)
 		}
 		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) && (stringNamed || !isNumericLiteralName(name)) {
-			node := b.f.NewStringLiteral(name)
-			if singleQuote {
-				node.AsStringLiteral().TokenFlags |= ast.TokenFlagsSingleQuote
-			}
+			node := b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
 			return node
 		}
 		if isNumericLiteralName(name) && name[0] == '-' {
-			return b.f.NewComputedPropertyName(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(name[1:])))
+			return b.f.NewComputedPropertyName(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(name[1:], ast.TokenFlagsNone)))
 		}
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod)
 	}
@@ -2896,14 +2890,14 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		value := t.AsLiteralType().value.(jsnum.Number)
 		b.ctx.approximateLength += len(value.String())
 		if value < 0 {
-			return b.f.NewLiteralTypeNode(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(value.String()[1:])))
+			return b.f.NewLiteralTypeNode(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone)))
 		} else {
-			return b.f.NewLiteralTypeNode(b.f.NewNumericLiteral(value.String()))
+			return b.f.NewLiteralTypeNode(b.f.NewNumericLiteral(value.String(), ast.TokenFlagsNone))
 		}
 	}
 	if t.flags&TypeFlagsBigIntLiteral != 0 {
 		b.ctx.approximateLength += len(pseudoBigIntToString(getBigIntLiteralValue(t))) + 1
-		return b.f.NewLiteralTypeNode(b.f.NewBigIntLiteral(pseudoBigIntToString(getBigIntLiteralValue(t)) + "n"))
+		return b.f.NewLiteralTypeNode(b.f.NewBigIntLiteral(pseudoBigIntToString(getBigIntLiteralValue(t))+"n", ast.TokenFlagsNone))
 	}
 	if t.flags&TypeFlagsBooleanLiteral != 0 {
 		if t.AsLiteralType().value.(bool) {
@@ -3102,10 +3096,15 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 }
 
 func (b *NodeBuilderImpl) newStringLiteral(text string) *ast.Node {
-	node := b.f.NewStringLiteral(text)
-	if b.ctx.flags&nodebuilder.FlagsUseSingleQuotesForStringLiteralType != 0 {
-		node.AsStringLiteral().TokenFlags |= ast.TokenFlagsSingleQuote
+	return b.newStringLiteralEx(text, false /*isSingleQuote*/)
+}
+
+func (b *NodeBuilderImpl) newStringLiteralEx(text string, isSingleQuote bool) *ast.Node {
+	flags := ast.TokenFlagsNone
+	if isSingleQuote || b.ctx.flags&nodebuilder.FlagsUseSingleQuotesForStringLiteralType != 0 {
+		flags |= ast.TokenFlagsSingleQuote
 	}
+	node := b.f.NewStringLiteral(text, flags)
 	return node
 }
 

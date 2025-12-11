@@ -24,8 +24,8 @@ class Test1 {
 >foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
 
     ['this'] = '';
->['this'] : Symbol(Test1["this"], Decl(typeofThis.ts, 8, 23))
->'this' : Symbol(Test1["this"], Decl(typeofThis.ts, 8, 23))
+>['this'] : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>'this' : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
 
     constructor() {
         var copy: typeof this.data = { foo: '' };
@@ -55,9 +55,9 @@ class Test1 {
 
         var str: typeof this.this = '';
 >str : Symbol(str, Decl(typeofThis.ts, 17, 11))
->this.this : Symbol(Test1["this"], Decl(typeofThis.ts, 8, 23))
+>this.this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
 >this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
->this : Symbol(Test1["this"], Decl(typeofThis.ts, 8, 23))
+>this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
     }
 }
 

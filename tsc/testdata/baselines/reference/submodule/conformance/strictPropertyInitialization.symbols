@@ -332,8 +332,8 @@ class C12 {
 >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
 
     ['c']: number;
->['c'] : Symbol(C12["c"], Decl(strictPropertyInitialization.ts, 139, 16))
->'c' : Symbol(C12["c"], Decl(strictPropertyInitialization.ts, 139, 16))
+>['c'] : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+>'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
 
     constructor() {
         this[a] = 1;
@@ -346,7 +346,7 @@ class C12 {
 
         this['c'] = 1;
 >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
->'c' : Symbol(C12["c"], Decl(strictPropertyInitialization.ts, 139, 16))
+>'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
     }
 }
 

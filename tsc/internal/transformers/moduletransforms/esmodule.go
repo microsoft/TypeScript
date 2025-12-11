@@ -320,7 +320,7 @@ func (tx *ESModuleTransformer) createRequireCall(node *ast.Node /*ImportDeclarat
 					}),
 				),
 			),
-			tx.Factory().NewStringLiteral("module"),
+			tx.Factory().NewStringLiteral("module", ast.TokenFlagsNone),
 			nil, /*attributes*/
 		)
 		tx.EmitContext().AddEmitFlags(importStatement, printer.EFCustomPrologue)

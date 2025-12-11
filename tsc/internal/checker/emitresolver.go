@@ -972,18 +972,18 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	}
 	switch value := t.AsLiteralType().value.(type) {
 	case string:
-		return emitContext.Factory.NewStringLiteral(value)
+		return emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
 		if value.Abs() != value {
 			// negative
 			return emitContext.Factory.NewPrefixUnaryExpression(
 				ast.KindMinusToken,
-				emitContext.Factory.NewNumericLiteral(value.String()[1:]),
+				emitContext.Factory.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone),
 			)
 		}
-		return emitContext.Factory.NewNumericLiteral(value.String())
+		return emitContext.Factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
 	case jsnum.PseudoBigInt:
-		return emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value) + "n")
+		return emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value)+"n", ast.TokenFlagsNone)
 	case bool:
 		kind := ast.KindFalseKeyword
 		if value {

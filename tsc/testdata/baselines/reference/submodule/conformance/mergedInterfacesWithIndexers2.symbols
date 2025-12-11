@@ -26,7 +26,7 @@ interface A2 {
 >x : Symbol(x, Decl(mergedInterfacesWithIndexers2.ts, 12, 5))
 
     'a': number; //error
->'a' : Symbol(A2["a"], Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
+>'a' : Symbol(A2['a'], Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
 }
 
 

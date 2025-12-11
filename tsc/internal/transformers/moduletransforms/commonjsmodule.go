@@ -269,7 +269,7 @@ func (tx *CommonJSModuleTransformer) createUnderscoreUnderscoreESModule() *ast.S
 			nil, /*typeArguments*/
 			tx.Factory().NewNodeList([]*ast.Node{
 				tx.Factory().NewIdentifier("exports"),
-				tx.Factory().NewStringLiteral("__esModule"),
+				tx.Factory().NewStringLiteral("__esModule", ast.TokenFlagsNone),
 				tx.Factory().NewObjectLiteralExpression(
 					tx.Factory().NewNodeList([]*ast.Node{
 						tx.Factory().NewPropertyAssignment(

@@ -1062,7 +1062,7 @@ func TestParenthesizeTaggedTemplate1(t *testing.T) {
 					),
 					nil, /*questionDotToken*/
 					nil, /*typeArguments*/
-					factory.NewNoSubstitutionTemplateLiteral(""),
+					factory.NewNoSubstitutionTemplateLiteral("", ast.TokenFlagsNone),
 					ast.NodeFlagsNone,
 				),
 			),
@@ -1090,7 +1090,7 @@ func TestParenthesizeTaggedTemplate2(t *testing.T) {
 					),
 					nil, /*questionDotToken*/
 					nil, /*typeArguments*/
-					factory.NewNoSubstitutionTemplateLiteral(""),
+					factory.NewNoSubstitutionTemplateLiteral("", ast.TokenFlagsNone),
 					ast.NodeFlagsNone,
 				),
 			),

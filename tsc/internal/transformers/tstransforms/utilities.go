@@ -21,7 +21,7 @@ func convertEntityNameToExpression(emitContext *printer.EmitContext, name *ast.E
 func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression {
 	switch value := value.(type) {
 	case string:
-		return factory.NewStringLiteral(value)
+		return factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
 		if value.IsInf() || value.IsNaN() {
 			return nil
@@ -29,7 +29,7 @@ func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression
 		if value < 0 {
 			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, constantExpression(-value, factory))
 		}
-		return factory.NewNumericLiteral(value.String())
+		return factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
 	}
 	return nil
 }

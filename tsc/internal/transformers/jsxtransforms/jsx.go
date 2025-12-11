@@ -49,7 +49,7 @@ func (tx *JSXTransformer) getCurrentFileNameExpression() *ast.Node {
 		}),
 		nil,
 		nil,
-		tx.Factory().NewStringLiteral(tx.currentSourceFile.FileName()),
+		tx.Factory().NewStringLiteral(tx.currentSourceFile.FileName(), ast.TokenFlagsNone),
 	)
 	tx.filenameDeclaration = d
 	return d.AsVariableDeclaration().Name()
@@ -236,7 +236,7 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 				s := tx.Factory().NewImportDeclaration(
 					nil,
 					tx.Factory().NewImportClause(ast.KindUnknown, nil, tx.Factory().NewNamedImports(tx.Factory().NewNodeList(getSortedSpecifiers(importSpecifiersMap)))),
-					tx.Factory().NewStringLiteral(importSource),
+					tx.Factory().NewStringLiteral(importSource, ast.TokenFlagsNone),
 					nil,
 				)
 				ast.SetParentInChildren(s)
@@ -260,7 +260,11 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 					tx.Factory().NewBindingPattern(ast.KindObjectBindingPattern, tx.Factory().NewNodeList(asBindingElems)),
 					nil,
 					nil,
-					tx.Factory().NewCallExpression(tx.Factory().NewIdentifier("require"), nil, nil, tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewStringLiteral(importSource)}), ast.NodeFlagsNone),
+					tx.Factory().NewCallExpression(
+						tx.Factory().NewIdentifier("require"),
+						nil,
+						nil,
+						tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewStringLiteral(importSource, ast.TokenFlagsNone)}), ast.NodeFlagsNone),
 				)})))
 				ast.SetParentInChildren(s)
 				newStatements = append(newStatements, s)
@@ -354,9 +358,11 @@ func (tx *JSXTransformer) getTagName(node *ast.Node) *ast.Node {
 	} else if ast.IsJsxOpeningLikeElement(node) {
 		tagName := node.TagName()
 		if ast.IsIdentifier(tagName) && scanner.IsIntrinsicJsxName(tagName.Text()) {
-			return tx.Factory().NewStringLiteral(tagName.Text())
+			return tx.Factory().NewStringLiteral(tagName.Text(), ast.TokenFlagsNone)
 		} else if ast.IsJsxNamespacedName(tagName) {
-			return tx.Factory().NewStringLiteral(tagName.AsJsxNamespacedName().Namespace.Text() + ":" + tagName.AsJsxNamespacedName().Name().Text())
+			return tx.Factory().NewStringLiteral(
+				tagName.AsJsxNamespacedName().Namespace.Text()+":"+tagName.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
+			)
 		} else {
 			return createExpressionFromEntityName(tx.Factory(), tagName)
 		}
@@ -514,10 +520,12 @@ func (tx *JSXTransformer) getAttributeName(node *ast.JsxAttribute) *ast.Node {
 		if scanner.IsIdentifierText(text, core.LanguageVariantStandard) {
 			return name
 		}
-		return tx.Factory().NewStringLiteral(text)
+		return tx.Factory().NewStringLiteral(text, ast.TokenFlagsNone)
 	}
 	// must be jsx namespace
-	return tx.Factory().NewStringLiteral(name.AsJsxNamespacedName().Namespace.Text() + ":" + name.AsJsxNamespacedName().Name().Text())
+	return tx.Factory().NewStringLiteral(
+		name.AsJsxNamespacedName().Namespace.Text()+":"+name.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
+	)
 }
 
 func (tx *JSXTransformer) transformJsxAttributeInitializer(node *ast.Node) *ast.Node {
@@ -527,7 +535,7 @@ func (tx *JSXTransformer) transformJsxAttributeInitializer(node *ast.Node) *ast.
 	if node.Kind == ast.KindStringLiteral {
 		// Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
 		// Need to be escaped to be handled correctly in a normal string
-		res := tx.Factory().NewStringLiteral(decodeEntities(node.Text()))
+		res := tx.Factory().NewStringLiteral(decodeEntities(node.Text()), node.AsStringLiteral().TokenFlags)
 		res.Loc = node.Loc
 		// Preserve the original quote style (single vs double quotes)
 		res.AsStringLiteral().TokenFlags = node.AsStringLiteral().TokenFlags
@@ -583,8 +591,8 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 			line, col := scanner.GetECMALineAndCharacterOfPosition(originalFile.AsSourceFile(), location.Pos())
 			args = append(args, tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList([]*ast.Node{
 				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("fileName"), nil, nil, tx.getCurrentFileNameExpression()),
-				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("lineNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(line+1), 10))),
-				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("columnNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(col+1), 10))),
+				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("lineNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(line+1), 10), ast.TokenFlagsNone)),
+				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("columnNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(col+1), 10), ast.TokenFlagsNone)),
 			}), false))
 			// __self development flag
 			args = append(args, tx.Factory().NewThisExpression())
@@ -769,7 +777,7 @@ func (tx *JSXTransformer) visitJsxText(text *ast.JsxText) *ast.Node {
 	if len(fixed) == 0 {
 		return nil
 	}
-	return tx.Factory().NewStringLiteral(fixed)
+	return tx.Factory().NewStringLiteral(fixed, ast.TokenFlagsNone)
 }
 
 func addLineOfJsxText(b *strings.Builder, trimmedLine string, isInitial bool) {

@@ -177,7 +177,7 @@ func (f *NodeFactory) NewStringLiteralFromNode(textSourceNode *ast.Node) *ast.No
 		ast.KindRegularExpressionLiteral:
 		text = textSourceNode.Text()
 	}
-	node := f.NewStringLiteral(text)
+	node := f.NewStringLiteral(text, ast.TokenFlagsNone)
 	if f.emitContext.textSource == nil {
 		f.emitContext.textSource = make(map[*ast.StringLiteralNode]*ast.Node)
 	}
@@ -234,7 +234,7 @@ func (f *NodeFactory) NewStrictInequalityExpression(left *ast.Expression, right 
 //
 
 func (f *NodeFactory) NewVoidZeroExpression() *ast.Expression {
-	return f.NewVoidExpression(f.NewNumericLiteral("0"))
+	return f.NewVoidExpression(f.NewNumericLiteral("0", ast.TokenFlagsNone))
 }
 
 func flattenCommaElement(node *ast.Expression, expressions []*ast.Expression) []*ast.Expression {
@@ -282,7 +282,7 @@ func (f *NodeFactory) NewTypeCheck(value *ast.Node, tag string) *ast.Node {
 	} else if tag == "undefined" {
 		return f.NewStrictEqualityExpression(value, f.NewVoidZeroExpression())
 	} else {
-		return f.NewStrictEqualityExpression(f.NewTypeOfExpression(value), f.NewStringLiteral(tag))
+		return f.NewStrictEqualityExpression(f.NewTypeOfExpression(value), f.NewStringLiteral(tag, ast.TokenFlagsNone))
 	}
 }
 
@@ -321,7 +321,7 @@ func (f *NodeFactory) NewFunctionCallCall(target *ast.Expression, thisArg *ast.E
 func (f *NodeFactory) NewArraySliceCall(array *ast.Expression, start int) *ast.Node {
 	var args []*ast.Node
 	if start != 0 {
-		args = append(args, f.NewNumericLiteral(strconv.Itoa(start)))
+		args = append(args, f.NewNumericLiteral(strconv.Itoa(start), ast.TokenFlagsNone))
 	}
 	return f.NewMethodCall(array, f.NewIdentifier("slice"), args)
 }
@@ -387,7 +387,7 @@ func (f *NodeFactory) EnsureUseStrict(statements []*ast.Statement) []*ast.Statem
 			break
 		}
 	}
-	useStrictPrologue := f.NewExpressionStatement(f.NewStringLiteral("use strict"))
+	useStrictPrologue := f.NewExpressionStatement(f.NewStringLiteral("use strict", ast.TokenFlagsNone))
 	statements = append([]*ast.Statement{useStrictPrologue}, statements...)
 	return statements
 }
@@ -573,7 +573,7 @@ func (f *NodeFactory) NewRestHelper(value *ast.Expression, elements []*ast.Node,
 					f.NewToken(ast.KindQuestionToken),
 					temp,
 					f.NewToken(ast.KindColonToken),
-					f.NewBinaryExpression(nil, temp, nil, f.NewToken(ast.KindPlusToken), f.NewStringLiteral("")),
+					f.NewBinaryExpression(nil, temp, nil, f.NewToken(ast.KindPlusToken), f.NewStringLiteral("", ast.TokenFlagsNone)),
 				))
 			} else {
 				propertyNames = append(propertyNames, f.NewStringLiteralFromNode(propertyName))
@@ -613,7 +613,7 @@ func (f *NodeFactory) NewSetFunctionNameHelper(fn *ast.Expression, name *ast.Exp
 	f.emitContext.RequestEmitHelper(setFunctionNameHelper)
 	var arguments []*ast.Expression
 	if len(prefix) > 0 {
-		arguments = []*ast.Expression{fn, name, f.NewStringLiteral(prefix)}
+		arguments = []*ast.Expression{fn, name, f.NewStringLiteral(prefix, ast.TokenFlagsNone)}
 	} else {
 		arguments = []*ast.Expression{fn, name}
 	}

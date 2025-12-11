@@ -477,7 +477,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.Node {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
-	externalHelpersModuleReference := p.factory.NewStringLiteral(text)
+	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
 	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
 	// !!! addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
 	externalHelpersModuleReference.Parent = importDecl

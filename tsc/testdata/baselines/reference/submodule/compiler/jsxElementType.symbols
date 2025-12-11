@@ -64,8 +64,8 @@ declare global {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
       ['my-custom-element']: React.DOMAttributes<unknown>;
->['my-custom-element'] : Symbol(IntrinsicElements["my-custom-element"], Decl(jsxElementType.tsx, 23, 33))
->'my-custom-element' : Symbol(IntrinsicElements["my-custom-element"], Decl(jsxElementType.tsx, 23, 33))
+>['my-custom-element'] : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
+>'my-custom-element' : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
 >DOMAttributes : Symbol(React.DOMAttributes, Decl(react16.d.ts, 844, 9))
     }
@@ -225,7 +225,7 @@ Component = RenderStringClass;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 <my-custom-element />;
->my-custom-element : Symbol(JSX.IntrinsicElements["my-custom-element"], Decl(jsxElementType.tsx, 23, 33))
+>my-custom-element : Symbol(JSX.IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 
 // Undeclared host element types are still rejected
 <boop />;
@@ -284,8 +284,8 @@ declare global {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
           ['a:b']: { a: string };
->['a:b'] : Symbol(IntrinsicElements["a:b"], Decl(jsxElementType.tsx, 102, 35))
->'a:b' : Symbol(IntrinsicElements["a:b"], Decl(jsxElementType.tsx, 102, 35))
+>['a:b'] : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))
+>'a:b' : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))
 >a : Symbol(a, Decl(jsxElementType.tsx, 103, 20))
       }
   }

@@ -71,7 +71,7 @@ interface MEMO_STATICS {
 >MEMO_STATICS : Symbol(MEMO_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 25, 1))
 
     '$$typeof': true;
->'$$typeof' : Symbol(MEMO_STATICS["$$typeof"], Decl(styledComponentsInstantiaionLimitNotReached.ts, 27, 24))
+>'$$typeof' : Symbol(MEMO_STATICS['$$typeof'], Decl(styledComponentsInstantiaionLimitNotReached.ts, 27, 24))
 
     compare: true;
 >compare : Symbol(MEMO_STATICS.compare, Decl(styledComponentsInstantiaionLimitNotReached.ts, 28, 21))
@@ -93,7 +93,7 @@ interface FORWARD_REF_STATICS {
 >FORWARD_REF_STATICS : Symbol(FORWARD_REF_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 34, 1))
 
     '$$typeof': true;
->'$$typeof' : Symbol(FORWARD_REF_STATICS["$$typeof"], Decl(styledComponentsInstantiaionLimitNotReached.ts, 36, 31))
+>'$$typeof' : Symbol(FORWARD_REF_STATICS['$$typeof'], Decl(styledComponentsInstantiaionLimitNotReached.ts, 36, 31))
 
     render: true;
 >render : Symbol(FORWARD_REF_STATICS.render, Decl(styledComponentsInstantiaionLimitNotReached.ts, 37, 21))

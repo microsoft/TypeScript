@@ -29,8 +29,8 @@ class E {
 >E : Symbol(E, Decl(quotedConstructors.ts, 10, 1))
 
     ['constructor']() {
->['constructor'] : Symbol(E["constructor"], Decl(quotedConstructors.ts, 12, 9))
->'constructor' : Symbol(E["constructor"], Decl(quotedConstructors.ts, 12, 9))
+>['constructor'] : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
+>'constructor' : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
 
         console.log(this);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

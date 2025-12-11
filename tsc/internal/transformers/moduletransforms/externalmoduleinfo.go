@@ -259,7 +259,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 					nil,   /*modifiers*/
 					false, /*isTypeOnly*/
 					externalHelpersModuleName,
-					emitContext.Factory.NewExternalModuleReference(emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText)),
+					emitContext.Factory.NewExternalModuleReference(emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone)),
 				)
 				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper|printer.EFCustomPrologue)
 				return externalHelpersImportDeclaration
@@ -293,7 +293,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 				externalHelpersImportDeclaration := emitContext.Factory.NewImportDeclaration(
 					nil, /*modifiers*/
 					emitContext.Factory.NewImportClause(ast.KindUnknown /*phaseModifier*/, nil /*name*/, namedBindings),
-					emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText),
+					emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone),
 					nil, /*attributes*/
 				)
 
