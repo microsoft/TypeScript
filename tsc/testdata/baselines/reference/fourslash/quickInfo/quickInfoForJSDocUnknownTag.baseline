@@ -14,9 +14,12 @@
 // | ```
 // | 
 // | 
-// | *@example* — if (true) {
+// | *@example*
+// | ```tsx
+// | if (true) {
 // |     foo()
 // | }
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -35,9 +38,12 @@
 // | ```
 // | 
 // | 
-// | *@example* — {
+// | *@example*
+// | ```tsx
+// | {
 // |     foo()
 // | }
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -56,9 +62,12 @@
 // | ```
 // | 
 // | 
-// | *@example* —   x y
+// | *@example*
+// | ```tsx
+// |   x y
 // |   12345
 // |      b
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -80,9 +89,12 @@
 // | 
 // | *@func*
 // | 
-// | *@example* —   x y
+// | *@example*
+// | ```tsx
+// |   x y
 // |   12345
 // |      b
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -103,9 +115,12 @@
 // | 
 // | *@func*
 // | 
-// | *@example* — x y
+// | *@example*
+// | ```tsx
+// | x y
 // | 12345
 // |    b
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -124,7 +139,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example* — if (true) {\n    foo()\n}\n"
+        "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example*\n```tsx\nif (true) {\n    foo()\n}\n```\n"
       },
       "range": {
         "start": {
@@ -151,7 +166,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2(): string\n```\n\n\n*@example* — {\n    foo()\n}\n"
+        "value": "```tsx\nfunction foo2(): string\n```\n\n\n*@example*\n```tsx\n{\n    foo()\n}\n```\n"
       },
       "range": {
         "start": {
@@ -178,7 +193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction moo(): string\n```\n\n\n*@example* —   x y\n  12345\n     b\n"
+        "value": "```tsx\nfunction moo(): string\n```\n\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
       },
       "range": {
         "start": {
@@ -205,7 +220,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example* —   x y\n  12345\n     b\n"
+        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
       },
       "range": {
         "start": {
@@ -232,7 +247,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example* — x y\n12345\n   b\n"
+        "value": "```tsx\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\nx y\n12345\n   b\n```\n"
       },
       "range": {
         "start": {

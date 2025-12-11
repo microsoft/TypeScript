@@ -36,9 +36,12 @@
 // | ```
 // | 
 // | 
-// | *@example* — ``
+// | *@example*
+// | ```tsx
+// | ``
 // | 1 + 2
 // | `
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //     return '2';
@@ -84,7 +87,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@example* — ``\n1 + 2\n`\n"
+        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@example*\n```tsx\n``\n1 + 2\n`\n```\n"
       },
       "range": {
         "start": {

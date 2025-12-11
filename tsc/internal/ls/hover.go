@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 const (
@@ -109,19 +110,37 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, de
 						}
 					}
 					comments := tag.Comments()
-					if len(comments) != 0 {
-						if commentHasPrefix(comments, "```") {
+					if tag.Kind == ast.KindJSDocTag && tag.TagName().Text() == "example" {
+						b.WriteString("\n")
+						commentText := strings.TrimRight(getCommentText(comments), " \t\r\n")
+						if len(commentText) > 6 && strings.HasPrefix(commentText, "```") && strings.HasSuffix(commentText, "```") && strings.Contains(commentText, "\n") {
+							b.WriteString(commentText)
 							b.WriteString("\n")
 						} else {
-							b.WriteString(" ")
-							if !commentHasPrefix(comments, "-") {
-								b.WriteString("— ")
-							}
+							writeCode(&b, "tsx", commentText)
+						}
+					} else if len(comments) != 0 {
+						b.WriteString(" ")
+						if !commentHasPrefix(comments, "-") {
+							b.WriteString("— ")
 						}
 						l.writeComments(&b, c, comments, isMarkdown)
 					}
 				}
 			}
+		}
+	}
+	return b.String()
+}
+
+func getCommentText(comments []*ast.Node) string {
+	var b strings.Builder
+	for _, comment := range comments {
+		switch comment.Kind {
+		case ast.KindJSDocText:
+			b.WriteString(comment.Text())
+		case ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain:
+			b.WriteString(scanner.GetTextOfNode(comment))
 		}
 	}
 	return b.String()
