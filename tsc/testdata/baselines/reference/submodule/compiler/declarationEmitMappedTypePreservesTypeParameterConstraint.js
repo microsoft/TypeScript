@@ -65,7 +65,7 @@ export const entriesOf = <o extends object>(o: o) =>
 // repro from https://github.com/microsoft/TypeScript/issues/54560
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.entriesOf = exports.buildSchema = void 0;
-const buildSchema = (version) => (({}));
+const buildSchema = (version) => ({});
 exports.buildSchema = buildSchema;
 const entriesOf = (o) => Object.entries(o);
 exports.entriesOf = entriesOf;

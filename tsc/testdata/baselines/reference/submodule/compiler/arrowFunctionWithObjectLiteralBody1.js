@@ -4,4 +4,4 @@
 var v = a => <any>{}
 
 //// [arrowFunctionWithObjectLiteralBody1.js]
-var v = a => (({}));
+var v = a => ({});

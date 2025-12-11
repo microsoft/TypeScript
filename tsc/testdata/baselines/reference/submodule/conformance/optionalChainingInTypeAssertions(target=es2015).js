@@ -30,7 +30,7 @@ const foo = new Foo();
 /*a1*/ (_c = foo.m /*a3*/ /*a4*/) === null || _c === void 0 ? void 0 : _c.call(/*a2*/ foo);
 /*b1*/ (_d = foo.m /*b3*/ /*b4*/) === null || _d === void 0 ? void 0 : _d.call(foo);
 // https://github.com/microsoft/TypeScript/issues/50148
-((foo === null || foo === void 0 ? void 0 : foo.m)).length;
-((foo === null || foo === void 0 ? void 0 : foo.m)).length;
-((foo === null || foo === void 0 ? void 0 : foo["m"])).length;
-((foo === null || foo === void 0 ? void 0 : foo["m"])).length;
+(foo === null || foo === void 0 ? void 0 : foo.m).length;
+(foo === null || foo === void 0 ? void 0 : foo.m).length;
+(foo === null || foo === void 0 ? void 0 : foo["m"]).length;
+(foo === null || foo === void 0 ? void 0 : foo["m"]).length;

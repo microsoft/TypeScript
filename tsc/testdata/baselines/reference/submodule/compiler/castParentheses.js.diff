@@ -8,9 +8,3 @@
  }
  var b = a;
  var b = a.b;
-@@= skipped -7, +8 lines =@@
- var b = a.b().c;
- var b = new a;
- var b = new a.b;
--var b = (new a).b;
-+var b = ((new a)).b;

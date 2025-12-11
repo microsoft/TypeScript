@@ -2919,7 +2919,7 @@ func (p *Printer) emitMetaProperty(node *ast.MetaProperty) {
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitPartiallyEmittedExpression(node *ast.PartiallyEmittedExpression, precedence ast.OperatorPrecedence) {
+func (p *Printer) emitPartiallyEmittedExpression(node *ast.PartiallyEmittedExpression) {
 	// avoid reprinting parens for nested partially emitted expressions
 	type entry struct {
 		node  *ast.PartiallyEmittedExpression
@@ -2935,7 +2935,7 @@ func (p *Printer) emitPartiallyEmittedExpression(node *ast.PartiallyEmittedExpre
 		node = node.Expression.AsPartiallyEmittedExpression()
 	}
 
-	p.emitExpression(node.Expression, precedence)
+	p.emitExpression(node.Expression, ast.OperatorPrecedenceLowest)
 
 	// unwind stack
 	for stack.Len() > 0 {
@@ -3081,7 +3081,7 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 	case ast.KindNotEmittedStatement:
 		return
 	case ast.KindPartiallyEmittedExpression:
-		p.emitPartiallyEmittedExpression(node.AsPartiallyEmittedExpression(), precedence)
+		p.emitPartiallyEmittedExpression(node.AsPartiallyEmittedExpression())
 	case ast.KindSyntheticReferenceExpression:
 		panic("SyntheticReferenceExpression should not be printed")
 

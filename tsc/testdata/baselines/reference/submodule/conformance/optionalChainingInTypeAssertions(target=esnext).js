@@ -29,7 +29,7 @@ foo.m?.();
 /*a1*/ foo.m /*a3*/ /*a4*/?.();
 /*b1*/ foo.m /*b3*/ /*b4*/?.();
 // https://github.com/microsoft/TypeScript/issues/50148
-((foo?.m)).length;
-((foo?.m)).length;
-((foo?.["m"])).length;
-((foo?.["m"])).length;
+(foo?.m).length;
+(foo?.m).length;
+(foo?.["m"]).length;
+(foo?.["m"]).length;
