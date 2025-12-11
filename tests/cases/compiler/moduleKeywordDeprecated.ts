@@ -3,17 +3,14 @@
 // Error
 module notok { }
 module not.ok { }
-
-// OK
-declare module fine { }
-declare module also.fine { }
+declare module bad { }
+declare module also.bad { }
 
 // Still the only way to do it
 declare module "good" { }
 
 // @filename: decl.d.ts
 
-// OK since these are ambient
 declare module foo { }
 declare module foo.bar { }
 

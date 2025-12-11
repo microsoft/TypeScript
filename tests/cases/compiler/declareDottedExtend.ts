@@ -1,4 +1,4 @@
-declare module A.B
+declare namespace A.B
 {
     export class C{ }
 }
