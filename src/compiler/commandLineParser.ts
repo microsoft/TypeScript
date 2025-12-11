@@ -674,6 +674,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
         defaultValueDescription: false,
     },
+    {
+        name: "ignoreConfig",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files,
+        defaultValueDescription: false,
+    },
 
     // Basic
     targetOptionDeclaration,

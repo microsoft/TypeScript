@@ -1,0 +1,154 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   <|[|foo|]: string;|>
+//   bar: number;
+// };
+// 
+// declare function fn<T extends C>(arg: T): T;
+// 
+// fn({
+//   foo/*GOTO DEF*/: "",
+//   bar: true,
+// });
+// 
+// --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "foo",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   foo: string;
+//   <|[|bar|]: number;|>
+// };
+// 
+// declare function fn<T extends C>(arg: T): T;
+// 
+// fn({
+//   foo: "",
+//   bar/*GOTO DEF*/: true,
+// });
+// 
+// const result = fn({
+// --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "bar",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   <|[|foo|]: string;|>
+//   bar: number;
+// };
+// 
+// --- (line: 6) skipped ---
+
+// --- (line: 10) skipped ---
+// });
+// 
+// const result = fn({
+//   foo/*GOTO DEF*/: "",
+//   bar: 1,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "foo",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   foo: string;
+//   <|[|bar|]: number;|>
+// };
+// 
+// declare function fn<T extends C>(arg: T): T;
+// --- (line: 7) skipped ---
+
+// --- (line: 11) skipped ---
+// 
+// const result = fn({
+//   foo: "",
+//   bar/*GOTO DEF*/: 1,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "bar",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties2.ts ===
+// --- (line: 10) skipped ---
+// });
+// 
+// const result = fn({
+//   <|[|foo|]: ""|>,
+//   bar: 1,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo/*GOTO DEF*/;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "foo",
+    "containerName": "__object",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
