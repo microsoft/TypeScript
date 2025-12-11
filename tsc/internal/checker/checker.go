@@ -9638,6 +9638,17 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 		}
 		return diagnostic
 	default:
+		// Guard against out-of-bounds access when maxCount >= len(args).
+		// This can happen when we reach this fallback error path but the argument
+		// count actually matches the parameter count (e.g., due to trailing commas
+		// causing signature resolution to fail for other reasons).
+		if maxCount >= len(args) {
+			diagnostic := NewDiagnosticForNode(errorNode, message, parameterRange, len(args))
+			if headMessage != nil {
+				diagnostic = ast.NewDiagnosticChain(diagnostic, headMessage)
+			}
+			return diagnostic
+		}
 		sourceFile := ast.GetSourceFileOfNode(node)
 		pos := scanner.SkipTrivia(sourceFile.Text(), args[maxCount].Pos())
 		end := args[len(args)-1].End()
