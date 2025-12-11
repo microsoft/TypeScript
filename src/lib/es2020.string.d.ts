@@ -4,11 +4,11 @@
 
 interface String {
     /**
-     * Matches a string with a regular expression or string, and returns an iterable of matches
+     * Matches a string with a regular expression, and returns an iterable of matches
      * containing the results of that search.
-     * @param regexp A regular expression or string literal with which to search the string
+     * @param regexp A regular expression
      */
-    matchAll(regexp: RegExp | string): RegExpStringIterator<RegExpExecArray>;
+    matchAll(regexp: RegExp): RegExpStringIterator<RegExpExecArray>;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
     toLocaleLowerCase(locales?: Intl.LocalesArgument): string;
