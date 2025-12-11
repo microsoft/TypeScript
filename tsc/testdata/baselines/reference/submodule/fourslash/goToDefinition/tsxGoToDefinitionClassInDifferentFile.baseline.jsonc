@@ -1,0 +1,7 @@
+// === goToDefinition ===
+// === /C.tsx ===
+// <|export default class [|C|] {}|>
+
+// === /a.tsx ===
+// import C from "./C";
+// const foo = </*GOTO DEF*/C />;

@@ -1,0 +1,86 @@
+--- old.goToDefinitionSignatureAlias.baseline.jsonc
++++ new.goToDefinitionSignatureAlias.baseline.jsonc
+@@= skipped -45, +45 lines =@@
+ // f();
+ // g();
+ // h();
+-// const [|i|] = <|() => 0|>;
++// <|const [|i|] = () => 0;|>
+ // const iFn = function () { return 0; };
+ // const j = i;
+ // /*GOTO DEF*/i();
+@@= skipped -17, +17 lines =@@
+ // g();
+ // h();
+ // const i = () => 0;
+-// const [|iFn|] = <|function () { return 0; }|>;
++// <|const [|iFn|] = function () { return 0; };|>
+ // const j = i;
+ // i();
+ // /*GOTO DEF*/iFn();
+@@= skipped -36, +36 lines =@@
+ // i();
+ // iFn();
+ // j();
+-// const o = { [|m|]: <|() => 0|> };
++// const o = { <|[|m|]: () => 0|> };
+ // o./*GOTO DEF*/m();
+ // const oFn = { mFn: function () { return 0; } };
+ // oFn.mFn();
+@@= skipped -15, +15 lines =@@
+ // j();
+ // const o = { m: () => 0 };
+ // o.m();
+-// const oFn = { [|mFn|]: <|function () { return 0; }|> };
++// const oFn = { <|[|mFn|]: function () { return 0; }|> };
+ // oFn./*GOTO DEF*/mFn();
+ // class Component { constructor(props: {}) {} }
+ // type ComponentClass = new () => Component;
+@@= skipped -11, +11 lines =@@
+
+ // === goToDefinition ===
+ // === /a.tsx ===
+-// --- (line: 17) skipped ---
++// --- (line: 13) skipped ---
++// o.m();
++// const oFn = { mFn: function () { return 0; } };
++// oFn.mFn();
++// class Component { [|constructor(props: {}) {}|] }
+ // type ComponentClass = new () => Component;
+ // interface ComponentClass2 { new(): Component; }
+ // 
+@@= skipped -35, +39 lines =@@
+
+ // === goToDefinition ===
+ // === /a.tsx ===
+-// --- (line: 21) skipped ---
++// --- (line: 14) skipped ---
++// const oFn = { mFn: function () { return 0; } };
++// oFn.mFn();
++// class Component { constructor(props: {}) {} }
++// type ComponentClass = [|new () => Component|];
++// interface ComponentClass2 { new(): Component; }
++// 
++// class MyComponent extends Component {}
+ // <MyComponent />;
+ // new MyComponent({});
+ // 
+@@= skipped -39, +46 lines =@@
+
+ // === goToDefinition ===
+ // === /a.tsx ===
+-// --- (line: 25) skipped ---
++// --- (line: 15) skipped ---
++// oFn.mFn();
++// class Component { constructor(props: {}) {} }
++// type ComponentClass = new () => Component;
++// interface ComponentClass2 { [|new(): Component;|] }
++// 
++// class MyComponent extends Component {}
++// <MyComponent />;
++// new MyComponent({});
++// 
++// declare const MyComponent2: ComponentClass;
+ // <MyComponent2 />;
+ // new MyComponent2();
+ // 

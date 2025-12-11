@@ -1,0 +1,54 @@
+// === QuickInfo ===
+=== /quickInfoLink3.ts ===
+// class Foo<T> {
+//     /**
+//      * {@link Foo}
+//      * {@link Foo<T>}
+//      * {@link Foo<Array<X>>}
+//      * {@link Foo<>}
+//      * {@link Foo>}
+//      * {@link Foo<}
+//      */
+//     bar(){}
+//     ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) Foo.bar(): void
+// | ```
+// | [Foo](file:///quickInfoLink3.ts#1,7-1,10)
+// | [<T>](file:///quickInfoLink3.ts#1,7-1,10)
+// | [<Array<X>>](file:///quickInfoLink3.ts#1,7-1,10)
+// | [<>](file:///quickInfoLink3.ts#1,7-1,10)
+// | [>](file:///quickInfoLink3.ts#1,7-1,10)
+// | [<](file:///quickInfoLink3.ts#1,7-1,10)
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 169,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) Foo.bar(): void\n```\n[Foo](file:///quickInfoLink3.ts#1,7-1,10)\n[<T>](file:///quickInfoLink3.ts#1,7-1,10)\n[<Array<X>>](file:///quickInfoLink3.ts#1,7-1,10)\n[<>](file:///quickInfoLink3.ts#1,7-1,10)\n[>](file:///quickInfoLink3.ts#1,7-1,10)\n[<](file:///quickInfoLink3.ts#1,7-1,10)"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 4
+        },
+        "end": {
+          "line": 9,
+          "character": 7
+        }
+      }
+    }
+  }
+]

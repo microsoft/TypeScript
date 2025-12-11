@@ -1,0 +1,47 @@
+// === findAllReferences ===
+// === /importing.ts ===
+//  import { Leaf } from './exporting';
+//  Leaf.[|hello|]()
+
+// === /leafModule.ts ===
+// export const /*FIND ALL REFS*/[|hello|] = () => 'Hello';
+
+
+
+// === findAllReferences ===
+// === /importing.ts ===
+//  import { Leaf } from './exporting';
+//  Leaf./*FIND ALL REFS*/[|hello|]()
+
+// === /leafModule.ts ===
+// export const [|hello|] = () => 'Hello';
+
+
+
+// === findAllReferences ===
+// === /exporting.ts ===
+// export * as /*FIND ALL REFS*/[|Leaf|] from './leafModule';
+
+// === /importing.ts ===
+//  import { [|Leaf|] } from './exporting';
+//  [|Leaf|].hello()
+
+
+
+// === findAllReferences ===
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
+
+// === /importing.ts ===
+//  import { /*FIND ALL REFS*/[|Leaf|] } from './exporting';
+//  [|Leaf|].hello()
+
+
+
+// === findAllReferences ===
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
+
+// === /importing.ts ===
+//  import { [|Leaf|] } from './exporting';
+//  /*FIND ALL REFS*/[|Leaf|].hello()

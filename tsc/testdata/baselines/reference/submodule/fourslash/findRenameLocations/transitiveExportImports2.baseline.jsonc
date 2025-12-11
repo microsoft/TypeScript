@@ -1,0 +1,47 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// namespace /*RENAME*/[|ARENAME|] {
+//     export const x = 0;
+// }
+
+// === /b.ts ===
+// export import B = [|ARENAME|];
+// B.x;
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// namespace [|ARENAME|] {
+//     export const x = 0;
+// }
+
+// === /b.ts ===
+// export import B = /*RENAME*/[|ARENAME|];
+// B.x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export import /*RENAME*/[|BRENAME|] = A;
+// [|BRENAME|].x;
+
+// === /c.ts ===
+// import { [|BRENAME|] } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// export import [|BRENAME|] = A;
+// /*RENAME*/[|BRENAME|].x;
+
+// === /c.ts ===
+// import { [|BRENAME|] } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import { /*START PREFIX*/B as /*RENAME*/[|BRENAME|] } from "./b";

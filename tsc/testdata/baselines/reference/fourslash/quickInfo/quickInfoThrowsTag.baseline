@@ -1,0 +1,134 @@
+// === QuickInfo ===
+=== /quickInfoThrowsTag.ts ===
+// class E extends Error {}
+// 
+// /**
+//  * @throws {E}
+//  */
+// function f1() {}
+// 
+// /**
+//  * @throws {E} description
+//  */
+// function f2() {}
+// 
+// /**
+//  * @throws description
+//  */
+// function f3() {}
+// f1()
+// ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f1(): void
+// | ```
+// | 
+// | 
+// | *@throws* — {E}
+// | 
+// | ----------------------------------------------------------------------
+// f2()
+// ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f2(): void
+// | ```
+// | 
+// | 
+// | *@throws* — {E} description
+// | 
+// | ----------------------------------------------------------------------
+// f3()
+// ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f3(): void
+// | ```
+// | 
+// | 
+// | *@throws* — description
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 170,
+      "LSPosition": {
+        "line": 16,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f1(): void\n```\n\n\n*@throws* — {E}\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 2
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 175,
+      "LSPosition": {
+        "line": 17,
+        "character": 2
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f2(): void\n```\n\n\n*@throws* — {E} description\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 2
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 18,
+        "character": 2
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f3(): void\n```\n\n\n*@throws* — description\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 0
+        },
+        "end": {
+          "line": 18,
+          "character": 2
+        }
+      }
+    }
+  }
+]

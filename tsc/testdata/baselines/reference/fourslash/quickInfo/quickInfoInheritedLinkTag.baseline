@@ -1,0 +1,51 @@
+// === QuickInfo ===
+=== /quickInfoInheritedLinkTag.ts ===
+// export class C {
+//      /**
+//       * @deprecated Use {@link PerspectiveCamera#setFocalLength .setFocalLength()} and {@link PerspectiveCamera#filmGauge .filmGauge} instead.
+//       */
+//     m() { }
+// }
+// export class D extends C {
+//     m() { } // crashes here
+// }
+// new C().m // and here (with a different thing trying to access undefined)
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.m(): void
+// | ```
+// | 
+// | 
+// | *@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and PerspectiveCamera.filmGauge .filmGauge instead.
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 9,
+        "character": 9
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.m(): void\n```\n\n\n*@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and PerspectiveCamera.filmGauge .filmGauge instead.\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 8
+        },
+        "end": {
+          "line": 9,
+          "character": 9
+        }
+      }
+    }
+  }
+]

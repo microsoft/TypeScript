@@ -1,0 +1,19 @@
+--- old.findAllRefsRenameImportWithSameName.baseline.jsonc
++++ new.findAllRefsRenameImportWithSameName.baseline.jsonc
+@@= skipped -2, +2 lines =@@
+ // export const /*RENAME*/[|xRENAME|] = 0;
+
+ // === /b.ts ===
+-// import { [|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";
++// import { [|xRENAME|] as [|xRENAME|] } from "./a";
+ // [|xRENAME|];
+
+
+@@= skipped -10, +10 lines =@@
+ // export const [|xRENAME|] = 0;
+
+ // === /b.ts ===
+-// import { /*RENAME*/[|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";
++// import { /*RENAME*/[|xRENAME|] as [|xRENAME|] } from "./a";
+ // [|xRENAME|];
+

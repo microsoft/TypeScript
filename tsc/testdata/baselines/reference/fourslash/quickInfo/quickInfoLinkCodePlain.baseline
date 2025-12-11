@@ -1,0 +1,48 @@
+// === QuickInfo ===
+=== /quickInfoLinkCodePlain.ts ===
+// export class C {
+//      /**
+//       * @deprecated Use {@linkplain PerspectiveCamera#setFocalLength .setFocalLength()} and {@linkcode PerspectiveCamera#filmGauge .filmGauge} instead.
+//       */
+//     m() { }
+// }
+// new C().m
+//         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (method) C.m(): void
+// | ```
+// | 
+// | 
+// | *@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and `PerspectiveCamera.filmGauge .filmGauge` instead.
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 210,
+      "LSPosition": {
+        "line": 6,
+        "character": 9
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(method) C.m(): void\n```\n\n\n*@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and `PerspectiveCamera.filmGauge .filmGauge` instead.\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 8
+        },
+        "end": {
+          "line": 6,
+          "character": 9
+        }
+      }
+    }
+  }
+]

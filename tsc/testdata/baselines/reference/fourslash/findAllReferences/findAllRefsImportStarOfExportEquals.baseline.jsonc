@@ -1,0 +1,133 @@
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import [|a|] from "a";
+// [|a|]();
+// [|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function /*FIND ALL REFS*/[|a|](): void;
+// declare namespace [|a|] {
+//     export const x: number;
+// }
+// export = [|a|];
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import [|a|] from "a";
+// [|a|]();
+// [|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|a|](): void;
+// declare namespace /*FIND ALL REFS*/[|a|] {
+//     export const x: number;
+// }
+// export = [|a|];
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import [|a|] from "a";
+// [|a|]();
+// [|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|a|](): void;
+// declare namespace [|a|] {
+//     export const x: number;
+// }
+// export = /*FIND ALL REFS*/[|a|];
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// /*FIND ALL REFS*/[|b|]();
+// [|b|].x;
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import /*FIND ALL REFS*/[|a|] from "a";
+// [|a|]();
+// [|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|a|](): void;
+// declare namespace [|a|] {
+//     export const x: number;
+// }
+// export = [|a|];
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import [|a|] from "a";
+// /*FIND ALL REFS*/[|a|]();
+// [|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|a|](): void;
+// declare namespace [|a|] {
+//     export const x: number;
+// }
+// export = [|a|];
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
+// === /c.ts ===
+// import [|a|] from "a";
+// [|a|]();
+// /*FIND ALL REFS*/[|a|].x;
+
+// === /node_modules/a/index.d.ts ===
+// declare function [|a|](): void;
+// declare namespace [|a|] {
+//     export const x: number;
+// }
+// export = [|a|];

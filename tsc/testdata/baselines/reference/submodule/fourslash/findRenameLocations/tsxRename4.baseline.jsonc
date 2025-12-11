@@ -1,0 +1,91 @@
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// class /*RENAME*/[|MyClassRENAME|] {}
+// 
+// <[|MyClassRENAME|]></[|MyClassRENAME|]>;
+// <[|MyClassRENAME|]/>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// class [|MyClassRENAME|] {}
+// 
+// </*RENAME*/[|MyClassRENAME|]></[|MyClassRENAME|]>;
+// <[|MyClassRENAME|]/>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// class [|MyClassRENAME|] {}
+// 
+// <[|MyClassRENAME|]><//*RENAME*/[|MyClassRENAME|]>;
+// <[|MyClassRENAME|]/>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// class [|MyClassRENAME|] {}
+// 
+// <[|MyClassRENAME|]></[|MyClassRENAME|]>;
+// </*RENAME*/[|MyClassRENAME|]/>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element {}
+//     interface IntrinsicElements {
+//         [|divRENAME|]: {};
+//     }
+// }
+// class MyClass {}
+// 
+// <MyClass></MyClass>;
+// <MyClass/>;
+// 
+// </*RENAME*/[|divRENAME|]> </[|divRENAME|]>
+
+
+
+// === findRenameLocations ===
+// === /file.tsx ===
+// declare module JSX {
+//     interface Element {}
+//     interface IntrinsicElements {
+//         [|divRENAME|]: {};
+//     }
+// }
+// class MyClass {}
+// 
+// <MyClass></MyClass>;
+// <MyClass/>;
+// 
+// <[|divRENAME|]> <//*RENAME*/[|divRENAME|]>

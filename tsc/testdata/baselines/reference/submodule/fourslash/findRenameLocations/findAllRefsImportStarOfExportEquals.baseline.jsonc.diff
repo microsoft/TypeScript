@@ -1,0 +1,58 @@
+--- old.findAllRefsImportStarOfExportEquals.baseline.jsonc
++++ new.findAllRefsImportStarOfExportEquals.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
++// === /c.ts ===
++// import [|aRENAME|] from "a";
++// [|aRENAME|]();
++// [|aRENAME|].x;
++
+ // === /node_modules/a/index.d.ts ===
+ // declare function /*RENAME*/[|aRENAME|](): void;
+ // declare namespace [|aRENAME|] {
+@@= skipped -5, +10 lines =@@
+ // }
+ // export = [|aRENAME|];
+
++
++
++// === findRenameLocations ===
+ // === /c.ts ===
+ // import [|aRENAME|] from "a";
+ // [|aRENAME|]();
+ // [|aRENAME|].x;
+
+-
+-
+-// === findRenameLocations ===
+ // === /node_modules/a/index.d.ts ===
+ // declare function [|aRENAME|](): void;
+ // declare namespace /*RENAME*/[|aRENAME|] {
+@@= skipped -15, +15 lines =@@
+ // }
+ // export = [|aRENAME|];
+
++
++
++// === findRenameLocations ===
+ // === /c.ts ===
+ // import [|aRENAME|] from "a";
+ // [|aRENAME|]();
+ // [|aRENAME|].x;
+
+-
+-
+-// === findRenameLocations ===
+ // === /node_modules/a/index.d.ts ===
+ // declare function [|aRENAME|](): void;
+ // declare namespace [|aRENAME|] {
+ //     export const x: number;
+ // }
+ // export = /*RENAME*/[|aRENAME|];
+-
+-// === /c.ts ===
+-// import [|aRENAME|] from "a";
+-// [|aRENAME|]();
+-// [|aRENAME|].x;
+
+

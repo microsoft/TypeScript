@@ -249,6 +249,22 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
                     return parseVerifyNavTree(callExpression.arguments);
                 case "navigationBar":
                     return []; // Deprecated.
+                case "numberOfErrorsInCurrentFile":
+                    return parseNumberOfErrorsInCurrentFile(callExpression.arguments);
+                case "noErrors":
+                    return [{ kind: "verifyNoErrors" }];
+                case "errorExistsAtRange":
+                    return parseErrorExistsAtRange(callExpression.arguments);
+                case "currentLineContentIs":
+                    return parseCurrentLineContentIs(callExpression.arguments);
+                case "currentFileContentIs":
+                    return parseCurrentFileContentIs(callExpression.arguments);
+                case "errorExistsBetweenMarkers":
+                    return parseErrorExistsBetweenMarkers(callExpression.arguments);
+                case "errorExistsAfterMarker":
+                    return parseErrorExistsAfterMarker(callExpression.arguments);
+                case "errorExistsBeforeMarker":
+                    return parseErrorExistsBeforeMarker(callExpression.arguments);
             }
         }
         // `goTo....`
@@ -311,6 +327,32 @@ function parseEditStatement(funcName: string, args: readonly ts.Expression[]): E
             return {
                 kind: "edit",
                 goStatement: `f.Backspace(t, 1)`,
+            };
+        }
+        case "deleteAtCaret": {
+            const arg = args[0];
+            if (arg) {
+                let arg0;
+                if (arg0 = getNumericLiteral(arg)) {
+                    return {
+                        kind: "edit",
+                        goStatement: `f.DeleteAtCaret(t, ${arg0.text})`,
+                    };
+                }
+                // Handle 'string'.length expressions
+                const lengthValue = getStringLengthExpression(arg);
+                if (lengthValue !== undefined) {
+                    return {
+                        kind: "edit",
+                        goStatement: `f.DeleteAtCaret(t, ${lengthValue})`,
+                    };
+                }
+                console.error(`Expected numeric literal argument in edit.deleteAtCaret, got ${arg.getText()}`);
+                return undefined;
+            }
+            return {
+                kind: "edit",
+                goStatement: `f.DeleteAtCaret(t, 1)`,
             };
         }
         default:
@@ -1444,6 +1486,130 @@ function parseExpectedDiagnostic(expr: ts.Expression): string | undefined {
     }
 
     return `&lsproto.Diagnostic{\n${diagnosticProps.join("\n")}\n}`;
+}
+
+function parseNumberOfErrorsInCurrentFile(args: readonly ts.Expression[]): [VerifyNumberOfErrorsInCurrentFileCmd] | undefined {
+    let arg0;
+    if (args.length !== 1 || !(arg0 = getNumericLiteral(args[0]))) {
+        console.error(`Expected a single numeric literal argument in verify.numberOfErrorsInCurrentFile, got ${args.map(arg => arg.getText()).join(", ")}`);
+        return undefined;
+    }
+    return [{
+        kind: "verifyNumberOfErrorsInCurrentFile",
+        expectedCount: parseInt(arg0.text, 10),
+    }];
+}
+
+function parseErrorExistsAtRange(args: readonly ts.Expression[]): [VerifyErrorExistsAtRangeCmd] | undefined {
+    if (args.length < 2 || args.length > 3) {
+        console.error(`Expected 2 or 3 arguments in verify.errorExistsAtRange, got ${args.length}`);
+        return undefined;
+    }
+
+    // First arg is a range
+    const rangeArg = parseBaselineMarkerOrRangeArg(args[0]);
+    if (!rangeArg) {
+        console.error(`Expected range argument in verify.errorExistsAtRange, got ${args[0].getText()}`);
+        return undefined;
+    }
+
+    // Second arg is error code
+    let codeArg;
+    if (!(codeArg = getNumericLiteral(args[1]))) {
+        console.error(`Expected numeric literal for code in verify.errorExistsAtRange, got ${args[1].getText()}`);
+        return undefined;
+    }
+
+    // Third arg is optional message
+    let message = "";
+    if (args[2]) {
+        const messageArg = getStringLiteralLike(args[2]);
+        if (!messageArg) {
+            console.error(`Expected string literal for message in verify.errorExistsAtRange, got ${args[2].getText()}`);
+            return undefined;
+        }
+        message = messageArg.text;
+    }
+
+    return [{
+        kind: "verifyErrorExistsAtRange",
+        range: rangeArg,
+        code: parseInt(codeArg.text, 10),
+        message: message,
+    }];
+}
+
+function parseCurrentLineContentIs(args: readonly ts.Expression[]): [VerifyCurrentLineContentIsCmd] | undefined {
+    let arg0;
+    if (args.length !== 1 || !(arg0 = getStringLiteralLike(args[0]))) {
+        console.error(`Expected a single string literal argument in verify.currentLineContentIs, got ${args.map(arg => arg.getText()).join(", ")}`);
+        return undefined;
+    }
+    return [{
+        kind: "verifyCurrentLineContentIs",
+        text: arg0.text,
+    }];
+}
+
+function parseCurrentFileContentIs(args: readonly ts.Expression[]): [VerifyCurrentFileContentIsCmd] | undefined {
+    let arg0;
+    if (args.length !== 1 || !(arg0 = getStringLiteralLike(args[0]))) {
+        console.error(`Expected a single string literal argument in verify.currentFileContentIs, got ${args.map(arg => arg.getText()).join(", ")}`);
+        return undefined;
+    }
+    return [{
+        kind: "verifyCurrentFileContentIs",
+        text: arg0.text,
+    }];
+}
+
+function parseErrorExistsBetweenMarkers(args: readonly ts.Expression[]): [VerifyErrorExistsBetweenMarkersCmd] | undefined {
+    if (args.length !== 2) {
+        console.error(`Expected 2 arguments in verify.errorExistsBetweenMarkers, got ${args.length}`);
+        return undefined;
+    }
+    let startMarker, endMarker;
+    if (!(startMarker = getStringLiteralLike(args[0])) || !(endMarker = getStringLiteralLike(args[1]))) {
+        console.error(`Expected string literal arguments in verify.errorExistsBetweenMarkers, got ${args.map(arg => arg.getText()).join(", ")}`);
+        return undefined;
+    }
+    return [{
+        kind: "verifyErrorExistsBetweenMarkers",
+        startMarker: startMarker.text,
+        endMarker: endMarker.text,
+    }];
+}
+
+function parseErrorExistsAfterMarker(args: readonly ts.Expression[]): [VerifyErrorExistsAfterMarkerCmd] | undefined {
+    let markerName = "";
+    if (args.length > 0) {
+        const arg0 = getStringLiteralLike(args[0]);
+        if (!arg0) {
+            console.error(`Expected string literal argument in verify.errorExistsAfterMarker, got ${args[0].getText()}`);
+            return undefined;
+        }
+        markerName = arg0.text;
+    }
+    return [{
+        kind: "verifyErrorExistsAfterMarker",
+        markerName: markerName,
+    }];
+}
+
+function parseErrorExistsBeforeMarker(args: readonly ts.Expression[]): [VerifyErrorExistsBeforeMarkerCmd] | undefined {
+    let markerName = "";
+    if (args.length > 0) {
+        const arg0 = getStringLiteralLike(args[0]);
+        if (!arg0) {
+            console.error(`Expected string literal argument in verify.errorExistsBeforeMarker, got ${args[0].getText()}`);
+            return undefined;
+        }
+        markerName = arg0.text;
+    }
+    return [{
+        kind: "verifyErrorExistsBeforeMarker",
+        markerName: markerName,
+    }];
 }
 
 function stringToTristate(s: string): string {
@@ -2689,6 +2855,48 @@ interface VerifyNavTreeCmd {
     kind: "verifyNavigationTree";
 }
 
+interface VerifyNumberOfErrorsInCurrentFileCmd {
+    kind: "verifyNumberOfErrorsInCurrentFile";
+    expectedCount: number;
+}
+
+interface VerifyNoErrorsCmd {
+    kind: "verifyNoErrors";
+}
+
+interface VerifyErrorExistsAtRangeCmd {
+    kind: "verifyErrorExistsAtRange";
+    range: string;
+    code: number;
+    message: string;
+}
+
+interface VerifyCurrentLineContentIsCmd {
+    kind: "verifyCurrentLineContentIs";
+    text: string;
+}
+
+interface VerifyCurrentFileContentIsCmd {
+    kind: "verifyCurrentFileContentIs";
+    text: string;
+}
+
+interface VerifyErrorExistsBetweenMarkersCmd {
+    kind: "verifyErrorExistsBetweenMarkers";
+    startMarker: string;
+    endMarker: string;
+}
+
+interface VerifyErrorExistsAfterMarkerCmd {
+    kind: "verifyErrorExistsAfterMarker";
+    markerName: string;
+}
+
+interface VerifyErrorExistsBeforeMarkerCmd {
+    kind: "verifyErrorExistsBeforeMarker";
+    markerName: string;
+}
+
 type Cmd =
     | VerifyCompletionsCmd
     | VerifyApplyCodeActionFromCompletionCmd
@@ -2715,7 +2923,15 @@ type Cmd =
     | VerifyImportFixModuleSpecifiersCmd
     | VerifyDiagnosticsCmd
     | VerifyBaselineDiagnosticsCmd
-    | VerifyOutliningSpansCmd;
+    | VerifyOutliningSpansCmd
+    | VerifyNumberOfErrorsInCurrentFileCmd
+    | VerifyNoErrorsCmd
+    | VerifyErrorExistsAtRangeCmd
+    | VerifyCurrentLineContentIsCmd
+    | VerifyCurrentFileContentIsCmd
+    | VerifyErrorExistsBetweenMarkersCmd
+    | VerifyErrorExistsAfterMarkerCmd
+    | VerifyErrorExistsBeforeMarkerCmd;
 
 function generateVerifyOutliningSpans({ foldingRangeKind }: VerifyOutliningSpansCmd): string {
     if (foldingRangeKind) {
@@ -3029,6 +3245,22 @@ function generateCmd(cmd: Cmd): string {
             return generateVerifyOutliningSpans(cmd);
         case "verifyNavigationTree":
             return `f.VerifyBaselineDocumentSymbol(t)`;
+        case "verifyNumberOfErrorsInCurrentFile":
+            return `f.VerifyNumberOfErrorsInCurrentFile(t, ${cmd.expectedCount})`;
+        case "verifyNoErrors":
+            return `f.VerifyNoErrors(t)`;
+        case "verifyErrorExistsAtRange":
+            return `f.VerifyErrorExistsAtRange(t, ${cmd.range}, ${cmd.code}, ${getGoStringLiteral(cmd.message)})`;
+        case "verifyCurrentLineContentIs":
+            return `f.VerifyCurrentLineContentIs(t, ${getGoStringLiteral(cmd.text)})`;
+        case "verifyCurrentFileContentIs":
+            return `f.VerifyCurrentFileContentIs(t, ${getGoStringLiteral(cmd.text)})`;
+        case "verifyErrorExistsBetweenMarkers":
+            return `f.VerifyErrorExistsBetweenMarkers(t, ${getGoStringLiteral(cmd.startMarker)}, ${getGoStringLiteral(cmd.endMarker)})`;
+        case "verifyErrorExistsAfterMarker":
+            return `f.VerifyErrorExistsAfterMarker(t, ${getGoStringLiteral(cmd.markerName)})`;
+        case "verifyErrorExistsBeforeMarker":
+            return `f.VerifyErrorExistsBeforeMarker(t, ${getGoStringLiteral(cmd.markerName)})`;
         default:
             let neverCommand: never = cmd;
             throw new Error(`Unknown command kind: ${neverCommand as Cmd["kind"]}`);
@@ -3047,16 +3279,17 @@ function generateGoTest(failingTests: Set<string>, test: GoTest, isServer: boole
     const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
     const imports = [`"github.com/microsoft/typescript-go/internal/fourslash"`];
     // Only include these imports if the commands use them to avoid unused import errors.
-    if (commands.includes("core.")) {
+    // Use regex with word boundary to avoid false positives like "underscore." matching "core."
+    if (/\bcore\./.test(commands)) {
         imports.unshift(`"github.com/microsoft/typescript-go/internal/core"`);
     }
-    if (commands.includes("ls.")) {
+    if (/\bls\./.test(commands)) {
         imports.push(`"github.com/microsoft/typescript-go/internal/ls"`);
     }
-    if (commands.includes("lsutil.")) {
+    if (/\blsutil\./.test(commands)) {
         imports.push(`"github.com/microsoft/typescript-go/internal/ls/lsutil"`);
     }
-    if (commands.includes("lsproto.")) {
+    if (/\blsproto\./.test(commands)) {
         imports.push(`"github.com/microsoft/typescript-go/internal/lsp/lsproto"`);
     }
     if (usesFourslashUtil(commands)) {
@@ -3127,6 +3360,17 @@ function getNumericLiteral(node: ts.Node): ts.NumericLiteral | undefined {
 
 function getArrayLiteralExpression(node: ts.Node): ts.ArrayLiteralExpression | undefined {
     return getNodeOfKind(node, ts.isArrayLiteralExpression);
+}
+
+// Parses expressions like 'string'.length or "string".length and returns the length value
+function getStringLengthExpression(node: ts.Node): number | undefined {
+    if (ts.isPropertyAccessExpression(node) && node.name.text === "length") {
+        const stringLiteral = getStringLiteralLike(node.expression);
+        if (stringLiteral) {
+            return stringLiteral.text.length;
+        }
+    }
+    return undefined;
 }
 
 function getInitializer(name: ts.Identifier): ts.Expression | undefined {

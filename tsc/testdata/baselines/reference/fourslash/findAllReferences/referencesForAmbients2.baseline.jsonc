@@ -1,0 +1,77 @@
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     /*FIND ALL REFS*/export type [|T|] = number;
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     export type /*FIND ALL REFS*/[|T|] = number;
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     export type [|T|] = number;
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a./*FIND ALL REFS*/[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     export type [|T|] = number;
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a./*FIND ALL REFS*/[|T|];
+// }

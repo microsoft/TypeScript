@@ -1,0 +1,36 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestDerivedTypeIndexerWithGenericConstraints(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class CollectionItem {
+    x: number;
+}
+class Entity extends CollectionItem {
+    y: number;
+}
+class BaseCollection<TItem extends CollectionItem>  {
+    _itemsByKey: { [key: string]: TItem; };
+}
+class DbSet<TEntity extends Entity> extends BaseCollection<TEntity> { // error
+    _itemsByKey: { [key: string]: TEntity; } = {};
+}
+var a: BaseCollection<CollectionItem>;
+var /**/r = a._itemsByKey['x']; // should just say CollectionItem not TItem extends CollectionItem
+var result = r.x;
+a = new DbSet<Entity>();
+var r2 = a._itemsByKey['x'];
+var result2 = r2.x;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "", "var r: CollectionItem", "")
+	f.VerifyNoErrors(t)
+}

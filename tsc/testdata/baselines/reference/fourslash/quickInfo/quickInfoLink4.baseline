@@ -1,0 +1,46 @@
+// === QuickInfo ===
+=== /quickInfoLink4.ts ===
+// type A = 1 | 2;
+// 
+// switch (0 as A) {
+// 	/** {@link A} */
+//             ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type A = 1 | 2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 	case 1:
+// 	case 2:
+//     break;
+// }
+[
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 3,
+        "character": 12
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype A = 1 | 2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 12
+        },
+        "end": {
+          "line": 3,
+          "character": 13
+        }
+      }
+    }
+  }
+]
