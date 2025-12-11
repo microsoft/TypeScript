@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsPaths_kinds(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /src/b.ts
 not read

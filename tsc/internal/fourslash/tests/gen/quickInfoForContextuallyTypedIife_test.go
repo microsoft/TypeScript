@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForContextuallyTypedIife(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `(({ q/*1*/, qq/*2*/ }, x/*3*/, { p/*4*/ }) => {
     var s: number = q/*5*/;

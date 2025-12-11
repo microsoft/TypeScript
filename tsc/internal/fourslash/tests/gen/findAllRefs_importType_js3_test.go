@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefs_importType_js3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @checkJs: true

@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpOptionalCall(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function fnTest(str: string, num: number) { }
 fnTest?.(/*1*/);`

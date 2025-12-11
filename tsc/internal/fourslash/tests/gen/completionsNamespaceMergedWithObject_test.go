@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsNamespaceMergedWithObject(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `namespace N {
     export type T = number;

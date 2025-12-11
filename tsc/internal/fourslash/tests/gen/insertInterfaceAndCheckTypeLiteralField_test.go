@@ -8,8 +8,8 @@ import (
 )
 
 func TestInsertInterfaceAndCheckTypeLiteralField(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*addC*/
 interface G<T, U> { }

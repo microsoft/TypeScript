@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToImplementationInterface_09(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: def.d.ts
 export interface Interface { P: number }

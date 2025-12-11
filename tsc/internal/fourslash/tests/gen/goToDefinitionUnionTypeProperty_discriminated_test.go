@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionUnionTypeProperty_discriminated(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type U = A | B;
 

@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpExplicitTypeArguments(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f<T = boolean, U = string>(x: T, y: U): T;
 f<number, string>(/*1*/);

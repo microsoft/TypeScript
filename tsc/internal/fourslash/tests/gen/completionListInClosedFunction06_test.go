@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInClosedFunction06(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface MyType {
 }

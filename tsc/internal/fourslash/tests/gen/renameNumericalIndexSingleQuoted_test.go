@@ -9,8 +9,8 @@ import (
 )
 
 func TestRenameNumericalIndexSingleQuoted(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const foo = { [|0|]: true };
 foo[[|0|]];`

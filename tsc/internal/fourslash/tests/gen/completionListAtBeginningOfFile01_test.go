@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListAtBeginningOfFile01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/
 var x = 0, y = 1, z = 2;

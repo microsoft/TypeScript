@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoOnArgumentsInsideFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo(x: string) {
     return /*1*/arguments;

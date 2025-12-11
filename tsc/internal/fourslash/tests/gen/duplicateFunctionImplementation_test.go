@@ -8,8 +8,8 @@ import (
 )
 
 func TestDuplicateFunctionImplementation(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface IFoo<T> {
     foo<T>(): T;

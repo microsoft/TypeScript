@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoLink10(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/**
  * start {@link https://vscode.dev/ | end}

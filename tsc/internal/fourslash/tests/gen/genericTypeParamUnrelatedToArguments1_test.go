@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericTypeParamUnrelatedToArguments1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Foo<T> {
     new (x: number): Foo<T>;

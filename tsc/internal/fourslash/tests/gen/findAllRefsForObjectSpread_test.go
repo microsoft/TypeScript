@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForObjectSpread(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A1 { readonly /*0*/a: string };
 interface A2 { /*1*/a?: number };

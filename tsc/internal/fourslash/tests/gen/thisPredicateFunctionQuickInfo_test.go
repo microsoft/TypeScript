@@ -8,8 +8,8 @@ import (
 )
 
 func TestThisPredicateFunctionQuickInfo(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class RoyalGuard {
     isLeader(): this is LeadGuard {

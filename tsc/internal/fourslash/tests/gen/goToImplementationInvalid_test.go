@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToImplementationInvalid(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x1 = 50/*0*/0;
 var x2 = "hel/*1*/lo";

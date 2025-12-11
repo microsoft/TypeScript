@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsDestructuring(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const points = [{ x: 1, y: 2 }];
 points.forEach(({ /*a*/ }) => { });

@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavbar_let(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let c = 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

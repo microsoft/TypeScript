@@ -11,8 +11,8 @@ import (
 )
 
 func TestImportTypeCompletions7(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @target: es2020
 // @module: esnext

@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormattingExpressionsInIfCondition(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `if (a === 1 ||
     /*0*/b === 2 ||/*1*/

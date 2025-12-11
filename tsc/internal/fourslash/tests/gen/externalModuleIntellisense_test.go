@@ -9,8 +9,8 @@ import (
 )
 
 func TestExternalModuleIntellisense(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: externalModuleIntellisense_file0.ts
 export = express;

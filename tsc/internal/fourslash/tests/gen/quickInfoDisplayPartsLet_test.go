@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsLet(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let /*1*/a = 10;
 function foo() {

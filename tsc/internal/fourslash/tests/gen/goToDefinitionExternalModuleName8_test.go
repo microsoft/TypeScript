@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionExternalModuleName8(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: b.ts
 export {Foo, Bar} from [|'e/*1*/'|];

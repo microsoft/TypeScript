@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesStringLiterals(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x = "[|string|]";
 function f(a = "[|initial value|]") { }`

@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsKeyof(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A { a: number; };
 interface B { a: number; b: number; };

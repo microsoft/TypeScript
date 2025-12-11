@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToTypeDefinition3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type /*definition*/T = string;
 const x: /*reference*/T;`

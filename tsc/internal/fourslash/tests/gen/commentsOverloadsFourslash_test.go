@@ -10,8 +10,8 @@ import (
 )
 
 func TestCommentsOverloadsFourslash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** this is signature 1*/
 function /*1*/f1(/**param a*/a: number): number;

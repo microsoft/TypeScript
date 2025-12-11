@@ -11,8 +11,8 @@ import (
 )
 
 func TestSymbolCompletionLowerPriority(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare const Symbol: (s: string) => symbol;
 const mySymbol = Symbol("test");

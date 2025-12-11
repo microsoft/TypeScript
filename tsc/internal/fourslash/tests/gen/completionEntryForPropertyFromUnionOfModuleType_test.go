@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionEntryForPropertyFromUnionOfModuleType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module E {
     export var n = 1;

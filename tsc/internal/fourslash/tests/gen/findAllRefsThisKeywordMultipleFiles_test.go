@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsThisKeywordMultipleFiles(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
 /*1*/this; /*2*/this;

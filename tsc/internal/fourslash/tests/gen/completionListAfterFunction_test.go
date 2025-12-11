@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListAfterFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// Outside the function
 declare function f1(a: number);/*1*/

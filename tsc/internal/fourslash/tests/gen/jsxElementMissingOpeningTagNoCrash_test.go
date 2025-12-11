@@ -8,8 +8,8 @@ import (
 )
 
 func TestJsxElementMissingOpeningTagNoCrash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
 declare function Foo(): any;

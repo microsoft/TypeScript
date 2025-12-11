@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionJsModuleName(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @Filename: foo.js

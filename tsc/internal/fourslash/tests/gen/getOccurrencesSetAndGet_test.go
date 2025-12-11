@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesSetAndGet(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     [|set|] bar(b: any) {

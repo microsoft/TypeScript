@@ -8,8 +8,8 @@ import (
 )
 
 func TestIndexerReturnTypes1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Numeric {
     [x: number]: Date;

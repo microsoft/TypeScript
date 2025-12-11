@@ -8,8 +8,8 @@ import (
 )
 
 func TestModuleReexportedIntoGlobalQuickInfo(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/@types/three/index.d.ts
 export class Vector3 {}

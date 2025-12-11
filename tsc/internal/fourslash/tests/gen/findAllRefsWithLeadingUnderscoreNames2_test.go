@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsWithLeadingUnderscoreNames2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     /*1*/public /*2*/__bar() { return 0; }

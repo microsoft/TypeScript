@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsInExport(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const a = "a";
 type T = number;

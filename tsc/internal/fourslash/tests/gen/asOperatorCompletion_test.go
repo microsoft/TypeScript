@@ -9,8 +9,8 @@ import (
 )
 
 func TestAsOperatorCompletion(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type T = number;
 var x;

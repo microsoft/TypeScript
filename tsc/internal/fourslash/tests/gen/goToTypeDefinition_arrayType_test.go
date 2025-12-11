@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToTypeDefinition_arrayType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type User = { name: string };
 declare const users: User[]

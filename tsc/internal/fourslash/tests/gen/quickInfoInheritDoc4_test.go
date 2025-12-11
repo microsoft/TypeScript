@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoInheritDoc4(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: quickInfoInheritDoc4.ts
 var A: any;

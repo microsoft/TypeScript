@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesOfAnonymousFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `(function [|foo|](): number {
     var x = [|foo|];

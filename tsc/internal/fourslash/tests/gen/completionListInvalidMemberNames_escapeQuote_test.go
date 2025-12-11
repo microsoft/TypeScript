@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionListInvalidMemberNames_escapeQuote(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare const x: { "\"'": 0 };
 x[|./**/|];`

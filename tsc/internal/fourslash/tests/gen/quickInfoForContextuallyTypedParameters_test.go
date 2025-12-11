@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForContextuallyTypedParameters(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function foo1<T>(obj: T, settings: (row: T) => { value: string, func?: Function }): void;
 

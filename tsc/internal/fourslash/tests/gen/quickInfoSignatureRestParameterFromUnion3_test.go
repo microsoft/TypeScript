@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoSignatureRestParameterFromUnion3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare const fn:
   | ((a: { x: number }, b: { x: number }) => number)

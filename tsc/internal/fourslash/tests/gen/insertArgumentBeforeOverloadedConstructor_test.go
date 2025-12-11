@@ -8,8 +8,8 @@ import (
 )
 
 func TestInsertArgumentBeforeOverloadedConstructor(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `alert(/**/100);
 

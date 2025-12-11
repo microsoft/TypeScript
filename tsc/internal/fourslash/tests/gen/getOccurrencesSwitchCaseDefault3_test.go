@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesSwitchCaseDefault3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `foo: [|switch|] (1) {
     [|case|] 1:

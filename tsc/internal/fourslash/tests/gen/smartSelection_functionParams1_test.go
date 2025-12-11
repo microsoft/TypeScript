@@ -8,8 +8,8 @@ import (
 )
 
 func TestSmartSelection_functionParams1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f(/*1*/p, /*2*/q?, /*3*/...r: any[] = []) {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsExternalModuleReferenceResolutionOrderInImportDeclaration(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts
 export function foo() { };

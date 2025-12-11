@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetOccurrencesConst04(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export const class C {
     private static c/*1*/onst f/*2*/oo;

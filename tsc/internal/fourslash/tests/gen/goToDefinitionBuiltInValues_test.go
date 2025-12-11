@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionBuiltInValues(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var u = /*undefined*/undefined;
 var n = /*null*/null;

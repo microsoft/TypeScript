@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpFunctionParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function parameterFunction(callback: (a: number, b: string) => void) {
     callback(/*parameterFunction1*/5, /*parameterFunction2*/"");

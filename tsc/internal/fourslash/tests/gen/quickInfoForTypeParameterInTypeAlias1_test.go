@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForTypeParameterInTypeAlias1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Ctor<AA> = new () => A/*1*/A;
 type MixinCtor<AA> = new () => AA & { constructor: MixinCtor<A/*2*/A> };

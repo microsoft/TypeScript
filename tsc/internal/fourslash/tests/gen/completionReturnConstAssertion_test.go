@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionReturnConstAssertion(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type T = {
     foo1: 1;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarVariables(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x = 0;
 let y = 1;

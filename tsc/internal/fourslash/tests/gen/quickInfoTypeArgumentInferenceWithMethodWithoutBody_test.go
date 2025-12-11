@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoTypeArgumentInferenceWithMethodWithoutBody(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface ProxyHandler<T extends object> {
     getPrototypeOf?(target: T): object | null;

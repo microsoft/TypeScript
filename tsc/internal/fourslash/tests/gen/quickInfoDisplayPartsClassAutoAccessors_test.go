@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsClassAutoAccessors(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class c {
     public accessor /*1a*/publicProperty: string;

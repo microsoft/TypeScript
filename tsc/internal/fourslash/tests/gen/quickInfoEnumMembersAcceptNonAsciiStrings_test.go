@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoEnumMembersAcceptNonAsciiStrings(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `enum Demo {
     /*Emoji*/Emoji = '🍎',

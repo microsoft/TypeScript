@@ -8,8 +8,8 @@ import (
 )
 
 func TestContextualTypingGenericFunction1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var obj: { f<T>(x: T): T } = { f: <S>(/*1*/x) => x };
 var obj2: <T>(x: T) => T = <S>(/*2*/x) => x;

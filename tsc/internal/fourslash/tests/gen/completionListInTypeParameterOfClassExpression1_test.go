@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInTypeParameterOfClassExpression1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var C0 = class D</*0*/
 var C1 = class D</*1*/T> {}

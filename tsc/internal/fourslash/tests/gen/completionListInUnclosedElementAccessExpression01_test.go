@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInUnclosedElementAccessExpression01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x;
 var y = x[/*1*/`

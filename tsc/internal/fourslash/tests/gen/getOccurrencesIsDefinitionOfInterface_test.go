@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetOccurrencesIsDefinitionOfInterface(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/interface /*2*/I {
     p: number;

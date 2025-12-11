@@ -8,8 +8,8 @@ import (
 )
 
 func TestStringPropertyNames2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export interface Album<T> {
    "artist": T;

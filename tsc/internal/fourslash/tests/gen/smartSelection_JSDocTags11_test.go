@@ -8,8 +8,8 @@ import (
 )
 
 func TestSmartSelection_JSDocTags11(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const x = 1;
 type Foo = {

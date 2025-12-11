@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesIsAvailableThroughGlobalNoCrash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts
 declare var debug: debug.Debug & { debug: debug.Debug; default: debug.Debug };

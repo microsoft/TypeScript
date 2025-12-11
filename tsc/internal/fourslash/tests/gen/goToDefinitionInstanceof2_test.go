@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionInstanceof2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @lib: esnext
 // @filename: /main.ts

@@ -9,8 +9,8 @@ import (
 )
 
 func TestUnderscoreTypings01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Iterator_<T, U> {
     (value: T, index: any, list: any): U;

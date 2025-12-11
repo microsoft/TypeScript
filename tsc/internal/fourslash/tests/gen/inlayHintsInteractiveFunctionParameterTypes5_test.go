@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsInteractiveFunctionParameterTypes5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const foo: 1n = 1n;
 export function fn(b = foo) {}`

@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsExternalModules(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export namespace /*1*/m {
     var /*2*/namespaceElemWithoutExport = 10;

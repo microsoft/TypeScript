@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpCommentsClass(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** This is class c2 without constructor*/
 class c2 {

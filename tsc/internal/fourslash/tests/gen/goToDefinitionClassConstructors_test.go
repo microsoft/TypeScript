@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionClassConstructors(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: definitions.ts
 export class Base {

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsAtGenericTypeArguments(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo<T1, T2> {}
 const foo = new Foo</*1*/, /*2*/,

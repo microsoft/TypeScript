@@ -9,8 +9,8 @@ import (
 )
 
 func TestMemberListOfModuleBeforeKeyword(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module TypeModule1 {
     export class C1 { }

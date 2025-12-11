@@ -8,8 +8,8 @@ import (
 )
 
 func TestCallHierarchyAccessor(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo() {
     new C().bar;

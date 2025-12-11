@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_exportEqualsNamespace_noDuplicate(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/a/index.d.ts
 declare namespace core {

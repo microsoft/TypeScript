@@ -9,8 +9,8 @@ import (
 )
 
 func TestSwitchCompletions(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `enum E { A, B }
 declare const e: E;

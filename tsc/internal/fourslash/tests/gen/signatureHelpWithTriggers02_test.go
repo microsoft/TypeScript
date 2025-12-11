@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpWithTriggers02(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function foo<T>(x: T, y: T): T;
 declare function bar<U>(x: U, y: U): U;

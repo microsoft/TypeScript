@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpConstructorInheritance(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class base {
     constructor(s: string);

@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportFixes_ambientCircularDefaultCrash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 {

@@ -8,8 +8,8 @@ import (
 )
 
 func TestClassInterfaceInsert(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Intersection {
     dist: number;

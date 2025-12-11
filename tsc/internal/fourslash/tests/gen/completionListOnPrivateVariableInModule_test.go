@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionListOnPrivateVariableInModule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module Foo {     var testing = "";     test/**/ }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

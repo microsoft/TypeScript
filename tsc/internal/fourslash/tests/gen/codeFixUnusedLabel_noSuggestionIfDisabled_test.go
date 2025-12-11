@@ -8,8 +8,8 @@ import (
 )
 
 func TestCodeFixUnusedLabel_noSuggestionIfDisabled(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowUnusedLabels: true
 foo: while (true) {}`

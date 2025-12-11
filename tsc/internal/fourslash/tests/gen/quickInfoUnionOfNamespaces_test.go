@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoUnionOfNamespaces(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare const x: typeof A | typeof B;
 x./**/f;

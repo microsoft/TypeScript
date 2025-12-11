@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForUMDModuleAlias(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: 0.d.ts
 export function doThing(): string;

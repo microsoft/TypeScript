@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoClassKeyword(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[1].forEach(cla/*1*/ss {});
 [1].forEach(cla/*2*/ss OK{});`

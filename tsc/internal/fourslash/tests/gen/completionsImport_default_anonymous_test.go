@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_default_anonymous(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: esnext
 // @noLib: true

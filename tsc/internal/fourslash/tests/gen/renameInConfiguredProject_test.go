@@ -9,8 +9,8 @@ import (
 )
 
 func TestRenameInConfiguredProject(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: referencesForGlobals_1.ts
 [|var [|{| "contextRangeIndex": 0 |}globalName|] = 0;|]

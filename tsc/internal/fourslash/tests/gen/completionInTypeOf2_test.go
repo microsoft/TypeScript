@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionInTypeOf2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module m1c {
     export class C { foo(): void; }

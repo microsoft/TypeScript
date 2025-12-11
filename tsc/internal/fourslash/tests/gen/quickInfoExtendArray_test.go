@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoExtendArray(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Foo<T> extends Array<T> { }
 var x: Foo<string>;

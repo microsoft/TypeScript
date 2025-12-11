@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericFunctionSignatureHelp3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo1<T>(x: number, callback: (y1: T) => number) { }
 function foo2<T>(x: number, callback: (y2: T) => number) { }

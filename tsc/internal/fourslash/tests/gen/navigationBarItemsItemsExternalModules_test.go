@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarItemsItemsExternalModules(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export class Bar {
     public s: string;

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsImportDeclarationAttributesEmptyModuleSpecifier1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: true
 // @filename: global.d.ts

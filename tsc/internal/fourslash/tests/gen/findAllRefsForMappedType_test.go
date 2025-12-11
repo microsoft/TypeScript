@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForMappedType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface T { /*1*/a: number };
 type U = { [K in keyof T]: string };

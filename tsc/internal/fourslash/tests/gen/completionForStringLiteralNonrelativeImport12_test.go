@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionForStringLiteralNonrelativeImport12(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: tests/test0.ts
 import * as foo1 from "m/*import_as0*/

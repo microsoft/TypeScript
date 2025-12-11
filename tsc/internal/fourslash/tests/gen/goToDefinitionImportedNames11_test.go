@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionImportedNames11(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowjs: true
 // @Filename: a.js

@@ -8,8 +8,8 @@ import (
 )
 
 func TestCodeFixCannotFindModule_suggestion_falsePositive(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @moduleResolution: bundler
 // @resolveJsonModule: true

@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarMerging_grandchildren(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// Should not merge grandchildren with property assignments
 const o = {

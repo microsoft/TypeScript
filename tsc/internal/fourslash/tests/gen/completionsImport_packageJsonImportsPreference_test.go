@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_packageJsonImportsPreference(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: preserve
 // @allowImportingTsExtensions: true

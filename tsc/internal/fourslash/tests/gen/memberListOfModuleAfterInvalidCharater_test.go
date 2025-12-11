@@ -10,8 +10,8 @@ import (
 )
 
 func TestMemberListOfModuleAfterInvalidCharater(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module testModule {
     export var foo = 1;

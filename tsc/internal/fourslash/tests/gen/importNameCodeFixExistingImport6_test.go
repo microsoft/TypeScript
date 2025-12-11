@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixExistingImport6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import [|{ v1 }|] from "fake-module";
 f1/*0*/();

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInClosedObjectTypeLiteralInSignature01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I<TString, TNumber> {
     [s: string]: TString;

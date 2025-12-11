@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesToStringLiteralValue(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const s: string = "some /*1*/ string";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

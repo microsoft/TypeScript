@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpAfterParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Type = (a, b, c) => void
 const a: Type = (a/*1*/, b/*2*/) => {}

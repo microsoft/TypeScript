@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToTypeDefinitionPrimitives(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: module1.ts
 var w: {a: number};

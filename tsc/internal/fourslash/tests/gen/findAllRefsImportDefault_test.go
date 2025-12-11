@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsImportDefault(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: f.ts
 export { foo as default };

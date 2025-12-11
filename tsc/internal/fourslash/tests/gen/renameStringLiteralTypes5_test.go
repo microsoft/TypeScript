@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameStringLiteralTypes5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type T = {
     "Prop 1": string;

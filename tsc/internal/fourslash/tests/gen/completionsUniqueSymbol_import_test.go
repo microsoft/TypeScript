@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsUniqueSymbol_import(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @noLib: true
 // @Filename: /globals.d.ts

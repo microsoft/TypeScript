@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesReadonly2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type T = {
   [|readonly|] prop: string;

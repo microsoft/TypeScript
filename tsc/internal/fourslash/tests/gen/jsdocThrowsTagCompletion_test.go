@@ -9,8 +9,8 @@ import (
 )
 
 func TestJsdocThrowsTagCompletion(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/**
  * @throws {/**/} description

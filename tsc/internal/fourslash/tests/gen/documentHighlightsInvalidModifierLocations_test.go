@@ -9,8 +9,8 @@ import (
 )
 
 func TestDocumentHighlightsInvalidModifierLocations(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class C {
     m([|readonly|] p) {}

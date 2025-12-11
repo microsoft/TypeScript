@@ -8,8 +8,8 @@ import (
 )
 
 func TestArrayCallAndConstructTypings(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var a/*1*/1 = new Array();
 var a/*2*/2 = new Array(1);

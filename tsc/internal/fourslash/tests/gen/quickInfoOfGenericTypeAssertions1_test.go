@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoOfGenericTypeAssertions1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f<T>(x: T): T { return null; }
 var /*1*/r = <T>(x: T) => x;

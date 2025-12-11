@@ -8,8 +8,8 @@ import (
 )
 
 func TestRename01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `///<reference path="./Bar.ts" />
 [|function [|{| "contextRangeIndex": 0 |}Bar|]() {

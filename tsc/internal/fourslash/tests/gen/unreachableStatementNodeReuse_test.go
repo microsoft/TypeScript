@@ -8,8 +8,8 @@ import (
 )
 
 func TestUnreachableStatementNodeReuse(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function test() {
 	return/*a*/abc();

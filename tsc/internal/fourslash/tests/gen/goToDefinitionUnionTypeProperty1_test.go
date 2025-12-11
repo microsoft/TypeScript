@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionUnionTypeProperty1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface One {
     /*propertyDefinition1*/commonProperty: number;

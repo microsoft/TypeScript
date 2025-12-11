@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToImplementation_satisfies(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: /a.ts
 interface /*def*/I {

@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameImportAndExportInDiffFiles(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: a.ts
 [|export var /*1*/[|{| "isDefinition": true, "contextRangeIndex": 0 |}a|];|]

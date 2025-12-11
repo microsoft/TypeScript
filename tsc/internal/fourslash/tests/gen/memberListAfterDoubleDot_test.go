@@ -8,8 +8,8 @@ import (
 )
 
 func TestMemberListAfterDoubleDot(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `../**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

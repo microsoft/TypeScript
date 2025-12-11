@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormattingTemplates(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `String.call ` + "`" + `${123}` + "`" + `/*1*/
 String.call ` + "`" + `${123} ${456}` + "`" + `/*2*/`

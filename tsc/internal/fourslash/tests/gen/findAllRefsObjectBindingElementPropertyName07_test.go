@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsObjectBindingElementPropertyName07(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let p, b;
 

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInUnclosedIndexSignature02(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class C {
     [foo: /*1*/

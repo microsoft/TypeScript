@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameImportRequire(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
 [|import [|{| "contextRangeIndex": 0 |}e|] = require("mod4");|]

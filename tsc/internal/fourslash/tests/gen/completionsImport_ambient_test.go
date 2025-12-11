@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_ambient(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
 // @Filename: a.d.ts

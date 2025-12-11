@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpConstructorOverload(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class clsOverload { constructor(); constructor(test: string); constructor(test?: string) { } }
 var x = new clsOverload(/*1*/);

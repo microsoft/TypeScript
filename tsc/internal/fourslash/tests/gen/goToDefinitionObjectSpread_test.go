@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionObjectSpread(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A1 { /*1*/a: number };
 interface A2 { /*2*/a?: number };

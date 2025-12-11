@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsParameterPropertyDeclaration3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     constructor(protected /*0*/protectedParam: number) {

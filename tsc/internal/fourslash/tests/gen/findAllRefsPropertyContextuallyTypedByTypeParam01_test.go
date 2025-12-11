@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsPropertyContextuallyTypedByTypeParam01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface IFoo {
     /*1*/a: string;

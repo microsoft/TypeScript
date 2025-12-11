@@ -9,8 +9,8 @@ import (
 )
 
 func TestImportNameCodeFixJsEnding(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
 // @Filename: /node_modules/lit/package.json

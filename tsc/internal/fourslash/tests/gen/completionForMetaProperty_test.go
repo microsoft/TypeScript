@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionForMetaProperty(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import./*1*/;
 new./*2*/;

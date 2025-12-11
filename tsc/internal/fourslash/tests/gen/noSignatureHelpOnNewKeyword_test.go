@@ -8,8 +8,8 @@ import (
 )
 
 func TestNoSignatureHelpOnNewKeyword(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo { }
 new/*1*/ Foo

@@ -9,8 +9,8 @@ import (
 )
 
 func TestBasicClassMembers(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class n {
     constructor (public x: number, public y: number, private z: string) { }

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionAtDottedNamespace(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `namespace wwer./**/w`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesBloomFilters2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: declaration.ts
 var container = { /*1*/42: 1 };

@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsLocalFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function /*1*/outerFoo() {
     function /*2*/foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {

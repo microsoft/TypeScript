@@ -10,8 +10,8 @@ import (
 )
 
 func TestCommentsInheritanceFourslash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** i1 is interface with properties*/
 interface i1 {

@@ -8,8 +8,8 @@ import (
 )
 
 func TestEsModuleInteropFindAllReferences(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @esModuleInterop: true
 // @Filename: /abc.d.ts

@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_named_didNotExistBefore(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @noLib: true
 // @Filename: /a.ts

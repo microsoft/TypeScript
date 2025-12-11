@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListAfterRegularExpressionLiteral03(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let v = 100;
 let x = /absidey/

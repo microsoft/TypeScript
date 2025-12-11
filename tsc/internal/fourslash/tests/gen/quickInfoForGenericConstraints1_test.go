@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForGenericConstraints1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo4<T extends Date>(te/**/st: T): T;
 function foo4<T extends Date>(test: any): any { return null; }`

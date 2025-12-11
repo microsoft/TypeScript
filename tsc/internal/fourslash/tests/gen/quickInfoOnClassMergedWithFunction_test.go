@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoOnClassMergedWithFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module Test {
     class Mocked {

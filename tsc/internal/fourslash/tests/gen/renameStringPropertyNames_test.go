@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameStringPropertyNames(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var o = {
     [|[|{| "contextRangeIndex": 0 |}prop|]: 0|]

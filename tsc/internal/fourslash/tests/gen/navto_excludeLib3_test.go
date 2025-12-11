@@ -10,8 +10,8 @@ import (
 )
 
 func TestNavto_excludeLib3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: /index.ts
 [|function parseInt(s: string): number {}|]`

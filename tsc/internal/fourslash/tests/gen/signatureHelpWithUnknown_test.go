@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpWithUnknown(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `eval(\/*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

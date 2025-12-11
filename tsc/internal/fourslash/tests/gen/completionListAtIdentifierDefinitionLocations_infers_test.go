@@ -8,8 +8,8 @@ import (
 )
 
 func TestCompletionListAtIdentifierDefinitionLocations_infers(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type UType = 1;
 type Bar<T> = T extends { a: (x: infer /*1*/) => void; b: (x: infer U/*2*/) => void }

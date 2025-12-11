@@ -9,8 +9,8 @@ import (
 )
 
 func TestAugmentedTypesModule2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function /*11*/m2f(x: number) { };
 namespace m2f { export interface I { foo(): void } }

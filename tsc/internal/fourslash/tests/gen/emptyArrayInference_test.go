@@ -8,8 +8,8 @@ import (
 )
 
 func TestEmptyArrayInference(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x/*1*/x = true ? [1] : [undefined]; 
 var y/*2*/y = true ? [1] : [];`

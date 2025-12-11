@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoOnConstructorWithGenericParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I {
     x: number;

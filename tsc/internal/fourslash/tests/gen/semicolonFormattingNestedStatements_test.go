@@ -8,8 +8,8 @@ import (
 )
 
 func TestSemicolonFormattingNestedStatements(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `if (true)
 if (true)/*parentOutsideBlock*/

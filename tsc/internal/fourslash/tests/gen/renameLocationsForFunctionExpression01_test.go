@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameLocationsForFunctionExpression01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x = [|function [|{| "contextRangeIndex": 0 |}f|](g: any, h: any) {
     [|f|]([|f|], g);

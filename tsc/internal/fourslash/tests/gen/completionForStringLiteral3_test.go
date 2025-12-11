@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionForStringLiteral3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f(a: "A", b: number): void;
 declare function f(a: "B", b: number): void;

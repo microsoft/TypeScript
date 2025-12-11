@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpInCompleteGenericsCall(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo<T>(x: number, callback: (x: T) => number) {
 }

@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForDefaultExport_anonymous(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
 export /*1*/default 1;

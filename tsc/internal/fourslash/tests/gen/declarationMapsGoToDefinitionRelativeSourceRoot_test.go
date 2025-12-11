@@ -8,8 +8,8 @@ import (
 )
 
 func TestDeclarationMapsGoToDefinitionRelativeSourceRoot(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: index.ts
 export class Foo {

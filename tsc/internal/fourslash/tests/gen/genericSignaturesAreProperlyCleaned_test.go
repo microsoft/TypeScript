@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericSignaturesAreProperlyCleaned(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Int<T> {
 val<U>(f: (t: T) => U): Int<U>;

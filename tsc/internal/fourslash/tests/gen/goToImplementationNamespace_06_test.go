@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToImplementationNamespace_06(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `namespace [|F/*declaration*/oo|] {
     declare function hello(): void;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionImportedNames6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: b.ts
 import [|/*moduleAliasDefinition*/alias|] = require("./a");

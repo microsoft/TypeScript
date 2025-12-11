@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpRestArgs3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @target: esnext
 // @lib: esnext

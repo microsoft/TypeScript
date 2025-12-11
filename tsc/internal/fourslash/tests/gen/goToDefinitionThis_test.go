@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionThis(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f(/*fnDecl*/this: number) {
     return [|/*fnUse*/this|];

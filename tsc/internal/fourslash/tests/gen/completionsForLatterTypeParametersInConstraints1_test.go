@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionsForLatterTypeParametersInConstraints1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// https://github.com/microsoft/TypeScript/issues/56474
 function test<First extends S/*1*/, Second>(a: First, b: Second) {}

@@ -8,8 +8,8 @@ import (
 )
 
 func TestWhiteSpaceTrimming2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let noSubTemplate = ` + "`" + `/*    /*1*/` + "`" + `;
 let templateHead = ` + "`" + `/*    /*2*/${1 + 2}` + "`" + `;

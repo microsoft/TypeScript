@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoMappedTypeMethods(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type M = { [K in 'one']: any };
 const x: M = {

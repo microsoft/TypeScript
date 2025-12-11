@@ -10,8 +10,8 @@ import (
 )
 
 func TestPathCompletionsPackageJsonExportsWildcard9(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: node18
 // @allowJs: true

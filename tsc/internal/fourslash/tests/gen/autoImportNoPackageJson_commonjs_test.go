@@ -8,8 +8,8 @@ import (
 )
 
 func TestAutoImportNoPackageJson_commonjs(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
 // @Filename: /node_modules/lit/index.d.cts

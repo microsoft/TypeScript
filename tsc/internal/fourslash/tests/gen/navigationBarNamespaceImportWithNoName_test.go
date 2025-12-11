@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarNamespaceImportWithNoName(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import *{} from 'foo';`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

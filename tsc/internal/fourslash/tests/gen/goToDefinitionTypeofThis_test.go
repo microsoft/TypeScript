@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionTypeofThis(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f(/*fnDecl*/this: number) {
     type X = typeof [|/*fnUse*/this|];

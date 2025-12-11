@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListOnVarBetweenModules(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module M1 {
     export class C1 {

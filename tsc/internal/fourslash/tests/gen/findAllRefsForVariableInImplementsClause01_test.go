@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForVariableInImplementsClause01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var Base = class { };
 class C extends Base implements /**/Base { }`

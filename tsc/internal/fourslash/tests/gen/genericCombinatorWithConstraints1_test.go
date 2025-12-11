@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericCombinatorWithConstraints1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function apply<T, U extends Date>(source: T[], selector: (x: T) => U) {
     var /*1*/xs = source.map(selector); // any[]

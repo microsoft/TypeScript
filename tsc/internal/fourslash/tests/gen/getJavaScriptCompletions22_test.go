@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetJavaScriptCompletions22(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file.js

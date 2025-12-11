@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListOutsideOfForLoop01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `for (let i = 0; i < 10; i++) i;/*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

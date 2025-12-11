@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_jsx1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @jsx: react
 // @Filename: /node_modules/react/index.d.ts

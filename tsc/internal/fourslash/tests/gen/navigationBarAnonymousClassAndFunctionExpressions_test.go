@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarAnonymousClassAndFunctionExpressions(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `global.cls = class { };
 (function() {

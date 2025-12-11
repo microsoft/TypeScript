@@ -9,8 +9,8 @@ import (
 )
 
 func TestAutoImportPaths(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /package1/jsconfig.json
 {

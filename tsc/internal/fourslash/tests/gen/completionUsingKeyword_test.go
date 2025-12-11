@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionUsingKeyword(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo() {
     usin/*1*/

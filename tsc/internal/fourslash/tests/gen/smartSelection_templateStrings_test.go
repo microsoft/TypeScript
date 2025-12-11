@@ -8,8 +8,8 @@ import (
 )
 
 func TestSmartSelection_templateStrings(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `` + "`" + `a /*1*/b ${
   '/*2*/c'

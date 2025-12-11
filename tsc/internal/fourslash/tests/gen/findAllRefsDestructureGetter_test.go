@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsDestructureGetter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Test {
     get /*x0*/x() { return 0; }

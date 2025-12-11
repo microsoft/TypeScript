@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForModifiers(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|/*declareModifier*/declare /*abstractModifier*/abstract class C1 {
     [|/*staticModifier*/static a;|]

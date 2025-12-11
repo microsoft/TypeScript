@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForStatic(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: referencesOnStatic_1.ts
 var n = 43;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForIndexProperty(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     /*1*/property: number;

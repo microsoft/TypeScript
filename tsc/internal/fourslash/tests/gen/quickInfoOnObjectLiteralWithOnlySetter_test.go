@@ -10,8 +10,8 @@ import (
 )
 
 func TestQuickInfoOnObjectLiteralWithOnlySetter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function /*1*/makePoint(x: number) {
     return {

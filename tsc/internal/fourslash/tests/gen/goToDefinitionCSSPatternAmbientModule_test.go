@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionCSSPatternAmbientModule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @esModuleInterop: true
 // @Filename: index.css

@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToTypeDefinition_returnType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface /*I*/I { x: number; }
 interface /*J*/J { y: number; }

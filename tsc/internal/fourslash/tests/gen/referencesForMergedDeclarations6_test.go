@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForMergedDeclarations6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Foo { }
 /*1*/module /*2*/Foo {

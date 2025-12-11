@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsInheritedProperties4(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface C extends D {
     /*0*/prop0: string;

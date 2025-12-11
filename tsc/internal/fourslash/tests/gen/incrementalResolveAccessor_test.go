@@ -8,8 +8,8 @@ import (
 )
 
 func TestIncrementalResolveAccessor(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class c1 {
     get p1(): string {

@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsInteractiveMultifileFunctionCalls(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Target: esnext
 // @module: node18

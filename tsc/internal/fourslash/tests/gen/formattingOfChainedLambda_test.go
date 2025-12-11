@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormattingOfChainedLambda(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var fn = (x: string) => ()=> alert(x)/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

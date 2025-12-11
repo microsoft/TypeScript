@@ -8,8 +8,8 @@ import (
 )
 
 func TestAutoImportCrossProject_paths_toDist(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/packages/app/package.json
 { "name": "app", "dependencies": { "dep": "*" } }

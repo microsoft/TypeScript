@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoMappedType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I {
   /** m documentation */ m(): void;

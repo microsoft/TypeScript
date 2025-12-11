@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameParameterPropertyDeclaration1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     constructor([|private [|{| "contextRangeIndex": 0 |}privateParam|]: number|]) {

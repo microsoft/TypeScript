@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportAllowSyntheticDefaultImports0(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @AllowSyntheticDefaultImports: true
 // @Filename: a/f1.ts

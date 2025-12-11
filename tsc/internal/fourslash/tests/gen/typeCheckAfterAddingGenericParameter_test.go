@@ -8,8 +8,8 @@ import (
 )
 
 func TestTypeCheckAfterAddingGenericParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f<x, x>() { }
 function f2<X, X>(b: X): X { return null; }

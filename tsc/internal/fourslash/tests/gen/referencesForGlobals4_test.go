@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForGlobals4(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: referencesForGlobals_1.ts
 /*1*/module /*2*/globalModule {

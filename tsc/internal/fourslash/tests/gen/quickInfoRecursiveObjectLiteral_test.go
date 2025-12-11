@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoRecursiveObjectLiteral(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var a = { f: /**/a`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

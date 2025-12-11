@@ -10,8 +10,8 @@ import (
 )
 
 func TestConstQuickInfoAndCompletionList(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const /*1*/a = 10;
 var x = /*2*/a;

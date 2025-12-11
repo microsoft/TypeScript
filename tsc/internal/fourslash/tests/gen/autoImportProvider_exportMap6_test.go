@@ -11,8 +11,8 @@ import (
 )
 
 func TestAutoImportProvider_exportMap6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @types package should be ignored because implementation package has types
 // @Filename: /home/src/workspaces/project/tsconfig.json

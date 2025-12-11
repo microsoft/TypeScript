@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_importType1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @verbatimModuleSyntax: true
 // @module: es2015

@@ -9,8 +9,8 @@ import (
 )
 
 func TestTripleSlashRefPathCompletionContext(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: f.ts
 /*f*/

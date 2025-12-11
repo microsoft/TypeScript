@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionListsStringLiteralTypeAsIndexedAccessTypeObject(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let firstCase: "a/*case_1*/"["foo"]
 let secondCase: "b/*case_2*/"["bar"]

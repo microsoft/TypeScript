@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameObjectBindingElementPropertyName01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I {
     [|[|{| "contextRangeIndex": 0 |}property1|]: number;|]

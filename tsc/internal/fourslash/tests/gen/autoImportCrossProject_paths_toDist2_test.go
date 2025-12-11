@@ -9,8 +9,8 @@ import (
 )
 
 func TestAutoImportCrossProject_paths_toDist2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/common/tsconfig.json
 {

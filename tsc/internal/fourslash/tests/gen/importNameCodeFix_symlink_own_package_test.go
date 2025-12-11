@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_symlink_own_package(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /packages/b/b0.ts
 // @Symlink: /node_modules/b/b0.ts

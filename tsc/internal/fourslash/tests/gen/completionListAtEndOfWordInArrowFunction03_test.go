@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionListAtEndOfWordInArrowFunction03(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `(d, defaultIsAnInvalidParameterName) => default/*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

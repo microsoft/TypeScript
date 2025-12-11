@@ -8,8 +8,8 @@ import (
 )
 
 func TestIncrementalParsingDynamicImport2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @lib: es2015
 // @Filename: ./foo.ts

@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForStringLiteralPropertyNames6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const x = function () { return 111111; }
 x./*1*/someProperty = 5;

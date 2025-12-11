@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfo_notInsideComment(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `a/* /**/ */.b`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

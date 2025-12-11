@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsArrowFunctionExpression(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var /*1*/x = /*5*/a => 10;
 var /*2*/y = (/*6*/a, /*7*/b) => 10;

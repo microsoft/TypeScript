@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionInFunctionLikeBody_includesPrimitiveTypes(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo<T> { }
 class Bar { }

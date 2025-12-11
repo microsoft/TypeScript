@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListBuilderLocations_parameters(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var aa = 1;
 class bar1{ constructor(/*1*/

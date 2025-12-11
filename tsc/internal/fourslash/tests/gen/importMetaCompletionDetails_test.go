@@ -10,8 +10,8 @@ import (
 )
 
 func TestImportMetaCompletionDetails(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: index.mts
 // @module: Node16

@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoOnThis2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Bar<T> {
     public explicitThis(this: this) {

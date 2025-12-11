@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_fileWithNoTrailingNewline(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
 export const foo = 0;

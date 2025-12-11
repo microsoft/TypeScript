@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormatEmptyParamList(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f( f: function){/*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

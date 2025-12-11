@@ -9,8 +9,8 @@ import (
 )
 
 func TestAugmentedTypesModule6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare class m3f { foo(x: number): void }
 module m3f { export interface I { foo(): void } }

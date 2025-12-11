@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsEnumAsNamespace(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/enum /*2*/E { A }
 let e: /*3*/E.A;`

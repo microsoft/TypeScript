@@ -8,8 +8,8 @@ import (
 )
 
 func TestAutoImportPackageRootPathTypeModule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @Filename: /node_modules/pkg/package.json

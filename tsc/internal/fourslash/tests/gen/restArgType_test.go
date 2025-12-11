@@ -8,8 +8,8 @@ import (
 )
 
 func TestRestArgType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Test {
     private _priv(.../*1*/restArgs) {

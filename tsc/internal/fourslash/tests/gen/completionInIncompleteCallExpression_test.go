@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionInIncompleteCallExpression(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var array = [1, 2, 4]
 function a4(x, y, z) { }

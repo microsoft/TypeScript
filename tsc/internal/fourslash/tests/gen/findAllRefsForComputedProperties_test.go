@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForComputedProperties(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I {
     ["/*0*/prop1"]: () => void;

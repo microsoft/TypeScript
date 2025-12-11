@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionForStringLiteralNonrelativeImportTypings3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: subdirectory/test0.ts
 /// <reference types="m/*types_ref0*/" />

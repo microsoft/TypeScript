@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameDestructuringAssignment(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I {
     [|[|{| "contextRangeIndex": 0 |}x|]: number;|]

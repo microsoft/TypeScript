@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarComputedPropertyName(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function F(key, value) {
     return {

@@ -8,8 +8,8 @@ import (
 )
 
 func TestSelfReferencedExternalModule2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: app.ts
 export import A = require('./app2');

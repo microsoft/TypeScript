@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameAlias2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|module [|{| "contextRangeIndex": 0 |}SomeModule|] { export class SomeClass { } }|]
 import M = [|SomeModule|];

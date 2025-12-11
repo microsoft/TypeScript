@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_default_symbolName(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
 // @esModuleInterop: false

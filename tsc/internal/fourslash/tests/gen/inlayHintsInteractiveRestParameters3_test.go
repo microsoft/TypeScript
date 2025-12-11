@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsInteractiveRestParameters3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function fn(x: number, y: number, a: number, b: number) {
     return x + y + a + b;

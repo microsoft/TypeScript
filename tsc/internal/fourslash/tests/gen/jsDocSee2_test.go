@@ -8,8 +8,8 @@ import (
 )
 
 func TestJsDocSee2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** @see {/*use1*/[|foooo|]} unknown reference*/
 const a = ""

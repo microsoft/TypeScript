@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportNodeModules6(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|f1/*0*/('');|]
 // @Filename: package.json

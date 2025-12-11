@@ -9,8 +9,8 @@ import (
 )
 
 func TestJsdocTypedefTagRename01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: jsDocTypedef_form1.js

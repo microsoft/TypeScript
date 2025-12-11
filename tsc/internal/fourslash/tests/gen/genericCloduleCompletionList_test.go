@@ -9,8 +9,8 @@ import (
 )
 
 func TestGenericCloduleCompletionList(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class D<T> { x: number }
 module D { export function f() { } }

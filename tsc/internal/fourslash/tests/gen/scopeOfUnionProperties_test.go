@@ -8,8 +8,8 @@ import (
 )
 
 func TestScopeOfUnionProperties(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f(s: string | number) {
     s.constr/*1*/uctor

@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_noDestructureNonObjectLiteral(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @target: es2015
 // @strict: true

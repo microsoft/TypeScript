@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionForStringLiteral_quotePreference(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `enum A {
     A,

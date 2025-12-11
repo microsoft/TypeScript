@@ -8,8 +8,8 @@ import (
 )
 
 func TestTsxQuickInfo1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
 var x1 = <di/*1*/v></di/*2*/v>

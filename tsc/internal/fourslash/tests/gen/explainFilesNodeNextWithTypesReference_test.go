@@ -8,8 +8,8 @@ import (
 )
 
 func TestExplainFilesNodeNextWithTypesReference(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/react-hook-form/package.json
 {

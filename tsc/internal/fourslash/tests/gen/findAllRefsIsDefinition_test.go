@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsIsDefinition(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function foo(a: number): number;
 declare function foo(a: string): string;

@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetPropertySymbolsFromBaseTypesDoesntCrash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
 class ClassA implements IInterface {

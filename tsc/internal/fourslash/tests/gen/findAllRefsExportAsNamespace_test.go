@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsExportAsNamespace(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/a/index.d.ts
 export function /*0*/f(): void;

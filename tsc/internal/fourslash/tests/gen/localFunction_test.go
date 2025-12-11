@@ -8,8 +8,8 @@ import (
 )
 
 func TestLocalFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function /*1*/foo() {
     function /*2*/bar2() {

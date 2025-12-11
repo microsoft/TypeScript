@@ -8,8 +8,8 @@ import (
 )
 
 func TestAssertContextualType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `<(aa: number) =>void >(function myFn(b/**/b) { });`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

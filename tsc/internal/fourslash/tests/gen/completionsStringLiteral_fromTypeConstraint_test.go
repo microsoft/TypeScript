@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsStringLiteral_fromTypeConstraint(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Foo { foo: string; bar: string; }
 type T = Pick<Foo, "[|/**/|]">;`

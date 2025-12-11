@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForClassMembersExtendingGenericClass(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Base<T> {
     /*a1*/a: this;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsPrivateNameAccessors(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class C {
     /*1*/get /*2*/#foo(){ return 1; }

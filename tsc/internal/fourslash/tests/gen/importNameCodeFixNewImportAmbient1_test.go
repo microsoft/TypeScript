@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportAmbient1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import d from "other-ambient-module";
 import * as ns from "yet-another-ambient-module";

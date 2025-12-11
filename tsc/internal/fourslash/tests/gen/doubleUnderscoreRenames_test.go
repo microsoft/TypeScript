@@ -8,8 +8,8 @@ import (
 )
 
 func TestDoubleUnderscoreRenames(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: fileA.ts
 [|export function [|{| "contextRangeIndex": 0 |}__foo|]() {

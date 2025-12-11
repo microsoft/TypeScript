@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionSwitchCase2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `switch (null) {
   [|/*start*/default|]: break;

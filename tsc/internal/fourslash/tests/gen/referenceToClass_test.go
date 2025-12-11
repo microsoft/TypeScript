@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferenceToClass(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: referenceToClass_1.ts
 class /*1*/foo {

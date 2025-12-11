@@ -8,8 +8,8 @@ import (
 )
 
 func TestCompletionListForNonExportedMemberInAmbientModuleWithExportAssignment1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: completionListForNonExportedMemberInAmbientModuleWithExportAssignment1_file0.ts
 var x: Date;

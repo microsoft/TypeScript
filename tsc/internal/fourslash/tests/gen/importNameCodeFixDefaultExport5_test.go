@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixDefaultExport5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @moduleResolution: bundler
 // @Filename: /node_modules/hooks/useFoo.ts

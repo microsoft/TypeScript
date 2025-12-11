@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsUnresolvedSymbols3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import * as /*a0*/Bar from "does-not-exist";
 

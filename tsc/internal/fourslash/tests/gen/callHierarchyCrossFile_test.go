@@ -8,8 +8,8 @@ import (
 )
 
 func TestCallHierarchyCrossFile(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: /a.ts
 export function /**/createModelReference() {}

@@ -8,8 +8,8 @@ import (
 )
 
 func TestCompletionListInObjectBindingPattern14(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const { b/**/ } = new class {
     private ab;

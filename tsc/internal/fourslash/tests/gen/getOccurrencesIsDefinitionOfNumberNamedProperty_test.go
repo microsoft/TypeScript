@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetOccurrencesIsDefinitionOfNumberNamedProperty(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `let o = { /*1*/1: 12 };
 let y = o[/*2*/1];`

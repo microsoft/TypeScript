@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpTaggedTemplatesNegatives5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo(strs, ...rest) {
 }

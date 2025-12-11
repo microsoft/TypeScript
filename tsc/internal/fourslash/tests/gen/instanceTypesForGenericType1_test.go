@@ -8,8 +8,8 @@ import (
 )
 
 func TestInstanceTypesForGenericType1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class G<T> {               // Introduce type parameter T
     self: G<T>;            // Use T as type argument to form instance type

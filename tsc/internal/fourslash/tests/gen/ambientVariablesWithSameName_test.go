@@ -8,8 +8,8 @@ import (
 )
 
 func TestAmbientVariablesWithSameName(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare module M {
     export var x: string;

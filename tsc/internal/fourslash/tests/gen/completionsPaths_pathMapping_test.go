@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsPaths_pathMapping(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /src/b.ts
 export const x = 0;

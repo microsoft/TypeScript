@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionForStringLiteral_quotePreference5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type T = "0" | "1";
 const t: T = /**/`

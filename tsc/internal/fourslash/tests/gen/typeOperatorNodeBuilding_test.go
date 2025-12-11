@@ -8,8 +8,8 @@ import (
 )
 
 func TestTypeOperatorNodeBuilding(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: keyof.ts
 function doSomethingWithKeys<T>(...keys: (keyof T)[]) { }

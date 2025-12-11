@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoJsDocTags12(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/**
  * @param {Object} options the args object

@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsJsDocTemplateTag_class(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** @template /*1*/T */
 class C</*2*/T> {}`

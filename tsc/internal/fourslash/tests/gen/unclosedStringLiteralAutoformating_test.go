@@ -8,8 +8,8 @@ import (
 )
 
 func TestUnclosedStringLiteralAutoformating(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var x = /*1*/"asd/*2*/
 class Foo {

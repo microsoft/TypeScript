@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoInInvalidIndexSignature(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function method() { var /**/dictionary = <{ [index]: string; }>{}; }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

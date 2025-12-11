@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetOccurrencesIsDefinitionOfArrowFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/var /*2*/f = x => x + 1;
 /*3*/f(12);`

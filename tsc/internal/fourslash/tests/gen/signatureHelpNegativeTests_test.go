@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpNegativeTests(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//inside a comment foo(/*insideComment*/
 cl/*invalidContext*/ass InvalidSignatureHelpLocation { }

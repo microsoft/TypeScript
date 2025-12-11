@@ -8,8 +8,8 @@ import (
 )
 
 func TestGetOccurrencesIsDefinitionOfFunction(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/function /*2*/func(x: number) {
 }

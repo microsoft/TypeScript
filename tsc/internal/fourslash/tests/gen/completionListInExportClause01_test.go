@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionListInExportClause01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: m1.ts
 export var foo: number = 1;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericArityEnforcementAfterEdit(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface G<T, U> { }
 /**/

@@ -8,8 +8,8 @@ import (
 )
 
 func TestGenericInterfaceWithInheritanceEdit1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface ChainedObject<T> {
     values(): ChainedArray<any>;

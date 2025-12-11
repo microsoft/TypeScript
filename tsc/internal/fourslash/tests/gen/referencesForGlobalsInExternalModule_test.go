@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForGlobalsInExternalModule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/var /*2*/topLevelVar = 2;
 var topLevelVar2 = /*3*/topLevelVar;

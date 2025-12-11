@@ -10,8 +10,8 @@ import (
 )
 
 func TestCommentsExternalModulesFourslash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: commentsExternalModules_file0.ts
 /** Namespace comment*/

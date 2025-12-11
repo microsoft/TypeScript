@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionListCladule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo {
     doStuff(): number { return 0; }

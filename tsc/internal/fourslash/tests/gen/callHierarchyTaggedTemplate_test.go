@@ -8,8 +8,8 @@ import (
 )
 
 func TestCallHierarchyTaggedTemplate(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo() {
     bar` + "`" + `a${1}b` + "`" + `;

@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportTypeNodeGoToDefinition(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /ns.ts
 /*refFile*/export namespace /*refFoo*/Foo {

@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_jsCJSvsESM2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
 // @checkJs: true

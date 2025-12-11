@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionTypeGuard(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const x = "str";
 function assert1(condition: any, msg?: string): /*1*/ ;

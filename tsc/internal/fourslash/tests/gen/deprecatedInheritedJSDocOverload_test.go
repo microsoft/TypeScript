@@ -8,8 +8,8 @@ import (
 )
 
 func TestDeprecatedInheritedJSDocOverload(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface PartialObserver<T> {}
 interface Subscription {}

@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpTypeParametersNotVariadic(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f(a: any, ...b: any[]): any;
 f</*1*/>(1, 2);`

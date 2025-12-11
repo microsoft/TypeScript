@@ -8,8 +8,8 @@ import (
 )
 
 func TestRemoteGetReferences(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: remoteGetReferences_1.ts
 // Comment Refence Test: globalVar

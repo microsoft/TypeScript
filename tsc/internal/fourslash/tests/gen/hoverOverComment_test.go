@@ -8,8 +8,8 @@ import (
 )
 
 func TestHoverOverComment(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export function f() {}
 //foo

@@ -10,8 +10,8 @@ import (
 )
 
 func TestCommentsEnumsFourslash(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/** Enum of colors*/
 enum /*1*/Colors {

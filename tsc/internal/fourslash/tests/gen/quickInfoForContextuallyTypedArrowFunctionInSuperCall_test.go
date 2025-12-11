@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoForContextuallyTypedArrowFunctionInSuperCall(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class A<T1, T2> {
     constructor(private map: (value: T1) => T2) {

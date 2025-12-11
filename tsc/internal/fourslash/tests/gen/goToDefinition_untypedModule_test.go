@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinition_untypedModule(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/foo/index.js
 not read

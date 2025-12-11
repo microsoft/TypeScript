@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionEntryForClassMembers_StaticWhenBaseTypeIsNotResolved(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.ts
 import React from 'react'

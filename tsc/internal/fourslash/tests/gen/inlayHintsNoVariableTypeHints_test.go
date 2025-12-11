@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsNoVariableTypeHints(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const a = 123;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

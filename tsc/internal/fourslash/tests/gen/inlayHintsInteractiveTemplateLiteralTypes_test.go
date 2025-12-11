@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsInteractiveTemplateLiteralTypes(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function getTemplateLiteral1(): ` + "`" + `${string},${string}` + "`" + `;
 const lit1 = getTemplateLiteral1();

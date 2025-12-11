@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarMerging(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
 module a {

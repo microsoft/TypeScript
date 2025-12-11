@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsForFunctionExpression01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
 var foo = /*1*/function /*2*/foo(a = /*3*/foo(), b = () => /*4*/foo) {

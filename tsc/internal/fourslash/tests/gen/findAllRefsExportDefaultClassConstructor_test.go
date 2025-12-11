@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsExportDefaultClassConstructor(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export default class {
     /*1*/constructor() {}

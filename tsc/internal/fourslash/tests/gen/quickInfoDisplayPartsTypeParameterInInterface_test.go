@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsTypeParameterInInterface(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface /*1*/I</*2*/T> {
     new </*3*/U>(/*4*/a: /*5*/U, /*6*/b: /*7*/T): /*8*/U;

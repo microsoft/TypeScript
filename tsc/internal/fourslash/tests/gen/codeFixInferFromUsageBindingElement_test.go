@@ -8,8 +8,8 @@ import (
 )
 
 func TestCodeFixInferFromUsageBindingElement(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f([car, cdr]) {
     return car + cdr + 1

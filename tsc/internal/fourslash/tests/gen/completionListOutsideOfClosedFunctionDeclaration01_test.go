@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListOutsideOfClosedFunctionDeclaration01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// no a or b
 /*1*/function f (a, b) {}`

@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionTypeofExpressions(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const x = "str";
 function test(arg: typeof x./*1*/) {}

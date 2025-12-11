@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToImplementationLocal_00(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `he/*function_call*/llo();
 function [|hello|]() {}`

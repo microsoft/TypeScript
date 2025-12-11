@@ -8,8 +8,8 @@ import (
 )
 
 func TestDocumentHighlightTemplateStrings(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Foo = "[|a|]" | "b";
 

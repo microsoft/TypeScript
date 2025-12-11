@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportFileDetachedComments(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|/**
  * This is a comment intended to be attached to this interface

@@ -8,8 +8,8 @@ import (
 )
 
 func TestCodeFixRemoveUnnecessaryAwait_mixedUnion(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @target: esnext
 async function fn1(a: Promise<void> | void) {

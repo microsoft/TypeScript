@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpInRecursiveType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Tail<T extends any[]> =
 	((...args: T) => any) extends ((head: any, ...tail: infer R) => any) ? R : never;

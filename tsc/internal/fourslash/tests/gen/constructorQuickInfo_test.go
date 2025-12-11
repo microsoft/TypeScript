@@ -8,8 +8,8 @@ import (
 )
 
 func TestConstructorQuickInfo(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class SS<T>{}
 

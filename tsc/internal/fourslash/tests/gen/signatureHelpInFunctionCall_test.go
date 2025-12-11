@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpInFunctionCall(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var items = [];
 items.forEach(item => {

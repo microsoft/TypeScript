@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionForStringLiteral(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type Options = "Option 1" | "Option 2" | "Option 3";
 var x: Options = "[|/*1*/Option 3|]";

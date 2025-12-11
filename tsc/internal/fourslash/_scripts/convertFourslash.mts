@@ -9,17 +9,11 @@ const stradaFourslashPath = path.resolve(import.meta.dirname, "../", "../", "../
 
 let inputFileSet: Set<string> | undefined;
 
-const failingTestsPath = path.join(import.meta.dirname, "failingTests.txt");
 const manualTestsPath = path.join(import.meta.dirname, "manualTests.txt");
 
 const outputDir = path.join(import.meta.dirname, "../", "tests", "gen");
 
 const unparsedFiles: string[] = [];
-
-function getFailingTests(): Set<string> {
-    const failingTestsList = fs.readFileSync(failingTestsPath, "utf-8").split("\n").map(line => line.trim().substring(4)).filter(line => line.length > 0);
-    return new Set(failingTestsList);
-}
 
 function getManualTests(): Set<string> {
     if (!fs.existsSync(manualTestsPath)) {
@@ -43,13 +37,13 @@ export function main() {
     fs.rmSync(outputDir, { recursive: true, force: true });
     fs.mkdirSync(outputDir, { recursive: true });
 
-    parseTypeScriptFiles(getFailingTests(), getManualTests(), stradaFourslashPath);
+    parseTypeScriptFiles(getManualTests(), stradaFourslashPath);
     console.log(unparsedFiles.join("\n"));
     const gofmt = which.sync("go");
     cp.execFileSync(gofmt, ["tool", "mvdan.cc/gofumpt", "-lang=go1.25", "-w", outputDir]);
 }
 
-function parseTypeScriptFiles(failingTests: Set<string>, manualTests: Set<string>, folder: string): void {
+function parseTypeScriptFiles(manualTests: Set<string>, folder: string): void {
     const files = fs.readdirSync(folder);
 
     files.forEach(file => {
@@ -60,14 +54,14 @@ function parseTypeScriptFiles(failingTests: Set<string>, manualTests: Set<string
         }
 
         if (stat.isDirectory()) {
-            parseTypeScriptFiles(failingTests, manualTests, filePath);
+            parseTypeScriptFiles(manualTests, filePath);
         }
         else if (file.endsWith(".ts") && !manualTests.has(file.slice(0, -3))) {
             const content = fs.readFileSync(filePath, "utf-8");
             const test = parseFileContent(file, content);
             const isServer = filePath.split(path.sep).includes("server");
             if (test) {
-                const testContent = generateGoTest(failingTests, test, isServer);
+                const testContent = generateGoTest(test, isServer);
                 const testPath = path.join(outputDir, `${test.name}_test.go`);
                 fs.writeFileSync(testPath, testContent, "utf-8");
             }
@@ -3273,7 +3267,7 @@ interface GoTest {
     commands: Cmd[];
 }
 
-function generateGoTest(failingTests: Set<string>, test: GoTest, isServer: boolean): string {
+function generateGoTest(test: GoTest, isServer: boolean): string {
     const testName = (test.name[0].toUpperCase() + test.name.substring(1)).replaceAll("-", "_").replaceAll(/[^a-zA-Z0-9_]/g, "");
     const content = test.content;
     const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
@@ -3305,8 +3299,8 @@ import (
 )
 
 func Test${testName}(t *testing.T) {
+    fourslash.SkipIfFailing(t)
     t.Parallel()
-    ${failingTests.has(testName) ? "t.Skip()" : ""}
     defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ${content}
     f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

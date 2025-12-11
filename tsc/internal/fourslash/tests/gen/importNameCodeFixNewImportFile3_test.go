@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportFile3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `[|let t: XXX/*0*/.I;|]
 // @Filename: ./module.ts

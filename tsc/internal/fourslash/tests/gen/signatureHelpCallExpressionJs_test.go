@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpCallExpressionJs(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @checkJs: true
 // @allowJs: true

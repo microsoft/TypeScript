@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpForSignatureWithUnreachableType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /node_modules/foo/node_modules/bar/index.d.ts
 export interface SomeType {

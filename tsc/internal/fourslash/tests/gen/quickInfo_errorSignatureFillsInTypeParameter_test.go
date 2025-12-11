@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfo_errorSignatureFillsInTypeParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f<T>(x: number): T;
 const x/**/ = f();`

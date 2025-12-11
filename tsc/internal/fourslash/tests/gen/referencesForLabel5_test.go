@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForLabel5(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*1*/label:  while (true) {
             if (false) /*2*/break /*3*/label;

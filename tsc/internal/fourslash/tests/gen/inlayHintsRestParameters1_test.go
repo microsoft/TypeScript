@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsRestParameters1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function foo1(a: number, ...b: number[]) {}
 foo1(1, 1, 1, 1);

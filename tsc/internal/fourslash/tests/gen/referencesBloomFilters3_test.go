@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesBloomFilters3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: declaration.ts
 enum Test { /*1*/"/*2*/42" = 1 };

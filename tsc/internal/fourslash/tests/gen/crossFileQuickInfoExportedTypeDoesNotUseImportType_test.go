@@ -8,8 +8,8 @@ import (
 )
 
 func TestCrossFileQuickInfoExportedTypeDoesNotUseImportType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: b.ts
 export interface B {}

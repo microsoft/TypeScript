@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsOnPrivateParameterProperty1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class ABCD {
     constructor(private x: number, public y: number, /*1*/private /*2*/z: number) {

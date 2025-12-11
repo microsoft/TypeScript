@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsOverridingProperties1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @newline: LF
 // @Filename: a.ts

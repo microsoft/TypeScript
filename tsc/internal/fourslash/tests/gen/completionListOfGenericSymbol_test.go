@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionListOfGenericSymbol(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var a = [1,2,3];
 a./**/`

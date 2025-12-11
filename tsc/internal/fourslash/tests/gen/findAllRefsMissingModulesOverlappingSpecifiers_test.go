@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsMissingModulesOverlappingSpecifiers(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// https://github.com/microsoft/TypeScript/issues/5551
 import { resolve/*0*/ as resolveUrl } from "idontcare";

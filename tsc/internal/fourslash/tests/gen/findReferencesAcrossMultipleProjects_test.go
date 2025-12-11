@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindReferencesAcrossMultipleProjects(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: a.ts
 /*1*/var /*2*/x: number;

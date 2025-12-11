@@ -9,8 +9,8 @@ import (
 )
 
 func TestCompletionListInUnclosedCommaExpression01(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// should NOT see a and b
 foo((a, b) => a,/*1*/`

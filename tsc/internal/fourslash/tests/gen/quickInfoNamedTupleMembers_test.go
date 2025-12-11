@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoNamedTupleMembers(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export type /*1*/Segment = [length: number, count: number];`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

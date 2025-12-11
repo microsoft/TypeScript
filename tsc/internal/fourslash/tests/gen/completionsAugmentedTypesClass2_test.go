@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsAugmentedTypesClass2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class c5b { public foo(){ } }
 module c5b { var y = 2; } // should be ok

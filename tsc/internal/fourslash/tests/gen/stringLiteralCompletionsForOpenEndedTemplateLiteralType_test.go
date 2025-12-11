@@ -9,8 +9,8 @@ import (
 )
 
 func TestStringLiteralCompletionsForOpenEndedTemplateLiteralType(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | ` + "`" + `${string}Downcast` + "`" + ` & {}) {}
 conversionTest("/**/");`

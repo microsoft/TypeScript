@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenameObjectSpreadAssignment(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A1 { a: number };
 interface A2 { a?: number };

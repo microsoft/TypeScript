@@ -9,8 +9,8 @@ import (
 )
 
 func TestJavascriptModules23(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: mod.ts
 var foo = {a: "test"};

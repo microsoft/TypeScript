@@ -8,8 +8,8 @@ import (
 )
 
 func TestAutoImportPackageJsonFilterExistingImport2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: preserve
 // @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts

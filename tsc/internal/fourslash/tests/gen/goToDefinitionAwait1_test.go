@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionAwait1(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `async function /*end1*/foo() {
     [|/*start1*/await|] Promise.resolve(0);

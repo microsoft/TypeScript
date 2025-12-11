@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsWriteAccess(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface Obj {
     [` + "`" + `/*1*/num` + "`" + `]: number;

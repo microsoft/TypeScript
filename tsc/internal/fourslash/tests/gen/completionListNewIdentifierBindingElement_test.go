@@ -8,8 +8,8 @@ import (
 )
 
 func TestCompletionListNewIdentifierBindingElement(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var { x:html/*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

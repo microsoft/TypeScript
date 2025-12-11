@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormatOnEnterFunctionDeclaration(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*0*/function listAPIFiles(path: string): string[] {/*1*/ }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

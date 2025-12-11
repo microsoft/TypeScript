@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFix_importType4(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @preserveValueImports: true
 // @isolatedModules: true

@@ -8,8 +8,8 @@ import (
 )
 
 func TestRegexErrorRecovery(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ` // test code
 //var x = //**/a/;/*1*/

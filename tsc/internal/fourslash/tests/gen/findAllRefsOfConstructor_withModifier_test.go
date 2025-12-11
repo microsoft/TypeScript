@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsOfConstructor_withModifier(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class X {
     public /*0*/constructor() {}

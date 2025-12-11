@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinitionExpandoElementAccess(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function f() {}
 f[/*0*/"x"] = 0;

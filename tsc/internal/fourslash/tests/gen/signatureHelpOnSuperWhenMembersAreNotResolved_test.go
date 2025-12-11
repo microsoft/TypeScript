@@ -8,8 +8,8 @@ import (
 )
 
 func TestSignatureHelpOnSuperWhenMembersAreNotResolved(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class A { }
 class B extends A { constructor(public x: string) { } }

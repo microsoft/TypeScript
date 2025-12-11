@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindReferencesSeeTagInTs(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function doStuffWithStuff/*1*/(stuff: { quantity: number }) {}
 

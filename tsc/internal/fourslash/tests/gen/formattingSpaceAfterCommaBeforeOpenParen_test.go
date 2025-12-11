@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormattingSpaceAfterCommaBeforeOpenParen(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `foo(a,(b))/*1*/
 foo(a,(<b>c).d)/*2*/`

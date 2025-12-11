@@ -9,8 +9,8 @@ import (
 )
 
 func TestObjectLiteralBindingInParameter(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface I { x1: number; x2: string }
 function f(cb: (ev: I) => any) { }

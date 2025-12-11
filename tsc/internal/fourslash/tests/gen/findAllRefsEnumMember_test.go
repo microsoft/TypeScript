@@ -8,8 +8,8 @@ import (
 )
 
 func TestFindAllRefsEnumMember(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `enum E { /*1*/A, B }
 const e: E./*2*/A = E./*3*/A;`

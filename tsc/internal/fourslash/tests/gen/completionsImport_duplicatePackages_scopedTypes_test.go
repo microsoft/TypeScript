@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionsImport_duplicatePackages_scopedTypes(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
 // @esModuleInterop: true

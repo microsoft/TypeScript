@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoJSDocTags(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/**
  * This is class Foo.

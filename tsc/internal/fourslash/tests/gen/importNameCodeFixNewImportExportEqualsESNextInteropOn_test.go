@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportNameCodeFixNewImportExportEqualsESNextInteropOn(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @EsModuleInterop: true
 // @Module: es2015

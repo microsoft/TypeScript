@@ -9,8 +9,8 @@ import (
 )
 
 func TestInlayHintsInteractiveParameterNamesWithComments(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const fn = (x: any) => { }
 fn(/* nobody knows exactly what this param is */ 42);

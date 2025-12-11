@@ -8,8 +8,8 @@ import (
 )
 
 func TestReferencesForContextuallyTypedObjectLiteralProperties(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface IFoo { /*xy*/xy: number; }
 

@@ -8,8 +8,8 @@ import (
 )
 
 func TestQuickInfoDisplayPartsIife(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strictNullChecks: true
 var iife = (function foo/*1*/(x, y) { return x })(12);`

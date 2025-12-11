@@ -9,8 +9,8 @@ import (
 )
 
 func TestGetOccurrencesAbstract02(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// Not valid TS (abstract methods can only appear in abstract classes)
 class Animal {

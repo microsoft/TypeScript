@@ -8,8 +8,8 @@ import (
 )
 
 func TestGoToDefinition_super(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class A {
     /*ctr*/constructor() {}

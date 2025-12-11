@@ -8,8 +8,8 @@ import (
 )
 
 func TestImportTypesDeclarationDiagnosticsNoServerError(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @declaration: true
 // @Filename: node_modules/foo/index.d.ts

@@ -8,8 +8,8 @@ import (
 )
 
 func TestNavigationBarImports(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `import a, {b} from "m";
 import c = require("m");

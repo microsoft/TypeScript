@@ -10,8 +10,8 @@ import (
 )
 
 func TestCompletionsConditionalMember(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare function f<T extends string>(
   p: { a: T extends 'foo' ? { x: string } : { y: string } }

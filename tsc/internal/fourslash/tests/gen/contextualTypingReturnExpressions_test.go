@@ -8,8 +8,8 @@ import (
 )
 
 func TestContextualTypingReturnExpressions(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `interface A { }
 var f44: (x: A) => (y: A) => A = /*1*/x => /*2*/y => /*3*/x;`

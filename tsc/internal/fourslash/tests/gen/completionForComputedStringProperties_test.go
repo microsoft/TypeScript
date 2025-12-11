@@ -11,8 +11,8 @@ import (
 )
 
 func TestCompletionForComputedStringProperties(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const p2 = "p2";
 interface A {

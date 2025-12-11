@@ -8,8 +8,8 @@ import (
 )
 
 func TestAutoImportPackageJsonImportsPattern_ts_js(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: node18
 // @Filename: /package.json

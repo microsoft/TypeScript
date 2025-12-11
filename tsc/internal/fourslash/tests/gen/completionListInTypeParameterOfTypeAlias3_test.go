@@ -8,8 +8,8 @@ import (
 )
 
 func TestCompletionListInTypeParameterOfTypeAlias3(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `type constructorType<T1, T2> = new <T/*1*/, /*2*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

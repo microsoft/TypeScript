@@ -8,8 +8,8 @@ import (
 )
 
 func TestSmartSelection_emptyRanges(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class HomePage {
   componentDidMount(/*1*/) {

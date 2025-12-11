@@ -8,8 +8,8 @@ import (
 )
 
 func TestFormattingOnDoWhileNoSemicolon(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-	t.Skip()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/*2*/do {
 /*3*/    for (var i = 0; i < 10; i++)

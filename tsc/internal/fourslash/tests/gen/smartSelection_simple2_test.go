@@ -8,8 +8,8 @@ import (
 )
 
 func TestSmartSelection_simple2(t *testing.T) {
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
-
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `export interface IService {
   _serviceBrand: any;
