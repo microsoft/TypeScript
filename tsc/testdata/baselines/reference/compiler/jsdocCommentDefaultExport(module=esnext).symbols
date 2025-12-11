@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsdocCommentDefaultExport.ts] ////
+
+=== exportDefaultObject.ts ===
+/** Object comment */
+export default {
+    fn() {}
+>fn : Symbol(fn, Decl(exportDefaultObject.ts, 1, 16))
+}
+
+=== exportDefaultFunction.ts ===
+
+/** Function comment */
+export default function() {
+    return 42;
+}
+
+=== exportDefaultClass.ts ===
+/** Class comment */
+export default class {
+    method() {}
+>method : Symbol(default.method, Decl(exportDefaultClass.ts, 1, 22))
+}
+
+=== exportDefaultLiteral.ts ===
+
+/** Literal comment */
+export default 42;
+
+=== exportDefaultNull.ts ===
+
+/** Null comment */
+export default null;
+

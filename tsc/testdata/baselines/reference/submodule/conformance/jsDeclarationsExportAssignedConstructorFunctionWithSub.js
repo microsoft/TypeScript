@@ -30,6 +30,9 @@ module.exports.Sub.prototype = {};
 
 
 //// [jsDeclarationsExportAssignedConstructorFunctionWithSub.d.ts]
+/**
+ * @param {number} p
+ */
 declare const _default: (p: number) => void;
 export = _default;
 export declare var Sub: () => void;

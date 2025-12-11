@@ -17,5 +17,8 @@ exports.default = null;
 
 
 //// [exportDefaultExpressionComments.d.ts]
+/**
+ * JSDoc Comments
+ */
 declare const _default: any;
 export default _default;
