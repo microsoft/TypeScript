@@ -68,7 +68,7 @@ module NotOptional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 25, 5))
 
         '1.0': Derived; // error
->'1.0' : Symbol(B3["10"], Decl(subtypingWithObjectMembers5.ts, 31, 28))
+>'1.0' : Symbol(B3["1.0"], Decl(subtypingWithObjectMembers5.ts, 31, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 }
@@ -124,7 +124,7 @@ module Optional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 52, 5))
 
         '1.0': Derived; // weak type error
->'1.0' : Symbol(B3["10"], Decl(subtypingWithObjectMembers5.ts, 58, 28))
+>'1.0' : Symbol(B3["1.0"], Decl(subtypingWithObjectMembers5.ts, 58, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 }

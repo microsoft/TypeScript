@@ -13,7 +13,7 @@ module JustStrings {
 
     class T { '1.': string; }
 >T : Symbol(T, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 4, 28))
->'1.' : Symbol(T["1"], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 5, 13))
+>'1.' : Symbol(T["1."], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 5, 13))
 
     var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 6, 7))
@@ -30,7 +30,7 @@ module JustStrings {
 
     interface T2 { '1.0': string; baz?: string }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 9, 46))
->'1.0' : Symbol(T2["10"], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 10, 18))
+>'1.0' : Symbol(T2["1.0"], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 10, 18))
 >baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 10, 33))
 
     var s2: S2;

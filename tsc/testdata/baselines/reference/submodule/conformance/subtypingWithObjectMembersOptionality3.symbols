@@ -59,7 +59,7 @@ interface S3 extends T3 {
 >T3 : Symbol(T3, Decl(subtypingWithObjectMembersOptionality3.ts, 19, 1))
 
     '1.0': Derived; // ok
->'1.0' : Symbol(S3["10"], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
+>'1.0' : Symbol(S3["1.0"], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
 }
 

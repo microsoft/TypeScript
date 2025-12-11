@@ -34,14 +34,14 @@ class Foo {
 >B : Symbol(B, Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     "2.5": B // ok
->"2.5" : Symbol(Foo["25"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 13, 11))
+>"2.5" : Symbol(Foo["2.5"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 13, 11))
 >B : Symbol(B, Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     3.0: number; // error
 >3.0 : Symbol(Foo[3.0], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 14, 12))
 
     "4.0": string; // error
->"4.0" : Symbol(Foo["40"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 15, 16))
+>"4.0" : Symbol(Foo["4.0"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 15, 16))
 }
 
 interface Foo2 {
@@ -60,14 +60,14 @@ interface Foo2 {
 >B : Symbol(B, Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     "2.5": B // ok
->"2.5" : Symbol(Foo2["25"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 22, 11))
+>"2.5" : Symbol(Foo2["2.5"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 22, 11))
 >B : Symbol(B, Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 4, 1))
 
     3.0: number; // error
 >3.0 : Symbol(Foo2[3.0], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 23, 12))
 
     "4.0": string; // error
->"4.0" : Symbol(Foo2["40"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 24, 16))
+>"4.0" : Symbol(Foo2["4.0"], Decl(numericIndexerConstrainsPropertyDeclarations2.ts, 24, 16))
 }
 
 var a: {

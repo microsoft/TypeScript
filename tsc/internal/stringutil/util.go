@@ -217,7 +217,7 @@ func StripQuotes(name string) string {
 	return name
 }
 
-var matchSlashSomething = regexp.MustCompile(`\.`)
+var matchSlashSomething = regexp.MustCompile(`\\.`)
 
 func matchSlashReplacer(in string) string {
 	return in[1:]

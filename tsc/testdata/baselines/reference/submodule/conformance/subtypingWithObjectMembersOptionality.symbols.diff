@@ -14,7 +14,7 @@
 
      '1.': Derived;
 ->'1.' : Symbol(S3['1.'], Decl(subtypingWithObjectMembersOptionality.ts, 34, 25))
-+>'1.' : Symbol(S3["1"], Decl(subtypingWithObjectMembersOptionality.ts, 34, 25))
++>'1.' : Symbol(S3["1."], Decl(subtypingWithObjectMembersOptionality.ts, 34, 25))
  >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality.ts, 2, 31))
  }
 
@@ -32,6 +32,6 @@
 
          '1.': Derived2;
 ->'1.' : Symbol(S3['1.'], Decl(subtypingWithObjectMembersOptionality.ts, 64, 29))
-+>'1.' : Symbol(S3["1"], Decl(subtypingWithObjectMembersOptionality.ts, 64, 29))
++>'1.' : Symbol(S3["1."], Decl(subtypingWithObjectMembersOptionality.ts, 64, 29))
  >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembersOptionality.ts, 3, 47))
      }

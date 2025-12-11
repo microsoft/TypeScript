@@ -65,6 +65,6 @@ class B3 extends A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers4.ts, 24, 1))
 
     '1.1': Derived; // ok, inherits '1'
->'1.1' : Symbol(B3["11"], Decl(subtypingWithObjectMembers4.ts, 30, 21))
+>'1.1' : Symbol(B3["1.1"], Decl(subtypingWithObjectMembers4.ts, 30, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
 }

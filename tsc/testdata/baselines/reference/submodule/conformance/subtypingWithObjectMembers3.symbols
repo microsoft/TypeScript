@@ -79,7 +79,7 @@ module NotOptional {
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers3.ts, 0, 0))
 
         '2.0': Derived;
->'2.0' : Symbol(A3["20"], Decl(subtypingWithObjectMembers3.ts, 32, 18))
+>'2.0' : Symbol(A3["2.0"], Decl(subtypingWithObjectMembers3.ts, 32, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers3.ts, 2, 1))
     }
 
@@ -92,7 +92,7 @@ module NotOptional {
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers3.ts, 2, 1))
 
         '2.0': Base; // error
->'2.0' : Symbol(B3["20"], Decl(subtypingWithObjectMembers3.ts, 37, 21))
+>'2.0' : Symbol(B3["2.0"], Decl(subtypingWithObjectMembers3.ts, 37, 21))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers3.ts, 0, 0))
     }
 }
@@ -158,7 +158,7 @@ module Optional {
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers3.ts, 0, 0))
 
         '2.0'?: Derived;
->'2.0' : Symbol(A3["20"], Decl(subtypingWithObjectMembers3.ts, 64, 19))
+>'2.0' : Symbol(A3["2.0"], Decl(subtypingWithObjectMembers3.ts, 64, 19))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers3.ts, 2, 1))
     }
 
@@ -171,7 +171,7 @@ module Optional {
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers3.ts, 2, 1))
 
         '2.0'?: Base; // error
->'2.0' : Symbol(B3["20"], Decl(subtypingWithObjectMembers3.ts, 69, 22))
+>'2.0' : Symbol(B3["2.0"], Decl(subtypingWithObjectMembers3.ts, 69, 22))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers3.ts, 0, 0))
     }
 }

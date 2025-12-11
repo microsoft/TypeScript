@@ -10,7 +10,7 @@
 
          '2.0': Base;
 ->'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 32, 18))
-+>'2.0' : Symbol(A3["20"], Decl(subtypingWithObjectMembers2.ts, 32, 18))
++>'2.0' : Symbol(A3["2.0"], Decl(subtypingWithObjectMembers2.ts, 32, 18))
  >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
      }
 
@@ -24,7 +24,7 @@
 
          '2.0': string; // error
 ->'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 37, 21))
-+>'2.0' : Symbol(B3["20"], Decl(subtypingWithObjectMembers2.ts, 37, 21))
++>'2.0' : Symbol(B3["2.0"], Decl(subtypingWithObjectMembers2.ts, 37, 21))
      }
  }
 
@@ -38,7 +38,7 @@
 
          '2.0'?: Base;
 ->'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 65, 19))
-+>'2.0' : Symbol(A3["20"], Decl(subtypingWithObjectMembers2.ts, 65, 19))
++>'2.0' : Symbol(A3["2.0"], Decl(subtypingWithObjectMembers2.ts, 65, 19))
  >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
      }
 
@@ -52,6 +52,6 @@
 
          '2.0'?: string; // error
 ->'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 70, 22))
-+>'2.0' : Symbol(B3["20"], Decl(subtypingWithObjectMembers2.ts, 70, 22))
++>'2.0' : Symbol(B3["2.0"], Decl(subtypingWithObjectMembers2.ts, 70, 22))
      }
  }

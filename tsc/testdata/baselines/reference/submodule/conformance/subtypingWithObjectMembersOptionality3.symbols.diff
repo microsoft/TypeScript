@@ -14,6 +14,6 @@
 
      '1.0': Derived; // ok
 ->'1.0' : Symbol(S3['1.0'], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
-+>'1.0' : Symbol(S3["10"], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
++>'1.0' : Symbol(S3["1.0"], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
  >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
  }
