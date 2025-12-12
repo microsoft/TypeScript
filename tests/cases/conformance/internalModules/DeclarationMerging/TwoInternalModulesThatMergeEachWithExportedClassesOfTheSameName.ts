@@ -5,7 +5,7 @@ namespace A {
     }
 }
 
-module A{
+namespace A{
     // expected error
     export class Point {
         origin: number;

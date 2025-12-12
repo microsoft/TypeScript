@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declareDottedExtend.ts] ////
 
 //// [declareDottedExtend.ts]
-declare module A.B
+declare namespace A.B
 {
     export class C{ }
 }

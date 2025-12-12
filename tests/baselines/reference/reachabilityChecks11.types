@@ -8,7 +8,7 @@ var x = 1;
 >1 : 1
 >  : ^
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ module A {
 >  : ^^^
 }
 
-module A1 {
+namespace A1 {
 >A1 : typeof A1
 >   : ^^^^^^^^^
 
@@ -29,12 +29,12 @@ module A1 {
 >true : true
 >     : ^^^^
 
-    module A {
+    namespace A {
         interface F {}
     }
 }
 
-module A2 {
+namespace A2 {
 >A2 : typeof A2
 >   : ^^^^^^^^^
 
@@ -42,7 +42,7 @@ module A2 {
 >true : true
 >     : ^^^^
 
-    module A {
+    namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -54,7 +54,7 @@ module A2 {
     }
 }
 
-module A3 {
+namespace A3 {
 >A3 : typeof A3
 >   : ^^^^^^^^^
 
@@ -67,7 +67,7 @@ module A3 {
 >  : ^^^^^^
 }
 
-module A4 {
+namespace A4 {
 >A4 : typeof A4
 >   : ^^^^^^^^^
 
@@ -75,7 +75,7 @@ module A4 {
 >true : true
 >     : ^^^^
 
-    module A {
+    namespace A {
         const enum E { X }
 >E : E
 >  : ^
@@ -121,12 +121,12 @@ function f2() {
     }
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
     for (; ;);
-    module C {
+    namespace C {
     }
 }
 
