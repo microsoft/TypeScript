@@ -13721,7 +13721,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        return isEntityNameOrElementAccessExpression(expr);
+    }
+
+    /**
+     * Returns true if the expression is a valid late-bindable expression.
+     * A late-bindable expression is an entity name expression (Identifier or PropertyAccessExpression)
+     * or an ElementAccessExpression with a string or numeric literal key where the base expression
+     * is itself a valid late-bindable expression.
+     */
+    function isEntityNameOrElementAccessExpression(node: Node): boolean {
+        if (isEntityNameExpression(node)) {
+            return true;
+        }
+        if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression)) {
+            return isEntityNameOrElementAccessExpression(node.expression);
+        }
+        return false;
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
@@ -52910,8 +52926,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
-        // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` type name expression
-        if (isNonBindableDynamicName(node) && !isEntityNameExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
+        // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` or `a['b']` type name expression
+        if (isNonBindableDynamicName(node) && !isEntityNameOrElementAccessExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
             return grammarErrorOnNode(node, message);
         }
     }

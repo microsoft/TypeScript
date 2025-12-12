@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/enumKeysAsComputedPropertiesWithBracketNotation.ts] ////
+
+=== enumKeysAsComputedPropertiesWithBracketNotation.ts ===
+// Test that enum keys accessed with bracket notation can be used as computed properties
+// Regression test for https://github.com/microsoft/TypeScript/issues/25083
+
+enum Type {
+>Type : Symbol(Type, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 0, 0))
+
+    Foo = 'foo',
+>Foo : Symbol(Type.Foo, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 3, 11))
+
+    '3x14' = '3x14'
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 4, 16))
+}
+
+// All of these should work
+type TypeMap = {
+>TypeMap : Symbol(TypeMap, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 6, 1))
+
+    [Type.Foo]: string;        // Property access
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 9, 16))
+>Type.Foo : Symbol(Type.Foo, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 3, 11))
+>Type : Symbol(Type, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 3, 11))
+
+    [Type['3x14']]: number;    // Element access with non-identifier key
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 10, 23))
+>Type : Symbol(Type, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 4, 16))
+}
+
+// Bracket notation with identifier key should also work (equivalent to property access)
+type TypeMap2 = {
+>TypeMap2 : Symbol(TypeMap2, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 12, 1))
+
+    [Type['Foo']]: boolean;
+>[Type['Foo']] : Symbol([Type['Foo']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 15, 17))
+>Type : Symbol(Type, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 0, 0))
+>'Foo' : Symbol(Type.Foo, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 3, 11))
+}
+
+// Nested element access should work
+const nested = {
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+
+    inner: {
+>inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+
+        key: 'hello' as const
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>const : Symbol(const)
+    }
+};
+
+type TypeMap3 = {
+>TypeMap3 : Symbol(TypeMap3, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 24, 2))
+
+    [nested.inner.key]: string;
+>[nested.inner.key] : Symbol([nested.inner.key], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 26, 17))
+>nested.inner.key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>nested.inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+// Element access on deeply nested path
+type TypeMap4 = {
+>TypeMap4 : Symbol(TypeMap4, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 28, 1))
+
+    [nested['inner']['key']]: string;
+>[nested['inner']['key']] : Symbol([nested['inner']['key']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 31, 17))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>'inner' : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>'key' : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+

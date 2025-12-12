@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/enumKeysAsComputedPropertiesWithBracketNotation.ts] ////
+
+=== enumKeysAsComputedPropertiesWithBracketNotation.ts ===
+// Test that enum keys accessed with bracket notation can be used as computed properties
+// Regression test for https://github.com/microsoft/TypeScript/issues/25083
+
+enum Type {
+>Type : Type
+>     : ^^^^
+
+    Foo = 'foo',
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    '3x14' = '3x14'
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+// All of these should work
+type TypeMap = {
+>TypeMap : TypeMap
+>        : ^^^^^^^
+
+    [Type.Foo]: string;        // Property access
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+    [Type['3x14']]: number;    // Element access with non-identifier key
+>[Type['3x14']] : number
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+// Bracket notation with identifier key should also work (equivalent to property access)
+type TypeMap2 = {
+>TypeMap2 : TypeMap2
+>         : ^^^^^^^^
+
+    [Type['Foo']]: boolean;
+>[Type['Foo']] : boolean
+>              : ^^^^^^^
+>Type['Foo'] : Type.Foo
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Foo' : "Foo"
+>      : ^^^^^
+}
+
+// Nested element access should work
+const nested = {
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    inner: {        key: 'hello' as const    }} : { inner: { key: "hello"; }; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    inner: {
+>inner : { key: "hello"; }
+>      : ^^^^^^^^^^^^^^^^^
+>{        key: 'hello' as const    } : { key: "hello"; }
+>                                    : ^^^^^^^^^^^^^^^^^
+
+        key: 'hello' as const
+>key : "hello"
+>    : ^^^^^^^
+>'hello' as const : "hello"
+>                 : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+    }
+};
+
+type TypeMap3 = {
+>TypeMap3 : TypeMap3
+>         : ^^^^^^^^
+
+    [nested.inner.key]: string;
+>[nested.inner.key] : string
+>                   : ^^^^^^
+>nested.inner.key : "hello"
+>                 : ^^^^^^^
+>nested.inner : { key: "hello"; }
+>             : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : { key: "hello"; }
+>      : ^^^^^^^^^^^^^^^^^
+>key : "hello"
+>    : ^^^^^^^
+}
+
+// Element access on deeply nested path
+type TypeMap4 = {
+>TypeMap4 : TypeMap4
+>         : ^^^^^^^^
+
+    [nested['inner']['key']]: string;
+>[nested['inner']['key']] : string
+>                         : ^^^^^^
+>nested['inner']['key'] : "hello"
+>                       : ^^^^^^^
+>nested['inner'] : { key: "hello"; }
+>                : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'inner' : "inner"
+>        : ^^^^^^^
+>'key' : "key"
+>      : ^^^^^
+}
+
