@@ -239,14 +239,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["glob","minimatch","node"]
 TI:: [hh:mm:ss:mss] 'glob':: Entry for package 'glob' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'minimatch':: Entry for package 'minimatch' does not exist in local types registry - skipping...
@@ -324,50 +316,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project1/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project1/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/glob/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/minimatch/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/path/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects:
-  {}
-/user/username/projects/project1/src/node_modules:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
