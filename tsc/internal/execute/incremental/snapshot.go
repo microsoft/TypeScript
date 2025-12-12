@@ -29,7 +29,7 @@ func (f *FileInfo) AffectsGlobalScope() bool               { return f.affectsGlo
 func (f *FileInfo) ImpliedNodeFormat() core.ResolutionMode { return f.impliedNodeFormat }
 
 func ComputeHash(text string, hashWithText bool) string {
-	hashBytes := xxh3.Hash128([]byte(text)).Bytes()
+	hashBytes := xxh3.HashString128(text).Bytes()
 	hash := hex.EncodeToString(hashBytes[:])
 	if hashWithText {
 		hash += "-" + text

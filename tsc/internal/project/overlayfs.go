@@ -78,7 +78,7 @@ func newDiskFile(fileName string, content string) *diskFile {
 		fileBase: fileBase{
 			fileName: fileName,
 			content:  content,
-			hash:     xxh3.Hash128([]byte(content)),
+			hash:     xxh3.HashString128(content),
 		},
 	}
 }
@@ -125,7 +125,7 @@ func newOverlay(fileName string, content string, version int32, kind core.Script
 		fileBase: fileBase{
 			fileName: fileName,
 			content:  content,
-			hash:     xxh3.Hash128([]byte(content)),
+			hash:     xxh3.HashString128(content),
 		},
 		version: version,
 		kind:    kind,
@@ -154,7 +154,7 @@ func (o *Overlay) computeMatchesDiskText(fs vfs.FS) bool {
 	if !ok {
 		return false
 	}
-	return xxh3.Hash128([]byte(diskContent)) == o.hash
+	return xxh3.HashString128(diskContent) == o.hash
 }
 
 func (o *Overlay) IsOverlay() bool {
@@ -348,7 +348,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				}
 				if len(change.Changes) > 0 {
 					o.version = change.Version
-					o.hash = xxh3.Hash128([]byte(o.content))
+					o.hash = xxh3.HashString128(o.content)
 					o.matchesDiskText = false
 					newOverlays[path] = o
 				}
