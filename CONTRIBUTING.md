@@ -1,6 +1,6 @@
 # Note
 
-🚨 **Important** 🚨 : All code changes should be submitted to the https://github.com/Microsoft/TypeScript-go repo. Development in this codebase [is winding down](https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/#typescript-6.0-is-the-last-javascript-based-release) and PRs will only be merged if they fix **critical** 6.0 issues (at minimum, *any* bug that existed in 5.9 is not critical unless it's a security issue).
+🚨 **Important** 🚨 : All code changes should be submitted to the https://github.com/microsoft/typescript-go repo. Development in this codebase [is winding down](https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/#typescript-6.0-is-the-last-javascript-based-release) and PRs will only be merged if they fix **critical** 6.0 issues (at minimum, any bug that existed in 5.9 is not critical unless it's a security issue).
 
 # Instructions for Logging Issues
 
