@@ -125,3 +125,198 @@ type TypeMap4 = {
 >      : ^^^^^
 }
 
+// Mixed chain: element access followed by property access
+type TypeMap5 = {
+>TypeMap5 : TypeMap5
+>         : ^^^^^^^^
+
+    [nested['inner'].key]: string;
+>[nested['inner'].key] : string
+>                      : ^^^^^^
+>nested['inner'].key : "hello"
+>                    : ^^^^^^^
+>nested['inner'] : { key: "hello"; }
+>                : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'inner' : "inner"
+>        : ^^^^^^^
+>key : "hello"
+>    : ^^^^^^^
+}
+
+// Mixed chain: property access followed by element access
+type TypeMap6 = {
+>TypeMap6 : TypeMap6
+>         : ^^^^^^^^
+
+    [nested.inner['key']]: string;
+>[nested.inner['key']] : string
+>                      : ^^^^^^
+>nested.inner['key'] : "hello"
+>                    : ^^^^^^^
+>nested.inner : { key: "hello"; }
+>             : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : { key: "hello"; }
+>      : ^^^^^^^^^^^^^^^^^
+>'key' : "key"
+>      : ^^^^^
+}
+
+// Complex mixed chain
+const deep = {
+>deep : { a: { b: { c: { d: "value"; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: {        b: {            c: {                d: 'value' as const            }        }    }} : { a: { b: { c: { d: "value"; }; }; }; }
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: {
+>a : { b: { c: { d: "value"; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        b: {            c: {                d: 'value' as const            }        }    } : { b: { c: { d: "value"; }; }; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        b: {
+>b : { c: { d: "value"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>{            c: {                d: 'value' as const            }        } : { c: { d: "value"; }; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^
+
+            c: {
+>c : { d: "value"; }
+>  : ^^^^^^^^^^^^^^^
+>{                d: 'value' as const            } : { d: "value"; }
+>                                                  : ^^^^^^^^^^^^^^^
+
+                d: 'value' as const
+>d : "value"
+>  : ^^^^^^^
+>'value' as const : "value"
+>                 : ^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+            }
+        }
+    }
+};
+
+type TypeMap7 = {
+>TypeMap7 : TypeMap7
+>         : ^^^^^^^^
+
+    [deep.a['b'].c['d']]: string;
+>[deep.a['b'].c['d']] : string
+>                     : ^^^^^^
+>deep.a['b'].c['d'] : "value"
+>                   : ^^^^^^^
+>deep.a['b'].c : { d: "value"; }
+>              : ^^^^^^^^^^^^^^^
+>deep.a['b'] : { c: { d: "value"; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+>deep.a : { b: { c: { d: "value"; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deep : { a: { b: { c: { d: "value"; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b: { c: { d: "value"; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'b' : "b"
+>    : ^^^
+>c : { d: "value"; }
+>  : ^^^^^^^^^^^^^^^
+>'d' : "d"
+>    : ^^^
+}
+
+type TypeMap8 = {
+>TypeMap8 : TypeMap8
+>         : ^^^^^^^^
+
+    [deep['a'].b['c'].d]: string;
+>[deep['a'].b['c'].d] : string
+>                     : ^^^^^^
+>deep['a'].b['c'].d : "value"
+>                   : ^^^^^^^
+>deep['a'].b['c'] : { d: "value"; }
+>                 : ^^^^^^^^^^^^^^^
+>deep['a'].b : { c: { d: "value"; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+>deep['a'] : { b: { c: { d: "value"; }; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deep : { a: { b: { c: { d: "value"; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'a' : "a"
+>    : ^^^
+>b : { c: { d: "value"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>'c' : "c"
+>    : ^^^
+>d : "value"
+>  : ^^^^^^^
+}
+
+// Parenthesized expressions
+type TypeMap9 = {
+>TypeMap9 : TypeMap9
+>         : ^^^^^^^^
+
+    [(nested.inner).key]: string;
+>[(nested.inner).key] : string
+>                     : ^^^^^^
+>(nested.inner).key : "hello"
+>                   : ^^^^^^^
+>(nested.inner) : { key: "hello"; }
+>               : ^^^^^^^^^^^^^^^^^
+>nested.inner : { key: "hello"; }
+>             : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : { key: "hello"; }
+>      : ^^^^^^^^^^^^^^^^^
+>key : "hello"
+>    : ^^^^^^^
+}
+
+type TypeMap10 = {
+>TypeMap10 : TypeMap10
+>          : ^^^^^^^^^
+
+    [(nested['inner']).key]: string;
+>[(nested['inner']).key] : string
+>                        : ^^^^^^
+>(nested['inner']).key : "hello"
+>                      : ^^^^^^^
+>(nested['inner']) : { key: "hello"; }
+>                  : ^^^^^^^^^^^^^^^^^
+>nested['inner'] : { key: "hello"; }
+>                : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'inner' : "inner"
+>        : ^^^^^^^
+>key : "hello"
+>    : ^^^^^^^
+}
+
+type TypeMap11 = {
+>TypeMap11 : TypeMap11
+>          : ^^^^^^^^^
+
+    [(nested).inner.key]: string;
+>[(nested).inner.key] : string
+>                     : ^^^^^^
+>(nested).inner.key : "hello"
+>                   : ^^^^^^^
+>(nested).inner : { key: "hello"; }
+>               : ^^^^^^^^^^^^^^^^^
+>(nested) : { inner: { key: "hello"; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : { key: "hello"; }
+>      : ^^^^^^^^^^^^^^^^^
+>key : "hello"
+>    : ^^^^^^^
+}
+

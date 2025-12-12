@@ -13721,21 +13721,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameOrElementAccessExpression(expr);
+        return isLateBindableAccessExpression(expr);
     }
 
     /**
-     * Returns true if the expression is a valid late-bindable expression.
-     * A late-bindable expression is an entity name expression (Identifier or PropertyAccessExpression)
-     * or an ElementAccessExpression with a string or numeric literal key where the base expression
-     * is itself a valid late-bindable expression.
+     * Returns true if the expression is a valid late-bindable access expression.
+     * A late-bindable access expression is:
+     * - An Identifier
+     * - A PropertyAccessExpression where the base is a late-bindable access expression
+     * - An ElementAccessExpression with a string/numeric literal key where the base is a late-bindable access expression
+     *
+     * This supports mixed chains like: obj.a['b'].c['d']
+     * Parentheses are skipped to support expressions like: (obj.a)['b']
      */
-    function isEntityNameOrElementAccessExpression(node: Node): boolean {
-        if (isEntityNameExpression(node)) {
+    function isLateBindableAccessExpression(node: Node): boolean {
+        node = skipParentheses(node);
+
+        if (isIdentifier(node)) {
             return true;
         }
+        // For PropertyAccessExpression, require the name to be an Identifier (not PrivateIdentifier)
+        if (isPropertyAccessExpression(node) && isIdentifier(node.name)) {
+            return isLateBindableAccessExpression(node.expression);
+        }
         if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression)) {
-            return isEntityNameOrElementAccessExpression(node.expression);
+            return isLateBindableAccessExpression(node.expression);
         }
         return false;
     }
@@ -52927,7 +52937,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
         // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` or `a['b']` type name expression
-        if (isNonBindableDynamicName(node) && !isEntityNameOrElementAccessExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
+        // isLateBindableAccessExpression handles skipParentheses internally
+        if (isNonBindableDynamicName(node) && !isLateBindableAccessExpression(isElementAccessExpression(node) ? node.argumentExpression : (node as ComputedPropertyName).expression)) {
             return grammarErrorOnNode(node, message);
         }
     }

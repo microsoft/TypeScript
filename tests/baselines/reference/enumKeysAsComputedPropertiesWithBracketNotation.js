@@ -36,6 +36,48 @@ type TypeMap4 = {
     [nested['inner']['key']]: string;
 }
 
+// Mixed chain: element access followed by property access
+type TypeMap5 = {
+    [nested['inner'].key]: string;
+}
+
+// Mixed chain: property access followed by element access
+type TypeMap6 = {
+    [nested.inner['key']]: string;
+}
+
+// Complex mixed chain
+const deep = {
+    a: {
+        b: {
+            c: {
+                d: 'value' as const
+            }
+        }
+    }
+};
+
+type TypeMap7 = {
+    [deep.a['b'].c['d']]: string;
+}
+
+type TypeMap8 = {
+    [deep['a'].b['c'].d]: string;
+}
+
+// Parenthesized expressions
+type TypeMap9 = {
+    [(nested.inner).key]: string;
+}
+
+type TypeMap10 = {
+    [(nested['inner']).key]: string;
+}
+
+type TypeMap11 = {
+    [(nested).inner.key]: string;
+}
+
 
 //// [enumKeysAsComputedPropertiesWithBracketNotation.js]
 "use strict";
@@ -50,5 +92,15 @@ var Type;
 var nested = {
     inner: {
         key: 'hello'
+    }
+};
+// Complex mixed chain
+var deep = {
+    a: {
+        b: {
+            c: {
+                d: 'value'
+            }
+        }
     }
 };

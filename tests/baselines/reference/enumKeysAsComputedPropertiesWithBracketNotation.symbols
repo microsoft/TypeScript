@@ -76,3 +76,112 @@ type TypeMap4 = {
 >'key' : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
 }
 
+// Mixed chain: element access followed by property access
+type TypeMap5 = {
+>TypeMap5 : Symbol(TypeMap5, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 33, 1))
+
+    [nested['inner'].key]: string;
+>[nested['inner'].key] : Symbol([nested['inner'].key], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 36, 17))
+>nested['inner'].key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>'inner' : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+// Mixed chain: property access followed by element access
+type TypeMap6 = {
+>TypeMap6 : Symbol(TypeMap6, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 38, 1))
+
+    [nested.inner['key']]: string;
+>[nested.inner['key']] : Symbol([nested.inner['key']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 41, 17))
+>nested.inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>'key' : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+// Complex mixed chain
+const deep = {
+>deep : Symbol(deep, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 5))
+
+    a: {
+>a : Symbol(a, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 14))
+
+        b: {
+>b : Symbol(b, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 47, 8))
+
+            c: {
+>c : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+
+                d: 'value' as const
+>d : Symbol(d, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 49, 16))
+>const : Symbol(const)
+            }
+        }
+    }
+};
+
+type TypeMap7 = {
+>TypeMap7 : Symbol(TypeMap7, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 54, 2))
+
+    [deep.a['b'].c['d']]: string;
+>[deep.a['b'].c['d']] : Symbol([deep.a['b'].c['d']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 56, 17))
+>deep.a['b'].c : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+>deep.a : Symbol(a, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 14))
+>deep : Symbol(deep, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 5))
+>a : Symbol(a, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 14))
+>'b' : Symbol(b, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 47, 8))
+>c : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+>'d' : Symbol(d, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 49, 16))
+}
+
+type TypeMap8 = {
+>TypeMap8 : Symbol(TypeMap8, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 58, 1))
+
+    [deep['a'].b['c'].d]: string;
+>[deep['a'].b['c'].d] : Symbol([deep['a'].b['c'].d], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 60, 17))
+>deep['a'].b['c'].d : Symbol(d, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 49, 16))
+>deep['a'].b : Symbol(b, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 47, 8))
+>deep : Symbol(deep, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 5))
+>'a' : Symbol(a, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 14))
+>b : Symbol(b, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 47, 8))
+>'c' : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+>d : Symbol(d, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 49, 16))
+}
+
+// Parenthesized expressions
+type TypeMap9 = {
+>TypeMap9 : Symbol(TypeMap9, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 62, 1))
+
+    [(nested.inner).key]: string;
+>[(nested.inner).key] : Symbol([(nested.inner).key], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 65, 17))
+>(nested.inner).key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>nested.inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+type TypeMap10 = {
+>TypeMap10 : Symbol(TypeMap10, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 67, 1))
+
+    [(nested['inner']).key]: string;
+>[(nested['inner']).key] : Symbol([(nested['inner']).key], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 69, 18))
+>(nested['inner']).key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>'inner' : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+type TypeMap11 = {
+>TypeMap11 : Symbol(TypeMap11, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 71, 1))
+
+    [(nested).inner.key]: string;
+>[(nested).inner.key] : Symbol([(nested).inner.key], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 73, 18))
+>(nested).inner.key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+>(nested).inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>inner : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+>key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
