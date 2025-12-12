@@ -2,7 +2,7 @@ namespace A.B {
     export var x: number;
 }
 
-module A{ 
+namespace A{ 
     namespace B {
         export var x: string;
     }

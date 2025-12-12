@@ -62,7 +62,7 @@ var tmpError = A.B.x;
 >  : ^^^^^^
 
 
-module A.B.C
+namespace A.B.C
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B
@@ -82,7 +82,7 @@ module A.B.C
  
  
  
-module M
+namespace M
  
 {
  

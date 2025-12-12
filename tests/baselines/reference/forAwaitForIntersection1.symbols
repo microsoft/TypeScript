@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/forAwaitForIntersection1.ts] ////
+
+=== forAwaitForIntersection1.ts ===
+type Stream1<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async>;
+>Stream1 : Symbol(Stream1, Decl(forAwaitForIntersection1.ts, 0, 0))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 0, 13))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 0, 20))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 0, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 0, 20))
+
+class A1 {}
+>A1 : Symbol(A1, Decl(forAwaitForIntersection1.ts, 0, 74))
+
+class B1 {}
+>B1 : Symbol(B1, Decl(forAwaitForIntersection1.ts, 2, 11))
+
+async function loop1(stream: Stream1<A1, B1>) {
+>loop1 : Symbol(loop1, Decl(forAwaitForIntersection1.ts, 3, 11))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 5, 21))
+>Stream1 : Symbol(Stream1, Decl(forAwaitForIntersection1.ts, 0, 0))
+>A1 : Symbol(A1, Decl(forAwaitForIntersection1.ts, 0, 74))
+>B1 : Symbol(B1, Decl(forAwaitForIntersection1.ts, 2, 11))
+
+  for await (const b of stream) {}
+>b : Symbol(b, Decl(forAwaitForIntersection1.ts, 6, 18))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 5, 21))
+}
+
+type Stream2<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async>;
+>Stream2 : Symbol(Stream2, Decl(forAwaitForIntersection1.ts, 7, 1))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 9, 13))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 9, 20))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 9, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 9, 20))
+
+class A2 {}
+>A2 : Symbol(A2, Decl(forAwaitForIntersection1.ts, 9, 74))
+
+class B2 {}
+>B2 : Symbol(B2, Decl(forAwaitForIntersection1.ts, 11, 11))
+
+async function loop2(stream: Stream2<A2, B2>) {
+>loop2 : Symbol(loop2, Decl(forAwaitForIntersection1.ts, 12, 11))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 14, 21))
+>Stream2 : Symbol(Stream2, Decl(forAwaitForIntersection1.ts, 7, 1))
+>A2 : Symbol(A2, Decl(forAwaitForIntersection1.ts, 9, 74))
+>B2 : Symbol(B2, Decl(forAwaitForIntersection1.ts, 11, 11))
+
+  for (const a of stream) {}
+>a : Symbol(a, Decl(forAwaitForIntersection1.ts, 15, 12))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 14, 21))
+}
+
+type Stream3<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async>;
+>Stream3 : Symbol(Stream3, Decl(forAwaitForIntersection1.ts, 16, 1))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 18, 13))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 18, 20))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 18, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 18, 20))
+
+class A3 {}
+>A3 : Symbol(A3, Decl(forAwaitForIntersection1.ts, 18, 74))
+
+class B3 {}
+>B3 : Symbol(B3, Decl(forAwaitForIntersection1.ts, 20, 11))
+
+async function loop3(stream: Stream3<A3, B3>) {
+>loop3 : Symbol(loop3, Decl(forAwaitForIntersection1.ts, 21, 11))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 23, 21))
+>Stream3 : Symbol(Stream3, Decl(forAwaitForIntersection1.ts, 16, 1))
+>A3 : Symbol(A3, Decl(forAwaitForIntersection1.ts, 18, 74))
+>B3 : Symbol(B3, Decl(forAwaitForIntersection1.ts, 20, 11))
+
+  for await (const b of stream) {}
+>b : Symbol(b, Decl(forAwaitForIntersection1.ts, 24, 18))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 23, 21))
+
+  for (const a of stream) {}
+>a : Symbol(a, Decl(forAwaitForIntersection1.ts, 26, 12))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 23, 21))
+}
+
+type Stream4<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async>;
+>Stream4 : Symbol(Stream4, Decl(forAwaitForIntersection1.ts, 27, 1))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 29, 13))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 29, 20))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T_Sync : Symbol(T_Sync, Decl(forAwaitForIntersection1.ts, 29, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T_Async : Symbol(T_Async, Decl(forAwaitForIntersection1.ts, 29, 20))
+
+class A4 {}
+>A4 : Symbol(A4, Decl(forAwaitForIntersection1.ts, 29, 74))
+
+class B4 {}
+>B4 : Symbol(B4, Decl(forAwaitForIntersection1.ts, 31, 11))
+
+// verify that resolving sync iteration first doesn't spoil the type for async iteration
+async function loop4(stream: Stream4<A4, B4>) {
+>loop4 : Symbol(loop4, Decl(forAwaitForIntersection1.ts, 32, 11))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 35, 21))
+>Stream4 : Symbol(Stream4, Decl(forAwaitForIntersection1.ts, 27, 1))
+>A4 : Symbol(A4, Decl(forAwaitForIntersection1.ts, 29, 74))
+>B4 : Symbol(B4, Decl(forAwaitForIntersection1.ts, 31, 11))
+
+  for (const a of stream) {}
+>a : Symbol(a, Decl(forAwaitForIntersection1.ts, 36, 12))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 35, 21))
+
+  for await (const b of stream) {}
+>b : Symbol(b, Decl(forAwaitForIntersection1.ts, 38, 18))
+>stream : Symbol(stream, Decl(forAwaitForIntersection1.ts, 35, 21))
+}
