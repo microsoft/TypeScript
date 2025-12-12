@@ -200,6 +200,7 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     onDiscoveredSymlink?(): void;
 
     skipWatchingFailedLookups?(path: Path): boolean | undefined;
+    skipWatchingTypeRoots?(): boolean | undefined;
 
     // For incremental testing
     beforeResolveSingleModuleNameWithoutWatching?(
@@ -1669,6 +1670,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (options.types) {
             // No need to do any watch since resolution cache is going to handle the failed lookups
             // for the types added by this
+            closeTypeRootsWatch();
+            return;
+        }
+
+        // if this is inferred project with non watchable root or current directory that is lib location, skip watching type roots
+        if (!isRootWatchable || resolutionHost.skipWatchingTypeRoots?.()) {
             closeTypeRootsWatch();
             return;
         }

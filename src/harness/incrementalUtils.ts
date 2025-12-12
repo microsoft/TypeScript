@@ -532,6 +532,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
         skipWatchingFailedLookups: project.skipWatchingFailedLookups.bind(project),
+        skipWatchingTypeRoots: project.skipWatchingTypeRoots.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
         preferNonRecursiveWatch: project.preferNonRecursiveWatch,

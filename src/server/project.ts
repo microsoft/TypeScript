@@ -1633,6 +1633,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    skipWatchingTypeRoots(): boolean | undefined {
+        // Skip watching inferrd project where current directory is lib location
+        return isInferredProject(this) && this.currentDirectory === this.projectService.currentDirectory;
+    }
+
+    /** @internal */
     getCurrentProgram(): Program | undefined {
         return this.program;
     }
