@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/spreadsAndContextualArrayLikeTypes1.ts] ////
+
+=== spreadsAndContextualArrayLikeTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58286
+
+type MyType<T extends unknown> = {
+>MyType : Symbol(MyType, Decl(spreadsAndContextualArrayLikeTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 2, 12))
+
+  myKey: T;
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 2, 34))
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 2, 12))
+
+  myFunction: (arg1: T) => void;
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 3, 11))
+>arg1 : Symbol(arg1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 4, 15))
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 2, 12))
+
+};
+
+declare const generate: () => Array<MyType<string>>;
+>generate : Symbol(generate, Decl(spreadsAndContextualArrayLikeTypes1.ts, 7, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>MyType : Symbol(MyType, Decl(spreadsAndContextualArrayLikeTypes1.ts, 0, 0))
+
+declare const arrayLikeInferenceFunction: <T extends unknown>(
+>arrayLikeInferenceFunction : Symbol(arrayLikeInferenceFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 13))
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 43))
+
+  arr: ArrayLike<T>,
+>arr : Symbol(arr, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 62))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 43))
+
+) => T[];
+>T : Symbol(T, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 43))
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction : Symbol(arrayLikeInferenceFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 13))
+
+  { myKey: "123", myFunction: (value1) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 14, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 14, 17))
+>value1 : Symbol(value1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 14, 31))
+
+  ...generate(),
+>generate : Symbol(generate, Decl(spreadsAndContextualArrayLikeTypes1.ts, 7, 13))
+
+  { myKey: "456", myFunction: (value2) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 16, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 16, 17))
+>value2 : Symbol(value2, Decl(spreadsAndContextualArrayLikeTypes1.ts, 16, 31))
+
+]);
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction : Symbol(arrayLikeInferenceFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 13))
+
+  { myKey: "123", myFunction: (value1) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 20, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 20, 17))
+>value1 : Symbol(value1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 20, 31))
+
+  { myKey: "456", myFunction: (value2) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 21, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 21, 17))
+>value2 : Symbol(value2, Decl(spreadsAndContextualArrayLikeTypes1.ts, 21, 31))
+
+  ...generate(),
+>generate : Symbol(generate, Decl(spreadsAndContextualArrayLikeTypes1.ts, 7, 13))
+
+]);
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction : Symbol(arrayLikeInferenceFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 9, 13))
+
+  ...generate(),
+>generate : Symbol(generate, Decl(spreadsAndContextualArrayLikeTypes1.ts, 7, 13))
+
+  { myKey: "123", myFunction: (value1) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 27, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 27, 17))
+>value1 : Symbol(value1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 27, 31))
+
+  { myKey: "456", myFunction: (value2) => {} },
+>myKey : Symbol(myKey, Decl(spreadsAndContextualArrayLikeTypes1.ts, 28, 3))
+>myFunction : Symbol(myFunction, Decl(spreadsAndContextualArrayLikeTypes1.ts, 28, 17))
+>value2 : Symbol(value2, Decl(spreadsAndContextualArrayLikeTypes1.ts, 28, 31))
+
+]);
+
+declare function numericProperties(weirdo: {
+>numericProperties : Symbol(numericProperties, Decl(spreadsAndContextualArrayLikeTypes1.ts, 29, 3))
+>weirdo : Symbol(weirdo, Decl(spreadsAndContextualArrayLikeTypes1.ts, 31, 35))
+
+  "0": (a: 0) => void;
+>"0" : Symbol("0", Decl(spreadsAndContextualArrayLikeTypes1.ts, 31, 44))
+>a : Symbol(a, Decl(spreadsAndContextualArrayLikeTypes1.ts, 32, 8))
+
+  "1": (a: 1) => void;
+>"1" : Symbol("1", Decl(spreadsAndContextualArrayLikeTypes1.ts, 32, 22))
+>a : Symbol(a, Decl(spreadsAndContextualArrayLikeTypes1.ts, 33, 8))
+
+  "2": (a: 2) => void;
+>"2" : Symbol("2", Decl(spreadsAndContextualArrayLikeTypes1.ts, 33, 22))
+>a : Symbol(a, Decl(spreadsAndContextualArrayLikeTypes1.ts, 34, 8))
+
+}): void;
+
+const tuple1 = [() => {}, () => {}] as const;
+>tuple1 : Symbol(tuple1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 37, 5))
+>const : Symbol(const)
+
+numericProperties([...tuple1, (a) => {}]);
+>numericProperties : Symbol(numericProperties, Decl(spreadsAndContextualArrayLikeTypes1.ts, 29, 3))
+>tuple1 : Symbol(tuple1, Decl(spreadsAndContextualArrayLikeTypes1.ts, 37, 5))
+>a : Symbol(a, Decl(spreadsAndContextualArrayLikeTypes1.ts, 39, 31))
+
