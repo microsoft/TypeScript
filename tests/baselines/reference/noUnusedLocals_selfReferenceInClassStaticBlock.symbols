@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/noUnusedLocals_selfReferenceInClassStaticBlock.ts] ////
+
+=== noUnusedLocals_selfReferenceInClassStaticBlock.ts ===
+// https://github.com/microsoft/TypeScript/issues/57620
+
+let BluethootDevice_create;
+>BluethootDevice_create : Symbol(BluethootDevice_create, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 3))
+
+class BluethootDevice {
+>BluethootDevice : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+
+  #id!: string;
+>#id : Symbol(BluethootDevice.#id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 3, 23))
+
+  static #allowConstruct = false;
+>#allowConstruct : Symbol(BluethootDevice.#allowConstruct, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 4, 15))
+
+  private constructor() {
+    if (!BluethootDevice.#allowConstruct) {
+>BluethootDevice.#allowConstruct : Symbol(BluethootDevice.#allowConstruct, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 4, 15))
+>BluethootDevice : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+
+      throw new Error("You cannot instantiate this class directly");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+  }
+
+  static {
+    BluethootDevice_create = (id: string) => {
+>BluethootDevice_create : Symbol(BluethootDevice_create, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 3))
+>id : Symbol(id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 15, 30))
+
+      BluethootDevice.#allowConstruct = true;
+>BluethootDevice.#allowConstruct : Symbol(BluethootDevice.#allowConstruct, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 4, 15))
+>BluethootDevice : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+
+      const device = new BluethootDevice();
+>device : Symbol(device, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 17, 11))
+>BluethootDevice : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+
+      BluethootDevice.#allowConstruct = false;
+>BluethootDevice.#allowConstruct : Symbol(BluethootDevice.#allowConstruct, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 4, 15))
+>BluethootDevice : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+
+      device.#id = id;
+>device.#id : Symbol(BluethootDevice.#id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 3, 23))
+>device : Symbol(device, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 17, 11))
+>id : Symbol(id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 15, 30))
+
+      return device;
+>device : Symbol(device, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 17, 11))
+
+    };
+  }
+
+  get id() {
+>id : Symbol(BluethootDevice.id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 22, 3))
+
+    return this.#id;
+>this.#id : Symbol(BluethootDevice.#id, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 3, 23))
+>this : Symbol(BluethootDevice, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 27))
+  }
+}
+
+BluethootDevice_create("aa");
+>BluethootDevice_create : Symbol(BluethootDevice_create, Decl(noUnusedLocals_selfReferenceInClassStaticBlock.ts, 2, 3))
+
+export {};
+
