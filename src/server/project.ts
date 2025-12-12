@@ -1627,6 +1627,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    skipWatchingFailedLookups(path: Path): boolean | undefined {
+        const info = this.projectService.getScriptInfoForPath(path);
+        return info?.isDynamic;
+    }
+
+    /** @internal */
     getCurrentProgram(): Program | undefined {
         return this.program;
     }

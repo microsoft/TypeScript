@@ -314,8 +314,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq/response_6b1244f1-9aca-4b8b-8f65-0ff7ed4e6b4e/2#{"references":[]} ProjectRootPath: /:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: /
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -360,30 +358,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
