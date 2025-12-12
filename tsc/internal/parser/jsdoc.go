@@ -89,17 +89,12 @@ func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {
 func (p *Parser) parseJSDocNameReference() *ast.Node {
 	pos := p.nodePos()
 	hasBrace := p.parseOptional(ast.KindOpenBraceToken)
-	p2 := p.nodePos()
-	entityName := p.parseEntityName(false, nil)
-	for p.token == ast.KindPrivateIdentifier {
-		p.scanner.ReScanHashToken() // rescan #id as # id
-		p.nextTokenJSDoc()          // then skip the #
-		entityName = p.finishNode(p.factory.NewQualifiedName(entityName, p.parseIdentifier()), p2)
-	}
+	entityName := p.parseJSDocLinkName()
 	if hasBrace {
 		p.parseExpectedJSDoc(ast.KindCloseBraceToken)
 	}
-
+	p.scanner.ResetPos(p.scanner.TokenFullStart())
+	p.nextTokenJSDoc()
 	return p.finishNode(p.factory.NewJSDocNameReference(entityName), pos)
 }
 
@@ -627,7 +622,6 @@ func (p *Parser) parseJSDocLink(start int) *ast.Node {
 func (p *Parser) parseJSDocLinkName() *ast.Node {
 	if tokenIsIdentifierOrKeyword(p.token) {
 		pos := p.nodePos()
-
 		name := p.parseIdentifierName()
 		for p.parseOptional(ast.KindDotToken) {
 			var right *ast.IdentifierNode
@@ -638,7 +632,6 @@ func (p *Parser) parseJSDocLinkName() *ast.Node {
 			}
 			name = p.finishNode(p.factory.NewQualifiedName(name, right), pos)
 		}
-
 		for p.token == ast.KindPrivateIdentifier {
 			p.scanner.ReScanHashToken()
 			p.nextTokenJSDoc()
@@ -794,11 +787,10 @@ func (p *Parser) parseTypeTag(previousTags []*ast.Node, start int, tagName *ast.
 }
 
 func (p *Parser) parseSeeTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
-	isMarkdownOrJSDocLink := p.token == ast.KindOpenBracketToken || p.lookAhead(func(p *Parser) bool {
-		return p.nextTokenJSDoc() == ast.KindAtToken && tokenIsIdentifierOrKeyword(p.nextTokenJSDoc()) && isJSDocLinkTag(p.scanner.TokenValue())
-	})
+	hasNameReference := p.isIdentifier() && !strings.HasPrefix(p.sourceText[p.scanner.TokenEnd():], "://") ||
+		p.token == ast.KindOpenBraceToken && p.lookAhead((*Parser).nextTokenIsIdentifierOrKeyword)
 	var nameExpression *ast.Node
-	if !isMarkdownOrJSDocLink {
+	if hasNameReference {
 		nameExpression = p.parseJSDocNameReference()
 	}
 	comments := p.parseTrailingTagComments(start, p.nodePos(), indent, indentText)

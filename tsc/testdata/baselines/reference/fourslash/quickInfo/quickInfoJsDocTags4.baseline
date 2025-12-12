@@ -26,7 +26,7 @@
 // | *@author* — Me <me@domain.tld>
 // | 
 // | 
-// | *@see* `x` — (the parameter)
+// | *@see* — x (the parameter)
 // | 
 // | 
 // | *@param* `x` - x comment
@@ -56,7 +56,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Bar.method(x: number, y: number): number\n```\ncomment\n\n*@author* — Me <me@domain.tld>\n\n\n*@see* `x` — (the parameter)\n\n\n*@param* `x` - x comment\n\n\n*@param* `y` - y comment\n\n\n*@returns* — The result\n"
+        "value": "```tsx\n(method) Bar.method(x: number, y: number): number\n```\ncomment\n\n*@author* — Me <me@domain.tld>\n\n\n*@see* — x (the parameter)\n\n\n*@param* `x` - x comment\n\n\n*@param* `y` - y comment\n\n\n*@returns* — The result\n"
       },
       "range": {
         "start": {

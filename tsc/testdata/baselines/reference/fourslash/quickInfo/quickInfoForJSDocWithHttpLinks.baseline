@@ -40,7 +40,7 @@
 // | ```
 // | 
 // | 
-// | *@see* `https` — ://hvad 
+// | *@see* — https://hvad 
 // | ----------------------------------------------------------------------
 // 
 // /** @see {@link https://hva} */
@@ -159,7 +159,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar see1: boolean\n```\n\n\n*@see* `https` — ://hvad "
+        "value": "```tsx\nvar see1: boolean\n```\n\n\n*@see* — https://hvad "
       },
       "range": {
         "start": {
