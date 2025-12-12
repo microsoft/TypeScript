@@ -57,25 +57,89 @@ describe("unittests:: core paths", () => {
         assert.strictEqual(ts.getRootLength("http://server"), 13);
         assert.strictEqual(ts.getRootLength("http://server/path"), 14);
     });
-    it("isUrl", () => {
-        assert.isFalse(ts.isUrl("a"));
-        assert.isFalse(ts.isUrl("/"));
-        assert.isFalse(ts.isUrl("c:"));
-        assert.isFalse(ts.isUrl("c:d"));
-        assert.isFalse(ts.isUrl("c:/"));
-        assert.isFalse(ts.isUrl("c:\\"));
-        assert.isFalse(ts.isUrl("//server"));
-        assert.isFalse(ts.isUrl("//server/share"));
-        assert.isFalse(ts.isUrl("\\\\server"));
-        assert.isFalse(ts.isUrl("\\\\server\\share"));
-        assert.isTrue(ts.isUrl("file:///path"));
-        assert.isTrue(ts.isUrl("file:///c:"));
-        assert.isTrue(ts.isUrl("file:///c:d"));
-        assert.isTrue(ts.isUrl("file:///c:/path"));
-        assert.isTrue(ts.isUrl("file://server"));
-        assert.isTrue(ts.isUrl("file://server/path"));
-        assert.isTrue(ts.isUrl("http://server"));
-        assert.isTrue(ts.isUrl("http://server/path"));
+    describe("isUrl", () => {
+        it("isUrl", () => {
+            assert.isFalse(ts.isUrl("a"));
+            assert.isFalse(ts.isUrl("/"));
+            assert.isFalse(ts.isUrl("c:"));
+            assert.isFalse(ts.isUrl("c:d"));
+            assert.isFalse(ts.isUrl("c:/"));
+            assert.isFalse(ts.isUrl("c:\\"));
+            assert.isFalse(ts.isUrl("//server"));
+            assert.isFalse(ts.isUrl("//server/share"));
+            assert.isFalse(ts.isUrl("\\\\server"));
+            assert.isFalse(ts.isUrl("\\\\server\\share"));
+            assert.isTrue(ts.isUrl("file:///path"));
+            assert.isTrue(ts.isUrl("file:///c:"));
+            assert.isTrue(ts.isUrl("file:///c:d"));
+            assert.isTrue(ts.isUrl("file:///c:/path"));
+            assert.isTrue(ts.isUrl("file://server"));
+            assert.isTrue(ts.isUrl("file://server/path"));
+            assert.isTrue(ts.isUrl("http://server"));
+            assert.isTrue(ts.isUrl("http://server/path"));
+        });
+        for (const [input, result] of [
+            ["data:application/", false],
+            ["data:application/abc", false],
+            ["data:application/abc,", false],
+            ["data:application/abc;base32,123", false],
+            ["data:application/abc,123", true],
+            ["data:application/abc;base64,123", true],
+            // https://github.com/microsoft/TypeScript/issues/53605
+            ["data:application/typescript,42", true],
+            ["https://deno.land/mod.ts", true],
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs
+            ["data:,Hello%2C%20World%21", true],
+            ["data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==", true],
+            ["data:text/html,%3Ch1%3EHello%2C%20World%21%3C%2Fh1%3E", true],
+            ["data:text/html,%3Cscript%3Ealert%28%27hi%27%29%3B%3C%2Fscript%3E", true],
+        ] as const) {
+            it(input, () => {
+                assert.strictEqual(ts.isUrl(input), result);
+            });
+        }
+    });
+    describe("ensureTrailingDirectorySeparator", () => {
+        for (const [input, result] of [
+            ["", "/"],
+            ["a", "a/"],
+            ["a/b", "a/b/"],
+            ["/", "/"],
+            ["c:", "c:/"],
+            ["c:d", "c:d/"],
+            ["c:/", "c:/"],
+            ["c:\\", "c:\\"],
+            ["//server", "//server/"],
+            ["//server/share", "//server/share/"],
+            // https://github.com/microsoft/TypeScript/issues/53605
+            ["data:application/typescript,42", "data:application/typescript,42"],
+            ["https://deno.land/mod.ts", "https://deno.land/mod.ts/"],
+        ] as const) {
+            it(input, () => {
+                assert.strictEqual(ts.ensureTrailingDirectorySeparator(input), result);
+            });
+        }
+    });
+    describe("pathIsAbsolute", () => {
+        for (const [input, result] of [
+            ["", false],
+            ["a", false],
+            ["a/b", false],
+            ["/", true],
+            ["c:", true],
+            ["c:d", false],
+            ["c:/", true],
+            ["c:\\", true],
+            ["//server", true],
+            ["//server/share", true],
+            // https://github.com/microsoft/TypeScript/issues/53605
+            ["data:application/typescript,42", true],
+            ["https://deno.land/mod.ts", true],
+        ] as const) {
+            it(input, () => {
+                assert.strictEqual(ts.pathIsAbsolute(input), result);
+            });
+        }
     });
     it("isRootedDiskPath", () => {
         assert.isFalse(ts.isRootedDiskPath("a"));
