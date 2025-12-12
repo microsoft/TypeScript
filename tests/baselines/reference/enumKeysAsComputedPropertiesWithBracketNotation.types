@@ -320,3 +320,77 @@ type TypeMap11 = {
 >    : ^^^^^^^
 }
 
+// Parenthesized keys in element access
+type TypeMap12 = {
+>TypeMap12 : TypeMap12
+>          : ^^^^^^^^^
+
+    [nested[('inner')]['key']]: string;
+>[nested[('inner')]['key']] : string
+>                           : ^^^^^^
+>nested[('inner')]['key'] : "hello"
+>                         : ^^^^^^^
+>nested[('inner')] : { key: "hello"; }
+>                  : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>('inner') : "inner"
+>          : ^^^^^^^
+>'inner' : "inner"
+>        : ^^^^^^^
+>'key' : "key"
+>      : ^^^^^
+}
+
+type TypeMap13 = {
+>TypeMap13 : TypeMap13
+>          : ^^^^^^^^^
+
+    [nested['inner'][('key')]]: string;
+>[nested['inner'][('key')]] : string
+>                           : ^^^^^^
+>nested['inner'][('key')] : "hello"
+>                         : ^^^^^^^
+>nested['inner'] : { key: "hello"; }
+>                : ^^^^^^^^^^^^^^^^^
+>nested : { inner: { key: "hello"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'inner' : "inner"
+>        : ^^^^^^^
+>('key') : "key"
+>        : ^^^^^
+>'key' : "key"
+>      : ^^^^^
+}
+
+type TypeMap14 = {
+>TypeMap14 : TypeMap14
+>          : ^^^^^^^^^
+
+    [deep[('a')][('b')].c['d']]: string;
+>[deep[('a')][('b')].c['d']] : string
+>                            : ^^^^^^
+>deep[('a')][('b')].c['d'] : "value"
+>                          : ^^^^^^^
+>deep[('a')][('b')].c : { d: "value"; }
+>                     : ^^^^^^^^^^^^^^^
+>deep[('a')][('b')] : { c: { d: "value"; }; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>deep[('a')] : { b: { c: { d: "value"; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deep : { a: { b: { c: { d: "value"; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>('a') : "a"
+>      : ^^^
+>'a' : "a"
+>    : ^^^
+>('b') : "b"
+>      : ^^^
+>'b' : "b"
+>    : ^^^
+>c : { d: "value"; }
+>  : ^^^^^^^^^^^^^^^
+>'d' : "d"
+>    : ^^^
+}
+

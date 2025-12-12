@@ -78,6 +78,19 @@ type TypeMap11 = {
     [(nested).inner.key]: string;
 }
 
+// Parenthesized keys in element access
+type TypeMap12 = {
+    [nested[('inner')]['key']]: string;
+}
+
+type TypeMap13 = {
+    [nested['inner'][('key')]]: string;
+}
+
+type TypeMap14 = {
+    [deep[('a')][('b')].c['d']]: string;
+}
+
 
 //// [enumKeysAsComputedPropertiesWithBracketNotation.js]
 "use strict";

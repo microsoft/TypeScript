@@ -13744,7 +13744,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isPropertyAccessExpression(node) && isIdentifier(node.name)) {
             return isLateBindableAccessExpression(node.expression);
         }
-        if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression)) {
+        if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(skipParentheses(node.argumentExpression))) {
             return isLateBindableAccessExpression(node.expression);
         }
         return false;

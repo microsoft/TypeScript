@@ -185,3 +185,33 @@ type TypeMap11 = {
 >key : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
 }
 
+// Parenthesized keys in element access
+type TypeMap12 = {
+>TypeMap12 : Symbol(TypeMap12, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 75, 1))
+
+    [nested[('inner')]['key']]: string;
+>[nested[('inner')]['key']] : Symbol([nested[('inner')]['key']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 78, 18))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>'key' : Symbol(key, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 21, 12))
+}
+
+type TypeMap13 = {
+>TypeMap13 : Symbol(TypeMap13, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 80, 1))
+
+    [nested['inner'][('key')]]: string;
+>[nested['inner'][('key')]] : Symbol([nested['inner'][('key')]], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 82, 18))
+>nested : Symbol(nested, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 5))
+>'inner' : Symbol(inner, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 20, 16))
+}
+
+type TypeMap14 = {
+>TypeMap14 : Symbol(TypeMap14, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 84, 1))
+
+    [deep[('a')][('b')].c['d']]: string;
+>[deep[('a')][('b')].c['d']] : Symbol([deep[('a')][('b')].c['d']], Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 86, 18))
+>deep[('a')][('b')].c : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+>deep : Symbol(deep, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 46, 5))
+>c : Symbol(c, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 48, 12))
+>'d' : Symbol(d, Decl(enumKeysAsComputedPropertiesWithBracketNotation.ts, 49, 16))
+}
+
