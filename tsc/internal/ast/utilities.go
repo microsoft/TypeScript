@@ -4159,3 +4159,24 @@ func GetRestParameterElementType(node *ParameterDeclarationNode) *Node {
 	}
 	return nil
 }
+
+func isTagName(node *Node) bool {
+	return node.Parent != nil && IsJSDocTag(node.Parent) && node.Parent.TagName() == node
+}
+
+// We want to store any numbers/strings if they were a name that could be
+// related to a declaration.  So, if we have 'import x = require("something")'
+// then we want 'something' to be in the name table.  Similarly, if we have
+// "a['propname']" then we want to store "propname" in the name table.
+func literalIsName(node *Node) bool {
+	return IsDeclarationName(node) ||
+		node.Parent.Kind == KindExternalModuleReference ||
+		isArgumentOfElementAccessExpression(node) ||
+		IsLiteralComputedPropertyDeclarationName(node)
+}
+
+func isArgumentOfElementAccessExpression(node *Node) bool {
+	return node != nil && node.Parent != nil &&
+		node.Parent.Kind == KindElementAccessExpression &&
+		node.Parent.AsElementAccessExpression().ArgumentExpression == node
+}

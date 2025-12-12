@@ -2391,7 +2391,7 @@ func (state *refState) forEachRelatedSymbol(
 
 // Search for all occurrences of an identifier in a source file (and filter out the ones that match).
 func (state *refState) searchForName(sourceFile *ast.SourceFile, search *refSearch) {
-	if _, ok := getNameTable(sourceFile)[search.escapedText]; ok {
+	if _, ok := sourceFile.GetNameTable()[search.escapedText]; ok {
 		state.getReferencesInSourceFile(sourceFile, search, true /*addReferencesHere*/)
 	}
 }

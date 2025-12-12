@@ -452,47 +452,6 @@ func isSeparator(node *ast.Node, candidate *ast.Node) bool {
 	return candidate != nil && node.Parent != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent.Kind == ast.KindObjectLiteralExpression))
 }
 
-// Returns a map of all names in the file to their positions.
-// !!! cache this
-func getNameTable(file *ast.SourceFile) map[string]int {
-	nameTable := make(map[string]int)
-	var walk func(node *ast.Node) bool
-
-	walk = func(node *ast.Node) bool {
-		if ast.IsIdentifier(node) && !isTagName(node) && node.Text() != "" ||
-			ast.IsStringOrNumericLiteralLike(node) && literalIsName(node) ||
-			ast.IsPrivateIdentifier(node) {
-			text := node.Text()
-			if _, ok := nameTable[text]; ok {
-				nameTable[text] = -1
-			} else {
-				nameTable[text] = node.Pos()
-			}
-		}
-
-		node.ForEachChild(walk)
-		jsdocNodes := node.JSDoc(file)
-		for _, jsdoc := range jsdocNodes {
-			jsdoc.ForEachChild(walk)
-		}
-		return false
-	}
-
-	file.ForEachChild(walk)
-	return nameTable
-}
-
-// We want to store any numbers/strings if they were a name that could be
-// related to a declaration.  So, if we have 'import x = require("something")'
-// then we want 'something' to be in the name table.  Similarly, if we have
-// "a['propname']" then we want to store "propname" in the name table.
-func literalIsName(node *ast.NumericOrStringLikeLiteral) bool {
-	return ast.IsDeclarationName(node) ||
-		node.Parent.Kind == ast.KindExternalModuleReference ||
-		isArgumentOfElementAccessExpression(node) ||
-		ast.IsLiteralComputedPropertyDeclarationName(node)
-}
-
 func isLiteralNameOfPropertyDeclarationOrIndexAccess(node *ast.Node) bool {
 	// utilities
 	switch node.Parent.Kind {
@@ -522,12 +481,6 @@ func isObjectBindingElementWithoutPropertyName(bindingElement *ast.Node) bool {
 		bindingElement.Parent.Kind == ast.KindObjectBindingPattern &&
 		bindingElement.Name().Kind == ast.KindIdentifier &&
 		bindingElement.PropertyName() == nil
-}
-
-func isArgumentOfElementAccessExpression(node *ast.Node) bool {
-	return node != nil && node.Parent != nil &&
-		node.Parent.Kind == ast.KindElementAccessExpression &&
-		node.Parent.AsElementAccessExpression().ArgumentExpression == node
 }
 
 func isRightSideOfPropertyAccess(node *ast.Node) bool {
@@ -580,10 +533,6 @@ func isLabelOfLabeledStatement(node *ast.Node) bool {
 
 func findReferenceInPosition(refs []*ast.FileReference, pos int) *ast.FileReference {
 	return core.Find(refs, func(ref *ast.FileReference) bool { return ref.TextRange.ContainsInclusive(pos) })
-}
-
-func isTagName(node *ast.Node) bool {
-	return node.Parent != nil && ast.IsJSDocTag(node.Parent) && node.Parent.TagName() == node
 }
 
 // Assumes `candidate.pos <= position` holds.

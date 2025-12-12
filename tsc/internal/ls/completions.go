@@ -3582,7 +3582,7 @@ func (l *LanguageService) getJSCompletionEntries(
 	uniqueNames *collections.Set[string],
 	sortedEntries []*lsproto.CompletionItem,
 ) []*lsproto.CompletionItem {
-	nameTable := getNameTable(file)
+	nameTable := file.GetNameTable()
 	for name, pos := range nameTable {
 		// Skip identifiers produced only from the current location
 		if pos == position {
