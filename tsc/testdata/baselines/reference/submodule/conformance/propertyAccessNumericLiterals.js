@@ -28,4 +28,4 @@
 880000..toString();
 880000..toString();
 88e4.toString();
-8_8e4..toString();
+880000..toString();

@@ -115,7 +115,7 @@ function ExpandoNested(n) {
     const nested = function (m) {
         return n + m;
     };
-    nested.total = n + 1_000_000;
+    nested.total = n + 1000000;
     return nested;
 }
 ExpandoNested.also = -1;

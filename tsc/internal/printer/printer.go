@@ -37,7 +37,7 @@ type PrinterOptions struct {
 	NoEmitHelpers bool
 	// Module                        core.ModuleKind
 	// ModuleResolution              core.ModuleResolutionKind
-	// Target                        core.ScriptTarget
+	Target                      core.ScriptTarget
 	SourceMap                   bool
 	InlineSourceMap             bool
 	InlineSources               bool
@@ -206,11 +206,12 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 			}
 		}
 	}
-
 	// !!! Printer option to control whether to terminate unterminated literals
-	// !!! If necessary, printer option to control whether to preserve numeric separators
 	if p.emitContext.EmitFlags(node)&EFNoAsciiEscaping != 0 {
 		flags |= getLiteralTextFlagsNeverAsciiEscape
+	}
+	if p.Options.Target >= core.ScriptTargetES2021 {
+		flags |= getLiteralTextFlagsAllowNumericSeparator
 	}
 	return getLiteralText(node, core.Coalesce(sourceFile, p.currentSourceFile), flags)
 }
@@ -999,7 +1000,7 @@ func (p *Printer) emitLiteral(node *ast.LiteralLikeNode, flags getLiteralTextFla
 
 func (p *Printer) emitNumericLiteral(node *ast.NumericLiteral) {
 	state := p.enterNode(node.AsNode())
-	p.emitLiteral(node.AsNode(), getLiteralTextFlagsAllowNumericSeparator)
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
 	p.exitNode(node.AsNode(), state)
 }
 

@@ -163,6 +163,7 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 		SourceMap:       options.SourceMap.IsTrue(),
 		InlineSourceMap: options.InlineSourceMap.IsTrue(),
 		InlineSources:   options.InlineSources.IsTrue(),
+		Target:          options.Target,
 		// !!!
 	}
 
