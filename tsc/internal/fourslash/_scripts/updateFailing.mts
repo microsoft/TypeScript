@@ -4,6 +4,7 @@ import path from "path";
 import which from "which";
 
 const failingTestsPath = path.join(import.meta.dirname, "failingTests.txt");
+const crashingTestsPath = path.join(import.meta.dirname, "crashingTests.txt");
 
 function main() {
     const go = which.sync("go");
@@ -24,13 +25,19 @@ function main() {
     }
     const failRegex = /--- FAIL: ([\S]+)/gm;
     const failingTests: string[] = [];
+    const crashingRegex = /^=== (?:NAME|CONT)  ([\S]+)\n.*InternalError.*$/gm;
+    const crashingTests: string[] = [];
     let match;
 
     while ((match = failRegex.exec(testOutput)) !== null) {
         failingTests.push(match[1]);
     }
+    while ((match = crashingRegex.exec(testOutput)) !== null) {
+        crashingTests.push(match[1]);
+    }
 
     fs.writeFileSync(failingTestsPath, failingTests.sort((a, b) => a.localeCompare(b, "en-US")).join("\n") + "\n", "utf-8");
+    fs.writeFileSync(crashingTestsPath, crashingTests.sort((a, b) => a.localeCompare(b, "en-US")).join("\n") + "\n", "utf-8");
 }
 
 main();
