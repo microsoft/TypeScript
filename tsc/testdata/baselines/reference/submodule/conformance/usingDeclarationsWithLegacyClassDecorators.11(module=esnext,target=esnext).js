@@ -15,8 +15,10 @@ using after = null;
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.11.js]
-@dec
-class C {
-}
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 export { C };
 using after = null;

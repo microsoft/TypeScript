@@ -263,6 +263,12 @@ func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeBase {
 }
 func (n *Node) KindString() string { return n.Kind.String() }
 func (n *Node) KindValue() int16   { return int16(n.Kind) }
+func (n *Node) Decorators() []*Node {
+	if n.Modifiers() == nil {
+		return nil
+	}
+	return core.Filter(n.Modifiers().Nodes, IsDecorator)
+}
 
 type MutableNode Node
 
@@ -6300,7 +6306,7 @@ func (node *BinaryExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.OperatorToken) |
 		propagateSubtreeFacts(node.Right) |
-		core.IfElse(node.OperatorToken.Kind == KindInKeyword && IsPrivateIdentifier(node.Left), SubtreeContainsClassFields, SubtreeFactsNone)
+		core.IfElse(node.OperatorToken.Kind == KindInKeyword && IsPrivateIdentifier(node.Left), SubtreeContainsClassFields|SubtreeContainsPrivateIdentifierInExpression, SubtreeFactsNone)
 }
 
 func (node *BinaryExpression) setModifiers(modifiers *ModifierList) { node.modifiers = modifiers }
@@ -6753,9 +6759,13 @@ func (node *PropertyAccessExpression) Clone(f NodeFactoryCoercible) *Node {
 func (node *PropertyAccessExpression) Name() *DeclarationName { return node.name }
 
 func (node *PropertyAccessExpression) computeSubtreeFacts() SubtreeFacts {
+	privateName := SubtreeFactsNone
+	if !IsIdentifier(node.name) {
+		privateName = SubtreeContainsPrivateIdentifierInExpression
+	}
 	return propagateSubtreeFacts(node.Expression) |
 		propagateSubtreeFacts(node.QuestionDotToken) |
-		propagateSubtreeFacts(node.name)
+		propagateSubtreeFacts(node.name) | privateName
 }
 
 func (node *PropertyAccessExpression) propagateSubtreeFacts() SubtreeFacts {

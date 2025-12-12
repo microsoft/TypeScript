@@ -20,10 +20,12 @@ exports.default = void 0;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    exports.default = _default = C = 
-    @dec
-    class C {
+    C = class C {
     };
+    C = __decorate([
+        dec
+    ], C);
+    exports.default = _default = C;
 }
 catch (e_1) {
     env_1.error = e_1;

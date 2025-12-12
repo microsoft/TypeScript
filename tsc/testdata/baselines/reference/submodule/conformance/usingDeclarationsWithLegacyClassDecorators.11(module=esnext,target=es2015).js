@@ -16,9 +16,11 @@ using after = null;
 
 //// [usingDeclarationsWithLegacyClassDecorators.11.js]
 var after;
-@dec
-class C {
-}
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 export { C };
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {

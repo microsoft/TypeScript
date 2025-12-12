@@ -16,9 +16,11 @@ using after = null;
 "use strict";
 var after;
 Object.defineProperty(exports, "__esModule", { value: true });
-@dec
-class default_1 {
-}
+let default_1 = class {
+};
+default_1 = __decorate([
+    dec
+], default_1);
 exports.default = default_1;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {

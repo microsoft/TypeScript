@@ -17,7 +17,9 @@ export class C {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 using before = null;
-@dec
-class C {
-}
+let C = class C {
+};
 exports.C = C;
+exports.C = C = __decorate([
+    dec
+], C);

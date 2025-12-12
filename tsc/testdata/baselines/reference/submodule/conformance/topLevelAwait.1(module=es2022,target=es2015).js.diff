@@ -40,18 +40,3 @@
  }
  ({
      await() { }
-@@= skipped -16, +14 lines =@@
- });
- // property access name should be ok
- C1.prototype.await;
--let C = class C {
--};
--C = __decorate([
--    (await dec)
--], C);
-+@(await dec)
-+class C {
-+}
- // newlines
- // await in throw
- throw await 1;

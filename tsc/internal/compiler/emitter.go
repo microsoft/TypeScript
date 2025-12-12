@@ -85,7 +85,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	var emitResolver printer.EmitResolver
 	var referenceResolver binder.ReferenceResolver
-	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() { // full emit resolver is needed for import ellision and const enum inlining
+	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() { // full emit resolver is needed for import ellision and const enum inlining
 		emitResolver = host.GetEmitResolver()
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
@@ -103,6 +103,11 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	// transform TypeScript syntax
 	{
+		// use type nodes to add metadata decorators
+		if options.EmitDecoratorMetadata.IsTrue() {
+			tx = append(tx, tstransforms.NewMetadataTransformer(&opts))
+		}
+
 		// erase types
 		tx = append(tx, tstransforms.NewTypeEraserTransformer(&opts))
 
@@ -113,6 +118,10 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 		// transform `enum`, `namespace`, and parameter properties
 		tx = append(tx, tstransforms.NewRuntimeSyntaxTransformer(&opts))
+
+		if options.ExperimentalDecorators.IsTrue() {
+			tx = append(tx, tstransforms.NewLegacyDecoratorsTransformer(&opts))
+		}
 	}
 
 	// !!! transform legacy decorator syntax

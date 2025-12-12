@@ -13,8 +13,6 @@ class A {
 
 //// [privateNamesAndDecorators.js]
 class A {
-    @dec // Error
     #foo = 1;
-    @dec // Error
     #bar() { }
 }

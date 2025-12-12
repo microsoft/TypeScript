@@ -37,6 +37,7 @@ const (
 	SubtreeContainsClassFields
 	SubtreeContainsDecorators
 	SubtreeContainsIdentifier
+	SubtreeContainsPrivateIdentifierInExpression
 
 	SubtreeFactsComputed              // NOTE: This should always be last
 	SubtreeFactsNone     SubtreeFacts = 0

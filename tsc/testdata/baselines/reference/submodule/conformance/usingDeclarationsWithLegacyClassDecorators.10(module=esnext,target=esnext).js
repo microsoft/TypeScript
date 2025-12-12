@@ -13,7 +13,10 @@ using after = null;
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.10.js]
-@dec
-export default class {
-}
+let default_1 = class {
+};
+default_1 = __decorate([
+    dec
+], default_1);
+export default default_1;
 using after = null;

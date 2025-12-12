@@ -7,15 +7,11 @@
 +var after;
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.D = void 0;
--let C = class C {
--};
-+@dec
-+class C {
-+}
- exports.D = C;
--exports.D = C = __decorate([
--    dec
--], C);
+ let C = class C {
+@@= skipped -8, +9 lines =@@
+ exports.D = C = __decorate([
+     dec
+ ], C);
 -var after;
  const env_1 = { stack: [], error: void 0, hasError: false };
  try {

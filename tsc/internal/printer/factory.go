@@ -217,6 +217,10 @@ func (f *NodeFactory) NewLogicalORExpression(left *ast.Expression, right *ast.Ex
 	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindBarBarToken), right)
 }
 
+func (f *NodeFactory) NewLogicalANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindAmpersandAmpersandToken), right)
+}
+
 // func (f *NodeFactory) NewLogicalANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 // func (f *NodeFactory) NewBitwiseORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 // func (f *NodeFactory) NewBitwiseXORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
@@ -518,7 +522,57 @@ func (f *NodeFactory) NewUnscopedHelperName(name string) *ast.IdentifierNode {
 	return node
 }
 
-// !!! TypeScript Helpers
+// TypeScript Helpers
+
+func (f *NodeFactory) NewDecorateHelper(decoratorExpressions []*ast.Node, target *ast.Node, memberName *ast.Node, descriptor *ast.Node) *ast.Expression {
+	f.emitContext.RequestEmitHelper(decorateHelper)
+
+	var argumentsArray []*ast.Node
+	argumentsArray = append(argumentsArray, f.NewArrayLiteralExpression(f.NewNodeList(decoratorExpressions), true))
+	argumentsArray = append(argumentsArray, target)
+	if memberName != nil {
+		argumentsArray = append(argumentsArray, memberName)
+		if descriptor != nil {
+			argumentsArray = append(argumentsArray, descriptor)
+		}
+	}
+
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__decorate"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList(argumentsArray),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewMetadataHelper(metadataKey string, metadataValue *ast.Node) *ast.Node {
+	f.emitContext.RequestEmitHelper(metadataHelper)
+
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__metadata"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Node{
+			f.NewStringLiteral(metadataKey, ast.TokenFlagsNone),
+			metadataValue,
+		}),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewParamHelper(expression *ast.Node, parameterOffset int, location core.TextRange) *ast.Expression {
+	f.emitContext.RequestEmitHelper(paramHelper)
+	helper := f.NewCallExpression(
+		f.NewUnscopedHelperName("__param"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{f.NewNumericLiteral(strconv.Itoa(parameterOffset), ast.TokenFlagsNone), expression}),
+		ast.NodeFlagsNone,
+	)
+	helper.Loc = location
+	return helper
+}
 
 // ESNext Helpers
 

@@ -30,7 +30,40 @@ func compareEmitHelpers(x *EmitHelper, y *EmitHelper) int {
 	return x.Priority.Value - y.Priority.Value
 }
 
-// !!! TypeScript Helpers
+// TypeScript Helpers
+
+var decorateHelper = &EmitHelper{
+	Name:       "typescript:decorate",
+	ImportName: "__decorate",
+	Scoped:     false,
+	Priority:   &Priority{2},
+	Text: `var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};`,
+}
+
+var metadataHelper = &EmitHelper{
+	Name:       "typescript:metadata",
+	ImportName: "__metadata",
+	Scoped:     false,
+	Priority:   &Priority{3},
+	Text: `var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};`,
+}
+
+var paramHelper = &EmitHelper{
+	Name:       "typescript:param",
+	ImportName: "__param",
+	Scoped:     false,
+	Priority:   &Priority{4},
+	Text: `var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};`,
+}
 
 // ESNext Helpers
 

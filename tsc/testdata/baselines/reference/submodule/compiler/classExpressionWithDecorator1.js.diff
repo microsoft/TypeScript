@@ -9,8 +9,6 @@
 -    },
 -    _a.p = 1,
 -    _a);
-+var v = 
-+@decorate
-+class C {
++var v = class C {
 +    static p = 1;
 +};

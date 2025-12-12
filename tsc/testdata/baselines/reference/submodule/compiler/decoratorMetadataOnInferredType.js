@@ -28,7 +28,10 @@ class A {
 function decorator(target, propertyKey) {
 }
 class B {
-    @decorator
     x = new A();
 }
 exports.B = B;
+__decorate([
+    decorator,
+    __metadata("design:type", Object)
+], B.prototype, "x", void 0);

@@ -23,11 +23,15 @@ export declare function __classPrivateFieldIn(a: any, b: any): boolean;
 
 
 //// [a.js]
-@dec
-export class A {
+import { __decorate } from "tslib";
+let A = class A {
     #x = 1;
     async f() { this.#x = await this.#x; }
     g(u) { return #x in u; }
-}
+};
+A = __decorate([
+    dec
+], A);
+export { A };
 const o = { a: 1 };
 const y = Object.assign({}, o);

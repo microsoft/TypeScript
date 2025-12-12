@@ -25,6 +25,55 @@ type SymbolAccessibilityResult struct {
 	ErrorModuleName      string      // Optional - If the symbol is not visible from module, module's name
 }
 
+/**
+ * Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata
+ *
+ * @internal
+ */
+type TypeReferenceSerializationKind int32
+
+const (
+	// The TypeReferenceNode could not be resolved.
+	// The type name should be emitted using a safe fallback.
+	TypeReferenceSerializationKindUnknown = iota
+
+	// The TypeReferenceNode resolves to a type with a constructor
+	// function that can be reached at runtime (e.g. a `class`
+	// declaration or a `var` declaration for the static side
+	// of a type, such as the global `Promise` type in lib.d.ts).
+	TypeReferenceSerializationKindTypeWithConstructSignatureAndValue
+
+	// The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
+	TypeReferenceSerializationKindVoidNullableOrNeverType
+
+	// The TypeReferenceNode resolves to a Number-like type.
+	TypeReferenceSerializationKindNumberLikeType
+
+	// The TypeReferenceNode resolves to a BigInt-like type.
+	TypeReferenceSerializationKindBigIntLikeType
+
+	// The TypeReferenceNode resolves to a String-like type.
+	TypeReferenceSerializationKindStringLikeType
+
+	// The TypeReferenceNode resolves to a Boolean-like type.
+	TypeReferenceSerializationKindBooleanType
+
+	// The TypeReferenceNode resolves to an Array-like type.
+	TypeReferenceSerializationKindArrayLikeType
+
+	// The TypeReferenceNode resolves to the ESSymbol type.
+	TypeReferenceSerializationKindESSymbolType
+
+	// The TypeReferenceNode resolved to the global Promise constructor symbol.
+	TypeReferenceSerializationKindPromise
+
+	// The TypeReferenceNode resolves to a Function type or a type with call signatures.
+	TypeReferenceSerializationKindTypeWithCallSignature
+
+	// The TypeReferenceNode resolves to any other type.
+	TypeReferenceSerializationKindObjectType
+)
+
 type EmitResolver interface {
 	binder.ReferenceResolver
 	IsReferencedAliasDeclaration(node *ast.Node) bool
@@ -34,6 +83,9 @@ type EmitResolver interface {
 	GetExternalModuleFileFromDeclaration(node *ast.Node) *ast.SourceFile
 	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
 	GetResolutionModeOverride(node *ast.Node) core.ResolutionMode
+
+	// decorator metadata
+	GetTypeReferenceSerializationKind(name *ast.EntityName, serialScope *ast.Node) TypeReferenceSerializationKind
 
 	// const enum inlining
 	GetConstantValue(node *ast.Node) any

@@ -16,8 +16,10 @@ using after = null;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-@dec
-class C {
-}
+let C = class C {
+};
 exports.C = C;
+exports.C = C = __decorate([
+    dec
+], C);
 using after = null;

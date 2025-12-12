@@ -2648,15 +2648,6 @@ func getOptionalSymbolFlagForNode(node *ast.Node) ast.SymbolFlags {
 	return core.IfElse(postfixToken != nil && postfixToken.Kind == ast.KindQuestionToken, ast.SymbolFlagsOptional, ast.SymbolFlagsNone)
 }
 
-func isAsyncFunction(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindMethodDeclaration:
-		data := node.BodyData()
-		return data.Body != nil && data.AsteriskToken == nil && ast.HasSyntacticModifier(node, ast.ModifierFlagsAsync)
-	}
-	return false
-}
-
 func isFunctionSymbol(symbol *ast.Symbol) bool {
 	d := symbol.ValueDeclaration
 	if d != nil {

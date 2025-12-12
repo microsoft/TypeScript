@@ -446,6 +446,10 @@ func (c *EmitContext) SetOriginal(node *ast.Node, original *ast.Node) {
 	c.SetOriginalEx(node, original, false)
 }
 
+func (c *EmitContext) UnsetOriginal(node *ast.Node) {
+	delete(c.original, node)
+}
+
 func (c *EmitContext) SetOriginalEx(node *ast.Node, original *ast.Node, allowOverwrite bool) {
 	if original == nil {
 		panic("Original cannot be nil.")

@@ -17,6 +17,8 @@ exports.C = void 0;
 class C {
     @dec
     x;
-    constructor(x) { }
+    constructor(
+    @dec
+    x) { }
 }
 exports.C = C;

@@ -21,9 +21,12 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-@dec
-class A {
-}
+const tslib_1 = require("tslib");
+let A = class A {
+};
 exports.A = A;
+exports.A = A = tslib_1.__decorate([
+    dec
+], A);
 const o = { a: 1 };
 const y = Object.assign({}, o);

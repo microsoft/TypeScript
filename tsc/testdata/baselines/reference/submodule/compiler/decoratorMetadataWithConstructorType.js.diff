@@ -7,11 +7,7 @@
 -    constructor() {
 -        this.x = new A();
 -    }
-+    @decorator
 +    x = new A();
  }
  exports.B = B;
--__decorate([
--    decorator,
--    __metadata("design:type", A)
--], B.prototype, "x", void 0);
+ __decorate([

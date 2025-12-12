@@ -125,9 +125,11 @@ class C3 {
 });
 // property access name should be ok
 C1.prototype.await;
-@(await dec)
-class C {
-}
+let C = class C {
+};
+C = __decorate([
+    (await dec)
+], C);
 // newlines
 // await in throw
 throw await 1;

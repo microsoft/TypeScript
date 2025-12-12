@@ -14,9 +14,12 @@ using after = null;
 
 //// [usingDeclarationsWithLegacyClassDecorators.10.js]
 var after;
-@dec
-export default class {
-}
+let default_1 = class {
+};
+default_1 = __decorate([
+    dec
+], default_1);
+export default default_1;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);

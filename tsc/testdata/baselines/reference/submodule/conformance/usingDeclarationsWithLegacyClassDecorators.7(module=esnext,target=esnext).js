@@ -13,8 +13,10 @@ using after = null;
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.7.js]
-@dec
-class C {
-}
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 using after = null;
 export {};

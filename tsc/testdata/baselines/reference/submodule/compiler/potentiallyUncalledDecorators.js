@@ -81,69 +81,123 @@ export { };
 
 
 //// [potentiallyUncalledDecorators.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 class FooComponent {
-    @Input
     foo;
 }
+__decorate([
+    Input
+], FooComponent.prototype, "foo", void 0);
 class Person {
-    @tracked
     person;
     any;
 }
+__decorate([
+    tracked
+], Person.prototype, "person", void 0);
 class MultiplyByTwo {
     args;
-    @tracked('args')
     get multiplied() {
         return this.args.number * 2;
     }
 }
-@noArgs
-class A {
-    @noArgs
+__decorate([
+    tracked('args')
+], MultiplyByTwo.prototype, "multiplied", null);
+let A = class A {
     foo;
-    @noArgs
     bar() { }
-}
-@allRest
-class B {
-    @allRest
+};
+__decorate([
+    noArgs
+], A.prototype, "foo", void 0);
+__decorate([
+    noArgs
+], A.prototype, "bar", null);
+A = __decorate([
+    noArgs
+], A);
+let B = class B {
     foo;
-    @allRest
     bar() { }
-}
-@oneOptional
-class C {
-    @oneOptional
+};
+__decorate([
+    allRest
+], B.prototype, "foo", void 0);
+__decorate([
+    allRest
+], B.prototype, "bar", null);
+B = __decorate([
+    allRest
+], B);
+let C = class C {
     foo;
-    @oneOptional
     bar() { }
-}
-@twoOptional
-class D {
-    @twoOptional
+};
+__decorate([
+    oneOptional
+], C.prototype, "foo", void 0);
+__decorate([
+    oneOptional
+], C.prototype, "bar", null);
+C = __decorate([
+    oneOptional
+], C);
+let D = class D {
     foo;
-    @twoOptional
     bar() { }
-}
-@threeOptional
-class E {
-    @threeOptional
+};
+__decorate([
+    twoOptional
+], D.prototype, "foo", void 0);
+__decorate([
+    twoOptional
+], D.prototype, "bar", null);
+D = __decorate([
+    twoOptional
+], D);
+let E = class E {
     foo;
-    @threeOptional
     bar() { }
-}
-@oneOptionalWithRest
-class F {
-    @oneOptionalWithRest
+};
+__decorate([
+    threeOptional
+], E.prototype, "foo", void 0);
+__decorate([
+    threeOptional
+], E.prototype, "bar", null);
+E = __decorate([
+    threeOptional
+], E);
+let F = class F {
     foo;
-    @oneOptionalWithRest
     bar() { }
-}
-@anyDec
-class G {
-    @anyDec
+};
+__decorate([
+    oneOptionalWithRest
+], F.prototype, "foo", void 0);
+__decorate([
+    oneOptionalWithRest
+], F.prototype, "bar", null);
+F = __decorate([
+    oneOptionalWithRest
+], F);
+let G = class G {
     foo;
-    @anyDec
     bar() { }
-}
+};
+__decorate([
+    anyDec
+], G.prototype, "foo", void 0);
+__decorate([
+    anyDec
+], G.prototype, "bar", null);
+G = __decorate([
+    anyDec
+], G);
 export {};

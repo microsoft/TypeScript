@@ -18,8 +18,12 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 
 //// [a.js]
-@dec
-export class A {
-}
+import { __decorate as __decorate_1 } from "tslib";
+let A = class A {
+};
+A = __decorate_1([
+    dec
+], A);
+export { A };
 const o = { a: 1 };
 const y = Object.assign({}, o);

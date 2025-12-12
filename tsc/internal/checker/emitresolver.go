@@ -1116,3 +1116,95 @@ func (r *EmitResolver) GetConstantValue(node *ast.Node) any {
 	defer r.checkerMu.Unlock()
 	return r.checker.GetConstantValue(node)
 }
+
+func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, location *ast.Node) printer.TypeReferenceSerializationKind {
+	// typeName = emitContext.ParseNode(typeName)
+	// location = emitContext.ParseNode(location)
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	if typeName == nil || location == nil {
+		return printer.TypeReferenceSerializationKindUnknown
+	}
+
+	// Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
+	isTypeOnly := false
+	if ast.IsQualifiedName(typeName) {
+		rootValueSymbol := r.checker.resolveEntityName(ast.GetFirstIdentifier(typeName), ast.SymbolFlagsValue, true, true, location)
+
+		if rootValueSymbol != nil && len(rootValueSymbol.Declarations) > 0 {
+			isTypeOnly = core.Every(rootValueSymbol.Declarations, ast.IsTypeOnlyImportOrExportDeclaration)
+		}
+	}
+	valueSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsValue, true, true, location)
+	resolvedValueSymbol := valueSymbol
+	if valueSymbol != nil && valueSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		resolvedValueSymbol = r.checker.resolveAlias(valueSymbol)
+	}
+
+	isTypeOnly = isTypeOnly || (valueSymbol != nil && r.checker.getTypeOnlyAliasDeclarationEx(valueSymbol, ast.SymbolFlagsValue) != nil)
+
+	// Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
+	typeSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsType, true, true, location)
+	resolvedTypeSymbol := typeSymbol
+	if typeSymbol != nil && typeSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		resolvedTypeSymbol = r.checker.resolveAlias(typeSymbol)
+	}
+	// In case the value symbol can't be resolved (e.g. because of missing declarations), use type symbol for reachability check.
+	isTypeOnly = isTypeOnly || (typeSymbol != nil && r.checker.getTypeOnlyAliasDeclarationEx(typeSymbol, ast.SymbolFlagsType) != nil)
+
+	if resolvedValueSymbol != nil && resolvedValueSymbol == resolvedTypeSymbol {
+		globalPromiseSymbol := r.checker.getGlobalPromiseConstructorSymbol()
+		if globalPromiseSymbol != nil && resolvedValueSymbol == globalPromiseSymbol {
+			return printer.TypeReferenceSerializationKindPromise
+		}
+
+		constructorType := r.checker.getTypeOfSymbol(resolvedValueSymbol)
+		if constructorType != nil && r.checker.isConstructorType(constructorType) {
+			if isTypeOnly {
+				return printer.TypeReferenceSerializationKindTypeWithCallSignature
+			}
+			return printer.TypeReferenceSerializationKindTypeWithConstructSignatureAndValue
+		}
+	}
+
+	// We might not be able to resolve type symbol so use unknown type in that case (eg error case)
+	if resolvedTypeSymbol == nil {
+		if isTypeOnly {
+			return printer.TypeReferenceSerializationKindObjectType
+		}
+		return printer.TypeReferenceSerializationKindUnknown
+	}
+
+	type_ := r.checker.getDeclaredTypeOfSymbol(resolvedTypeSymbol)
+	if r.checker.isErrorType(type_) {
+		if isTypeOnly {
+			return printer.TypeReferenceSerializationKindObjectType
+		}
+		return printer.TypeReferenceSerializationKindUnknown
+	}
+
+	if type_.flags&TypeFlagsAnyOrUnknown != 0 {
+		return printer.TypeReferenceSerializationKindObjectType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsVoid|TypeFlagsNullable|TypeFlagsNever) {
+		return printer.TypeReferenceSerializationKindVoidNullableOrNeverType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsBooleanLike) {
+		return printer.TypeReferenceSerializationKindBooleanType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsNumberLike) {
+		return printer.TypeReferenceSerializationKindNumberLikeType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsBigIntLike) {
+		return printer.TypeReferenceSerializationKindBigIntLikeType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsStringLike) {
+		return printer.TypeReferenceSerializationKindStringLikeType
+	} else if isTupleType(type_) {
+		return printer.TypeReferenceSerializationKindArrayLikeType
+	} else if r.checker.isTypeAssignableToKind(type_, TypeFlagsESSymbolLike) {
+		return printer.TypeReferenceSerializationKindESSymbolType
+	} else if r.checker.isFunctionType(type_) {
+		return printer.TypeReferenceSerializationKindTypeWithCallSignature
+	} else if r.checker.isArrayType(type_) {
+		return printer.TypeReferenceSerializationKindArrayLikeType
+	} else {
+		return printer.TypeReferenceSerializationKindObjectType
+	}
+}

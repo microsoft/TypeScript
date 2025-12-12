@@ -28,6 +28,10 @@ export class Foo {}
 
 
 //// [index.mjs]
-@decorator
-export class Foo {
-}
+import { __decorate } from "tslib";
+let Foo = class Foo {
+};
+Foo = __decorate([
+    decorator
+], Foo);
+export { Foo };

@@ -16,7 +16,9 @@ export default class C {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 using before = null;
-@dec
-class C {
-}
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
 exports.default = C;

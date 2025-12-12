@@ -60,145 +60,197 @@ declare let h: () => <T>(...args: any) => any;
 
 //// [esDecorators-decoratorExpression.2.js]
 {
-    @x
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        x
+    ], C);
 }
 {
-    @x.y
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        x.y
+    ], C);
 }
 {
-    @x.y
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        x.y
+    ], C);
 }
 {
-    @g()
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        g()
+    ], C);
 }
 {
-    @(g)
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (g)
+    ], C);
 }
 {
-    @(h())
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (h())
+    ], C);
 }
 {
-    @(x().y)
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x().y)
+    ], C);
 }
 {
-    @(x().y())
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x().y())
+    ], C);
 }
 {
-    @(x ``)
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x ``)
+    ], C);
 }
 {
-    @(x.y ``)
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x.y ``)
+    ], C);
 }
 {
-    @(x?.y)
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x?.y)
+    ], C);
 }
 {
-    @(x["y"])
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x["y"])
+    ], C);
 }
 {
-    @(x?.["y"])
-    class C {
-    }
+    let C = class C {
+    };
+    C = __decorate([
+        (x?.["y"])
+    ], C);
 }
 {
     class C {
-        @x
         m() { }
     }
+    __decorate([
+        x
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @x.y
         m() { }
     }
+    __decorate([
+        x.y
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @x.y
         m() { }
     }
+    __decorate([
+        x.y
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @g()
         m() { }
     }
+    __decorate([
+        g()
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(g)
         m() { }
     }
+    __decorate([
+        (g)
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(h())
         m() { }
     }
+    __decorate([
+        (h())
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x().y)
         m() { }
     }
+    __decorate([
+        (x().y)
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x().y())
         m() { }
     }
+    __decorate([
+        (x().y())
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x ``)
         m() { }
     }
+    __decorate([
+        (x ``)
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x.y ``)
         m() { }
     }
+    __decorate([
+        (x.y ``)
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x?.y)
         m() { }
     }
+    __decorate([
+        (x?.y)
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x["y"])
         m() { }
     }
+    __decorate([
+        (x["y"])
+    ], C.prototype, "m", null);
 }
 {
     class C {
-        @(x?.["y"])
         m() { }
     }
+    __decorate([
+        (x?.["y"])
+    ], C.prototype, "m", null);
 }

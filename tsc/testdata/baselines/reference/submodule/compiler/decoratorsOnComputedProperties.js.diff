@@ -1,21 +1,15 @@
 --- old.decoratorsOnComputedProperties.js
 +++ new.decoratorsOnComputedProperties.js
-@@= skipped -191, +191 lines =@@
+@@= skipped -197, +197 lines =@@
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
  };
-
- //// [decoratorsOnComputedProperties.js]
--var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
--    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
--    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
--    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
--    return c > 3 && r && Object.defineProperty(target, key, r), r;
--};
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
 -var _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51;
  function x(o, k) { }
  let i = 0;
  function foo() { return ++i + ""; }
-@@= skipped -15, +7 lines =@@
+@@= skipped -9, +7 lines =@@
  const fieldNameB = "fieldName2";
  const fieldNameC = "fieldName3";
  class A {
@@ -27,41 +21,34 @@
 -        this[_t] = null;
 -        this[_v] = null;
 -    }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
  }
 -_q = Symbol.toStringTag, _r = Symbol.iterator, Symbol.isConcatSpreadable, _a = Symbol.match, foo(), _s = foo(), _t = foo(), _u = fieldNameB, _v = fieldNameC;
--__decorate([
--    x
--], A.prototype, "property", void 0);
--__decorate([
--    x
+ __decorate([
+     x
+ ], A.prototype, "property", void 0);
+ __decorate([
+     x
 -], A.prototype, _q, void 0);
--__decorate([
--    x
--], A.prototype, "property2", void 0);
--__decorate([
--    x
++], A.prototype, _a, void 0);
+ __decorate([
+     x
+ ], A.prototype, "property2", void 0);
+ __decorate([
+     x
 -], A.prototype, _r, void 0);
 -__decorate([
 -    x
@@ -95,28 +82,33 @@
 -    _0 = fieldNameB,
 -    _1 = fieldNameC,
 -    _c);
++], A.prototype, _b, void 0);
++__decorate([
++    x
++], A.prototype, _c, void 0);
++__decorate([
++    x
++], A.prototype, _d, void 0);
++__decorate([
++    x
++], A.prototype, _e, void 0);
++__decorate([
++    x
++], A.prototype, _f, void 0);
 +void class B {
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
 +};
  class C {
@@ -129,41 +121,34 @@
 -        this[_7] = null;
 -    }
 -    [(_2 = Symbol.toStringTag, _3 = Symbol.iterator, Symbol.isConcatSpreadable, _d = Symbol.match, foo(), _4 = foo(), _5 = foo(), _6 = fieldNameB, _7 = fieldNameC, "some" + "method")]() { }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
 +    ["some" + "method"]() { }
  }
--__decorate([
--    x
--], C.prototype, "property", void 0);
--__decorate([
--    x
+ __decorate([
+     x
+ ], C.prototype, "property", void 0);
+ __decorate([
+     x
 -], C.prototype, _2, void 0);
--__decorate([
--    x
--], C.prototype, "property2", void 0);
--__decorate([
--    x
++], C.prototype, _g, void 0);
+ __decorate([
+     x
+ ], C.prototype, "property2", void 0);
+ __decorate([
+     x
 -], C.prototype, _3, void 0);
 -__decorate([
 -    x
@@ -177,6 +162,19 @@
 -__decorate([
 -    x
 -], C.prototype, _7, void 0);
++], C.prototype, _h, void 0);
++__decorate([
++    x
++], C.prototype, _j, void 0);
++__decorate([
++    x
++], C.prototype, _k, void 0);
++__decorate([
++    x
++], C.prototype, _l, void 0);
++__decorate([
++    x
++], C.prototype, _m, void 0);
  void class D {
 -    constructor() {
 -        this["property2"] = 2;
@@ -187,27 +185,19 @@
 -        this[_13] = null;
 -    }
 -    [(_8 = Symbol.toStringTag, _9 = Symbol.iterator, Symbol.isConcatSpreadable, _e = Symbol.match, foo(), _10 = foo(), _11 = foo(), _12 = fieldNameB, _13 = fieldNameC, "some" + "method")]() { }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
 +    ["some" + "method"]() { }
  };
@@ -221,42 +211,35 @@
 -        this[_19] = null;
 -    }
 -    [(_14 = Symbol.toStringTag, _15 = Symbol.iterator, Symbol.isConcatSpreadable, _f = Symbol.match, foo(), _16 = foo(), _17 = foo(), "some" + "method")]() { }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
  }
 -_18 = fieldNameB, _19 = fieldNameC;
--__decorate([
--    x
--], E.prototype, "property", void 0);
--__decorate([
--    x
+ __decorate([
+     x
+ ], E.prototype, "property", void 0);
+ __decorate([
+     x
 -], E.prototype, _14, void 0);
--__decorate([
--    x
--], E.prototype, "property2", void 0);
--__decorate([
--    x
++], E.prototype, _o, void 0);
+ __decorate([
+     x
+ ], E.prototype, "property2", void 0);
+ __decorate([
+     x
 -], E.prototype, _15, void 0);
 -__decorate([
 -    x
@@ -284,29 +267,34 @@
 -    _24 = fieldNameB,
 -    _25 = fieldNameC,
 -    _h);
++], E.prototype, _p, void 0);
++__decorate([
++    x
++], E.prototype, _q, void 0);
++__decorate([
++    x
++], E.prototype, _r, void 0);
++__decorate([
++    x
++], E.prototype, _s, void 0);
++__decorate([
++    x
++], E.prototype, _t, void 0);
 +void class F {
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
-+    @x
 +    [fieldNameC] = null;
 +};
  class G {
@@ -320,43 +308,36 @@
 -    }
 -    [(_26 = Symbol.toStringTag, _27 = Symbol.iterator, Symbol.isConcatSpreadable, _j = Symbol.match, foo(), _28 = foo(), _29 = foo(), "some" + "method")]() { }
 -    [(_30 = fieldNameB, "some" + "method2")]() { }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
 +    ["some" + "method2"]() { }
-+    @x
 +    [fieldNameC] = null;
  }
 -_31 = fieldNameC;
--__decorate([
--    x
--], G.prototype, "property", void 0);
--__decorate([
--    x
+ __decorate([
+     x
+ ], G.prototype, "property", void 0);
+ __decorate([
+     x
 -], G.prototype, _26, void 0);
--__decorate([
--    x
--], G.prototype, "property2", void 0);
--__decorate([
--    x
++], G.prototype, _u, void 0);
+ __decorate([
+     x
+ ], G.prototype, "property2", void 0);
+ __decorate([
+     x
 -], G.prototype, _27, void 0);
 -__decorate([
 -    x
@@ -384,30 +365,35 @@
 -    },
 -    _37 = fieldNameC,
 -    _l);
++], G.prototype, _v, void 0);
++__decorate([
++    x
++], G.prototype, _w, void 0);
++__decorate([
++    x
++], G.prototype, _x, void 0);
++__decorate([
++    x
++], G.prototype, _y, void 0);
++__decorate([
++    x
++], G.prototype, _z, void 0);
 +void class H {
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
 +    ["some" + "method2"]() { }
-+    @x
 +    [fieldNameC] = null;
 +};
  class I {
@@ -421,44 +407,36 @@
 -    }
 -    [(_38 = Symbol.toStringTag, _39 = Symbol.iterator, Symbol.isConcatSpreadable, _m = Symbol.match, foo(), _40 = foo(), _41 = foo(), _42 = "some" + "method")]() { }
 -    [(_43 = fieldNameB, "some" + "method2")]() { }
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
-+    @x
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
 +    ["some" + "method2"]() { }
-+    @x
 +    [fieldNameC] = null;
  }
 -_44 = fieldNameC;
--__decorate([
--    x
--], I.prototype, "property", void 0);
--__decorate([
--    x
+ __decorate([
+     x
+ ], I.prototype, "property", void 0);
+ __decorate([
+     x
 -], I.prototype, _38, void 0);
--__decorate([
--    x
--], I.prototype, "property2", void 0);
--__decorate([
--    x
++], I.prototype, _0, void 0);
+ __decorate([
+     x
+ ], I.prototype, "property2", void 0);
+ __decorate([
+     x
 -], I.prototype, _39, void 0);
 -__decorate([
 -    x
@@ -489,30 +467,37 @@
 -    },
 -    _51 = fieldNameC,
 -    _p);
++], I.prototype, _1, void 0);
++__decorate([
++    x
++], I.prototype, _2, void 0);
++__decorate([
++    x
++], I.prototype, _3, void 0);
++__decorate([
++    x
++], I.prototype, _4, null);
++__decorate([
++    x
++], I.prototype, _5, void 0);
++__decorate([
++    x
++], I.prototype, _6, void 0);
 +void class J {
-+    @x
 +    ["property"];
-+    @x
 +    [Symbol.toStringTag];
-+    @x
 +    ["property2"] = 2;
-+    @x
 +    [Symbol.iterator] = null;
 +    ["property3"];
 +    [Symbol.isConcatSpreadable];
 +    ["property4"] = 2;
 +    [Symbol.match] = null;
 +    [foo()];
-+    @x
 +    [foo()];
-+    @x
 +    [foo()] = null;
-+    @x
 +    ["some" + "method"]() { }
 +    [fieldNameA];
-+    @x
 +    [fieldNameB];
 +    ["some" + "method2"]() { }
-+    @x
 +    [fieldNameC] = null;
 +};

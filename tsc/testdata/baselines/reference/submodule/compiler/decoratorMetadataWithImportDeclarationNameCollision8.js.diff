@@ -1,25 +1,10 @@
 --- old.decoratorMetadataWithImportDeclarationNameCollision8.js
 +++ new.decoratorMetadataWithImportDeclarationNameCollision8.js
-@@= skipped -35, +35 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.MyClass = void 0;
--const database = require("./db");
- function someDecorator(target) {
+@@= skipped -40, +40 lines =@@
      return target;
  }
--let MyClass = class MyClass {
-+@someDecorator
-+class MyClass {
+ let MyClass = class MyClass {
 +    db;
      constructor(db) {
          this.db = db;
          this.db.doSomething();
-     }
--};
-+}
- exports.MyClass = MyClass;
--exports.MyClass = MyClass = __decorate([
--    someDecorator,
--    __metadata("design:paramtypes", [database.db])
--], MyClass);

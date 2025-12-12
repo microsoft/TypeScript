@@ -1,17 +1,6 @@
 --- old.derivedClassSuperProperties.js
 +++ new.derivedClassSuperProperties.js
-@@= skipped -403, +403 lines =@@
-
-
- //// [derivedClassSuperProperties.js]
--var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
--    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
--    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
--    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
--    return c > 3 && r && Object.defineProperty(target, key, r), r;
--};
- class Base {
-     constructor(a) { }
+@@= skipped -414, +414 lines =@@
      receivesAnything(param) { }
  }
  class Derived1 extends Base {
@@ -97,14 +86,11 @@
  class DerivedWithDecoratorOnClass extends Base {
 +    prop = true;
      constructor() {
--        let InnerClass = class InnerClass {
--        };
--        InnerClass = __decorate([
--            decorate(this)
--        ], InnerClass);
-+        @decorate(this)
-+        class InnerClass {
-+        }
+         let InnerClass = class InnerClass {
+         };
+@@= skipped -77, +78 lines =@@
+             decorate(this)
+         ], InnerClass);
          super();
 -        this.prop = true;
      }
@@ -113,12 +99,10 @@
 +    prop = true;
      constructor() {
          class InnerClass {
-+            @decorate(this)
              innerMethod() { }
-         }
--        __decorate([
--            decorate(this)
--        ], InnerClass.prototype, "innerMethod", null);
+@@= skipped -12, +12 lines =@@
+             decorate(this)
+         ], InnerClass.prototype, "innerMethod", null);
          super();
 -        this.prop = true;
      }
@@ -130,12 +114,11 @@
 -            constructor() {
 -                this.innerProp = true;
 -            }
-+            @decorate(this)
 +            innerProp = true;
          }
--        __decorate([
--            decorate(this)
--        ], InnerClass.prototype, "innerProp", void 0);
+         __decorate([
+             decorate(this)
+         ], InnerClass.prototype, "innerProp", void 0);
          super();
 -        this.prop = true;
      }
@@ -283,7 +266,7 @@
      constructor() {
          console.log(new class extends Base {
              constructor() {
-@@= skipped -246, +233 lines =@@
+@@= skipped -146, +144 lines =@@
              }
          }());
          super();

@@ -14,6 +14,9 @@ export class C {
 
 //// [usingDeclarationsWithLegacyClassDecorators.2.js]
 using before = null;
-@dec
-export class C {
-}
+let C = class C {
+};
+C = __decorate([
+    dec
+], C);
+export { C };
