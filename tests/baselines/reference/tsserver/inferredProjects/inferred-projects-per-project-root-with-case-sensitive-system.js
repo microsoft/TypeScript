@@ -741,12 +741,6 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject3*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -890,12 +884,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules: *new*
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/jsconfig.json:
@@ -1026,12 +1014,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -1169,12 +1151,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components:
@@ -1308,12 +1284,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components:
@@ -1446,12 +1416,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -1682,12 +1646,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject3*' - done.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1763,12 +1721,6 @@ PolledWatches *deleted*::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/b/bower_components:
   {"pollingInterval":500}
@@ -2317,12 +2269,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject6*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject6* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -2470,12 +2416,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules: *new*
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
@@ -2621,12 +2561,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -2780,12 +2714,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
@@ -2936,12 +2864,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
@@ -3091,12 +3013,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -3355,12 +3271,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject6*' - done.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject6* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -3467,12 +3377,6 @@ PolledWatches *deleted*::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
   {"pollingInterval":500}
@@ -3997,12 +3901,6 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject8*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject8*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject8* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -4146,12 +4044,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules: *new*
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/jsconfig.json:
@@ -4282,12 +4174,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -4425,12 +4311,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components:
@@ -4564,12 +4444,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components:
@@ -4702,12 +4576,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -4938,12 +4806,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject8*' - done.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject8* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -5019,12 +4881,6 @@ PolledWatches *deleted*::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/b/bower_components:
   {"pollingInterval":500}
@@ -5581,12 +5437,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject11*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject11* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject11* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -5733,12 +5583,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -5890,12 +5734,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -6054,12 +5892,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
@@ -6215,12 +6047,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
   {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/A/bower_components:
@@ -6375,12 +6201,6 @@ PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
