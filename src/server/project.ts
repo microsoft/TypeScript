@@ -1530,6 +1530,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     watchTypingLocations(files: readonly string[] | undefined): void {
+        // Skip watching typing locations for inferred project whose currentDirectory is not watchable or 
+        // is same as server's current directory
+        if (this.currentDirectory === this.projectService.currentDirectory ||
+            !canWatchDirectoryOrFilePath(this.toPath(this.currentDirectory))) {
+            return;
+        }
+
         if (!files) {
             this.typingWatchers!.isInvoked = false;
             return;
