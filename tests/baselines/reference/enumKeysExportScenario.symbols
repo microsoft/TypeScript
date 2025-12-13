@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/enumKeysExportScenario.ts] ////
+
+=== enumKeysExportScenario.ts ===
+// Test that export scenario with enum bracket notation doesn't crash
+// This tests the trackComputedName -> getFirstIdentifier path
+
+enum Type {
+>Type : Symbol(Type, Decl(enumKeysExportScenario.ts, 0, 0))
+
+    Foo = 'foo',
+>Foo : Symbol(Type.Foo, Decl(enumKeysExportScenario.ts, 3, 11))
+
+    '3x14' = '3x14'
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysExportScenario.ts, 4, 16))
+}
+
+// Export interface with bracket notation computed property
+// This should trigger the tracker path
+export interface TypeMap {
+>TypeMap : Symbol(TypeMap, Decl(enumKeysExportScenario.ts, 6, 1))
+
+    [Type['3x14']]: number;
+>[Type['3x14']] : Symbol(TypeMap[Type['3x14']], Decl(enumKeysExportScenario.ts, 10, 26))
+>Type : Symbol(Type, Decl(enumKeysExportScenario.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysExportScenario.ts, 4, 16))
+}
+
+export type TypeMap2 = {
+>TypeMap2 : Symbol(TypeMap2, Decl(enumKeysExportScenario.ts, 12, 1))
+
+    [Type['3x14']]: string;
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumKeysExportScenario.ts, 14, 24))
+>Type : Symbol(Type, Decl(enumKeysExportScenario.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysExportScenario.ts, 4, 16))
+}
+

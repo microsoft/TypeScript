@@ -7475,7 +7475,7 @@ export function getFirstIdentifier(node: EntityNameOrEntityNameExpression | Elem
         case SyntaxKind.ElementAccessExpression:
             let expr: Expression = node;
             do {
-                expr = (expr as PropertyAccessExpression | ElementAccessExpression).expression;
+                expr = skipParentheses((expr as PropertyAccessExpression | ElementAccessExpression).expression);
             }
             while (expr.kind !== SyntaxKind.Identifier);
             return expr as Identifier;
