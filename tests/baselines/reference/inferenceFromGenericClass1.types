@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/inferenceFromGenericClass1.ts] ////
+
+=== inferenceFromGenericClass1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61633
+
+type AnyConstructor = new (...args: any[]) => object;
+>AnyConstructor : AnyConstructor
+>               : ^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+class Container<T> {}
+>Container : Container<T>
+>          : ^^^^^^^^^^^^
+
+declare function RenderFlagsMixin1<
+>RenderFlagsMixin1 : <BaseClass extends AnyConstructor | undefined = undefined>(Base?: BaseClass) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^^         ^^^^^         
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>(Base?: BaseClass): BaseClass;
+>Base : BaseClass | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+const result1 = RenderFlagsMixin1(Container);
+>result1 : typeof Container
+>        : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin1(Container) : typeof Container
+>                             : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin1 : <BaseClass extends AnyConstructor | undefined = undefined>(Base?: BaseClass) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^^         ^^^^^         
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+declare function RenderFlagsMixin2<
+>RenderFlagsMixin2 : <BaseClass extends AnyConstructor | undefined = undefined>(Base: BaseClass) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^         ^^^^^         
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>(Base: BaseClass): BaseClass;
+>Base : BaseClass
+>     : ^^^^^^^^^
+
+const result2 = RenderFlagsMixin2(Container);
+>result2 : typeof Container
+>        : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin2(Container) : typeof Container
+>                             : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin2 : <BaseClass extends AnyConstructor | undefined = undefined>(Base: BaseClass) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^         ^^^^^         
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+declare function RenderFlagsMixin3<
+>RenderFlagsMixin3 : <BaseClass extends AnyConstructor | undefined = undefined>(Base: BaseClass | number) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^                  ^^^^^         
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>(Base: BaseClass | number): BaseClass;
+>Base : number | BaseClass
+>     : ^^^^^^^^^^^^^^^^^^
+
+const result3 = RenderFlagsMixin3(Container);
+>result3 : typeof Container
+>        : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin3(Container) : typeof Container
+>                             : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin3 : <BaseClass extends AnyConstructor | undefined = undefined>(Base: BaseClass | number) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^                  ^^^^^         
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+declare function RenderFlagsMixin4<
+>RenderFlagsMixin4 : <BaseClass extends AnyConstructor | undefined = undefined>(Base?: BaseClass | number) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^^                  ^^^^^         
+
+  BaseClass extends AnyConstructor | undefined = undefined,
+>(Base?: BaseClass | number): BaseClass;
+>Base : number | BaseClass | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const result4 = RenderFlagsMixin4(Container);
+>result4 : typeof Container
+>        : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin4(Container) : typeof Container
+>                             : ^^^^^^^^^^^^^^^^
+>RenderFlagsMixin4 : <BaseClass extends AnyConstructor | undefined = undefined>(Base?: BaseClass | number) => BaseClass
+>                  : ^         ^^^^^^^^^                          ^^^^^^^^^^^^^^    ^^^                  ^^^^^         
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
