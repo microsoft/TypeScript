@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/bigintSubtypingTypeParameter.ts] ////
+
+=== bigintSubtypingTypeParameter.ts ===
+function bigintSubtypeAdder<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeAdder : Symbol(bigintSubtypeAdder, Decl(bigintSubtypingTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 0, 28))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 0, 46))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 0, 28))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 0, 51))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 0, 28))
+
+	const sum = a + b;
+>sum : Symbol(sum, Decl(bigintSubtypingTypeParameter.ts, 1, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 0, 46))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 0, 51))
+
+	return sum;
+>sum : Symbol(sum, Decl(bigintSubtypingTypeParameter.ts, 1, 6))
+}
+
+function bigintSubtypeDifference<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeDifference : Symbol(bigintSubtypeDifference, Decl(bigintSubtypingTypeParameter.ts, 3, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 5, 33))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 5, 51))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 5, 33))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 5, 56))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 5, 33))
+
+	const difference = a - b;
+>difference : Symbol(difference, Decl(bigintSubtypingTypeParameter.ts, 6, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 5, 51))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 5, 56))
+
+	return difference;
+>difference : Symbol(difference, Decl(bigintSubtypingTypeParameter.ts, 6, 6))
+}
+
+function bigintSubtypeArithmeticNegation<T extends bigint>(a: T): bigint {
+>bigintSubtypeArithmeticNegation : Symbol(bigintSubtypeArithmeticNegation, Decl(bigintSubtypingTypeParameter.ts, 8, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 10, 41))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 10, 59))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 10, 41))
+
+	const negation = -a;
+>negation : Symbol(negation, Decl(bigintSubtypingTypeParameter.ts, 11, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 10, 59))
+
+	return negation;
+>negation : Symbol(negation, Decl(bigintSubtypingTypeParameter.ts, 11, 6))
+}
+
+function bigintSubtypeBitInverse<T extends bigint>(a: T): bigint {
+>bigintSubtypeBitInverse : Symbol(bigintSubtypeBitInverse, Decl(bigintSubtypingTypeParameter.ts, 13, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 15, 33))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 15, 51))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 15, 33))
+
+	const bitInverse = ~a;
+>bitInverse : Symbol(bitInverse, Decl(bigintSubtypingTypeParameter.ts, 16, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 15, 51))
+
+	return bitInverse;
+>bitInverse : Symbol(bitInverse, Decl(bigintSubtypingTypeParameter.ts, 16, 6))
+}
+
+function bigintSubtypeBitand<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeBitand : Symbol(bigintSubtypeBitand, Decl(bigintSubtypingTypeParameter.ts, 18, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 20, 29))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 20, 47))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 20, 29))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 20, 52))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 20, 29))
+
+	const bitand = a & b;
+>bitand : Symbol(bitand, Decl(bigintSubtypingTypeParameter.ts, 21, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 20, 47))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 20, 52))
+
+	return bitand;
+>bitand : Symbol(bitand, Decl(bigintSubtypingTypeParameter.ts, 21, 6))
+}
+
+function bigintSubtypeBitor<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeBitor : Symbol(bigintSubtypeBitor, Decl(bigintSubtypingTypeParameter.ts, 23, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 25, 28))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 25, 46))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 25, 28))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 25, 51))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 25, 28))
+
+	const bitor = a | b;
+>bitor : Symbol(bitor, Decl(bigintSubtypingTypeParameter.ts, 26, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 25, 46))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 25, 51))
+
+	return bitor;
+>bitor : Symbol(bitor, Decl(bigintSubtypingTypeParameter.ts, 26, 6))
+}
+
+function bigintSubtypeLeftshift<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeLeftshift : Symbol(bigintSubtypeLeftshift, Decl(bigintSubtypingTypeParameter.ts, 28, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 30, 32))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 30, 50))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 30, 32))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 30, 55))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 30, 32))
+
+	const leftshift = a << b;
+>leftshift : Symbol(leftshift, Decl(bigintSubtypingTypeParameter.ts, 31, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 30, 50))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 30, 55))
+
+	return leftshift;
+>leftshift : Symbol(leftshift, Decl(bigintSubtypingTypeParameter.ts, 31, 6))
+}
+
+function bigintSubtypeRightshift<T extends bigint>(a: T, b: T): bigint {
+>bigintSubtypeRightshift : Symbol(bigintSubtypeRightshift, Decl(bigintSubtypingTypeParameter.ts, 33, 1))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 35, 33))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 35, 51))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 35, 33))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 35, 56))
+>T : Symbol(T, Decl(bigintSubtypingTypeParameter.ts, 35, 33))
+
+	const rightshift = a >> b;
+>rightshift : Symbol(rightshift, Decl(bigintSubtypingTypeParameter.ts, 36, 6))
+>a : Symbol(a, Decl(bigintSubtypingTypeParameter.ts, 35, 51))
+>b : Symbol(b, Decl(bigintSubtypingTypeParameter.ts, 35, 56))
+
+	return rightshift;
+>rightshift : Symbol(rightshift, Decl(bigintSubtypingTypeParameter.ts, 36, 6))
+}
+
