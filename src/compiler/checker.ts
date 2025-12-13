@@ -21148,6 +21148,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { expression } = node as JsxExpression | YieldExpression;
                 return !!expression && isContextSensitive(expression);
             }
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.CallExpression:
+                return some((node as NewExpression | CallExpression).arguments, isContextSensitive);
         }
 
         return false;
@@ -37032,7 +37035,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
+        if (!node.typeArguments && (checkMode & CheckMode.SkipGenericFunctions && callSignatures.some(isGenericFunctionReturningFunction) || ((checkMode & (CheckMode.Contextual | CheckMode.SkipContextSensitive)) === (CheckMode.Contextual | CheckMode.SkipContextSensitive)) && isContextSensitive(node))) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
@@ -37085,6 +37088,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
             }
             return resolveUntypedCall(node);
+        }
+
+        if (!node.typeArguments && ((checkMode & (CheckMode.Contextual | CheckMode.SkipContextSensitive)) === (CheckMode.Contextual | CheckMode.SkipContextSensitive)) && isContextSensitive(node)) {
+            skippedGenericFunction(node, checkMode);
+            return resolvingSignature;
         }
 
         // Technically, this signatures list may be incomplete. We are taking the apparent type,

@@ -1,0 +1,381 @@
+//// [tests/cases/compiler/contextSensitiveCallNewArguments1.ts] ////
+
+=== contextSensitiveCallNewArguments1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62380
+
+class Foo<T> {
+>Foo : Foo<T>
+>    : ^^^^^^
+
+  constructor(public inner: T) {}
+>inner : T
+>      : ^
+}
+
+class BarClass<T> {
+>BarClass : BarClass<T>
+>         : ^^^^^^^^^^^
+
+  constructor(public accessor: (state: T) => boolean) {}
+>accessor : (state: T) => boolean
+>         : ^     ^^ ^^^^^       
+>state : T
+>      : ^
+}
+
+{
+  class Container<C, F> {
+>Container : Container<C, F>
+>          : ^^^^^^^^^^^^^^^
+
+    constructor(
+      public ctx: C,
+>ctx : C
+>    : ^
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : (ctx: C) => F
+>           : ^   ^^ ^^^^^ 
+>ctx : C
+>    : ^
+
+      public bars: BarClass<F>[],
+>bars : BarClass<F>[]
+>     : ^^^^^^^^^^^^^
+
+    ) {}
+  }
+
+  const container = new Container(42, (ctx) => new Foo({ answer: ctx }), [
+>container : Container<number, Foo<{ answer: number; }>>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(42, (ctx) => new Foo({ answer: ctx }), [    new BarClass((state) => true),  ]) : Container<number, Foo<{ answer: number; }>>
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+>(ctx) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+>[    new BarClass((state) => true),  ] : BarClass<Foo<{ answer: number; }>>[]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    new BarClass((state) => true),
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  ]);
+}
+
+{
+  class Container<C, F> {
+>Container : Container<C, F>
+>          : ^^^^^^^^^^^^^^^
+
+    constructor(
+      public ctx: C,
+>ctx : C
+>    : ^
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : (ctx: C) => F
+>           : ^   ^^ ^^^^^ 
+>ctx : C
+>    : ^
+
+      public bar: BarClass<F>,
+>bar : BarClass<F>
+>    : ^^^^^^^^^^^
+
+    ) {}
+  }
+
+  const containerWithoutAnnotation = new Container(
+>containerWithoutAnnotation : Container<number, Foo<{ answer: number; }>>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(    42,    (ctx) => new Foo({ answer: ctx }),    new BarClass((state) => true),  ) : Container<number, Foo<{ answer: number; }>>
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+    42,
+>42 : 42
+>   : ^^
+
+    (ctx) => new Foo({ answer: ctx }),
+>(ctx) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+
+    new BarClass((state) => true),
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  );
+
+  const containerWithAnnotation = new Container(
+>containerWithAnnotation : Container<42, Foo<{ answer: number; }>>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(    42,    (ctx: number) => new Foo({ answer: ctx }),    new BarClass((state) => true),  ) : Container<42, Foo<{ answer: number; }>>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+    42,
+>42 : 42
+>   : ^^
+
+    (ctx: number) => new Foo({ answer: ctx }),
+>(ctx: number) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                          : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+
+    new BarClass((state) => true),
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  );
+}
+
+{
+  class Container<C, F> {
+>Container : Container<C, F>
+>          : ^^^^^^^^^^^^^^^
+
+    constructor(
+      public ctx: C,
+>ctx : C
+>    : ^
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : (ctx: C) => F
+>           : ^   ^^ ^^^^^ 
+>ctx : C
+>    : ^
+
+      public barFactory: () => BarClass<F>,
+>barFactory : () => BarClass<F>
+>           : ^^^^^^           
+
+    ) {}
+  }
+
+  const container = new Container(
+>container : Container<number, Foo<{ answer: number; }>>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(    42,    (ctx) => new Foo({ answer: ctx }),    () => new BarClass((state) => true),  ) : Container<number, Foo<{ answer: number; }>>
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+    42,
+>42 : 42
+>   : ^^
+
+    (ctx) => new Foo({ answer: ctx }),
+>(ctx) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+
+    () => new BarClass((state) => true),
+>() => new BarClass((state) => true) : () => BarClass<Foo<{ answer: number; }>>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  );
+}
+
+{
+  class Container<C, F> {
+>Container : Container<C, F>
+>          : ^^^^^^^^^^^^^^^
+
+    constructor(
+      public ctx: C,
+>ctx : C
+>    : ^
+
+      public fooFactory: (ctx: C) => F,
+>fooFactory : (ctx: C) => F
+>           : ^   ^^ ^^^^^ 
+>ctx : C
+>    : ^
+
+      public barFactory: (dummy: never) => BarClass<F>,
+>barFactory : (dummy: never) => BarClass<F>
+>           : ^     ^^     ^^^^^           
+>dummy : never
+>      : ^^^^^
+
+    ) {}
+  }
+
+  const containerWithDummy = new Container(
+>containerWithDummy : Container<number, Foo<{ answer: number; }>>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(    42,    (ctx) => new Foo({ answer: ctx }),    (dummy) => new BarClass((state) => true),  ) : Container<number, Foo<{ answer: number; }>>
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+    42,
+>42 : 42
+>   : ^^
+
+    (ctx) => new Foo({ answer: ctx }),
+>(ctx) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+
+    (dummy) => new BarClass((state) => true),
+>(dummy) => new BarClass((state) => true) : (dummy: never) => BarClass<Foo<{ answer: number; }>>
+>                                         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dummy : never
+>      : ^^^^^
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  );
+
+  const containerWithWrongArity = new Container(
+>containerWithWrongArity : Container<number, Foo<{ answer: number; }>>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Container(    42,    (ctx) => new Foo({ answer: ctx }),    () => new BarClass((state) => true),  ) : Container<number, Foo<{ answer: number; }>>
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Container : typeof Container
+>          : ^^^^^^^^^^^^^^^^
+
+    42,
+>42 : 42
+>   : ^^
+
+    (ctx) => new Foo({ answer: ctx }),
+>(ctx) => new Foo({ answer: ctx }) : (ctx: number) => Foo<{ answer: number; }>
+>                                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : number
+>    : ^^^^^^
+>new Foo({ answer: ctx }) : Foo<{ answer: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>{ answer: ctx } : { answer: number; }
+>                : ^^^^^^^^^^^^^^^^^^^
+>answer : number
+>       : ^^^^^^
+>ctx : number
+>    : ^^^^^^
+
+    () => new BarClass((state) => true),
+>() => new BarClass((state) => true) : () => BarClass<Foo<{ answer: number; }>>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BarClass((state) => true) : BarClass<Foo<{ answer: number; }>>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BarClass : typeof BarClass
+>         : ^^^^^^^^^^^^^^^
+>(state) => true : (state: Foo<{ answer: number; }>) => boolean
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : Foo<{ answer: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  );
+}
+
