@@ -752,9 +752,9 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 5 >Emitted(124, 189) Source(20, 6) + SourceIndex(0)
 6 >Emitted(124, 266) Source(20, 11) + SourceIndex(0)
 ---
->>>        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+>>>        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: "C", metadata: _metadata }, null, _classExtraInitializers);
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        class C {
   >            @dec
@@ -798,7 +798,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >            static accessor #z = 1;
   >        }
 1 >Emitted(125, 9) Source(5, 1) + SourceIndex(0)
-2 >Emitted(125, 182) Source(45, 2) + SourceIndex(0)
+2 >Emitted(125, 170) Source(45, 2) + SourceIndex(0)
 ---
 >>>        C = _classThis = _classDescriptor.value;
 >>>        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });

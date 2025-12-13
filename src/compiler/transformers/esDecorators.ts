@@ -876,11 +876,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             leadingBlockStatements ??= [];
 
             // produces:
-            //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata }, _classExtraInitializers);
+            //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: "C", metadata }, _classExtraInitializers);
             const valueProperty = factory.createPropertyAssignment("value", renamedClassThis);
             const classDescriptor = factory.createObjectLiteralExpression([valueProperty]);
             const classDescriptorAssignment = factory.createAssignment(classInfo.classDescriptorName, classDescriptor);
-            const classNameReference = factory.createPropertyAccessExpression(renamedClassThis, "name");
+            // Use the literal class name to avoid triggering a static `name` getter (see #62870)
+            const classNameReference = node.name
+                ? factory.createStringLiteralFromNode(node.name)
+                : node.emitNode?.assignedName ?? factory.createStringLiteral("");
             const esDecorateHelper = emitHelpers().createESDecorateHelper(
                 factory.createNull(),
                 classDescriptorAssignment,

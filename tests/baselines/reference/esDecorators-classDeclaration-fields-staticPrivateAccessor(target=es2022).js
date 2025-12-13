@@ -50,7 +50,7 @@ let D = (() => {
         static { _D_field1_get = function _D_field1_get() { return __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1_accessor_storage); }, _D_field1_set = function _D_field1_set(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _D_field1_accessor_storage); }; }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: "D", metadata: _metadata }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
