@@ -103,16 +103,31 @@ export class Client {
         const pprofDir = config.get<string>("pprofDir");
         const pprofArgs = pprofDir ? ["--pprofDir", pprofDir] : [];
 
+        const goMemLimit = config.get<string>("goMemLimit");
+        const env = { ...process.env };
+        if (goMemLimit) {
+            // Keep this regex aligned with the pattern in package.json.
+            if (/^[0-9]+(([KMGT]i)?B)?$/.test(goMemLimit)) {
+                this.outputChannel.appendLine(`Setting GOMEMLIMIT=${goMemLimit}`);
+                env.GOMEMLIMIT = goMemLimit;
+            }
+            else {
+                this.outputChannel.error(`Invalid goMemLimit: ${goMemLimit}. Must be a valid memory limit (e.g., '2048MiB', '4GiB'). Not overriding GOMEMLIMIT.`);
+            }
+        }
+
         const serverOptions: ServerOptions = {
             run: {
                 command: this.exe.path,
                 args: ["--lsp", ...pprofArgs],
                 transport: TransportKind.stdio,
+                options: { env },
             },
             debug: {
                 command: this.exe.path,
                 args: ["--lsp", ...pprofArgs],
                 transport: TransportKind.stdio,
+                options: { env },
             },
         };
 

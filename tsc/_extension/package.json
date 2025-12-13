@@ -57,6 +57,15 @@
                         "tags": [
                             "experimental"
                         ]
+                    },
+                    "typescript.native-preview.goMemLimit": {
+                        "type": "string",
+                        "description": "Set GOMEMLIMIT for the language server (e.g., '2048MiB', '4GiB'). See https://pkg.go.dev/runtime#hdr-Environment_Variables for more information.",
+                        "pattern": "^[0-9]+(([KMGT]i)?B)?$",
+                        "patternErrorMessage": "Must be a valid memory limit (e.g., '2048MiB', '4GiB').",
+                        "tags": [
+                            "experimental"
+                        ]
                     }
                 }
             }
