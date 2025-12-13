@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockDoNotSpoilVariance1.ts] ////
+
+=== classStaticBlockDoNotSpoilVariance1.ts ===
+class A<T = number> {
+>A : A<T>
+>  : ^^^^
+
+  static {
+    type _<T extends A = A> = T;
+>_ : T
+>  : ^
+  }
+
+  value!: T;
+>value : T
+>      : ^
+
+  child!: InstanceType<typeof A.B<A<T>>>;
+>child : B<A<T>>
+>      : ^^^^^^^
+>A.B : typeof B
+>    : ^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T extends A = A> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T extends A = A> {    parent!: T;  } : typeof B
+>                                             : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+}
+
+const A2 = class A2<T = number> {
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>class A2<T = number> {  static {    type _<T extends A2 = A2> = T;  }  value!: T;  child!: InstanceType<typeof A2.B<A2<T>>>;  static B = class B<T extends A2 = A2> {    parent!: T;  };} : typeof A2
+>                                                                                                                                                                                          : ^^^^^^^^^
+>A2 : typeof A2
+>   : ^^^^^^^^^
+
+  static {
+    type _<T extends A2 = A2> = T;
+>_ : T
+>  : ^
+  }
+
+  value!: T;
+>value : T
+>      : ^
+
+  child!: InstanceType<typeof A2.B<A2<T>>>;
+>child : B<A2<T>>
+>      : ^^^^^^^^
+>A2.B : typeof B
+>     : ^^^^^^^^
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T extends A2 = A2> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T extends A2 = A2> {    parent!: T;  } : typeof B
+>                                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+

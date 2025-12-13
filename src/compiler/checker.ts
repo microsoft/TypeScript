@@ -42432,7 +42432,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+    function checkClassStaticBlockDeclarationDeferred(node: ClassStaticBlockDeclaration) {
         checkGrammarModifiers(node);
 
         forEachChild(node, checkSourceElement);
@@ -49057,7 +49057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.MethodSignature:
                 return checkMethodDeclaration(node as MethodDeclaration | MethodSignature);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return checkClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
+                return checkNodeDeferred(node);
             case SyntaxKind.Constructor:
                 return checkConstructorDeclaration(node as ConstructorDeclaration);
             case SyntaxKind.GetAccessor:
@@ -49449,6 +49449,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
                 checkFunctionExpressionOrObjectLiteralMethodDeferred(node as FunctionExpression);
+                break;
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                checkClassStaticBlockDeclarationDeferred(node as ClassStaticBlockDeclaration);
                 break;
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
