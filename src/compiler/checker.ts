@@ -655,6 +655,7 @@ import {
     isJsxSpreadAttribute,
     isJSXTagName,
     isKnownSymbol,
+    isLateBindableAccessExpression,
     isLateVisibilityPaintedStatement,
     isLeftHandSideExpression,
     isLineBreak,
@@ -6042,8 +6043,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getMeaningOfEntityNameReference(entityName: EntityNameOrEntityNameExpression): SymbolFlags {
-        // get symbol of the first identifier of the entityName
+    function getMeaningOfEntityNameReference(entityName: EntityNameOrEntityNameExpression | ElementAccessExpression): SymbolFlags {
+        // get symbol of the first identifier of the entityName or element access chain
         let meaning: SymbolFlags;
         if (
             entityName.parent.kind === SyntaxKind.TypeQuery ||
@@ -6056,6 +6057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (
             entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
+            entityName.kind === SyntaxKind.ElementAccessExpression ||
             entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ||
             (entityName.parent.kind === SyntaxKind.QualifiedName && (entityName.parent as QualifiedName).left === entityName) ||
             (entityName.parent.kind === SyntaxKind.PropertyAccessExpression && (entityName.parent as PropertyAccessExpression).expression === entityName) ||
@@ -6072,7 +6074,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return meaning;
     }
 
-    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible = true): SymbolVisibilityResult {
+    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression | ElementAccessExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible = true): SymbolVisibilityResult {
         const meaning = getMeaningOfEntityNameReference(entityName);
         const firstIdentifier = getFirstIdentifier(entityName);
         const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*isUse*/ false);
@@ -8369,9 +8371,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function trackComputedName(accessExpression: EntityNameOrEntityNameExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
+        function trackComputedName(accessExpression: EntityNameOrEntityNameExpression | ElementAccessExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
             if (!context.tracker.canTrackSymbol) return;
-            // get symbol of the first identifier of the entityName
+            // get symbol of the first identifier of the entityName or element access chain
             const firstIdentifier = getFirstIdentifier(accessExpression);
             const name = resolveName(enclosingDeclaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
             if (name) {
@@ -13722,32 +13724,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
         return isLateBindableAccessExpression(expr);
-    }
-
-    /**
-     * Returns true if the expression is a valid late-bindable access expression.
-     * A late-bindable access expression is:
-     * - An Identifier
-     * - A PropertyAccessExpression where the base is a late-bindable access expression
-     * - An ElementAccessExpression with a string/numeric literal key where the base is a late-bindable access expression
-     *
-     * This supports mixed chains like: obj.a['b'].c['d']
-     * Parentheses are skipped to support expressions like: (obj.a)['b']
-     */
-    function isLateBindableAccessExpression(node: Node): boolean {
-        node = skipParentheses(node);
-
-        if (isIdentifier(node)) {
-            return true;
-        }
-        // For PropertyAccessExpression, require the name to be an Identifier (not PrivateIdentifier)
-        if (isPropertyAccessExpression(node) && isIdentifier(node.name)) {
-            return isLateBindableAccessExpression(node.expression);
-        }
-        if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(skipParentheses(node.argumentExpression))) {
-            return isLateBindableAccessExpression(node.expression);
-        }
-        return false;
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
@@ -51470,9 +51446,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return result;
 
-                function trackComputedName(accessExpression: EntityNameOrEntityNameExpression) {
+                function trackComputedName(accessExpression: EntityNameOrEntityNameExpression | ElementAccessExpression) {
                     if (!tracker.trackSymbol) return;
-                    // get symbol of the first identifier of the entityName
+                    // get symbol of the first identifier of the entityName or element access chain
                     const firstIdentifier = getFirstIdentifier(accessExpression);
                     const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
                     if (name) {

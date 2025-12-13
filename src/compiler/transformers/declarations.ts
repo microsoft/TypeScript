@@ -32,6 +32,7 @@ import {
     declarationNameToString,
     Diagnostics,
     DiagnosticWithLocation,
+    ElementAccessExpression,
     EmitFlags,
     EmitHost,
     EmitResolver,
@@ -118,6 +119,7 @@ import {
     isInternalDeclaration,
     isJSDocImportTag,
     isJsonSourceFile,
+    isLateBindableAccessExpression,
     isLateVisibilityPaintedStatement,
     isLiteralImportTypeNode,
     isMappedTypeNode,
@@ -616,8 +618,11 @@ export function transformDeclarations(context: TransformationContext): Transform
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isComputedPropertyName(elem.propertyName) && isEntityNameExpression(elem.propertyName.expression)) {
-                checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
+            if (elem.propertyName && isComputedPropertyName(elem.propertyName)) {
+                const expr = elem.propertyName.expression;
+                if (isLateBindableAccessExpression(expr)) {
+                    checkEntityNameVisibility(expr, enclosingDeclaration);
+                }
             }
 
             return factory.updateBindingElement(
@@ -815,7 +820,7 @@ export function transformDeclarations(context: TransformationContext): Transform
             || isMappedTypeNode(node);
     }
 
-    function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {
+    function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression | ElementAccessExpression, enclosingDeclaration: Node) {
         const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
         handleSymbolAccessibilityError(visibilityResult);
     }
@@ -1012,16 +1017,16 @@ export function transformDeclarations(context: TransformationContext): Transform
                             return;
                         }
                         else if (
-                            // Type declarations just need to double-check that the input computed name is an entity name expression
+                            // Type declarations just need to double-check that the input computed name is a late-bindable access expression
                             (isInterfaceDeclaration(input.parent) || isTypeLiteralNode(input.parent))
-                            && !isEntityNameExpression(input.name.expression)
+                            && !isLateBindableAccessExpression(input.name.expression)
                         ) {
                             context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                             return;
                         }
                     }
                 }
-                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isEntityNameExpression(input.name.expression)) {
+                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isLateBindableAccessExpression(input.name.expression)) {
                     return;
                 }
             }
