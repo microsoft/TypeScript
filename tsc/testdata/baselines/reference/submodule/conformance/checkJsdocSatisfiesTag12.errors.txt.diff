@@ -2,34 +2,34 @@
 +++ new.checkJsdocSatisfiesTag12.errors.txt
 @@= skipped -0, +0 lines =@@
  /a.js(24,20): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
-+/a.js(29,14): error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
++/a.js(27,16): error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
  /a.js(44,25): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
 -/a.js(51,6): error TS1360: Type 'number' does not satisfy the expected type 'string'.
 -
 -
 -==== /a.js (3 errors) ====
-+/a.js(51,42): error TS1360: Type 'number' does not satisfy the expected type 'string'.
++/a.js(51,17): error TS1360: Type 'number' does not satisfy the expected type 'string'.
 +
 +
 +==== /a.js (4 errors) ====
      /**
       * @typedef {Object} T1
       * @property {number} a
-@@= skipped -34, +35 lines =@@
-      * @satisfies {T1}
-      */
-     const t3 = {};
-+                 ~
-+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
-+!!! related TS2728 /a.js:3:23: 'a' is declared here.
+@@= skipped -32, +33 lines =@@
      
      /**
-      * @satisfies {Array.<number, number>}
-@@= skipped -24, +27 lines =@@
+      * @satisfies {T1}
++                   ~~
++!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
++!!! related TS2728 /a.js:3:23: 'a' is declared here.
+      */
+     const t3 = {};
+     
+@@= skipped -26, +29 lines =@@
      const t7 = { a: "a" };
      
      /** @satisfies {string} */ const t8 = (1);
 -         ~~~~~~~~~
-+                                             ~
++                    ~~~~~~
  !!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
      

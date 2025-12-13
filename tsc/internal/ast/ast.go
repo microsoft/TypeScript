@@ -11001,7 +11001,6 @@ func (node *SourceFile) GetOrCreateToken(
 ) *TokenNode {
 	node.tokenCacheMu.Lock()
 	defer node.tokenCacheMu.Unlock()
-
 	loc := core.NewTextRange(pos, end)
 	if node.tokenCache == nil {
 		node.tokenCache = make(map[core.TextRange]*Node)
@@ -11014,7 +11013,9 @@ func (node *SourceFile) GetOrCreateToken(
 		}
 		return token
 	}
-
+	if parent.Flags&NodeFlagsReparsed != 0 {
+		panic(fmt.Sprintf("Cannot create token from reparsed node of kind %v", parent.Kind))
+	}
 	token := createToken(kind, node, pos, end, flags)
 	token.Loc = loc
 	token.Parent = parent

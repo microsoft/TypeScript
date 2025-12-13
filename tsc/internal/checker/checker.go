@@ -10408,18 +10408,15 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 }
 
 func (c *Checker) checkSatisfiesExpression(node *ast.Node) *Type {
-	c.checkSourceElement(node.Type())
-	return c.checkSatisfiesExpressionWorker(node.Expression(), node.Type(), CheckModeNormal)
-}
-
-func (c *Checker) checkSatisfiesExpressionWorker(expression *ast.Node, target *ast.Node, checkMode CheckMode) *Type {
-	exprType := c.checkExpressionEx(expression, checkMode)
-	targetType := c.getTypeFromTypeNode(target)
+	typeNode := node.Type()
+	c.checkSourceElement(typeNode)
+	exprType := c.checkExpression(node.Expression())
+	targetType := c.getTypeFromTypeNode(typeNode)
 	if c.isErrorType(targetType) {
 		return targetType
 	}
-	errorNode := ast.FindAncestor(target.Parent, func(n *ast.Node) bool { return ast.IsSatisfiesExpression(n) })
-	c.checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, errorNode, expression, diagnostics.Type_0_does_not_satisfy_the_expected_type_1, nil)
+	errorNode := core.IfElse(typeNode.Flags&ast.NodeFlagsReparsed != 0, typeNode, node)
+	c.checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, errorNode, node.Expression(), diagnostics.Type_0_does_not_satisfy_the_expected_type_1, nil)
 	return exprType
 }
 
@@ -11935,14 +11932,15 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 }
 
 func (c *Checker) checkAssertionDeferred(node *ast.Node) {
+	typeNode := node.Type()
 	exprType := c.getRegularTypeOfObjectLiteral(c.getBaseTypeOfLiteralType(c.assertionLinks.Get(node).exprType))
-	targetType := c.getTypeFromTypeNode(node.Type())
+	targetType := c.getTypeFromTypeNode(typeNode)
 	if !c.isErrorType(targetType) {
 		widenedType := c.getWidenedType(exprType)
 		if !c.isTypeComparableTo(targetType, widenedType) {
 			errNode := node
-			if node.Flags&ast.NodeFlagsReparsed != 0 {
-				errNode = node.Type()
+			if typeNode.Flags&ast.NodeFlagsReparsed != 0 {
+				errNode = typeNode
 			}
 			c.checkTypeComparableTo(exprType, targetType, errNode, diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first)
 		}

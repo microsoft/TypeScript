@@ -314,7 +314,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if parent.Expression() != nil && tag.TypeExpression() != nil {
 				parent.AsMutable().SetExpression(p.makeNewCast(
 					p.factory.DeepCloneReparse(tag.TypeExpression().Type()),
-					p.factory.DeepCloneReparse(parent.Expression()),
+					parent.Expression(),
 					true /*isAssertion*/))
 				p.finishMutatedNode(parent)
 				return
@@ -335,7 +335,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 					if declaration.Initializer() != nil && tag.TypeExpression() != nil {
 						declaration.AsMutable().SetInitializer(p.makeNewCast(
 							p.factory.DeepCloneReparse(tag.TypeExpression().Type()),
-							p.factory.DeepCloneReparse(declaration.Initializer()),
+							declaration.Initializer(),
 							false /*isAssertion*/))
 						p.finishMutatedNode(declaration)
 						break
@@ -348,7 +348,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if parent.Initializer() != nil && tag.TypeExpression() != nil {
 				parent.AsMutable().SetInitializer(p.makeNewCast(
 					p.factory.DeepCloneReparse(tag.TypeExpression().Type()),
-					p.factory.DeepCloneReparse(parent.Initializer()),
+					parent.Initializer(),
 					false /*isAssertion*/))
 				p.finishMutatedNode(parent)
 			}
@@ -357,7 +357,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if shorthand.ObjectAssignmentInitializer != nil && tag.AsJSDocSatisfiesTag().TypeExpression != nil {
 				shorthand.ObjectAssignmentInitializer = p.makeNewCast(
 					p.factory.DeepCloneReparse(tag.AsJSDocSatisfiesTag().TypeExpression.Type()),
-					p.factory.DeepCloneReparse(shorthand.ObjectAssignmentInitializer),
+					shorthand.ObjectAssignmentInitializer,
 					false /*isAssertion*/)
 				p.finishMutatedNode(parent)
 			}
@@ -366,7 +366,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if parent.Expression() != nil && tag.TypeExpression() != nil {
 				parent.AsMutable().SetExpression(p.makeNewCast(
 					p.factory.DeepCloneReparse(tag.TypeExpression().Type()),
-					p.factory.DeepCloneReparse(parent.Expression()),
+					parent.Expression(),
 					false /*isAssertion*/))
 				p.finishMutatedNode(parent)
 			}
@@ -376,7 +376,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 				if kind := ast.GetAssignmentDeclarationKind(bin); kind != ast.JSDeclarationKindNone && tag.TypeExpression() != nil {
 					bin.Right = p.makeNewCast(
 						p.factory.DeepCloneReparse(tag.TypeExpression().Type()),
-						p.factory.DeepCloneReparse(bin.Right),
+						bin.Right,
 						false /*isAssertion*/)
 					p.finishMutatedNode(bin.AsNode())
 				}
@@ -602,7 +602,7 @@ func (p *Parser) makeNewCast(t *ast.TypeNode, e *ast.Node, isAssertion bool) *as
 	} else {
 		assert = p.factory.NewSatisfiesExpression(e, t)
 	}
-	p.finishReparsedNode(assert, e)
+	p.finishNodeWithEnd(assert, e.Pos(), e.End())
 	return assert
 }
 

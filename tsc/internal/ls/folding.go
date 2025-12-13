@@ -109,10 +109,7 @@ func (l *LanguageService) addRegionOutliningSpans(sourceFile *ast.SourceFile) []
 }
 
 func visitNode(ctx context.Context, n *ast.Node, depthRemaining int, sourceFile *ast.SourceFile, l *LanguageService) []*lsproto.FoldingRange {
-	if depthRemaining == 0 {
-		return nil
-	}
-	if ctx.Err() != nil {
+	if n.Flags&ast.NodeFlagsReparsed != 0 || depthRemaining == 0 || ctx.Err() != nil {
 		return nil
 	}
 	foldingRange := make([]*lsproto.FoldingRange, 0, 40)

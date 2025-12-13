@@ -4,7 +4,7 @@
  /a.js(21,44): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 -/a.js(22,17): error TS1360: Type '{}' does not satisfy the expected type 'T1'.
 -  Property 'a' is missing in type '{}' but required in type 'T1'.
-+/a.js(22,38): error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
++/a.js(22,28): error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
  /a.js(31,49): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
 
 
@@ -16,7 +16,7 @@
 -!!! error TS1360: Type '{}' does not satisfy the expected type 'T1'.
 -!!! error TS1360:   Property 'a' is missing in type '{}' but required in type 'T1'.
 -!!! related TS2728 /a.js:3:4: 'a' is declared here.
-+                                         ~
++                               ~~
 +!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'T1'.
 +!!! related TS2728 /a.js:3:23: 'a' is declared here.
      
