@@ -11368,21 +11368,13 @@ func (c *Checker) isOptionalPropertyDeclaration(node *ast.Node) bool {
 }
 
 func (c *Checker) isPropertyDeclaredInAncestorClass(prop *ast.Symbol) bool {
-	if prop.Parent.Flags&ast.SymbolFlagsClass == 0 {
-		return false
-	}
-	classType := c.getDeclaredTypeOfSymbol(prop.Parent)
-	for {
-		baseTypes := c.getBaseTypes(classType)
-		if len(baseTypes) == 0 {
-			return false
-		}
-		classType = baseTypes[0]
-		superProperty := c.getPropertyOfType(classType, prop.Name)
-		if superProperty != nil && superProperty.ValueDeclaration != nil {
-			return true
+	if prop.Parent.Flags&ast.SymbolFlagsClass != 0 {
+		if baseTypes := c.getBaseTypes(c.getDeclaredTypeOfSymbol(prop.Parent)); len(baseTypes) != 0 {
+			superProperty := c.getPropertyOfType(baseTypes[0], prop.Name)
+			return superProperty != nil && superProperty.ValueDeclaration != nil
 		}
 	}
+	return false
 }
 
 /**

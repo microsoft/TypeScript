@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/checkInheritedProperty.ts] ////
+
+=== checkInheritedProperty.ts ===
+class Base {
+>Base : Symbol(Base, Decl(checkInheritedProperty.ts, 0, 0))
+}
+
+declare const BaseFactory: new() => Base & { c: string }
+>BaseFactory : Symbol(BaseFactory, Decl(checkInheritedProperty.ts, 3, 13))
+>Base : Symbol(Base, Decl(checkInheritedProperty.ts, 0, 0))
+>c : Symbol(c, Decl(checkInheritedProperty.ts, 3, 44))
+
+class Derived extends BaseFactory {
+>Derived : Symbol(Derived, Decl(checkInheritedProperty.ts, 3, 56))
+>BaseFactory : Symbol(BaseFactory, Decl(checkInheritedProperty.ts, 3, 13))
+
+    a = this.b
+>a : Symbol(Derived.a, Decl(checkInheritedProperty.ts, 5, 35))
+>this.b : Symbol(Derived.b, Decl(checkInheritedProperty.ts, 6, 14))
+>this : Symbol(Derived, Decl(checkInheritedProperty.ts, 3, 56))
+>b : Symbol(Derived.b, Decl(checkInheritedProperty.ts, 6, 14))
+
+    b = "abc"
+>b : Symbol(Derived.b, Decl(checkInheritedProperty.ts, 6, 14))
+}
+
