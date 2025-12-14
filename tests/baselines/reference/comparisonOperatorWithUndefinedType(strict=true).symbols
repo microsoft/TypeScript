@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithUndefinedType.ts] ////
+
+=== comparisonOperatorWithUndefinedType.ts ===
+declare let foo: string | undefined;
+>foo : Symbol(foo, Decl(comparisonOperatorWithUndefinedType.ts, 0, 11))
+
+declare let bar: number | undefined;
+>bar : Symbol(bar, Decl(comparisonOperatorWithUndefinedType.ts, 1, 11))
+
+foo === bar;
+>foo : Symbol(foo, Decl(comparisonOperatorWithUndefinedType.ts, 0, 11))
+>bar : Symbol(bar, Decl(comparisonOperatorWithUndefinedType.ts, 1, 11))
+
