@@ -207,7 +207,7 @@ func ParseIsolatedEntityName(text string) *ast.EntityName {
 
 func (p *Parser) initializeState(opts ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) {
 	if scriptKind == core.ScriptKindUnknown {
-		panic("ScriptKind must be specified when parsing source files.")
+		panic("ScriptKind must be specified when parsing source file: " + opts.FileName)
 	}
 
 	if p.scanner == nil {
