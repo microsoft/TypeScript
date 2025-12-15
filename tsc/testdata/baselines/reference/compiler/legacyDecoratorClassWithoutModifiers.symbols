@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/legacyDecoratorClassWithoutModifiers.ts] ////
+
+=== legacyDecoratorClassWithoutModifiers.ts ===
+// Test case for decorated class without modifiers
+declare function classDec(target: any): any;
+>classDec : Symbol(classDec, Decl(legacyDecoratorClassWithoutModifiers.ts, 0, 0))
+>target : Symbol(target, Decl(legacyDecoratorClassWithoutModifiers.ts, 1, 26))
+
+@classDec
+>classDec : Symbol(classDec, Decl(legacyDecoratorClassWithoutModifiers.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(legacyDecoratorClassWithoutModifiers.ts, 1, 44))
+}
+

@@ -8,27 +8,7 @@
  1 >declare function ClassDecorator1(target: Function): void;
    >declare function ClassDecorator2(x: number): (target: Function) => void;
    >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
-@@= skipped -9, +8 lines =@@
-   >declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
-   >
-   >@ClassDecorator1
--  >@ClassDecorator2(10)
-   >
--2 >class 
-+2 >@ClassDecorator2(10)
-+  >class 
- 3 >    Greeter
- 4 >           
--5 >              class 
-+5 >              @ClassDecorator2(10)
-+  >              class 
- 6 >                    Greeter
--1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
-+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
- 2 >Emitted(10, 5) Source(10, 7) + SourceIndex(0)
- 3 >Emitted(10, 12) Source(10, 14) + SourceIndex(0)
--4 >Emitted(10, 15) Source(10, 1) + SourceIndex(0)
-+4 >Emitted(10, 15) Source(9, 1) + SourceIndex(0)
+@@= skipped -23, +22 lines =@@
  5 >Emitted(10, 21) Source(10, 7) + SourceIndex(0)
  6 >Emitted(10, 28) Source(10, 14) + SourceIndex(0)
  ---
@@ -48,7 +28,7 @@
  >>>    constructor(greeting, ...b) {
  1->^^^^
  2 >    ^^^^^^^^^^^^
-@@= skipped -21, +35 lines =@@
+@@= skipped -7, +20 lines =@@
  4 >                        ^^
  5 >                          ^^^
  6 >                             ^
@@ -325,24 +305,22 @@
  1->
    >
    >    @PropertyDecorator1
--  >    @PropertyDecorator2(80)
+@@= skipped -36, +37 lines =@@
    >    
--2 >    get 
-+2 >    @PropertyDecorator2(80)
-+  >        get 
+ 2 >    get 
  3 >        greetings
 -1->Emitted(20, 5) Source(44, 5) + SourceIndex(0)
 -2 >Emitted(20, 9) Source(44, 9) + SourceIndex(0)
 -3 >Emitted(20, 18) Source(44, 18) + SourceIndex(0)
 +4 >                 () 
-+1->Emitted(23, 5) Source(43, 5) + SourceIndex(0)
++1->Emitted(23, 5) Source(44, 5) + SourceIndex(0)
 +2 >Emitted(23, 9) Source(44, 9) + SourceIndex(0)
 +3 >Emitted(23, 18) Source(44, 18) + SourceIndex(0)
 +4 >Emitted(23, 21) Source(44, 21) + SourceIndex(0)
  ---
  >>>        return this.greeting;
  1->^^^^^^^^
-@@= skipped -47, +50 lines =@@
+@@= skipped -11, +13 lines =@@
  4 >                   ^
  5 >                    ^^^^^^^^
  6 >                            ^
@@ -628,18 +606,16 @@
  ---
  >>>__decorate([
  1 >
-@@= skipped -8, +8 lines =@@
- 1 >
-   >
+@@= skipped -10, +10 lines =@@
    >    @PropertyDecorator1
--  >    @PropertyDecorator2(80)
+   >    @PropertyDecorator2(80)
    >    
 -1 >Emitted(40, 1) Source(44, 5) + SourceIndex(0)
-+1 >Emitted(42, 1) Source(43, 5) + SourceIndex(0)
++1 >Emitted(42, 1) Source(44, 5) + SourceIndex(0)
  ---
  >>>    PropertyDecorator1,
  1->^^^^
-@@= skipped -10, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  3 >                      ^^^^^^->
  1->
  2 >    PropertyDecorator1

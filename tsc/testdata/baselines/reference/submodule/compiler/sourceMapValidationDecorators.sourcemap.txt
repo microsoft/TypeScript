@@ -32,18 +32,17 @@ sourceFile:sourceMapValidationDecorators.ts
   >declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
   >
   >@ClassDecorator1
+  >@ClassDecorator2(10)
   >
-2 >@ClassDecorator2(10)
-  >class 
+2 >class 
 3 >    Greeter
 4 >           
-5 >              @ClassDecorator2(10)
-  >              class 
+5 >              class 
 6 >                    Greeter
-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
 2 >Emitted(10, 5) Source(10, 7) + SourceIndex(0)
 3 >Emitted(10, 12) Source(10, 14) + SourceIndex(0)
-4 >Emitted(10, 15) Source(9, 1) + SourceIndex(0)
+4 >Emitted(10, 15) Source(10, 1) + SourceIndex(0)
 5 >Emitted(10, 21) Source(10, 7) + SourceIndex(0)
 6 >Emitted(10, 28) Source(10, 14) + SourceIndex(0)
 ---
@@ -281,12 +280,12 @@ sourceFile:sourceMapValidationDecorators.ts
 1->
   >
   >    @PropertyDecorator1
+  >    @PropertyDecorator2(80)
   >    
-2 >    @PropertyDecorator2(80)
-  >        get 
+2 >    get 
 3 >        greetings
 4 >                 () 
-1->Emitted(23, 5) Source(43, 5) + SourceIndex(0)
+1->Emitted(23, 5) Source(44, 5) + SourceIndex(0)
 2 >Emitted(23, 9) Source(44, 9) + SourceIndex(0)
 3 >Emitted(23, 18) Source(44, 18) + SourceIndex(0)
 4 >Emitted(23, 21) Source(44, 21) + SourceIndex(0)
@@ -543,8 +542,9 @@ sourceFile:sourceMapValidationDecorators.ts
 1 >
   >
   >    @PropertyDecorator1
+  >    @PropertyDecorator2(80)
   >    
-1 >Emitted(42, 1) Source(43, 5) + SourceIndex(0)
+1 >Emitted(42, 1) Source(44, 5) + SourceIndex(0)
 ---
 >>>    PropertyDecorator1,
 1->^^^^
