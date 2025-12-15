@@ -2705,6 +2705,30 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, getStrictModeBlockScopeFunctionDeclarationMessage(node)));
             }
         }
+        // In strict mode, function declarations are not allowed as the direct child of a statement.
+        // For example: `if (true) function f() {}` is a syntax error in strict mode.
+        // This applies regardless of the target version.
+        if (inStrictMode && isFunctionDeclarationStatementChild(node)) {
+            const errorSpan = getErrorSpanForNode(file, node);
+            file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, Diagnostics.In_strict_mode_code_functions_can_only_be_declared_at_top_level_or_inside_a_block));
+        }
+    }
+
+    function isFunctionDeclarationStatementChild(node: FunctionDeclaration): boolean {
+        const parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.LabeledStatement:
+                return true;
+            default:
+                return false;
+        }
     }
 
     function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {

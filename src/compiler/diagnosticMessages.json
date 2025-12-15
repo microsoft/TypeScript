@@ -823,6 +823,10 @@
         "category": "Error",
         "code": 1255
     },
+    "In strict mode code, functions can only be declared at top level or inside a block.": {
+        "category": "Error",
+        "code": 1256
+    },
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257

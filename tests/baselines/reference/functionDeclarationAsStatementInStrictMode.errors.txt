@@ -1,0 +1,53 @@
+functionDeclarationAsStatementInStrictMode.ts(2,20): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(3,23): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(4,13): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(5,19): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(6,28): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(7,28): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(8,1): error TS1344: 'A label is not allowed here.
+functionDeclarationAsStatementInStrictMode.ts(8,17): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+
+
+==== functionDeclarationAsStatementInStrictMode.ts (8 errors) ====
+    // Error cases - function declarations as direct children of statements in strict mode
+    if (true) function f1() {}
+                       ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    while (true) function f2() {}
+                          ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    do function f3() {} while (false);
+                ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    for (;;) function f4() {}
+                      ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    for (let x in {}) function f5() {}
+                               ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    for (let x of []) function f6() {}
+                               ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    label: function f7() {}
+    ~~~~~
+!!! error TS1344: 'A label is not allowed here.
+                    ~~
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+    
+    // Valid cases - function declarations inside blocks
+    if (true) { function g1() {} }
+    while (true) { function g2() {} }
+    do { function g3() {} } while (false);
+    for (;;) { function g4() {} }
+    for (let x in {}) { function g5() {} }
+    for (let x of []) { function g6() {} }
+    label: { function g7() {} }
+    
+    // Valid - top level
+    function topLevel() {}
+    
+    // Valid - inside function body
+    function outer() {
+        function inner() {}
+    }
+    
