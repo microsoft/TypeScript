@@ -29772,6 +29772,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return caseType;
             }
             const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)), (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))));
+            // Allow non-union types to narrow to never in the default case when all values are handled
+            if (!(type.flags & TypeFlags.Union) && isUnitLikeType(type)) {
+                const regularType = type.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(type));
+                if (isUnitType(regularType) && contains(switchTypes, regularType, (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))) {
+                    return neverType;
+                }
+            }
             return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
         }
 

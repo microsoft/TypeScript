@@ -1,0 +1,90 @@
+exhaustiveSwitchSingleEnumMember.ts(78,9): error TS2322: Type 'MultiMemberEnum.B' is not assignable to type 'never'.
+
+
+==== exhaustiveSwitchSingleEnumMember.ts (1 errors) ====
+    // Test exhaustiveness checking for single-member enums
+    // Repro for #23155
+    
+    // Single enum member should narrow to never in default case
+    enum SingleMemberEnum {
+      VALUE = 'VALUE'
+    }
+    
+    function testSingleEnumExhaustive(x: SingleMemberEnum) {
+      switch (x) {
+        case SingleMemberEnum.VALUE:
+          return 1;
+      }
+      // x should be narrowed to never here
+      const n: never = x;
+    }
+    
+    // With explicit default clause
+    function testSingleEnumWithDefault(x: SingleMemberEnum) {
+      switch (x) {
+        case SingleMemberEnum.VALUE:
+          return 1;
+        default:
+          // x should be narrowed to never in default
+          const n: never = x;
+          throw new Error("unreachable");
+      }
+    }
+    
+    // Numeric enum
+    enum NumericSingleMember {
+      ONE = 1
+    }
+    
+    function testNumericSingleEnum(x: NumericSingleMember) {
+      switch (x) {
+        case NumericSingleMember.ONE:
+          return 'one';
+      }
+      const n: never = x;
+    }
+    
+    // Test that non-enum single types also work
+    type SingleLiteral = 'onlyValue';
+    
+    function testSingleLiteral(x: SingleLiteral) {
+      switch (x) {
+        case 'onlyValue':
+          return 1;
+      }
+      const n: never = x;
+    }
+    
+    // Ensure unions still work correctly (existing behavior)
+    enum MultiMemberEnum {
+      A = 'A',
+      B = 'B'
+    }
+    
+    function testMultiEnum(x: MultiMemberEnum) {
+      switch (x) {
+        case MultiMemberEnum.A:
+          return 1;
+        case MultiMemberEnum.B:
+          return 2;
+      }
+      // Should narrow to never
+      const n: never = x;
+    }
+    
+    // Test incomplete coverage - should error
+    function testIncomplete(x: MultiMemberEnum) {
+      switch (x) {
+        case MultiMemberEnum.A:
+          return 1;
+      }
+      // Should NOT narrow to never - B is not handled
+      const n: never = x; // Error expected
+            ~
+!!! error TS2322: Type 'MultiMemberEnum.B' is not assignable to type 'never'.
+    }
+    
+    // Note: Discriminated union narrowing for single-member types is a more complex case
+    // that involves property access narrowing, not just direct value narrowing.
+    // This test focuses on direct value narrowing.
+    

@@ -1,0 +1,173 @@
+//// [tests/cases/compiler/exhaustiveSwitchSingleEnumMember.ts] ////
+
+=== exhaustiveSwitchSingleEnumMember.ts ===
+// Test exhaustiveness checking for single-member enums
+// Repro for #23155
+
+// Single enum member should narrow to never in default case
+enum SingleMemberEnum {
+>SingleMemberEnum : Symbol(SingleMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 0, 0))
+
+  VALUE = 'VALUE'
+>VALUE : Symbol(SingleMemberEnum.VALUE, Decl(exhaustiveSwitchSingleEnumMember.ts, 4, 23))
+}
+
+function testSingleEnumExhaustive(x: SingleMemberEnum) {
+>testSingleEnumExhaustive : Symbol(testSingleEnumExhaustive, Decl(exhaustiveSwitchSingleEnumMember.ts, 6, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 8, 34))
+>SingleMemberEnum : Symbol(SingleMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 0, 0))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 8, 34))
+
+    case SingleMemberEnum.VALUE:
+>SingleMemberEnum.VALUE : Symbol(SingleMemberEnum.VALUE, Decl(exhaustiveSwitchSingleEnumMember.ts, 4, 23))
+>SingleMemberEnum : Symbol(SingleMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 0, 0))
+>VALUE : Symbol(SingleMemberEnum.VALUE, Decl(exhaustiveSwitchSingleEnumMember.ts, 4, 23))
+
+      return 1;
+  }
+  // x should be narrowed to never here
+  const n: never = x;
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 14, 7))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 8, 34))
+}
+
+// With explicit default clause
+function testSingleEnumWithDefault(x: SingleMemberEnum) {
+>testSingleEnumWithDefault : Symbol(testSingleEnumWithDefault, Decl(exhaustiveSwitchSingleEnumMember.ts, 15, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 18, 35))
+>SingleMemberEnum : Symbol(SingleMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 0, 0))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 18, 35))
+
+    case SingleMemberEnum.VALUE:
+>SingleMemberEnum.VALUE : Symbol(SingleMemberEnum.VALUE, Decl(exhaustiveSwitchSingleEnumMember.ts, 4, 23))
+>SingleMemberEnum : Symbol(SingleMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 0, 0))
+>VALUE : Symbol(SingleMemberEnum.VALUE, Decl(exhaustiveSwitchSingleEnumMember.ts, 4, 23))
+
+      return 1;
+    default:
+      // x should be narrowed to never in default
+      const n: never = x;
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 24, 11))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 18, 35))
+
+      throw new Error("unreachable");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+// Numeric enum
+enum NumericSingleMember {
+>NumericSingleMember : Symbol(NumericSingleMember, Decl(exhaustiveSwitchSingleEnumMember.ts, 27, 1))
+
+  ONE = 1
+>ONE : Symbol(NumericSingleMember.ONE, Decl(exhaustiveSwitchSingleEnumMember.ts, 30, 26))
+}
+
+function testNumericSingleEnum(x: NumericSingleMember) {
+>testNumericSingleEnum : Symbol(testNumericSingleEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 32, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 34, 31))
+>NumericSingleMember : Symbol(NumericSingleMember, Decl(exhaustiveSwitchSingleEnumMember.ts, 27, 1))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 34, 31))
+
+    case NumericSingleMember.ONE:
+>NumericSingleMember.ONE : Symbol(NumericSingleMember.ONE, Decl(exhaustiveSwitchSingleEnumMember.ts, 30, 26))
+>NumericSingleMember : Symbol(NumericSingleMember, Decl(exhaustiveSwitchSingleEnumMember.ts, 27, 1))
+>ONE : Symbol(NumericSingleMember.ONE, Decl(exhaustiveSwitchSingleEnumMember.ts, 30, 26))
+
+      return 'one';
+  }
+  const n: never = x;
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 39, 7))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 34, 31))
+}
+
+// Test that non-enum single types also work
+type SingleLiteral = 'onlyValue';
+>SingleLiteral : Symbol(SingleLiteral, Decl(exhaustiveSwitchSingleEnumMember.ts, 40, 1))
+
+function testSingleLiteral(x: SingleLiteral) {
+>testSingleLiteral : Symbol(testSingleLiteral, Decl(exhaustiveSwitchSingleEnumMember.ts, 43, 33))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 45, 27))
+>SingleLiteral : Symbol(SingleLiteral, Decl(exhaustiveSwitchSingleEnumMember.ts, 40, 1))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 45, 27))
+
+    case 'onlyValue':
+      return 1;
+  }
+  const n: never = x;
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 50, 7))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 45, 27))
+}
+
+// Ensure unions still work correctly (existing behavior)
+enum MultiMemberEnum {
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+
+  A = 'A',
+>A : Symbol(MultiMemberEnum.A, Decl(exhaustiveSwitchSingleEnumMember.ts, 54, 22))
+
+  B = 'B'
+>B : Symbol(MultiMemberEnum.B, Decl(exhaustiveSwitchSingleEnumMember.ts, 55, 10))
+}
+
+function testMultiEnum(x: MultiMemberEnum) {
+>testMultiEnum : Symbol(testMultiEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 57, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 59, 23))
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 59, 23))
+
+    case MultiMemberEnum.A:
+>MultiMemberEnum.A : Symbol(MultiMemberEnum.A, Decl(exhaustiveSwitchSingleEnumMember.ts, 54, 22))
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+>A : Symbol(MultiMemberEnum.A, Decl(exhaustiveSwitchSingleEnumMember.ts, 54, 22))
+
+      return 1;
+    case MultiMemberEnum.B:
+>MultiMemberEnum.B : Symbol(MultiMemberEnum.B, Decl(exhaustiveSwitchSingleEnumMember.ts, 55, 10))
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+>B : Symbol(MultiMemberEnum.B, Decl(exhaustiveSwitchSingleEnumMember.ts, 55, 10))
+
+      return 2;
+  }
+  // Should narrow to never
+  const n: never = x;
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 67, 7))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 59, 23))
+}
+
+// Test incomplete coverage - should error
+function testIncomplete(x: MultiMemberEnum) {
+>testIncomplete : Symbol(testIncomplete, Decl(exhaustiveSwitchSingleEnumMember.ts, 68, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 71, 24))
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+
+  switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 71, 24))
+
+    case MultiMemberEnum.A:
+>MultiMemberEnum.A : Symbol(MultiMemberEnum.A, Decl(exhaustiveSwitchSingleEnumMember.ts, 54, 22))
+>MultiMemberEnum : Symbol(MultiMemberEnum, Decl(exhaustiveSwitchSingleEnumMember.ts, 51, 1))
+>A : Symbol(MultiMemberEnum.A, Decl(exhaustiveSwitchSingleEnumMember.ts, 54, 22))
+
+      return 1;
+  }
+  // Should NOT narrow to never - B is not handled
+  const n: never = x; // Error expected
+>n : Symbol(n, Decl(exhaustiveSwitchSingleEnumMember.ts, 77, 7))
+>x : Symbol(x, Decl(exhaustiveSwitchSingleEnumMember.ts, 71, 24))
+}
+
+// Note: Discriminated union narrowing for single-member types is a more complex case
+// that involves property access narrowing, not just direct value narrowing.
+// This test focuses on direct value narrowing.
+
