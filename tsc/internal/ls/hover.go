@@ -109,8 +109,24 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, de
 					}
 					comments := tag.Comments()
 					if tag.Kind == ast.KindJSDocTag && tag.TagName().Text() == "example" {
-						b.WriteString("\n")
 						commentText := strings.TrimRight(getCommentText(comments), " \t\r\n")
+						if strings.HasPrefix(commentText, "<caption>") {
+							if captionEnd := strings.Index(commentText, "</caption>"); captionEnd > 0 {
+								b.WriteString(" — ")
+								b.WriteString(commentText[len("<caption>"):captionEnd])
+								commentText = commentText[captionEnd+len("</caption>"):]
+								// Trim leading blank lines from commentText
+								for {
+									s1 := strings.TrimLeft(commentText, " \t")
+									s2 := strings.TrimLeft(s1, "\r\n")
+									if len(s1) == len(s2) {
+										break
+									}
+									commentText = s2
+								}
+							}
+						}
+						b.WriteString("\n")
 						if len(commentText) > 6 && strings.HasPrefix(commentText, "```") && strings.HasSuffix(commentText, "```") && strings.Contains(commentText, "\n") {
 							b.WriteString(commentText)
 							b.WriteString("\n")
