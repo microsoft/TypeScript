@@ -1,38 +1,36 @@
-functionDeclarationAsStatementInStrictMode.ts(2,20): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(3,23): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(4,13): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(5,19): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(6,28): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(7,28): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
-functionDeclarationAsStatementInStrictMode.ts(8,1): error TS1344: 'A label is not allowed here.
-functionDeclarationAsStatementInStrictMode.ts(8,17): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+functionDeclarationAsStatementInStrictMode.ts(3,20): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(4,23): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(5,13): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(6,19): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(7,28): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(8,28): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+functionDeclarationAsStatementInStrictMode.ts(9,17): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
 
 
-==== functionDeclarationAsStatementInStrictMode.ts (8 errors) ====
-    // Error cases - function declarations as direct children of statements in strict mode
+==== functionDeclarationAsStatementInStrictMode.ts (7 errors) ====
+    // Error cases - function declarations as direct children of statements
+    // TypeScript assumes strict mode at all times, so these are always errors
     if (true) function f1() {}
                        ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     while (true) function f2() {}
                           ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     do function f3() {} while (false);
                 ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     for (;;) function f4() {}
                       ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     for (let x in {}) function f5() {}
                                ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     for (let x of []) function f6() {}
                                ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     label: function f7() {}
-    ~~~~~
-!!! error TS1344: 'A label is not allowed here.
                     ~~
-!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
+!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     
     // Valid cases - function declarations inside blocks
     if (true) { function g1() {} }

@@ -2705,16 +2705,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, getStrictModeBlockScopeFunctionDeclarationMessage(node)));
             }
         }
-        // In strict mode, function declarations are not allowed as the direct child of a statement.
-        // For example: `if (true) function f() {}` is a syntax error in strict mode.
-        // This applies regardless of the target version.
-        if (inStrictMode && isFunctionDeclarationStatementChild(node)) {
-            const errorSpan = getErrorSpanForNode(file, node);
-            file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, Diagnostics.In_strict_mode_code_functions_can_only_be_declared_at_top_level_or_inside_a_block));
-        }
     }
 
-    function isFunctionDeclarationStatementChild(node: FunctionDeclaration): boolean {
+    // Function declarations are not allowed as the direct child of a statement.
+    // For example: `if (true) function f() {}` is a syntax error in strict mode.
+    // Since TypeScript assumes strict mode at all times, this is always an error.
+    function checkFunctionDeclarationStatementChild(node: FunctionDeclaration) {
         const parent = node.parent;
         switch (parent.kind) {
             case SyntaxKind.IfStatement:
@@ -2725,9 +2721,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ForOfStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.LabeledStatement:
-                return true;
-            default:
-                return false;
+                const errorSpan = getErrorSpanForNode(file, node);
+                file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, Diagnostics.Function_declarations_are_not_allowed_inside_statements_Use_a_block_statement_to_wrap_the_function_declaration));
+                break;
         }
     }
 
@@ -3737,6 +3733,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
 
         checkStrictModeFunctionName(node);
+        // Function declarations as direct children of statements are always an error
+        // since TypeScript assumes strict mode at all times.
+        checkFunctionDeclarationStatementChild(node);
         if (inStrictMode) {
             checkStrictModeFunctionDeclaration(node);
             bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);

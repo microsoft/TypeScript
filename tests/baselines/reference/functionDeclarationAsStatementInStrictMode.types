@@ -1,7 +1,8 @@
 //// [tests/cases/compiler/functionDeclarationAsStatementInStrictMode.ts] ////
 
 === functionDeclarationAsStatementInStrictMode.ts ===
-// Error cases - function declarations as direct children of statements in strict mode
+// Error cases - function declarations as direct children of statements
+// TypeScript assumes strict mode at all times, so these are always errors
 if (true) function f1() {}
 >true : true
 >     : ^^^^
@@ -33,10 +34,10 @@ for (let x in {}) function f5() {}
 >   : ^^^^^^^^^^
 
 for (let x of []) function f6() {}
->x : never
->  : ^^^^^
->[] : never[]
->   : ^^^^^^^
+>x : any
+>  : ^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
 >f6 : () => void
 >   : ^^^^^^^^^^
 
@@ -78,10 +79,10 @@ for (let x in {}) { function g5() {} }
 >   : ^^^^^^^^^^
 
 for (let x of []) { function g6() {} }
->x : never
->  : ^^^^^
->[] : never[]
->   : ^^^^^^^
+>x : any
+>  : ^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
 >g6 : () => void
 >   : ^^^^^^^^^^
 

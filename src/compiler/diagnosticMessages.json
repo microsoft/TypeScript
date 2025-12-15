@@ -823,7 +823,7 @@
         "category": "Error",
         "code": 1255
     },
-    "In strict mode code, functions can only be declared at top level or inside a block.": {
+    "Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.": {
         "category": "Error",
         "code": 1256
     },
