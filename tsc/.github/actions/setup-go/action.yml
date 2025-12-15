@@ -71,7 +71,7 @@ runs:
 
     - if: ${{ inputs.create != 'true' }}
       name: Restore Go modules
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: ${{ steps.cache-info.outputs.modules-key }}
         path: |
@@ -79,7 +79,7 @@ runs:
 
     - if: ${{ inputs.create != 'true' }}
       name: Restore Go build cache
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: unused-key-${{ github.run_id }}
         restore-keys: ${{ steps.cache-info.outputs.build-key }}-
@@ -90,7 +90,7 @@ runs:
 
     - if: ${{ inputs.create != 'true' && inputs.lint-cache == 'true' }}
       name: Restore golangci-lint cache
-      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: unused-key-${{ github.run_id }}
         restore-keys: ${{ steps.cache-info.outputs.lint-key }}-
@@ -146,7 +146,7 @@ runs:
 
     - if: ${{ inputs.create == 'true' }}
       name: Save Go modules
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/save@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: ${{ steps.cache-info.outputs.modules-key }}
         path: |
@@ -154,7 +154,7 @@ runs:
 
     - if: ${{ inputs.create == 'true' }}
       name: Save Go build cache
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/save@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: ${{ steps.cache-info.outputs.build-key }}-${{ github.run_id }}
         path: |
@@ -164,7 +164,7 @@ runs:
 
     - if: ${{ inputs.create == 'true' }}
       name: Save golangci-lint cache
-      uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache/save@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: ${{ steps.cache-info.outputs.lint-key }}-${{ github.run_id }}
         path: ${{ env.GOLANGCI_LINT_CACHE }}
