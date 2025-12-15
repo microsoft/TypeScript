@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/substitutionTypeNonGenericIndexType2.ts] ////
+
+=== substitutionTypeNonGenericIndexType2.ts ===
+type BasicConditional<T> = keyof T extends infer R ? R : never;
+>BasicConditional : Symbol(BasicConditional, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 0))
+>T : Symbol(T, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 22))
+>T : Symbol(T, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 22))
+>R : Symbol(R, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 48))
+>R : Symbol(R, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 48))
+
+type Config = { rejectClose: true };
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 63))
+>rejectClose : Symbol(rejectClose, Decl(substitutionTypeNonGenericIndexType2.ts, 2, 15))
+
+type Test = Config extends {}
+>Test : Symbol(Test, Decl(substitutionTypeNonGenericIndexType2.ts, 2, 36))
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 63))
+
+  ? {
+      rejectClose: BasicConditional<Config>;
+>rejectClose : Symbol(rejectClose, Decl(substitutionTypeNonGenericIndexType2.ts, 5, 5))
+>BasicConditional : Symbol(BasicConditional, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 0))
+>Config : Symbol(Config, Decl(substitutionTypeNonGenericIndexType2.ts, 0, 63))
+    }
+  : never;
+
+const test: Test["rejectClose"] = "rejectClose";
+>test : Symbol(test, Decl(substitutionTypeNonGenericIndexType2.ts, 10, 5))
+>Test : Symbol(Test, Decl(substitutionTypeNonGenericIndexType2.ts, 2, 36))
+

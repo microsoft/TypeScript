@@ -18928,6 +18928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIndexType(type: Type, indexFlags = IndexFlags.None): Type {
         type = getReducedType(type);
         return isNoInferType(type) ? getNoInferType(getIndexType((type as SubstitutionType).baseType, indexFlags)) :
+            type.flags & TypeFlags.Substitution && !isGenericType((type as SubstitutionType).baseType) && !isGenericType((type as SubstitutionType).constraint) ? getUnionType([getIndexType((type as SubstitutionType).baseType, indexFlags), getIndexType((type as SubstitutionType).constraint, indexFlags)]) :
             shouldDeferIndexType(type, indexFlags) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, indexFlags) :
             type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, indexFlags))) :
             type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags))) :
