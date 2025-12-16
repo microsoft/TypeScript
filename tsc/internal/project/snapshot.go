@@ -105,7 +105,10 @@ func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
 }
 
 func (s *Snapshot) UserPreferences() *lsutil.UserPreferences {
-	return s.config.tsUserPreferences
+	if s.config.tsUserPreferences != nil {
+		return s.config.tsUserPreferences
+	}
+	return lsutil.NewDefaultUserPreferences()
 }
 
 func (s *Snapshot) FormatOptions() *format.FormatCodeSettings {
