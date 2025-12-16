@@ -1,7 +1,6 @@
 package tsoptions
 
 import (
-	"regexp"
 	"strings"
 
 	"github.com/dlclark/regexp2"
@@ -28,13 +27,13 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 	}
 
 	rawExcludeRegex := vfs.GetRegularExpressionForWildcard(exclude, comparePathsOptions.CurrentDirectory, "exclude")
-	var excludeRegex *regexp.Regexp
+	var excludeRegex *regexp2.Regexp
 	if rawExcludeRegex != "" {
-		options := ""
+		flags := regexp2.ECMAScript
 		if !comparePathsOptions.UseCaseSensitiveFileNames {
-			options = "(?i)"
+			flags |= regexp2.IgnoreCase
 		}
-		excludeRegex = regexp.MustCompile(options + rawExcludeRegex)
+		excludeRegex = regexp2.MustCompile(rawExcludeRegex, regexp2.RegexOptions(flags))
 	}
 
 	wildcardDirectories := make(map[string]bool)
@@ -44,8 +43,10 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 
 	for _, file := range include {
 		spec := tspath.NormalizeSlashes(tspath.CombinePaths(comparePathsOptions.CurrentDirectory, file))
-		if excludeRegex != nil && excludeRegex.MatchString(spec) {
-			continue
+		if excludeRegex != nil {
+			if matched, _ := excludeRegex.MatchString(spec); matched {
+				continue
+			}
 		}
 
 		match := getWildcardDirectoryFromSpec(spec, comparePathsOptions.UseCaseSensitiveFileNames)

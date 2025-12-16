@@ -81,11 +81,11 @@ func IsImplicitGlob(lastPathComponent string) bool {
 	return !strings.ContainsAny(lastPathComponent, ".*?")
 }
 
-// Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
-// It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
-// proof.
+// Reserved characters - only escape actual regex metacharacters.
+// Go's regexp doesn't support \x escape sequences for arbitrary characters,
+// so we only escape characters that have special meaning in regex.
 var (
-	reservedCharacterPattern *regexp.Regexp = regexp.MustCompile(`[^\w\s/]`)
+	reservedCharacterPattern *regexp.Regexp = regexp.MustCompile(`[\\.\+*?()\[\]{}^$|#]`)
 	wildcardCharCodes                       = []rune{'*', '?'}
 )
 
