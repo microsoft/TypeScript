@@ -337,7 +337,8 @@ type NodeLinks struct {
 }
 
 type SymbolNodeLinks struct {
-	resolvedSymbol *ast.Symbol // Resolved symbol associated with node
+	resolvedSymbol              *ast.Symbol // Resolved symbol associated with node
+	resolvedSymbolNoDiagnostics *ast.Symbol // Resolved symbol associated with node, generated without producing diagnostics for an API call
 }
 
 type TypeNodeLinks struct {

@@ -13450,6 +13450,22 @@ func (c *Checker) getResolvedSymbolOrNil(node *ast.Node) *ast.Symbol {
 	return c.symbolNodeLinks.Get(node).resolvedSymbol
 }
 
+func (c *Checker) getResolvedSymbolNoDiagnostics(node *ast.Node) *ast.Symbol {
+	links := c.symbolNodeLinks.Get(node)
+	if links.resolvedSymbol != nil {
+		return links.resolvedSymbol
+	}
+	if links.resolvedSymbolNoDiagnostics == nil {
+		var symbol *ast.Symbol
+		if !ast.NodeIsMissing(node) {
+			symbol = c.resolveName(node, node.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue,
+				nil, !ast.IsWriteOnlyAccess(node), false /*excludeGlobals*/)
+		}
+		links.resolvedSymbolNoDiagnostics = core.OrElse(symbol, c.unknownSymbol)
+	}
+	return links.resolvedSymbolNoDiagnostics
+}
+
 func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostics.Message {
 	switch node.Text() {
 	case "document", "console":
