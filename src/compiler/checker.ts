@@ -23772,8 +23772,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ? getIntersectionType([filteredByApplicability, typeParameter])
                                     : typeParameter;
                                 const indexedAccessType = getIndexedAccessType(source, indexingType);
+
+                                if (filteredByApplicability && isTypeAssignableTo(filteredByApplicability, target.constraintType!)) {
+                                    const mapper = appendTypeMapping(target.mapper, getTypeParameterFromMappedType(target), filteredByApplicability);
+                                    const propType = instantiateType(templateType, mapper);
+                                    if (result = isRelatedTo(indexedAccessType, propType)) {
+                                        return result;
+                                    }
+                                }
                                 // Compare `S[indexingType]` to `T`, where `T` is the type of a property of the target type.
-                                if (result = isRelatedTo(indexedAccessType, templateType, RecursionFlags.Both, reportErrors)) {
+                                else if (result = isRelatedTo(indexedAccessType, templateType, RecursionFlags.Both, reportErrors)) {
                                     return result;
                                 }
                             }
