@@ -8,13 +8,9 @@
 //                                            ^
 // | ----------------------------------------------------------------------
 // | Function.call(thisArg: any, **...argArray: any[]**): any
+// | - `...argArray: any[]`: A list of arguments to be passed to the method.
+
 // | Calls a method of an object, substituting another object for the current object.
-// | 
-// | *@param* `thisArg` — The object to be used as the current object.
-// | 
-// | 
-// | *@param* `argArray` — A list of arguments to be passed to the method.
-// | 
 // | ----------------------------------------------------------------------
 //         });
 //     };
@@ -36,14 +32,22 @@
           "label": "Function.call(thisArg: any, ...argArray: any[]): any",
           "documentation": {
             "kind": "markdown",
-            "value": "Calls a method of an object, substituting another object for the current object.\n\n*@param* `thisArg` — The object to be used as the current object.\n\n\n*@param* `argArray` — A list of arguments to be passed to the method.\n"
+            "value": "Calls a method of an object, substituting another object for the current object."
           },
           "parameters": [
             {
-              "label": "thisArg: any"
+              "label": "thisArg: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The object to be used as the current object.\n"
+              }
             },
             {
-              "label": "...argArray: any[]"
+              "label": "...argArray: any[]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A list of arguments to be passed to the method.\n"
+              }
             }
           ],
           "activeParameter": 1

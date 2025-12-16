@@ -25,14 +25,20 @@
 //   ^
 // | ----------------------------------------------------------------------
 // | t(**eventName: string**, eventName2: string | number, eventName3: any): number
+// | - `eventName: string`: - So many words
+
 // | ----------------------------------------------------------------------
 //        ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, **eventName2: string | number**, eventName3: any): number
+// | - `eventName2: string | number`: - Silence is golden
+
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, eventName2: string | number, **eventName3: any**): number
+// | - `eventName3: any`: - Osterreich mos def
+
 // | ----------------------------------------------------------------------
 [
   {
@@ -51,13 +57,25 @@
           "label": "t(eventName: string, eventName2: string | number, eventName3: any): number",
           "parameters": [
             {
-              "label": "eventName: string"
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
             },
             {
-              "label": "eventName2: string | number"
+              "label": "eventName2: string | number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
             },
             {
-              "label": "eventName3: any"
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
             }
           ],
           "activeParameter": 0
@@ -82,13 +100,25 @@
           "label": "t(eventName: string, eventName2: string | number, eventName3: any): number",
           "parameters": [
             {
-              "label": "eventName: string"
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
             },
             {
-              "label": "eventName2: string | number"
+              "label": "eventName2: string | number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
             },
             {
-              "label": "eventName3: any"
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
             }
           ],
           "activeParameter": 1
@@ -113,13 +143,25 @@
           "label": "t(eventName: string, eventName2: string | number, eventName3: any): number",
           "parameters": [
             {
-              "label": "eventName: string"
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
             },
             {
-              "label": "eventName2: string | number"
+              "label": "eventName2: string | number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
             },
             {
-              "label": "eventName3: any"
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
             }
           ],
           "activeParameter": 2

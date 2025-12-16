@@ -68,21 +68,21 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	if quickInfo == "" {
 		return "", ""
 	}
-	return quickInfo, l.getDocumentationFromDeclaration(c, declaration, contentFormat)
+	return quickInfo, l.getDocumentationFromDeclaration(c, declaration, contentFormat, false /*commentOnly*/)
 }
 
-func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, declaration *ast.Node, contentFormat lsproto.MarkupKind) string {
+func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if declaration == nil {
 		return ""
 	}
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
-	if jsdoc := getJSDocOrTag(c, declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
+	if jsdoc := getJSDocOrTag(c, declaration); jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
 		l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
-		if jsdoc.Kind == ast.KindJSDoc {
+		if jsdoc.Kind == ast.KindJSDoc && !commentOnly {
 			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
 				for _, tag := range tags.Nodes {
-					if tag.Kind == ast.KindJSDocTypeTag {
+					if tag.Kind == ast.KindJSDocTypeTag || tag.Kind == ast.KindJSDocTypedefTag || tag.Kind == ast.KindJSDocCallbackTag {
 						continue
 					}
 					b.WriteString("\n\n")
@@ -142,7 +142,7 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, de
 						}
 					} else if len(comments) != 0 {
 						b.WriteString(" ")
-						if !commentHasPrefix(comments, "-") {
+						if comments[0].Kind != ast.KindJSDocText || !strings.HasPrefix(comments[0].Text(), "-") {
 							b.WriteString("— ")
 						}
 						l.writeComments(&b, c, comments, isMarkdown)
@@ -307,7 +307,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				b.WriteString(" = ")
 				b.WriteString(c.TypeToStringEx(c.GetDeclaredTypeOfSymbol(symbol), container, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
 			}
-			declaration = core.Find(symbol.Declarations, ast.IsTypeAliasDeclaration)
+			declaration = core.Find(symbol.Declarations, ast.IsTypeOrJSTypeAliasDeclaration)
 		default:
 			b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbol(symbol), container, typeFormatFlags))
 		}
@@ -440,10 +440,6 @@ func containsTypedefTag(jsdoc *ast.Node) bool {
 		}
 	}
 	return false
-}
-
-func commentHasPrefix(comments []*ast.Node, prefix string) bool {
-	return comments[0].Kind == ast.KindJSDocText && strings.HasPrefix(comments[0].Text(), prefix)
 }
 
 func getJSDoc(node *ast.Node) *ast.Node {

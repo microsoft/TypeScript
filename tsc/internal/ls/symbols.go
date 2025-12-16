@@ -125,12 +125,14 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		if ctx.Err() != nil {
 			return true
 		}
-		if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
-			for _, jsdoc := range jsdocs {
-				if tagList := jsdoc.AsJSDoc().Tags; tagList != nil {
-					for _, tag := range tagList.Nodes {
-						if ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag) {
-							addSymbolForNode(tag, nil /*children*/)
+		if node.Flags&ast.NodeFlagsReparsed == 0 {
+			if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
+				for _, jsdoc := range jsdocs {
+					if tagList := jsdoc.AsJSDoc().Tags; tagList != nil {
+						for _, tag := range tagList.Nodes {
+							if ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag) {
+								addSymbolForNode(tag, nil /*children*/)
+							}
 						}
 					}
 				}

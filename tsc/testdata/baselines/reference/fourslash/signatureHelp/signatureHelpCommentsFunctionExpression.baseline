@@ -7,11 +7,13 @@
 //           ^
 // | ----------------------------------------------------------------------
 // | lambdaFoo(**a: number**, b: number): number
+// | - `a: number`: param a
 // | this is lambda comment
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
 // | lambdaFoo(a: number, **b: number**): number
+// | - `b: number`: param b
 // | this is lambda comment
 // | ----------------------------------------------------------------------
 // function anotherFunc(a: number) {
@@ -39,13 +41,8 @@
 //          ^
 // | ----------------------------------------------------------------------
 // | assigned(**s: string**): number
+// | - `s: string`: On parameter
 // | Summary on expression
-// | 
-// | *@param* `s` — param on expression
-// | 
-// | 
-// | *@returns* — return on expression
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -68,10 +65,18 @@
           },
           "parameters": [
             {
-              "label": "a: number"
+              "label": "a: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "param a"
+              }
             },
             {
-              "label": "b: number"
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "param b"
+              }
             }
           ],
           "activeParameter": 0
@@ -100,10 +105,18 @@
           },
           "parameters": [
             {
-              "label": "a: number"
+              "label": "a: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "param a"
+              }
             },
             {
-              "label": "b: number"
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "param b"
+              }
             }
           ],
           "activeParameter": 1
@@ -128,11 +141,15 @@
           "label": "assigned(s: string): number",
           "documentation": {
             "kind": "markdown",
-            "value": "Summary on expression\n\n*@param* `s` — param on expression\n\n\n*@returns* — return on expression\n"
+            "value": "Summary on expression"
           },
           "parameters": [
             {
-              "label": "s: string"
+              "label": "s: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "On parameter"
+              }
             }
           ],
           "activeParameter": 0

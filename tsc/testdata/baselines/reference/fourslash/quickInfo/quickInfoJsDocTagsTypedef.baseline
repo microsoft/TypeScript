@@ -8,7 +8,7 @@
 // | ```tsx
 // | type Bar = { baz: string; qux: string; }
 // | ```
-// | 
+// | Bar comment
 // | ----------------------------------------------------------------------
 //  * @property {string} baz - baz comment
 //  * @property {string} qux - qux comment
@@ -22,7 +22,7 @@
 // | ```tsx
 // | type Bar = { baz: string; qux: string; }
 // | ```
-// | 
+// | Bar comment
 // | ----------------------------------------------------------------------
 //  * @returns {Bar}
 //  */
@@ -43,7 +43,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\n"
+        "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\nBar comment"
       },
       "range": {
         "start": {
@@ -70,7 +70,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\n"
+        "value": "```tsx\ntype Bar = { baz: string; qux: string; }\n```\nBar comment"
       },
       "range": {
         "start": {

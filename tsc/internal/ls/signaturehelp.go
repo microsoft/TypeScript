@@ -418,9 +418,9 @@ func (l *LanguageService) computeActiveParameter(sig signatureInformation, argum
 func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool, callTargetSymbol string, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) []signatureInformation {
 	var infos []*signatureHelpItemInfo
 	if isTypeParameterList {
-		infos = itemInfoForTypeParameters(candidate, c, enclosingDeclaration, sourceFile)
+		infos = l.itemInfoForTypeParameters(candidate, c, enclosingDeclaration, sourceFile, docFormat)
 	} else {
-		infos = itemInfoForParameters(candidate, c, enclosingDeclaration, sourceFile)
+		infos = l.itemInfoForParameters(candidate, c, enclosingDeclaration, sourceFile, docFormat)
 	}
 
 	suffixDisplayParts := returnTypeToDisplayParts(candidate, c)
@@ -428,7 +428,7 @@ func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isT
 	// Generate documentation from the signature's declaration
 	var documentation *string
 	if declaration := candidate.Declaration(); declaration != nil {
-		doc := l.getDocumentationFromDeclaration(c, declaration, docFormat)
+		doc := l.getDocumentationFromDeclaration(c, declaration, docFormat, true /*commentOnly*/)
 		if doc != "" {
 			documentation = &doc
 		}
@@ -462,7 +462,7 @@ func returnTypeToDisplayParts(candidateSignature *checker.Signature, c *checker.
 	return returnType.String()
 }
 
-func itemInfoForTypeParameters(candidateSignature *checker.Signature, c *checker.Checker, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile) []*signatureHelpItemInfo {
+func (l *LanguageService) itemInfoForTypeParameters(candidateSignature *checker.Signature, c *checker.Checker, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, docFormat lsproto.MarkupKind) []*signatureHelpItemInfo {
 	printer := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, nil)
 
 	var typeParameters []*checker.Type
@@ -478,7 +478,7 @@ func itemInfoForTypeParameters(candidateSignature *checker.Signature, c *checker
 
 	thisParameter := []signatureHelpParameter{}
 	if candidateSignature.ThisParameter() != nil {
-		thisParameter = []signatureHelpParameter{createSignatureHelpParameterForParameter(candidateSignature.ThisParameter(), enclosingDeclaration, printer, sourceFile, c)}
+		thisParameter = []signatureHelpParameter{l.createSignatureHelpParameterForParameter(candidateSignature.ThisParameter(), enclosingDeclaration, printer, sourceFile, c, docFormat)}
 	}
 
 	// Creating type parameter display label
@@ -504,7 +504,7 @@ func itemInfoForTypeParameters(candidateSignature *checker.Signature, c *checker
 		displayParameters.WriteString(displayParts.String())
 		parameters := thisParameter
 		for j, param := range parameterList {
-			parameter := createSignatureHelpParameterForParameter(param, enclosingDeclaration, printer, sourceFile, c)
+			parameter := l.createSignatureHelpParameterForParameter(param, enclosingDeclaration, printer, sourceFile, c, docFormat)
 			parameters = append(parameters, parameter)
 			if j > 0 {
 				displayParameters.WriteString(", ")
@@ -522,7 +522,7 @@ func itemInfoForTypeParameters(candidateSignature *checker.Signature, c *checker
 	return result
 }
 
-func itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Checker, enclosingDeclaratipn *ast.Node, sourceFile *ast.SourceFile) []*signatureHelpItemInfo {
+func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Checker, enclosingDeclaratipn *ast.Node, sourceFile *ast.SourceFile, docFormat lsproto.MarkupKind) []*signatureHelpItemInfo {
 	printer := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, nil)
 
 	signatureHelpTypeParameters := make([]signatureHelpParameter, len(candidateSignature.TypeParameters()))
@@ -564,7 +564,7 @@ func itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Che
 		var displayParameters strings.Builder
 		displayParameters.WriteString(displayParts.String())
 		for j, param := range parameterList {
-			parameter := createSignatureHelpParameterForParameter(param, enclosingDeclaratipn, printer, sourceFile, c)
+			parameter := l.createSignatureHelpParameterForParameter(param, enclosingDeclaratipn, printer, sourceFile, c, docFormat)
 			parameters[j] = parameter
 			if j > 0 {
 				displayParameters.WriteString(", ")
@@ -585,14 +585,26 @@ func itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Che
 
 const signatureHelpNodeBuilderFlags = nodebuilder.FlagsOmitParameterModifiers | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope
 
-func createSignatureHelpParameterForParameter(parameter *ast.Symbol, enclosingDeclaratipn *ast.Node, p *printer.Printer, sourceFile *ast.SourceFile, c *checker.Checker) signatureHelpParameter {
+func (l *LanguageService) createSignatureHelpParameterForParameter(parameter *ast.Symbol, enclosingDeclaratipn *ast.Node, p *printer.Printer, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) signatureHelpParameter {
 	display := p.Emit(checker.NewNodeBuilder(c, printer.NewEmitContext()).SymbolToParameterDeclaration(parameter, enclosingDeclaratipn, signatureHelpNodeBuilderFlags, nodebuilder.InternalFlagsNone, nil), sourceFile)
 	isOptional := parameter.CheckFlags&ast.CheckFlagsOptionalParameter != 0
 	isRest := parameter.CheckFlags&ast.CheckFlagsRestParameter != 0
+	var documentation *lsproto.StringOrMarkupContent
+	if parameter.ValueDeclaration != nil {
+		doc := l.getDocumentationFromDeclaration(c, parameter.ValueDeclaration, docFormat, true /*commentOnly*/)
+		if doc != "" {
+			documentation = &lsproto.StringOrMarkupContent{
+				MarkupContent: &lsproto.MarkupContent{
+					Kind:  docFormat,
+					Value: doc,
+				},
+			}
+		}
+	}
 	return signatureHelpParameter{
 		parameterInfo: &lsproto.ParameterInformation{
 			Label:         lsproto.StringOrTuple{String: &display},
-			Documentation: nil,
+			Documentation: documentation,
 		},
 		isRest:     isRest,
 		isOptional: isOptional,

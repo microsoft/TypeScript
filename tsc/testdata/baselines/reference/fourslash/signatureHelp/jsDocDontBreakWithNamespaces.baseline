@@ -8,10 +8,6 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | foo(): module
-// | 
-// | 
-// | *@returns* — :@nodefuel/web~Webserver~wsServer#hello} Websocket server object
-// | 
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -46,10 +42,6 @@
       "signatures": [
         {
           "label": "foo(): module",
-          "documentation": {
-            "kind": "markdown",
-            "value": "\n\n*@returns* — :@nodefuel/web~Webserver~wsServer#hello} Websocket server object\n"
-          },
           "parameters": []
         }
       ],

@@ -298,7 +298,7 @@ loop:
 
 func removeLeadingNewlines(comments []string) []string {
 	i := 0
-	for i < len(comments) && (comments[i] == "\n" || comments[i] == "\r") {
+	for i < len(comments) && strings.TrimLeft(comments[i], "\r\n") == "" {
 		i++
 	}
 	return comments[i:]

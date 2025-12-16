@@ -84,6 +84,8 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		}
 		typeAlias.AsTypeAliasDeclaration().Type = t
 		p.finishReparsedNode(typeAlias, tag)
+		p.jsdocCache[typeAlias] = []*ast.Node{jsDoc}
+		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, typeAlias)
 	case ast.KindJSDocCallbackTag:
 		callbackTag := tag.AsJSDocCallbackTag()
@@ -94,6 +96,8 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.factory.DeepCloneReparse(callbackTag.FullName), nil, functionType)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		p.finishReparsedNode(typeAlias, tag)
+		p.jsdocCache[typeAlias] = []*ast.Node{jsDoc}
+		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, typeAlias)
 	case ast.KindJSDocImportTag:
 		importTag := tag.AsJSDocImportTag()
@@ -171,6 +175,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 		}
 		p.finishReparsedNode(parameter, param)
 		parameters = append(parameters, parameter)
+		p.reparseJSDocComment(parameter, param)
 	}
 	signature.FunctionLikeData().Parameters = p.newNodeList(jsSignature.AsJSDocSignature().Parameters.Loc, parameters)
 
@@ -205,6 +210,7 @@ func (p *Parser) reparseJSDocTypeLiteral(t *ast.TypeNode) *ast.Node {
 			}
 			p.finishReparsedNode(property, prop)
 			properties = append(properties, property)
+			p.reparseJSDocComment(property, prop)
 		}
 		t = p.factory.NewTypeLiteralNode(p.newNodeList(jstypeliteral.Loc, properties))
 		if isArrayType {
@@ -212,8 +218,18 @@ func (p *Parser) reparseJSDocTypeLiteral(t *ast.TypeNode) *ast.Node {
 			t = p.factory.NewArrayTypeNode(t)
 		}
 		p.finishReparsedNode(t, jstypeliteral.AsNode())
+		return t
 	}
 	return p.factory.DeepCloneReparse(t)
+}
+
+func (p *Parser) reparseJSDocComment(node *ast.Node, tag *ast.Node) {
+	if comment := tag.CommentList(); comment != nil {
+		propJSDoc := p.factory.NewJSDoc(comment, nil)
+		p.finishReparsedNode(propJSDoc, tag)
+		p.jsdocCache[node] = []*ast.Node{propJSDoc}
+		node.Flags |= ast.NodeFlagsHasJSDoc
+	}
 }
 
 func (p *Parser) gatherTypeParameters(j *ast.Node, tagWithTypeParameters *ast.Node) *ast.NodeList {

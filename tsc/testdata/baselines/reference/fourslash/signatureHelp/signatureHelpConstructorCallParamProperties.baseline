@@ -12,10 +12,9 @@
 //                    ^
 // | ----------------------------------------------------------------------
 // | Circle(**radius: number**): Circle
+// | - `radius: number`: The radius of the circle.
+
 // | Initialize a circle.
-// | 
-// | *@param* `radius` — The radius of the circle.
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -34,11 +33,15 @@
           "label": "Circle(radius: number): Circle",
           "documentation": {
             "kind": "markdown",
-            "value": "Initialize a circle.\n\n*@param* `radius` — The radius of the circle.\n"
+            "value": "Initialize a circle."
           },
           "parameters": [
             {
-              "label": "radius: number"
+              "label": "radius: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The radius of the circle.\n"
+              }
             }
           ],
           "activeParameter": 0

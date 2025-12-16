@@ -12,10 +12,9 @@
 //        ^
 // | ----------------------------------------------------------------------
 // | str(n: number, **radix: number**): string
+// | - `radix: number`: The radix
+
 // | Stringifies a number with radix
-// | 
-// | *@param* `radix` — The radix
-// | 
 // | ----------------------------------------------------------------------
 // 
 // declare function f<T>(a: T): T;
@@ -50,14 +49,18 @@
           "label": "str(n: number, radix: number): string",
           "documentation": {
             "kind": "markdown",
-            "value": "Stringifies a number with radix\n\n*@param* `radix` — The radix\n"
+            "value": "Stringifies a number with radix"
           },
           "parameters": [
             {
               "label": "n: number"
             },
             {
-              "label": "radix: number"
+              "label": "radix: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The radix\n"
+              }
             }
           ],
           "activeParameter": 1

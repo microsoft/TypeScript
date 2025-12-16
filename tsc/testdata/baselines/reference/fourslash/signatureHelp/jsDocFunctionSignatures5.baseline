@@ -15,22 +15,9 @@
 //            ^
 // | ----------------------------------------------------------------------
 // | pathFilter(**basePath: String**, pattern: String, type: String, options: Object): any[]
+// | - `basePath: String`: The base path where the search will be performed.
+
 // | Filters a path based on a regexp or glob pattern.
-// | 
-// | *@param* `basePath` — The base path where the search will be performed.
-// | 
-// | 
-// | *@param* `pattern` — A string defining a regexp of a glob pattern.
-// | 
-// | 
-// | *@param* `type` — The search pattern type, can be a regexp or a glob.
-// | 
-// | 
-// | *@param* `options` — A object containing options to the search.
-// | 
-// | 
-// | *@return* — A list containing the filtered paths.
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -49,20 +36,36 @@
           "label": "pathFilter(basePath: String, pattern: String, type: String, options: Object): any[]",
           "documentation": {
             "kind": "markdown",
-            "value": "Filters a path based on a regexp or glob pattern.\n\n*@param* `basePath` — The base path where the search will be performed.\n\n\n*@param* `pattern` — A string defining a regexp of a glob pattern.\n\n\n*@param* `type` — The search pattern type, can be a regexp or a glob.\n\n\n*@param* `options` — A object containing options to the search.\n\n\n*@return* — A list containing the filtered paths.\n"
+            "value": "Filters a path based on a regexp or glob pattern."
           },
           "parameters": [
             {
-              "label": "basePath: String"
+              "label": "basePath: String",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The base path where the search will be performed.\n"
+              }
             },
             {
-              "label": "pattern: String"
+              "label": "pattern: String",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A string defining a regexp of a glob pattern.\n"
+              }
             },
             {
-              "label": "type: String"
+              "label": "type: String",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The search pattern type, can be a regexp or a glob.\n"
+              }
             },
             {
-              "label": "options: Object"
+              "label": "options: Object",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A object containing options to the search.\n"
+              }
             }
           ],
           "activeParameter": 0

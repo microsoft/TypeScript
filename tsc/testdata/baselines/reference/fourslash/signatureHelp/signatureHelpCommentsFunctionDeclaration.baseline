@@ -19,11 +19,13 @@
 //                   ^
 // | ----------------------------------------------------------------------
 // | fooWithParameters(**a: string**, b: number): void
+// | - `a: string`: this is comment about a
 // | This is comment for function signature
 // | ----------------------------------------------------------------------
 //                       ^
 // | ----------------------------------------------------------------------
 // | fooWithParameters(a: string, **b: number**): void
+// | - `b: number`: this is comment for b
 // | This is comment for function signature
 // | ----------------------------------------------------------------------
 // /**
@@ -35,10 +37,9 @@
 //    ^
 // | ----------------------------------------------------------------------
 // | fn(**a: string**): any
+// | - `a: string`: a string
+
 // | Does something
-// | 
-// | *@param* `a` — a string
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -85,10 +86,18 @@
           },
           "parameters": [
             {
-              "label": "a: string"
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment about a"
+              }
             },
             {
-              "label": "b: number"
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment for b"
+              }
             }
           ],
           "activeParameter": 0
@@ -117,10 +126,18 @@
           },
           "parameters": [
             {
-              "label": "a: string"
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment about a"
+              }
             },
             {
-              "label": "b: number"
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment for b"
+              }
             }
           ],
           "activeParameter": 1
@@ -145,11 +162,15 @@
           "label": "fn(a: string): any",
           "documentation": {
             "kind": "markdown",
-            "value": "Does something\n\n*@param* `a` — a string\n"
+            "value": "Does something"
           },
           "parameters": [
             {
-              "label": "a: string"
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "a string\n"
+              }
             }
           ],
           "activeParameter": 0
