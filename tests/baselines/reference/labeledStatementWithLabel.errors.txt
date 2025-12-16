@@ -1,20 +1,11 @@
-labeledStatementWithLabel.ts(1,17): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
-labeledStatementWithLabel.ts(2,18): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
-labeledStatementWithLabel.ts(3,23): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
 labeledStatementWithLabel.ts(11,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 labeledStatementWithLabel.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 
 
-==== labeledStatementWithLabel.ts (5 errors) ====
+==== labeledStatementWithLabel.ts (2 errors) ====
     label: function fn() { }
-                    ~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     label: function* gen() { }
-                     ~~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     label: async function gen1() { }
-                          ~~~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
     label: enum E {}
     label: interface I {}
     label: class C { }

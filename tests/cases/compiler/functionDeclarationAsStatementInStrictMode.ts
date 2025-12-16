@@ -1,7 +1,7 @@
+// @strict: true
 // @target: ES2020
 
-// Error cases - function declarations as direct children of statements
-// TypeScript assumes strict mode at all times, so these are always errors
+// Error cases - function declarations as direct children of statements in strict mode
 if (true) function f1() {}
 while (true) function f2() {}
 do function f3() {} while (false);

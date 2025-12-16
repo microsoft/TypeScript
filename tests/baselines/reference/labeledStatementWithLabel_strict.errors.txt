@@ -1,9 +1,9 @@
 labeledStatementWithLabel_strict.ts(2,1): error TS1344: 'A label is not allowed here.
-labeledStatementWithLabel_strict.ts(2,17): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+labeledStatementWithLabel_strict.ts(2,17): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
 labeledStatementWithLabel_strict.ts(3,1): error TS1344: 'A label is not allowed here.
-labeledStatementWithLabel_strict.ts(3,18): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+labeledStatementWithLabel_strict.ts(3,18): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
 labeledStatementWithLabel_strict.ts(4,1): error TS1344: 'A label is not allowed here.
-labeledStatementWithLabel_strict.ts(4,23): error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+labeledStatementWithLabel_strict.ts(4,23): error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
 labeledStatementWithLabel_strict.ts(5,1): error TS1344: 'A label is not allowed here.
 labeledStatementWithLabel_strict.ts(6,1): error TS1344: 'A label is not allowed here.
 labeledStatementWithLabel_strict.ts(7,1): error TS1344: 'A label is not allowed here.
@@ -23,17 +23,17 @@ labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
                     ~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
     label: function* gen() { }
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
                      ~~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
     label: async function gen1() { }
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
                           ~~~~
-!!! error TS1256: Function declarations are not allowed inside statements. Use a block statement to wrap the function declaration.
+!!! error TS1256: In strict mode code, functions can only be declared at top level or inside a block.
     label: enum E {}
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
