@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/conditionalTypeExtendsNewline.ts] ////
+
+=== conditionalTypeExtendsNewline.ts ===
+// Repro from #53589
+
+type Example1 = string 
+>Example1 : true
+
+     extends string ? true : false;
+>true : true
+>false : false
+
+type Example2 = `${string
+>Example2 : "true"
+
+     extends string ? true : false}`;
+>true : true
+>false : false
+
+type Example3 = Array<string
+>Example3 : true[]
+
+     extends string ? true : false>;
+>true : true
+>false : false
+
+type Example4<K extends string
+>Example4 : string
+
+     extends string ? true : false> = string;
+>true : true
+>false : false
+
+type Example5<K = string
+>Example5 : string
+
+     extends string ? true : false> = string;
+>true : true
+>false : false
+
+function example6(a: string
+>example6 : (a: string extends string ? true : false) => void
+>a : true
+
+     extends string ? true : false): void {};
+>true : true
+>false : false
+
+type Example7 = {
+>Example7 : { foo: string extends string ? true : false; }
+
+  foo: string
+>foo : true
+
+     extends string ? true : false;
+>true : true
+>false : false
+
+};
+
+type Example8 = {
+>Example8 : { true: string; }
+
+     [Key in string as Key 
+          extends string ? 'true' : 'false']: string;
+};
+
+class Example9 {
+>Example9 : Example9
+
+  a?: number
+>a : number
+
+  extends = null;
+>extends : any
+}
+
+type Example10Interface = {
+>Example10Interface : { extends: number | undefined; }
+
+  extends: number | undefined;
+>extends : number
+}
+
+class Example10 implements Example10Interface {
+>Example10 : Example10
+
+  a?: number
+>a : number
+
+  extends;
+>extends : any
+}
+
