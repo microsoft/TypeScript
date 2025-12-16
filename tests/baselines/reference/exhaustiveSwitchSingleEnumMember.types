@@ -249,7 +249,6 @@ function testIncomplete(x: MultiMemberEnum) {
 >  : ^^^^^^^^^^^^^^^^^
 }
 
-// Note: Discriminated union narrowing for single-member types is a more complex case
-// that involves property access narrowing, not just direct value narrowing.
-// This test focuses on direct value narrowing.
+// Note: Discriminated union narrowing for single-member types requires
+// narrowing through property access, which is more complex and not yet implemented.
 

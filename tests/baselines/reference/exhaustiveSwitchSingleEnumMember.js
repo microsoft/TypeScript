@@ -81,9 +81,8 @@ function testIncomplete(x: MultiMemberEnum) {
   const n: never = x; // Error expected
 }
 
-// Note: Discriminated union narrowing for single-member types is a more complex case
-// that involves property access narrowing, not just direct value narrowing.
-// This test focuses on direct value narrowing.
+// Note: Discriminated union narrowing for single-member types requires
+// narrowing through property access, which is more complex and not yet implemented.
 
 
 //// [exhaustiveSwitchSingleEnumMember.js]
@@ -158,6 +157,5 @@ function testIncomplete(x) {
     // Should NOT narrow to never - B is not handled
     var n = x; // Error expected
 }
-// Note: Discriminated union narrowing for single-member types is a more complex case
-// that involves property access narrowing, not just direct value narrowing.
-// This test focuses on direct value narrowing.
+// Note: Discriminated union narrowing for single-member types requires
+// narrowing through property access, which is more complex and not yet implemented.
