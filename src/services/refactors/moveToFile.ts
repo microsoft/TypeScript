@@ -1148,6 +1148,9 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
             if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration).path === sourceFile.path) {
                 existingLocals.add(symbol);
             }
+            else if (!symbol.valueDeclaration && symbol.parent?.valueDeclaration && getSourceFileOfNode(symbol.parent.valueDeclaration).path === sourceFile.path) {
+                existingLocals.add(symbol);
+            }
         });
     }
     return existingLocals;
