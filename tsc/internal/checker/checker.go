@@ -27,6 +27,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 // CheckMode
@@ -161,23 +162,23 @@ type UnionOfUnionKey struct {
 	id1 TypeId
 	id2 TypeId
 	r   UnionReduction
-	a   string
+	a   CacheHashKey
 }
 
 // CachedSignatureKey
 
 type CachedSignatureKey struct {
 	sig *Signature
-	key string // Type list key or one of the strings below
+	key CacheHashKey // Type list key or one of the special keys below
 }
 
-const (
-	SignatureKeyErased         string = "-"
-	SignatureKeyCanonical      string = "*"
-	SignatureKeyBase           string = "#"
-	SignatureKeyInner          string = "<"
-	SignatureKeyOuter          string = ">"
-	SignatureKeyImplementation string = "+"
+var (
+	SignatureKeyErased         = CacheHashKey(xxh3.HashString128("-"))
+	SignatureKeyCanonical      = CacheHashKey(xxh3.HashString128("*"))
+	SignatureKeyBase           = CacheHashKey(xxh3.HashString128("#"))
+	SignatureKeyInner          = CacheHashKey(xxh3.HashString128("<"))
+	SignatureKeyOuter          = CacheHashKey(xxh3.HashString128(">"))
+	SignatureKeyImplementation = CacheHashKey(xxh3.HashString128("+"))
 )
 
 // StringMappingKey
@@ -234,7 +235,7 @@ type IterationTypesKey struct {
 
 type FlowLoopKey struct {
 	flowNode *ast.FlowNode
-	refKey   string
+	refKey   CacheHashKey
 }
 
 type FlowLoopInfo struct {
@@ -595,13 +596,13 @@ type Checker struct {
 	numberLiteralTypes                          map[jsnum.Number]*Type
 	bigintLiteralTypes                          map[jsnum.PseudoBigInt]*Type
 	enumLiteralTypes                            map[EnumLiteralKey]*Type
-	indexedAccessTypes                          map[string]*Type
-	templateLiteralTypes                        map[string]*Type
+	indexedAccessTypes                          map[CacheHashKey]*Type
+	templateLiteralTypes                        map[CacheHashKey]*Type
 	stringMappingTypes                          map[StringMappingKey]*Type
 	uniqueESSymbolTypes                         map[*ast.Symbol]*Type
 	thisExpandoKinds                            map[*ast.Symbol]thisAssignmentDeclarationKind
 	thisExpandoLocations                        map[*ast.Symbol]*ast.Node
-	subtypeReductionCache                       map[string][]*Type
+	subtypeReductionCache                       map[CacheHashKey][]*Type
 	cachedTypes                                 map[CachedTypeKey]*Type
 	cachedSignatures                            map[CachedSignatureKey]*Signature
 	undefinedProperties                         map[string]*ast.Symbol
@@ -619,14 +620,14 @@ type Checker struct {
 	requireSymbol                               *ast.Symbol
 	unknownSymbol                               *ast.Symbol
 	unresolvedSymbols                           map[string]*ast.Symbol
-	errorTypes                                  map[string]*Type
+	errorTypes                                  map[CacheHashKey]*Type
 	globalThisSymbol                            *ast.Symbol
 	resolveName                                 func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
 	resolveNameForSymbolSuggestion              func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
-	tupleTypes                                  map[string]*Type
-	unionTypes                                  map[string]*Type
+	tupleTypes                                  map[CacheHashKey]*Type
+	unionTypes                                  map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
-	intersectionTypes                           map[string]*Type
+	intersectionTypes                           map[CacheHashKey]*Type
 	diagnostics                                 ast.DiagnosticsCollection
 	suggestionDiagnostics                       ast.DiagnosticsCollection
 	symbolPool                                  core.Pool[ast.Symbol]
@@ -853,7 +854,7 @@ type Checker struct {
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
-	activeTypeMappersCaches                     []map[string]*Type
+	activeTypeMappersCaches                     []map[CacheHashKey]*Type
 	ambientModulesOnce                          sync.Once
 	ambientModules                              []*ast.Symbol
 	withinUnreachableCode                       bool
@@ -896,13 +897,13 @@ func NewChecker(program Program) (*Checker, *sync.Mutex) {
 	c.numberLiteralTypes = make(map[jsnum.Number]*Type)
 	c.bigintLiteralTypes = make(map[jsnum.PseudoBigInt]*Type)
 	c.enumLiteralTypes = make(map[EnumLiteralKey]*Type)
-	c.indexedAccessTypes = make(map[string]*Type)
-	c.templateLiteralTypes = make(map[string]*Type)
+	c.indexedAccessTypes = make(map[CacheHashKey]*Type)
+	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
 	c.stringMappingTypes = make(map[StringMappingKey]*Type)
 	c.uniqueESSymbolTypes = make(map[*ast.Symbol]*Type)
 	c.thisExpandoKinds = make(map[*ast.Symbol]thisAssignmentDeclarationKind)
 	c.thisExpandoLocations = make(map[*ast.Symbol]*ast.Node)
-	c.subtypeReductionCache = make(map[string][]*Type)
+	c.subtypeReductionCache = make(map[CacheHashKey][]*Type)
 	c.cachedTypes = make(map[CachedTypeKey]*Type)
 	c.cachedSignatures = make(map[CachedSignatureKey]*Signature)
 	c.undefinedProperties = make(map[string]*ast.Symbol)
@@ -919,16 +920,16 @@ func NewChecker(program Program) (*Checker, *sync.Mutex) {
 	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, "require")
 	c.unknownSymbol = c.newSymbol(ast.SymbolFlagsProperty, "unknown")
 	c.unresolvedSymbols = make(map[string]*ast.Symbol)
-	c.errorTypes = make(map[string]*Type)
+	c.errorTypes = make(map[CacheHashKey]*Type)
 	c.globalThisSymbol = c.newSymbolEx(ast.SymbolFlagsModule, "globalThis", ast.CheckFlagsReadonly)
 	c.globalThisSymbol.Exports = c.globals
 	c.globals[c.globalThisSymbol.Name] = c.globalThisSymbol
 	c.resolveName = c.createNameResolver().Resolve
 	c.resolveNameForSymbolSuggestion = c.createNameResolverForSuggestion().Resolve
-	c.tupleTypes = make(map[string]*Type)
-	c.unionTypes = make(map[string]*Type)
+	c.tupleTypes = make(map[CacheHashKey]*Type)
+	c.unionTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
-	c.intersectionTypes = make(map[string]*Type)
+	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
@@ -985,7 +986,7 @@ func NewChecker(program Program) (*Checker, *sync.Mutex) {
 	c.unknownEmptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.unknownUnionType = c.createUnknownUnionType()
 	c.emptyGenericType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
-	c.emptyGenericType.AsObjectType().instantiations = make(map[string]*Type)
+	c.emptyGenericType.AsObjectType().instantiations = make(map[CacheHashKey]*Type)
 	c.anyFunctionType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.anyFunctionType.objectFlags |= ObjectFlagsNonInferrableType
 	c.noConstraintType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
@@ -16835,7 +16836,7 @@ func (c *Checker) getDeclaredTypeOfClassOrInterface(symbol *ast.Symbol) *Type {
 			d.allTypeParameters = append(typeParameters, d.thisType)
 			d.outerTypeParameterCount = len(outerTypeParameters)
 			d.resolvedTypeArguments = d.TypeParameters()
-			d.instantiations = make(map[string]*Type)
+			d.instantiations = make(map[CacheHashKey]*Type)
 			d.instantiations[getTypeListKey(d.resolvedTypeArguments)] = t
 			d.target = t
 		}
@@ -16870,85 +16871,87 @@ func (c *Checker) isThislessInterface(symbol *ast.Symbol) bool {
 	return true
 }
 
-type KeyBuilder struct {
-	strings.Builder
+func hashWrite32[T ~int32 | ~uint32](h *xxh3.Hasher, value T) {
+	v := uint32(value)
+	_, _ = h.Write([]byte{
+		byte(v),
+		byte(v >> 8),
+		byte(v >> 16),
+		byte(v >> 24),
+	})
 }
 
-var base64chars = []byte{
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-	'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-	'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '$', '%',
+func hashWrite64[T ~int | ~uint | ~int64 | ~uint64](h *xxh3.Hasher, value T) {
+	v := uint64(value)
+	_, _ = h.Write([]byte{
+		byte(v),
+		byte(v >> 8),
+		byte(v >> 16),
+		byte(v >> 24),
+		byte(v >> 32),
+		byte(v >> 40),
+		byte(v >> 48),
+		byte(v >> 56),
+	})
 }
 
-func (b *KeyBuilder) WriteUint64(value uint64) {
-	for value != 0 {
-		b.WriteByte(base64chars[value&0x3F])
-		value >>= 6
+type CacheHashKey xxh3.Uint128
+
+func (k CacheHashKey) IsZero() bool {
+	return xxh3.Uint128(k) == xxh3.Uint128{}
+}
+
+type keyBuilder struct {
+	h xxh3.Hasher
+}
+
+func (b *keyBuilder) hash() CacheHashKey {
+	return CacheHashKey(b.h.Sum128())
+}
+
+func (b *keyBuilder) writeByte(c byte) {
+	_, _ = b.h.Write([]byte{c})
+}
+
+func (b *keyBuilder) writeString(s string) {
+	_, _ = b.h.WriteString(s)
+}
+
+func (b *keyBuilder) writeInt(value int) {
+	hashWrite64(&b.h, value)
+}
+
+func (b *keyBuilder) writeSymbol(s *ast.Symbol) {
+	hashWrite64(&b.h, ast.GetSymbolId(s))
+}
+
+func (b *keyBuilder) writeType(t *Type) {
+	hashWrite32(&b.h, t.id)
+}
+
+func (b *keyBuilder) writeTypes(types []*Type) {
+	b.writeInt(len(types))
+	for _, t := range types {
+		b.writeType(t)
 	}
 }
 
-func (b *KeyBuilder) WriteInt(value int) {
-	b.WriteUint64(uint64(int64(value)))
-}
-
-func (b *KeyBuilder) WriteSymbolId(id ast.SymbolId) {
-	b.WriteUint64(uint64(id))
-}
-
-func (b *KeyBuilder) WriteSymbol(s *ast.Symbol) {
-	b.WriteSymbolId(ast.GetSymbolId(s))
-}
-
-func (b *KeyBuilder) WriteTypeId(id TypeId) {
-	b.WriteUint64(uint64(id))
-}
-
-func (b *KeyBuilder) WriteType(t *Type) {
-	b.WriteTypeId(t.id)
-}
-
-func (b *KeyBuilder) WriteTypes(types []*Type) {
-	i := 0
-	var tail bool
-	for i < len(types) {
-		startId := types[i].id
-		count := 1
-		for i+count < len(types) && types[i+count].id == startId+TypeId(count) {
-			count++
-		}
-		if tail {
-			b.WriteByte(',')
-		}
-		b.WriteTypeId(startId)
-		if count > 1 {
-			b.WriteByte(':')
-			b.WriteInt(count)
-		}
-		i += count
-		tail = true
-	}
-}
-
-func (b *KeyBuilder) WriteAlias(alias *TypeAlias) {
+func (b *keyBuilder) writeAlias(alias *TypeAlias) {
 	if alias != nil {
-		b.WriteByte('@')
-		b.WriteSymbol(alias.symbol)
-		if len(alias.typeArguments) != 0 {
-			b.WriteByte(':')
-			b.WriteTypes(alias.typeArguments)
-		}
+		b.writeByte(1)
+		b.writeSymbol(alias.symbol)
+		b.writeTypes(alias.typeArguments)
+	} else {
+		b.writeByte(0)
 	}
 }
 
-func (b *KeyBuilder) WriteGenericTypeReferences(source *Type, target *Type, ignoreConstraints bool) bool {
+func (b *keyBuilder) writeGenericTypeReferences(source *Type, target *Type, ignoreConstraints bool) bool {
 	var constrained bool
 	typeParameters := make([]*Type, 0, 8)
 	var writeTypeReference func(*Type, int)
-	// writeTypeReference(A<T, number, U>) writes "111=0-12=1"
-	// where A.id=111 and number.id=12
 	writeTypeReference = func(ref *Type, depth int) {
-		b.WriteType(ref.Target())
+		b.writeType(ref.Target())
 		for _, t := range ref.AsTypeReference().resolvedTypeArguments {
 			if t.flags&TypeFlagsTypeParameter != 0 {
 				if ignoreConstraints || t.checker.getConstraintOfTypeParameter(t) == nil {
@@ -16957,193 +16960,179 @@ func (b *KeyBuilder) WriteGenericTypeReferences(source *Type, target *Type, igno
 						index = len(typeParameters)
 						typeParameters = append(typeParameters, t)
 					}
-					b.WriteByte('=')
-					b.WriteInt(index)
+					b.writeByte('=')
+					b.writeInt(index)
 					continue
 				}
 				constrained = true
 			} else if depth < 4 && isTypeReferenceWithGenericArguments(t) {
-				b.WriteByte('<')
+				b.writeByte('<')
 				writeTypeReference(t, depth+1)
-				b.WriteByte('>')
+				b.writeByte('>')
 				continue
 			}
-			b.WriteByte('-')
-			b.WriteType(t)
+			b.writeByte('-')
+			b.writeType(t)
 		}
 	}
 	writeTypeReference(source, 0)
-	b.WriteByte(',')
+	b.writeByte(',')
 	writeTypeReference(target, 0)
 	return constrained
 }
 
-func (b *KeyBuilder) WriteNodeId(id ast.NodeId) {
-	b.WriteUint64(uint64(id))
+func (b *keyBuilder) writeNodeId(id ast.NodeId) {
+	hashWrite64(&b.h, id)
 }
 
-func (b *KeyBuilder) WriteNode(node *ast.Node) {
+func (b *keyBuilder) writeNode(node *ast.Node) {
 	if node != nil {
-		b.WriteNodeId(ast.GetNodeId(node))
+		b.writeNodeId(ast.GetNodeId(node))
 	}
 }
 
-func getTypeListKey(types []*Type) string {
-	var b KeyBuilder
-	b.WriteTypes(types)
-	return b.String()
+func getTypeListKey(types []*Type) CacheHashKey {
+	var b keyBuilder
+	b.writeTypes(types)
+	return b.hash()
 }
 
-func getAliasKey(alias *TypeAlias) string {
-	var b KeyBuilder
-	b.WriteAlias(alias)
-	return b.String()
+func getAliasKey(alias *TypeAlias) CacheHashKey {
+	var b keyBuilder
+	b.writeAlias(alias)
+	return b.hash()
 }
 
-func getUnionKey(types []*Type, origin *Type, alias *TypeAlias) string {
-	var b KeyBuilder
+func getUnionKey(types []*Type, origin *Type, alias *TypeAlias) CacheHashKey {
+	var b keyBuilder
 	switch {
 	case origin == nil:
-		b.WriteTypes(types)
+		b.writeTypes(types)
 	case origin.flags&TypeFlagsUnion != 0:
-		b.WriteByte('|')
-		b.WriteTypes(origin.Types())
+		b.writeByte('|')
+		b.writeTypes(origin.Types())
 	case origin.flags&TypeFlagsIntersection != 0:
-		b.WriteByte('&')
-		b.WriteTypes(origin.Types())
+		b.writeByte('&')
+		b.writeTypes(origin.Types())
 	case origin.flags&TypeFlagsIndex != 0:
 		// origin type id alone is insufficient, as `keyof x` may resolve to multiple WIP values while `x` is still resolving
-		b.WriteByte('#')
-		b.WriteType(origin)
-		b.WriteByte('|')
-		b.WriteTypes(types)
+		b.writeByte('#')
+		b.writeType(origin)
+		b.writeByte('|')
+		b.writeTypes(types)
 	default:
 		panic("Unhandled case in getUnionKey")
 	}
-	b.WriteAlias(alias)
-	return b.String()
+	b.writeAlias(alias)
+	return b.hash()
 }
 
-func getIntersectionKey(types []*Type, flags IntersectionFlags, alias *TypeAlias) string {
-	var b KeyBuilder
-	b.WriteTypes(types)
+func getIntersectionKey(types []*Type, flags IntersectionFlags, alias *TypeAlias) CacheHashKey {
+	var b keyBuilder
+	b.writeTypes(types)
 	if flags&IntersectionFlagsNoConstraintReduction == 0 {
-		b.WriteAlias(alias)
+		b.writeAlias(alias)
 	} else {
-		b.WriteByte('*')
+		b.writeByte('*')
 	}
-	return b.String()
+	return b.hash()
 }
 
-func getTupleKey(elementInfos []TupleElementInfo, readonly bool) string {
-	var b KeyBuilder
+func getTupleKey(elementInfos []TupleElementInfo, readonly bool) CacheHashKey {
+	var b keyBuilder
 	for _, e := range elementInfos {
 		switch {
 		case e.flags&ElementFlagsRequired != 0:
-			b.WriteByte('#')
+			b.writeByte('#')
 		case e.flags&ElementFlagsOptional != 0:
-			b.WriteByte('?')
+			b.writeByte('?')
 		case e.flags&ElementFlagsRest != 0:
-			b.WriteByte('.')
+			b.writeByte('.')
 		default:
-			b.WriteByte('*')
+			b.writeByte('*')
 		}
 		if e.labeledDeclaration != nil {
-			b.WriteNode(e.labeledDeclaration)
+			b.writeNode(e.labeledDeclaration)
 		}
 	}
 	if readonly {
-		b.WriteByte('!')
+		b.writeByte('!')
 	}
-	return b.String()
+	return b.hash()
 }
 
-func getTypeAliasInstantiationKey(typeArguments []*Type, alias *TypeAlias) string {
+func getTypeAliasInstantiationKey(typeArguments []*Type, alias *TypeAlias) CacheHashKey {
 	return getTypeInstantiationKey(typeArguments, alias, false)
 }
 
-func getTypeInstantiationKey(typeArguments []*Type, alias *TypeAlias, singleSignature bool) string {
-	var b KeyBuilder
-	b.WriteTypes(typeArguments)
-	b.WriteAlias(alias)
+func getTypeInstantiationKey(typeArguments []*Type, alias *TypeAlias, singleSignature bool) CacheHashKey {
+	var b keyBuilder
+	b.writeTypes(typeArguments)
+	b.writeAlias(alias)
 	if singleSignature {
-		b.WriteByte('!')
+		b.writeByte('!')
 	}
-	return b.String()
+	return b.hash()
 }
 
-func getIndexedAccessKey(objectType *Type, indexType *Type, accessFlags AccessFlags, alias *TypeAlias) string {
-	var b KeyBuilder
-	b.WriteType(objectType)
-	b.WriteByte(',')
-	b.WriteType(indexType)
-	b.WriteByte(',')
-	b.WriteUint64(uint64(accessFlags))
-	b.WriteAlias(alias)
-	return b.String()
+func getIndexedAccessKey(objectType *Type, indexType *Type, accessFlags AccessFlags, alias *TypeAlias) CacheHashKey {
+	var b keyBuilder
+	b.writeType(objectType)
+	b.writeType(indexType)
+	hashWrite32(&b.h, accessFlags)
+	b.writeAlias(alias)
+	return b.hash()
 }
 
-func getTemplateTypeKey(texts []string, types []*Type) string {
-	var b KeyBuilder
-	b.WriteTypes(types)
-	b.WriteByte('|')
-	for i, s := range texts {
-		if i != 0 {
-			b.WriteByte(',')
-		}
-		b.WriteInt(len(s))
-	}
-	b.WriteByte('|')
+func getTemplateTypeKey(texts []string, types []*Type) CacheHashKey {
+	var b keyBuilder
+	b.writeTypes(types)
+	b.writeByte('|')
 	for _, s := range texts {
-		b.WriteString(s)
+		b.writeInt(len(s))
 	}
-	return b.String()
+	b.writeByte('|')
+	for _, s := range texts {
+		b.writeString(s)
+	}
+	return b.hash()
 }
 
-func getConditionalTypeKey(typeArguments []*Type, alias *TypeAlias, forConstraint bool) string {
-	var b KeyBuilder
-	b.WriteTypes(typeArguments)
-	b.WriteAlias(alias)
+func getConditionalTypeKey(typeArguments []*Type, alias *TypeAlias, forConstraint bool) CacheHashKey {
+	var b keyBuilder
+	b.writeTypes(typeArguments)
+	b.writeAlias(alias)
 	if forConstraint {
-		b.WriteByte('!')
+		b.writeByte('!')
 	}
-	return b.String()
+	return b.hash()
 }
 
-func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) string {
+func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (CacheHashKey, bool) {
 	if isIdentity && source.id > target.id {
 		source, target = target, source
 	}
-	var b KeyBuilder
+	var b keyBuilder
 	var constrained bool
 	if isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) {
-		constrained = b.WriteGenericTypeReferences(source, target, ignoreConstraints)
+		b.writeByte('g')
+		constrained = b.writeGenericTypeReferences(source, target, ignoreConstraints)
 	} else {
-		b.WriteType(source)
-		b.WriteByte(',')
-		b.WriteType(target)
+		b.writeByte('s')
+		b.writeType(source)
+		b.writeType(target)
 	}
-	if intersectionState != IntersectionStateNone {
-		b.WriteByte(':')
-		b.WriteUint64(uint64(intersectionState))
-	}
-	if constrained {
-		// We mark keys with type references that reference constrained type parameters such that we know
-		// to obtain and look for a "broadest equivalent key" in the cache.
-		b.WriteByte('*')
-	}
-	return b.String()
+	hashWrite32(&b.h, intersectionState)
+	return b.hash(), constrained
 }
 
-func getNodeListKey(nodes []*ast.Node) string {
-	var b KeyBuilder
-	for i, n := range nodes {
-		if i > 0 {
-			b.WriteByte(',')
-		}
-		b.WriteNode(n)
+func getNodeListKey(nodes []*ast.Node) CacheHashKey {
+	var b keyBuilder
+	b.writeInt(len(nodes))
+	for _, n := range nodes {
+		b.writeNode(n)
 	}
-	return b.String()
+	return b.hash()
 }
 
 func isTypeReferenceWithGenericArguments(t *Type) bool {
@@ -21517,10 +21506,10 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if index == -1 {
 		c.pushActiveMapper(m)
 	}
-	var b KeyBuilder
-	b.WriteType(t)
-	b.WriteAlias(alias)
-	key := b.String()
+	var b keyBuilder
+	b.writeType(t)
+	b.writeAlias(alias)
+	key := b.hash()
 	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
 	if cachedType, ok := cache[key]; ok {
 		return cachedType
@@ -21546,10 +21535,10 @@ func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
 		// The cap may contain an empty map from popActiveMapper; reuse it.
 		c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex+1]
 		if c.activeTypeMappersCaches[lastIndex] == nil {
-			c.activeTypeMappersCaches[lastIndex] = make(map[string]*Type, 1)
+			c.activeTypeMappersCaches[lastIndex] = make(map[CacheHashKey]*Type, 1)
 		}
 	} else {
-		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[string]*Type, 1))
+		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[CacheHashKey]*Type, 1))
 	}
 }
 
@@ -21760,7 +21749,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	data := target.AsObjectType()
 	key := getTypeInstantiationKey(typeArguments, newAlias, t.objectFlags&ObjectFlagsSingleSignatureType != 0)
 	if data.instantiations == nil {
-		data.instantiations = make(map[string]*Type)
+		data.instantiations = make(map[CacheHashKey]*Type)
 		data.instantiations[getTypeInstantiationKey(typeParameters, target.alias, false)] = target
 	}
 	result := data.instantiations[key]
@@ -22381,12 +22370,12 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 		if symbol != nil {
 			uniqueType := c.uniqueESSymbolTypes[symbol]
 			if uniqueType == nil {
-				var b KeyBuilder
+				var b strings.Builder
 				b.WriteString(ast.InternalSymbolNamePrefix)
 				b.WriteByte('@')
 				b.WriteString(symbol.Name)
 				b.WriteByte('@')
-				b.WriteSymbol(symbol)
+				b.WriteString(strconv.FormatUint(uint64(ast.GetSymbolId(symbol)), 10))
 				uniqueType = c.newUniqueESSymbolType(symbol, b.String())
 				c.uniqueESSymbolTypes[symbol] = uniqueType
 			}
@@ -23176,7 +23165,7 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *ast.Symbol) *Type {
 				// Initialize the instantiation cache for generic type aliases. The declared type corresponds to
 				// an instantiation of the type alias with the type parameters supplied as type arguments.
 				links.typeParameters = typeParameters
-				links.instantiations = make(map[string]*Type)
+				links.instantiations = make(map[CacheHashKey]*Type)
 				links.instantiations[getTypeListKey(typeParameters)] = t
 			}
 			if t == c.intrinsicMarkerType && symbol.Name == "BuiltinIteratorReturn" {
@@ -23611,7 +23600,7 @@ func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 		}
 		links.resolvedType = c.getConditionalType(root, nil /*mapper*/, false /*forConstraint*/, nil)
 		if outerTypeParameters != nil {
-			root.instantiations = make(map[string]*Type)
+			root.instantiations = make(map[CacheHashKey]*Type)
 			root.instantiations[getTypeListKey(outerTypeParameters)] = links.resolvedType
 		}
 	}
@@ -24131,7 +24120,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 	d.thisType.AsTypeParameter().isThisType = true
 	d.thisType.AsTypeParameter().constraint = t
 	d.allTypeParameters = append(typeParameters, d.thisType)
-	d.instantiations = make(map[string]*Type)
+	d.instantiations = make(map[CacheHashKey]*Type)
 	d.instantiations[getTypeListKey(d.TypeParameters())] = t
 	d.target = t
 	d.resolvedTypeArguments = d.TypeParameters()
@@ -31069,7 +31058,7 @@ func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
 			declarationList := core.MapNonNil(infos, func(info *IndexInfo) *ast.Node { return info.declaration })
 			nodeListId := getNodeListKey(declarationList)
 			if indexSymbolLinks.filteredIndexSymbolCache == nil {
-				indexSymbolLinks.filteredIndexSymbolCache = make(map[string]*ast.Symbol)
+				indexSymbolLinks.filteredIndexSymbolCache = make(map[CacheHashKey]*ast.Symbol)
 			}
 			if result, ok := indexSymbolLinks.filteredIndexSymbolCache[nodeListId]; ok {
 				return result
