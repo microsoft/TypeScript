@@ -802,3 +802,33 @@ type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
 >   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^ ^^^ ^^^
 
+// repro #47607#issuecomment-1331744280
+
+type DivElement = { type: 'div' }
+>DivElement : DivElement
+>           : ^^^^^^^^^^
+>type : "div"
+>     : ^^^^^
+
+interface ElementMap { div: DivElement }
+>div : DivElement
+>    : ^^^^^^^^^^
+
+declare function foo<T extends keyof ElementMap>(arg: T): ElementMap[T];
+>foo : { <T extends keyof ElementMap>(arg: T): ElementMap[T]; <T_1 extends DivElement>(arg: T_1): T_1; }
+>    : ^^^ ^^^^^^^^^                ^^   ^^ ^^^             ^^^^^^^^^^^^^^^          ^^   ^^   ^^^   ^^^
+>arg : T
+>    : ^
+
+declare function foo<T extends DivElement>(arg: T): T;
+>foo : { <T_1 extends keyof ElementMap>(arg: T_1): ElementMap[T_1]; <T extends DivElement>(arg: T): T; }
+>    : ^^^^^^^^^^^^^^^                ^^   ^^   ^^^               ^^^ ^^^^^^^^^          ^^   ^^ ^^^ ^^^
+>arg : T
+>    : ^
+
+type DivFromMap = typeof foo<"div">;
+>DivFromMap : typeof foo<"div">
+>           :                  
+>foo : { <T extends keyof ElementMap>(arg: T): ElementMap[T]; <T extends DivElement>(arg: T): T; }
+>    : ^^^ ^^^^^^^^^                ^^   ^^ ^^^             ^^^ ^^^^^^^^^          ^^   ^^ ^^^ ^^^
+
