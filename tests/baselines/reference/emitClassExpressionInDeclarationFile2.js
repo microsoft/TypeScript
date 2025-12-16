@@ -50,6 +50,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    var d = Object.getOwnPropertyDescriptor(f, "name");
+    if (d && d.writable !== false) return f;
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a;

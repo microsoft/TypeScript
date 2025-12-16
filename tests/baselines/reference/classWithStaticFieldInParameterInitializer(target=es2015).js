@@ -7,6 +7,8 @@
 //// [classWithStaticFieldInParameterInitializer.js]
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    var d = Object.getOwnPropertyDescriptor(f, "name");
+    if (d && d.writable !== false) return f;
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 // https://github.com/microsoft/TypeScript/issues/36295

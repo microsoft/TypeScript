@@ -200,6 +200,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    var d = Object.getOwnPropertyDescriptor(f, "name");
+    if (d && d.writable !== false) return f;
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
