@@ -12,7 +12,7 @@ namespace A.B {
 >  : ^^^^^^
 }
 
-module A{ 
+namespace A{ 
 >A : typeof A
 >  : ^^^^^^^^
 

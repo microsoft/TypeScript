@@ -1,4 +1,4 @@
-forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+forgot.js(23,1): error TS2322: Type '(keyframes: Array<any>) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
   Type 'void' is not assignable to type 'Animation'.
 
 
@@ -27,6 +27,6 @@ forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignab
      */
     Element.prototype.animate = function(keyframes) {};
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+!!! error TS2322: Type '(keyframes: Array<any>) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
 !!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
     
