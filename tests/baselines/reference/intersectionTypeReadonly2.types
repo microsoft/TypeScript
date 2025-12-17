@@ -1,0 +1,115 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeReadonly2.ts] ////
+
+=== intersectionTypeReadonly2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61344
+
+type A = { k: number };
+>A : A
+>  : ^
+>k : number
+>  : ^^^^^^
+
+type B = { readonly k: number };
+>B : B
+>  : ^
+>k : number
+>  : ^^^^^^
+
+(({}) as A & B).k = 0; // ok
+>(({}) as A & B).k = 0 : 0
+>                      : ^
+>(({}) as A & B).k : number
+>                  : ^^^^^^
+>(({}) as A & B) : A & B
+>                : ^^^^^
+>({}) as A & B : A & B
+>              : ^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>k : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+(({}) as B & A).k = 0; // ok
+>(({}) as B & A).k = 0 : 0
+>                      : ^
+>(({}) as B & A).k : number
+>                  : ^^^^^^
+>(({}) as B & A) : B & A
+>                : ^^^^^
+>({}) as B & A : B & A
+>              : ^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>k : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+type MakeWritable<T> = { -readonly [K in keyof T]: T[K] };
+>MakeWritable : MakeWritable<T>
+>             : ^^^^^^^^^^^^^^^
+
+type C = MakeWritable<B>;
+>C : MakeWritable<B>
+>  : ^^^^^^^^^^^^^^^
+
+(({}) as C).k = 0; // ok
+>(({}) as C).k = 0 : 0
+>                  : ^
+>(({}) as C).k : number
+>              : ^^^^^^
+>(({}) as C) : MakeWritable<B>
+>            : ^^^^^^^^^^^^^^^
+>({}) as C : MakeWritable<B>
+>          : ^^^^^^^^^^^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>k : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+(({}) as C & B).k = 0; // ok
+>(({}) as C & B).k = 0 : 0
+>                      : ^
+>(({}) as C & B).k : number
+>                  : ^^^^^^
+>(({}) as C & B) : MakeWritable<B> & B
+>                : ^^^^^^^^^^^^^^^^^^^
+>({}) as C & B : MakeWritable<B> & B
+>              : ^^^^^^^^^^^^^^^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>k : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+(({}) as B & C).k = 0; // ok
+>(({}) as B & C).k = 0 : 0
+>                      : ^
+>(({}) as B & C).k : number
+>                  : ^^^^^^
+>(({}) as B & C) : B & MakeWritable<B>
+>                : ^^^^^^^^^^^^^^^^^^^
+>({}) as B & C : B & MakeWritable<B>
+>              : ^^^^^^^^^^^^^^^^^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>k : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
