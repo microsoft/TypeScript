@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/indexTypeOnHomomorphicMappedTypesWithReadonly1.ts] ////
+
+=== indexTypeOnHomomorphicMappedTypesWithReadonly1.ts ===
+type T1 = Readonly<string[]>;
+>T1 : Symbol(T1, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 0, 0))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+type R1 = keyof T1; // keyof readonly string[]
+>R1 : Symbol(R1, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 0, 29))
+>T1 : Symbol(T1, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 0, 0))
+
+type KeyOfReadonly<T> = keyof Readonly<T>;
+>KeyOfReadonly : Symbol(KeyOfReadonly, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 1, 19))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 2, 19))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 2, 19))
+
+type R2 = KeyOfReadonly<string[]>; // keyof readonly string[]
+>R2 : Symbol(R2, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 2, 42))
+>KeyOfReadonly : Symbol(KeyOfReadonly, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 1, 19))
+
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Symbol(Identity, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 3, 34))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 14))
+>K : Symbol(K, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 22))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 14))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 14))
+>K : Symbol(K, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 22))
+
+type KeyOfReadonly2<T> = keyof Identity<Readonly<T>>; 
+>KeyOfReadonly2 : Symbol(KeyOfReadonly2, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 44))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 7, 20))
+>Identity : Symbol(Identity, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 3, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 7, 20))
+
+type R3 = KeyOfReadonly2<string[]>; // keyof readonly string[]
+>R3 : Symbol(R3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 7, 53))
+>KeyOfReadonly2 : Symbol(KeyOfReadonly2, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 5, 44))
+
+type KeyOfReadonly3<T> = keyof Readonly<Identity<T>>; 
+>KeyOfReadonly3 : Symbol(KeyOfReadonly3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 8, 35))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 9, 20))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Identity : Symbol(Identity, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 3, 34))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 9, 20))
+
+type R4 = KeyOfReadonly3<string[]>; // keyof readonly string[]
+>R4 : Symbol(R4, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 9, 53))
+>KeyOfReadonly3 : Symbol(KeyOfReadonly3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 8, 35))
+
+type Writable<T> = { -readonly [K in keyof T]: T[K] };
+>Writable : Symbol(Writable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 10, 35))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 14))
+>K : Symbol(K, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 32))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 14))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 14))
+>K : Symbol(K, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 32))
+
+type KeyOfWritable<T> = keyof Writable<T>;
+>KeyOfWritable : Symbol(KeyOfWritable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 54))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 14, 19))
+>Writable : Symbol(Writable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 10, 35))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 14, 19))
+
+type R5 = KeyOfWritable<readonly string[]>; // keyof string[]
+>R5 : Symbol(R5, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 14, 42))
+>KeyOfWritable : Symbol(KeyOfWritable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 12, 54))
+
+type KeyOfWritable2<T> = keyof Writable<Readonly<T>>;
+>KeyOfWritable2 : Symbol(KeyOfWritable2, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 15, 43))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 16, 20))
+>Writable : Symbol(Writable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 10, 35))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 16, 20))
+
+type R6 = KeyOfWritable2<readonly string[]>; // keyof string[]
+>R6 : Symbol(R6, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 16, 53))
+>KeyOfWritable2 : Symbol(KeyOfWritable2, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 15, 43))
+
+type KeyOfWritable3<T> = keyof Identity<Writable<Readonly<T>>>;
+>KeyOfWritable3 : Symbol(KeyOfWritable3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 17, 44))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 18, 20))
+>Identity : Symbol(Identity, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 3, 34))
+>Writable : Symbol(Writable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 10, 35))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 18, 20))
+
+type R7 = KeyOfWritable3<string[]>; // keyof string[]
+>R7 : Symbol(R7, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 18, 63))
+>KeyOfWritable3 : Symbol(KeyOfWritable3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 17, 44))
+
+type R8 = KeyOfWritable3<readonly string[]>; // keyof string[]
+>R8 : Symbol(R8, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 19, 35))
+>KeyOfWritable3 : Symbol(KeyOfWritable3, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 17, 44))
+
+type KeyOfReadonly4<T> = keyof Identity<Readonly<Writable<T>>>;
+>KeyOfReadonly4 : Symbol(KeyOfReadonly4, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 20, 44))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 22, 20))
+>Identity : Symbol(Identity, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 3, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Writable : Symbol(Writable, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 10, 35))
+>T : Symbol(T, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 22, 20))
+
+type R9 = KeyOfReadonly4<string[]>; // keyof readonly string[]
+>R9 : Symbol(R9, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 22, 63))
+>KeyOfReadonly4 : Symbol(KeyOfReadonly4, Decl(indexTypeOnHomomorphicMappedTypesWithReadonly1.ts, 20, 44))
+
