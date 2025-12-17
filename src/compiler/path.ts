@@ -511,8 +511,14 @@ export function getPathComponents(path: string, currentDirectory = "") {
  */
 export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[], length?: number): T {
     if (pathComponents.length === 0) return "" as T;
+    const firstComponent = pathComponents[0];
 
-    const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
+    // Fast path to just join everything together without slicing the array.
+    if (pathComponents.length > 1 && firstComponent.length > 0 && !hasTrailingDirectorySeparator(firstComponent)) {
+        return pathComponents.join(directorySeparator) as T;
+    }
+
+    const root = firstComponent && ensureTrailingDirectorySeparator(firstComponent);
     return root + pathComponents.slice(1, length).join(directorySeparator) as T;
 }
 
@@ -784,7 +790,7 @@ export function removeTrailingDirectorySeparator(path: string): string;
 /** @internal */
 export function removeTrailingDirectorySeparator(path: string) {
     if (hasTrailingDirectorySeparator(path)) {
-        return path.substr(0, path.length - 1);
+        return path.slice(0, -1);
     }
 
     return path;
