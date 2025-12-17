@@ -35,9 +35,16 @@ unionTypeCallSignatures.ts(63,12): error TS2554: Expected 2 arguments, but got 0
 unionTypeCallSignatures.ts(69,45): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 unionTypeCallSignatures.ts(70,12): error TS2555: Expected at least 1 arguments, but got 0.
 unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1.
+unionTypeCallSignatures.ts(78,24): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+unionTypeCallSignatures.ts(82,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+unionTypeCallSignatures.ts(83,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+unionTypeCallSignatures.ts(84,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+unionTypeCallSignatures.ts(89,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+unionTypeCallSignatures.ts(90,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+unionTypeCallSignatures.ts(94,24): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
 
 
-==== unionTypeCallSignatures.ts (28 errors) ====
+==== unionTypeCallSignatures.ts (35 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -191,4 +198,38 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures.ts:72:76: An argument for 'b' was not provided.
     strOrNum = unionWithRestParameter4("hello", "world");
+    
+    var unionWithAnyParameter1: { (a: string): void; } | { (a: any): void; };
+    unionWithAnyParameter1('hello');
+    unionWithAnyParameter1({}); // wrong argument type
+                           ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+    
+    var unionWithAnyParameter2: { (a: string, b: any): void; } | { (a: any, b: number): void; };
+    unionWithAnyParameter2('hello', 10);
+    unionWithAnyParameter2(10, 'hello'); // error wrong arguments types
+                           ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    unionWithAnyParameter2('hello', 'hello'); // error wrong argument type
+                                    ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    unionWithAnyParameter2(10, 10); // error wrong argument type
+                           ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    var unionWithAnyParameter3: { (a: string | number, b: any): void; } | { (...a: string[]): void; };
+    unionWithAnyParameter3('hello', 'hello');
+    unionWithAnyParameter3('hello', 'hello', 'hello');
+    unionWithAnyParameter3(10, 'hello'); // error wrong argument type
+                           ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    unionWithAnyParameter3('hello', 10); // error wrong argument type
+                                    ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    var unionWithAnyParameter4: { (a: string, b: any): void; } | { (a: any): void; };
+    unionWithAnyParameter4('hello', {}); 
+    unionWithAnyParameter4({}, {}); // error wrong argument type 
+                           ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
     
