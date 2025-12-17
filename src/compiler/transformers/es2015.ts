@@ -2777,7 +2777,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      *
      * @param node A VariableDeclarationList node.
      */
-    function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
+    function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList | undefined {
         if (node.flags & NodeFlags.BlockScoped || node.transformFlags & TransformFlags.ContainsBindingPattern) {
             if (node.flags & NodeFlags.BlockScoped) {
                 enableSubstitutionsForBlockScopedBindings();
@@ -2790,6 +2790,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     : visitVariableDeclaration,
                 isVariableDeclaration,
             );
+
+            if (!declarations.length) {
+                return;
+            }
 
             const declarationList = factory.createVariableDeclarationList(declarations);
             setOriginalNode(declarationList, node);
