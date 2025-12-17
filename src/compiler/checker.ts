@@ -1885,7 +1885,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const moduleSpecifier = getParseTreeNode(moduleSpecifierIn, isExpression);
             return moduleSpecifier && resolveExternalModuleName(moduleSpecifier, moduleSpecifier, /*ignoreErrors*/ true);
         },
-        resolveExternalModuleSymbol,
         tryGetThisTypeAt: (nodeIn, includeGlobalThis, container) => {
             const node = getParseTreeNode(nodeIn);
             return node && tryGetThisTypeAt(node, includeGlobalThis, container);
@@ -2688,6 +2687,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
      */
     function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
+        if (target === source) {
+            return source; // target and source already merged (likely same symbol found in multiple export tables)
+        }
         if (
             !(target.flags & getExcludedSymbolFlags(source.flags)) ||
             (source.flags | target.flags) & SymbolFlags.Assignment
@@ -2869,8 +2871,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!mainModule) {
                 return;
             }
-            // obtain item referenced by 'export='
-            mainModule = resolveExternalModuleSymbol(mainModule);
+            mainModule = resolveSymbol(mainModule);
             if (mainModule.flags & SymbolFlags.Namespace) {
                 // If we're merging an augmentation to a pattern ambient module, we want to
                 // perform the merge unidirectionally from the augmentation ('a.foo') to
@@ -2891,6 +2892,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const resolvedExports = getResolvedMembersOrExportsOfSymbol(mainModule, MembersOrExportsResolutionKind.resolvedExports);
                         for (const [key, value] of arrayFrom(moduleAugmentation.symbol.exports.entries())) {
                             if (resolvedExports.has(key) && !mainModule.exports.has(key)) {
+                                mergeSymbol(resolvedExports.get(key)!, value);
+                            }
+                        }
+                    }
+                    if (mainModule.exports?.get(InternalSymbolName.ExportEquals) && moduleAugmentation.symbol.exports?.size) {
+                        // We may need to merge the module augmentation's exports into the target symbols of the resolved exports
+                        // unlike with export*, export= does not prioritize the local declaration over the merged one - they all get merged
+                        const resolvedExports = getResolvedMembersOrExportsOfSymbol(mainModule, MembersOrExportsResolutionKind.resolvedExports);
+                        for (const [key, value] of arrayFrom(moduleAugmentation.symbol.exports.entries())) {
+                            if (resolvedExports.has(key)) {
                                 mergeSymbol(resolvedExports.get(key)!, value);
                             }
                         }
@@ -3710,7 +3721,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 node,
                 getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node),
             );
-            const resolved = resolveExternalModuleSymbol(immediate);
+            const resolved = resolveSymbol(immediate);
             if (resolved && ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
                 const moduleExports = getExportOfModule(resolved, "module.exports" as __String, node, dontResolveAlias);
                 if (moduleExports) {
@@ -3743,10 +3754,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function resolveExportByName(moduleSymbol: Symbol, name: __String, sourceNode: TypeOnlyCompatibleAliasDeclaration | undefined, dontResolveAlias: boolean) {
-        const exportValue = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
-        const exportSymbol = exportValue
-            ? getPropertyOfType(getTypeOfSymbol(exportValue), name, /*skipObjectFunctionPropertyAugment*/ true)
-            : moduleSymbol.exports!.get(name);
+        let exportSymbol = moduleSymbol.exports?.get(name)
+        if (exportSymbol === undefined && hasExportAssignmentSymbol(moduleSymbol)) {
+            const ee = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals)!;
+            exportSymbol = getExportsOfSymbol(ee).get(name);
+        }
         const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
         markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, exportSymbol, resolved, /*overwriteEmpty*/ false);
         return resolved;
@@ -3902,7 +3914,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (hasSyntheticDefault || hasDefaultOnly) {
             // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
-            const resolved = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+            const resolved = resolveSymbol(moduleSymbol, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, moduleSymbol, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -4014,15 +4026,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getPropertyOfVariable(symbol: Symbol, name: __String): Symbol | undefined {
-        if (symbol.flags & SymbolFlags.Variable) {
-            const typeAnnotation = (symbol.valueDeclaration as VariableDeclaration).type;
-            if (typeAnnotation) {
-                return resolveSymbol(getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name));
-            }
-        }
-    }
-
     function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration | JSDocImportTag, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
         const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration | JSDocImportTag).moduleSpecifier!;
         const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
@@ -4044,14 +4047,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return moduleSymbol;
                 }
 
-                let symbolFromVariable: Symbol | undefined;
-                // First check if module was specified with "export=". If so, get the member from the resolved type
-                if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get(InternalSymbolName.ExportEquals)) {
-                    symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), nameText, /*skipObjectFunctionPropertyAugment*/ true);
-                }
-                else {
-                    symbolFromVariable = getPropertyOfVariable(targetSymbol, nameText);
-                }
+                let symbolFromVariable = getPropertyOfType(getTypeOfSymbol(moduleSymbol), nameText, /*skipObjectFunctionPropertyAugment*/ true);
                 // if symbolFromVariable is export - get its final target
                 symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
 
@@ -4059,7 +4055,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (symbolFromModule === undefined && nameText === InternalSymbolName.Default) {
                     const file = moduleSymbol.declarations?.find(isSourceFile);
                     if (isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
-                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+                        symbolFromModule = resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                 }
 
@@ -4174,7 +4170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol | undefined {
         if (canHaveSymbol(node.parent)) {
-            const resolved = resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
+            const resolved = resolveSymbol(node.parent.symbol, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -4363,6 +4359,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             flags |= target.flags;
             symbol = target;
+
+            if (!(symbol.flags & SymbolFlags.Alias) && symbol.exports && hasExportAssignmentSymbol(symbol)) {
+                // mix in flags from export= target
+                symbol = symbol.exports.get(InternalSymbolName.ExportEquals)!;
+            }
         }
         return flags;
     }
@@ -4504,6 +4505,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbol;
     }
 
+    function isExportAssignmentAny(namespace: Symbol): boolean {
+        if (namespace.exports && hasExportAssignmentSymbol(namespace)) {
+            const ee = namespace.exports.get(InternalSymbolName.ExportEquals)
+            const decl = ee?.declarations?.[0]
+            if (decl && (isExportAssignment(decl) || isBinaryExpression(decl))) {
+                const init = getExportAssignmentExpression(decl)
+                const type = checkExpressionCached(init)
+                if (type.flags & TypeFlags.Any) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     /**
      * Resolves a qualified name and any involved aliases.
      */
@@ -4543,7 +4559,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
                 const moduleSym = resolveExternalModuleName(moduleName, moduleName);
                 if (moduleSym) {
-                    const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                    const resolvedModuleSymbol = resolveSymbol(moduleSym);
                     if (resolvedModuleSymbol) {
                         namespace = resolvedModuleSymbol;
                     }
@@ -4555,6 +4571,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(resolveAlias(namespace)), right.escapedText, meaning));
             }
             if (!symbol) {
+                if (isExportAssignmentAny(namespace)) {
+                    return unknownSymbol; // no error - lookup on psuedo-`any` module
+                }
                 if (!ignoreErrors) {
                     const namespaceName = getFullyQualifiedName(namespace);
                     const declarationName = declarationNameToString(right);
@@ -4959,49 +4978,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined {
-        if (moduleSymbol?.exports) {
-            const exportEquals = resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias);
-            const exported = getCommonJsExportEquals(getMergedSymbol(exportEquals), getMergedSymbol(moduleSymbol));
-            return getMergedSymbol(exported) || moduleSymbol;
-        }
-        return undefined;
-    }
-
-    function getCommonJsExportEquals(exported: Symbol | undefined, moduleSymbol: Symbol): Symbol | undefined {
-        if (!exported || exported === unknownSymbol || exported === moduleSymbol || moduleSymbol.exports!.size === 1 || exported.flags & SymbolFlags.Alias) {
-            return exported;
-        }
-        const links = getSymbolLinks(exported);
-        if (links.cjsExportMerged) {
-            return links.cjsExportMerged;
-        }
-        const merged = exported.flags & SymbolFlags.Transient ? exported : cloneSymbol(exported);
-        merged.flags = merged.flags | SymbolFlags.ValueModule;
-        if (merged.exports === undefined) {
-            merged.exports = createSymbolTable();
-        }
-        moduleSymbol.exports!.forEach((s, name) => {
-            if (name === InternalSymbolName.ExportEquals) return;
-            merged.exports!.set(name, merged.exports!.has(name) ? mergeSymbol(merged.exports!.get(name)!, s) : s);
-        });
-        if (merged === exported) {
-            // We just mutated a symbol, reset any cached links we may have already set
-            // (Notably required to make late bound members appear)
-            getSymbolLinks(merged).resolvedExports = undefined;
-            getSymbolLinks(merged).resolvedMembers = undefined;
-        }
-        getSymbolLinks(merged).cjsExportMerged = merged;
-        return links.cjsExportMerged = merged;
-    }
-
     // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
     // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
     // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
     function resolveESModuleSymbol(moduleSymbol: Symbol | undefined, referencingLocation: Node, dontResolveAlias: boolean, suppressInteropError: boolean): Symbol | undefined {
-        const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+        const symbol = resolveSymbol(moduleSymbol, dontResolveAlias);
 
         if (!dontResolveAlias && symbol) {
             if (!suppressInteropError && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
@@ -5092,9 +5073,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[] {
         const exports = getExportsOfModuleAsArray(moduleSymbol);
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals !== moduleSymbol) {
-            const type = getTypeOfSymbol(exportEquals);
+        if (hasExportAssignmentSymbol(moduleSymbol)) {
+            const type = getTypeOfSymbol(moduleSymbol);
             if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
                 addRange(exports, getPropertiesOfType(type));
             }
@@ -5109,9 +5089,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 cb(symbol, key);
             }
         });
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals !== moduleSymbol) {
-            const type = getTypeOfSymbol(exportEquals);
+        if (hasExportAssignmentSymbol(moduleSymbol)) {
+            const type = getTypeOfSymbol(moduleSymbol);
             if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
                 forEachPropertyOfType(type, (symbol, escapedName) => {
                     cb(symbol, escapedName);
@@ -5133,12 +5112,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbol;
         }
 
-        const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-        if (exportEquals === moduleSymbol) {
+        if (!moduleSymbol.exports || !hasExportAssignmentSymbol(moduleSymbol)) {
             return undefined;
         }
 
-        const type = getTypeOfSymbol(exportEquals);
+        const type = getTypeOfSymbol(moduleSymbol);
         return shouldTreatPropertiesOfExternalModuleAsExports(type) ? getPropertyOfType(type, memberName) : undefined;
     }
 
@@ -5159,6 +5137,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
         const links = getSymbolLinks(moduleSymbol);
         if (!links.resolvedExports) {
+            links.resolvedExports = emptySymbols
             const { exports, typeOnlyExportStarMap } = getExportsOfModuleWorker(moduleSymbol);
             links.resolvedExports = exports;
             links.typeOnlyExportStarMap = typeOnlyExportStarMap;
@@ -5209,7 +5188,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nonTypeOnlyNames = new Set<__String>();
 
         // A module defined by an 'export=' consists of one export that needs to be resolved
-        moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
+        moduleSymbol = resolveSymbol(moduleSymbol);
         const exports = visit(moduleSymbol) || emptySymbols;
 
         if (typeOnlyExportStarMap) {
@@ -5276,6 +5255,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         exportStar as ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: Expression; },
                     )
                 );
+            }
+            const exportEqual = symbol.exports.get(InternalSymbolName.ExportEquals);
+            if (exportEqual) {
+                if (exportEqual.flags & SymbolFlags.Alias) {
+                    // copy all symbols from the target alias
+                    const target = resolveSymbol(exportEqual);
+                    const targetExports = getExportsOfSymbol(target);
+                    extendExportSymbols(symbols, targetExports);
+                }
+                else if (exportEqual.declarations) {
+                    loop: for (const node of exportEqual.declarations) {
+                        let init: Expression
+                        switch (node.kind) {
+                            case SyntaxKind.ExportAssignment:
+                                init = (node as ExportAssignment).expression;
+                                break;
+                            case SyntaxKind.BinaryExpression:
+                                init = (node as BinaryExpression).right;
+                                break;
+                            case SyntaxKind.SourceFile:
+                                // JSON source file
+                                break loop;
+                            default:
+                                Debug.failBadSyntaxKind(node, "Unhandled export assignment kind in export= lookup");
+                        }
+                        // copy out the values from the export= target
+                        // NOTE: Must match `resolveStructuredTypeMembers` so identical symbols merge later when other structural elements are copied
+                        const type = getWidenedType(checkExpressionCached(init));
+                        const props = getPropertiesOfType(type);
+                        const table = createSymbolTable(props);
+                        extendExportSymbols(symbols, table);
+                    }
+                }
+                symbols.delete(InternalSymbolName.ExportEquals)
             }
             return symbols;
         }
@@ -5365,8 +5378,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getSymbolOfDeclaration(d.parent as Declaration);
                 }
                 // export ='d member of an ambient module
-                if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfDeclaration(d.parent.parent)) === symbol) {
-                    return getSymbolOfDeclaration(d.parent.parent);
+                if (isModuleBlock(d.parent) && d.parent.parent) {
+                    const container = resolveSymbol(getSymbolOfDeclaration(d.parent.parent))
+                    if (container && container.exports && hasExportAssignmentSymbol(container) && container.exports.get(InternalSymbolName.ExportEquals) === symbol) {
+                        return getSymbolOfDeclaration(d.parent.parent);
+                    }
                 }
             }
             if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
@@ -9329,12 +9345,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 void getInternalSymbolName(symbol, baseName); // Called to cache values into `usedSymbolNames` and `remappedSymbolNames`
             });
             let addingDeclare = !context.bundled;
-            const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
-            if (exportEquals && symbolTable.size > 1 && exportEquals.flags & (SymbolFlags.Alias | SymbolFlags.Module)) {
-                symbolTable = createSymbolTable();
-                // Remove extraneous elements from root symbol table (they'll be mixed back in when the target of the `export=` is looked up)
-                symbolTable.set(InternalSymbolName.ExportEquals, exportEquals);
-            }
 
             visitSymbolTable(symbolTable);
             return mergeRedundantStatements(results);
@@ -12746,20 +12756,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             return getWidenedTypeForAssignmentDeclaration(symbol);
         }
-        else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
-            const resolvedModule = resolveExternalModuleSymbol(symbol);
-            if (resolvedModule !== symbol) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return errorType;
-                }
-                const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                const type = getWidenedTypeForAssignmentDeclaration(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
-                if (!popTypeResolution()) {
-                    return reportCircularityError(symbol);
-                }
-                return type;
-            }
-        }
         const type = createObjectType(ObjectFlags.Anonymous, symbol);
         if (symbol.flags & SymbolFlags.Class) {
             const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
@@ -13042,7 +13038,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
-    function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
+    function getOuterTypeParametersOfClassOrInterface(symbol: Symbol | undefined): TypeParameter[] | undefined {
+        if (!symbol) {
+            return undefined;
+        }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            return getOuterTypeParametersOfClassOrInterface(resolveSymbol(symbol.exports?.get(InternalSymbolName.ExportEquals)));
+        }
         const declaration = (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Function)
             ? symbol.valueDeclaration
             : symbol.declarations?.find(decl => {
@@ -13061,9 +13063,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // The local type parameters are the combined set of type parameters from all declarations of the class,
     // interface, or type alias.
-    function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] | undefined {
-        if (!symbol.declarations) {
+    function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol | undefined): TypeParameter[] | undefined {
+        if (!symbol || !symbol.declarations) {
             return;
+        }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            return getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(resolveSymbol(symbol.exports?.get(InternalSymbolName.ExportEquals)));
         }
         let result: TypeParameter[] | undefined;
         for (const node of symbol.declarations) {
@@ -14612,6 +14617,48 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 constructSignatures = getDefaultConstructSignatures(classType);
             }
             type.constructSignatures = constructSignatures;
+        }
+
+        // And lastly, if the underlying symbol has an export=, we need to copy the type structure from it
+        if (symbol.exports?.has(InternalSymbolName.ExportEquals)) {
+            const ee = symbol.exports?.get(InternalSymbolName.ExportEquals)!;
+            if (ee.flags & SymbolFlags.Alias) {
+                const target = resolveSymbol(ee);
+                const t = getTypeOfSymbol(target);
+                const callSignatures = getSignaturesOfType(t, SignatureKind.Call);
+                const constructSignatures = getSignaturesOfType(t, SignatureKind.Construct);
+                const indexInfos = getIndexInfosOfType(t)
+                const targetProps = getPropertiesOfType(t);
+                const targetTable = createSymbolTable(targetProps)
+                mergeSymbolTable(targetTable, members)
+                setStructuredTypeMembers(type, targetTable, callSignatures, constructSignatures, indexInfos);
+            } else {
+                    loop: for (const node of ee.declarations || emptyArray) {
+                        let init: Expression
+                        switch (node.kind) {
+                            case SyntaxKind.ExportAssignment:
+                                init = (node as ExportAssignment).expression;
+                                break;
+                            case SyntaxKind.BinaryExpression:
+                                init = (node as BinaryExpression).right;
+                                break;
+                            case SyntaxKind.SourceFile:
+                                // JSON source file
+                                break loop;
+                            default:
+                                Debug.failBadSyntaxKind(node, "Unhandled export assignment kind in export= lookup");
+                        }
+                        const t = getWidenedType(checkExpressionCached(init));
+                        const callSignatures = getSignaturesOfType(t, SignatureKind.Call);
+                        const constructSignatures = getSignaturesOfType(t, SignatureKind.Construct);
+                        const indexInfos = getIndexInfosOfType(t)
+                        const targetProps = getPropertiesOfType(t);
+                        const targetTable = createSymbolTable(targetProps)
+                        mergeSymbolTable(targetTable, members)
+                        setStructuredTypeMembers(type, targetTable, callSignatures, constructSignatures, indexInfos);
+                        break; // TODO: JS has allowed multiple export= assignments and merged them in the past - issue better error on this
+                    }
+            }
         }
     }
 
@@ -16331,7 +16378,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
         const moduleSym = resolveExternalModuleName(name, name);
         if (moduleSym) {
-            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+            const resolvedModuleSymbol = resolveSymbol(moduleSym);
             if (resolvedModuleSymbol) {
                 return getTypeOfSymbol(resolvedModuleSymbol);
             }
@@ -17101,6 +17148,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const res = tryGetDeclaredTypeOfSymbol(symbol);
         if (res) {
             return checkNoTypeArguments(node, symbol) ? getRegularTypeOfLiteralType(res) : errorType;
+        }
+        if (symbol.exports && hasExportAssignmentSymbol(symbol)) {
+            const res = getTypeReferenceType(node, resolveSymbol(symbol.exports.get(InternalSymbolName.ExportEquals)!));
+            if (res !== errorType) {
+                return res;
+            }
         }
         if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
             const jsdocType = getTypeFromJSDocValueReference(node, symbol);
@@ -19946,7 +19999,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedType = errorType;
             }
             const isExportEquals = !!innerModuleSymbol.exports?.get(InternalSymbolName.ExportEquals);
-            const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
+            const moduleSymbol = resolveSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
             if (!nodeIsMissing(node.qualifier)) {
                 const nameStack: Identifier[] = getIdentifierChain(node.qualifier!);
                 let currentNamespace = moduleSymbol;
@@ -22695,9 +22748,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
             if (originalSource === originalTarget) return Ternary.True;
 
+            let skipPrenormalFastpath: Type | undefined;
+            // LEGACY COMPAT: In non-esm-compatible module loaders, and `export =` target of a primitive makes the module into that primitive.
+            // We restore that flag-level compatability on type originating from modules with `export=` statements here (rather than it being purely structural).
+            if (originalSource.symbol && originalSource.symbol.exports && hasExportAssignmentSymbol(originalSource.symbol)) {
+                const candidate = getTypeOfSymbol(originalSource.symbol.exports.get(InternalSymbolName.ExportEquals)!)
+                if (candidate.flags & TypeFlags.Primitive) {
+                    skipPrenormalFastpath = candidate
+                }
+            }
+
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
-            if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
+            if (!skipPrenormalFastpath && originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
                 if (
                     relation === comparableRelation && !(originalTarget.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(originalTarget, originalSource, relation) ||
                     isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)
@@ -22714,7 +22777,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // turn deferred type references into regular type references, simplify indexed access and
             // conditional types, and resolve substitution types to either the substitution (on the source
             // side) or the type variable (on the target side).
-            const source = getNormalizedType(originalSource, /*writing*/ false);
+            const source = getNormalizedType(skipPrenormalFastpath || originalSource, /*writing*/ false);
             let target = getNormalizedType(originalTarget, /*writing*/ true);
 
             if (source === target) return Ternary.True;
@@ -34802,7 +34865,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const parentSymbol = getNodeLinks(left).resolvedSymbol;
         const assignmentKind = getAssignmentTargetKind(node);
         const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
-        const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
+        const isPsuedoAnyModule = (parentSymbol && isExportAssignmentAny(resolveSymbol(parentSymbol)))
+        const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType || isPsuedoAnyModule;
         let prop: Symbol | undefined;
         if (isPrivateIdentifier(right)) {
             if (
@@ -34855,7 +34919,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIdentifier(left) && parentSymbol) {
                     markLinkedReferences(node, ReferenceHint.Property, /*propSymbol*/ undefined, leftType);
                 }
-                return isErrorType(apparentType) ? errorType : apparentType;
+                return isErrorType(apparentType) ? errorType : isPsuedoAnyModule ? anyType : apparentType;
             }
             prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ isConstEnumObjectType(apparentType), /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
         }
@@ -48935,21 +48999,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function hasExportedMembers(moduleSymbol: Symbol) {
-        return forEachEntry(moduleSymbol.exports!, (_, id) => id !== "export=");
-    }
-
     function checkExternalModuleExports(node: SourceFile | ModuleDeclaration) {
         const moduleSymbol = getSymbolOfDeclaration(node);
         const links = getSymbolLinks(moduleSymbol);
         if (!links.exportsChecked) {
-            const exportEqualsSymbol = moduleSymbol.exports!.get("export=" as __String);
-            if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
-                const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                if (declaration && !isTopLevelInExternalModuleAugmentation(declaration) && !isInJSFile(declaration)) {
-                    error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
-                }
-            }
             // Checks for export * conflicts
             const exports = getExportsOfModule(moduleSymbol);
             if (exports) {
@@ -49564,6 +49617,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isExternalOrCommonJsModule(node)) {
                 checkExternalModuleExports(node);
+                checkDeferredNodes(node); // `checkExternalModuleExports` may trigger the first call of `getExportsOfModule`, which may be the first thing to trigger checking of a deferred function body
             }
 
             if (potentialThisCollisions.length) {
@@ -50724,12 +50778,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!symbol) {
             return false;
         }
-        const container = getSourceFileOfNode(symbol.valueDeclaration);
-        const fileSymbol = container && getSymbolOfDeclaration(container);
-        // Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
-        // If we don't, the merge may not have yet occured, and the flags check below will be missing flags that
-        // are added as a result of the merge.
-        void resolveExternalModuleSymbol(fileSymbol);
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
         if (target === unknownSymbol) {
             return !excludeTypeOnlyValues || !getTypeOnlyAliasDeclaration(symbol);
@@ -51393,7 +51441,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!sym) {
                     return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, internalFlags, tracker);
                 }
-                resolveExternalModuleSymbol(sym); // ensures cjs export assignment is setup
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, internalFlags, tracker);
             },
             isImportRequiredByAugmentation,

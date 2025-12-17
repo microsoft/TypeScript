@@ -1289,10 +1289,9 @@ function getNewImportFixes(
                 //
                 // import fs = require("fs"); // or const in JS
                 // fs.writeFile
-                const exportEquals = checker.resolveExternalModuleSymbol(exportInfo.moduleSymbol);
                 let namespacePrefix;
-                if (exportEquals !== exportInfo.moduleSymbol) {
-                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, getEmitScriptTarget(compilerOptions), identity)!;
+                if (exportInfo.moduleSymbol.exports?.has(InternalSymbolName.ExportEquals)) {
+                    namespacePrefix = forEachNameOfDefaultExport(exportInfo.moduleSymbol.exports?.get(InternalSymbolName.ExportEquals)!, checker, getEmitScriptTarget(compilerOptions), identity)!;
                 }
                 namespacePrefix ||= moduleSymbolToValidIdentifier(
                     exportInfo.moduleSymbol,
