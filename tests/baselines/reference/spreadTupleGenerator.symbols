@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/spreadTupleGenerator.ts] ////
+
+=== spreadTupleGenerator.ts ===
+class V {
+>V : Symbol(V, Decl(spreadTupleGenerator.ts, 0, 0))
+
+  *[Symbol.iterator](): TupleGenerator<[number, number]> {
+>[Symbol.iterator] : Symbol(V[Symbol.iterator], Decl(spreadTupleGenerator.ts, 0, 9))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>TupleGenerator : Symbol(TupleGenerator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    yield 1; yield 2;
+  }
+}
+
+declare const v: V;
+>v : Symbol(v, Decl(spreadTupleGenerator.ts, 6, 13))
+>V : Symbol(V, Decl(spreadTupleGenerator.ts, 0, 0))
+
+declare function foo(x: number, y: number): void;
+>foo : Symbol(foo, Decl(spreadTupleGenerator.ts, 6, 19))
+>x : Symbol(x, Decl(spreadTupleGenerator.ts, 7, 21))
+>y : Symbol(y, Decl(spreadTupleGenerator.ts, 7, 31))
+
+foo(...v);
+>foo : Symbol(foo, Decl(spreadTupleGenerator.ts, 6, 19))
+>v : Symbol(v, Decl(spreadTupleGenerator.ts, 6, 13))
+
+const a: [number, number] = [...v];
+>a : Symbol(a, Decl(spreadTupleGenerator.ts, 10, 5))
+>v : Symbol(v, Decl(spreadTupleGenerator.ts, 6, 13))
+

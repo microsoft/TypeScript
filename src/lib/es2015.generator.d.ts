@@ -8,6 +8,9 @@ interface Generator<T = unknown, TReturn = any, TNext = any> extends IteratorObj
     [Symbol.iterator](): Generator<T, TReturn, TNext>;
 }
 
+interface TupleGenerator<Tuple extends any[] = unknown[], TReturn = any, TNext = any> 
+    extends Generator<Tuple extends (infer T)[] ? T : unknown, TReturn, TNext> {}
+
 interface GeneratorFunction {
     /**
      * Creates a new Generator object.
