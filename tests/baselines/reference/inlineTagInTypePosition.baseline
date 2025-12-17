@@ -1,0 +1,97 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/inlineTagInTypePosition.ts ===
+// class C {
+// }
+// /**
+//  * @throws {@link C}
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | function CC(): void
+// | @throws {@link C}
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/inlineTagInTypePosition.ts",
+      "position": 50,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 50,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "CC",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/tests/cases/fourslash/inlineTagInTypePosition.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 11
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
