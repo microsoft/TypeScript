@@ -5,6 +5,7 @@ export * from "../codefixes/addConvertToUnknownForNonOverlappingTypes.js";
 export * from "../codefixes/addEmptyExportDeclaration.js";
 export * from "../codefixes/addMissingAsync.js";
 export * from "../codefixes/addMissingAwait.js";
+export * from "../codefixes/addMissingAwaitInReturn.js";
 export * from "../codefixes/addMissingConst.js";
 export * from "../codefixes/addMissingDeclareProperty.js";
 export * from "../codefixes/addMissingInvocationForDecorator.js";

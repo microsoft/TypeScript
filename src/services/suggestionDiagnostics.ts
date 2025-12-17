@@ -15,6 +15,7 @@ import {
     ExpressionStatement,
     Extension,
     fileExtensionIsOneOf,
+    findAncestor,
     forEachReturnStatement,
     FunctionDeclaration,
     FunctionExpression,
@@ -29,6 +30,7 @@ import {
     Identifier,
     importFromModuleSpecifier,
     isAsyncFunction,
+    isAwaitExpression,
     isBinaryExpression,
     isBlock,
     isCallExpression,
@@ -36,6 +38,7 @@ import {
     isFunctionDeclaration,
     isFunctionExpression,
     isFunctionLike,
+    isFunctionLikeDeclaration,
     isIdentifier,
     isImportEqualsDeclaration,
     isPropertyAccessExpression,
@@ -43,6 +46,7 @@ import {
     isReturnStatement,
     isSourceFileJS,
     isStringLiteral,
+    isTryStatement,
     isVariableDeclaration,
     isVariableStatement,
     MethodDeclaration,
@@ -55,6 +59,7 @@ import {
     PropertyAccessExpression,
     ReturnStatement,
     skipAlias,
+    skipParentheses,
     some,
     SourceFile,
     SyntaxKind,
@@ -136,6 +141,9 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         if (canBeConvertedToAsync(node)) {
             addConvertToAsyncFunctionDiagnostics(node, checker, diags);
         }
+        if (isFunctionLikeDeclaration(node) && isAsyncFunction(node)) {
+            addMissingAwaitInReturnDiagnostics(node, checker, diags);
+        }
         node.forEachChild(check);
     }
 }
@@ -192,6 +200,31 @@ function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeCheck
         isBlock(node.body) &&
         hasReturnStatementWithPromiseHandler(node.body, checker) &&
         returnsPromise(node, checker);
+}
+
+function addMissingAwaitInReturnDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]) {
+    if (!node.body || !isBlock(node.body)) {
+        return;
+    }
+
+    forEachReturnStatement(node.body, statement => {
+        if (!statement.expression) {
+            return;
+        }
+        const expression = skipParentheses(statement.expression);
+        if (isAwaitExpression(expression)) {
+            return;
+        }
+        const type = checker.getTypeAtLocation(expression);
+        if (type.isUnion() ? type.types.every(t => !checker.getPromisedTypeOfPromise(t)) : !checker.getPromisedTypeOfPromise(type)) {
+            return;
+        }
+        const ancestor = findAncestor(statement, n => n === node || isTryStatement(n));
+        if (!ancestor || !isTryStatement(ancestor)) {
+            return;
+        }
+        diags.push(createDiagnosticForNode(statement, Diagnostics.This_may_need_await_keyword_Otherwise_the_enclosing_try_statement_won_t_handle_this));
+    });
 }
 
 /** @internal */
