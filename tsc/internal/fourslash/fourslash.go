@@ -492,6 +492,20 @@ var (
 	defaultDocumentSymbolCapabilities = &lsproto.DocumentSymbolClientCapabilities{
 		HierarchicalDocumentSymbolSupport: ptrTrue,
 	}
+	defaultFoldingRangeCapabilities = &lsproto.FoldingRangeClientCapabilities{
+		RangeLimit: ptrTo[uint32](5000),
+		// LineFoldingOnly: ptrTrue,
+		FoldingRangeKind: &lsproto.ClientFoldingRangeKindOptions{
+			ValueSet: &[]lsproto.FoldingRangeKind{
+				lsproto.FoldingRangeKindComment,
+				lsproto.FoldingRangeKindImports,
+				lsproto.FoldingRangeKindRegion,
+			},
+		},
+		FoldingRange: &lsproto.ClientFoldingRangeOptions{
+			CollapsedText: ptrTrue, // Unused by our testing, but set to exercise the code.
+		},
+	}
 )
 
 func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lsproto.ClientCapabilities {
@@ -553,6 +567,9 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	}
 	if capabilitiesWithDefaults.TextDocument.DocumentSymbol == nil {
 		capabilitiesWithDefaults.TextDocument.DocumentSymbol = defaultDocumentSymbolCapabilities
+	}
+	if capabilitiesWithDefaults.TextDocument.FoldingRange == nil {
+		capabilitiesWithDefaults.TextDocument.FoldingRange = defaultFoldingRangeCapabilities
 	}
 	return &capabilitiesWithDefaults
 }
