@@ -49925,6 +49925,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getParameterSymbolFromJSDocHost(node: Identifier): Symbol | undefined {
+        if (!isIdentifier(node)) {
+            return undefined;
+        }
+        const name = node.escapedText;
+        const decl = getHostSignatureFromJSDoc(node);
+        if (!decl) {
+            return undefined;
+        }
+        const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        if (parameter && parameter.symbol) {
+            return parameter.symbol;
+        }
+        // If parameter.symbol is not available, try to get it from the function's locals
+        if (parameter && decl.locals) {
+            return decl.locals.get(name);
+        }
+        return undefined;
+    }
+
     function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocMemberName): Symbol | undefined {
         if (isDeclarationName(name)) {
             return getSymbolOfNode(name.parent);
@@ -50011,20 +50031,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const isJSDoc = findAncestor(name, or(isJSDocLinkLike, isJSDocNameReference, isJSDocMemberName));
-            const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
+            const isJSDocContext = !!(name.flags & NodeFlags.JSDoc) || isJSDoc;
+            const meaning = isJSDocContext ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
             if (name.kind === SyntaxKind.Identifier) {
                 if (isJSXTagName(name) && isJsxIntrinsicTagName(name)) {
                     const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                     return symbol === unknownSymbol ? undefined : symbol;
                 }
+                // Check for parameter symbol in JSDoc typeof context
+                if (isJSDocContext && isInTypeQuery(name)) {
+                    const parameterSymbol = getParameterSymbolFromJSDocHost(name);
+                    if (parameterSymbol) {
+                        return parameterSymbol;
+                    }
+                }
                 const result = resolveEntityName(name, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
-                if (!result && isJSDoc) {
+                if (!result && isJSDocContext) {
                     const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                     if (container) {
                         return resolveJSDocMemberName(name, /*ignoreErrors*/ true, getSymbolOfDeclaration(container));
                     }
                 }
-                if (result && isJSDoc) {
+                if (result && isJSDocContext) {
                     const container = getJSDocHost(name);
                     if (container && isEnumMember(container) && container === result.valueDeclaration) {
                         return resolveEntityName(name, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, getSourceFileOfNode(container)) || result;
