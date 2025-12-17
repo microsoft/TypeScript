@@ -21,6 +21,7 @@ import {
     getNameOfAccessExpression,
     getSourceFileOfNode,
     getSymbolId,
+    getSymbolTarget,
     hasSyntacticModifier,
     Identifier,
     ImportCall,
@@ -634,6 +635,16 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             }
             else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
+            }
+            else {
+                const sourceFile = getSourceFileOfNode(node);
+                if (sourceFile.symbol?.exports?.has(InternalSymbolName.ExportEquals)) {
+                    const moduleSymbol = checker.resolveExternalModuleSymbol(sourceFile.symbol);
+                    if (moduleSymbol && (moduleSymbol === symbol.parent || some(checker.getPropertiesOfType(checker.getTypeOfSymbol(moduleSymbol)), s => getSymbolTarget(s, checker) === symbol))) {
+                        const exportInfo = { exportingModuleSymbol: sourceFile.symbol, exportKind: ExportKind.Named };
+                        return { kind: ImportExport.Export, symbol, exportInfo };
+                    }
+                }
             }
         }
 

@@ -1,0 +1,169 @@
+// === findAllReferences ===
+// === /mod.d.ts ===
+// export default Outer.Inner;
+// 
+// declare namespace Outer {
+//   namespace Inner {
+//     <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}lazy|](): void;|>
+//   }
+// }
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|lazy|]();
+
+  // === Definitions ===
+  // === /mod.d.ts ===
+  // export default Outer.Inner;
+  // 
+  // declare namespace Outer {
+  //   namespace Inner {
+  //     <|function /*FIND ALL REFS*/[|lazy|](): void;|>
+  //   }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function Outer.Inner.lazy(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Outer",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Inner",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "lazy",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /mod.d.ts ===
+// export default Outer.Inner;
+// 
+// declare namespace Outer {
+//   namespace Inner {
+//     <|function [|{| isWriteAccess: true |}lazy|](): void;|>
+//   }
+// }
+
+// === /index.ts ===
+// import def from "./mod"
+// def.[|lazy|]/*FIND ALL REFS*/();
+
+  // === Definitions ===
+  // === /mod.d.ts ===
+  // export default Outer.Inner;
+  // 
+  // declare namespace Outer {
+  //   namespace Inner {
+  //     <|function [|lazy|](): void;|>
+  //   }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function Outer.Inner.lazy(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Outer",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Inner",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "lazy",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
