@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/reflexiveIdentityRelation.ts] ////
+
+=== reflexiveIdentityRelation.ts ===
+namespace reflexiveIdentityRelation {
+>reflexiveIdentityRelation : Symbol(reflexiveIdentityRelation, Decl(reflexiveIdentityRelation.ts, 0, 0))
+
+    type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Symbol(Equals, Decl(reflexiveIdentityRelation.ts, 0, 37))
+>A : Symbol(A, Decl(reflexiveIdentityRelation.ts, 1, 16))
+>B : Symbol(B, Decl(reflexiveIdentityRelation.ts, 1, 18))
+>T : Symbol(T, Decl(reflexiveIdentityRelation.ts, 1, 26))
+>T : Symbol(T, Decl(reflexiveIdentityRelation.ts, 1, 26))
+>B : Symbol(B, Decl(reflexiveIdentityRelation.ts, 1, 18))
+>T : Symbol(T, Decl(reflexiveIdentityRelation.ts, 1, 65))
+>T : Symbol(T, Decl(reflexiveIdentityRelation.ts, 1, 65))
+>A : Symbol(A, Decl(reflexiveIdentityRelation.ts, 1, 16))
+
+    type Intersection = Equals<{a: 1} & {a: 1}, {a: 1}>;  // true
+>Intersection : Symbol(Intersection, Decl(reflexiveIdentityRelation.ts, 1, 109))
+>Equals : Symbol(Equals, Decl(reflexiveIdentityRelation.ts, 0, 37))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 3, 32))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 3, 41))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 3, 49))
+
+    type Union = Equals<{a: 1} | {a: 1}, {a: 1}>;  // true
+>Union : Symbol(Union, Decl(reflexiveIdentityRelation.ts, 3, 56))
+>Equals : Symbol(Equals, Decl(reflexiveIdentityRelation.ts, 0, 37))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 4, 25))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 4, 34))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 4, 42))
+
+    type UnionOfIntersection = Equals<{a: 1} & {b: 2} | {a: 1} & {b: 2}, {a: 1} & {b: 2}>;  // true
+>UnionOfIntersection : Symbol(UnionOfIntersection, Decl(reflexiveIdentityRelation.ts, 4, 49))
+>Equals : Symbol(Equals, Decl(reflexiveIdentityRelation.ts, 0, 37))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 5, 39))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 5, 48))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 5, 57))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 5, 66))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 5, 74))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 5, 83))
+
+    // The intersection distributes to `{a: 1} & {a: 1} | {a: 1} & {b: 2} | {b: 2} & {a: 1} | {b: 2} & {b: 2}`
+    // which is not identical to `{a: 1} | {b: 2}`
+    type IntersectionOfUnion = Equals<({a: 1} | {b: 2}) & ({a: 1} | {b: 2}), {a: 1} | {b: 2}>;  // false
+>IntersectionOfUnion : Symbol(IntersectionOfUnion, Decl(reflexiveIdentityRelation.ts, 5, 90))
+>Equals : Symbol(Equals, Decl(reflexiveIdentityRelation.ts, 0, 37))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 9, 40))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 9, 49))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 9, 60))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 9, 69))
+>a : Symbol(a, Decl(reflexiveIdentityRelation.ts, 9, 78))
+>b : Symbol(b, Decl(reflexiveIdentityRelation.ts, 9, 87))
+}
+
