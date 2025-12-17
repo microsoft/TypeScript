@@ -74,3 +74,4 @@ export * from "../codefixes/splitTypeOnlyImport.js";
 export * from "../codefixes/convertConstToLet.js";
 export * from "../codefixes/fixExpectedComma.js";
 export * from "../codefixes/fixAddVoidToPromise.js";
+export * from "../codefixes/removeUnnecessaryNamedImport.js";
