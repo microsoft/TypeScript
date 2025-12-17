@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts] ////
+
+=== mappedTypeConstraintAssignabilityExactOptionalPropertyTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60233
+
+type T = {
+>T : T
+>  : ^
+
+  foo?: true;
+>foo : true | undefined
+>    : ^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+  bar?: true;
+>bar : true | undefined
+>    : ^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+};
+
+type WrappedT<t extends T> = [t];
+>WrappedT : WrappedT<t>
+>         : ^^^^^^^^^^^
+
+type OmitBarFromWrapped<t> = t extends WrappedT<infer inner>
+>OmitBarFromWrapped : OmitBarFromWrapped<t>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+
+  ? WrappedT<Omit<inner, "bar">>
+  : never;
+
+type OmitHomomorphicFromWrapped<t> = t extends WrappedT<infer inner>
+>OmitHomomorphicFromWrapped : OmitHomomorphicFromWrapped<t>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? WrappedT<HomomorphicOmit<inner, "bar">>
+  : never;
+
+type HomomorphicOmit<t, keyToOmit> = {
+>HomomorphicOmit : HomomorphicOmit<t, keyToOmit>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [k in keyof t as k extends keyToOmit ? never : k]: t[k];
+};
+
+type OmitHomomorphicFromWrappedConformed<t> = t extends WrappedT<infer inner>
+>OmitHomomorphicFromWrappedConformed : OmitHomomorphicFromWrappedConformed<t>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? WrappedT<conform<HomomorphicOmit<inner, "bar">, T>>
+  : never;
+
+type conform<t, base> = t extends base ? t : base;
+>conform : conform<t, base>
+>        : ^^^^^^^^^^^^^^^^
+
