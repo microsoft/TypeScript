@@ -510,6 +510,12 @@ oh.no
  * @param this is (@@fine@@and) is one comment
  */`,
             );
+            parsesCorrectly(
+                "@pattern with @ in it",
+                `/**
+ * @pattern ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$
+ */`,
+            );
         });
     });
     describe("getFirstToken", () => {
