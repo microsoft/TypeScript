@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain5.ts] ////
+
+=== controlFlowOptionalChain5.ts ===
+// https://github.com/microsoft/TypeScript/issues/59145
+
+function resolve1(id: string | undefined) {
+>resolve1 : Symbol(resolve1, Decl(controlFlowOptionalChain5.ts, 0, 0))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 2, 18))
+
+  const isBundled = id?.includes("_bundled");
+>isBundled : Symbol(isBundled, Decl(controlFlowOptionalChain5.ts, 3, 7))
+>id?.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 2, 18))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+  if (isBundled) {
+>isBundled : Symbol(isBundled, Decl(controlFlowOptionalChain5.ts, 3, 7))
+
+    const str: string = id;
+>str : Symbol(str, Decl(controlFlowOptionalChain5.ts, 5, 9))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 2, 18))
+  }
+}
+
+function resolve2(id: string | undefined) {
+>resolve2 : Symbol(resolve2, Decl(controlFlowOptionalChain5.ts, 7, 1))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 9, 18))
+
+  if (id?.includes("_bundled")) {
+>id?.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 9, 18))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+    const str: string = id;
+>str : Symbol(str, Decl(controlFlowOptionalChain5.ts, 11, 9))
+>id : Symbol(id, Decl(controlFlowOptionalChain5.ts, 9, 18))
+  }
+}
+
