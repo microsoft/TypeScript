@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/commonPropertyCheckWithMultipleIndexSignatures1.ts] ////
+
+=== commonPropertyCheckWithMultipleIndexSignatures1.ts ===
+interface ITopType {
+>ITopType : Symbol(ITopType, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  tKey?: string;
+>tKey : Symbol(ITopType.tKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 0, 20))
+}
+
+interface ISubType extends ITopType {
+>ISubType : Symbol(ISubType, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 2, 1))
+>ITopType : Symbol(ITopType, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  sKey?: string;
+>sKey : Symbol(ISubType.sKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 4, 37))
+}
+
+interface ITestInteface {
+>ITestInteface : Symbol(ITestInteface, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 6, 1))
+
+  [pA: string]: ITopType;
+>pA : Symbol(pA, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 9, 3))
+>ITopType : Symbol(ITopType, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 0, 0))
+
+  [pB: number]: ISubType;
+>pB : Symbol(pB, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 10, 3))
+>ISubType : Symbol(ISubType, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 2, 1))
+}
+
+const testObj1: ITestInteface = {
+>testObj1 : Symbol(testObj1, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 13, 5))
+>ITestInteface : Symbol(ITestInteface, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 6, 1))
+
+  a: { tKey: "tVal" },
+>a : Symbol(a, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 13, 33))
+>tKey : Symbol(tKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 14, 6))
+
+  1: { tKey: "tVal", sKey: "sVal" },
+>1 : Symbol(1, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 14, 22))
+>tKey : Symbol(tKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 15, 6))
+>sKey : Symbol(sKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 15, 20))
+
+};
+
+const testObj1_2: ITestInteface = {
+>testObj1_2 : Symbol(testObj1_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 18, 5))
+>ITestInteface : Symbol(ITestInteface, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 6, 1))
+
+  a: { tKey: "tVal" },
+>a : Symbol(a, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 18, 35))
+>tKey : Symbol(tKey, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 19, 6))
+
+  1: { notCommon: "val3" },
+>1 : Symbol(1, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 19, 22))
+>notCommon : Symbol(notCommon, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 20, 6))
+
+};
+
+interface ITopType_2 {
+>ITopType_2 : Symbol(ITopType_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 21, 2))
+
+  tKey_2?: string;
+>tKey_2 : Symbol(ITopType_2.tKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 23, 22))
+}
+
+interface ISubType_2 extends ITopType_2 {
+>ISubType_2 : Symbol(ISubType_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 25, 1))
+>ITopType_2 : Symbol(ITopType_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 21, 2))
+
+  sKey_2?: string;
+>sKey_2 : Symbol(ISubType_2.sKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 27, 41))
+}
+
+interface ITestInteface_2 {
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 29, 1))
+
+  [pA_2: string]: ITopType_2;
+>pA_2 : Symbol(pA_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 32, 3))
+>ITopType_2 : Symbol(ITopType_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 21, 2))
+
+  [pB_2: `sub_${string}`]: ISubType_2;
+>pB_2 : Symbol(pB_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 33, 3))
+>ISubType_2 : Symbol(ISubType_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 25, 1))
+}
+
+const testObj2: ITestInteface_2 = {
+>testObj2 : Symbol(testObj2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 36, 5))
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 29, 1))
+
+  a: { tKey_2: "tVal_2 " },
+>a : Symbol(a, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 36, 35))
+>tKey_2 : Symbol(tKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 37, 6))
+
+  sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2" },
+>sub_b : Symbol(sub_b, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 37, 27))
+>tKey_2 : Symbol(tKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 38, 10))
+>sKey_2 : Symbol(sKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 38, 29))
+
+};
+
+const testObj2_2: ITestInteface_2 = {
+>testObj2_2 : Symbol(testObj2_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 41, 5))
+>ITestInteface_2 : Symbol(ITestInteface_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 29, 1))
+
+  a: { tKey_2: "tVal_2 " },
+>a : Symbol(a, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 41, 37))
+>tKey_2 : Symbol(tKey_2, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 42, 6))
+
+  sub_b: { notCommon: "val3" },
+>sub_b : Symbol(sub_b, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 42, 27))
+>notCommon : Symbol(notCommon, Decl(commonPropertyCheckWithMultipleIndexSignatures1.ts, 43, 10))
+
+};
+
