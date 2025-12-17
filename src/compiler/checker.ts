@@ -495,7 +495,7 @@ import {
     isBindingPattern,
     isBlock,
     isBlockOrCatchScoped,
-    isBlockScopedContainerTopLevel,
+    isBlockScopedOrTopLevelContainer,
     isBooleanLiteral,
     isCallChain,
     isCallExpression,
@@ -50641,7 +50641,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const inLoopInitializer = isIterationStatement(container, /*lookInLabeledStatements*/ false);
                         const inLoopBodyBlock = container.kind === SyntaxKind.Block && isIterationStatement(container.parent, /*lookInLabeledStatements*/ false);
 
-                        links.isDeclarationWithCollidingName = !isBlockScopedContainerTopLevel(container) && (!isDeclaredInLoop || (!inLoopInitializer && !inLoopBodyBlock));
+                        links.isDeclarationWithCollidingName = !isBlockScopedOrTopLevelContainer(container) && (!isDeclaredInLoop || (!inLoopInitializer && !inLoopBodyBlock));
                     }
                     else {
                         links.isDeclarationWithCollidingName = false;

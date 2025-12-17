@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/expandoFunctionBlockShadowing3.ts] ////
+
+=== expandoFunctionBlockShadowing3.ts ===
+export function Z() {}
+>Z : typeof Z
+>  : ^^^^^^^^
+
+Z.test = "foo";
+>Z.test = "foo" : "foo"
+>               : ^^^^^
+>Z.test : string
+>       : ^^^^^^
+>Z : typeof Z
+>  : ^^^^^^^^
+>test : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const aliasTopZ = Z;
+>aliasTopZ : typeof Z
+>          : ^^^^^^^^
+>Z : typeof Z
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const Z = function Z() {};
+>Z : { (): void; test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function Z() {} : { (): void; test: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Z : { (): void; test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    Z.test = 42;
+>Z.test = 42 : 42
+>            : ^^
+>Z.test : number
+>       : ^^^^^^
+>Z : { (): void; test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+  }
+
+  const topZcheck: { (): void; test: string } = aliasTopZ;
+>topZcheck : { (): void; test: string; }
+>          : ^^^^^^    ^^^^^^^^      ^^^
+>test : string
+>     : ^^^^^^
+>aliasTopZ : typeof import("expandoFunctionBlockShadowing3").Z
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const blockZcheck: { (): void; test: number } = Z;
+>blockZcheck : { (): void; test: number; }
+>            : ^^^^^^    ^^^^^^^^      ^^^
+>test : number
+>     : ^^^^^^
+>Z : { (): void; test: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
