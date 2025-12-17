@@ -37,11 +37,9 @@
         // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
         "trailingCommas": "never"
     },
-    "exec": {
-        "cwd": "${configDir}",
-        "commands": [
-            { "command": "go tool mvdan.cc/gofumpt", "exts": ["go"], "cacheKeyFiles": ["go.mod"] }
-        ]
+    "gofumpt": {
+        "langVersion": "go1.25",
+        "modulePath": "github.com/microsoft/typescript-go"
     },
     "excludes": [
         "**/.git",
@@ -61,6 +59,6 @@
         "https://plugins.dprint.dev/typescript-0.95.13.wasm",
         "https://plugins.dprint.dev/json-0.21.0.wasm",
         "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm",
-        "https://plugins.dprint.dev/exec-0.6.0.json@a054130d458f124f9b5c91484833828950723a5af3f8ff2bd1523bd47b83b364"
+        "https://plugins.dprint.dev/jakebailey/gofumpt-v0.0.3.wasm"
     ]
 }
