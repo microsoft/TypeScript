@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/genericMappedTypeOptionalityModifier1.ts] ////
+
+=== genericMappedTypeOptionalityModifier1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59902
+
+const example = <T extends string>() => {
+>example : Symbol(example, Decl(genericMappedTypeOptionalityModifier1.ts, 2, 5))
+>T : Symbol(T, Decl(genericMappedTypeOptionalityModifier1.ts, 2, 17))
+
+  type SomeOptional = { [key in T]?: 1 };
+>SomeOptional : Symbol(SomeOptional, Decl(genericMappedTypeOptionalityModifier1.ts, 2, 41))
+>key : Symbol(key, Decl(genericMappedTypeOptionalityModifier1.ts, 3, 25))
+>T : Symbol(T, Decl(genericMappedTypeOptionalityModifier1.ts, 2, 17))
+
+  type AllRequired = { [key in keyof SomeOptional]-?: 1 };
+>AllRequired : Symbol(AllRequired, Decl(genericMappedTypeOptionalityModifier1.ts, 3, 41))
+>key : Symbol(key, Decl(genericMappedTypeOptionalityModifier1.ts, 5, 24))
+>SomeOptional : Symbol(SomeOptional, Decl(genericMappedTypeOptionalityModifier1.ts, 2, 41))
+
+  type RequiredValues = AllRequired[keyof AllRequired];
+>RequiredValues : Symbol(RequiredValues, Decl(genericMappedTypeOptionalityModifier1.ts, 5, 58))
+>AllRequired : Symbol(AllRequired, Decl(genericMappedTypeOptionalityModifier1.ts, 3, 41))
+>AllRequired : Symbol(AllRequired, Decl(genericMappedTypeOptionalityModifier1.ts, 3, 41))
+
+  const x: RequiredValues = undefined; // error
+>x : Symbol(x, Decl(genericMappedTypeOptionalityModifier1.ts, 9, 7))
+>RequiredValues : Symbol(RequiredValues, Decl(genericMappedTypeOptionalityModifier1.ts, 5, 58))
+>undefined : Symbol(undefined)
+
+  return x;
+>x : Symbol(x, Decl(genericMappedTypeOptionalityModifier1.ts, 9, 7))
+
+};
+

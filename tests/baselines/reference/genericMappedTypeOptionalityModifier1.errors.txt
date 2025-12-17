@@ -1,0 +1,20 @@
+genericMappedTypeOptionalityModifier1.ts(10,9): error TS2322: Type 'undefined' is not assignable to type 'RequiredValues'.
+
+
+==== genericMappedTypeOptionalityModifier1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59902
+    
+    const example = <T extends string>() => {
+      type SomeOptional = { [key in T]?: 1 };
+    
+      type AllRequired = { [key in keyof SomeOptional]-?: 1 };
+    
+      type RequiredValues = AllRequired[keyof AllRequired];
+    
+      const x: RequiredValues = undefined; // error
+            ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'RequiredValues'.
+    
+      return x;
+    };
+    
