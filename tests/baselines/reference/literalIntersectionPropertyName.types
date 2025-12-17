@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/literalIntersectionPropertyName.ts] ////
+
+=== literalIntersectionPropertyName.ts ===
+declare const typeKey: unique symbol;
+>typeKey : unique symbol
+>        : ^^^^^^^^^^^^^
+
+type TypeID<Type = unknown, ID extends string = string> = ID & { [typeKey]?: Type };
+>TypeID : TypeID<Type, ID>
+>       : ^^^^^^^^^^^^^^^^
+>[typeKey] : Type
+>          : ^^^^
+>typeKey : unique symbol
+>        : ^^^^^^^^^^^^^
+
+function typeID<Type, ID extends string>(id: ID): TypeID<Type, ID> {
+>typeID : <Type, ID extends string>(id: ID) => TypeID<Type, ID>
+>       : ^    ^^  ^^^^^^^^^      ^^  ^^  ^^^^^                
+>id : ID
+>   : ^^
+
+  return id;
+>id : ID
+>   : ^^
+}
+
+type KeyOf<TID extends TypeID> = TID extends TypeID<any, infer ID> ? ID : never;
+>KeyOf : KeyOf<TID>
+>      : ^^^^^^^^^^
+
+type TypeOf<TID extends TypeID> = TID extends TypeID<infer Type> ? Type : never;
+>TypeOf : TypeOf<TID>
+>       : ^^^^^^^^^^^
+
+type Provides<P extends TypeID> = { readonly [T in KeyOf<P>]: TypeOf<P> };
+>Provides : Provides<P>
+>         : ^^^^^^^^^^^
+
+// ---cut---
+
+interface Foo {
+    foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+}
+
+const Foo = typeID("Foo") satisfies TypeID<Foo>;
+>Foo : TypeID<Foo, "Foo">
+>    : ^^^^^^^^^^^^^^^^^^
+>typeID("Foo") satisfies TypeID<Foo> : TypeID<Foo, "Foo">
+>                                    : ^^^^^^^^^^^^^^^^^^
+>typeID("Foo") : TypeID<Foo, "Foo">
+>              : ^^^^^^^^^^^^^^^^^^
+>typeID : <Type, ID extends string>(id: ID) => TypeID<Type, ID>
+>       : ^    ^^  ^^^^^^^^^      ^^  ^^  ^^^^^                
+>"Foo" : "Foo"
+>      : ^^^^^
+
+//    ^? const Foo: TypeID<Foo, "Foo">
+
+const Bar: Provides<typeof Foo> = {
+>Bar : Provides<TypeID<Foo, "Foo">>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : TypeID<Foo, "Foo">
+>    : ^^^^^^^^^^^^^^^^^^
+>{    [Foo]: {}} : { Foo: {}; }
+>                : ^^^^^^^^^^^^
+
+    [Foo]: {}
+>[Foo] : {}
+>      : ^^
+>Foo : TypeID<Foo, "Foo">
+>    : ^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+};
