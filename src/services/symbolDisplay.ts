@@ -57,6 +57,7 @@ import {
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
+    isOptionalChain,
     isTaggedTemplateExpression,
     isThisInTypeQuery,
     isTransientSymbol,
@@ -321,6 +322,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
 
         let signature: Signature | undefined;
         type ??= isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+
+        // For optional symbols, use the non-optional type to avoid showing both '?' and '| undefined'
+        // but only when not in optional chaining contexts where '| undefined' is semantically meaningful
+        if (symbol.flags & SymbolFlags.Optional && type && !isOptionalChain(location)) {
+            type = typeChecker.getNonOptionalType(type);
+        }
 
         if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
             const right = (location.parent as PropertyAccessExpression).name;
