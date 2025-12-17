@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/indexedAccessConstraints2.ts] ////
+
+=== indexedAccessConstraints2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59946
+
+type Test<T extends string> = { [K in T]: { key: K } }[T] & { target: string };
+>Test : Test<T>
+>     : ^^^^^^^
+>key : K
+>    : ^
+>target : string
+>       : ^^^^^^
+
+const foo = <T extends string>(arg: Test<T>) => {
+>foo : <T extends string>(arg: Test<T>) => void
+>    : ^ ^^^^^^^^^      ^^   ^^       ^^^^^^^^^
+><T extends string>(arg: Test<T>) => {  const value: Test<T> = arg; // ok  const value2: Test<T>["key"] = arg["key"]; // ok  const value3: Test<T>["target"] = arg["target"]; // ok} : <T extends string>(arg: Test<T>) => void
+>                                                                                                                                                                                    : ^ ^^^^^^^^^      ^^   ^^       ^^^^^^^^^
+>arg : Test<T>
+>    : ^^^^^^^
+
+  const value: Test<T> = arg; // ok
+>value : Test<T>
+>      : ^^^^^^^
+>arg : Test<T>
+>    : ^^^^^^^
+
+  const value2: Test<T>["key"] = arg["key"]; // ok
+>value2 : Test<T>["key"]
+>       : ^^^^^^^^^^^^^^
+>arg["key"] : T
+>           : ^
+>arg : Test<T>
+>    : ^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+
+  const value3: Test<T>["target"] = arg["target"]; // ok
+>value3 : Test<T>["target"]
+>       : ^^^^^^^^^^^^^^^^^
+>arg["target"] : string
+>              : ^^^^^^
+>arg : Test<T>
+>    : ^^^^^^^
+>"target" : "target"
+>         : ^^^^^^^^
+
+};
+
