@@ -28,8 +28,8 @@ type T4 = Boxify<string[] & [string, string]>;
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T5 = Boxify<string[] & { x: string }>;
->T5 : Boxify<string[] & { x: string; }>
->   : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>T5 : Box<string>[]
+>   : ^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
