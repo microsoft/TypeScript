@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/exhaustiveSwitchTypeofPrimitive1.ts] ////
+
+=== exhaustiveSwitchTypeofPrimitive1.ts ===
+function woo(x: string): number {
+>woo : Symbol(woo, Decl(exhaustiveSwitchTypeofPrimitive1.ts, 0, 0))
+>x : Symbol(x, Decl(exhaustiveSwitchTypeofPrimitive1.ts, 0, 13))
+
+  switch (typeof x) {
+>x : Symbol(x, Decl(exhaustiveSwitchTypeofPrimitive1.ts, 0, 13))
+
+    case "string":
+      return 1;
+  }
+}
+

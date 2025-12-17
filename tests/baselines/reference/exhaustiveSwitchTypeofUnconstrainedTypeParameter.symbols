@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts] ////
+
+=== exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts ===
+// https://github.com/microsoft/TypeScript/issues/56786
+
+function checkAll<T>(something: T): T {
+>checkAll : Symbol(checkAll, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 18))
+>something : Symbol(something, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 21))
+>T : Symbol(T, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 18))
+>T : Symbol(T, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 18))
+
+  switch (typeof something) {
+>something : Symbol(something, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 21))
+
+    case "number":
+    case "bigint":
+    case "boolean":
+    case "symbol":
+    case "undefined":
+    case "function":
+    case "object":
+    case "string":
+      return something;
+>something : Symbol(something, Decl(exhaustiveSwitchTypeofUnconstrainedTypeParameter.ts, 2, 21))
+  }
+}
+
