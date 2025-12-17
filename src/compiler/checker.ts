@@ -23693,9 +23693,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const baseObjectType = getBaseConstraintOfType(objectType) || objectType;
                     const baseIndexType = getBaseConstraintOfType(indexType) || indexType;
                     if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseIndexType)) {
-                        const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
-                        const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags);
-                        if (constraint) {
+                        let constraint;
+                        if (
+                            isMappedTypeGenericIndexedAccess(target) &&
+                            (constraint = getBaseConstraintOfType(target)) &&
+                            (result = isRelatedTo(source, constraint, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState))
+                        ) {
+                            return result;
+                        }
+                        if (constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0))) {
                             if (reportErrors && originalErrorInfo) {
                                 // create a new chain for the constraint error
                                 resetErrorInfo(saveErrorInfo);

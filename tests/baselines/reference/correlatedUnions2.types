@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/correlatedUnions2.ts] ////
+
+=== correlatedUnions2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61676
+
+type Definitions = {
+>Definitions : Definitions
+>            : ^^^^^^^^^^^
+
+  onFoo: [arg: number];
+>onFoo : [arg: number]
+>      : ^^^^^^^^^^^^^
+
+  onBar: [arg: string];
+>onBar : [arg: string]
+>      : ^^^^^^^^^^^^^
+
+};
+
+type SomeCallbacks = {
+>SomeCallbacks : SomeCallbacks
+>              : ^^^^^^^^^^^^^
+
+  [K in keyof Definitions]: (...args: Definitions[K]) => void;
+>args : Definitions[K]
+>     : ^^^^^^^^^^^^^^
+
+};
+
+const wrapCallback = <K extends keyof SomeCallbacks>(
+>wrapCallback : <K extends keyof SomeCallbacks>(source: SomeCallbacks, target: SomeCallbacks, key: K) => void
+>             : ^ ^^^^^^^^^                   ^^      ^^             ^^      ^^             ^^   ^^ ^^^^^^^^^
+><K extends keyof SomeCallbacks>(  source: SomeCallbacks,  target: SomeCallbacks,  key: K,) => {  const callback = source[key];  target[key] = (...args) => {    if (Math.random() > 0.5) {      return callback(...args);    }  };} : <K extends keyof SomeCallbacks>(source: SomeCallbacks, target: SomeCallbacks, key: K) => void
+>                                                                                                                                                                                                                                    : ^ ^^^^^^^^^                   ^^      ^^             ^^      ^^             ^^   ^^ ^^^^^^^^^
+
+  source: SomeCallbacks,
+>source : SomeCallbacks
+>       : ^^^^^^^^^^^^^
+
+  target: SomeCallbacks,
+>target : SomeCallbacks
+>       : ^^^^^^^^^^^^^
+
+  key: K,
+>key : K
+>    : ^
+
+) => {
+  const callback = source[key];
+>callback : SomeCallbacks[K]
+>         : ^^^^^^^^^^^^^^^^
+>source[key] : SomeCallbacks[K]
+>            : ^^^^^^^^^^^^^^^^
+>source : SomeCallbacks
+>       : ^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+  target[key] = (...args) => {
+>target[key] = (...args) => {    if (Math.random() > 0.5) {      return callback(...args);    }  } : (...args: Definitions[K]) => void
+>                                                                                                  : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>target[key] : SomeCallbacks[K]
+>            : ^^^^^^^^^^^^^^^^
+>target : SomeCallbacks
+>       : ^^^^^^^^^^^^^
+>key : K
+>    : ^
+>(...args) => {    if (Math.random() > 0.5) {      return callback(...args);    }  } : (...args: Definitions[K]) => void
+>                                                                                    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : Definitions[K]
+>     : ^^^^^^^^^^^^^^
+
+    if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+      return callback(...args);
+>callback(...args) : void
+>                  : ^^^^
+>callback : SomeCallbacks[K]
+>         : ^^^^^^^^^^^^^^^^
+>...args : string | number
+>        : ^^^^^^^^^^^^^^^
+>args : Definitions[K]
+>     : ^^^^^^^^^^^^^^
+    }
+  };
+};
+
+function wrapAll(callbacks: SomeCallbacks): SomeCallbacks {
+>wrapAll : (callbacks: SomeCallbacks) => SomeCallbacks
+>        : ^         ^^             ^^^^^             
+>callbacks : SomeCallbacks
+>          : ^^^^^^^^^^^^^
+
+  const wrapped = {} as SomeCallbacks;
+>wrapped : SomeCallbacks
+>        : ^^^^^^^^^^^^^
+>{} as SomeCallbacks : SomeCallbacks
+>                    : ^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  for (let key in callbacks) {
+>key : string
+>    : ^^^^^^
+>callbacks : SomeCallbacks
+>          : ^^^^^^^^^^^^^
+
+    wrapCallback(callbacks, wrapped, key as keyof SomeCallbacks);
+>wrapCallback(callbacks, wrapped, key as keyof SomeCallbacks) : void
+>                                                             : ^^^^
+>wrapCallback : <K extends keyof SomeCallbacks>(source: SomeCallbacks, target: SomeCallbacks, key: K) => void
+>             : ^ ^^^^^^^^^                   ^^      ^^             ^^      ^^             ^^   ^^ ^^^^^^^^^
+>callbacks : SomeCallbacks
+>          : ^^^^^^^^^^^^^
+>wrapped : SomeCallbacks
+>        : ^^^^^^^^^^^^^
+>key as keyof SomeCallbacks : keyof Definitions
+>                           : ^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+  }
+  return wrapped;
+>wrapped : SomeCallbacks
+>        : ^^^^^^^^^^^^^
+}
+

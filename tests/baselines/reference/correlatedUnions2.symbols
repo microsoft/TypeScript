@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/correlatedUnions2.ts] ////
+
+=== correlatedUnions2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61676
+
+type Definitions = {
+>Definitions : Symbol(Definitions, Decl(correlatedUnions2.ts, 0, 0))
+
+  onFoo: [arg: number];
+>onFoo : Symbol(onFoo, Decl(correlatedUnions2.ts, 2, 20))
+
+  onBar: [arg: string];
+>onBar : Symbol(onBar, Decl(correlatedUnions2.ts, 3, 23))
+
+};
+
+type SomeCallbacks = {
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  [K in keyof Definitions]: (...args: Definitions[K]) => void;
+>K : Symbol(K, Decl(correlatedUnions2.ts, 8, 3))
+>Definitions : Symbol(Definitions, Decl(correlatedUnions2.ts, 0, 0))
+>args : Symbol(args, Decl(correlatedUnions2.ts, 8, 29))
+>Definitions : Symbol(Definitions, Decl(correlatedUnions2.ts, 0, 0))
+>K : Symbol(K, Decl(correlatedUnions2.ts, 8, 3))
+
+};
+
+const wrapCallback = <K extends keyof SomeCallbacks>(
+>wrapCallback : Symbol(wrapCallback, Decl(correlatedUnions2.ts, 11, 5))
+>K : Symbol(K, Decl(correlatedUnions2.ts, 11, 22))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  source: SomeCallbacks,
+>source : Symbol(source, Decl(correlatedUnions2.ts, 11, 53))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  target: SomeCallbacks,
+>target : Symbol(target, Decl(correlatedUnions2.ts, 12, 24))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  key: K,
+>key : Symbol(key, Decl(correlatedUnions2.ts, 13, 24))
+>K : Symbol(K, Decl(correlatedUnions2.ts, 11, 22))
+
+) => {
+  const callback = source[key];
+>callback : Symbol(callback, Decl(correlatedUnions2.ts, 16, 7))
+>source : Symbol(source, Decl(correlatedUnions2.ts, 11, 53))
+>key : Symbol(key, Decl(correlatedUnions2.ts, 13, 24))
+
+  target[key] = (...args) => {
+>target : Symbol(target, Decl(correlatedUnions2.ts, 12, 24))
+>key : Symbol(key, Decl(correlatedUnions2.ts, 13, 24))
+>args : Symbol(args, Decl(correlatedUnions2.ts, 18, 17))
+
+    if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      return callback(...args);
+>callback : Symbol(callback, Decl(correlatedUnions2.ts, 16, 7))
+>args : Symbol(args, Decl(correlatedUnions2.ts, 18, 17))
+    }
+  };
+};
+
+function wrapAll(callbacks: SomeCallbacks): SomeCallbacks {
+>wrapAll : Symbol(wrapAll, Decl(correlatedUnions2.ts, 23, 2))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions2.ts, 25, 17))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  const wrapped = {} as SomeCallbacks;
+>wrapped : Symbol(wrapped, Decl(correlatedUnions2.ts, 26, 7))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+
+  for (let key in callbacks) {
+>key : Symbol(key, Decl(correlatedUnions2.ts, 27, 10))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions2.ts, 25, 17))
+
+    wrapCallback(callbacks, wrapped, key as keyof SomeCallbacks);
+>wrapCallback : Symbol(wrapCallback, Decl(correlatedUnions2.ts, 11, 5))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions2.ts, 25, 17))
+>wrapped : Symbol(wrapped, Decl(correlatedUnions2.ts, 26, 7))
+>key : Symbol(key, Decl(correlatedUnions2.ts, 27, 10))
+>SomeCallbacks : Symbol(SomeCallbacks, Decl(correlatedUnions2.ts, 5, 2))
+  }
+  return wrapped;
+>wrapped : Symbol(wrapped, Decl(correlatedUnions2.ts, 26, 7))
+}
+
