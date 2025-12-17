@@ -30,6 +30,8 @@ class Foo {
         for (#field in v) { /**/ } // Bad - 'in' not allowed
 
         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
+
+        for (let d in #field) { /**/ } // Bad - private field not allowed in expression of forInStatement
     }
     whitespace(v: any) {
         const a = v && /*0*/#field/*1*/
@@ -139,6 +141,7 @@ class Foo {
         const c = (#field) in v; // Bad - privateID is not an expression on its own
         for (#field in v) { /**/ } // Bad - 'in' not allowed
         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
+        for (let d in #field) { /**/ } // Bad - private field not allowed in expression of forInStatement
     }
     whitespace(v) {
         const a = v && /*0*/ #field /*1*/
