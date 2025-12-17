@@ -7,8 +7,10 @@ import {
     AnyImportSyntax,
     Diagnostics,
     Expression,
+    factory,
     getQuotePreference,
     getTokenAtPosition,
+    hasSyntacticModifier,
     Identifier,
     isExternalModuleReference,
     isIdentifier,
@@ -16,6 +18,7 @@ import {
     isImportEqualsDeclaration,
     isNamespaceImport,
     makeImport,
+    ModifierFlags,
     SourceFile,
     textChanges,
     UserPreferences,
@@ -44,20 +47,34 @@ interface Info {
     readonly importNode: AnyImportSyntax;
     readonly name: Identifier;
     readonly moduleSpecifier: Expression;
+    readonly exportModifier: boolean;
 }
 function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const name = getTokenAtPosition(sourceFile, pos);
     if (!isIdentifier(name)) return undefined; // bad input
     const { parent } = name;
     if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {
-        return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression };
+        return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression, exportModifier: hasSyntacticModifier(parent, ModifierFlags.Export) };
     }
     else if (isNamespaceImport(parent) && isImportDeclaration(parent.parent.parent)) {
         const importNode = parent.parent.parent;
-        return { importNode, name, moduleSpecifier: importNode.moduleSpecifier };
+        return { importNode, name, moduleSpecifier: importNode.moduleSpecifier, exportModifier: false };
     }
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
     changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
+    if (info.exportModifier) {
+        changes.insertNodeAfter(
+            sourceFile,
+            info.importNode,
+            factory.createExportDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                factory.createNamedExports([
+                    factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, info.name),
+                ]),
+            ),
+        );
+    }
 }
