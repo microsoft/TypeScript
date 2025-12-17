@@ -26824,13 +26824,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
-                        if (inference.priority === undefined || priority < inference.priority) {
+                        const combinedPriority = priority | (inference.individualPriority || InferencePriority.None);
+                        if (inference.priority === undefined || priority < (inference.priority & ~InferencePriority.DistributiveConditional)) {
                             inference.candidates = undefined;
                             inference.contraCandidates = undefined;
                             inference.topLevel = true;
-                            inference.priority = priority;
+                            inference.priority = combinedPriority;
                         }
-                        if (priority === inference.priority) {
+                        if (priority === (inference.priority & ~InferencePriority.DistributiveConditional)) {
+                            // "upgrade" the priority (by essentially removing DistributiveConditional bit) of the inference without discarding the collected candidates
+                            if (inference.priority > combinedPriority) {
+                                inference.priority = combinedPriority;
+                                clearCachedInferences(inferences);
+                            }
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
@@ -27196,6 +27202,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToConditionalType(source: Type, target: ConditionalType) {
+            const info = target.root.isDistributive ? getInferenceInfoForType(getActualTypeVariable(target.checkType)) : undefined;
+            const saveIndividualPriority = info?.individualPriority;
+            if (info) {
+                info.individualPriority = (info.individualPriority || InferencePriority.None) | InferencePriority.DistributiveConditional;
+            }
             if (source.flags & TypeFlags.Conditional) {
                 inferFromTypes((source as ConditionalType).checkType, target.checkType);
                 inferFromTypes((source as ConditionalType).extendsType, target.extendsType);
@@ -27205,6 +27216,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 const targetTypes = [getTrueTypeFromConditionalType(target), getFalseTypeFromConditionalType(target)];
                 inferToMultipleTypesWithPriority(source, targetTypes, target.flags, contravariant ? InferencePriority.ContravariantConditional : 0);
+            }
+            if (info) {
+                info.individualPriority = saveIndividualPriority;
             }
         }
 

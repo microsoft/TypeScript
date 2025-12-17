@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/inferToDistributiveConditionalType1.ts] ////
+
+=== inferToDistributiveConditionalType1.ts ===
+declare class Animal { eat(): void; }
+>Animal : Animal
+>       : ^^^^^^
+>eat : () => void
+>    : ^^^^^^    
+
+declare class Cat extends Animal { meow(): void; }
+>Cat : Cat
+>    : ^^^
+>Animal : Animal
+>       : ^^^^^^
+>meow : () => void
+>     : ^^^^^^    
+
+declare class Dog extends Animal { bark(): void; }
+>Dog : Dog
+>    : ^^^
+>Animal : Animal
+>       : ^^^^^^
+>bark : () => void
+>     : ^^^^^^    
+
+declare function test1<T>(a: T extends unknown ? { prop: T } : never): T;
+>test1 : <T>(a: T extends unknown ? { prop: T; } : never) => T
+>      : ^ ^^ ^^                                        ^^^^^ 
+>a : T extends unknown ? { prop: T; } : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>prop : T
+>     : ^
+
+declare const arg1: { prop: Dog } | { prop: Cat };
+>arg1 : { prop: Dog; } | { prop: Cat; }
+>     : ^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>prop : Dog
+>     : ^^^
+>prop : Cat
+>     : ^^^
+
+const result1 = test1(arg1);
+>result1 : Cat | Dog
+>        : ^^^^^^^^^
+>test1(arg1) : Cat | Dog
+>            : ^^^^^^^^^
+>test1 : <T>(a: T extends unknown ? { prop: T; } : never) => T
+>      : ^ ^^ ^^                                        ^^^^^ 
+>arg1 : { prop: Dog; } | { prop: Cat; }
+>     : ^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+

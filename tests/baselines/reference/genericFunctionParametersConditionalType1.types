@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/genericFunctionParametersConditionalType1.ts] ////
+
+=== genericFunctionParametersConditionalType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62079
+
+export {};
+
+interface _Map {
+  foo: { a: 123 }
+>foo : { a: 123; }
+>    : ^^^^^   ^^^
+>a : 123
+>  : ^^^
+}
+
+type ModuleSubType = "bar" & { brand: true };
+>ModuleSubType : ModuleSubType
+>              : ^^^^^^^^^^^^^
+>brand : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+type Map = _Map & Record<ModuleSubType, { blah: string }>
+>Map : Map
+>    : ^^^
+>blah : string
+>     : ^^^^^^
+
+type SubTypeGet<
+>SubTypeGet : SubTypeGet<SubType, Map>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  SubType extends string,
+  Map extends Record<SubType, unknown>,
+> = SubType extends unknown
+? { type?: SubType } & Map[SubType]
+>type : SubType | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+
+: never;
+
+type TestParameters = Parameters<<T extends "foo" | ModuleSubType>(arg: SubTypeGet<T, Map>) => void>
+>TestParameters : [arg: { type?: ModuleSubType | undefined; } | ({ type?: "foo" | undefined; } & { a: 123; })]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^
+>arg : SubTypeGet<T, Map>
+>    : ^^^^^^^^^^^^^^^^^^
+
+declare class Test<T extends "foo" | ModuleSubType> {
+>Test : Test<T>
+>     : ^^^^^^^
+
+  constructor(arg: SubTypeGet<T, Map>);
+>arg : SubTypeGet<T, Map>
+>    : ^^^^^^^^^^^^^^^^^^
+}
+
+type TestConstructorParameters = ConstructorParameters<typeof Test>;
+>TestConstructorParameters : [arg: { type?: ModuleSubType | undefined; } | ({ type?: "foo" | undefined; } & { a: 123; })]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+declare class Animal { eat(): void; }
+>Animal : Animal
+>       : ^^^^^^
+>eat : () => void
+>    : ^^^^^^    
+
+declare class Cat extends Animal { meow(): void; }
+>Cat : Cat
+>    : ^^^
+>Animal : Animal
+>       : ^^^^^^
+>meow : () => void
+>     : ^^^^^^    
+
+declare class Dog extends Animal { bark(): void; }
+>Dog : Dog
+>    : ^^^
+>Animal : Animal
+>       : ^^^^^^
+>bark : () => void
+>     : ^^^^^^    
+
+type WithDistributiveConditionalDirectlyInParam = <T extends Cat | Dog>(
+>WithDistributiveConditionalDirectlyInParam : WithDistributiveConditionalDirectlyInParam
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arg: T extends unknown ? T : never,
+>arg : T extends unknown ? T : never
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) => void;
+
+type Result1 = Parameters<WithDistributiveConditionalDirectlyInParam>;
+>Result1 : [arg: Cat | Dog]
+>        : ^^^^^^^^^^^^^^^^
+
+type WithDistributiveConditionalNested = <T extends Cat | Dog>(
+>WithDistributiveConditionalNested : WithDistributiveConditionalNested
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arg: T extends unknown ? { animal: T } : never,
+>arg : T extends unknown ? { animal: T; } : never
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>animal : T
+>       : ^
+
+) => void;
+
+type Result2 = Parameters<WithDistributiveConditionalNested>;
+>Result2 : [arg: { animal: Cat; } | { animal: Dog; }]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type WithNonDistributiveConditionalNested = <T extends Cat | Dog>(
+>WithNonDistributiveConditionalNested : WithNonDistributiveConditionalNested
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arg: [T] extends [unknown] ? { animal: T } : never,
+>arg : [T] extends [unknown] ? { animal: T; } : never
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>animal : T
+>       : ^
+
+) => void;
+
+type Result3 = Parameters<WithNonDistributiveConditionalNested>;
+>Result3 : [arg: { animal: Cat | Dog; }]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
