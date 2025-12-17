@@ -180,3 +180,82 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 >Foo : (props: Props) => JSX.Element
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 
+// https://github.com/microsoft/TypeScript/issues/60343
+
+function Component60343(props: any) {
+>Component60343 : (props: any) => JSX.Element
+>               : ^     ^^   ^^^^^^^^^^^^^^^^
+>props : any
+>      : ^^^
+
+  return <div></div>;
+><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+}
+
+function Test60343({ shouldOverride }: { shouldOverride: boolean }) {
+>Test60343 : ({ shouldOverride }: { shouldOverride: boolean; }) => JSX.Element
+>          : ^                  ^^                            ^^^^^^^^^^^^^^^^
+>shouldOverride : boolean
+>               : ^^^^^^^
+>shouldOverride : boolean
+>               : ^^^^^^^
+
+  return (
+>(    <Component60343      a={false}      b={false} // no error      c={false}      {...(shouldOverride        ? {            b: true,          }        : {})}    />  ) : JSX.Element
+>                                                                                                                                                                        : ^^^^^^^^^^^
+
+    <Component60343
+><Component60343      a={false}      b={false} // no error      c={false}      {...(shouldOverride        ? {            b: true,          }        : {})}    /> : JSX.Element
+>                                                                                                                                                                : ^^^^^^^^^^^
+>Component60343 : (props: any) => JSX.Element
+>               : ^     ^^   ^^^^^^^^^^^^^^^^
+
+      a={false}
+>a : boolean
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+      b={false} // no error
+>b : boolean
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+      c={false}
+>c : boolean
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+      {...(shouldOverride
+>(shouldOverride        ? {            b: true,          }        : {}) : { b: boolean; } | {}
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^
+>shouldOverride        ? {            b: true,          }        : {} : { b: boolean; } | {}
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^
+>shouldOverride : boolean
+>               : ^^^^^^^
+
+        ? {
+>{            b: true,          } : { b: boolean; }
+>                                 : ^^^^^^^^^^^^^^^
+
+            b: true,
+>b : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+          }
+        : {})}
+>{} : {}
+>   : ^^
+
+    />
+  );
+}
+

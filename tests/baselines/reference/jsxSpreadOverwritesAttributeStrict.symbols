@@ -86,3 +86,44 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 >d : Symbol(d, Decl(file.tsx, 21, 50))
 >Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
 
+// https://github.com/microsoft/TypeScript/issues/60343
+
+function Component60343(props: any) {
+>Component60343 : Symbol(Component60343, Decl(file.tsx, 21, 66))
+>props : Symbol(props, Decl(file.tsx, 25, 24))
+
+  return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+function Test60343({ shouldOverride }: { shouldOverride: boolean }) {
+>Test60343 : Symbol(Test60343, Decl(file.tsx, 27, 1))
+>shouldOverride : Symbol(shouldOverride, Decl(file.tsx, 29, 20))
+>shouldOverride : Symbol(shouldOverride, Decl(file.tsx, 29, 40))
+
+  return (
+    <Component60343
+>Component60343 : Symbol(Component60343, Decl(file.tsx, 21, 66))
+
+      a={false}
+>a : Symbol(a, Decl(file.tsx, 31, 19))
+
+      b={false} // no error
+>b : Symbol(b, Decl(file.tsx, 32, 15))
+
+      c={false}
+>c : Symbol(c, Decl(file.tsx, 33, 15))
+
+      {...(shouldOverride
+>shouldOverride : Symbol(shouldOverride, Decl(file.tsx, 29, 20))
+
+        ? {
+            b: true,
+>b : Symbol(b, Decl(file.tsx, 36, 11))
+          }
+        : {})}
+    />
+  );
+}
+

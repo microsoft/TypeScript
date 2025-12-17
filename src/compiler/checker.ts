@@ -33796,10 +33796,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
+                        const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(exprType, /*readonly*/ false);
                         if (allAttributesTable) {
-                            checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
+                            checkSpreadPropOverrides(mergedType, allAttributesTable, attributeDecl);
                         }
+                        if (isErrorType(spread)) {
+                            continue;
+                        }
+                        spread = getSpreadType(spread, mergedType, attributes.symbol, objectFlags, /*readonly*/ false);
                     }
                     else {
                         error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
