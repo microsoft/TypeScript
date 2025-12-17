@@ -39,9 +39,13 @@ let obj = {
 >f3 : Symbol(f3, Decl(index.js, 11, 4))
 
     this.x = 1
+>this.x : Symbol(x, Decl(index.js, 1, 11))
+>this : Symbol(obj, Decl(index.js, 1, 9))
 >x : Symbol((Anonymous function).x, Decl(index.js, 12, 19))
 
     this/*3*/
+>this : Symbol(obj, Decl(index.js, 1, 9))
+
   }),
 }
 
