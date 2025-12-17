@@ -40152,14 +40152,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, rightIsThis?: boolean): Type {
-        const properties = node.properties;
-        if (strictNullChecks && properties.length === 0) {
-            return checkNonNullType(sourceType, node);
+        // Iterate over all properties of the object literal
+        for (const prop of node.properties) {
+            if (prop.kind === SyntaxKind.SpreadAssignment) {
+                const spreadType = checkExpression(prop.expression);
+                
+                // If strictSpreadCheck is enabled, enforce full type compatibility
+                if (compilerOptions.strictSpreadCheck && !isTypeAssignableTo(spreadType, sourceType)) {
+                    // Report an error if the spread operand’s type does not match the target type
+                    error(
+                        prop,
+                        Diagnostics.Type_0_is_not_assignable_to_type_1,
+                        typeToString(spreadType),
+                        typeToString(sourceType)
+                    );
+                }
+            } else {
+                // Existing logic for non-spread properties...
+            }
         }
-        for (let i = 0; i < properties.length; i++) {
-            checkObjectLiteralDestructuringPropertyAssignment(node, sourceType, i, properties, rightIsThis);
-        }
-        return sourceType;
     }
 
     /** Note: If property cannot be a SpreadAssignment, then allProperties does not need to be provided */
