@@ -7,18 +7,15 @@ class C {
 
     #bar;
 >#bar : any
->     : ^^^
 
     constructor () {
         this?.#foo;
->this?.#foo : any
->           : ^^^
+>this?.#foo : error
 >this : this
 >     : ^^^^
 
         this?.#bar;
 >this?.#bar : any
->           : ^^^
 >this : this
 >     : ^^^^
     }

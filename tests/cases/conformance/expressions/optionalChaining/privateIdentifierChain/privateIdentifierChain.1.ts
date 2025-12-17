@@ -1,5 +1,5 @@
 // @strict: true
-// @target: esnext
+// @target: esnext,es2015
 // @useDefineForClassFields: false
 
 class A {
@@ -9,8 +9,23 @@ class A {
         return new A();
     }
     constructor() {
-        this?.#b;           // Error
-        this?.a.#b;         // Error
-        this?.getA().#b;    // Error
+        this.a = this;
+        // None of these should error
+        this?.#b;
+        this?.a.#b;
+        this?.getA().#b;
+    }
+}
+
+class B {
+    a?: A
+    getA(): A {
+        return new A();
+    }
+    constructor() {
+        this.a = new A();
+        this.a?.#b; // Error
+        this?.a.#b; // Error
+        this?.getA().#b; // Error
     }
 }

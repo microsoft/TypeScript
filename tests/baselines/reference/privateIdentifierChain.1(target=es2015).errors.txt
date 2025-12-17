@@ -1,0 +1,40 @@
+privateIdentifierChain.1.ts(23,17): error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+privateIdentifierChain.1.ts(24,17): error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+privateIdentifierChain.1.ts(25,22): error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+
+
+==== privateIdentifierChain.1.ts (3 errors) ====
+    class A {
+        a?: A
+        #b?: A;
+        getA(): A {
+            return new A();
+        }
+        constructor() {
+            this.a = this;
+            // None of these should error
+            this?.#b;
+            this?.a.#b;
+            this?.getA().#b;
+        }
+    }
+    
+    class B {
+        a?: A
+        getA(): A {
+            return new A();
+        }
+        constructor() {
+            this.a = new A();
+            this.a?.#b; // Error
+                    ~~
+!!! error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+            this?.a.#b; // Error
+                    ~~
+!!! error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+            this?.getA().#b; // Error
+                         ~~
+!!! error TS18013: Property '#b' is not accessible outside class 'A' because it has a private identifier.
+        }
+    }
+    

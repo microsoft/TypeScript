@@ -1,0 +1,136 @@
+//// [tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts] ////
+
+=== privateIdentifierChain.1.ts ===
+class A {
+>A : A
+>  : ^
+
+    a?: A
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+
+    #b?: A;
+>#b : A | undefined
+>   : ^^^^^^^^^^^^^
+
+    getA(): A {
+>getA : () => A
+>     : ^^^^^^ 
+
+        return new A();
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+    }
+    constructor() {
+        this.a = this;
+>this.a = this : this
+>              : ^^^^
+>this.a : A | undefined
+>       : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+
+        // None of these should error
+        this?.#b;
+>this?.#b : A | undefined
+>         : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+
+        this?.a.#b;
+>this?.a.#b : A | undefined
+>           : ^^^^^^^^^^^^^
+>this?.a : A
+>        : ^
+>this : this
+>     : ^^^^
+>a : A
+>  : ^
+
+        this?.getA().#b;
+>this?.getA().#b : A | undefined
+>                : ^^^^^^^^^^^^^
+>this?.getA() : A
+>             : ^
+>this?.getA : () => A
+>           : ^^^^^^ 
+>this : this
+>     : ^^^^
+>getA : () => A
+>     : ^^^^^^ 
+    }
+}
+
+class B {
+>B : B
+>  : ^
+
+    a?: A
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+
+    getA(): A {
+>getA : () => A
+>     : ^^^^^^ 
+
+        return new A();
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+    }
+    constructor() {
+        this.a = new A();
+>this.a = new A() : A
+>                 : ^
+>this.a : A | undefined
+>       : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+
+        this.a?.#b; // Error
+>this.a?.#b : any
+>           : ^^^
+>this.a : A
+>       : ^
+>this : this
+>     : ^^^^
+>a : A
+>  : ^
+
+        this?.a.#b; // Error
+>this?.a.#b : any
+>           : ^^^
+>this?.a : A
+>        : ^
+>this : this
+>     : ^^^^
+>a : A
+>  : ^
+
+        this?.getA().#b; // Error
+>this?.getA().#b : any
+>                : ^^^
+>this?.getA() : A
+>             : ^
+>this?.getA : () => A
+>           : ^^^^^^ 
+>this : this
+>     : ^^^^
+>getA : () => A
+>     : ^^^^^^ 
+    }
+}
+
