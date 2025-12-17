@@ -61,6 +61,7 @@ var moduleA;
     }
     moduleA.Point = Point;
 })(moduleA || (moduleA = {}));
+var alias = moduleA;
 var p;
 var p;
 var p;
@@ -70,6 +71,7 @@ class clodule {
 (function (clodule) {
     var Point = { x: 0, y: 0 };
 })(clodule || (clodule = {}));
+var clolias = clodule;
 var p;
 var p;
 var p;
@@ -79,6 +81,7 @@ function fundule() {
 (function (fundule) {
     var Point = { x: 0, y: 0 };
 })(fundule || (fundule = {}));
+var funlias = fundule;
 var p;
 var p;
 var p;

@@ -31,6 +31,8 @@ exports.A = A;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.A = void 0;
+var A = a.A; // Error
+exports.A = A;
 const x = 0;
 exports.x = x;
 //// [c.js]
@@ -70,4 +72,5 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const b = __importStar(require("./b"));
+var x = b.x;
 console.log(x);

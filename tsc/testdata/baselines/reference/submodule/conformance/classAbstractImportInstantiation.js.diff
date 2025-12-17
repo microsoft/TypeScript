@@ -1,8 +1,0 @@
---- old.classAbstractImportInstantiation.js
-+++ new.classAbstractImportInstantiation.js
-@@= skipped -19, +19 lines =@@
-     M.A = A;
-     new A;
- })(M || (M = {}));
--var myA = M.A;
- new myA;

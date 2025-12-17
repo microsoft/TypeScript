@@ -10,7 +10,7 @@ sourceFile:sourceMapValidationImport.ts
 -------------------------------------------------------------------
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });
->>>exports.m = void 0;
+>>>exports.b = exports.m = void 0;
 >>>var m;
 1 >
 2 >^^^^
@@ -111,8 +111,52 @@ sourceFile:sourceMapValidationImport.ts
 8 >Emitted(9, 23) Source(1, 16) + SourceIndex(0)
 9 >Emitted(9, 31) Source(4, 2) + SourceIndex(0)
 ---
->>>var x = new a();
+>>>var a = m.c;
 1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^
+6 >           ^
+7 >            ^^^^^->
+1 >
+  >
+2 >import 
+3 >    a
+4 >      = 
+5 >        m.c
+6 >           ;
+1 >Emitted(10, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(10, 5) Source(5, 8) + SourceIndex(0)
+3 >Emitted(10, 6) Source(5, 9) + SourceIndex(0)
+4 >Emitted(10, 9) Source(5, 12) + SourceIndex(0)
+5 >Emitted(10, 12) Source(5, 15) + SourceIndex(0)
+6 >Emitted(10, 13) Source(5, 16) + SourceIndex(0)
+---
+>>>exports.b = m.c;
+1->
+2 >^^^^^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^^
+6 >               ^
+7 >                ^->
+1->
+  >export import 
+2 >
+3 >        b
+4 >          = 
+5 >            m.c
+6 >               ;
+1->Emitted(11, 1) Source(6, 15) + SourceIndex(0)
+2 >Emitted(11, 9) Source(6, 15) + SourceIndex(0)
+3 >Emitted(11, 10) Source(6, 16) + SourceIndex(0)
+4 >Emitted(11, 13) Source(6, 19) + SourceIndex(0)
+5 >Emitted(11, 16) Source(6, 22) + SourceIndex(0)
+6 >Emitted(11, 17) Source(6, 23) + SourceIndex(0)
+---
+>>>var x = new a();
+1->
 2 >^^^^
 3 >    ^
 4 >     ^^^
@@ -121,9 +165,7 @@ sourceFile:sourceMapValidationImport.ts
 7 >             ^^
 8 >               ^
 9 >                ^^^^^^^^^->
-1 >
-  >import a = m.c;
-  >export import b = m.c;
+1->
   >
 2 >var 
 3 >    x
@@ -132,14 +174,14 @@ sourceFile:sourceMapValidationImport.ts
 6 >            a
 7 >             ()
 8 >               ;
-1 >Emitted(10, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(10, 5) Source(7, 5) + SourceIndex(0)
-3 >Emitted(10, 6) Source(7, 6) + SourceIndex(0)
-4 >Emitted(10, 9) Source(7, 9) + SourceIndex(0)
-5 >Emitted(10, 13) Source(7, 13) + SourceIndex(0)
-6 >Emitted(10, 14) Source(7, 14) + SourceIndex(0)
-7 >Emitted(10, 16) Source(7, 16) + SourceIndex(0)
-8 >Emitted(10, 17) Source(7, 17) + SourceIndex(0)
+1->Emitted(12, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(12, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(12, 6) Source(7, 6) + SourceIndex(0)
+4 >Emitted(12, 9) Source(7, 9) + SourceIndex(0)
+5 >Emitted(12, 13) Source(7, 13) + SourceIndex(0)
+6 >Emitted(12, 14) Source(7, 14) + SourceIndex(0)
+7 >Emitted(12, 16) Source(7, 16) + SourceIndex(0)
+8 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
 ---
 >>>var y = new exports.b();
 1->
@@ -162,14 +204,14 @@ sourceFile:sourceMapValidationImport.ts
 7 >                    b
 8 >                     ()
 9 >                       ;
-1->Emitted(11, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(11, 5) Source(8, 5) + SourceIndex(0)
-3 >Emitted(11, 6) Source(8, 6) + SourceIndex(0)
-4 >Emitted(11, 9) Source(8, 9) + SourceIndex(0)
-5 >Emitted(11, 13) Source(8, 13) + SourceIndex(0)
-6 >Emitted(11, 21) Source(8, 13) + SourceIndex(0)
-7 >Emitted(11, 22) Source(8, 14) + SourceIndex(0)
-8 >Emitted(11, 24) Source(8, 16) + SourceIndex(0)
-9 >Emitted(11, 25) Source(8, 17) + SourceIndex(0)
+1->Emitted(13, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(13, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(13, 6) Source(8, 6) + SourceIndex(0)
+4 >Emitted(13, 9) Source(8, 9) + SourceIndex(0)
+5 >Emitted(13, 13) Source(8, 13) + SourceIndex(0)
+6 >Emitted(13, 21) Source(8, 13) + SourceIndex(0)
+7 >Emitted(13, 22) Source(8, 14) + SourceIndex(0)
+8 >Emitted(13, 24) Source(8, 16) + SourceIndex(0)
+9 >Emitted(13, 25) Source(8, 17) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationImport.js.map

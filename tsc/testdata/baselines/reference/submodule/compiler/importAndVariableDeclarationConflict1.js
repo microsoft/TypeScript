@@ -14,4 +14,5 @@ var m;
 (function (m_1) {
     m_1.m = '';
 })(m || (m = {}));
+var x = m.m;
 var x = '';

@@ -65,6 +65,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
 const foobar_1 = __importDefault(require("foobar"));
+var X = foobar_1.default.X;
 const foobarx_1 = __importDefault(require("foobarx"));
 const x = X;
 const x2 = foobarx_1.default;

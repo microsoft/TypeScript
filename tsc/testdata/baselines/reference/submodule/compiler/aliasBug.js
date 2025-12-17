@@ -37,6 +37,8 @@ var foo;
         })(baz = bar.baz || (bar.baz = {}));
     })(bar = foo.bar || (foo.bar = {}));
 })(foo || (foo = {}));
+var provide = foo;
+var booz = foo.bar.baz;
 var p = new provide.Provide();
 function use() {
     var p1; // error here, but should be okay

@@ -45,6 +45,7 @@ var Translation;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 const translation_1 = require("./translation");
+var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
 class Test {
     TranslationKeyEnum = TranslationKeyEnum;
     print() {

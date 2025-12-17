@@ -25,4 +25,6 @@ const test2 = mod2; // Possible false positive instantiation, but ok
 //// [reExportAliasMakesInstantiated.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.test1 = void 0;
+exports.test1 = pack2.test1;
 const test2 = mod2; // Possible false positive instantiation, but ok

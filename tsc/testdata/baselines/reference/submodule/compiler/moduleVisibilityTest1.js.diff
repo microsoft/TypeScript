@@ -1,14 +1,6 @@
 --- old.moduleVisibilityTest1.js
 +++ new.moduleVisibilityTest1.js
-@@= skipped -77, +77 lines =@@
-         OuterInnerMod.someExportedOuterInnerFunc = someExportedOuterInnerFunc;
-     })(OuterInnerMod = OuterMod.OuterInnerMod || (OuterMod.OuterInnerMod = {}));
- })(OuterMod || (OuterMod = {}));
--var OuterInnerAlias = OuterMod.OuterInnerMod;
- var M;
- (function (M) {
-     let InnerMod;
-@@= skipped -17, +16 lines =@@
+@@= skipped -94, +94 lines =@@
      M.x = 5;
      var y = M.x + M.x;
      class B {

@@ -8,15 +8,7 @@
      // No parameter properties
      constructor(foo) {
          this.foo = foo;
-@@= skipped -25, +26 lines =@@
- (function (NotLegalEnum) {
-     NotLegalEnum[NotLegalEnum["B"] = 1] = "B";
- })(NotLegalEnum || (NotLegalEnum = {}));
--var NoGoodAlias = NotLegalEnum.B;
- // No errors after this point
- class MyClassOk {
-     // Not a parameter property, ok
-@@= skipped -22, +21 lines =@@
+@@= skipped -47, +48 lines =@@
  // at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
  ({ foo() { } }.foo());
  // at the start of an ExpressionStatement if followed by function keyword

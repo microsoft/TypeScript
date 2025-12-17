@@ -1,7 +1,0 @@
---- old.collisionThisExpressionAndAliasInGlobal.js
-+++ new.collisionThisExpressionAndAliasInGlobal.js
-@@= skipped -12, +12 lines =@@
-     a.b = 10;
- })(a || (a = {}));
- var f = () => this;
--var _this = a; // Error

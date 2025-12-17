@@ -31,6 +31,8 @@ var mOfGloalFile;
     }
     mOfGloalFile.c = c;
 })(mOfGloalFile || (mOfGloalFile = {}));
+var exports = mOfGloalFile.c;
+var require = mOfGloalFile.c;
 new exports();
 new require();
 var m1;

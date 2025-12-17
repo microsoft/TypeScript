@@ -16,5 +16,6 @@ var globals;
 (function (globals) {
     globals.Bar = {};
 })(globals || (globals = {}));
+var Foo = globals.toString.Blah;
 //// [index.js]
 const Foo = {};

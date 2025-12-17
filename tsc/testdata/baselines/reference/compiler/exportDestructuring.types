@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/exportDestructuring.ts] ////
+
+=== exportDestructuring.ts ===
+const arr = [1, 2];
+>arr : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+export const [a, b] = arr;
+>a : number
+>b : number
+>arr : number[]
+

@@ -76,6 +76,7 @@ var editor;
         }
     }
 })(editor || (editor = {}));
+var modesOuter = _modes;
 var editor2;
 (function (editor2) {
     var i;

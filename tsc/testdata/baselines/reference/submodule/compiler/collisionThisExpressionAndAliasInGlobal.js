@@ -13,3 +13,4 @@ var a;
     a.b = 10;
 })(a || (a = {}));
 var f = () => this;
+var _this = a; // Error

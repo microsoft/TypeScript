@@ -125,28 +125,28 @@ export class PrivateIdentifierWithExtendedEscape2 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-exports.x = 10;
+exports.\u0078 = 10;
 exports.x++;
 //# sourceMappingURL=identifierVariableWithEscape1.js.map
 //// [identifierVariableWithEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.xx = void 0;
-exports.xx = 10;
+exports.x\u0078 = 10;
 exports.xx++;
 //# sourceMappingURL=identifierVariableWithEscape2.js.map
 //// [identifierVariableWithExtendedEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-exports.x = 10;
+exports.\u{78} = 10;
 exports.x++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map
 //// [identifierVariableWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.xx = void 0;
-exports.xx = 10;
+exports.x\u{78} = 10;
 exports.xx++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
 //// [IdentifierNameWithEscape1.js]

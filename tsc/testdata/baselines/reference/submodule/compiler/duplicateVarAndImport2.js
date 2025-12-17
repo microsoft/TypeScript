@@ -13,3 +13,4 @@ var M;
 (function (M) {
     M.x = 1;
 })(M || (M = {}));
+var a = M;

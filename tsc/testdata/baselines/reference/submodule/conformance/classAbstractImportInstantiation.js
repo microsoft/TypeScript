@@ -20,4 +20,5 @@ var M;
     M.A = A;
     new A;
 })(M || (M = {}));
+var myA = M.A;
 new myA;

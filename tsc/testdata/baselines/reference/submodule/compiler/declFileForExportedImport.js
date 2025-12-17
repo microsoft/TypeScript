@@ -18,9 +18,11 @@ exports.x = void 0;
 //// [declFileForExportedImport_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
 ///<reference path='declFileForExportedImport_0.ts'/>
 exports.a = require("./declFileForExportedImport_0");
 var y = exports.a.x;
+exports.b = exports.a;
 var z = exports.b.x;
 
 

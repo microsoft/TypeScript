@@ -23,6 +23,7 @@ var a;
     }
     a.foo = foo;
 })(a || (exports.a = a = {}));
+var b = a.foo;
 exports.bVal = b(10);
 exports.bVal2 = b;
 

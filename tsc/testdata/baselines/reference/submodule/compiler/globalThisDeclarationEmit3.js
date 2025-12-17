@@ -12,6 +12,8 @@ export { mod as variable };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable = void 0;
+var mod = globalThis;
+exports.variable = mod;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

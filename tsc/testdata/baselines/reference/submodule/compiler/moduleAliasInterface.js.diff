@@ -8,15 +8,7 @@
      var i;
      // If you just use p1:modes, the compiler accepts it - should be an error
      class Bug {
-@@= skipped -8, +9 lines =@@
-         }
-     }
- })(editor || (editor = {}));
--var modesOuter = _modes;
- var editor2;
- (function (editor2) {
-     var i;
-@@= skipped -25, +24 lines =@@
+@@= skipped -33, +34 lines =@@
  })(A1 || (A1 = {}));
  var B1;
  (function (B1) {

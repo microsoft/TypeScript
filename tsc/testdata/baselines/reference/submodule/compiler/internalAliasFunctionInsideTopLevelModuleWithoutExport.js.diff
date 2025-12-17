@@ -1,9 +1,0 @@
---- old.internalAliasFunctionInsideTopLevelModuleWithoutExport.js
-+++ new.internalAliasFunctionInsideTopLevelModuleWithoutExport.js
-@@= skipped -22, +22 lines =@@
-     }
-     a.foo = foo;
- })(a || (exports.a = a = {}));
--var b = a.foo;
- exports.bVal = b(10);
- exports.bVal2 = b;

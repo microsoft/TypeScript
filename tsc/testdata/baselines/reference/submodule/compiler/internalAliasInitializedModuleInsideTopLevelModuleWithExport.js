@@ -14,7 +14,7 @@ export var x: b.c = new b.c();
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.a = void 0;
+exports.x = exports.b = exports.a = void 0;
 var a;
 (function (a) {
     let b;
@@ -24,6 +24,7 @@ var a;
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (exports.a = a = {}));
+exports.b = a.b;
 exports.x = new exports.b.c();
 
 

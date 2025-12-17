@@ -1,40 +1,6 @@
 --- old.unicodeEscapesInNames01(target=es5).sourcemap.txt
 +++ new.unicodeEscapesInNames01(target=es5).sourcemap.txt
-@@= skipped -10, +10 lines =@@
- >>>"use strict";
- >>>Object.defineProperty(exports, "__esModule", { value: true });
- >>>exports.x = void 0;
-->>>exports.\u0078 = 10;
-+>>>exports.x = 10;
- 1 >
- 2 >^^^^^^^^
--3 >        ^^^^^^
--4 >              ^^^
--5 >                 ^^
--6 >                   ^
-+3 >        ^
-+4 >         ^^^
-+5 >            ^^
-+6 >              ^
- 1 >export let 
- 2 >
- 3 >        \u0078
--4 >               = 
--5 >                 10
--6 >                   ;
-+4 >          = 
-+5 >            10
-+6 >              ;
- 1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
- 2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
--3 >Emitted(4, 15) Source(1, 18) + SourceIndex(0)
--4 >Emitted(4, 18) Source(1, 21) + SourceIndex(0)
--5 >Emitted(4, 20) Source(1, 23) + SourceIndex(0)
--6 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
-+3 >Emitted(4, 10) Source(1, 18) + SourceIndex(0)
-+4 >Emitted(4, 13) Source(1, 21) + SourceIndex(0)
-+5 >Emitted(4, 15) Source(1, 23) + SourceIndex(0)
-+6 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
+@@= skipped -32, +32 lines =@@
  ---
  >>>exports.x++;
  1 >
@@ -68,40 +34,6 @@
  >>>//# sourceMappingURL=identifierVariableWithEscape1.js.map===================================================================
  JsFile: identifierVariableWithEscape2.js
 @@= skipped -49, +52 lines =@@
- >>>"use strict";
- >>>Object.defineProperty(exports, "__esModule", { value: true });
- >>>exports.xx = void 0;
-->>>exports.x\u0078 = 10;
-+>>>exports.xx = 10;
- 1 >
- 2 >^^^^^^^^
--3 >        ^^^^^^^
--4 >               ^^^
--5 >                  ^^
--6 >                    ^
-+3 >        ^^
-+4 >          ^^^
-+5 >             ^^
-+6 >               ^
- 1 >export let 
- 2 >
- 3 >        x\u0078
--4 >                = 
--5 >                  10
--6 >                    ;
-+4 >           = 
-+5 >             10
-+6 >               ;
- 1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
- 2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
--3 >Emitted(4, 16) Source(1, 19) + SourceIndex(0)
--4 >Emitted(4, 19) Source(1, 22) + SourceIndex(0)
--5 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
--6 >Emitted(4, 22) Source(1, 25) + SourceIndex(0)
-+3 >Emitted(4, 11) Source(1, 19) + SourceIndex(0)
-+4 >Emitted(4, 14) Source(1, 22) + SourceIndex(0)
-+5 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
-+6 >Emitted(4, 17) Source(1, 25) + SourceIndex(0)
  ---
  >>>exports.xx++;
  1 >
@@ -135,40 +67,6 @@
  >>>//# sourceMappingURL=identifierVariableWithEscape2.js.map===================================================================
  JsFile: identifierVariableWithExtendedEscape1.js
 @@= skipped -49, +52 lines =@@
- >>>"use strict";
- >>>Object.defineProperty(exports, "__esModule", { value: true });
- >>>exports.x = void 0;
-->>>exports.\u{78} = 10;
-+>>>exports.x = 10;
- 1 >
- 2 >^^^^^^^^
--3 >        ^^^^^^
--4 >              ^^^
--5 >                 ^^
--6 >                   ^
-+3 >        ^
-+4 >         ^^^
-+5 >            ^^
-+6 >              ^
- 1 >export let 
- 2 >
- 3 >        \u{78}
--4 >               = 
--5 >                 10
--6 >                   ;
-+4 >          = 
-+5 >            10
-+6 >              ;
- 1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
- 2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
--3 >Emitted(4, 15) Source(1, 18) + SourceIndex(0)
--4 >Emitted(4, 18) Source(1, 21) + SourceIndex(0)
--5 >Emitted(4, 20) Source(1, 23) + SourceIndex(0)
--6 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
-+3 >Emitted(4, 10) Source(1, 18) + SourceIndex(0)
-+4 >Emitted(4, 13) Source(1, 21) + SourceIndex(0)
-+5 >Emitted(4, 15) Source(1, 23) + SourceIndex(0)
-+6 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
  ---
  >>>exports.x++;
  1 >
@@ -202,40 +100,6 @@
  >>>//# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map===================================================================
  JsFile: identifierVariableWithExtendedEscape2.js
 @@= skipped -49, +52 lines =@@
- >>>"use strict";
- >>>Object.defineProperty(exports, "__esModule", { value: true });
- >>>exports.xx = void 0;
-->>>exports.x\u{78} = 10;
-+>>>exports.xx = 10;
- 1 >
- 2 >^^^^^^^^
--3 >        ^^^^^^^
--4 >               ^^^
--5 >                  ^^
--6 >                    ^
-+3 >        ^^
-+4 >          ^^^
-+5 >             ^^
-+6 >               ^
- 1 >export let 
- 2 >
- 3 >        x\u{78}
--4 >                = 
--5 >                  10
--6 >                    ;
-+4 >           = 
-+5 >             10
-+6 >               ;
- 1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
- 2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
--3 >Emitted(4, 16) Source(1, 19) + SourceIndex(0)
--4 >Emitted(4, 19) Source(1, 22) + SourceIndex(0)
--5 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
--6 >Emitted(4, 22) Source(1, 25) + SourceIndex(0)
-+3 >Emitted(4, 11) Source(1, 19) + SourceIndex(0)
-+4 >Emitted(4, 14) Source(1, 22) + SourceIndex(0)
-+5 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
-+6 >Emitted(4, 17) Source(1, 25) + SourceIndex(0)
  ---
  >>>exports.xx++;
  1 >
@@ -268,7 +132,7 @@
  ---
  >>>//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map===================================================================
  JsFile: IdentifierNameWithEscape1.js
-@@= skipped -51, +54 lines =@@
+@@= skipped -29, +32 lines =@@
  >>>exports.IdentifierNameWithEscape1 = void 0;
  >>>class IdentifierNameWithEscape1 {
  1 >

@@ -192,6 +192,7 @@ var A2;
         })(C = B.C || (B.C = {}));
     })(B = A2.B || (A2.B = {}));
 })(A2 || (A2 = {}));
+var I2 = A2.B;
 function foo0(e) {
     if (e === 1 /* I.V1 */) {
     }

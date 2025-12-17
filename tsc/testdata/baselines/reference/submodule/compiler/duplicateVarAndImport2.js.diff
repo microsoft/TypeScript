@@ -1,7 +1,0 @@
---- old.duplicateVarAndImport2.js
-+++ new.duplicateVarAndImport2.js
-@@= skipped -12, +12 lines =@@
- (function (M) {
-     M.x = 1;
- })(M || (M = {}));
--var a = M;

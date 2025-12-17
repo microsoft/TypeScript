@@ -1,18 +1,10 @@
 --- old.invalidImportAliasIdentifiers.js
 +++ new.invalidImportAliasIdentifiers.js
-@@= skipped -28, +28 lines =@@
- //// [invalidImportAliasIdentifiers.js]
- // none of these should work, since non are actually modules
+@@= skipped -30, +30 lines =@@
  var V = 12;
--var v = V;
+ var v = V;
  class C {
 +    name;
  }
--var c = C;
+ var c = C;
  var E;
- (function (E) {
-     E[E["Red"] = 0] = "Red";
-     E[E["Blue"] = 1] = "Blue";
- })(E || (E = {}));
--var e = E;
--var i = I;

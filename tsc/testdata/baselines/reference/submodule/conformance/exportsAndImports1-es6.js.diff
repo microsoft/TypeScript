@@ -1,12 +1,6 @@
 --- old.exportsAndImports1-es6.js
 +++ new.exportsAndImports1-es6.js
-@@= skipped -52, +52 lines =@@
- var M;
- (function (M) {
- })(M || (exports.M = M = {}));
--var a = M.x;
--exports.a = a;
- //// [t2.js]
+@@= skipped -58, +58 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;

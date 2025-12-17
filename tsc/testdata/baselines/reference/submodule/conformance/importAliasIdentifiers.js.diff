@@ -9,12 +9,7 @@
          constructor(x, y) {
              this.x = x;
              this.y = y;
-@@= skipped -7, +9 lines =@@
-     }
-     moduleA.Point = Point;
- })(moduleA || (moduleA = {}));
--var alias = moduleA;
- var p;
+@@= skipped -12, +14 lines =@@
  var p;
  var p;
  class clodule {
@@ -22,16 +17,3 @@
  }
  (function (clodule) {
      var Point = { x: 0, y: 0 };
- })(clodule || (clodule = {}));
--var clolias = clodule;
- var p;
- var p;
- var p;
-@@= skipped -19, +18 lines =@@
- (function (fundule) {
-     var Point = { x: 0, y: 0 };
- })(fundule || (fundule = {}));
--var funlias = fundule;
- var p;
- var p;
- var p;

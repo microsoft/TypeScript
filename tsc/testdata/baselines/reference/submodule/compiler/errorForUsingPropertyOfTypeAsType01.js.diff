@@ -8,8 +8,3 @@
      }
      Test2.Foo = Foo;
      var x = "";
-@@= skipped -20, +21 lines =@@
-     var x = "";
-     var y = "";
- })(Test5 || (Test5 = {}));
--var lol = Test5.Foo.;

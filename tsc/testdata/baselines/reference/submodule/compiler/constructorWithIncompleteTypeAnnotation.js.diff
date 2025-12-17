@@ -1,11 +1,6 @@
 --- old.constructorWithIncompleteTypeAnnotation.js
 +++ new.constructorWithIncompleteTypeAnnotation.js
-@@= skipped -281, +281 lines =@@
-
-
- //// [constructorWithIncompleteTypeAnnotation.js]
--var fs = module;
- ("fs");
+@@= skipped -286, +286 lines =@@
  var TypeScriptAllInOne;
  (function (TypeScriptAllInOne) {
      class Program {
@@ -15,7 +10,7 @@
          static Main(...args) {
              try {
                  var bfs = new BasicFeatures();
-@@= skipped -15, +11 lines =@@
+@@= skipped -10, +7 lines =@@
                  retValue = bfs.VARIABLES();
                  if (retValue != 0)
                       ^= {

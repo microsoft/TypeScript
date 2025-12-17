@@ -1,10 +1,8 @@
 --- old.declarationEmitEnumReferenceViaImportEquals.js
 +++ new.declarationEmitEnumReferenceViaImportEquals.js
-@@= skipped -44, +44 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Test = void 0;
+@@= skipped -46, +46 lines =@@
  const translation_1 = require("./translation");
--var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
+ var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
  class Test {
 -    constructor() {
 -        this.TranslationKeyEnum = TranslationKeyEnum;

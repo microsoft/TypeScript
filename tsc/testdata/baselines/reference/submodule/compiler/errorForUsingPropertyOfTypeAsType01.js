@@ -76,3 +76,4 @@ var Test5;
     var x = "";
     var y = "";
 })(Test5 || (Test5 = {}));
+var lol = Test5.Foo.;

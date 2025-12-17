@@ -18,6 +18,7 @@ var a;
 (function (a) {
     a.x = 10;
 })(a || (exports.a = a = {}));
+var b = a.x;
 exports.bVal = b;
 
 

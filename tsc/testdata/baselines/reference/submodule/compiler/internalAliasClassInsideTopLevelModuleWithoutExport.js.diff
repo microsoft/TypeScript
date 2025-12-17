@@ -1,9 +1,0 @@
---- old.internalAliasClassInsideTopLevelModuleWithoutExport.js
-+++ new.internalAliasClassInsideTopLevelModuleWithoutExport.js
-@@= skipped -25, +25 lines =@@
-     }
-     x.c = c;
- })(x || (exports.x = x = {}));
--var xc = x.c;
- exports.cProp = new xc();
- var cReturnVal = exports.cProp.foo(10);

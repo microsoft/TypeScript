@@ -6,8 +6,9 @@ export default Foo
 
 //// [declarationEmitUnknownImport2.js]
 "use strict";
-'./Foo'; // Syntax error
 Object.defineProperty(exports, "__esModule", { value: true });
+var Foo = From;
+'./Foo'; // Syntax error
 exports.default = Foo;
 
 
