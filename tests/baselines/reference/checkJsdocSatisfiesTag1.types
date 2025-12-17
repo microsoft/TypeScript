@@ -60,8 +60,8 @@ const t3 = /** @satisfies {T1} */ ({});
 const t4 = /** @satisfies {T2} */ ({ a: "a" });
 >t4 : T2
 >   : ^^
->({ a: "a" }) : T2
->             : ^^
+>({ a: "a" }) : { a: "a"; }
+>             : ^^^^^^^^^^^
 >{ a: "a" } : { a: "a"; }
 >           : ^^^^^^^^^^^
 >a : "a"
@@ -74,7 +74,7 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >t5 : (m: string) => string
 >   : ^ ^^      ^^^^^      
 >((m) => m.substring(0)) : (m: string) => string
->                        : ^ ^^      ^^^^^      
+>                        : ^ ^^^^^^^^^^^^^^^^^^^
 >(m) => m.substring(0) : (m: string) => string
 >                      : ^ ^^^^^^^^^^^^^^^^^^^
 >m : string

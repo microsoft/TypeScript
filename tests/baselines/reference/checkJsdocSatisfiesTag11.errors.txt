@@ -1,8 +1,7 @@
 /a.js(13,5): error TS1223: 'satisfies' tag already specified.
-/a.js(18,5): error TS1223: 'satisfies' tag already specified.
 
 
-==== /a.js (2 errors) ====
+==== /a.js (1 errors) ====
     /**
      * @typedef {Object} T1
      * @property {number} a
@@ -23,8 +22,6 @@
     
     /**
      * @satisfies {number}
-        ~~~~~~~~~
-!!! error TS1223: 'satisfies' tag already specified.
      */
     const t2 = /** @satisfies {number} */ (1);
     
