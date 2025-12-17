@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/weakTypeIntersections1.ts] ////
+
+=== weakTypeIntersections1.ts ===
+interface EmptyInterface {}
+>EmptyInterface : Symbol(EmptyInterface, Decl(weakTypeIntersections1.ts, 0, 0))
+
+interface EmptyInterface2 {}
+>EmptyInterface2 : Symbol(EmptyInterface2, Decl(weakTypeIntersections1.ts, 0, 27))
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+
+  a: string;
+>a : Symbol(Foo.a, Decl(weakTypeIntersections1.ts, 3, 15))
+}
+interface Bar {
+>Bar : Symbol(Bar, Decl(weakTypeIntersections1.ts, 5, 1))
+
+  b: string;
+>b : Symbol(Bar.b, Decl(weakTypeIntersections1.ts, 6, 15))
+}
+
+const m1: Partial<Foo> & ThisType<{ x: string }> = () => null; // error
+>m1 : Symbol(m1, Decl(weakTypeIntersections1.ts, 10, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(weakTypeIntersections1.ts, 10, 35))
+
+const m2: Partial<Foo> = () => null; // error
+>m2 : Symbol(m2, Decl(weakTypeIntersections1.ts, 11, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+
+const m3: Partial<Foo> & EmptyInterface = () => null; // error
+>m3 : Symbol(m3, Decl(weakTypeIntersections1.ts, 12, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+>EmptyInterface : Symbol(EmptyInterface, Decl(weakTypeIntersections1.ts, 0, 0))
+
+const m4: EmptyInterface & EmptyInterface2 = () => null; // ok
+>m4 : Symbol(m4, Decl(weakTypeIntersections1.ts, 13, 5))
+>EmptyInterface : Symbol(EmptyInterface, Decl(weakTypeIntersections1.ts, 0, 0))
+>EmptyInterface2 : Symbol(EmptyInterface2, Decl(weakTypeIntersections1.ts, 0, 27))
+
+const m5: Partial<Foo> & Partial<Bar> = () => null; // error
+>m5 : Symbol(m5, Decl(weakTypeIntersections1.ts, 14, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Bar : Symbol(Bar, Decl(weakTypeIntersections1.ts, 5, 1))
+
+// https://github.com/microsoft/TypeScript/issues/56995
+declare function fun0(arg: () => Foo & ThisType<Foo>): void;
+>fun0 : Symbol(fun0, Decl(weakTypeIntersections1.ts, 14, 51), Decl(weakTypeIntersections1.ts, 17, 60))
+>arg : Symbol(arg, Decl(weakTypeIntersections1.ts, 17, 22))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+
+declare function fun0(arg: Partial<Foo> & ThisType<Foo>): void;
+>fun0 : Symbol(fun0, Decl(weakTypeIntersections1.ts, 14, 51), Decl(weakTypeIntersections1.ts, 17, 60))
+>arg : Symbol(arg, Decl(weakTypeIntersections1.ts, 18, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(weakTypeIntersections1.ts, 1, 28))
+
+fun0({ a: "1" }); // ok
+>fun0 : Symbol(fun0, Decl(weakTypeIntersections1.ts, 14, 51), Decl(weakTypeIntersections1.ts, 17, 60))
+>a : Symbol(a, Decl(weakTypeIntersections1.ts, 20, 6))
+
+fun0(() => ({ a: "1" })); // ok
+>fun0 : Symbol(fun0, Decl(weakTypeIntersections1.ts, 14, 51), Decl(weakTypeIntersections1.ts, 17, 60))
+>a : Symbol(a, Decl(weakTypeIntersections1.ts, 21, 13))
+
+fun0(() => ({ a: 1 })); // error
+>fun0 : Symbol(fun0, Decl(weakTypeIntersections1.ts, 14, 51), Decl(weakTypeIntersections1.ts, 17, 60))
+>a : Symbol(a, Decl(weakTypeIntersections1.ts, 22, 13))
+

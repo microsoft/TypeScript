@@ -1,0 +1,50 @@
+weakTypeIntersections1.ts(11,7): error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & ThisType<{ x: string; }>'.
+weakTypeIntersections1.ts(12,7): error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo>'.
+weakTypeIntersections1.ts(13,7): error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & EmptyInterface'.
+weakTypeIntersections1.ts(15,7): error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & Partial<Bar>'.
+weakTypeIntersections1.ts(23,1): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(arg: () => Foo & ThisType<Foo>): void', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(arg: Partial<Foo> & ThisType<Foo>): void', gave the following error.
+    Type '() => { a: number; }' has no properties in common with type 'Partial<Foo> & ThisType<Foo>'.
+
+
+==== weakTypeIntersections1.ts (5 errors) ====
+    interface EmptyInterface {}
+    interface EmptyInterface2 {}
+    
+    interface Foo {
+      a: string;
+    }
+    interface Bar {
+      b: string;
+    }
+    
+    const m1: Partial<Foo> & ThisType<{ x: string }> = () => null; // error
+          ~~
+!!! error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & ThisType<{ x: string; }>'.
+    const m2: Partial<Foo> = () => null; // error
+          ~~
+!!! error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo>'.
+    const m3: Partial<Foo> & EmptyInterface = () => null; // error
+          ~~
+!!! error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & EmptyInterface'.
+    const m4: EmptyInterface & EmptyInterface2 = () => null; // ok
+    const m5: Partial<Foo> & Partial<Bar> = () => null; // error
+          ~~
+!!! error TS2559: Type '() => null' has no properties in common with type 'Partial<Foo> & Partial<Bar>'.
+    
+    // https://github.com/microsoft/TypeScript/issues/56995
+    declare function fun0(arg: () => Foo & ThisType<Foo>): void;
+    declare function fun0(arg: Partial<Foo> & ThisType<Foo>): void;
+    
+    fun0({ a: "1" }); // ok
+    fun0(() => ({ a: "1" })); // ok
+    fun0(() => ({ a: 1 })); // error
+    ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(arg: () => Foo & ThisType<Foo>): void', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(arg: Partial<Foo> & ThisType<Foo>): void', gave the following error.
+!!! error TS2769:     Type '() => { a: number; }' has no properties in common with type 'Partial<Foo> & ThisType<Foo>'.
+!!! related TS6500 weakTypeIntersections1.ts:5:3: The expected type comes from property 'a' which is declared here on type 'Foo & ThisType<Foo>'
