@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/enumComputedPropertyNonIdentifier.ts] ////
+
+=== enumComputedPropertyNonIdentifier.ts ===
+// Issue #25083: Enum keys not accepted as computed properties if their name is not a valid identifier
+
+enum Type {
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+
+    Foo = 'foo',
+>Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+
+    '3x14' = '3x14',
+>'3x14' : Symbol(Type['3x14'], Decl(enumComputedPropertyNonIdentifier.ts, 3, 16))
+
+    'hello-world' = 'hello-world'
+>'hello-world' : Symbol(Type['hello-world'], Decl(enumComputedPropertyNonIdentifier.ts, 4, 20))
+}
+
+// These should work - dot notation
+type TypeMapDot = {
+>TypeMapDot : Symbol(TypeMapDot, Decl(enumComputedPropertyNonIdentifier.ts, 6, 1))
+
+    [Type.Foo]: string;
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumComputedPropertyNonIdentifier.ts, 9, 19))
+>Type.Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+}
+
+// These should also work - bracket notation with valid identifier
+type TypeMapBracketValid = {
+>TypeMapBracketValid : Symbol(TypeMapBracketValid, Decl(enumComputedPropertyNonIdentifier.ts, 11, 1))
+
+    [Type['Foo']]: string;  // Now works!
+>[Type['Foo']] : Symbol([Type['Foo']], Decl(enumComputedPropertyNonIdentifier.ts, 14, 28))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'Foo' : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+}
+
+// These should work - bracket notation with non-identifier names
+type TypeMapBracketNonIdentifier = {
+>TypeMapBracketNonIdentifier : Symbol(TypeMapBracketNonIdentifier, Decl(enumComputedPropertyNonIdentifier.ts, 16, 1))
+
+    [Type['3x14']]: number;  // Now works!
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumComputedPropertyNonIdentifier.ts, 19, 36))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumComputedPropertyNonIdentifier.ts, 3, 16))
+
+    [Type['hello-world']]: string;  // Now works!
+>[Type['hello-world']] : Symbol([Type['hello-world']], Decl(enumComputedPropertyNonIdentifier.ts, 20, 27))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'hello-world' : Symbol(Type['hello-world'], Decl(enumComputedPropertyNonIdentifier.ts, 4, 20))
+}
+
+// Test in object types as well
+interface TestInterface {
+>TestInterface : Symbol(TestInterface, Decl(enumComputedPropertyNonIdentifier.ts, 22, 1))
+
+    [Type.Foo]: string;  // OK
+>[Type.Foo] : Symbol(TestInterface[Type.Foo], Decl(enumComputedPropertyNonIdentifier.ts, 25, 25))
+>Type.Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+
+    [Type['3x14']]: number;  // Now works!
+>[Type['3x14']] : Symbol(TestInterface[Type['3x14']], Decl(enumComputedPropertyNonIdentifier.ts, 26, 23))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumComputedPropertyNonIdentifier.ts, 3, 16))
+}
+
+// Verify the enum values work in actual objects
+const obj1: Record<Type, any> = {
+>obj1 : Symbol(obj1, Decl(enumComputedPropertyNonIdentifier.ts, 31, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumComputedPropertyNonIdentifier.ts, 31, 33))
+>Type.Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+
+    [Type['3x14']]: 123,
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumComputedPropertyNonIdentifier.ts, 32, 23))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumComputedPropertyNonIdentifier.ts, 3, 16))
+
+    [Type['hello-world']]: 'hello'
+>[Type['hello-world']] : Symbol([Type['hello-world']], Decl(enumComputedPropertyNonIdentifier.ts, 33, 24))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'hello-world' : Symbol(Type['hello-world'], Decl(enumComputedPropertyNonIdentifier.ts, 4, 20))
+
+};
+
+// Verify direct access works
+const val1 = Type.Foo;  // OK
+>val1 : Symbol(val1, Decl(enumComputedPropertyNonIdentifier.ts, 38, 5))
+>Type.Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+
+const val2 = Type['Foo'];  // OK
+>val2 : Symbol(val2, Decl(enumComputedPropertyNonIdentifier.ts, 39, 5))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'Foo' : Symbol(Type.Foo, Decl(enumComputedPropertyNonIdentifier.ts, 2, 11))
+
+const val3 = Type['3x14'];  // OK
+>val3 : Symbol(val3, Decl(enumComputedPropertyNonIdentifier.ts, 40, 5))
+>Type : Symbol(Type, Decl(enumComputedPropertyNonIdentifier.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumComputedPropertyNonIdentifier.ts, 3, 16))
+
