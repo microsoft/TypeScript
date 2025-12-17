@@ -1,0 +1,96 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion3.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion3.ts ===
+// https://github.com/microsoft/TypeScript/issues/58508
+
+type PathSegment = object[];
+>PathSegment : Symbol(PathSegment, Decl(contextuallyTypedByDiscriminableUnion3.ts, 0, 0))
+
+type Handle<TData> = {
+>Handle : Symbol(Handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 2, 28))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 4, 12))
+
+  crumbBuilder: (data: TData) => PathSegment[];
+>crumbBuilder : Symbol(crumbBuilder, Decl(contextuallyTypedByDiscriminableUnion3.ts, 4, 22))
+>data : Symbol(data, Decl(contextuallyTypedByDiscriminableUnion3.ts, 5, 17))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 4, 12))
+>PathSegment : Symbol(PathSegment, Decl(contextuallyTypedByDiscriminableUnion3.ts, 0, 0))
+
+};
+
+type Loader<TData> = (args: {
+>Loader : Symbol(Loader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 6, 2))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 12))
+>args : Symbol(args, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 22))
+
+  params: Record<string, string>;
+>params : Symbol(params, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 29))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+}) => Promise<TData>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 12))
+
+type RouteHandler<TData = any> =
+>RouteHandler : Symbol(RouteHandler, Decl(contextuallyTypedByDiscriminableUnion3.ts, 10, 21))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 12, 18))
+
+  | {
+      handle: Handle<never>;
+>handle : Symbol(handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 13, 5))
+>Handle : Symbol(Handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 2, 28))
+
+      loader?: never;
+>loader : Symbol(loader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 14, 28))
+    }
+  | {
+      handle: Handle<TData>;
+>handle : Symbol(handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 17, 5))
+>Handle : Symbol(Handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 2, 28))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 12, 18))
+
+      loader: Loader<TData>;
+>loader : Symbol(loader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 18, 28))
+>Loader : Symbol(Loader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 6, 2))
+>TData : Symbol(TData, Decl(contextuallyTypedByDiscriminableUnion3.ts, 12, 18))
+
+    };
+
+const routeHandlerWithoutLoader = {
+>routeHandlerWithoutLoader : Symbol(routeHandlerWithoutLoader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 22, 5))
+
+  handle: {
+>handle : Symbol(handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 22, 35))
+
+    crumbBuilder: (data) => [],
+>crumbBuilder : Symbol(crumbBuilder, Decl(contextuallyTypedByDiscriminableUnion3.ts, 23, 11))
+>data : Symbol(data, Decl(contextuallyTypedByDiscriminableUnion3.ts, 24, 19))
+
+  },
+} satisfies RouteHandler;
+>RouteHandler : Symbol(RouteHandler, Decl(contextuallyTypedByDiscriminableUnion3.ts, 10, 21))
+
+const routeHandler = {
+>routeHandler : Symbol(routeHandler, Decl(contextuallyTypedByDiscriminableUnion3.ts, 28, 5))
+
+  loader: async (args) => {
+>loader : Symbol(loader, Decl(contextuallyTypedByDiscriminableUnion3.ts, 28, 22))
+>args : Symbol(args, Decl(contextuallyTypedByDiscriminableUnion3.ts, 29, 17))
+
+    return args.params.userId;
+>args.params : Symbol(params, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 29))
+>args : Symbol(args, Decl(contextuallyTypedByDiscriminableUnion3.ts, 29, 17))
+>params : Symbol(params, Decl(contextuallyTypedByDiscriminableUnion3.ts, 8, 29))
+
+  },
+  handle: {
+>handle : Symbol(handle, Decl(contextuallyTypedByDiscriminableUnion3.ts, 31, 4))
+
+    crumbBuilder: (data) => [],
+>crumbBuilder : Symbol(crumbBuilder, Decl(contextuallyTypedByDiscriminableUnion3.ts, 32, 11))
+>data : Symbol(data, Decl(contextuallyTypedByDiscriminableUnion3.ts, 33, 19))
+
+  },
+} satisfies RouteHandler<string>;
+>RouteHandler : Symbol(RouteHandler, Decl(contextuallyTypedByDiscriminableUnion3.ts, 10, 21))
+

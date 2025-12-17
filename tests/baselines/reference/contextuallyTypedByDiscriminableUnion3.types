@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion3.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion3.ts ===
+// https://github.com/microsoft/TypeScript/issues/58508
+
+type PathSegment = object[];
+>PathSegment : PathSegment
+>            : ^^^^^^^^^^^
+
+type Handle<TData> = {
+>Handle : Handle<TData>
+>       : ^^^^^^^^^^^^^
+
+  crumbBuilder: (data: TData) => PathSegment[];
+>crumbBuilder : (data: TData) => PathSegment[]
+>             : ^    ^^     ^^^^^             
+>data : TData
+>     : ^^^^^
+
+};
+
+type Loader<TData> = (args: {
+>Loader : Loader<TData>
+>       : ^^^^^^^^^^^^^
+>args : { params: Record<string, string>; }
+>     : ^^^^^^^^^^                      ^^^
+
+  params: Record<string, string>;
+>params : Record<string, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+
+}) => Promise<TData>;
+
+type RouteHandler<TData = any> =
+>RouteHandler : RouteHandler<TData>
+>             : ^^^^^^^^^^^^^^^^^^^
+
+  | {
+      handle: Handle<never>;
+>handle : Handle<never>
+>       : ^^^^^^^^^^^^^
+
+      loader?: never;
+>loader : undefined
+>       : ^^^^^^^^^
+    }
+  | {
+      handle: Handle<TData>;
+>handle : Handle<TData>
+>       : ^^^^^^^^^^^^^
+
+      loader: Loader<TData>;
+>loader : Loader<TData>
+>       : ^^^^^^^^^^^^^
+
+    };
+
+const routeHandlerWithoutLoader = {
+>routeHandlerWithoutLoader : { handle: { crumbBuilder: (data: never) => never[]; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  handle: {    crumbBuilder: (data) => [],  },} satisfies RouteHandler : { handle: { crumbBuilder: (data: never) => never[]; }; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  handle: {    crumbBuilder: (data) => [],  },} : { handle: { crumbBuilder: (data: never) => never[]; }; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  handle: {
+>handle : { crumbBuilder: (data: never) => never[]; }
+>       : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>{    crumbBuilder: (data) => [],  } : { crumbBuilder: (data: never) => never[]; }
+>                                    : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+
+    crumbBuilder: (data) => [],
+>crumbBuilder : (data: never) => never[]
+>             : ^    ^^^^^^^^^^^^^^^^^^^
+>(data) => [] : (data: never) => never[]
+>             : ^    ^^^^^^^^^^^^^^^^^^^
+>data : never
+>     : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  },
+} satisfies RouteHandler;
+
+const routeHandler = {
+>routeHandler : { loader: (args: { params: Record<string, string>; }) => Promise<string>; handle: { crumbBuilder: (data: string) => never[]; }; }
+>             : ^^^^^^^^^^^    ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  loader: async (args) => {    return args.params.userId;  },  handle: {    crumbBuilder: (data) => [],  },} satisfies RouteHandler<string> : { loader: (args: { params: Record<string, string>; }) => Promise<string>; handle: { crumbBuilder: (data: string) => never[]; }; }
+>                                                                                                                                             : ^^^^^^^^^^^    ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  loader: async (args) => {    return args.params.userId;  },  handle: {    crumbBuilder: (data) => [],  },} : { loader: (args: { params: Record<string, string>; }) => Promise<string>; handle: { crumbBuilder: (data: string) => never[]; }; }
+>                                                                                                              : ^^^^^^^^^^^    ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  loader: async (args) => {
+>loader : (args: { params: Record<string, string>; }) => Promise<string>
+>       : ^    ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^
+>async (args) => {    return args.params.userId;  } : (args: { params: Record<string, string>; }) => Promise<string>
+>                                                   : ^    ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^
+>args : { params: Record<string, string>; }
+>     : ^^^^^^^^^^                      ^^^
+
+    return args.params.userId;
+>args.params.userId : string
+>                   : ^^^^^^
+>args.params : Record<string, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>args : { params: Record<string, string>; }
+>     : ^^^^^^^^^^                      ^^^
+>params : Record<string, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>userId : string
+>       : ^^^^^^
+
+  },
+  handle: {
+>handle : { crumbBuilder: (data: string) => never[]; }
+>       : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{    crumbBuilder: (data) => [],  } : { crumbBuilder: (data: string) => never[]; }
+>                                    : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+    crumbBuilder: (data) => [],
+>crumbBuilder : (data: string) => never[]
+>             : ^    ^^^^^^^^^^^^^^^^^^^^
+>(data) => [] : (data: string) => never[]
+>             : ^    ^^^^^^^^^^^^^^^^^^^^
+>data : string
+>     : ^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  },
+} satisfies RouteHandler<string>;
+
