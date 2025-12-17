@@ -35,16 +35,16 @@ const testFnTypes = {
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
 >       : ^     ^^                 ^^^^^             
->input : boolean | myTypes.typeC
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>input : testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->input : boolean | myTypes.typeC
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>input : testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^
 >'number' : "number"
 >         : ^^^^^^^^
 
@@ -71,9 +71,9 @@ module.exports = {testFn, testFnTypes};
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number | null; testFnTypes: { [x: string]: any; }; }
->                      : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^     ^^                 ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFn : (input: testFnTypes.input) => number | null
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^             
+>       : ^     ^^                 ^^^^^             
 >testFnTypes : { [x: string]: any; }
 >            : ^^^^^^^^^^^^^^^^^^^^^
 

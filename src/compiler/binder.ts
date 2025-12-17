@@ -523,6 +523,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     // state used by control flow analysis
     var currentFlow: FlowNode;
+    var currentFlowJsDoc: FlowNode;
     var currentBreakTarget: FlowLabel | undefined;
     var currentContinueTarget: FlowLabel | undefined;
     var currentReturnTarget: FlowLabel | undefined;
@@ -2754,6 +2755,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         setParent(node, parent);
         if (tracing) (node as TracingNode).tracingPath = file.path;
         const saveInStrictMode = inStrictMode;
+        const saveCurrentFlowJsDoc = currentFlowJsDoc;
+        currentFlowJsDoc = currentFlow;
 
         // Even though in the AST the jsdoc @typedef node belongs to the current node,
         // its symbol might be in the same scope with the current node's symbol. Consider:
@@ -2800,14 +2803,18 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             parent = saveParent;
         }
         inStrictMode = saveInStrictMode;
+        currentFlowJsDoc = saveCurrentFlowJsDoc;
     }
 
     function bindJSDoc(node: Node) {
         if (hasJSDocNodes(node)) {
             if (isInJSFile(node)) {
+                const saveCurrentFlow = currentFlow;
+                currentFlow = currentFlowJsDoc;
                 for (const j of node.jsDoc!) {
                     bind(j);
                 }
+                currentFlow = saveCurrentFlow;
             }
             else {
                 for (const j of node.jsDoc!) {
