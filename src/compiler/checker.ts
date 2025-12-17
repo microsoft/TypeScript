@@ -47021,9 +47021,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkClassExpression(node: ClassExpression): Type {
-        checkClassLikeDeclaration(node);
-        checkNodeDeferred(node);
-        checkClassExpressionExternalHelpers(node);
+        const nodeLinks = getNodeLinks(node);
+        if (!(nodeLinks.flags & NodeCheckFlags.TypeChecked)) {
+            nodeLinks.flags |= NodeCheckFlags.TypeChecked;
+            checkClassLikeDeclaration(node);
+            checkNodeDeferred(node);
+            checkClassExpressionExternalHelpers(node);
+        }
         return getTypeOfSymbol(getSymbolOfDeclaration(node));
     }
 
