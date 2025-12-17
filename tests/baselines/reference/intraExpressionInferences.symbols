@@ -1076,3 +1076,77 @@ const distantRes = distant({
 
 });
 
+// https://github.com/microsoft/TypeScript/issues/62220
+
+declare function testAsConst<T, D>(arg: {
+>testAsConst : Symbol(testAsConst, Decl(intraExpressionInferences.ts, 329, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 29))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 333, 31))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 333, 35))
+
+  input: D;
+>input : Symbol(input, Decl(intraExpressionInferences.ts, 333, 41))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 333, 31))
+
+  produce: (arg: D) => T;
+>produce : Symbol(produce, Decl(intraExpressionInferences.ts, 334, 11))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 335, 12))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 333, 31))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 29))
+
+  consume: (arg: T) => number;
+>consume : Symbol(consume, Decl(intraExpressionInferences.ts, 335, 25))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 336, 12))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 333, 29))
+
+}): D;
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 333, 31))
+
+const testAsConstResult1 = testAsConst({
+>testAsConstResult1 : Symbol(testAsConstResult1, Decl(intraExpressionInferences.ts, 339, 5))
+>testAsConst : Symbol(testAsConst, Decl(intraExpressionInferences.ts, 329, 3))
+
+  input: 100,
+>input : Symbol(input, Decl(intraExpressionInferences.ts, 339, 40))
+
+  produce: (arg) => arg.toString(),
+>produce : Symbol(produce, Decl(intraExpressionInferences.ts, 340, 13))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 341, 12))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 341, 12))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+  consume: (arg) => arg.length,
+>consume : Symbol(consume, Decl(intraExpressionInferences.ts, 341, 35))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 342, 12))
+>arg.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 342, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+} as const);
+>const : Symbol(const)
+
+// included for comparison with the above
+const testAsConstResult2 = testAsConst({
+>testAsConstResult2 : Symbol(testAsConstResult2, Decl(intraExpressionInferences.ts, 346, 5))
+>testAsConst : Symbol(testAsConst, Decl(intraExpressionInferences.ts, 329, 3))
+
+  input: 100,
+>input : Symbol(input, Decl(intraExpressionInferences.ts, 346, 40))
+
+  produce: (arg) => arg.toString(),
+>produce : Symbol(produce, Decl(intraExpressionInferences.ts, 347, 13))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 348, 12))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 348, 12))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+  consume: (arg) => arg.length,
+>consume : Symbol(consume, Decl(intraExpressionInferences.ts, 348, 35))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 349, 12))
+>arg.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 349, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+});
+
