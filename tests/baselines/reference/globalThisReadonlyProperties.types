@@ -39,7 +39,7 @@ globalThis.x = 3
 >3 : 3
 >  : ^
 
-globalThis.y = 4 // should error
+globalThis.y = 4
 >globalThis.y = 4 : 4
 >                 : ^
 >globalThis.y : any

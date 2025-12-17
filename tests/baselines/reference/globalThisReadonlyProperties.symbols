@@ -17,6 +17,6 @@ globalThis.x = 3
 >globalThis : Symbol(globalThis)
 >x : Symbol(x, Decl(globalThisReadonlyProperties.ts, 1, 3))
 
-globalThis.y = 4 // should error
+globalThis.y = 4
 >globalThis : Symbol(globalThis)
 

@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/es2019/globalThisBlockscopedProperties2.ts] ////
+
+=== globalThisBlockscopedProperties2.ts ===
+// https://github.com/microsoft/TypeScript/issues/58345
+
+let invalid1 = globalThis.invalid1;
+>invalid1 : any
+>globalThis.invalid1 : any
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+>invalid1 : any
+>         : ^^^
+
+let y = globalThis.invalid1;
+>y : any
+>globalThis.invalid1 : any
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+>invalid1 : any
+>         : ^^^
+
+let z = globalThis.invalid2;
+>z : any
+>globalThis.invalid2 : any
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+>invalid2 : any
+>         : ^^^
+
