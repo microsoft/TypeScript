@@ -126,7 +126,8 @@ export function createGetSymbolWalker(
                 if (type.flags & TypeFlags.IndexedAccess) {
                     visitIndexedAccessType(type as IndexedAccessType);
                 }
-            } finally {
+            }
+            finally {
                 // Decrement recursion level when exiting
                 level--;
             }
