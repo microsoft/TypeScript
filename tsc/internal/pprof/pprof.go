@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime/pprof"
-
-	"github.com/microsoft/typescript-go/internal/repo"
 )
 
 type ProfileSession struct {
@@ -62,13 +60,4 @@ func (p *ProfileSession) Stop() {
 
 	fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
 	fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
-}
-
-// ProfileInPprofDir is a convenience function that starts profiling in the 'pprof' directory under the repository root.
-// The resulting files are logged to stderr. It returns a function that stops the profiling when called.
-func ProfileInPprofDir() func() {
-	session := BeginProfiling(filepath.Join(repo.RootPath, "pprof"), os.Stderr)
-	return func() {
-		session.Stop()
-	}
 }
