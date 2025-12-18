@@ -1,0 +1,223 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples4.ts] ////
+
+=== variadicTuples4.ts ===
+// https://github.com/microsoft/TypeScript/issues/62561
+
+function f<T extends unknown[], V extends unknown[]>(
+>f : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T], ...args: V) => [boolean, ...V, ...T]
+>  : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, ...V, ...T],
+>x : [boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a = f([true, 2, "b", true], 1, "a"); // ok
+>a : [boolean, number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f([true, 2, "b", true], 1, "a") : [boolean, number, string, boolean]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T], ...args: V) => [boolean, ...V, ...T]
+>  : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, 2, "b", true] : [true, number, string, true]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+function f2<T extends unknown[], V extends unknown[]>(
+>f2 : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T, string], ...args: V) => [boolean, ...V, ...T, string]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                             ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, ...V, ...T, string],
+>x : [boolean, ...V, ...T, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, ...V, ...T, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a2 = f2([true, 2, "b", true, "c"], 1, "a"); // ok
+>a2 : [boolean, number, string, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2([true, 2, "b", true, "c"], 1, "a") : [boolean, number, string, boolean, string]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2 : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T, string], ...args: V) => [boolean, ...V, ...T, string]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                             ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, 2, "b", true, "c"] : [true, number, string, true, string]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>"c" : "c"
+>    : ^^^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+function f3<T extends unknown[], V extends unknown[]>(
+>f3 : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T, string, number], ...args: V) => [boolean, ...V, ...T, string, number]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, ...V, ...T, string, number],
+>x : [boolean, ...V, ...T, string, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, ...V, ...T, string, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a3 = f3([true, 2, "b", true, "c", 3], 1, "a"); // ok
+>a3 : [boolean, number, string, boolean, string, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3([true, 2, "b", true, "c", 3], 1, "a") : [boolean, number, string, boolean, string, number]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3 : <T extends unknown[], V extends unknown[]>(x: [boolean, ...V, ...T, string, number], ...args: V) => [boolean, ...V, ...T, string, number]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                     ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, 2, "b", true, "c", 3] : [true, number, string, true, string, number]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>"c" : "c"
+>    : ^^^
+>3 : 3
+>  : ^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+function f4<T extends unknown[], V extends unknown[]>(
+>f4 : <T extends unknown[], V extends unknown[]>(x: [boolean, boolean, boolean, ...V, ...T, string, number], ...args: V) => [boolean, boolean, boolean, ...V, ...T, string, number]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                                       ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, boolean, boolean, ...V, ...T, string, number],
+>x : [boolean, boolean, boolean, ...V, ...T, string, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, boolean, boolean, ...V, ...T, string, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a4 = f4([true, true, true, 2, "b", true, "c", 3], 1, "a"); // ok
+>a4 : [boolean, boolean, boolean, number, string, boolean, string, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4([true, true, true, 2, "b", true, "c", 3], 1, "a") : [boolean, boolean, boolean, number, string, boolean, string, number]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : <T extends unknown[], V extends unknown[]>(x: [boolean, boolean, boolean, ...V, ...T, string, number], ...args: V) => [boolean, boolean, boolean, ...V, ...T, string, number]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                                       ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, true, true, 2, "b", true, "c", 3] : [true, true, true, number, string, true, string, number]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>"c" : "c"
+>    : ^^^
+>3 : 3
+>  : ^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+function f5<T extends unknown[], V extends unknown[]>(
+>f5 : <T extends unknown[], V extends unknown[]>(x: [boolean, boolean, boolean, ...V, ...T], ...args: V) => [boolean, boolean, boolean, ...V, ...T]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                       ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  x: [boolean, boolean, boolean, ...V, ...T],
+>x : [boolean, boolean, boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: V
+>args : V
+>     : ^
+
+) {
+  return x;
+>x : [boolean, boolean, boolean, ...V, ...T]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+const a5 = f5([true, true, true, 2, "b", true], 1, "a"); // ok
+>a5 : [boolean, boolean, boolean, number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5([true, true, true, 2, "b", true], 1, "a") : [boolean, boolean, boolean, number, string, boolean]
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5 : <T extends unknown[], V extends unknown[]>(x: [boolean, boolean, boolean, ...V, ...T], ...args: V) => [boolean, boolean, boolean, ...V, ...T]
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^                                       ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, true, true, 2, "b", true] : [true, true, true, number, string, true]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>2 : 2
+>  : ^
+>"b" : "b"
+>    : ^^^
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
