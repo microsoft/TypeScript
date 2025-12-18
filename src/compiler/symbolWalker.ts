@@ -81,7 +81,7 @@ export function createGetSymbolWalker(
             }
 
             // Prevent infinite recursion by limiting depth
-            if (level > maxRecursionDepth) {
+            if (level >= maxRecursionDepth) {
                 return;
             }
 
