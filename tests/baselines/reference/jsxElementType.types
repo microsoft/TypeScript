@@ -497,3 +497,46 @@ declare global {
 >b : string
 >  : ^^^^^^
 
+// GH#54702
+const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+>A : <T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error
+><T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error : <T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error
+>a : T
+>a : T
+>(typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error : T extends string ? null : Error
+>(typeof a === "string" ? null : new Error("a must be a string")) : Error | null
+>typeof a === "string" ? null : new Error("a must be a string") : Error | null
+>typeof a === "string" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"string" : "string"
+>new Error("a must be a string") : Error
+>Error : ErrorConstructor
+>"a must be a string" : "a must be a string"
+
+// should ok
+const jsxGeneric1 = <A<string> a="a" />;
+>jsxGeneric1 : JSX.Element
+><A<string> a="a" /> : JSX.Element
+>A : <T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error
+>a : string
+
+const B = A<string>;
+>B : ({ a }: { a: string; }) => null
+>A<string> : ({ a }: { a: string; }) => null
+>A : <T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error
+
+// should ok
+const jsxGeneric2 = <B a="a" />;
+>jsxGeneric2 : JSX.Element
+><B a="a" /> : JSX.Element
+>B : ({ a }: { a: string; }) => null
+>a : string
+
+// should error
+const jsxGeneric3 = <A<number> a="a" />;
+>jsxGeneric3 : JSX.Element
+><A<number> a="a" /> : JSX.Element
+>A : <T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error
+>a : string
+
