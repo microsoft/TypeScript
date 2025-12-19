@@ -14,9 +14,12 @@ predicateSemantics.ts(34,22): error TS2871: This expression is always nullish.
 predicateSemantics.ts(36,20): error TS2871: This expression is always nullish.
 predicateSemantics.ts(37,20): error TS2871: This expression is always nullish.
 predicateSemantics.ts(38,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(38,29): error TS2881: This expression is never nullish.
 predicateSemantics.ts(39,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(39,29): error TS2871: This expression is always nullish.
 predicateSemantics.ts(40,21): error TS2871: This expression is always nullish.
 predicateSemantics.ts(40,29): error TS2871: This expression is always nullish.
+predicateSemantics.ts(40,37): error TS2871: This expression is always nullish.
 predicateSemantics.ts(41,21): error TS2871: This expression is always nullish.
 predicateSemantics.ts(42,20): error TS2881: This expression is never nullish.
 predicateSemantics.ts(43,21): error TS2881: This expression is never nullish.
@@ -38,7 +41,7 @@ predicateSemantics.ts(89,1): error TS2869: Right operand of ?? is unreachable be
 predicateSemantics.ts(90,1): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 
-==== predicateSemantics.ts (38 errors) ====
+==== predicateSemantics.ts (41 errors) ====
     declare let opt: number | undefined;
     
     // OK: One or other operand is possibly nullish
@@ -109,13 +112,19 @@ predicateSemantics.ts(90,1): error TS2869: Right operand of ?? is unreachable be
     const p12 = opt ?? (null ?? 1);
                         ~~~~
 !!! error TS2871: This expression is always nullish.
+                                ~
+!!! error TS2881: This expression is never nullish.
     const p13 = opt ?? (null ?? null);
                         ~~~~
+!!! error TS2871: This expression is always nullish.
+                                ~~~~
 !!! error TS2871: This expression is always nullish.
     const p14 = opt ?? (null ?? null ?? null);
                         ~~~~
 !!! error TS2871: This expression is always nullish.
                                 ~~~~
+!!! error TS2871: This expression is always nullish.
+                                        ~~~~
 !!! error TS2871: This expression is always nullish.
     const p15 = opt ?? (opt ? null : undefined) ?? null;
                         ~~~~~~~~~~~~~~~~~~~~~~

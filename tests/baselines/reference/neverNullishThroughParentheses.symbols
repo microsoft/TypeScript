@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/neverNullishThroughParentheses.ts] ////
+
+=== neverNullishThroughParentheses.ts ===
+// Repro for issue where "never nullish" checks miss "never nullish" through parentheses
+
+const x: { y: string | undefined } | undefined = undefined as any;
+>x : Symbol(x, Decl(neverNullishThroughParentheses.ts, 2, 5))
+>y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+>undefined : Symbol(undefined)
+
+// Both should error - both expressions are guaranteed to be "oops"
+const foo = x?.y ?? `oops` ?? "";
+>foo : Symbol(foo, Decl(neverNullishThroughParentheses.ts, 5, 5))
+>x?.y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+>x : Symbol(x, Decl(neverNullishThroughParentheses.ts, 2, 5))
+>y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+
+const bar = (x?.y ?? `oops`) ?? "";
+>bar : Symbol(bar, Decl(neverNullishThroughParentheses.ts, 6, 5))
+>x?.y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+>x : Symbol(x, Decl(neverNullishThroughParentheses.ts, 2, 5))
+>y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+
+// Additional test cases with various levels of nesting
+const baz = ((x?.y ?? `oops`)) ?? "";
+>baz : Symbol(baz, Decl(neverNullishThroughParentheses.ts, 9, 5))
+>x?.y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+>x : Symbol(x, Decl(neverNullishThroughParentheses.ts, 2, 5))
+>y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+
+const qux = (((x?.y ?? `oops`))) ?? "";
+>qux : Symbol(qux, Decl(neverNullishThroughParentheses.ts, 10, 5))
+>x?.y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+>x : Symbol(x, Decl(neverNullishThroughParentheses.ts, 2, 5))
+>y : Symbol(y, Decl(neverNullishThroughParentheses.ts, 2, 10))
+
+// Test with different types
+const str1 = ("literal") ?? "fallback";
+>str1 : Symbol(str1, Decl(neverNullishThroughParentheses.ts, 13, 5))
+
+const str2 = (("nested")) ?? "fallback";
+>str2 : Symbol(str2, Decl(neverNullishThroughParentheses.ts, 14, 5))
+
+const nested = ("a" ?? "b") ?? "c";
+>nested : Symbol(nested, Decl(neverNullishThroughParentheses.ts, 15, 5))
+

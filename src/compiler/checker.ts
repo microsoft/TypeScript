@@ -40592,7 +40592,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isNotWithinNullishCoalesceExpression(node: BinaryExpression) {
-        return !isBinaryExpression(node.parent) || node.parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
+        const parent = walkUpOuterExpressions(node);
+        return !isBinaryExpression(parent) || parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
     }
 
     function getSyntacticNullishnessSemantics(node: Node): PredicateSemantics {
