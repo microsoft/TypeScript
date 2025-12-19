@@ -30,7 +30,7 @@ inKeywordTypeguard.ts(90,5): error TS2564: Property 'a' has no initializer and i
 inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
 inKeywordTypeguard.ts(155,16): error TS18046: 'x' is of type 'unknown'.
 inKeywordTypeguard.ts(158,21): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
-inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
+inKeywordTypeguard.ts(183,16): error TS18049: 'x' is possibly 'null' or 'undefined'.
 inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNullable<T>' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 
 
@@ -277,8 +277,7 @@ inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNullable<T>' may represent
     function f3<T>(x: T) {
         if ("a" in x) {
                    ~
-!!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
             x.a;
         }
         if (x && "a" in x) {

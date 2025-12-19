@@ -1,10 +1,5 @@
-keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
-  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-    Type 'T[string]' is not assignable to type 'object'.
-keyofAndIndexedAccess.ts(211,24): error TS2322: Type 'T[K]' is not assignable to type 'object'.
-  Type 'T[keyof T]' is not assignable to type 'object'.
-    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-      Type 'T[string]' is not assignable to type 'object'.
+keyofAndIndexedAccess.ts(205,24): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(211,24): error TS2533: Object is possibly 'null' or 'undefined'.
 keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
 keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
@@ -222,9 +217,7 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         }
         const b = "foo" in obj[key];
                            ~~~~~~~~
-!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
-!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-!!! error TS2322:     Type 'T[string]' is not assignable to type 'object'.
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
     }
     
     function f55<T, K extends keyof T>(obj: T, key: K) {
@@ -232,10 +225,7 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         }
         const b = "foo" in obj[key];
                            ~~~~~~~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'object'.
-!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'object'.
-!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-!!! error TS2322:       Type 'T[string]' is not assignable to type 'object'.
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
     }
     
     function f60<T>(source: T, target: T) {

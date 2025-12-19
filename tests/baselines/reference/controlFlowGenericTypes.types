@@ -583,9 +583,9 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
 >  : ^
 }
 
-// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-// a generic type without a nullable constraint and x is a generic type. This is because when both obj
-// and x are of generic types T and K, we want the resulting type to be T[K].
+// In an element access obj[key], we consider obj to be in a constraint position, except when
+// obj and key both have generic types. When obj and key are of generic types T and K, we want
+// the resulting type to be T[K].
 
 function fx1<T, K extends keyof T>(obj: T, key: K) {
 >fx1 : <T, K extends keyof T>(obj: T, key: K) => void
@@ -616,6 +616,16 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 >         : ^^^^^^^^^^^^^^^^^
 >obj : NonNullable<T>
 >    : ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x3 = obj?.[key];
+>x3 : NonNullable<T>[K] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.[key] : NonNullable<T>[K] | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
 >key : K
 >    : ^
 }
@@ -651,6 +661,16 @@ function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: 
 >    : ^
 >key : K
 >    : ^
+
+    const x3 = obj?.[key];
+>x3 : T[K]
+>   : ^^^^
+>obj?.[key] : T[K]
+>           : ^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
 }
 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
@@ -661,27 +681,223 @@ function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(o
 >key : K
 >    : ^
 
-    const x1 = obj[key];  // Error
->x1 : Record<keyof T, string>[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[key] : Record<keyof T, string>[K]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : Record<keyof T, string> | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    const x1 = obj[key];
+>x1 : T[K]
+>   : ^^^^
+>obj[key] : T[K]
+>         : ^^^^
+>obj : T
+>    : ^
 >key : K
 >    : ^
 
     const x2 = obj && obj[key];
->x2 : Record<keyof T, string>[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj && obj[key] : Record<keyof T, string>[K]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
+>obj && obj[key] : NonNullable<T>[K]
+>                : ^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
->obj[key] : Record<keyof T, string>[K]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : Record<keyof T, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x3 = obj?.[key];
+>x3 : NonNullable<T>[K] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.[key] : NonNullable<T>[K] | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+}
+
+function fx4<T extends unknown, K extends keyof T>(obj: T, key: K) {
+>fx4 : <T extends unknown, K extends keyof T>(obj: T, key: K) => void
+>    : ^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    const x1 = obj[key];
+>x1 : T[K]
+>   : ^^^^
+>obj[key] : T[K]
+>         : ^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    const x2 = obj && obj[key];
+>x2 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
+>obj && obj[key] : NonNullable<T>[K]
+>                : ^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x3 = obj?.[key];
+>x3 : NonNullable<T>[K] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.[key] : NonNullable<T>[K] | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+}
+
+function fx5<T extends {} | null | undefined, K extends keyof T>(obj: T, key: K) {
+>fx5 : <T extends {} | null | undefined, K extends keyof T>(obj: T, key: K) => void
+>    : ^ ^^^^^^^^^                     ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    const x1 = obj[key];
+>x1 : T[K]
+>   : ^^^^
+>obj[key] : T[K]
+>         : ^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    const x2 = obj && obj[key];
+>x2 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
+>obj && obj[key] : NonNullable<T>[K]
+>                : ^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x3 = obj?.[key];
+>x3 : NonNullable<T>[K] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.[key] : NonNullable<T>[K] | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+}
+
+function fx6<T, K extends keyof T>(obj: T | null | undefined, key: K) {
+>fx6 : <T, K extends keyof T>(obj: T | null | undefined, key: K) => void
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^                    ^^   ^^ ^^^^^^^^^
+>obj : T | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x1 = obj[key];  // Error
+>x1 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : T | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x2 = obj && obj[key];
+>x2 : NonNullable<T>[K] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj && obj[key] : NonNullable<T>[K] | null | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    const x3 = obj?.[key];
+>x3 : NonNullable<T>[K] | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.[key] : NonNullable<T>[K] | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+}
+
+function fx7<T, K extends keyof T>(obj: { x: T } | null | undefined, key: K) {
+>fx7 : <T, K extends keyof T>(obj: { x: T; } | null | undefined, key: K) => void
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^                            ^^   ^^ ^^^^^^^^^
+>obj : { x: T; } | null | undefined
+>    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>key : K
+>    : ^
+
+    const x1 = obj.x[key];  // Error
+>x1 : T[K]
+>   : ^^^^
+>obj.x[key] : T[K]
+>           : ^^^^
+>obj.x : T
+>      : ^
+>obj : { x: T; } | null | undefined
+>    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>key : K
+>    : ^
+
+    const x2 = obj && obj.x[key];
+>x2 : T[K] | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>obj && obj.x[key] : T[K] | null | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { x: T; } | null | undefined
+>    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>obj.x[key] : T[K]
+>           : ^^^^
+>obj.x : T
+>      : ^
+>obj : { x: T; }
+>    : ^^^^^ ^^^
+>x : T
+>  : ^
+>key : K
+>    : ^
+
+    const x3 = obj?.x[key];
+>x3 : T[K] | undefined
+>   : ^^^^^^^^^^^^^^^^
+>obj?.x[key] : T[K] | undefined
+>            : ^^^^^^^^^^^^^^^^
+>obj?.x : T | undefined
+>       : ^^^^^^^^^^^^^
+>obj : { x: T; } | null | undefined
+>    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 >key : K
 >    : ^
 }
@@ -706,21 +922,21 @@ class TableBaseEnum<
 >null! : never
 >      : ^^^^^
 
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
->iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any> | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        iSpec[null! as keyof InternalSpec];
+>iSpec[null! as keyof InternalSpec] : InternalSpec[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
 >                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
 >      : ^^^^^
 
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
->iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any> | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        iSpec[null! as keyof PublicSpec];    // Error
+>iSpec[null! as keyof PublicSpec] : any
+>                                 : ^^^
+>iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
 >                          : ^^^^^^^^^^^^^^^^
 >null! : never
@@ -737,20 +953,20 @@ class TableBaseEnum<
             return;
         }
         iSpec[null! as keyof InternalSpec];
->iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec[null! as keyof InternalSpec] : (InternalSpec & {})[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec & {}
+>      : ^^^^^^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
 >                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
 >      : ^^^^^
 
         iSpec[null! as keyof PublicSpec];
->iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec[null! as keyof PublicSpec] : (InternalSpec & {})[keyof PublicSpec]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec & {}
+>      : ^^^^^^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
 >                          : ^^^^^^^^^^^^^^^^
 >null! : never

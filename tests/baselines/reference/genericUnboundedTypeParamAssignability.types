@@ -8,14 +8,14 @@ function f1<T>(o: T) {
 >  : ^
 
   o.toString(); // error
->o.toString() : any
->             : ^^^
->o.toString : any
->           : ^^^
+>o.toString() : string
+>             : ^^^^^^
+>o.toString : () => string
+>           : ^^^^^^      
 >o : T
 >  : ^
->toString : any
->         : ^^^
+>toString : () => string
+>         : ^^^^^^      
 }
 
 function f2<T extends {}>(o: T) {
@@ -83,13 +83,13 @@ function user<T>(t: T) {
 >  : ^
 
   t.toString();  // error, for the same reason as f1()
->t.toString() : any
->             : ^^^
->t.toString : any
->           : ^^^
+>t.toString() : string
+>             : ^^^^^^
+>t.toString : () => string
+>           : ^^^^^^      
 >t : T
 >  : ^
->toString : any
->         : ^^^
+>toString : () => string
+>         : ^^^^^^      
 }
 

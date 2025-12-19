@@ -8,7 +8,9 @@ function f1<T>(o: T) {
 >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 0, 12))
 
   o.toString(); // error
+>o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 0, 15))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 function f2<T extends {}>(o: T) {
@@ -55,6 +57,8 @@ function user<T>(t: T) {
 >t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
 
   t.toString();  // error, for the same reason as f1()
+>t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 }
 
