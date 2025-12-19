@@ -1025,6 +1025,8 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
+    private recentAttemptedDefinitionInferenceNames: Set<string>;
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1073,6 +1075,8 @@ export class Session<TMessage = string> implements EventSender {
         this.projectService = new ProjectService(settings);
         this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
         this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
+
+        this.recentAttemptedDefinitionInferenceNames = new Set();
 
         // Make sure to setup handlers to throw error for not allowed commands on syntax server
         switch (this.projectService.serverMode) {
@@ -1643,6 +1647,16 @@ export class Session<TMessage = string> implements EventSender {
                 definitions: emptyArray,
                 textSpan: undefined!, // TODO: GH#18217
             };
+        }
+
+        if (unmappedDefinitionAndBoundSpan?.inferredIndex !== undefined) {
+            const name = unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex].name;
+
+            if (!this.recentAttemptedDefinitionInferenceNames.has(name)) {
+                this.recentAttemptedDefinitionInferenceNames.add(name);
+                this.host.setTimeout(() => this.recentAttemptedDefinitionInferenceNames.delete(name), 5000);
+                unmappedDefinitionAndBoundSpan.definitions = [unmappedDefinitionAndBoundSpan.definitions[unmappedDefinitionAndBoundSpan.inferredIndex]];
+            }
         }
 
         const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);

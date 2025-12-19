@@ -682,7 +682,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Before running Timeout callback:: count: 0
+Timeout callback:: count: 1
+1: undefined *new*
+
+Before running Timeout callback:: count: 1
+1: undefined
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
 {
   "version": 3,
@@ -696,6 +700,7 @@ Before running Timeout callback:: count: 0
 }
 
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 
 Before request
@@ -750,6 +755,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+2: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -801,6 +809,10 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 2
+2: undefined
+3: undefined *new*
 
 Before request
 
@@ -854,6 +866,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 3
+2: undefined
+3: undefined
+4: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -906,6 +923,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 4
+2: undefined
+3: undefined
+4: undefined
+5: undefined *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -957,3 +980,10 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 5
+2: undefined
+3: undefined
+4: undefined
+5: undefined
+6: undefined *new*

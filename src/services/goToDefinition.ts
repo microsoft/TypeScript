@@ -530,10 +530,11 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
 /** @internal */
 export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
     const definitions = getDefinitionAtPosition(program, sourceFile, position);
-
     if (!definitions || definitions.length === 0) {
         return undefined;
     }
+
+    const inferredIndex = getInferrableDefinitionIndex(definitions, getTouchingPropertyName(sourceFile, position), program);
 
     // Check if position is on triple slash reference.
     const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
@@ -541,13 +542,43 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
         findReferenceInPosition(sourceFile.libReferenceDirectives, position);
 
     if (comment) {
-        return { definitions, textSpan: createTextSpanFromRange(comment) };
+        return { definitions, inferredIndex, textSpan: createTextSpanFromRange(comment) };
     }
 
     const node = getTouchingPropertyName(sourceFile, position);
     const textSpan = createTextSpan(node.getStart(), node.getWidth());
 
-    return { definitions, textSpan };
+    return { definitions, inferredIndex, textSpan };
+}
+
+function getInferrableDefinitionIndex(definitions: readonly DefinitionInfo[], node: Node, program: Program): number | undefined {
+    const TYPEY_SET = new Set([SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration]);
+
+    const mainIsTypey = getUsageNodeKind(node) === SyntaxKind.TypeReference;
+    const optionNodes = definitions?.map(def => findNodeFromSpan(program.getSourceFile(def.fileName), def.textSpan)!);
+    const definitionsAreTypey = optionNodes.map(node => TYPEY_SET.has(node?.parent?.kind ?? undefined));
+
+    return definitionsAreTypey.filter(def => def === mainIsTypey).length === 1 ? definitionsAreTypey.indexOf(mainIsTypey) : undefined;
+}
+
+function getUsageNodeKind(node: Node): SyntaxKind {
+    return node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier ? getUsageNodeKind(node.parent) : node.kind;
+}
+
+function findNodeFromSpan(sourceFile: SourceFile | undefined, span: TextSpan): Node | undefined {
+    const { start, length } = span;
+    const end = start + length;
+
+    function visit(node: Node): Node | undefined {
+        const nodeStart = node.getFullStart();
+        const nodeEnd = node.getEnd();
+        if (start >= nodeStart && end <= nodeEnd) {
+            const childMatch = node.forEachChild(visit);
+            return childMatch || node;
+        }
+        return undefined;
+    }
+    return sourceFile ? visit(sourceFile) : undefined;
 }
 
 // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
