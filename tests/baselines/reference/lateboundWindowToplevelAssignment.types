@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/salsa/lateboundWindowToplevelAssignment.ts] ////
+
+=== lateboundWindowToplevelAssignment.js ===
+const UPDATE_MARKER_FUNC = 'updateMarkerPosition';
+>UPDATE_MARKER_FUNC : "updateMarkerPosition"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+>'updateMarkerPosition' : "updateMarkerPosition"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+window[UPDATE_MARKER_FUNC] = () => {};
+>window[UPDATE_MARKER_FUNC] = () => {} : () => void
+>                                      : ^^^^^^^^^^
+>window[UPDATE_MARKER_FUNC] : error
+>window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>UPDATE_MARKER_FUNC : "updateMarkerPosition"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+window[UPDATE_MARKER_FUNC]();
+>window[UPDATE_MARKER_FUNC]() : error
+>window[UPDATE_MARKER_FUNC] : error
+>window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>UPDATE_MARKER_FUNC : "updateMarkerPosition"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+
