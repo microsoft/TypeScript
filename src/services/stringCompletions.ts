@@ -1172,7 +1172,9 @@ function getCompletionsForPathMapping(
         const starIsFullPathComponent = endsWith(path, "/*");
         return starIsFullPathComponent ? justPathMappingName(parsedPath.prefix, ScriptElementKind.directory) : flatMap(patterns, pattern => getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, isExports, isImports, program, host, moduleSpecifierResolutionHost)?.map(({ name, ...rest }) => ({ name: parsedPath.prefix + name + parsedPath.suffix, ...rest })));
     }
-    return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExports, isImports, program, host, moduleSpecifierResolutionHost));
+    // For patterns with file extension trailers (e.g., "*.js"), add the suffix from the pattern to completions
+    // Only add suffixes that are file extensions (start with "."), not path components (e.g., "/suffix")
+    return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExports, isImports, program, host, moduleSpecifierResolutionHost)?.map(entry => parsedPath.suffix && startsWith(parsedPath.suffix, ".") ? { ...entry, name: entry.name + parsedPath.suffix } : entry));
 
     function justPathMappingName(name: string, kind: ScriptElementKind.directory | ScriptElementKind.scriptElement): readonly NameAndKind[] {
         return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }] : emptyArray;
@@ -1240,7 +1242,7 @@ function getModulesForPathsPattern(
         ? matchingSuffixes.map(suffix => "**/*" + suffix)
         : ["./*"];
 
-    const isExportsOrImportsWildcard = (isExports || isImports) && endsWith(pattern, "/*");
+    const isExportsOrImportsWildcard = (isExports || isImports) && pattern.includes("/*");
 
     let matches = getMatchesWithPrefix(baseDirectory);
 
