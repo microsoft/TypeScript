@@ -47843,17 +47843,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function computeEnumMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined): EvaluatorResult {
+        let errorReported = false;
         if (isComputedNonLiteralName(member.name)) {
+            errorReported = true;
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
         else if (isBigIntLiteral(member.name)) {
+            errorReported = true;
             error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
         }
         else {
             const text = getTextOfPropertyName(member.name);
             if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
+                errorReported = true;
                 error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
             }
+        }
+        if (!errorReported && isComputedPropertyName(member.name)) {
+            // Computed property name with a literal expression (e.g., ['key'] or [`key`])
+            // This is deprecated and will be disallowed in a future version
+            suggestionDiagnostics.add(
+                createDiagnosticForNode(member.name, Diagnostics.Using_a_string_literal_as_an_enum_member_name_via_a_computed_property_is_deprecated_Use_a_simple_string_literal_instead),
+            );
         }
         if (member.initializer) {
             return computeConstantEnumMemberValue(member);

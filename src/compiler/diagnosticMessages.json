@@ -1860,7 +1860,11 @@
         "category": "Message",
         "code": 1549
     },
-
+    "Using a string literal as an enum member name via a computed property is deprecated. Use a simple string literal instead.": {
+        "category": "Suggestion",
+        "code": 1550,
+        "reportsDeprecated": true
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -8347,7 +8351,14 @@
         "category": "Message",
         "code": 95197
     },
-
+    "Remove unnecessary computed property name syntax": {
+        "category": "Message",
+        "code": 95198
+    },
+    "Remove all unnecessary computed property name syntax": {
+        "category": "Message",
+        "code": 95199
+    },
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
