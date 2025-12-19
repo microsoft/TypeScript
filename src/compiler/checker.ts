@@ -7616,8 +7616,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (propertySymbol.flags & SymbolFlags.Prototype) {
                             continue;
                         }
-                        if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
-                            context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                        if ((getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) || propertySymbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(propertySymbol.valueDeclaration)) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(symbolToString(propertySymbol));
                         }
                         if (isPrivateIdentifierSymbol(propertySymbol) && context.tracker.reportPrivateInBaseOfClassExpression) {
                             context.tracker.reportPrivateInBaseOfClassExpression(idText((propertySymbol.valueDeclaration! as NamedDeclaration).name! as PrivateIdentifier));

@@ -1,0 +1,49 @@
+emitClassExpressionInDeclarationFile3.ts(1,12): error TS4094: Property '#p' of exported anonymous class type may not be private or protected.
+emitClassExpressionInDeclarationFile3.ts(1,12): error TS4094: Property '#ps' of exported anonymous class type may not be private or protected.
+emitClassExpressionInDeclarationFile3.ts(15,17): error TS4094: Property '#property' of exported anonymous class type may not be private or protected.
+emitClassExpressionInDeclarationFile3.ts(22,14): error TS4094: Property '#property' of exported anonymous class type may not be private or protected.
+emitClassExpressionInDeclarationFile3.ts(25,3): error TS4094: Property '#prop' of exported anonymous class type may not be private or protected.
+
+
+==== emitClassExpressionInDeclarationFile3.ts (5 errors) ====
+    export var noPrivates = class {
+               ~~~~~~~~~~
+!!! error TS4094: Property '#p' of exported anonymous class type may not be private or protected.
+!!! related TS9027 emitClassExpressionInDeclarationFile3.ts:1:12: Add a type annotation to the variable noPrivates.
+               ~~~~~~~~~~
+!!! error TS4094: Property '#ps' of exported anonymous class type may not be private or protected.
+!!! related TS9027 emitClassExpressionInDeclarationFile3.ts:1:12: Add a type annotation to the variable noPrivates.
+        static getTags() { }
+        tags() { }
+        static #ps = -1
+        #p = 12
+    }
+    
+    export class FooItem {
+        foo(): void { }
+        name?: string;
+        #property = "capitalism"
+    }
+    
+    export type Constructor<T> = new(...args: any[]) => T;
+    export function WithTags<T extends Constructor<FooItem>>(Base: T) {
+                    ~~~~~~~~
+!!! error TS4094: Property '#property' of exported anonymous class type may not be private or protected.
+        return class extends Base {
+            static getTags(): void { }
+            tags(): void { }
+        }
+    }
+    
+    export class Test extends WithTags(FooItem) {}
+                 ~~~~
+!!! error TS4094: Property '#property' of exported anonymous class type may not be private or protected.
+    
+    export class Test2 {
+      nested = class {
+      ~~~~~~
+!!! error TS4094: Property '#prop' of exported anonymous class type may not be private or protected.
+        #prop = 42;
+      }
+    }
+    

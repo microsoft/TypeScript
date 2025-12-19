@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/declarationEmitMixinPrivateField1.ts] ////
+
+=== first.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : <TMix>(mixin: TMix) => TMix
+>    : ^    ^^     ^^    ^^^^^    
+>mixin : TMix
+>      : ^^^^
+
+const DisposableMixin = class {
+>DisposableMixin : typeof DisposableMixin
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>class {    #onDispose() {}} : typeof DisposableMixin
+>                            : ^^^^^^^^^^^^^^^^^^^^^^
+
+    #onDispose() {}
+>#onDispose : () => void
+>           : ^^^^^^^^^^
+
+};
+
+export default mix(DisposableMixin);
+>mix(DisposableMixin) : typeof DisposableMixin
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
+>mix : <TMix>(mixin: TMix) => TMix
+>    : ^    ^^     ^^    ^^^^^    
+>DisposableMixin : typeof DisposableMixin
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
+export class Monitor extends mix(DisposableMixin) {}
+>Monitor : Monitor
+>        : ^^^^^^^
+>mix(DisposableMixin) : DisposableMixin
+>                     : ^^^^^^^^^^^^^^^
+>mix : <TMix>(mixin: TMix) => TMix
+>    : ^    ^^     ^^    ^^^^^    
+>DisposableMixin : typeof DisposableMixin
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
+=== another.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : <TMix>(mixin: TMix) => TMix
+>    : ^    ^^     ^^    ^^^^^    
+>mixin : TMix
+>      : ^^^^
+
+const DisposableMixin = class {
+>DisposableMixin : typeof DisposableMixin
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>class {    #onDispose() {}} : typeof DisposableMixin
+>                            : ^^^^^^^^^^^^^^^^^^^^^^
+
+    #onDispose() {}
+>#onDispose : () => void
+>           : ^^^^^^^^^^
+
+};
+
+export default class extends mix(DisposableMixin) {}
+>mix(DisposableMixin) : DisposableMixin
+>                     : ^^^^^^^^^^^^^^^
+>mix : <TMix>(mixin: TMix) => TMix
+>    : ^    ^^     ^^    ^^^^^    
+>DisposableMixin : typeof DisposableMixin
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+
