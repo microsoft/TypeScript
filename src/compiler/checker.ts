@@ -24878,7 +24878,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
-        const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
+        const include: Ternary[] = types.map(t => {
+            if (t.flags & TypeFlags.Primitive) {
+                return Ternary.False;
+            }
+            if (t.symbol && t.symbol.flags && SymbolFlags.Class && some(getPropertiesOfType(t), p => !!(p.valueDeclaration && isNamedDeclaration(p.valueDeclaration) && (isPrivateIdentifier(p.valueDeclaration.name) || getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier)))) {
+                return Ternary.False;
+            }
+            return Ternary.True;
+        });
         for (const [getDiscriminatingType, propertyName] of discriminators) {
             // If the remaining target types include at least one with a matching discriminant, eliminate those that
             // have non-matching discriminants. This ensures that we ignore erroneous discriminators and gradually
