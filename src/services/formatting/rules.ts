@@ -235,6 +235,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext],
             RuleAction.InsertSpace,
         ),
+        rule(
+            "NoSpaceBetweenFromKeywordAndLineStart",
+            SyntaxKind.NewLineTrivia,
+            SyntaxKind.FromKeyword,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace
+        ),
         // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
         rule("SpaceAfterModuleName", SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken, [isModuleDeclContext], RuleAction.InsertSpace),
 
