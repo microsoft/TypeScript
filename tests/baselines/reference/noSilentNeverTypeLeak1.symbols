@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/noSilentNeverTypeLeak1.ts] ////
+
+=== noSilentNeverTypeLeak1.ts ===
+type Fn<T> = (arg: T) => void;
+>Fn : Symbol(Fn, Decl(noSilentNeverTypeLeak1.ts, 0, 0))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 0, 8))
+>arg : Symbol(arg, Decl(noSilentNeverTypeLeak1.ts, 0, 14))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 0, 8))
+
+declare function fn1<T>(): Fn<T>;
+>fn1 : Symbol(fn1, Decl(noSilentNeverTypeLeak1.ts, 0, 30))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 2, 21))
+>Fn : Symbol(Fn, Decl(noSilentNeverTypeLeak1.ts, 0, 0))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 2, 21))
+
+declare function fn2<T>(
+>fn2 : Symbol(fn2, Decl(noSilentNeverTypeLeak1.ts, 2, 33))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 4, 21))
+
+  cb: Fn<{
+>cb : Symbol(cb, Decl(noSilentNeverTypeLeak1.ts, 4, 24))
+>Fn : Symbol(Fn, Decl(noSilentNeverTypeLeak1.ts, 0, 0))
+
+    [K in keyof T & string]: T[K];
+>K : Symbol(K, Decl(noSilentNeverTypeLeak1.ts, 6, 5))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 4, 21))
+>T : Symbol(T, Decl(noSilentNeverTypeLeak1.ts, 4, 21))
+>K : Symbol(K, Decl(noSilentNeverTypeLeak1.ts, 6, 5))
+
+  }>,
+): void;
+
+fn2(fn1());
+>fn2 : Symbol(fn2, Decl(noSilentNeverTypeLeak1.ts, 2, 33))
+>fn1 : Symbol(fn1, Decl(noSilentNeverTypeLeak1.ts, 0, 30))
+

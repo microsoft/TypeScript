@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/noSilentNeverTypeLeak1.ts] ////
+
+=== noSilentNeverTypeLeak1.ts ===
+type Fn<T> = (arg: T) => void;
+>Fn : Fn<T>
+>   : ^^^^^
+>arg : T
+>    : ^
+
+declare function fn1<T>(): Fn<T>;
+>fn1 : <T>() => Fn<T>
+>    : ^ ^^^^^^^     
+
+declare function fn2<T>(
+>fn2 : <T>(cb: Fn<{ [K in keyof T & string]: T[K]; }>) => void
+>    : ^ ^^  ^^                                      ^^^^^    
+
+  cb: Fn<{
+>cb : Fn<{ [K in keyof T & string]: T[K]; }>
+>   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T & string]: T[K];
+  }>,
+): void;
+
+fn2(fn1());
+>fn2(fn1()) : void
+>           : ^^^^
+>fn2 : <T>(cb: Fn<{ [K in keyof T & string]: T[K]; }>) => void
+>    : ^ ^^  ^^                                      ^^^^^    
+>fn1() : Fn<{}>
+>      : ^^^^^^
+>fn1 : <T>() => Fn<T>
+>    : ^ ^^^^^^^     
+
