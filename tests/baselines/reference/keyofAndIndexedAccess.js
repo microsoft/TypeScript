@@ -659,6 +659,10 @@ const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, 
     t.cool;
 };
 
+type IndexedNever<T> = never[keyof T];
+type IndexedAny<T> = any[keyof T];
+type IndexedUnknown<T> = unknown[keyof T];
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -1435,3 +1439,6 @@ declare const cf1: <T extends { [P in K]: string; } & {
     cool: string;
 }, K extends keyof T>(t: T, k: K) => void;
 declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;
+type IndexedNever<T> = never[keyof T];
+type IndexedAny<T> = any[keyof T];
+type IndexedUnknown<T> = unknown[keyof T];

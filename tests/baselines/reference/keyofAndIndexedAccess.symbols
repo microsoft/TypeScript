@@ -2345,3 +2345,18 @@ const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, 
 
 };
 
+type IndexedNever<T> = never[keyof T];
+>IndexedNever : Symbol(IndexedNever, Decl(keyofAndIndexedAccess.ts, 656, 2))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 658, 18))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 658, 18))
+
+type IndexedAny<T> = any[keyof T];
+>IndexedAny : Symbol(IndexedAny, Decl(keyofAndIndexedAccess.ts, 658, 38))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 16))
+
+type IndexedUnknown<T> = unknown[keyof T];
+>IndexedUnknown : Symbol(IndexedUnknown, Decl(keyofAndIndexedAccess.ts, 659, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 660, 20))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 660, 20))
+
