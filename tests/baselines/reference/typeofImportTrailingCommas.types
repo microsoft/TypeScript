@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/typeofImportTrailingCommas.ts] ////
+
+=== input.ts ===
+export type X = 1;
+>X : 1
+>  : ^
+
+=== main.ts ===
+type T1 = typeof import('./input.js',)
+>T1 : typeof import("input")
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+
+type T2 = typeof import('./input.js', { with: { "resolution-mode": "import" } },);
+>T2 : typeof import("input")
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+
