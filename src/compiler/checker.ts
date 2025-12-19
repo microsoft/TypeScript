@@ -49269,7 +49269,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         start = skipTrivia(sourceFile.text, start);
-        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, Math.max(end - start, 0), Diagnostics.Unreachable_code_detected));
 
         return true;
     }

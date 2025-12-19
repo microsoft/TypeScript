@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/reachabilityChecksNoCrash1.ts] ////
+
+=== reachabilityChecksNoCrash1.ts ===
+export async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promise<T[]> {
+>arrayFromAsync : <T>(asyncIterable: any, : any, AsyncIterable: any, : any, T: any) => any
+>               : ^ ^^             ^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>asyncIterable : any
+>              : ^^^
+> : any
+> : ^^^
+>AsyncIterable : any
+>              : ^^^
+> : any
+> : ^^^
+>T : any
+>  : ^^^
+>> : boolean
+>  : ^^^^^^^
+> : any
+> : ^^^
+> : any
+> : ^^^
+>Promise<T[]> {    const out = [];    for await (const v of asyncIterable) {        out.push(await v);    } : boolean
+>                                                                                                           : ^^^^^^^
+>Promise<T[] : boolean
+>            : ^^^^^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>T[] : any
+>    : ^^^
+>T : any
+>  : ^^^
+> : any
+> : ^^^
+>{    const out = [];    for await (const v of asyncIterable) {        out.push(await v);    } : { const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const out = [];
+>const : never[]
+>      : ^^^^^^^
+>out = [] : never[]
+>         : ^^^^^^^
+>out : any
+>    : ^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    for await (const v of asyncIterable) {
+>for : any
+>    : ^^^
+>await ( : any
+>        : ^^^
+>( : any
+>  : ^^^
+> : any
+> : ^^^
+>const : never[]
+>      : ^^^^^^^
+>v : any
+>  : ^^^
+>of : any
+>   : ^^^
+>asyncIterable : any
+>              : ^^^
+
+        out.push(await v);
+>out : any
+>    : ^^^
+> : any
+> : ^^^
+>.push(await v) : any
+>               : ^^^
+>.push : any
+>      : ^^^
+> : any
+> : ^^^
+>push : any
+>     : ^^^
+>await v : any
+>        : ^^^
+>v : any
+>  : ^^^
+    }
+    return out;
+>out : any
+>    : ^^^
+}
+> : any
+> : ^^^
+
