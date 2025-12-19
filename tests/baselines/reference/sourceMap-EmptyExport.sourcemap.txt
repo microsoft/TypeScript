@@ -1,0 +1,18 @@
+===================================================================
+JsFile: sourceMap-EmptyExport.js
+mapUrl: sourceMap-EmptyExport.js.map
+sourceRoot: 
+sources: sourceMap-EmptyExport.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMap-EmptyExport.js
+sourceFile:sourceMap-EmptyExport.ts
+-------------------------------------------------------------------
+>>>"use strict";
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>//# sourceMappingURL=sourceMap-EmptyExport.js.map
