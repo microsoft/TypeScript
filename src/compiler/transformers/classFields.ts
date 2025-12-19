@@ -1911,9 +1911,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
-            const staticProperties = getStaticPropertiesAndClassStaticBlock(node);
-            if (some(staticProperties)) {
-                addPropertyOrClassStaticBlockStatements(statements, staticProperties, factory.getInternalName(node));
+            const staticDeclarations = getStaticPropertiesAndClassStaticBlock(node);
+            if (some(staticDeclarations)) {
+                addPropertyOrClassStaticBlockStatements(statements, staticDeclarations, factory.getInternalName(node));
             }
         }
 

@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+// https://github.com/microsoft/TypeScript/issues/60879
+
+export default class {
+  static demo: number;
+>demo : number
+>     : ^^^^^^
+
+  static {
+    this.demo = 1;
+>this.demo = 1 : 1
+>              : ^
+>this.demo : number
+>          : ^^^^^^
+>this : typeof default
+>     : ^^^^^^^^^^^^^^
+>demo : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+  }
+}
+
+export function makeCls() {
+>makeCls : () => typeof (Anonymous class)
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return class {
+>class {    static demo: number;    static {      this.demo = 1;    }  } : typeof (Anonymous class)
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static demo: number;
+>demo : number
+>     : ^^^^^^
+
+    static {
+      this.demo = 1;
+>this.demo = 1 : 1
+>              : ^
+>this.demo : number
+>          : ^^^^^^
+>this : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>demo : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+    }
+  };
+}
+
