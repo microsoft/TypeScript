@@ -15,6 +15,7 @@ import {
     contains,
     containsPath,
     createCompilerDiagnostic,
+    createGetCanonicalFileName,
     Debug,
     deduplicate,
     Diagnostic,
@@ -1471,6 +1472,70 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         }
         else {
             trace(host, Diagnostics.Module_name_0_was_not_resolved, moduleName);
+        }
+    }
+
+    if (result.resolvedModule && isDeclarationFileName(containingFile)) {
+        const { extension, resolvedFileName } = result.resolvedModule;
+        if (extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts) {
+            let projectDir: string | undefined;
+            let options: CompilerOptions | undefined;
+
+            if (redirectedReference) {
+                projectDir = getDirectoryPath(redirectedReference.sourceFile.fileName);
+                options = redirectedReference.commandLine.options;
+            }
+            else {
+                projectDir = getDirectoryPath(containingFile);
+                options = compilerOptions;
+            }
+
+            let currentDir = projectDir;
+            let packageJsonInfo: PackageJsonInfoCacheEntry | undefined;
+            while (currentDir) {
+                const packageJsonPath = combinePaths(currentDir, "package.json");
+                packageJsonInfo = cache?.getPackageJsonInfo(packageJsonPath);
+                if (isPackageJsonInfo(packageJsonInfo)) break;
+                const parent = getDirectoryPath(currentDir);
+                if (parent === currentDir) break;
+                currentDir = parent;
+            }
+
+            if (isPackageJsonInfo(packageJsonInfo) && packageJsonInfo.contents.packageJsonContent.name === moduleName) {
+                if (options) {
+                    let outputDts: string | undefined;
+                    if (options.outFile) {
+                        outputDts = changeAnyExtension(options.outFile, ".d.ts");
+                    }
+                    else if (options.outDir) {
+                        const getCanonicalFileName = createGetCanonicalFileName(
+                            typeof host.useCaseSensitiveFileNames === "function"
+                                ? host.useCaseSensitiveFileNames()
+                                : host.useCaseSensitiveFileNames ?? true,
+                        );
+
+                        let rootDir = options.rootDir;
+                        if (!rootDir && redirectedReference) {
+                            rootDir = getCommonSourceDirectory(
+                                options,
+                                () => redirectedReference.commandLine.fileNames,
+                                host.getCurrentDirectory ? host.getCurrentDirectory() : "",
+                                getCanonicalFileName,
+                            );
+                        }
+
+                        if (rootDir) {
+                            const relativePath = getRelativePathFromDirectory(rootDir, resolvedFileName, getCanonicalFileName);
+                            outputDts = combinePaths(options.outDir, changeAnyExtension(relativePath, ".d.ts"));
+                        }
+                    }
+
+                    if (outputDts) {
+                        result.resolvedModule.resolvedFileName = outputDts;
+                        result.resolvedModule.extension = Extension.Dts;
+                    }
+                }
+            }
         }
     }
 
