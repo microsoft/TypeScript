@@ -101,6 +101,7 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isRequireCall,
+    isShorthandPropertyNameUseSite,
     isSourceFile,
     isStatement,
     isStringLiteral,
@@ -961,11 +962,11 @@ function inferNewFileName(importsFromNewFile: Map<Symbol, unknown>, movedSymbols
 
 function forEachReference(node: Node, checker: TypeChecker, enclosingRange: TextRange | undefined, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
     node.forEachChild(function cb(node) {
-        if (isIdentifier(node) && !isDeclarationName(node)) {
+        if (isIdentifier(node) && (!isDeclarationName(node) || isShorthandPropertyNameUseSite(node))) {
             if (enclosingRange && !rangeContainsRange(enclosingRange, node)) {
                 return;
             }
-            const sym = checker.getSymbolAtLocation(node);
+            const sym = isShorthandPropertyNameUseSite(node) ? checker.getShorthandAssignmentValueSymbol(node.parent) : checker.getSymbolAtLocation(node);
             if (sym) onReference(sym, isValidTypeOnlyAliasUseSite(node));
         }
         else {
