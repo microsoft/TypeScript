@@ -1,0 +1,225 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedAccessViaExplicitThisParameter.ts] ////
+
+=== protectedAccessViaExplicitThisParameter.ts ===
+// Accessing base class protected methods via explicit 'this' parameter
+// Should compile when 'this' type is a derived class
+
+class Base {
+>Base : Base
+>     : ^^^^
+
+  protected baseMethod() {
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+
+    return "Base.baseMethod";
+>"Base.baseMethod" : "Base.baseMethod"
+>                  : ^^^^^^^^^^^^^^^^^
+  }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>        : ^^^^^^^
+>Base : Base
+>     : ^^^^
+
+  protected override baseMethod() {
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+
+    return "Derived.baseMethod";
+>"Derived.baseMethod" : "Derived.baseMethod"
+>                     : ^^^^^^^^^^^^^^^^^^^^
+  }
+
+  // Test case 1: Static block with explicit 'this' parameter
+  static {
+    this.prototype.baseMethod = function(this: Derived) {
+>this.prototype.baseMethod = function(this: Derived) {      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived      return "override";    } : (this: Derived) => string
+>                                                                                                                                                            : ^    ^^       ^^^^^^^^^^^
+>this.prototype.baseMethod : () => string
+>                          : ^^^^^^^^^^^^
+>this.prototype : Derived
+>               : ^^^^^^^
+>this : typeof Derived
+>     : ^^^^^^^^^^^^^^
+>prototype : Derived
+>          : ^^^^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+>function(this: Derived) {      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived      return "override";    } : (this: Derived) => string
+>                                                                                                                                : ^    ^^       ^^^^^^^^^^^
+>this : Derived
+>     : ^^^^^^^
+
+      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived
+>Base.prototype.baseMethod.call(this) : string
+>                                     : ^^^^^^
+>Base.prototype.baseMethod.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>                               : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>Base.prototype.baseMethod : () => string
+>                          : ^^^^^^^^^^^^
+>Base.prototype : Base
+>               : ^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+>prototype : Base
+>          : ^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : Derived
+>     : ^^^^^^^
+
+      return "override";
+>"override" : "override"
+>           : ^^^^^^^^^^
+    }
+  }
+
+  // Test case 2: Regular method with explicit 'this' parameter
+  testExplicitThis() {
+>testExplicitThis : () => void
+>                 : ^^^^^^^^^^
+
+    const fn = function(this: Derived) {
+>fn : (this: Derived) => void
+>   : ^    ^^       ^^^^^^^^^
+>function(this: Derived) {      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived    } : (this: Derived) => void
+>                                                                                                        : ^    ^^       ^^^^^^^^^
+>this : Derived
+>     : ^^^^^^^
+
+      Base.prototype.baseMethod.call(this); // OK: explicit this: Derived
+>Base.prototype.baseMethod.call(this) : string
+>                                     : ^^^^^^
+>Base.prototype.baseMethod.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>                               : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>Base.prototype.baseMethod : () => string
+>                          : ^^^^^^^^^^^^
+>Base.prototype : Base
+>               : ^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+>prototype : Base
+>          : ^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : Derived
+>     : ^^^^^^^
+
+    };
+    fn.call(this);
+>fn.call(this) : void
+>              : ^^^^
+>fn.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>        : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>fn : (this: Derived) => void
+>   : ^    ^^       ^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : this
+>     : ^^^^
+  }
+
+  // Test case 3: Should still error with wrong explicit 'this' type
+  testWrongExplicitThis() {
+>testWrongExplicitThis : () => void
+>                      : ^^^^^^^^^^
+
+    const fn = function(this: Base) {
+>fn : (this: Base) => void
+>   : ^    ^^    ^^^^^^^^^
+>function(this: Base) {      Base.prototype.baseMethod.call(this); // Error: this: Base, not compatible    } : (this: Base) => void
+>                                                                                                            : ^    ^^    ^^^^^^^^^
+>this : Base
+>     : ^^^^
+
+      Base.prototype.baseMethod.call(this); // Error: this: Base, not compatible
+>Base.prototype.baseMethod.call(this) : string
+>                                     : ^^^^^^
+>Base.prototype.baseMethod.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>                               : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>Base.prototype.baseMethod : () => string
+>                          : ^^^^^^^^^^^^
+>Base.prototype : Base
+>               : ^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+>prototype : Base
+>          : ^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : Base
+>     : ^^^^
+
+    };
+  }
+}
+
+// Test case 4: Should error without derived relationship
+class Unrelated {
+>Unrelated : Unrelated
+>          : ^^^^^^^^^
+
+  testUnrelated() {
+>testUnrelated : () => void
+>              : ^^^^^^^^^^
+
+    const fn = function(this: Unrelated) {
+>fn : (this: Unrelated) => void
+>   : ^    ^^         ^^^^^^^^^
+>function(this: Unrelated) {      Base.prototype.baseMethod.call(this); // Error: Unrelated not related to Base    } : (this: Unrelated) => void
+>                                                                                                                    : ^    ^^         ^^^^^^^^^
+>this : Unrelated
+>     : ^^^^^^^^^
+
+      Base.prototype.baseMethod.call(this); // Error: Unrelated not related to Base
+>Base.prototype.baseMethod.call(this) : string
+>                                     : ^^^^^^
+>Base.prototype.baseMethod.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>                               : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>Base.prototype.baseMethod : () => string
+>                          : ^^^^^^^^^^^^
+>Base.prototype : Base
+>               : ^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+>prototype : Base
+>          : ^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : Unrelated
+>     : ^^^^^^^^^
+
+    };
+  }
+}
+
+// Test case 5: Should still error for external access
+const instance = new Derived();
+>instance : Derived
+>         : ^^^^^^^
+>new Derived() : Derived
+>              : ^^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+
+instance.baseMethod(); // Error: external access to protected member
+>instance.baseMethod() : string
+>                      : ^^^^^^
+>instance.baseMethod : () => string
+>                    : ^^^^^^^^^^^^
+>instance : Derived
+>         : ^^^^^^^
+>baseMethod : () => string
+>           : ^^^^^^^^^^^^
+
