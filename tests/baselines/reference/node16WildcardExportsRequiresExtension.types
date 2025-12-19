@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/node16WildcardExportsRequiresExtension.ts] ////
+
+=== /node_modules/@repo/library/src/utils.ts ===
+export function greet(): string {
+>greet : () => string
+>      : ^^^^^^      
+
+    return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+}
+
+=== /app.ts ===
+// This import should FAIL in node16 mode - extensionless imports not supported
+import { greet } from "@repo/library/utils";
+>greet : any
+>      : ^^^
+
+greet();
+>greet() : any
+>        : ^^^
+>greet : any
+>      : ^^^
+

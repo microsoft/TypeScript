@@ -2804,7 +2804,23 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
             const finalPath = toAbsolutePath(pattern ? resolvedTarget.replace(/\*/g, subpath) : resolvedTarget + subpath);
             const inputLink = tryLoadInputFileForPath(finalPath, subpath, combinePaths(scope.packageDirectory, "package.json"), isImports);
             if (inputLink) return inputLink;
-            return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, finalPath, target, /*onlyRecordFailures*/ false, state), state));
+            // First try the standard package.json field resolution
+            const fromPkgJsonField = loadFileNameFromPackageJsonField(extensions, finalPath, target, /*onlyRecordFailures*/ false, state);
+            if (fromPkgJsonField) {
+                return toSearchResult(withPackageId(scope, fromPkgJsonField, state));
+            }
+            // For extensionless paths in bundler mode (non-ESM), try adding extensions (e.g., ./foo -> ./foo.ts)
+            // This handles wildcard exports like "./*": "./src/*" where the resolved path has no extension.
+            if (!(state.features & NodeResolutionFeatures.EsmMode)) {
+                const filename = getBaseFileName(finalPath);
+                if (!filename.includes(".")) {
+                    const fromFile = loadModuleFromFile(extensions, finalPath, /*onlyRecordFailures*/ false, state);
+                    if (fromFile) {
+                        return toSearchResult(withPackageId(scope, fromFile, state));
+                    }
+                }
+            }
+            return toSearchResult(/*value*/ undefined);
         }
         else if (typeof target === "object" && target !== null) { // eslint-disable-line no-restricted-syntax
             if (!Array.isArray(target)) {

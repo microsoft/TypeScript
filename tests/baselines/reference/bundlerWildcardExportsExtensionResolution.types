@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/bundlerWildcardExportsExtensionResolution.ts] ////
+
+=== /node_modules/@repo/library/src/utils.ts ===
+export function greet(): string {
+>greet : () => string
+>      : ^^^^^^      
+
+    return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+}
+
+=== /node_modules/@repo/library/src/component.tsx ===
+export const Component = () => null;
+>Component : () => any
+>          : ^^^^^^^^^
+>() => null : () => any
+>           : ^^^^^^^^^
+
+=== /node_modules/@repo/library/src/deep/nested/module.ts ===
+export const deep = true;
+>deep : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+=== /app.ts ===
+// These imports should all resolve successfully in bundler mode
+import { greet } from "@repo/library/utils";
+>greet : () => string
+>      : ^^^^^^      
+
+import { Component } from "@repo/library/component";
+>Component : () => any
+>          : ^^^^^^^^^
+
+import { deep } from "@repo/library/deep/nested/module";
+>deep : true
+>     : ^^^^
+
+greet();
+>greet() : string
+>        : ^^^^^^
+>greet : () => string
+>      : ^^^^^^      
+
+Component;
+>Component : () => any
+>          : ^^^^^^^^^
+
+deep;
+>deep : true
+>     : ^^^^
+
