@@ -2302,8 +2302,8 @@ func (c *Checker) checkSourceElementUnreachable(node *ast.Node) bool {
 
 	sourceFile := ast.GetSourceFileOfNode(node)
 
-	start := node.Pos()
-	end := node.End()
+	startNode := node
+	endNode := node
 
 	parent := node.Parent
 	if parent.CanHaveStatements() {
@@ -2333,14 +2333,14 @@ func (c *Checker) checkSourceElementUnreachable(node *ast.Node) bool {
 				c.reportedUnreachableNodes.Add(nextNode)
 			}
 
-			start = statements[first].Pos()
-			end = statements[last].End()
+			startNode = statements[first]
+			endNode = statements[last]
 		}
 	}
 
-	start = scanner.SkipTrivia(sourceFile.Text(), start)
+	start := scanner.GetTokenPosOfNode(startNode, sourceFile, false /*includeJSDoc*/)
 
-	diagnostic := ast.NewDiagnostic(sourceFile, core.NewTextRange(start, end), diagnostics.Unreachable_code_detected)
+	diagnostic := ast.NewDiagnostic(sourceFile, core.NewTextRange(start, endNode.End()), diagnostics.Unreachable_code_detected)
 	c.addErrorOrSuggestion(c.compilerOptions.AllowUnreachableCode == core.TSFalse, diagnostic)
 
 	return true
