@@ -383,6 +383,7 @@ import {
     getTextOfPropertyName,
     getThisContainer,
     getThisParameter,
+    getTokenPosOfNode,
     getTrailingSemicolonDeferringWriter,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
@@ -49232,8 +49233,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const sourceFile = getSourceFileOfNode(node);
 
-        let start = node.pos;
-        let end = node.end;
+        let startNode = node;
+        let endNode = node;
 
         const parent = node.parent;
         if (canHaveStatements(parent)) {
@@ -49263,13 +49264,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     reportedUnreachableNodes.add(nextNode);
                 }
 
-                start = statements[first].pos;
-                end = statements[last].end;
+                startNode = statements[first];
+                endNode = statements[last];
             }
         }
 
-        start = skipTrivia(sourceFile.text, start);
-        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, Math.max(end - start, 0), Diagnostics.Unreachable_code_detected));
+        const start = getTokenPosOfNode(startNode, sourceFile);
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, endNode.end - start, Diagnostics.Unreachable_code_detected));
 
         return true;
     }
