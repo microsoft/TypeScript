@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/excessPropertyCheckInlineObjectWithSpreadVariable.ts] ////
+
+=== excessPropertyCheckInlineObjectWithSpreadVariable.ts ===
+type Foo = {
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 12))
+}
+
+type Bar = {
+>Bar : Symbol(Bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 2, 1))
+
+    extraProp: string;
+>extraProp : Symbol(extraProp, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 4, 12))
+}
+
+const bar: Bar = { extraProp: "" };
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 8, 5))
+>Bar : Symbol(Bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 2, 1))
+>extraProp : Symbol(extraProp, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 8, 18))
+
+const foo: Foo = { bar: "", foo: "" };
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 10, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 10, 18))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 10, 27))
+
+const foo2: Foo = { ...bar, foo: "" };
+>foo2 : Symbol(foo2, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 11, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 8, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 11, 27))
+
+const foo3: Foo = { ...{ ...bar}, foo: ""};
+>foo3 : Symbol(foo3, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 12, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 8, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 12, 33))
+
+const foo4: Foo = { ...{ bar: "" }, foo: ""};
+>foo4 : Symbol(foo4, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 13, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 13, 24))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 13, 35))
+
+
+const noBar = { extraProp2: "" };
+>noBar : Symbol(noBar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 16, 5))
+>extraProp2 : Symbol(extraProp2, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 16, 15))
+
+const foo5: Foo = { extraProp2: "", foo: "" };
+>foo5 : Symbol(foo5, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 17, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>extraProp2 : Symbol(extraProp2, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 17, 19))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 17, 35))
+
+const foo6: Foo = { ...noBar, foo: "" };
+>foo6 : Symbol(foo6, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 18, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>noBar : Symbol(noBar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 16, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 18, 29))
+
+const foo7: Foo = { ...{ ...noBar}, foo: ""};
+>foo7 : Symbol(foo7, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 19, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>noBar : Symbol(noBar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 16, 5))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 19, 35))
+
+const foo8: Foo = { ...{ noBar: "" }, foo: ""};
+>foo8 : Symbol(foo8, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 20, 5))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 0, 0))
+>noBar : Symbol(noBar, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 20, 24))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineObjectWithSpreadVariable.ts, 20, 37))
+

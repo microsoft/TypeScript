@@ -1,0 +1,154 @@
+//// [tests/cases/compiler/excessPropertyCheckInlineObjectWithSpreadVariable.ts] ////
+
+=== excessPropertyCheckInlineObjectWithSpreadVariable.ts ===
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    foo: string;
+>foo : string
+>    : ^^^^^^
+}
+
+type Bar = {
+>Bar : Bar
+>    : ^^^
+
+    extraProp: string;
+>extraProp : string
+>          : ^^^^^^
+}
+
+const bar: Bar = { extraProp: "" };
+>bar : Bar
+>    : ^^^
+>{ extraProp: "" } : { extraProp: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
+>extraProp : string
+>          : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo: Foo = { bar: "", foo: "" };
+>foo : Foo
+>    : ^^^
+>{ bar: "", foo: "" } : { bar: string; foo: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo2: Foo = { ...bar, foo: "" };
+>foo2 : Foo
+>     : ^^^
+>{ ...bar, foo: "" } : { foo: string; extraProp: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>bar : Bar
+>    : ^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo3: Foo = { ...{ ...bar}, foo: ""};
+>foo3 : Foo
+>     : ^^^
+>{ ...{ ...bar}, foo: ""} : { foo: string; extraProp: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>{ ...bar} : { extraProp: string; }
+>          : ^^^^^^^^^^^^^      ^^^
+>bar : Bar
+>    : ^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo4: Foo = { ...{ bar: "" }, foo: ""};
+>foo4 : Foo
+>     : ^^^
+>{ ...{ bar: "" }, foo: ""} : { foo: string; bar: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ bar: "" } : { bar: string; }
+>            : ^^^^^^^^^^^^^^^^
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+
+const noBar = { extraProp2: "" };
+>noBar : { extraProp2: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ extraProp2: "" } : { extraProp2: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>extraProp2 : string
+>           : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo5: Foo = { extraProp2: "", foo: "" };
+>foo5 : Foo
+>     : ^^^
+>{ extraProp2: "", foo: "" } : { extraProp2: string; foo: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extraProp2 : string
+>           : ^^^^^^
+>"" : ""
+>   : ^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo6: Foo = { ...noBar, foo: "" };
+>foo6 : Foo
+>     : ^^^
+>{ ...noBar, foo: "" } : { foo: string; extraProp2: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>noBar : { extraProp2: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo7: Foo = { ...{ ...noBar}, foo: ""};
+>foo7 : Foo
+>     : ^^^
+>{ ...{ ...noBar}, foo: ""} : { foo: string; extraProp2: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...noBar} : { extraProp2: string; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+>noBar : { extraProp2: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+const foo8: Foo = { ...{ noBar: "" }, foo: ""};
+>foo8 : Foo
+>     : ^^^
+>{ ...{ noBar: "" }, foo: ""} : { foo: string; noBar: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ noBar: "" } : { noBar: string; }
+>              : ^^^^^^^^^^^^^^^^^^
+>noBar : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+>foo : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
