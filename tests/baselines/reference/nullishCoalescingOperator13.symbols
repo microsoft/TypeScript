@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator13.ts] ////
+
+=== nullishCoalescingOperator13.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54551
+
+declare const b: string | undefined
+>b : Symbol(b, Decl(nullishCoalescingOperator13.ts, 2, 13))
+
+const c = b ?? await Promise.resolve("str").then(v => v)
+>c : Symbol(c, Decl(nullishCoalescingOperator13.ts, 4, 5))
+>b : Symbol(b, Decl(nullishCoalescingOperator13.ts, 2, 13))
+>Promise.resolve("str").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(nullishCoalescingOperator13.ts, 4, 49))
+>v : Symbol(v, Decl(nullishCoalescingOperator13.ts, 4, 49))
+
+const d = b ?? await Promise.resolve("str").then(null, v => "str")
+>d : Symbol(d, Decl(nullishCoalescingOperator13.ts, 5, 5))
+>b : Symbol(b, Decl(nullishCoalescingOperator13.ts, 2, 13))
+>Promise.resolve("str").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(nullishCoalescingOperator13.ts, 5, 54))
+
+export {}
