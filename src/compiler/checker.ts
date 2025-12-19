@@ -13991,8 +13991,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!])) : type;
         }
         else if (type.flags & TypeFlags.Intersection) {
-            const types = sameMap((type as IntersectionType).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
-            return types !== (type as IntersectionType).types ? getIntersectionType(types) : type;
+            const intersectionType = type as IntersectionType;
+            const types = sameMap(intersectionType.types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
+            if (types === intersectionType.types) {
+                return type;
+            }
+            const result = getIntersectionType(types);
+            if (result.flags & TypeFlags.Intersection) {
+                (result as IntersectionType).withThisArgumentTarget = intersectionType;
+            }
+            return result;
         }
         return needApparentType ? getApparentType(type) : type;
     }
@@ -15558,7 +15566,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkFlags |= (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                         (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
                         (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
-                        (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
+                        (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0) |
+                        (modifiers & ModifierFlags.Abstract ? CheckFlags.ContainsAbstract : 0);
                     if (!isPrototypeProperty(prop)) {
                         syntheticFlag = CheckFlags.SyntheticProperty;
                     }
@@ -15670,6 +15679,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (writeTypes) {
                 result.links.writeType = isUnion ? getUnionType(writeTypes) : getIntersectionType(writeTypes);
             }
+        }
+        if (!isUnion && (containingType as IntersectionType).withThisArgumentTarget) {
+            result.links.withThisArgumentIntersectionPropTarget = getUnionOrIntersectionProperty((containingType as IntersectionType).withThisArgumentTarget!, name, skipObjectFunctionPropertyAugment);
         }
         return result;
     }
@@ -47439,11 +47451,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getTargetSymbol(s: Symbol) {
+    function getTargetSymbol(s: Symbol): Symbol {
+        // NOTE: cast to TransientSymbol should be safe because only TransientSymbols have `CheckFlags.Instantiated | CheckFlags.Synthetic`
+        const checkFlags = getCheckFlags(s);
+
         // if symbol is instantiated its flags are not copied from the 'target'
         // so we'll need to get back original 'target' symbol to work with correct set of flags
-        // NOTE: cast to TransientSymbol should be safe because only TransientSymbols have CheckFlags.Instantiated
-        return getCheckFlags(s) & CheckFlags.Instantiated ? (s as TransientSymbol).links.target! : s;
+        if (checkFlags & CheckFlags.Instantiated) {
+            return (s as TransientSymbol).links.target!;
+        }
+        if (checkFlags & CheckFlags.Synthetic && (s as TransientSymbol).links.withThisArgumentIntersectionPropTarget) {
+            return (s as TransientSymbol).links.withThisArgumentIntersectionPropTarget!;
+        }
+        return s;
     }
 
     function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {

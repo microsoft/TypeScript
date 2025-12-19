@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/abstractIntersectedClasses2.ts] ////
+
+=== abstractIntersectedClasses2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62014
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : Symbol(Constructor, Decl(abstractIntersectedClasses2.ts, 0, 0))
+>args : Symbol(args, Decl(abstractIntersectedClasses2.ts, 2, 24))
+
+function MixinA<T extends Constructor>(base: T) {
+>MixinA : Symbol(MixinA, Decl(abstractIntersectedClasses2.ts, 2, 46))
+>T : Symbol(T, Decl(abstractIntersectedClasses2.ts, 4, 16))
+>Constructor : Symbol(Constructor, Decl(abstractIntersectedClasses2.ts, 0, 0))
+>base : Symbol(base, Decl(abstractIntersectedClasses2.ts, 4, 39))
+>T : Symbol(T, Decl(abstractIntersectedClasses2.ts, 4, 16))
+
+  abstract class Mixin extends base {
+>Mixin : Symbol(Mixin, Decl(abstractIntersectedClasses2.ts, 4, 49))
+>base : Symbol(base, Decl(abstractIntersectedClasses2.ts, 4, 39))
+
+    abstract testMethod(): string;
+>testMethod : Symbol(Mixin.testMethod, Decl(abstractIntersectedClasses2.ts, 5, 37))
+  }
+
+  return Mixin;
+>Mixin : Symbol(Mixin, Decl(abstractIntersectedClasses2.ts, 4, 49))
+}
+
+function MixinB<T extends Constructor>(base: T) {
+>MixinB : Symbol(MixinB, Decl(abstractIntersectedClasses2.ts, 10, 1))
+>T : Symbol(T, Decl(abstractIntersectedClasses2.ts, 12, 16))
+>Constructor : Symbol(Constructor, Decl(abstractIntersectedClasses2.ts, 0, 0))
+>base : Symbol(base, Decl(abstractIntersectedClasses2.ts, 12, 39))
+>T : Symbol(T, Decl(abstractIntersectedClasses2.ts, 12, 16))
+
+  abstract class Mixin extends base {
+>Mixin : Symbol(Mixin, Decl(abstractIntersectedClasses2.ts, 12, 49))
+>base : Symbol(base, Decl(abstractIntersectedClasses2.ts, 12, 39))
+
+    abstract testMethod(): string;
+>testMethod : Symbol(Mixin.testMethod, Decl(abstractIntersectedClasses2.ts, 13, 37))
+  }
+
+  return Mixin;
+>Mixin : Symbol(Mixin, Decl(abstractIntersectedClasses2.ts, 12, 49))
+}
+
+class Base {}
+>Base : Symbol(Base, Decl(abstractIntersectedClasses2.ts, 18, 1))
+
+// error
+class ImplementationB extends MixinB(MixinA(Base)) {}
+>ImplementationB : Symbol(ImplementationB, Decl(abstractIntersectedClasses2.ts, 20, 13))
+>MixinB : Symbol(MixinB, Decl(abstractIntersectedClasses2.ts, 10, 1))
+>MixinA : Symbol(MixinA, Decl(abstractIntersectedClasses2.ts, 2, 46))
+>Base : Symbol(Base, Decl(abstractIntersectedClasses2.ts, 18, 1))
+
+// error
+class ImplementationA extends MixinA(Base) {}
+>ImplementationA : Symbol(ImplementationA, Decl(abstractIntersectedClasses2.ts, 23, 53))
+>MixinA : Symbol(MixinA, Decl(abstractIntersectedClasses2.ts, 2, 46))
+>Base : Symbol(Base, Decl(abstractIntersectedClasses2.ts, 18, 1))
+

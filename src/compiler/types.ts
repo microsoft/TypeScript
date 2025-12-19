@@ -6098,6 +6098,7 @@ export interface SymbolLinks {
     accessibleChainCache?: Map<string, Symbol[] | undefined>;
     filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
     requestedExternalEmitHelpers?: ExternalEmitHelpers; // External emit helpers already checked for this symbol.
+    withThisArgumentIntersectionPropTarget?: Symbol;
 }
 
 // dprint-ignore
@@ -6116,15 +6117,16 @@ export const enum CheckFlags {
     ContainsProtected = 1 << 9,         // Synthetic property with protected constituent(s)
     ContainsPrivate   = 1 << 10,        // Synthetic property with private constituent(s)
     ContainsStatic    = 1 << 11,        // Synthetic property with static constituent(s)
-    Late              = 1 << 12,        // Late-bound symbol for a computed property with a dynamic name
-    ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
-    OptionalParameter = 1 << 14,        // Optional parameter
-    RestParameter     = 1 << 15,        // Rest parameter
-    DeferredType      = 1 << 16,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
-    HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
-    Mapped            = 1 << 18,        // Property of mapped type
-    StripOptional     = 1 << 19,        // Strip optionality in mapped property
-    Unresolved        = 1 << 20,        // Unresolved type alias symbol
+    ContainsAbstract  = 1 << 12,        // Synthetic property with abstract constituent(s)
+    Late              = 1 << 13,        // Late-bound symbol for a computed property with a dynamic name
+    ReverseMapped     = 1 << 14,        // Property of reverse-inferred homomorphic mapped type
+    OptionalParameter = 1 << 15,        // Optional parameter
+    RestParameter     = 1 << 16,        // Rest parameter
+    DeferredType      = 1 << 17,        // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
+    HasNeverType      = 1 << 18,        // Synthetic property with at least one never type in constituents
+    Mapped            = 1 << 19,        // Property of mapped type
+    StripOptional     = 1 << 20,        // Strip optionality in mapped property
+    Unresolved        = 1 << 21,        // Unresolved type alias symbol
     Synthetic = SyntheticProperty | SyntheticMethod,
     Discriminant = HasNonUniformType | HasLiteralType,
     Partial = ReadPartial | WritePartial,
@@ -6749,6 +6751,8 @@ export interface IntersectionType extends UnionOrIntersectionType {
     resolvedApparentType: Type;
     /** @internal */
     uniqueLiteralFilledInstantiation?: Type; // Instantiation with type parameters mapped to never type
+    /** @internal */
+    withThisArgumentTarget?: IntersectionType;
 }
 
 export type StructuredType = ObjectType | UnionType | IntersectionType;
