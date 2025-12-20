@@ -141,23 +141,50 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
     emittingObject.off(eventName as typeof eventName, 0);
 }
 
-// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-// a generic type without a nullable constraint and x is a generic type. This is because when both obj
-// and x are of generic types T and K, we want the resulting type to be T[K].
+// In an element access obj[key], we consider obj to be in a constraint position, except when
+// obj and key both have generic types. When obj and key are of generic types T and K, we want
+// the resulting type to be T[K].
 
 function fx1<T, K extends keyof T>(obj: T, key: K) {
     const x1 = obj[key];
     const x2 = obj && obj[key];
+    const x3 = obj?.[key];
 }
 
 function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
     const x1 = obj[key];
     const x2 = obj && obj[key];
+    const x3 = obj?.[key];
 }
 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
+    const x3 = obj?.[key];
+}
+
+function fx4<T extends unknown, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
+    const x3 = obj?.[key];
+}
+
+function fx5<T extends {} | null | undefined, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
+    const x3 = obj?.[key];
+}
+
+function fx6<T, K extends keyof T>(obj: T | null | undefined, key: K) {
     const x1 = obj[key];  // Error
     const x2 = obj && obj[key];
+    const x3 = obj?.[key];
+}
+
+function fx7<T, K extends keyof T>(obj: { x: T } | null | undefined, key: K) {
+    const x1 = obj.x[key];  // Error
+    const x2 = obj && obj.x[key];
+    const x3 = obj?.x[key];
 }
 
 // Repro from #44166
@@ -167,8 +194,8 @@ class TableBaseEnum<
     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
     m() {
         let iSpec = null! as InternalSpec;
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+        iSpec[null! as keyof InternalSpec];
+        iSpec[null! as keyof PublicSpec];    // Error
         if (iSpec === undefined) {
             return;
         }
@@ -327,20 +354,43 @@ function once(emittingObject, eventName) {
     emittingObject.off(eventName, 0);
     emittingObject.off(eventName, 0);
 }
-// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-// a generic type without a nullable constraint and x is a generic type. This is because when both obj
-// and x are of generic types T and K, we want the resulting type to be T[K].
+// In an element access obj[key], we consider obj to be in a constraint position, except when
+// obj and key both have generic types. When obj and key are of generic types T and K, we want
+// the resulting type to be T[K].
 function fx1(obj, key) {
     var x1 = obj[key];
     var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
 }
 function fx2(obj, key) {
     var x1 = obj[key];
     var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
 }
 function fx3(obj, key) {
+    var x1 = obj[key];
+    var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
+}
+function fx4(obj, key) {
+    var x1 = obj[key];
+    var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
+}
+function fx5(obj, key) {
+    var x1 = obj[key];
+    var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
+}
+function fx6(obj, key) {
     var x1 = obj[key]; // Error
     var x2 = obj && obj[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj[key];
+}
+function fx7(obj, key) {
+    var x1 = obj.x[key]; // Error
+    var x2 = obj && obj.x[key];
+    var x3 = obj === null || obj === void 0 ? void 0 : obj.x[key];
 }
 // Repro from #44166
 var TableBaseEnum = /** @class */ (function () {
@@ -348,8 +398,8 @@ var TableBaseEnum = /** @class */ (function () {
     }
     TableBaseEnum.prototype.m = function () {
         var iSpec = null;
-        iSpec[null]; // Error, object possibly undefined
-        iSpec[null]; // Error, object possibly undefined
+        iSpec[null];
+        iSpec[null]; // Error
         if (iSpec === undefined) {
             return;
         }
