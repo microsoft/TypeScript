@@ -30,15 +30,15 @@ function test1(result: Disjoint): string {
 >err : Symbol(err, Decl(narrowingIntersection.ts, 4, 28), Decl(narrowingIntersection.ts, 5, 28))
 
         throw result.err;
->result.err : Symbol(err, Decl(narrowingIntersection.ts, 4, 28), Decl(narrowingIntersection.ts, 5, 28))
+>result.err : Symbol(err, Decl(narrowingIntersection.ts, 5, 28))
 >result : Symbol(result, Decl(narrowingIntersection.ts, 7, 15))
->err : Symbol(err, Decl(narrowingIntersection.ts, 4, 28), Decl(narrowingIntersection.ts, 5, 28))
+>err : Symbol(err, Decl(narrowingIntersection.ts, 5, 28))
     }
     // Error, should OK
     return result.value;
->result.value : Symbol(value, Decl(narrowingIntersection.ts, 4, 4), Decl(narrowingIntersection.ts, 5, 4))
+>result.value : Symbol(value, Decl(narrowingIntersection.ts, 5, 4))
 >result : Symbol(result, Decl(narrowingIntersection.ts, 7, 15))
->value : Symbol(value, Decl(narrowingIntersection.ts, 4, 4), Decl(narrowingIntersection.ts, 5, 4))
+>value : Symbol(value, Decl(narrowingIntersection.ts, 5, 4))
 }
 
 type TrivialIntersection = { a: 1 } & { a: 1 };

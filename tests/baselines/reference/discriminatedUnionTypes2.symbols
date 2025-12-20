@@ -369,9 +369,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
     }
     else {
         x.value;  // number
->x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
->value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
     }
 }
 

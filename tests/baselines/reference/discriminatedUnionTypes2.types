@@ -578,12 +578,12 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
     }
     else {
         x.value;  // number
->x.value : number
->        : ^^^^^^
->x : { type: "number"; value: number; } & { type: "number"; }
->  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
->value : number
->      : ^^^^^^
+>x.value : any
+>        : ^^^
+>x : never
+>  : ^^^^^
+>value : any
+>      : ^^^
     }
 }
 
