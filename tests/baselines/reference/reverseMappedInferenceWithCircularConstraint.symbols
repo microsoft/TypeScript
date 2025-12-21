@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts] ////
+
+=== reverseMappedInferenceWithCircularConstraint.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/48798
+
+type AnyFunction = (...args: any[]) => any;
+>AnyFunction : Symbol(AnyFunction, Decl(reverseMappedInferenceWithCircularConstraint.ts, 0, 0))
+>args : Symbol(args, Decl(reverseMappedInferenceWithCircularConstraint.ts, 2, 20))
+
+type InferNarrowest<T> = T extends any
+>InferNarrowest : Symbol(InferNarrowest, Decl(reverseMappedInferenceWithCircularConstraint.ts, 2, 43))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+
+  ? T extends AnyFunction
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+>AnyFunction : Symbol(AnyFunction, Decl(reverseMappedInferenceWithCircularConstraint.ts, 0, 0))
+
+    ? T
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+
+    : T extends object
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+
+    ? InferNarrowestObject<T>
+>InferNarrowestObject : Symbol(InferNarrowestObject, Decl(reverseMappedInferenceWithCircularConstraint.ts, 10, 10))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+
+    : T
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 4, 20))
+
+  : never;
+
+type InferNarrowestObject<T> = {
+>InferNarrowestObject : Symbol(InferNarrowestObject, Decl(reverseMappedInferenceWithCircularConstraint.ts, 10, 10))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 12, 26))
+
+  readonly [K in keyof T]: InferNarrowest<T[K]>;
+>K : Symbol(K, Decl(reverseMappedInferenceWithCircularConstraint.ts, 13, 12))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 12, 26))
+>InferNarrowest : Symbol(InferNarrowest, Decl(reverseMappedInferenceWithCircularConstraint.ts, 2, 43))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 12, 26))
+>K : Symbol(K, Decl(reverseMappedInferenceWithCircularConstraint.ts, 13, 12))
+
+};
+
+type Config<TGlobal, TState = Prop<TGlobal, "states">> = {
+>Config : Symbol(Config, Decl(reverseMappedInferenceWithCircularConstraint.ts, 14, 2))
+>TGlobal : Symbol(TGlobal, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 12))
+>TState : Symbol(TState, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 20))
+>Prop : Symbol(Prop, Decl(reverseMappedInferenceWithCircularConstraint.ts, 24, 2))
+>TGlobal : Symbol(TGlobal, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 12))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 58))
+
+    [StateKey in keyof TState]: {
+>StateKey : Symbol(StateKey, Decl(reverseMappedInferenceWithCircularConstraint.ts, 18, 5))
+>TState : Symbol(TState, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 20))
+
+      on?: {};
+>on : Symbol(on, Decl(reverseMappedInferenceWithCircularConstraint.ts, 18, 33))
+
+    };
+  };
+} & {
+  initial: keyof TState;
+>initial : Symbol(initial, Decl(reverseMappedInferenceWithCircularConstraint.ts, 22, 5))
+>TState : Symbol(TState, Decl(reverseMappedInferenceWithCircularConstraint.ts, 16, 20))
+
+};
+
+type Prop<T, K> = K extends keyof T ? T[K] : never;
+>Prop : Symbol(Prop, Decl(reverseMappedInferenceWithCircularConstraint.ts, 24, 2))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 10))
+>K : Symbol(K, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 12))
+>K : Symbol(K, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 12))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 10))
+>T : Symbol(T, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 10))
+>K : Symbol(K, Decl(reverseMappedInferenceWithCircularConstraint.ts, 26, 12))
+
+const createMachine = <TConfig extends Config<TConfig>>(
+>createMachine : Symbol(createMachine, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 5))
+>TConfig : Symbol(TConfig, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 23))
+>Config : Symbol(Config, Decl(reverseMappedInferenceWithCircularConstraint.ts, 14, 2))
+>TConfig : Symbol(TConfig, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 23))
+
+  _config: InferNarrowestObject<TConfig>
+>_config : Symbol(_config, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 56))
+>InferNarrowestObject : Symbol(InferNarrowestObject, Decl(reverseMappedInferenceWithCircularConstraint.ts, 10, 10))
+>TConfig : Symbol(TConfig, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 23))
+
+): void => {};
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 5))
+
+  initial: "pending",
+>initial : Symbol(initial, Decl(reverseMappedInferenceWithCircularConstraint.ts, 32, 15))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedInferenceWithCircularConstraint.ts, 33, 21))
+
+    pending: {
+>pending : Symbol(pending, Decl(reverseMappedInferenceWithCircularConstraint.ts, 34, 11))
+
+      on: {
+>on : Symbol(on, Decl(reverseMappedInferenceWithCircularConstraint.ts, 35, 14))
+
+        done() {
+>done : Symbol(done, Decl(reverseMappedInferenceWithCircularConstraint.ts, 36, 11))
+
+          return "noData";
+        },
+      },
+    },
+  },
+});
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(reverseMappedInferenceWithCircularConstraint.ts, 28, 5))
+
+  initial: "unknown", // error
+>initial : Symbol(initial, Decl(reverseMappedInferenceWithCircularConstraint.ts, 45, 15))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedInferenceWithCircularConstraint.ts, 46, 21))
+
+    pending: {
+>pending : Symbol(pending, Decl(reverseMappedInferenceWithCircularConstraint.ts, 47, 11))
+
+      on: {
+>on : Symbol(on, Decl(reverseMappedInferenceWithCircularConstraint.ts, 48, 14))
+
+        done() {
+>done : Symbol(done, Decl(reverseMappedInferenceWithCircularConstraint.ts, 49, 11))
+
+          return "noData";
+        },
+      },
+    },
+  },
+});
+
