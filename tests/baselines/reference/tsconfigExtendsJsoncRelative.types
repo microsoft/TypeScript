@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/tsconfigExtendsJsoncRelative.ts] ////
+
+=== /index.ts ===
+export const x = 42;
+>x : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
