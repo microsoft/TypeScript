@@ -104,7 +104,8 @@
         "es2022.full",
         "es2023.full",
         "es2024.full",
-        "esnext.full"
+        "esnext.full",
+        "baseline"
     ],
     "paths": {
         "dom.generated": "lib.dom.d.ts",
@@ -114,6 +115,7 @@
         "webworker.iterable.generated": "lib.webworker.iterable.d.ts",
         "webworker.asynciterable.generated": "lib.webworker.asynciterable.d.ts",
         "es5.full": "lib.d.ts",
-        "es2015.full": "lib.es6.d.ts"
+        "es2015.full": "lib.es6.d.ts",
+        "baseline": "lib.baseline.d.ts"
     }
 }
