@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/issue55217.ts] ////
+
+=== types.ts ===
+export type ProductName = 'a' | 'b'
+>ProductName : ProductName
+>            : ^^^^^^^^^^^
+
+export type SubproductNameForProductName<P extends ProductName> = P extends unknown
+>SubproductNameForProductName : SubproductNameForProductName<P>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? keyof EntitiesByProductName[P]
+  : never
+
+type EntitiesByProductName = {
+>EntitiesByProductName : EntitiesByProductName
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+  a: { a1: { value: 'a-a1' } }
+>a : { a1: { value: "a-a1"; }; }
+>  : ^^^^^^                  ^^^
+>a1 : { value: "a-a1"; }
+>   : ^^^^^^^^^      ^^^
+>value : "a-a1"
+>      : ^^^^^^
+
+  b: { b1: { value: 'b-b1' } }
+>b : { b1: { value: "b-b1"; }; }
+>  : ^^^^^^                  ^^^
+>b1 : { value: "b-b1"; }
+>   : ^^^^^^^^^      ^^^
+>value : "b-b1"
+>      : ^^^^^^
+}
+
+export type DiscriminatedUnion<
+>DiscriminatedUnion : DiscriminatedUnion<P, E>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  P extends ProductName = ProductName,
+  E extends SubproductNameForProductName<P> = SubproductNameForProductName<P>,
+> = P extends ProductName
+    ? E extends SubproductNameForProductName<P>
+    // ? E extends unknown // With unknown, the exception doesn't happen. 
+      ? EntitiesByProductName[P][E]
+      : never
+    : never
+
+=== app.ts ===
+import { SubproductNameForProductName, DiscriminatedUnion, ProductName } from './types'
+>SubproductNameForProductName : any
+>                             : ^^^
+>DiscriminatedUnion : any
+>                   : ^^^
+>ProductName : any
+>            : ^^^
+
+export const bug = <P extends ProductName>() => {
+>bug : <P extends ProductName>() => void
+>    : ^ ^^^^^^^^^           ^^^^^^^^^^^
+><P extends ProductName>() => {  const subproducts: DiscriminatedUnion<P, SubproductNameForProductName<P>>[] = []  subproducts.map((_: DiscriminatedUnion) => null)} : <P extends ProductName>() => void
+>                                                                                                                                                                    : ^ ^^^^^^^^^           ^^^^^^^^^^^
+
+  const subproducts: DiscriminatedUnion<P, SubproductNameForProductName<P>>[] = []
+>subproducts : DiscriminatedUnion<P, SubproductNameForProductName<P>>[]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  subproducts.map((_: DiscriminatedUnion) => null)
+>subproducts.map((_: DiscriminatedUnion) => null) : null[]
+>                                                 : ^^^^^^
+>subproducts.map : <U>(callbackfn: (value: DiscriminatedUnion<P, SubproductNameForProductName<P>>, index: number, array: DiscriminatedUnion<P, SubproductNameForProductName<P>>[]) => U, thisArg?: any) => U[]
+>                : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>subproducts : DiscriminatedUnion<P, SubproductNameForProductName<P>>[]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: DiscriminatedUnion<P, SubproductNameForProductName<P>>, index: number, array: DiscriminatedUnion<P, SubproductNameForProductName<P>>[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(_: DiscriminatedUnion) => null : (_: DiscriminatedUnion) => null
+>                                : ^ ^^                  ^^^^^^^^^
+>_ : DiscriminatedUnion
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
