@@ -1,0 +1,142 @@
+//// [tests/cases/compiler/noImplicitAnySpreads1.ts] ////
+
+=== noImplicitAnySpreads1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58150#issuecomment-2052517378
+
+function getMore() {
+>getMore : () => { c: string; p: string; s: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return {
+>{    c: "foo",    p: "bar",    s: "baz",  } : { c: string; p: string; s: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    c: "foo",
+>c : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    p: "bar",
+>p : string
+>  : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+    s: "baz",
+>s : string
+>  : ^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
+
+  };
+}
+
+const foo = {
+>foo : { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  ...getMore(),} : { c: string; p: string; s: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null,
+>p : null
+>  : ^^^^
+
+  ...getMore(),
+>getMore() : { c: string; p: string; s: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getMore : () => { c: string; p: string; s: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+const bar = {
+>bar : { c: string; p: string; s: string; other: any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null, // no error, this gets overriden  other: null, // error, this does not get overriden  ...getMore(),} : { c: string; p: string; s: string; other: null; }
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null, // no error, this gets overriden
+>p : null
+>  : ^^^^
+
+  other: null, // error, this does not get overriden
+>other : null
+>      : ^^^^
+
+  ...getMore(),
+>getMore() : { c: string; p: string; s: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getMore : () => { c: string; p: string; s: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+function doSthWithParams(params: unknown) {
+>doSthWithParams : (params: unknown) => { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>params : unknown
+>       : ^^^^^^^
+
+  return {
+>{    c: 'foo',    p: 'bar',    s: 'baz',  } : { c: string; p: string; s: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    c: 'foo',
+>c : string
+>  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    p: 'bar',
+>p : string
+>  : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+    s: 'baz',
+>s : string
+>  : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
+
+  };
+}
+
+const baz = {
+>baz : { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  s: null,  ...doSthWithParams({    p: 'hello',    s: 'world',  }),} : { c: string; p: string; s: string; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null,
+>p : null
+>  : ^^^^
+
+  s: null,
+>s : null
+>  : ^^^^
+
+  ...doSthWithParams({
+>doSthWithParams({    p: 'hello',    s: 'world',  }) : { c: string; p: string; s: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams : (params: unknown) => { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    p: 'hello',    s: 'world',  } : { p: string; s: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p: 'hello',
+>p : string
+>  : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+    s: 'world',
+>s : string
+>  : ^^^^^^
+>'world' : "world"
+>        : ^^^^^^^
+
+  }),
+};
+
