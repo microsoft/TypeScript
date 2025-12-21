@@ -1,0 +1,311 @@
+//// [tests/cases/compiler/contextualTypingGenericFunction2.ts] ////
+
+=== contextualTypingGenericFunction2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61979
+
+declare function fn<P>(config: {
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>config : { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }
+>       : ^^^^^^^^^^^^                                                     ^^^^^^^^^^^^^^                     ^^^
+
+  callback: (params: P) => (context: number, params: P) => number;
+>callback : (params: P) => (context: number, params: P) => number
+>         : ^      ^^ ^^^^^                                      
+>params : P
+>       : ^
+>context : number
+>        : ^^^^^^
+>params : P
+>       : ^
+
+  unrelated?: (arg: string) => void;
+>unrelated : ((arg: string) => void) | undefined
+>          : ^^   ^^      ^^^^^    ^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+}): (params: P) => number;
+>params : P
+>       : ^
+
+// should error
+export const result1 = fn({
+>result1 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn({  callback: <T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  },  unrelated: (_) => {},}) : (params: unknown) => number
+>                                                                                                            : ^      ^^^^^^^^^^^^^^      
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>{  callback: <T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: boolean, b: unknown) => 1 | 0; unrelated: (_: string) => void; }
+>                                                                                                        : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: boolean, b: unknown) => 1 | 0
+>         : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+><T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  } : <T>(params: T) => (a: boolean, b: unknown) => 1 | 0
+>                                                                  : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>params : T
+>       : ^
+
+    return (a: boolean, b) => (a ? 1 : 0);
+>(a: boolean, b) => (a ? 1 : 0) : (a: boolean, b: unknown) => 1 | 0
+>                               : ^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>(a ? 1 : 0) : 0 | 1
+>            : ^^^^^
+>a ? 1 : 0 : 0 | 1
+>          : ^^^^^
+>a : boolean
+>  : ^^^^^^^
+>1 : 1
+>  : ^
+>0 : 0
+>  : ^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+// should error
+export const result2 = fn({
+>result2 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn({  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
+>                                                                                                     : ^      ^^^^^^^^^^^^^^      
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>{  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
+>                                                                                                 : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: number, b: unknown) => boolean
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+><T,>(params: T) => {    return (a, b): boolean => true;  } : <T>(params: T) => (a: number, b: unknown) => boolean
+>                                                           : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>params : T
+>       : ^
+
+    return (a, b): boolean => true;
+>(a, b): boolean => true : (a: number, b: unknown) => boolean
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+// should error
+export const result3 = fn({
+>result3 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn({  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
+>                                                                                            : ^      ^^^^^^^^^^^^^^      
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>{  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
+>                                                                                        : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: number, b: unknown) => boolean
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+><T,>(params: T) => {    return (a, b) => true;  } : <T>(params: T) => (a: number, b: unknown) => boolean
+>                                                  : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>params : T
+>       : ^
+
+    return (a, b) => true;
+>(a, b) => true : (a: number, b: unknown) => boolean
+>               : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+declare function fn2<P>(config: {
+>fn2 : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => any
+>    : ^ ^^      ^^                                                                                                       ^^^^^   
+>config : { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }
+>       : ^^^^^^^^^^^^                                                     ^^^^^^^^^^^^^^                     ^^^
+
+  callback: (params: P) => (context: number, params: P) => number;
+>callback : (params: P) => (context: number, params: P) => number
+>         : ^      ^^ ^^^^^                                      
+>params : P
+>       : ^
+>context : number
+>        : ^^^^^^
+>params : P
+>       : ^
+
+  unrelated?: (arg: string) => void;
+>unrelated : ((arg: string) => void) | undefined
+>          : ^^   ^^      ^^^^^    ^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+}): any;
+
+// should error
+export const result4 = fn2({
+>result4 : any
+>        : ^^^
+>fn2({  callback: <T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  },  unrelated: (_) => {},}) : any
+>                                                                                                             : ^^^
+>fn2 : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => any
+>    : ^ ^^      ^^                                                                                                       ^^^^^   
+>{  callback: <T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: boolean, b: unknown) => 1 | 0; unrelated: (_: string) => void; }
+>                                                                                                        : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: boolean, b: unknown) => 1 | 0
+>         : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+><T,>(params: T) => {    return (a: boolean, b) => (a ? 1 : 0);  } : <T>(params: T) => (a: boolean, b: unknown) => 1 | 0
+>                                                                  : ^ ^^      ^^ ^^^^^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>params : T
+>       : ^
+
+    return (a: boolean, b) => (a ? 1 : 0);
+>(a: boolean, b) => (a ? 1 : 0) : (a: boolean, b: unknown) => 1 | 0
+>                               : ^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>(a ? 1 : 0) : 0 | 1
+>            : ^^^^^
+>a ? 1 : 0 : 0 | 1
+>          : ^^^^^
+>a : boolean
+>  : ^^^^^^^
+>1 : 1
+>  : ^
+>0 : 0
+>  : ^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+// should error
+export const result5 = fn({
+>result5 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn({  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
+>                                                                                                     : ^      ^^^^^^^^^^^^^^      
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>{  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
+>                                                                                                 : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: number, b: unknown) => boolean
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+><T,>(params: T) => {    return (a, b): boolean => true;  } : <T>(params: T) => (a: number, b: unknown) => boolean
+>                                                           : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>params : T
+>       : ^
+
+    return (a, b): boolean => true;
+>(a, b): boolean => true : (a: number, b: unknown) => boolean
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
+// should error
+export const result6 = fn({
+>result6 : (params: unknown) => number
+>        : ^      ^^^^^^^^^^^^^^      
+>fn({  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
+>                                                                                            : ^      ^^^^^^^^^^^^^^      
+>fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+>   : ^ ^^      ^^                                                                                                       ^^^^^                     
+>{  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
+>                                                                                        : ^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: number, b: unknown) => boolean
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+><T,>(params: T) => {    return (a, b) => true;  } : <T>(params: T) => (a: number, b: unknown) => boolean
+>                                                  : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>params : T
+>       : ^
+
+    return (a, b) => true;
+>(a, b) => true : (a: number, b: unknown) => boolean
+>               : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+  },
+  unrelated: (_) => {},
+>unrelated : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>(_) => {} : (_: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>_ : string
+>  : ^^^^^^
+
+});
+
