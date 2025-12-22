@@ -48597,6 +48597,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportAttribute(node: ImportAttribute) {
+        // Validate that the value is a string literal before type checking
+        if (!isStringLiteral(node.value)) {
+            const parent = node.parent;
+            const diagnostic = parent.token === SyntaxKind.WithKeyword
+                ? Diagnostics.Import_attribute_values_must_be_string_literal_expressions
+                : Diagnostics.Import_assertion_values_must_be_string_literal_expressions;
+            error(node.value, diagnostic);
+            return errorType;
+        }
         return getRegularTypeOfLiteralType(checkExpressionCached(node.value));
     }
 

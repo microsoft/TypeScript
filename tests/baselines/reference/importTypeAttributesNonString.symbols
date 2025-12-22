@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/importTypeAttributesNonString.ts] ////
+
+=== wat.mts ===
+export const x = 1;
+>x : Symbol(x, Decl(wat.mts, 0, 12))
+
+=== mod.mts ===
+// Import type with function expression (should error)
+type T1 = typeof import("./wat.mjs", {
+>T1 : Symbol(T1, Decl(mod.mts, 0, 0))
+
+  assert: {
+    a: (() => {
+      console.log("why can you write js here????");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    })(),
+  }
+});
+
+// Import type with number literal (should error)
+type T2 = typeof import("./wat.mjs", {
+>T2 : Symbol(T2, Decl(mod.mts, 7, 3))
+
+  assert: { field: 0 }
+});
+
+// Import type with template literal (should error)
+type T3 = typeof import("./wat.mjs", {
+>T3 : Symbol(T3, Decl(mod.mts, 12, 3))
+
+  assert: { field: `a` }
+});
+
+// Import type with regex (should error)
+type T4 = typeof import("./wat.mjs", {
+>T4 : Symbol(T4, Decl(mod.mts, 17, 3))
+
+  assert: { field: /a/g }
+});
+
+// Import type with array (should error)
+type T5 = typeof import("./wat.mjs", {
+>T5 : Symbol(T5, Decl(mod.mts, 22, 3))
+
+  assert: { field: ["a"] }
+});
+
+// Import type with object (should error)
+type T6 = typeof import("./wat.mjs", {
+>T6 : Symbol(T6, Decl(mod.mts, 27, 3))
+
+  assert: { field: { a: 0 } }
+>a : Symbol(a, Decl(mod.mts, 31, 20))
+
+});
+
+// Import type with method call (should error)
+type T7 = typeof import("./wat.mjs", {
+>T7 : Symbol(T7, Decl(mod.mts, 32, 3))
+
+  assert: { field: 0..toString() }
+>0..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+});
+
+// Import type with valid string literal (should work)
+type T8 = typeof import("./wat.mjs", {
+>T8 : Symbol(T8, Decl(mod.mts, 37, 3))
+
+  assert: { type: "json" }
+});
+
+// Import type with 'with' keyword and valid string (should work)
+type T9 = typeof import("./wat.mjs", {
+>T9 : Symbol(T9, Decl(mod.mts, 42, 3))
+
+  with: { type: "json" }
+});
+
+// Import type with 'with' keyword and invalid expression (should error)
+type T10 = typeof import("./wat.mjs", {
+>T10 : Symbol(T10, Decl(mod.mts, 47, 3))
+
+  with: { field: 123 }
+});
+
