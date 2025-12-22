@@ -1414,6 +1414,18 @@ function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: 
 }
 
 /** @returns `Comparison.LessThan` if `a` is better than `b`. */
+/** Heuristic approach: Prioritize local/relative imports over node_modules imports. */
+function compareLocalVsExternal(
+    a: ImportFixWithModuleSpecifier,
+    b: ImportFixWithModuleSpecifier
+): Comparison {
+    const aIsExternal = a.moduleSpecifierKind === "node_modules";
+    const bIsExternal = b.moduleSpecifierKind === "node_modules";
+    if (!aIsExternal && bIsExternal) return Comparison.LessThan;
+    if (aIsExternal && !bIsExternal) return Comparison.GreaterThan;
+    return Comparison.EqualTo;
+}
+
 function compareModuleSpecifiers(
     a: ImportFixWithModuleSpecifier,
     b: ImportFixWithModuleSpecifier,
@@ -1424,6 +1436,11 @@ function compareModuleSpecifiers(
     toPath: (fileName: string) => Path,
 ): Comparison {
     if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
+        
+        const localVsExternalComparison = compareLocalVsExternal(a, b);
+        if (localVsExternalComparison !== Comparison.EqualTo) {
+            return localVsExternalComparison;
+        }
         return compareBooleans(
             b.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(b.moduleSpecifier),
             a.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(a.moduleSpecifier),
