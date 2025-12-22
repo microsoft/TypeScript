@@ -4740,7 +4740,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
             }
 
-            if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
+            if (errorNode && resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
                 const importOrExport = findAncestor(location, isImportDeclaration)?.importClause ||
                     findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
                 if (errorNode && importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
@@ -4751,7 +4751,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
             }
-            else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
+            else if (errorNode && resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
                 const importOrExport = findAncestor(location, isImportDeclaration)?.importClause ||
                     findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
                 if (errorNode && !(importOrExport?.isTypeOnly || findAncestor(location, isImportTypeNode))) {
@@ -4760,7 +4760,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (
-                compilerOptions.rewriteRelativeImportExtensions
+                errorNode
+                && compilerOptions.rewriteRelativeImportExtensions
                 && !(location.flags & NodeFlags.Ambient)
                 && !isDeclarationFileName(moduleReference)
                 && !isLiteralImportTypeNode(location)
