@@ -1003,8 +1003,8 @@ function callbackRefProject<T, P extends string>(
     cb: (refProj: ConfiguredProject) => T | undefined,
     refPath: P | undefined,
 ) {
-    const refProject = refPath && project.projectService.configuredProjects.get(refPath);
-    return refProject && cb(refProject);
+    const refProject = refPath ? project.projectService.configuredProjects.get(refPath) : undefined;
+    return refProject ? cb(refProject) : undefined;
 }
 
 function forEachReferencedProject<T>(

@@ -114,5 +114,7 @@
     "volta": {
         "node": "20.1.0",
         "npm": "8.19.4"
+    },
+    "dependencies": {
     }
 }
