@@ -667,13 +667,42 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
 }
 
 /**
+ * Gets the ScriptElementKind for a specific declaration.
+ * For merged declarations, this ensures each declaration returns its own kind
+ * rather than using the combined symbol flags.
+ *
+ * Fixes #22467: getDefinitionAtPosition doesn't distinguish different kinds in a merged declaration
+ */
+function getKindFromDeclaration(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node): ScriptElementKind {
+    // Check the specific declaration's syntax kind first
+    // This handles merged declarations correctly (e.g., namespace A + class A + interface A)
+    switch (declaration.kind) {
+        case SyntaxKind.ClassDeclaration:
+            return ScriptElementKind.classElement;
+        case SyntaxKind.ClassExpression:
+            return ScriptElementKind.localClassElement;
+        case SyntaxKind.InterfaceDeclaration:
+            return ScriptElementKind.interfaceElement;
+        case SyntaxKind.ModuleDeclaration:
+            return ScriptElementKind.moduleElement;
+        case SyntaxKind.EnumDeclaration:
+            return ScriptElementKind.enumElement;
+        case SyntaxKind.TypeAliasDeclaration:
+            return ScriptElementKind.typeElement;
+        // For other declaration types, fall back to the existing symbol-based logic
+        default:
+            return SymbolDisplay.getSymbolKind(checker, symbol, node);
+    }
+}
+
+/**
  * Creates a DefinitionInfo from a Declaration, using the declaration's name if possible.
  *
  * @internal
  */
 export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-    const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
+    const symbolKind = getKindFromDeclaration(declaration, checker, symbol, node);
     const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
     return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName, unverified, failedAliasResolution);
 }
