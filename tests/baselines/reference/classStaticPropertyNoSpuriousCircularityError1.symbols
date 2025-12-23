@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/classStaticPropertyNoSpuriousCircularityError1.ts] ////
+
+=== classStaticPropertyNoSpuriousCircularityError1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62552
+
+function id<T>(x: T): T {
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+>T : Symbol(T, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 2, 12))
+>x : Symbol(x, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 2, 15))
+>T : Symbol(T, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 2, 12))
+>T : Symbol(T, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 2, 12))
+
+  return x
+>x : Symbol(x, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 2, 15))
+}
+
+const Foo = id(class {
+>Foo : Symbol(Foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 6, 5))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+  static readonly foo = id(42) // ok
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 6, 22))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+})
+
+Foo.foo // 42
+>Foo.foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 6, 22))
+>Foo : Symbol(Foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 6, 5))
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 6, 22))
+
+const Foo2 = id(class {
+>Foo2 : Symbol(Foo2, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 5))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+  static foo = id(42) // ok
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 23))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+})
+
+Foo2.foo // number
+>Foo2.foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 23))
+>Foo2 : Symbol(Foo2, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 5))
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 12, 23))
+
+const Foo3 = id(class {
+>Foo3 : Symbol(Foo3, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 18, 5))
+>id : Symbol(id, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 0, 0))
+
+  static readonly foo = [42];
+>foo : Symbol((Anonymous class).foo, Decl(classStaticPropertyNoSpuriousCircularityError1.ts, 18, 23))
+
+});
+
