@@ -1,0 +1,274 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeRelationships2.ts] ////
+
+=== mappedTypeRelationships2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62717
+
+type Alias1<T extends object, U extends { [K in keyof T]?: any }> = U;
+>Alias1 : Symbol(Alias1, Decl(mappedTypeRelationships2.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 2, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 2, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 2, 43))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 2, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 2, 29))
+
+type Alias2<T extends object, U extends Partial<Record<keyof T, any>>> = U;
+>Alias2 : Symbol(Alias2, Decl(mappedTypeRelationships2.ts, 2, 70))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 3, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 3, 29))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 3, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 3, 29))
+
+type AB = { a: string; b: string };
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>a : Symbol(a, Decl(mappedTypeRelationships2.ts, 5, 11))
+>b : Symbol(b, Decl(mappedTypeRelationships2.ts, 5, 22))
+
+type B = { b: string };
+>B : Symbol(B, Decl(mappedTypeRelationships2.ts, 5, 35))
+>b : Symbol(b, Decl(mappedTypeRelationships2.ts, 6, 10))
+
+type Test1 = Alias1<AB, B>; // ok
+>Test1 : Symbol(Test1, Decl(mappedTypeRelationships2.ts, 6, 23))
+>Alias1 : Symbol(Alias1, Decl(mappedTypeRelationships2.ts, 0, 0))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>B : Symbol(B, Decl(mappedTypeRelationships2.ts, 5, 35))
+
+type Test2 = Alias2<AB, B>; // ok
+>Test2 : Symbol(Test2, Decl(mappedTypeRelationships2.ts, 8, 27))
+>Alias2 : Symbol(Alias2, Decl(mappedTypeRelationships2.ts, 2, 70))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>B : Symbol(B, Decl(mappedTypeRelationships2.ts, 5, 35))
+
+type Test3<T extends AB> = Alias1<T, B>; // ok
+>Test3 : Symbol(Test3, Decl(mappedTypeRelationships2.ts, 9, 27))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 11, 11))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>Alias1 : Symbol(Alias1, Decl(mappedTypeRelationships2.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 11, 11))
+>B : Symbol(B, Decl(mappedTypeRelationships2.ts, 5, 35))
+
+type Test4<T extends AB> = Alias2<T, B>; // ok
+>Test4 : Symbol(Test4, Decl(mappedTypeRelationships2.ts, 11, 40))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 12, 11))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>Alias2 : Symbol(Alias2, Decl(mappedTypeRelationships2.ts, 2, 70))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 12, 11))
+>B : Symbol(B, Decl(mappedTypeRelationships2.ts, 5, 35))
+
+type WithNumber<T> = { [K in keyof T]: T[K] | number };
+>WithNumber : Symbol(WithNumber, Decl(mappedTypeRelationships2.ts, 12, 40))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 14, 16))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 14, 24))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 14, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 14, 16))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 14, 24))
+
+type Alias3<T extends object, U extends WithNumber<Record<keyof T, any>>> = U;
+>Alias3 : Symbol(Alias3, Decl(mappedTypeRelationships2.ts, 14, 55))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 15, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 15, 29))
+>WithNumber : Symbol(WithNumber, Decl(mappedTypeRelationships2.ts, 12, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 15, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 15, 29))
+
+type ABC = { a: string; b: string; c: string };
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+>a : Symbol(a, Decl(mappedTypeRelationships2.ts, 17, 12))
+>b : Symbol(b, Decl(mappedTypeRelationships2.ts, 17, 23))
+>c : Symbol(c, Decl(mappedTypeRelationships2.ts, 17, 34))
+
+type Test5 = Alias3<AB, ABC>; // ok
+>Test5 : Symbol(Test5, Decl(mappedTypeRelationships2.ts, 17, 47))
+>Alias3 : Symbol(Alias3, Decl(mappedTypeRelationships2.ts, 14, 55))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+type Test6<T extends AB> = Alias3<T, ABC>; // error
+>Test6 : Symbol(Test6, Decl(mappedTypeRelationships2.ts, 19, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 20, 11))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>Alias3 : Symbol(Alias3, Decl(mappedTypeRelationships2.ts, 14, 55))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 20, 11))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+type Alias4<T extends object, U extends WithNumber<Partial<Record<keyof T, any>>>> = U;
+>Alias4 : Symbol(Alias4, Decl(mappedTypeRelationships2.ts, 20, 42))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 22, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 22, 29))
+>WithNumber : Symbol(WithNumber, Decl(mappedTypeRelationships2.ts, 12, 40))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 22, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 22, 29))
+
+type Test7 = Alias4<AB, ABC>; // ok
+>Test7 : Symbol(Test7, Decl(mappedTypeRelationships2.ts, 22, 87))
+>Alias4 : Symbol(Alias4, Decl(mappedTypeRelationships2.ts, 20, 42))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+type Test8<T extends AB> = Alias4<T, ABC>; // ok
+>Test8 : Symbol(Test8, Decl(mappedTypeRelationships2.ts, 24, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 25, 11))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>Alias4 : Symbol(Alias4, Decl(mappedTypeRelationships2.ts, 20, 42))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 25, 11))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+type Alias5<T extends object, U extends Partial<WithNumber<Record<keyof T, any>>>> = U;
+>Alias5 : Symbol(Alias5, Decl(mappedTypeRelationships2.ts, 25, 42))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 27, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 27, 29))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>WithNumber : Symbol(WithNumber, Decl(mappedTypeRelationships2.ts, 12, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 27, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships2.ts, 27, 29))
+
+type Test9 = Alias5<AB, ABC>; // ok
+>Test9 : Symbol(Test9, Decl(mappedTypeRelationships2.ts, 27, 87))
+>Alias5 : Symbol(Alias5, Decl(mappedTypeRelationships2.ts, 25, 42))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+type Test10<T extends AB> = Alias5<T, ABC>; // ok
+>Test10 : Symbol(Test10, Decl(mappedTypeRelationships2.ts, 29, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 30, 12))
+>AB : Symbol(AB, Decl(mappedTypeRelationships2.ts, 3, 75))
+>Alias5 : Symbol(Alias5, Decl(mappedTypeRelationships2.ts, 25, 42))
+>T : Symbol(T, Decl(mappedTypeRelationships2.ts, 30, 12))
+>ABC : Symbol(ABC, Decl(mappedTypeRelationships2.ts, 15, 78))
+
+// part of https://github.com/microsoft/TypeScript/issues/62770
+
+interface WithCommon {
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+
+  field1: number;
+>field1 : Symbol(WithCommon.field1, Decl(mappedTypeRelationships2.ts, 34, 22))
+
+  field2: string;
+>field2 : Symbol(WithCommon.field2, Decl(mappedTypeRelationships2.ts, 35, 17))
+}
+
+interface WithSpecial extends WithCommon {
+>WithSpecial : Symbol(WithSpecial, Decl(mappedTypeRelationships2.ts, 37, 1))
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+
+  special: number;
+>special : Symbol(WithSpecial.special, Decl(mappedTypeRelationships2.ts, 39, 42))
+}
+
+interface SpecialLookup {
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  special: WithSpecial;
+>special : Symbol(SpecialLookup.special, Decl(mappedTypeRelationships2.ts, 43, 25))
+>WithSpecial : Symbol(WithSpecial, Decl(mappedTypeRelationships2.ts, 37, 1))
+}
+
+interface CommonLookup extends SpecialLookup {
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  common: WithCommon;
+>common : Symbol(CommonLookup.common, Decl(mappedTypeRelationships2.ts, 47, 46))
+>WithCommon : Symbol(WithCommon, Decl(mappedTypeRelationships2.ts, 30, 43))
+}
+
+type Lookup<Name extends keyof CommonLookup> = {
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+
+  [K in keyof CommonLookup[Name]]?: CommonLookup[Name][K];
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 52, 3))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>CommonLookup : Symbol(CommonLookup, Decl(mappedTypeRelationships2.ts, 45, 1))
+>Name : Symbol(Name, Decl(mappedTypeRelationships2.ts, 51, 12))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 52, 3))
+
+};
+function someName<K extends keyof SpecialLookup>(): void {
+>someName : Symbol(someName, Decl(mappedTypeRelationships2.ts, 53, 2))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+>SpecialLookup : Symbol(SpecialLookup, Decl(mappedTypeRelationships2.ts, 41, 1))
+
+  // ok
+  const works1: Lookup<"special"> = {
+>works1 : Symbol(works1, Decl(mappedTypeRelationships2.ts, 56, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+
+    field1: 1,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 56, 37))
+
+    field2: "common",
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 57, 14))
+
+    special: 203,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 58, 21))
+
+  };
+
+  // error
+  const works2: Lookup<"common"> = {
+>works2 : Symbol(works2, Decl(mappedTypeRelationships2.ts, 63, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+
+    field1: 5,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 63, 36))
+
+    field2: "something",
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 64, 14))
+
+    special: 32, 
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 65, 24))
+
+  };
+
+  // ok
+  const works3: Lookup<K> = {
+>works3 : Symbol(works3, Decl(mappedTypeRelationships2.ts, 70, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+
+    special: undefined,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 70, 29))
+>undefined : Symbol(undefined)
+
+    field1: undefined,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 71, 23))
+>undefined : Symbol(undefined)
+
+    field2: undefined,
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 72, 22))
+>undefined : Symbol(undefined)
+
+  };
+
+  // error
+  const works4: Lookup<K> = {
+>works4 : Symbol(works4, Decl(mappedTypeRelationships2.ts, 77, 7))
+>Lookup : Symbol(Lookup, Decl(mappedTypeRelationships2.ts, 49, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships2.ts, 54, 18))
+
+    field1: undefined,
+>field1 : Symbol(field1, Decl(mappedTypeRelationships2.ts, 77, 29))
+>undefined : Symbol(undefined)
+
+    field2: undefined,
+>field2 : Symbol(field2, Decl(mappedTypeRelationships2.ts, 78, 22))
+>undefined : Symbol(undefined)
+
+    special: 32,
+>special : Symbol(special, Decl(mappedTypeRelationships2.ts, 79, 22))
+
+  };
+}
+
+export {};
+

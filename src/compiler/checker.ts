@@ -23719,8 +23719,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
                 const keysRemapped = !!target.declaration.nameType;
                 const templateType = getTemplateTypeFromMappedType(target);
-                const modifiers = getMappedTypeModifiers(target);
-                if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
+                const combinedOptionality = getCombinedMappedTypeOptionality(target);
+                if (combinedOptionality !== -1) {
                     // If the mapped type has shape `{ [P in Q]: T[P] }`,
                     // source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
                     if (
@@ -23735,7 +23735,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const targetKeys = keysRemapped ? getNameTypeFromMappedType(target)! : getConstraintTypeFromMappedType(target);
                         // Type of the keys of source type `S`, i.e. `keyof S`.
                         const sourceKeys = getIndexType(source, IndexFlags.NoIndexSignatures);
-                        const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
+                        const includeOptional = combinedOptionality === 1;
                         const filteredByApplicability = includeOptional ? intersectTypes(targetKeys, sourceKeys) : undefined;
                         // A source type `S` is related to a target type `{ [P in Q]: T }` if `Q` is related to `keyof S` and `S[Q]` is related to `T`.
                         // A source type `S` is related to a target type `{ [P in Q as R]: T }` if `R` is related to `keyof S` and `S[R]` is related to `T.
@@ -23752,10 +23752,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // Fastpath: When the template type has the form `Obj[P]` where `P` is the mapped type parameter, directly compare source `S` with `Obj`
                             // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `S[P]`.
                             const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
-                            if (!keysRemapped && nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
-                                if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, RecursionFlags.Target, reportErrors)) {
-                                    return result;
-                                }
+                            if (!keysRemapped && nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter && (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, RecursionFlags.Target, reportErrors))) {
+                                return result;
                             }
                             else {
                                 // We need to compare the type of a property on the source type `S` to the type of the same property on the target type,
