@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/thisTypeComparison.ts] ////
+
+=== thisTypeComparison.ts ===
+class AA {
+>AA : AA
+>   : ^^
+
+    do1() {
+>do1 : () => void
+>    : ^^^^^^^^^^
+
+        const b = dd.getB();
+>b : BB
+>  : ^^
+>dd.getB() : BB
+>          : ^^
+>dd.getB : () => BB
+>        : ^^^^^^  
+>dd : BB
+>   : ^^
+>getB : () => BB
+>     : ^^^^^^  
+
+        if (this === b) {
+>this === b : boolean
+>           : ^^^^^^^
+>this : this
+>     : ^^^^
+>b : BB
+>  : ^^
+
+            console.log("this === b");
+>console.log("this === b") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"this === b" : "this === b"
+>             : ^^^^^^^^^^^^
+        }
+    }
+}
+
+class BB extends AA {
+>BB : BB
+>   : ^^
+>AA : AA
+>   : ^^
+
+    getB(): BB { return this; }
+>getB : () => BB
+>     : ^^^^^^  
+>this : this
+>     : ^^^^
+}
+
+let dd = new BB();
+>dd : BB
+>   : ^^
+>new BB() : BB
+>         : ^^
+>BB : typeof BB
+>   : ^^^^^^^^^
+
+dd.do1();
+>dd.do1() : void
+>         : ^^^^
+>dd.do1 : () => void
+>       : ^^^^^^^^^^
+>dd : BB
+>   : ^^
+>do1 : () => void
+>    : ^^^^^^^^^^
+
