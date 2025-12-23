@@ -1,0 +1,109 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|] = 1;|>
+
+// === /tests/cases/fourslash/imports.d.ts ===
+// import * as $0 from "./bar";
+// 
+// declare global {
+//   const foo: typeof import("./foo")["[|foo|]"];
+//   const bar: typeof import("./bar")["bar"];
+// }
+// 
+// export {};
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.ts ===
+  // <|export const /*FIND ALL REFS*/[|foo|] = 1;|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const foo: 1",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/bar.ts ===
+// <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}bar|] = 1;|>
+
+// === /tests/cases/fourslash/imports.d.ts ===
+// import * as $0 from "./bar";
+// 
+// declare global {
+//   const foo: typeof import("./foo")["foo"];
+//   const bar: typeof import("./bar")["[|[|bar|]|]"];
+// }
+// 
+// export {};
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/bar.ts ===
+  // <|export const /*FIND ALL REFS*/[|bar|] = 1;|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const bar: 1",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
