@@ -6625,7 +6625,7 @@
     },
     "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
-        "code": 69010
+        "code": 6910
     },
     "Computed from the list of input files": {
         "category": "Message",
