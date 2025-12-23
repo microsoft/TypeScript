@@ -12346,9 +12346,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (elements.length === 0 || elements.length === 1 && restElement) {
             return languageVersion >= ScriptTarget.ES2015 ? createIterableType(anyType) : anyArrayType;
         }
-        const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
+
+        let elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
+
+        // For contextual typing, normalize pattern length to avoid inference differences
+        // based purely on binding name presence/absence
+        if (includePatternInType && !restElement) {
+            // Extend patterns to ensure consistent contextual types across equivalent destructuring operations
+            const lastBindingIndex = findLastIndex(elements, e => !isOmittedExpression(e), elements.length - 1);
+            if (lastBindingIndex >= 0) {
+                // Extend to at least one position beyond the last binding to ensure consistent behavior
+                // This makes patterns like [, s, ] equivalent to [, s, ,] for contextual typing purposes
+                const targetLength = lastBindingIndex + 2;
+                elementTypes = elementTypes.concat(Array(Math.max(0, targetLength - elementTypes.length)).fill(anyType));
+            }
+        }
+
         const minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
-        const elementFlags = map(elements, (e, i) => e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required);
+        const elementFlags = map(elementTypes, (_, i) => {
+            if (i < elements.length) {
+                const e = elements[i];
+                return e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required;
+            }
+            else {
+                // Extended elements for contextual typing are optional
+                return ElementFlags.Optional;
+            }
+        });
+
         let result = createTupleType(elementTypes, elementFlags) as TypeReference;
         if (includePatternInType) {
             result = cloneTypeReference(result);
