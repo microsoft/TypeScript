@@ -1550,7 +1550,7 @@ export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportD
         case SyntaxKind.ExportSpecifier:
             return (node as ExportSpecifier).isTypeOnly || (node as ExportSpecifier).parent.parent.isTypeOnly;
         case SyntaxKind.ExportDeclaration:
-            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
+            return (node as ExportDeclaration).isTypeOnly;
         case SyntaxKind.NamespaceExport:
             return (node as NamespaceExport).parent.isTypeOnly;
     }

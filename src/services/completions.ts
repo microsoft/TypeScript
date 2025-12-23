@@ -179,6 +179,7 @@ import {
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportKeyword,
+    isImportOrExportSpecifier,
     isImportSpecifier,
     isInComment,
     isIndexSignatureDeclaration,
@@ -4651,7 +4652,7 @@ function getCompletionData(
         if (!namedImportsOrExports) return GlobalsSearch.Continue;
 
         // We can at least offer `type` at `import { |`
-        if (!isTypeKeywordTokenOrIdentifier(contextToken)) {
+        if (!isTypeKeywordTokenOrIdentifier(contextToken) && !isTypeOnlyImportOrExportDeclaration(contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? contextToken.parent.parent : contextToken.parent)) {
             keywordFilters = KeywordCompletionFilters.TypeKeyword;
         }
 
@@ -5007,7 +5008,8 @@ function getCompletionData(
 
             case SyntaxKind.TypeKeyword:
                 // import { type foo| }
-                return containingNodeKind !== SyntaxKind.ImportSpecifier;
+                // export { type foo| }
+                return !isImportOrExportSpecifier(parent);
 
             case SyntaxKind.AsteriskToken:
                 return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
