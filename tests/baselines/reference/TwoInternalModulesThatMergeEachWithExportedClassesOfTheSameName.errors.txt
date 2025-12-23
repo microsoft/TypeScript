@@ -14,7 +14,7 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
         }
     }
     
-    module A{
+    namespace A{
         // expected error
         export class Point {
                      ~~~~~

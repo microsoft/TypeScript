@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/nestedModulePrivateAccess.ts] ////
 
 === nestedModulePrivateAccess.ts ===
-module a{
+namespace a{
 >a : typeof a
 >  : ^^^^^^^^
 
@@ -9,7 +9,7 @@ module a{
 >x : number
 >  : ^^^^^^
 
-       module b{
+       namespace b{
 >b : typeof b
 >  : ^^^^^^^^
 

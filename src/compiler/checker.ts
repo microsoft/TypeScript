@@ -62,6 +62,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     canHaveModuleSpecifier,
+    canHaveStatements,
     canHaveSymbol,
     canIncludeBindAndCheckDiagnostics,
     canUsePropertyAccess,
@@ -346,7 +347,6 @@ import {
     getNamespaceDeclarationNode,
     getNewTargetContainer,
     getNonAugmentationDeclaration,
-    getNonModifierTokenPosOfNode,
     getNormalizedAbsolutePath,
     getObjectFlags,
     getOriginalNode,
@@ -383,6 +383,7 @@ import {
     getTextOfPropertyName,
     getThisContainer,
     getThisParameter,
+    getTokenPosOfNode,
     getTrailingSemicolonDeferringWriter,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
@@ -503,6 +504,7 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
+    isCaseOrDefaultClause,
     isCatchClause,
     isCatchClauseVariableDeclaration,
     isCatchClauseVariableDeclarationOrBindingElement,
@@ -708,6 +710,7 @@ import {
     isPartOfTypeOnlyImportOrExportDeclaration,
     isPartOfTypeQuery,
     isPlainJsFile,
+    isPotentiallyExecutableNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
@@ -1512,6 +1515,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
     var isInferencePartiallyBlocked = false;
+    var withinUnreachableCode = false;
+    var reportedUnreachableNodes: Set<Node> | undefined;
 
     var emptySymbols = createSymbolTable();
     var arrayVariances = [VarianceFlags.Covariant];
@@ -1743,7 +1748,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) {
                 return undefined;
             }
-            if (contextFlags! & ContextFlags.Completions) {
+            if (contextFlags! & ContextFlags.IgnoreNodeInferences) {
                 return runWithInferenceBlockedFromSourceNode(node, () => getContextualType(node, contextFlags));
             }
             return getContextualType(node, contextFlags);
@@ -2184,7 +2189,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
-    var silentNeverIterationTypes = createIterationTypes(silentNeverType, silentNeverType, silentNeverType);
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -2835,7 +2839,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // When merging the module augmentation into a.ts, the symbol for `A` will itself be merged, so its parent
                 // should be the merged module symbol. But the symbol for `B` has only one declaration, so its parent should
                 // be the module augmentation symbol, which contains its only declaration.
-                merged.parent = mergedParent;
+                if (merged.flags & SymbolFlags.Transient) {
+                    merged.parent = mergedParent;
+                }
             }
             target.set(id, merged);
         });
@@ -21137,9 +21143,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { initializer } = node as JsxAttribute;
                 return !!initializer && isContextSensitive(initializer);
             }
-            case SyntaxKind.JsxExpression: {
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.YieldExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
-                const { expression } = node as JsxExpression;
+                const { expression } = node as JsxExpression | YieldExpression;
                 return !!expression && isContextSensitive(expression);
             }
         }
@@ -21148,7 +21155,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node);
+        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node) || hasContextSensitiveYieldExpression(node);
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -21159,6 +21166,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isContextSensitive(node.body);
         }
         return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression));
+    }
+
+    function hasContextSensitiveYieldExpression(node: FunctionLikeDeclaration): boolean {
+        // yield expressions can be context sensitive in situations like:
+        //
+        // declare function test(gen: () => Generator<(arg: number) => string, void, void>): void;
+        //
+        // test(function* () {
+        //   yield (arg) => String(arg);
+        // });
+        return !!(getFunctionFlags(node) & FunctionFlags.Generator && node.body && forEachYieldExpression(node.body as Block, isContextSensitive));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -26431,7 +26449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        return getWidenedType(getTypeFromInference(inference) || unknownType);
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
@@ -27571,10 +27589,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
-                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                if (inferredType) {
+                    const constraintWithThis = getTypeWithThisArgument(instantiatedConstraint, inferredType);
+                    if (!context.compareTypes(inferredType, constraintWithThis)) {
+                        // If we have a pure return type inference, we may succeed by removing constituents of the inferred type
+                        // that aren't assignable to the constraint type (pure return type inferences are speculation anyway).
+                        const filteredByConstraint = inference.priority === InferencePriority.ReturnType ? filterType(inferredType, t => !!context.compareTypes(t, constraintWithThis)) : neverType;
+                        inferredType = !(filteredByConstraint.flags & TypeFlags.Never) ? filteredByConstraint : undefined;
+                    }
                 }
+                if (!inferredType) {
+                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+                    inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                }
+                inference.inferredType = inferredType;
             }
             clearActiveMapperCaches();
         }
@@ -32613,7 +32641,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
-                return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                const type = instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type;
+                }
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
@@ -32621,9 +32652,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the 'boolean' type from the contextual type such that contextually typed boolean
                 // literals actually end up widening to 'boolean' (see #48363).
                 const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
-                return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
-                    filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                    type;
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                        filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                        type;
+                }
             }
         }
         return contextualType;
@@ -32690,7 +32723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return getContextualTypeForArgument(parent as CallExpression | NewExpression | Decorator, node);
+                return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
             case SyntaxKind.Decorator:
                 return getContextualTypeForDecorator(parent as Decorator);
             case SyntaxKind.TypeAssertionExpression:
@@ -32829,7 +32862,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
-        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
+        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.IgnoreNodeInferences) {
             const index = findContextualNode(node.parent, /*includeCaches*/ !contextFlags);
             if (index >= 0) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
@@ -39213,7 +39246,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
-            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode && checkMode & ~CheckMode.SkipGenericFunctions) : undefinedWideningType;
             if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
                 yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
             }
@@ -39236,9 +39269,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, sentType: Type, isAsync: boolean): Type | undefined {
-        if (expressionType === silentNeverType) {
-            return silentNeverType;
-        }
         const errorNode = node.expression || node;
         // A `yield*` expression effectively yields everything that its operand yields
         const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar, expressionType, sentType, errorNode) : expressionType;
@@ -45842,9 +45872,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
         type = getReducedType(type);
-        if (type === silentNeverType) {
-            return silentNeverIterationTypes;
-        }
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
@@ -46601,6 +46628,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return false;
             });
+        }
+
+        if (node.label.flags & NodeFlags.Unreachable && compilerOptions.allowUnusedLabels !== true) {
+            errorOrSuggestion(compilerOptions.allowUnusedLabels === false, node.label, Diagnostics.Unused_label);
         }
 
         // ensure that label is unique
@@ -48090,12 +48121,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isIdentifier(node.name)) {
                 checkCollisionsForDeclarationName(node, node.name);
                 if (!(node.flags & (NodeFlags.Namespace | NodeFlags.GlobalAugmentation))) {
-                    const sourceFile = getSourceFileOfNode(node);
-                    const pos = getNonModifierTokenPosOfNode(node);
-                    const span = getSpanOfTokenAtPosition(sourceFile, pos);
-                    suggestionDiagnostics.add(
-                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead),
-                    );
+                    error(node.name, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead);
                 }
             }
 
@@ -48967,10 +48993,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkSourceElement(node: Node | undefined): void {
         if (node) {
             const saveCurrentNode = currentNode;
+            const saveWithinUnreachableCode = withinUnreachableCode;
             currentNode = node;
             instantiationCount = 0;
             checkSourceElementWorker(node);
             currentNode = saveCurrentNode;
+            withinUnreachableCode = saveWithinUnreachableCode;
         }
     }
 
@@ -49003,8 +49031,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     cancellationToken.throwIfCancellationRequested();
             }
         }
-        if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && canHaveFlowNode(node) && node.flowNode && !isReachableFlowNode(node.flowNode)) {
-            errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+
+        if (compilerOptions.allowUnreachableCode !== true && !withinUnreachableCode) {
+            if (checkSourceElementUnreachable(node)) {
+                withinUnreachableCode = true;
+            }
         }
 
         // If editing this, keep `isSourceElement` in utilities up to date.
@@ -49183,6 +49214,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.MissingDeclaration:
                 return checkMissingDeclaration(node);
         }
+    }
+
+    function checkSourceElementUnreachable(node: Node): boolean {
+        if (!isPotentiallyExecutableNode(node)) {
+            return false;
+        }
+
+        if (reportedUnreachableNodes?.has(node)) {
+            return true;
+        }
+
+        if (!isSourceElementUnreachable(node)) {
+            return false;
+        }
+
+        (reportedUnreachableNodes ??= new Set()).add(node);
+
+        const sourceFile = getSourceFileOfNode(node);
+
+        let startNode = node;
+        let endNode = node;
+
+        const parent = node.parent;
+        if (canHaveStatements(parent)) {
+            const statements = parent.statements;
+            const offset = statements.indexOf(node as Statement);
+            if (offset >= 0) {
+                // Scan backwards to find the first unreachable unreported node;
+                // this may happen when producing region diagnostics where not all nodes
+                // will have been visited.
+                let first = offset;
+                for (let i = offset - 1; i >= 0; i--) {
+                    const prevNode = statements[i];
+                    if (!isPotentiallyExecutableNode(prevNode) || reportedUnreachableNodes.has(prevNode) || !isSourceElementUnreachable(prevNode)) {
+                        break;
+                    }
+                    first = i;
+                    reportedUnreachableNodes.add(prevNode);
+                }
+
+                let last = offset;
+                for (let i = offset + 1; i < statements.length; i++) {
+                    const nextNode = statements[i];
+                    if (!isPotentiallyExecutableNode(nextNode) || !isSourceElementUnreachable(nextNode)) {
+                        break;
+                    }
+                    last = i;
+                    reportedUnreachableNodes.add(nextNode);
+                }
+
+                startNode = statements[first];
+                endNode = statements[last];
+            }
+        }
+
+        const start = getTokenPosOfNode(startNode, sourceFile);
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, endNode.end - start, Diagnostics.Unreachable_code_detected));
+
+        return true;
+    }
+
+    function isSourceElementUnreachable(node: Node): boolean {
+        // Precondition: isPotentiallyExecutableNode is true
+        if (node.flags & NodeFlags.Unreachable) {
+            // The binder has determined that this code is unreachable.
+            // Ignore const enums unless preserveConstEnums is set.
+            switch (node.kind) {
+                case SyntaxKind.EnumDeclaration:
+                    return !isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(compilerOptions);
+                case SyntaxKind.ModuleDeclaration:
+                    return isInstantiatedModule(node as ModuleDeclaration, shouldPreserveConstEnums(compilerOptions));
+                default:
+                    return true;
+            }
+        }
+        else if (canHaveFlowNode(node) && node.flowNode) {
+            // For code the binder doesn't know is unreachable, use control flow / types.
+            return !isReachableFlowNode(node.flowNode);
+        }
+        return false;
     }
 
     function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
@@ -49383,6 +49494,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         performance.mark(afterMark);
         performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
+        reportedUnreachableNodes = undefined;
     }
 
     function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
@@ -53079,6 +53191,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeFlags === NodeFlags.Using ?
                         Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
                         Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
+                );
+            }
+            else if (isVariableStatement(declarationList.parent) && isCaseOrDefaultClause(declarationList.parent.parent)) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block :
+                        Diagnostics.await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block,
                 );
             }
 
