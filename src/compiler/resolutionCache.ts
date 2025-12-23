@@ -47,6 +47,7 @@ import {
     ModeAwareCache,
     ModuleResolutionCache,
     moduleResolutionNameAndModeGetter,
+    Mutable,
     mutateMap,
     noopFileWatcher,
     normalizePath,
@@ -556,7 +557,7 @@ function resolveModuleNameUsingGlobalCache(
         );
         if (resolvedModule) {
             // Modify existing resolution so its saved in the directory cache as well
-            (primaryResult.resolvedModule as any) = resolvedModule;
+            (primaryResult as Mutable<typeof primaryResult>).resolvedModule = resolvedModule;
             primaryResult.failedLookupLocations = updateResolutionField(primaryResult.failedLookupLocations, failedLookupLocations);
             primaryResult.affectingLocations = updateResolutionField(primaryResult.affectingLocations, affectingLocations);
             primaryResult.resolutionDiagnostics = updateResolutionField(primaryResult.resolutionDiagnostics, resolutionDiagnostics);
