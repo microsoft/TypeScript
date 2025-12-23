@@ -30,7 +30,7 @@ ws.delete(s);
 
 const wm = new WeakMap([[s, false]]);
 >wm : Symbol(wm, Decl(acceptSymbolAsWeakType.ts, 7, 5))
->WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
 >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
 
 wm.set(s, true);

@@ -55,7 +55,7 @@ async function f() {
     await using it5 = new Map<string, string>().entries();
 >it5 : Symbol(it5, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 15, 15))
 >new Map<string, string>().entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
 >entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
 
     await using it6 = new Set<string>().keys();
