@@ -1,0 +1,208 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation4.ts] ////
+
+=== nonInferrableTypePropagation4.ts ===
+// https://github.com/microsoft/TypeScript/issues/62345
+
+interface P<T> {
+  then: (onfulfilled: (value: T) => unknown) => unknown;
+>then : (onfulfilled: (value: T) => unknown) => unknown
+>     : ^           ^^                     ^^^^^       
+>onfulfilled : (value: T) => unknown
+>            : ^     ^^ ^^^^^       
+>value : T
+>      : ^
+}
+
+interface PConstructor {
+  new <T>(executor: (resolve: (value: T) => void) => void): P<T>;
+>executor : (resolve: (value: T) => void) => void
+>         : ^       ^^                  ^^^^^    
+>resolve : (value: T) => void
+>        : ^     ^^ ^^^^^    
+>value : T
+>      : ^
+}
+
+declare var P: PConstructor;
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+
+declare function foo1<T>(x: () => P<{ default: T }>): T;
+>foo1 : <T>(x: () => P<{ default: T; }>) => T
+>     : ^ ^^ ^^                        ^^^^^ 
+>x : () => P<{ default: T; }>
+>  : ^^^^^^                  
+>default : T
+>        : ^
+
+const result1 = foo1(() => {
+>result1 : unknown
+>        : ^^^^^^^
+>foo1(() => {  return new P((resolve) => {    resolve;  });}) : unknown
+>                                                             : ^^^^^^^
+>foo1 : <T>(x: () => P<{ default: T; }>) => T
+>     : ^ ^^ ^^                        ^^^^^ 
+>() => {  return new P((resolve) => {    resolve;  });} : () => P<unknown>
+>                                                       : ^^^^^^^^^^^^^^^^
+
+  return new P((resolve) => {
+>new P((resolve) => {    resolve;  }) : P<unknown>
+>                                     : ^^^^^^^^^^
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+>(resolve) => {    resolve;  } : (resolve: (value: unknown) => void) => void
+>                              : ^       ^^^     ^^^^^^^^^^^^^^    ^^^^^^^^^
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+    resolve;
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+  });
+});
+
+type WithDefault<T> = { default: T };
+>WithDefault : WithDefault<T>
+>            : ^^^^^^^^^^^^^^
+>default : T
+>        : ^
+
+declare function foo2<T>(x: () => P<WithDefault<T>>): T;
+>foo2 : <T>(x: () => P<WithDefault<T>>) => T
+>     : ^ ^^ ^^                       ^^^^^ 
+>x : () => P<WithDefault<T>>
+>  : ^^^^^^                 
+
+const result2 = foo2(() => {
+>result2 : unknown
+>        : ^^^^^^^
+>foo2(() => {  return new P((resolve) => {    resolve;  });}) : unknown
+>                                                             : ^^^^^^^
+>foo2 : <T>(x: () => P<WithDefault<T>>) => T
+>     : ^ ^^ ^^                       ^^^^^ 
+>() => {  return new P((resolve) => {    resolve;  });} : () => P<unknown>
+>                                                       : ^^^^^^^^^^^^^^^^
+
+  return new P((resolve) => {
+>new P((resolve) => {    resolve;  }) : P<unknown>
+>                                     : ^^^^^^^^^^
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+>(resolve) => {    resolve;  } : (resolve: (value: unknown) => void) => void
+>                              : ^       ^^^     ^^^^^^^^^^^^^^    ^^^^^^^^^
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+    resolve;
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+  });
+});
+
+declare function foo3<T>(x: () => P<[T]>): T;
+>foo3 : <T>(x: () => P<[T]>) => T
+>     : ^ ^^ ^^            ^^^^^ 
+>x : () => P<[T]>
+>  : ^^^^^^      
+
+const result3 = foo3(() => {
+>result3 : unknown
+>        : ^^^^^^^
+>foo3(() => {  return new P((resolve) => {    resolve;  });}) : unknown
+>                                                             : ^^^^^^^
+>foo3 : <T>(x: () => P<[T]>) => T
+>     : ^ ^^ ^^            ^^^^^ 
+>() => {  return new P((resolve) => {    resolve;  });} : () => P<unknown>
+>                                                       : ^^^^^^^^^^^^^^^^
+
+  return new P((resolve) => {
+>new P((resolve) => {    resolve;  }) : P<unknown>
+>                                     : ^^^^^^^^^^
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+>(resolve) => {    resolve;  } : (resolve: (value: unknown) => void) => void
+>                              : ^       ^^^     ^^^^^^^^^^^^^^    ^^^^^^^^^
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+    resolve;
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+  });
+});
+
+declare function foo4<T>(x: () => P<{ default: { prop: T } }>): T;
+>foo4 : <T>(x: () => P<{ default: { prop: T; }; }>) => T
+>     : ^ ^^ ^^                                   ^^^^^ 
+>x : () => P<{ default: { prop: T; }; }>
+>  : ^^^^^^                             
+>default : { prop: T; }
+>        : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+
+const result4 = foo4(() => {
+>result4 : unknown
+>        : ^^^^^^^
+>foo4(() => {  return new P((resolve) => {    resolve;  });}) : unknown
+>                                                             : ^^^^^^^
+>foo4 : <T>(x: () => P<{ default: { prop: T; }; }>) => T
+>     : ^ ^^ ^^                                   ^^^^^ 
+>() => {  return new P((resolve) => {    resolve;  });} : () => P<unknown>
+>                                                       : ^^^^^^^^^^^^^^^^
+
+  return new P((resolve) => {
+>new P((resolve) => {    resolve;  }) : P<unknown>
+>                                     : ^^^^^^^^^^
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+>(resolve) => {    resolve;  } : (resolve: (value: unknown) => void) => void
+>                              : ^       ^^^     ^^^^^^^^^^^^^^    ^^^^^^^^^
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+    resolve;
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+  });
+});
+
+declare function foo5<T>(x: () => P<{ default: [T] }>): T;
+>foo5 : <T>(x: () => P<{ default: [T]; }>) => T
+>     : ^ ^^ ^^                          ^^^^^ 
+>x : () => P<{ default: [T]; }>
+>  : ^^^^^^                    
+>default : [T]
+>        : ^^^
+
+const result5 = foo5(() => {
+>result5 : unknown
+>        : ^^^^^^^
+>foo5(() => {  return new P((resolve) => {    resolve;  });}) : unknown
+>                                                             : ^^^^^^^
+>foo5 : <T>(x: () => P<{ default: [T]; }>) => T
+>     : ^ ^^ ^^                          ^^^^^ 
+>() => {  return new P((resolve) => {    resolve;  });} : () => P<unknown>
+>                                                       : ^^^^^^^^^^^^^^^^
+
+  return new P((resolve) => {
+>new P((resolve) => {    resolve;  }) : P<unknown>
+>                                     : ^^^^^^^^^^
+>P : PConstructor
+>  : ^^^^^^^^^^^^
+>(resolve) => {    resolve;  } : (resolve: (value: unknown) => void) => void
+>                              : ^       ^^^     ^^^^^^^^^^^^^^    ^^^^^^^^^
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+    resolve;
+>resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
+
+  });
+});
+
