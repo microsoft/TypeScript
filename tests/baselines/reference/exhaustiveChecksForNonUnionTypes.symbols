@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/exhaustiveChecksForNonUnionTypes.ts] ////
+
+=== exhaustiveChecksForNonUnionTypes.ts ===
+// Basic case: narrowing non-union types to never
+function testBasicNarrowing(obj: { name: "bob" }) {
+>testBasicNarrowing : Symbol(testBasicNarrowing, Decl(exhaustiveChecksForNonUnionTypes.ts, 0, 0))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 28))
+>name : Symbol(name, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 34))
+
+  if (obj.name === "bob") {
+>obj.name : Symbol(name, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 34))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 28))
+>name : Symbol(name, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 34))
+
+    // obj.name is "bob"
+  } else {
+    // obj should be narrowed to never since { name: "bob" } with name !== "bob" is impossible
+    const n: never = obj;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 6, 9))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 1, 28))
+  }
+}
+
+// Single enum member case
+enum SingleAction { 
+>SingleAction : Symbol(SingleAction, Decl(exhaustiveChecksForNonUnionTypes.ts, 8, 1))
+
+  INCREMENT = 'INCREMENT'
+>INCREMENT : Symbol(SingleAction.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 11, 19))
+}
+
+interface IIncrement {
+>IIncrement : Symbol(IIncrement, Decl(exhaustiveChecksForNonUnionTypes.ts, 13, 1))
+
+  payload: {};
+>payload : Symbol(IIncrement.payload, Decl(exhaustiveChecksForNonUnionTypes.ts, 15, 22))
+
+  type: SingleAction.INCREMENT;
+>type : Symbol(IIncrement.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 16, 14))
+>SingleAction : Symbol(SingleAction, Decl(exhaustiveChecksForNonUnionTypes.ts, 8, 1))
+>INCREMENT : Symbol(SingleAction.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 11, 19))
+}
+
+function testSingleEnumSwitch(action: IIncrement) {
+>testSingleEnumSwitch : Symbol(testSingleEnumSwitch, Decl(exhaustiveChecksForNonUnionTypes.ts, 18, 1))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 20, 30))
+>IIncrement : Symbol(IIncrement, Decl(exhaustiveChecksForNonUnionTypes.ts, 13, 1))
+
+  switch (action.type) {
+>action.type : Symbol(IIncrement.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 16, 14))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 20, 30))
+>type : Symbol(IIncrement.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 16, 14))
+
+    case SingleAction.INCREMENT:
+>SingleAction.INCREMENT : Symbol(SingleAction.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 11, 19))
+>SingleAction : Symbol(SingleAction, Decl(exhaustiveChecksForNonUnionTypes.ts, 8, 1))
+>INCREMENT : Symbol(SingleAction.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 11, 19))
+
+      return 1;
+  }
+  
+  // action should be narrowed to never since all cases are handled
+  const n: never = action;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 27, 7))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 20, 30))
+}
+
+// Single literal type case (should already work)
+function testSingleLiteral(x: "a") {
+>testSingleLiteral : Symbol(testSingleLiteral, Decl(exhaustiveChecksForNonUnionTypes.ts, 28, 1))
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 31, 27))
+
+  if (x === "a") {
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 31, 27))
+
+    // x is "a"
+  } else {
+    // x should be never
+    const n: never = x;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 36, 9))
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 31, 27))
+  }
+}
+
+// Single enum value case
+enum Single { A = "a" }
+>Single : Symbol(Single, Decl(exhaustiveChecksForNonUnionTypes.ts, 38, 1))
+>A : Symbol(Single.A, Decl(exhaustiveChecksForNonUnionTypes.ts, 41, 13))
+
+function testSingleEnum(x: Single) {
+>testSingleEnum : Symbol(testSingleEnum, Decl(exhaustiveChecksForNonUnionTypes.ts, 41, 23))
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 43, 24))
+>Single : Symbol(Single, Decl(exhaustiveChecksForNonUnionTypes.ts, 38, 1))
+
+  if (x === Single.A) {
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 43, 24))
+>Single.A : Symbol(Single.A, Decl(exhaustiveChecksForNonUnionTypes.ts, 41, 13))
+>Single : Symbol(Single, Decl(exhaustiveChecksForNonUnionTypes.ts, 38, 1))
+>A : Symbol(Single.A, Decl(exhaustiveChecksForNonUnionTypes.ts, 41, 13))
+
+    // x is Single.A
+  } else {
+    // x should be never
+    const n: never = x;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 48, 9))
+>x : Symbol(x, Decl(exhaustiveChecksForNonUnionTypes.ts, 43, 24))
+  }
+}
+
+// More complex object with multiple literal properties
+function testComplexObject(obj: { type: "user", status: "active" }) {
+>testComplexObject : Symbol(testComplexObject, Decl(exhaustiveChecksForNonUnionTypes.ts, 50, 1))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 27))
+>type : Symbol(type, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 33))
+>status : Symbol(status, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 47))
+
+  if (obj.type === "user") {
+>obj.type : Symbol(type, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 33))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 27))
+>type : Symbol(type, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 33))
+
+    if (obj.status === "active") {
+>obj.status : Symbol(status, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 47))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 27))
+>status : Symbol(status, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 47))
+
+      // Both properties match
+    } else {
+      // obj.status !== "active" but obj: { type: "user", status: "active" } - impossible
+      const n: never = obj;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 59, 11))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 27))
+    }
+  } else {
+    // obj.type !== "user" but obj: { type: "user", status: "active" } - impossible  
+    const n: never = obj;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 63, 9))
+>obj : Symbol(obj, Decl(exhaustiveChecksForNonUnionTypes.ts, 53, 27))
+  }
+}
+
+// Switch statement with single case (original issue)
+enum ActionTypes {
+>ActionTypes : Symbol(ActionTypes, Decl(exhaustiveChecksForNonUnionTypes.ts, 65, 1))
+
+  INCREMENT = 'INCREMENT',
+>INCREMENT : Symbol(ActionTypes.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 68, 18))
+}
+
+interface IAction {
+>IAction : Symbol(IAction, Decl(exhaustiveChecksForNonUnionTypes.ts, 70, 1))
+
+  type: ActionTypes.INCREMENT;
+>type : Symbol(IAction.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 72, 19))
+>ActionTypes : Symbol(ActionTypes, Decl(exhaustiveChecksForNonUnionTypes.ts, 65, 1))
+>INCREMENT : Symbol(ActionTypes.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 68, 18))
+}
+
+function testOriginalIssue(action: IAction) {
+>testOriginalIssue : Symbol(testOriginalIssue, Decl(exhaustiveChecksForNonUnionTypes.ts, 74, 1))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 76, 27))
+>IAction : Symbol(IAction, Decl(exhaustiveChecksForNonUnionTypes.ts, 70, 1))
+
+  switch (action.type) {
+>action.type : Symbol(IAction.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 72, 19))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 76, 27))
+>type : Symbol(IAction.type, Decl(exhaustiveChecksForNonUnionTypes.ts, 72, 19))
+
+    case ActionTypes.INCREMENT:
+>ActionTypes.INCREMENT : Symbol(ActionTypes.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 68, 18))
+>ActionTypes : Symbol(ActionTypes, Decl(exhaustiveChecksForNonUnionTypes.ts, 65, 1))
+>INCREMENT : Symbol(ActionTypes.INCREMENT, Decl(exhaustiveChecksForNonUnionTypes.ts, 68, 18))
+
+      return 1;
+  }
+  
+  // This was the original issue - action should be never but wasn't
+  const n: never = action;
+>n : Symbol(n, Decl(exhaustiveChecksForNonUnionTypes.ts, 83, 7))
+>action : Symbol(action, Decl(exhaustiveChecksForNonUnionTypes.ts, 76, 27))
+}
