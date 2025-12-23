@@ -2301,7 +2301,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.verbatimModuleSyntax;
+            // When a default import exists, avoid keeping empty named braces under verbatimModuleSyntax.
+            const parentImportClause = node.parent as ImportClause | undefined;
+            const defaultBindingPresent = !!parentImportClause?.name;
+            const allowEmpty = compilerOptions.verbatimModuleSyntax && !defaultBindingPresent;
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
         }

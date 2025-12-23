@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/verbatimModuleSyntaxEmptyNamedImport.ts] ////
+
+=== verbatimModuleSyntaxEmptyNamedImport_module.ts ===
+export const ValueExport = 0;
+>ValueExport : 0
+>            : ^
+>0 : 0
+>  : ^
+
+export type TypeOnlyExport = number;
+>TypeOnlyExport : number
+>               : ^^^^^^
+
+const DefaultExport = class {};
+>DefaultExport : typeof DefaultExport
+>              : ^^^^^^^^^^^^^^^^^^^^
+>class {} : typeof DefaultExport
+>         : ^^^^^^^^^^^^^^^^^^^^
+
+export default DefaultExport;
+>DefaultExport : typeof DefaultExport
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+=== verbatimModuleSyntaxEmptyNamedImport_module.d.ts ===
+declare module "verbatimModuleSyntaxEmptyNamedImport_module";
+>"verbatimModuleSyntaxEmptyNamedImport_module" : any
+
+=== verbatimModuleSyntaxEmptyNamedImport_test.ts ===
+import DefaultExportA, {
+>DefaultExportA : any
+>               : ^^^
+
+  type TypeOnlyExport as TypeOnlyExportA,
+>TypeOnlyExport : any
+>               : ^^^
+>TypeOnlyExportA : any
+>                : ^^^
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportB, {
+>DefaultExportB : any
+>               : ^^^
+
+  type TypeOnlyExport as TypeOnlyExportB,
+>TypeOnlyExport : any
+>               : ^^^
+>TypeOnlyExportB : any
+>                : ^^^
+
+  ValueExport as ValueExportB,
+>ValueExport : any
+>            : ^^^
+>ValueExportB : any
+>             : ^^^
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportC, {
+>DefaultExportC : any
+>               : ^^^
+
+  ValueExport as RenamedValueExportC,
+>ValueExport : any
+>            : ^^^
+>RenamedValueExportC : any
+>                    : ^^^
+
+} from "verbatimModuleSyntaxEmptyNamedImport_module";
+import DefaultExportD from "verbatimModuleSyntaxEmptyNamedImport_module";
+>DefaultExportD : any
+>               : ^^^
+
+import { type TypeOnlyExport as RenamedTypeOnlyExportE } from "verbatimModuleSyntaxEmptyNamedImport_module";
+>TypeOnlyExport : any
+>               : ^^^
+>RenamedTypeOnlyExportE : any
+>                       : ^^^
+
+import { ValueExport as RenamedValueExportF } from "verbatimModuleSyntaxEmptyNamedImport_module";
+>ValueExport : any
+>            : ^^^
+>RenamedValueExportF : any
+>                    : ^^^
+
+import * as NamespaceImportG from "verbatimModuleSyntaxEmptyNamedImport_module";
+>NamespaceImportG : any
+
+new DefaultExportA();
+>new DefaultExportA() : any
+>DefaultExportA : any
+
+new DefaultExportB();
+>new DefaultExportB() : any
+>DefaultExportB : any
+
+new DefaultExportC();
+>new DefaultExportC() : any
+>DefaultExportC : any
+
+new DefaultExportD();
+>new DefaultExportD() : any
+>DefaultExportD : any
+
+console.log(ValueExportB);
+>console.log(ValueExportB) : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>ValueExportB : any
+
+console.log(RenamedValueExportC);
+>console.log(RenamedValueExportC) : void
+>                                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>RenamedValueExportC : any
+
+console.log(RenamedValueExportF);
+>console.log(RenamedValueExportF) : void
+>                                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>RenamedValueExportF : any
+
+console.log(NamespaceImportG.ValueExport);
+>console.log(NamespaceImportG.ValueExport) : void
+>                                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>NamespaceImportG.ValueExport : any
+>NamespaceImportG : any
+>                 : ^^^
+>ValueExport : any
+>            : ^^^
+
