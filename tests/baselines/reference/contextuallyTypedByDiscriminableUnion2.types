@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion2.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62256
+
+type Identifiable = { id: string };
+>Identifiable : Identifiable
+>             : ^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+
+interface EnableA {
+  readonly enableA: true;
+>enableA : true
+>        : ^^^^
+>true : true
+>     : ^^^^
+
+  // this introduces a conflicting property with some of the other members of MyComponentProps
+  // making relevant final union members reduced nevers
+  readonly enableB: true;
+>enableB : true
+>        : ^^^^
+>true : true
+>     : ^^^^
+}
+
+interface DisableA {
+  readonly enableA?: false;
+>enableA : false | undefined
+>        : ^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+}
+
+interface EnableB {
+  readonly enableB?: true;
+>enableB : true | undefined
+>        : ^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+interface DisableB {
+  readonly enableB: false;
+>enableB : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+}
+
+export interface EnableD<I extends Identifiable> {
+  readonly enableD: true;
+>enableD : true
+>        : ^^^^
+>true : true
+>     : ^^^^
+
+  readonly value: I["id"] | null;
+>value : I["id"] | null
+>      : ^^^^^^^^^^^^^^
+
+  readonly setItem: (item: I | null) => void;
+>setItem : (item: I | null) => void
+>        : ^    ^^        ^^^^^    
+>item : I | null
+>     : ^^^^^^^^
+}
+
+export interface DisableD<I extends Identifiable> {
+  readonly enableD: false;
+>enableD : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+
+  readonly value: I["id"];
+>value : I["id"]
+>      : ^^^^^^^
+
+  readonly setItem: (item: I) => void;
+>setItem : (item: I) => void
+>        : ^    ^^ ^^^^^    
+>item : I
+>     : ^
+}
+
+type MyComponentProps<I extends Identifiable> = (EnableA | DisableA) &
+>MyComponentProps : (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  (EnableB | DisableB) &
+  (DisableD<I> | EnableD<I>);
+
+const MyComponent = <I extends Identifiable>(props: MyComponentProps<I>) => {};
+>MyComponent : <I extends Identifiable>(props: MyComponentProps<I>) => void
+>            : ^ ^^^^^^^^^            ^^     ^^                   ^^^^^^^^^
+><I extends Identifiable>(props: MyComponentProps<I>) => {} : <I extends Identifiable>(props: MyComponentProps<I>) => void
+>                                                           : ^ ^^^^^^^^^            ^^     ^^                   ^^^^^^^^^
+>props : (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const item: string | null;
+>item : string | null
+>     : ^^^^^^^^^^^^^
+
+MyComponent({
+>MyComponent({  enableD: true,  value: item,  setItem: (item) => {},}) : void
+>                                                                      : ^^^^
+>MyComponent : <I extends Identifiable>(props: MyComponentProps<I>) => void
+>            : ^ ^^^^^^^^^            ^^     ^^                   ^^^^^^^^^
+>{  enableD: true,  value: item,  setItem: (item) => {},} : { enableD: true; value: string | null; setItem: (item: Identifiable | null) => void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  enableD: true,
+>enableD : true
+>        : ^^^^
+>true : true
+>     : ^^^^
+
+  value: item,
+>value : string | null
+>      : ^^^^^^^^^^^^^
+>item : string | null
+>     : ^^^^^^^^^^^^^
+
+  setItem: (item) => {},
+>setItem : (item: Identifiable | null) => void
+>        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(item) => {} : (item: Identifiable | null) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Identifiable | null
+>     : ^^^^^^^^^^^^^^^^^^^
+
+});
+
