@@ -41,7 +41,6 @@ import {
     BindableObjectDefinePropertyCall,
     BindableStaticNameExpression,
     BindingElement,
-    BindingElementGrandparent,
     BindingName,
     BindingPattern,
     bindSourceFile,
@@ -11535,12 +11534,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
     // assigned by contextual typing.
-    function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode) {
-        if (checkMode !== CheckMode.Normal) {
-            return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
+    function getTypeForBindingElementParent(node: BindingElement) {
+        const grandparent = node.parent.parent;
+        const rootParameter = tryGetRootParameterDeclaration(node);
+        if (rootParameter) {
+            const symbol = getSymbolOfDeclaration(grandparent);
+            const contextualParameterType = symbol && getSymbolLinks(symbol).type;
+            if (contextualParameterType) {
+                return contextualParameterType;
+            }
         }
-        const symbol = getSymbolOfDeclaration(node);
-        return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
+        return getTypeForVariableLikeDeclaration(grandparent, /*includeOptionality*/ false, node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal);
     }
 
     function getRestType(source: Type, properties: PropertyName[], symbol: Symbol | undefined): Type {
@@ -11673,8 +11677,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /** Return the inferred type for a binding element */
     function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-        const checkMode = declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
-        const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
+        const parentType = getTypeForBindingElementParent(declaration);
         return parentType && getBindingElementTypeFromParentType(declaration, parentType, /*noTupleBoundsCheck*/ false);
     }
 
@@ -30841,7 +30844,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getTypeOfSymbol(symbol);
         const declaration = symbol.valueDeclaration;
         if (declaration) {
-            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+            // If we have a binding element with no initializer declared as a const variable or a const-like
             // parameter (a parameter for which there are no assignments in the function body), and if the parent type
             // for the destructuring is a union type, one or more of the binding elements may represent discriminant
             // properties, and we want the effects of conditional checks on such discriminants to affect the types of
@@ -30864,19 +30867,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
             // as if it occurred in the specified location. We then recompute the narrowed binding element type by
             // destructuring from the narrowed parent type.
-            if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+            if (isBindingElement(declaration) && !declaration.initializer && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
                 const rootDeclaration = getRootDeclaration(parent);
                 if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
-                        const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
+                        const parentType = getTypeForBindingElementParent(declaration);
+                        const parentNarrowableType = parentType && getNarrowableTypeForReference(parentType, location);
+
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
+                        if (parentNarrowableType && parentNarrowableType.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
                             const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
+                            const narrowedType = getFlowTypeOfReference(pattern, parentNarrowableType, parentNarrowableType, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {
                                 return neverType;
                             }
@@ -45047,8 +45051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             // check private/protected variable access
             const parent = node.parent.parent;
-            const parentCheckMode = node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
-            const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
+            const parentType = getTypeForBindingElementParent(node);
             const name = node.propertyName || node.name;
             if (parentType && !isBindingPattern(name)) {
                 const exprType = getLiteralTypeFromPropertyName(name);

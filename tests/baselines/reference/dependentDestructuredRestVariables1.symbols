@@ -1,0 +1,248 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredRestVariables1.tsx] ////
+
+=== dependentDestructuredRestVariables1.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(dependentDestructuredRestVariables1.tsx, 2, 6))
+
+// https://github.com/microsoft/TypeScript/issues/46680
+
+type Action1 = { kind: "A"; payload: number } | { kind: "B"; payload: string };
+>Action1 : Symbol(Action1, Decl(dependentDestructuredRestVariables1.tsx, 2, 26))
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 6, 16))
+>payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 27))
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 6, 49))
+>payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 60))
+
+function example1({ kind, ...rest }: Action1) {
+>example1 : Symbol(example1, Decl(dependentDestructuredRestVariables1.tsx, 6, 79))
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 8, 19))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 8, 25))
+>Action1 : Symbol(Action1, Decl(dependentDestructuredRestVariables1.tsx, 2, 26))
+
+  if (kind === "A") {
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 8, 19))
+
+    rest.payload.toFixed();
+>rest.payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>rest.payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 27))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 8, 25))
+>payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 27))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+  }
+  if (kind === "B") {
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 8, 19))
+
+    rest.payload.toUpperCase();
+>rest.payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>rest.payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 60))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 8, 25))
+>payload : Symbol(payload, Decl(dependentDestructuredRestVariables1.tsx, 6, 60))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+type Action2 = [kind: "A", payload: number] | [kind: "B", payload: string];
+>Action2 : Symbol(Action2, Decl(dependentDestructuredRestVariables1.tsx, 15, 1))
+
+function example2([kind, ...rest]: Action2) {
+>example2 : Symbol(example2, Decl(dependentDestructuredRestVariables1.tsx, 17, 75))
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 19, 19))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 19, 24))
+>Action2 : Symbol(Action2, Decl(dependentDestructuredRestVariables1.tsx, 15, 1))
+
+  if (kind === "A") {
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 19, 19))
+
+    rest[0].toFixed();
+>rest[0].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 19, 24))
+>0 : Symbol(0)
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+  }
+  if (kind === "B") {
+>kind : Symbol(kind, Decl(dependentDestructuredRestVariables1.tsx, 19, 19))
+
+    rest[0].toUpperCase();
+>rest[0].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 19, 24))
+>0 : Symbol(0)
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+type Props1 =
+>Props1 : Symbol(Props1, Decl(dependentDestructuredRestVariables1.tsx, 26, 1))
+
+  | ({ as: "div" } & React.ComponentPropsWithRef<"div">)
+>as : Symbol(as, Decl(dependentDestructuredRestVariables1.tsx, 29, 6))
+>React : Symbol(React, Decl(dependentDestructuredRestVariables1.tsx, 2, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+
+  | ({ as: "span" } & React.ComponentPropsWithRef<"span">);
+>as : Symbol(as, Decl(dependentDestructuredRestVariables1.tsx, 30, 6))
+>React : Symbol(React, Decl(dependentDestructuredRestVariables1.tsx, 2, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+
+function MyComponent1({ as, ...rest }: Props1) {
+>MyComponent1 : Symbol(MyComponent1, Decl(dependentDestructuredRestVariables1.tsx, 30, 59))
+>as : Symbol(as, Decl(dependentDestructuredRestVariables1.tsx, 32, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 32, 27))
+>Props1 : Symbol(Props1, Decl(dependentDestructuredRestVariables1.tsx, 26, 1))
+
+  if (as === "div") {
+>as : Symbol(as, Decl(dependentDestructuredRestVariables1.tsx, 32, 23))
+
+    return <div {...rest} />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 32, 27))
+  }
+  if (as === "span") {
+>as : Symbol(as, Decl(dependentDestructuredRestVariables1.tsx, 32, 23))
+
+    return <span {...rest} />;
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 32, 27))
+  }
+}
+
+type Params1 = {
+>Params1 : Symbol(Params1, Decl(dependentDestructuredRestVariables1.tsx, 39, 1))
+
+  foo: string;
+>foo : Symbol(foo, Decl(dependentDestructuredRestVariables1.tsx, 41, 16))
+
+} & ({ tag: "a"; type: number } | { tag: "b"; type: string });
+>tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 45))
+
+const fn1 = <P extends Params1>(params: P) => {
+>fn1 : Symbol(fn1, Decl(dependentDestructuredRestVariables1.tsx, 45, 5))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 45, 13))
+>Params1 : Symbol(Params1, Decl(dependentDestructuredRestVariables1.tsx, 39, 1))
+>params : Symbol(params, Decl(dependentDestructuredRestVariables1.tsx, 45, 32))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 45, 13))
+
+  const { foo, ...rest } = params;
+>foo : Symbol(foo, Decl(dependentDestructuredRestVariables1.tsx, 46, 9))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 46, 14))
+>params : Symbol(params, Decl(dependentDestructuredRestVariables1.tsx, 45, 32))
+
+  if (rest.tag === "a") {
+>rest.tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 46, 14))
+>tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+
+    rest.type.toFixed(); // ok
+>rest.type.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>rest.type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 46, 14))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return rest; // Omit<P, "foo">
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 46, 14))
+  }
+
+  return undefined;
+>undefined : Symbol(undefined)
+
+};
+
+const fn2 = <P extends Params1>({ foo, ...rest }: P) => {
+>fn2 : Symbol(fn2, Decl(dependentDestructuredRestVariables1.tsx, 56, 5))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 56, 13))
+>Params1 : Symbol(Params1, Decl(dependentDestructuredRestVariables1.tsx, 39, 1))
+>foo : Symbol(foo, Decl(dependentDestructuredRestVariables1.tsx, 56, 33))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>P : Symbol(P, Decl(dependentDestructuredRestVariables1.tsx, 56, 13))
+
+  if (rest.tag === "a") {
+>rest.tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>tag : Symbol(tag, Decl(dependentDestructuredRestVariables1.tsx, 43, 6), Decl(dependentDestructuredRestVariables1.tsx, 43, 35))
+
+    rest.type.toFixed(); // ok
+>rest.type.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>rest.type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 43, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return rest; // Omit<P, "foo">
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 56, 38))
+  }
+
+  return undefined;
+>undefined : Symbol(undefined)
+
+};
+
+// https://github.com/microsoft/TypeScript/issues/53947
+
+function ImageAvatar(props: { className?: string; src: string }) {
+>ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 63, 2))
+>props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 67, 21))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 67, 29))
+>src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 67, 49))
+
+  return null;
+}
+
+function InitialsAvatar(props: { className?: string; name: string }) {
+>InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 69, 1))
+>props : Symbol(props, Decl(dependentDestructuredRestVariables1.tsx, 71, 24))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 71, 32))
+>name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 71, 52))
+
+  return null;
+}
+
+type AvatarProps =
+>AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 73, 1))
+
+  | { type: "image"; src: string; className: string }
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 76, 5))
+>src : Symbol(src, Decl(dependentDestructuredRestVariables1.tsx, 76, 20))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 76, 33))
+
+  | { type: "initials"; name: string; className: string };
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 77, 5))
+>name : Symbol(name, Decl(dependentDestructuredRestVariables1.tsx, 77, 23))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 77, 37))
+
+const Avatar = ({ type, className, ...rest }: AvatarProps) => {
+>Avatar : Symbol(Avatar, Decl(dependentDestructuredRestVariables1.tsx, 79, 5))
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
+>AvatarProps : Symbol(AvatarProps, Decl(dependentDestructuredRestVariables1.tsx, 73, 1))
+
+  if (type === "image") {
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
+
+    return <ImageAvatar className={className} {...rest} />;
+>ImageAvatar : Symbol(ImageAvatar, Decl(dependentDestructuredRestVariables1.tsx, 63, 2))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 81, 23))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
+  }
+
+  if (type === "initials") {
+>type : Symbol(type, Decl(dependentDestructuredRestVariables1.tsx, 79, 17))
+
+    return <InitialsAvatar className={className} {...rest} />;
+>InitialsAvatar : Symbol(InitialsAvatar, Decl(dependentDestructuredRestVariables1.tsx, 69, 1))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 85, 26))
+>className : Symbol(className, Decl(dependentDestructuredRestVariables1.tsx, 79, 23))
+>rest : Symbol(rest, Decl(dependentDestructuredRestVariables1.tsx, 79, 34))
+  }
+
+  throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+};
+
