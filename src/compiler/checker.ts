@@ -34450,7 +34450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isThisProperty(location) || isThisInitializedObjectBindingExpression(location) || isObjectBindingPattern(location.parent) && isThisInitializedDeclaration(location.parent.parent))
         ) {
             const parentSymbol = getParentOfSymbol(prop);
-            if (parentSymbol && parentSymbol.flags&SymbolFlags.Class && isNodeUsedDuringClassInitialization(location)) {
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Class && isNodeUsedDuringClassInitialization(location)) {
                 if (errorNode) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), symbolToString(parentSymbol));
                 }
