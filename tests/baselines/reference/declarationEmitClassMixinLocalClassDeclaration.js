@@ -80,11 +80,10 @@ type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T
 export declare const Mixin: MixinHelperFunc;
 export declare class Base {
 }
-declare const XmlElement2_base: {
+export declare class XmlElement2 extends ({} as {
     new (): {
         num: number;
     };
-};
-export declare class XmlElement2 extends XmlElement2_base {
+}) {
 }
 export {};

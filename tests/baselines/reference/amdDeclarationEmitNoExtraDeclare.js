@@ -86,7 +86,6 @@ declare module "Configurable" {
 declare module "Class" {
     export class HiddenClass {
     }
-    const ActualClass_base: typeof HiddenClass;
-    export class ActualClass extends ActualClass_base {
+    export class ActualClass extends ({} as typeof HiddenClass) {
     }
 }

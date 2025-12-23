@@ -60,9 +60,8 @@ type OutputFrom<TFields> = {
     [K in keyof TFields]: "_TOutput" extends keyof TFields[K] ? TFields[K]["_TOutput"] : never;
 };
 declare function string(): Type<string>;
-declare const A_base: Class<OutputFrom<{
+export declare class A extends ({} as Class<OutputFrom<{
     a: typeof string;
-}>>;
-export declare class A extends A_base {
+}>>) {
 }
 export {};

@@ -73,12 +73,10 @@ declare class ConcreteBase {
 declare abstract class AbstractBase {
     abstract abstractBaseMethod(): void;
 }
-declare const DerivedFromConcrete_base: typeof ConcreteBase & (abstract new (...args: any) => Mixin);
-declare class DerivedFromConcrete extends DerivedFromConcrete_base {
+declare class DerivedFromConcrete extends ({} as typeof ConcreteBase & (abstract new (...args: any) => Mixin)) {
 }
 declare const wasConcrete: DerivedFromConcrete;
-declare const DerivedFromAbstract_base: typeof AbstractBase & (abstract new (...args: any) => Mixin);
-declare class DerivedFromAbstract extends DerivedFromAbstract_base {
+declare class DerivedFromAbstract extends ({} as typeof AbstractBase & (abstract new (...args: any) => Mixin)) {
     abstractBaseMethod(): void;
 }
 declare const wasAbstract: DerivedFromAbstract;
