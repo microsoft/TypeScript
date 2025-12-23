@@ -118,7 +118,9 @@ try {
         var env_1 = { stack: [], error: void 0, hasError: false };
         try {
             var _e = __addDisposableResource(env_1, _e_1, true);
-            ;
+            {
+                ;
+            }
         }
         catch (e_2) {
             env_1.error = e_2;
@@ -159,7 +161,9 @@ export function test() {
                 case 3:
                     _f.trys.push([3, 4, 5, 8]);
                     _b = __addDisposableResource(env_2, _b_1, true);
-                    ;
+                    {
+                        ;
+                    }
                     return [3 /*break*/, 8];
                 case 4:
                     e_3 = _f.sent();

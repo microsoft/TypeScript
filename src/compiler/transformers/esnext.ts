@@ -295,11 +295,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             // produces a shallow transformation to:
             //
             //  for (const x_1 of y) {
-            //    using x = x;
-            //    ...
+            //    using x = x_1;
+            //    { ... }
             //  }
             //
-            // before handing the shallow transformation back to the visitor for an in-depth transformation.
+            // where the original loop body is wrapped in an additional block scope
+            // to handle shadowing variables naturally through block scoping.
             const forInitializer = node.initializer;
             const forDecl = firstOrUndefined(forInitializer.declarations) || factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined));
 
@@ -308,6 +309,26 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             const usingVar = factory.updateVariableDeclaration(forDecl, forDecl.name, /*exclamationToken*/ undefined, /*type*/ undefined, temp);
             const usingVarList = factory.createVariableDeclarationList([usingVar], isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using);
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
+
+            // Wrap the original loop body in an additional block scope to handle shadowing
+            // Don't create an extra block if the original statement is empty or contains only empty statements
+            const isEmptyBlock = isBlock(node.statement) && (
+                node.statement.statements.length === 0 ||
+                node.statement.statements.every(stmt => stmt.kind === SyntaxKind.EmptyStatement)
+            );
+            const shouldWrapInBlock = !isEmptyBlock;
+
+            const statements: Statement[] = [usingVarStatement];
+            if (shouldWrapInBlock) {
+                const wrappedStatement = isBlock(node.statement) ?
+                    node.statement :
+                    factory.createBlock([node.statement], /*multiLine*/ true);
+                statements.push(wrappedStatement);
+            }
+            else {
+                statements.push(...(isBlock(node.statement) ? node.statement.statements : [node.statement]));
+            }
+
             return visitNode(
                 factory.updateForOfStatement(
                     node,
@@ -316,15 +337,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
-                    isBlock(node.statement) ?
-                        factory.updateBlock(node.statement, [
-                            usingVarStatement,
-                            ...node.statement.statements,
-                        ]) :
-                        factory.createBlock([
-                            usingVarStatement,
-                            node.statement,
-                        ], /*multiLine*/ true),
+                    factory.createBlock(statements, /*multiLine*/ true),
                 ),
                 visitor,
                 isStatement,

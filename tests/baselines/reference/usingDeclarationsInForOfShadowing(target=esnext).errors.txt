@@ -1,0 +1,24 @@
+main.ts(12,7): error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
+
+
+==== main.ts (1 errors) ====
+    class Foo {}
+    
+    for (using foo of []) {
+      const foo = new Foo();
+    }
+    
+    for (using bar of []) {
+      let bar = "test";
+    }
+    
+    for (using baz of []) {
+      var baz = 42;
+          ~~~
+!!! error TS2481: Cannot initialize outer scoped variable 'baz' in the same scope as block scoped declaration 'baz'.
+    }
+    
+==== tslib.d.ts (0 errors) ====
+    export declare function __addDisposableResource<T>(env: any, value: T, async: boolean): T;
+    export declare function __disposeResources(env: any): void;
+    
