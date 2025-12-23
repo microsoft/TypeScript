@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/narrowByTypePredicateFromElementAccessExpression1.ts] ////
+
+=== narrowByTypePredicateFromElementAccessExpression1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62247
+
+const isBar = Symbol("isBar");
+>isBar : unique symbol
+>      : ^^^^^^^^^^^^^
+>Symbol("isBar") : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>"isBar" : "isBar"
+>        : ^^^^^^^
+
+abstract class Foo {
+>Foo : Foo
+>    : ^^^
+
+  abstract [isBar](): this is Bar;
+>[isBar] : () => this is Bar
+>        : ^^^^^^           
+>isBar : unique symbol
+>      : ^^^^^^^^^^^^^
+
+  method(): void {
+>method : () => void
+>       : ^^^^^^    
+
+    if (this[isBar]()) {
+>this[isBar]() : boolean
+>              : ^^^^^^^
+>this[isBar] : () => this is Bar
+>            : ^^^^^^           
+>this : this
+>     : ^^^^
+>isBar : unique symbol
+>      : ^^^^^^^^^^^^^
+
+      this.barMethod(); // ok
+>this.barMethod() : void
+>                 : ^^^^
+>this.barMethod : () => void
+>               : ^^^^^^    
+>this : this & Bar
+>     : ^^^^^^^^^^
+>barMethod : () => void
+>          : ^^^^^^    
+    }
+  }
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>    : ^^^
+>Foo : Foo
+>    : ^^^
+
+  override [isBar](): this is Bar {
+>[isBar] : () => this is Bar
+>        : ^^^^^^           
+>isBar : unique symbol
+>      : ^^^^^^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+
+  barMethod(): void {}
+>barMethod : () => void
+>          : ^^^^^^    
+}
+

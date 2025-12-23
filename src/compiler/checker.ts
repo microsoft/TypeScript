@@ -28001,8 +28001,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (
-            expression.expression.kind === SyntaxKind.PropertyAccessExpression &&
-            isOrContainsMatchingReference(reference, (expression.expression as PropertyAccessExpression).expression)
+            (expression.expression.kind === SyntaxKind.PropertyAccessExpression || expression.expression.kind === SyntaxKind.ElementAccessExpression && isConstantReference((expression.expression as ElementAccessExpression).argumentExpression)) &&
+            isOrContainsMatchingReference(reference, (expression.expression as PropertyAccessExpression | ElementAccessExpression).expression)
         ) {
             return true;
         }
