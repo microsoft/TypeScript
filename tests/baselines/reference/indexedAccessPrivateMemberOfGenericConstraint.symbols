@@ -37,3 +37,283 @@ type Z<T extends A & B> = T["a"];
 >B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
 >T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 10, 7))
 
+type R<T extends A, T2 extends B> = (T | T2)["a"];
+>R : Symbol(R, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 10, 33))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 11, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 11, 19))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 11, 7))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 11, 19))
+
+type S<T extends B, T2 extends A> = (T | T2)["a"];
+>S : Symbol(S, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 11, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 12, 7))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 12, 19))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 12, 7))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 12, 19))
+
+type U<T extends A> = (T & B)["a"];
+>U : Symbol(U, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 12, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 13, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 13, 7))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+
+type V<T extends A, T2 extends B> = (T & T2)["a"];
+>V : Symbol(V, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 13, 35))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 14, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 14, 19))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 14, 7))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 14, 19))
+
+type W<T extends B, T2 extends A> = (T & T2)["a"];
+>W : Symbol(W, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 14, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 7))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 19))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 7))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 19))
+
+class C {
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+
+  declare private a: number;
+>a : Symbol(C.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 17, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+
+  declare a: string;
+>a : Symbol(D.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 21, 9))
+}
+
+type X2<T extends C> = [T["a"], (T | D)["a"]];
+>X2 : Symbol(X2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 23, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 25, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 25, 8))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 25, 8))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+
+type Y2<T extends C | D> = T["a"];
+>Y2 : Symbol(Y2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 25, 46))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 26, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 26, 8))
+
+type Z2<T extends C & D> = T["a"];
+>Z2 : Symbol(Z2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 26, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 27, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 27, 8))
+
+type R2<T extends C, T2 extends D> = (T | T2)["a"];
+>R2 : Symbol(R2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 27, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 28, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 28, 20))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 28, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 28, 20))
+
+type S2<T extends D, T2 extends C> = (T | T2)["a"];
+>S2 : Symbol(S2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 28, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 29, 8))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 29, 20))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 29, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 29, 20))
+
+type U2<T extends C> = (T & D)["a"];
+>U2 : Symbol(U2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 29, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 30, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 30, 8))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+
+type V2<T extends C, T2 extends D> = (T & T2)["a"];
+>V2 : Symbol(V2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 30, 36))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 31, 8))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 31, 20))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 31, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 31, 20))
+
+type W2<T extends D, T2 extends C> = (T & T2)["a"];
+>W2 : Symbol(W2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 31, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 8))
+>D : Symbol(D, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 19, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 20))
+>C : Symbol(C, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 15, 50))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 20))
+
+class E {
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+
+  declare a: number;
+>a : Symbol(E.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 34, 9))
+}
+
+class F {
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+
+  declare private a: string;
+>a : Symbol(F.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 38, 9))
+}
+
+type X3<T extends E> = [T["a"], (T | F)["a"]];
+>X3 : Symbol(X3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 40, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 42, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 42, 8))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 42, 8))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+
+type Y3<T extends E | F> = T["a"];
+>Y3 : Symbol(Y3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 42, 46))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 43, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 43, 8))
+
+type Z3<T extends E & F> = T["a"];
+>Z3 : Symbol(Z3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 43, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 44, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 44, 8))
+
+type R3<T extends E, T2 extends F> = (T | T2)["a"];
+>R3 : Symbol(R3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 44, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 45, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 45, 20))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 45, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 45, 20))
+
+type S3<T extends F, T2 extends E> = (T | T2)["a"];
+>S3 : Symbol(S3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 45, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 46, 8))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 46, 20))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 46, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 46, 20))
+
+type U3<T extends E> = (T & F)["a"];
+>U3 : Symbol(U3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 46, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 47, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 47, 8))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+
+type V3<T extends E, T2 extends F> = (T & T2)["a"];
+>V3 : Symbol(V3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 47, 36))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 48, 8))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 48, 20))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 48, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 48, 20))
+
+type W3<T extends F, T2 extends E> = (T & T2)["a"];
+>W3 : Symbol(W3, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 48, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 8))
+>F : Symbol(F, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 36, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 20))
+>E : Symbol(E, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 32, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 20))
+
+class G {
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+
+  declare b: number;
+>b : Symbol(G.b, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 51, 9))
+}
+
+class H {
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+
+  declare private a: string;
+>a : Symbol(H.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 55, 9))
+}
+
+type X4<T extends G> = [T["a"], (T | H)["a"]];
+>X4 : Symbol(X4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 57, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 59, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 59, 8))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 59, 8))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+
+type Y4<T extends G | H> = T["a"];
+>Y4 : Symbol(Y4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 59, 46))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 60, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 60, 8))
+
+type Z4<T extends G & H> = T["a"];
+>Z4 : Symbol(Z4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 60, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 61, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 61, 8))
+
+type R4<T extends G, T2 extends H> = (T | T2)["a"];
+>R4 : Symbol(R4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 61, 34))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 62, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 62, 20))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 62, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 62, 20))
+
+type S4<T extends H, T2 extends G> = (T | T2)["a"];
+>S4 : Symbol(S4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 62, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 63, 8))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 63, 20))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 63, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 63, 20))
+
+type U4<T extends G> = (T & H)["a"];
+>U4 : Symbol(U4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 63, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 64, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 64, 8))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+
+type V4<T extends G, T2 extends H> = (T & T2)["a"];
+>V4 : Symbol(V4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 64, 36))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 65, 8))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 65, 20))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 65, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 65, 20))
+
+type W4<T extends H, T2 extends G> = (T & T2)["a"];
+>W4 : Symbol(W4, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 65, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 66, 8))
+>H : Symbol(H, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 53, 1))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 66, 20))
+>G : Symbol(G, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 49, 51))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 66, 8))
+>T2 : Symbol(T2, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 66, 20))
+
