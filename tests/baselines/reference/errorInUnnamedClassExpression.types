@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/errorInUnnamedClassExpression.ts] ////
+
+=== errorInUnnamedClassExpression.ts ===
+// https://github.com/microsoft/TypeScript/issues/62920
+
+let Foo = class {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>class {    constructor() {        this.bar++;    }    abstract bar;} : typeof Foo
+>                                                                     : ^^^^^^^^^^
+
+    constructor() {
+        this.bar++;
+>this.bar++ : number
+>           : ^^^^^^
+>this.bar : any
+>         : ^^^
+>this : this
+>     : ^^^^
+>bar : any
+>    : ^^^
+    }
+    abstract bar;
+>bar : any
+>    : ^^^
+
+};
+
