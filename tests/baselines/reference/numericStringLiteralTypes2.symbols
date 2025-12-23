@@ -1,0 +1,76 @@
+//// [tests/cases/conformance/types/literal/numericStringLiteralTypes2.ts] ////
+
+=== numericStringLiteralTypes2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55383
+
+type LiteralType = string | number | boolean;
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+
+type ValueGetter<ValueType extends LiteralType = LiteralType> = () => ValueType;
+>ValueGetter : Symbol(ValueGetter, Decl(numericStringLiteralTypes2.ts, 2, 45))
+>ValueType : Symbol(ValueType, Decl(numericStringLiteralTypes2.ts, 3, 17))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+>ValueType : Symbol(ValueType, Decl(numericStringLiteralTypes2.ts, 3, 17))
+
+type Schema = SchemaArray | SchemaObject | LiteralType;
+>Schema : Symbol(Schema, Decl(numericStringLiteralTypes2.ts, 3, 80))
+>SchemaArray : Symbol(SchemaArray, Decl(numericStringLiteralTypes2.ts, 5, 55))
+>SchemaObject : Symbol(SchemaObject, Decl(numericStringLiteralTypes2.ts, 6, 67))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+
+type SchemaArray = Array<SchemaObject | SchemaArray | LiteralType>;
+>SchemaArray : Symbol(SchemaArray, Decl(numericStringLiteralTypes2.ts, 5, 55))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>SchemaObject : Symbol(SchemaObject, Decl(numericStringLiteralTypes2.ts, 6, 67))
+>SchemaArray : Symbol(SchemaArray, Decl(numericStringLiteralTypes2.ts, 5, 55))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+
+type SchemaObject = {
+>SchemaObject : Symbol(SchemaObject, Decl(numericStringLiteralTypes2.ts, 6, 67))
+
+  [key: string]: SchemaObject | SchemaArray | LiteralType;
+>key : Symbol(key, Decl(numericStringLiteralTypes2.ts, 8, 3))
+>SchemaObject : Symbol(SchemaObject, Decl(numericStringLiteralTypes2.ts, 6, 67))
+>SchemaArray : Symbol(SchemaArray, Decl(numericStringLiteralTypes2.ts, 5, 55))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+
+};
+
+type InferValuesFromSchema<S extends Schema> = S extends LiteralType
+>InferValuesFromSchema : Symbol(InferValuesFromSchema, Decl(numericStringLiteralTypes2.ts, 9, 2))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>Schema : Symbol(Schema, Decl(numericStringLiteralTypes2.ts, 3, 80))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>LiteralType : Symbol(LiteralType, Decl(numericStringLiteralTypes2.ts, 0, 0))
+
+  ? ValueGetter<S>
+>ValueGetter : Symbol(ValueGetter, Decl(numericStringLiteralTypes2.ts, 2, 45))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+
+  : S extends SchemaArray
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>SchemaArray : Symbol(SchemaArray, Decl(numericStringLiteralTypes2.ts, 5, 55))
+
+  ? {
+      [K in keyof S]: InferValuesFromSchema<S[K]>; // `S[K]` should satisfy the required `Schema` constraint here
+>K : Symbol(K, Decl(numericStringLiteralTypes2.ts, 15, 7))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>InferValuesFromSchema : Symbol(InferValuesFromSchema, Decl(numericStringLiteralTypes2.ts, 9, 2))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>K : Symbol(K, Decl(numericStringLiteralTypes2.ts, 15, 7))
+    }
+  : S extends SchemaObject
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>SchemaObject : Symbol(SchemaObject, Decl(numericStringLiteralTypes2.ts, 6, 67))
+
+  ? {
+      [K in keyof S]: InferValuesFromSchema<S[K]>;
+>K : Symbol(K, Decl(numericStringLiteralTypes2.ts, 19, 7))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>InferValuesFromSchema : Symbol(InferValuesFromSchema, Decl(numericStringLiteralTypes2.ts, 9, 2))
+>S : Symbol(S, Decl(numericStringLiteralTypes2.ts, 11, 27))
+>K : Symbol(K, Decl(numericStringLiteralTypes2.ts, 19, 7))
+    }
+  : never;
+
