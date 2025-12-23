@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType1.ts] ////
+
+=== reverseMappedTypeInferFromFilteringNameType1.ts ===
+declare class User {
+>User : User
+>     : ^^^^
+
+  public name: string;
+>name : string
+>     : ^^^^^^
+
+  public last: string;
+>last : string
+>     : ^^^^^^
+
+  public age: number;
+>age : number
+>    : ^^^^^^
+}
+
+type AllowedNeeds<T> = {
+>AllowedNeeds : AllowedNeeds<T>
+>             : ^^^^^^^^^^^^^^^
+
+  [K in keyof T as K & keyof User]: T[K];
+};
+
+declare function extend<T>(
+>extend : <T>(input: { [K in keyof T]: { needs: AllowedNeeds<T[K]>; compute: (x: Pick<User, keyof T[K] & keyof User>) => any; }; }) => T
+>       : ^ ^^     ^^                                                                                                             ^^^^^ 
+
+  input: {
+>input : { [K in keyof T]: { needs: AllowedNeeds<T[K]>; compute: (x: Pick<User, keyof T[K] & keyof User>) => any; }; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^                                               ^^^^^^
+
+    [K in keyof T]: {
+      needs: AllowedNeeds<T[K]>
+>needs : AllowedNeeds<T[K]>
+>      : ^^^^^^^^^^^^^^^^^^
+
+      compute: (x: Pick<User, keyof T[K] & keyof User>) => any;
+>compute : (x: Pick<User, keyof T[K] & keyof User>) => any
+>        : ^ ^^                                   ^^^^^   
+>x : Pick<User, keyof T[K] & keyof User>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    };
+  }
+): T
+
+const inferred1 = extend({
+>inferred1 : { fullName: { name: boolean; last: boolean; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extend({  fullName: {    needs: {      name: true,      last: true,    },    compute: (user) => `${user.name} ${user.last}`,  },}) : { fullName: { name: boolean; last: boolean; }; }
+>                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extend : <T>(input: { [K in keyof T]: { needs: AllowedNeeds<T[K]>; compute: (x: Pick<User, keyof T[K] & keyof User>) => any; }; }) => T
+>       : ^ ^^     ^^                                                                                                             ^^^^^ 
+>{  fullName: {    needs: {      name: true,      last: true,    },    compute: (user) => `${user.name} ${user.last}`,  },} : { fullName: { needs: { name: true; last: true; }; compute: (user: Pick<User, "name" | "last">) => string; }; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  fullName: {
+>fullName : { needs: { name: true; last: true; }; compute: (user: Pick<User, "name" | "last">) => string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    needs: {      name: true,      last: true,    },    compute: (user) => `${user.name} ${user.last}`,  } : { needs: { name: true; last: true; }; compute: (user: Pick<User, "name" | "last">) => string; }
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    needs: {
+>needs : { name: true; last: true; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      name: true,      last: true,    } : { name: true; last: true; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      name: true,
+>name : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+      last: true,
+>last : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+    },
+    compute: (user) => `${user.name} ${user.last}`,
+>compute : (user: Pick<User, "name" | "last">) => string
+>        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(user) => `${user.name} ${user.last}` : (user: Pick<User, "name" | "last">) => string
+>                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>user : Pick<User, "name" | "last">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>`${user.name} ${user.last}` : string
+>                            : ^^^^^^
+>user.name : string
+>          : ^^^^^^
+>user : Pick<User, "name" | "last">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>user.last : string
+>          : ^^^^^^
+>user : Pick<User, "name" | "last">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>last : string
+>     : ^^^^^^
+
+  },
+});
+
+const inferred2 = extend({
+>inferred2 : { fullName: { last: boolean; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extend({  fullName: {    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  },}) : { fullName: { last: boolean; }; }
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extend : <T>(input: { [K in keyof T]: { needs: AllowedNeeds<T[K]>; compute: (x: Pick<User, keyof T[K] & keyof User>) => any; }; }) => T
+>       : ^ ^^     ^^                                                                                                             ^^^^^ 
+>{  fullName: {    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  },} : { fullName: { needs: { last: true; doesntExist: boolean; }; compute: (user: Pick<User, "last">) => void; }; }
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  fullName: {
+>fullName : { needs: { last: true; doesntExist: boolean; }; compute: (user: Pick<User, "last">) => void; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  } : { needs: { last: true; doesntExist: boolean; }; compute: (user: Pick<User, "last">) => void; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    needs: {
+>needs : { last: true; doesntExist: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      last: true,      doesntExist: true // error    } : { last: true; doesntExist: boolean; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      last: true,
+>last : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+      doesntExist: true // error
+>doesntExist : boolean
+>            : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    },
+    compute: (user) => {},
+>compute : (user: Pick<User, "last">) => void
+>        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(user) => {} : (user: Pick<User, "last">) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>user : Pick<User, "last">
+>     : ^^^^^^^^^^^^^^^^^^
+
+  },
+});
+

@@ -14649,14 +14649,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType) || unknownType, readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         const limitedConstraint = getLimitedConstraint(type);
+        const nameType = getNameTypeFromMappedType(type.mappedType);
+
         for (const prop of getPropertiesOfType(type.source)) {
-            // In case of a reverse mapped type with an intersection constraint, if we were able to
-            // extract the filtering type literals we skip those properties that are not assignable to them,
+            // In case of a reverse mapped type with an intersection constraint or a name type
+            // we skip those properties that are not assignable to them
             // because the extra properties wouldn't get through the application of the mapped type anyway
-            if (limitedConstraint) {
+            if (limitedConstraint || nameType) {
                 const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
-                if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                if (limitedConstraint && !isTypeAssignableTo(propertyNameType, limitedConstraint)) {
                     continue;
+                }
+                if (nameType) {
+                    const nameMapper = appendTypeMapping(type.mappedType.mapper, getTypeParameterFromMappedType(type.mappedType), propertyNameType);
+                    const instantiatedNameType = instantiateType(nameType, nameMapper);
+                    if (instantiatedNameType.flags & TypeFlags.Never) {
+                        continue;
+                    }
                 }
             }
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
@@ -27300,10 +27309,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isGenericMappedType(source) && isGenericMappedType(target)) {
                 inferFromGenericMappedTypes(source, target);
             }
-            if (getObjectFlags(target) & ObjectFlags.Mapped && !(target as MappedType).declaration.nameType) {
-                const constraintType = getConstraintTypeFromMappedType(target as MappedType);
-                if (inferToMappedType(source, target as MappedType, constraintType)) {
-                    return;
+            if (getObjectFlags(target) & ObjectFlags.Mapped) {
+                const mappedType = target as MappedType;
+                if (getMappedTypeNameTypeKind(mappedType) !== MappedTypeNameTypeKind.Remapping) {
+                    const constraintType = getConstraintTypeFromMappedType(mappedType);
+                    if (inferToMappedType(source, mappedType, constraintType)) {
+                        return;
+                    }
                 }
             }
             // Infer from the members of source and target only if the two types are possibly related
