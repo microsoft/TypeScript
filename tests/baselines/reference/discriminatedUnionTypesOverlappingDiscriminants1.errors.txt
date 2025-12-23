@@ -1,0 +1,196 @@
+discriminatedUnionTypesOverlappingDiscriminants1.ts(83,7): error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+  Types of property 'meal' are incompatible.
+    Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+discriminatedUnionTypesOverlappingDiscriminants1.ts(89,7): error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+  Types of property 'audience' are incompatible.
+    Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+discriminatedUnionTypesOverlappingDiscriminants1.ts(97,7): error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+  Types of property 'meal' are incompatible.
+    Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+discriminatedUnionTypesOverlappingDiscriminants1.ts(103,7): error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+  Types of property 'audience' are incompatible.
+    Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+discriminatedUnionTypesOverlappingDiscriminants1.ts(111,7): error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+  Types of property 'meal' are incompatible.
+    Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+discriminatedUnionTypesOverlappingDiscriminants1.ts(117,7): error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+  Types of property 'audience' are incompatible.
+    Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+discriminatedUnionTypesOverlappingDiscriminants1.ts(125,7): error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow" | "vegetable_pig"; }' is not assignable to type 'Target'.
+  Types of property 'meal' are incompatible.
+    Type '"vegetable_cow" | "vegetable_pig"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'.
+      Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+discriminatedUnionTypesOverlappingDiscriminants1.ts(131,7): error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+  Types of property 'audience' are incompatible.
+    Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+
+
+==== discriminatedUnionTypesOverlappingDiscriminants1.ts (8 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57231
+    
+    type Food = "apple" | "orange";
+    type Vegetable = "spinach" | "carrot";
+    type Other = "milk" | "water";
+    type Custom = "air" | "soil";
+    
+    type Target =
+      | {
+          audience: "earth";
+          meal:
+            | Custom
+            | `fruit_${Food}`
+            | `vegetable_${Vegetable}`
+            | `other_${Other}`;
+        }
+      | {
+          audience: "mars" | "jupiter";
+          meal: string;
+        };
+    
+    const target1: Target = {
+      audience: "earth",
+      meal: `vegetable_carrot`,
+    };
+    
+    const target2: Target = {
+      meal: `vegetable_carrot`,
+      audience: "earth",
+    };
+    
+    const typedVegetableWithInitializer: Vegetable = 'carrot';
+    
+    const target3: Target = {
+      audience: "earth",
+      meal: `vegetable_${typedVegetableWithInitializer}`,
+    };
+    
+    const target4: Target = {
+      meal: `vegetable_${typedVegetableWithInitializer}`,
+      audience: "earth",
+    };
+    
+    const typedCarrotWithInitializer: "carrot" = 'carrot';
+    
+    const target5: Target = {
+      audience: "earth",
+      meal: `vegetable_${typedCarrotWithInitializer}`,
+    };
+    
+    const target6: Target = {
+      meal: `vegetable_${typedCarrotWithInitializer}`,
+      audience: "earth",
+    };
+    
+    const carrotInitializer = 'carrot';
+    
+    const target7: Target = {
+      audience: "earth",
+      meal: `vegetable_${carrotInitializer}`,
+    };
+    
+    const target8: Target = {
+      meal: `vegetable_${carrotInitializer}`,
+      audience: "earth",
+    };
+    
+    declare const vegetable: Vegetable;
+    
+    const target9: Target = {
+      audience: "earth",
+      meal: `vegetable_${vegetable}`,
+    };
+    
+    const target10: Target = {
+      meal: `vegetable_${vegetable}`,
+      audience: "earth",
+    };
+    
+    const typedNonVegetableWithInitializer: "cow" | "pig" = "cow";
+    
+    // error
+    const target11: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'meal' are incompatible.
+!!! error TS2322:     Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+      audience: "earth",
+      meal: `vegetable_${typedNonVegetableWithInitializer}`,
+    };
+    
+    // error
+    const target12: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'audience' are incompatible.
+!!! error TS2322:     Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+      meal: `vegetable_${typedNonVegetableWithInitializer}`,
+      audience: "earth",
+    };
+    
+    const typedCowWithInitializer: "cow" = "cow";
+    
+    // error
+    const target13: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'meal' are incompatible.
+!!! error TS2322:     Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+      audience: "earth",
+      meal: `vegetable_${typedCowWithInitializer}`,
+    };
+    
+    // error
+    const target14: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'audience' are incompatible.
+!!! error TS2322:     Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+      meal: `vegetable_${typedCowWithInitializer}`,
+      audience: "earth",
+    };
+    
+    const cowInitializer = "cow";
+    
+    // error
+    const target15: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'meal' are incompatible.
+!!! error TS2322:     Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+      audience: "earth",
+      meal: `vegetable_${cowInitializer}`,
+    };
+    
+    // error
+    const target16: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'audience' are incompatible.
+!!! error TS2322:     Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+      meal: `vegetable_${cowInitializer}`,
+      audience: "earth",
+    };
+    
+    declare const nonVegetable: "cow" | "pig";
+    
+    // error
+    const target17: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ audience: "earth"; meal: "vegetable_cow" | "vegetable_pig"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'meal' are incompatible.
+!!! error TS2322:     Type '"vegetable_cow" | "vegetable_pig"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'.
+!!! error TS2322:       Type '"vegetable_cow"' is not assignable to type 'Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"'. Did you mean '"vegetable_carrot"'?
+      audience: "earth",
+      meal: `vegetable_${nonVegetable}`,
+    };
+    
+    // error
+    const target18: Target = {
+          ~~~~~~~~
+!!! error TS2322: Type '{ meal: string; audience: "earth"; }' is not assignable to type 'Target'.
+!!! error TS2322:   Types of property 'audience' are incompatible.
+!!! error TS2322:     Type '"earth"' is not assignable to type '"mars" | "jupiter"'.
+      meal: `vegetable_${nonVegetable}`,
+      audience: "earth",
+    };
+    

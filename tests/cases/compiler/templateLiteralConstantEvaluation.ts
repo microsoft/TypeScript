@@ -13,3 +13,6 @@ const c = `${b} 3`;
 const d = `${b} 3` as const;
 
 fn(`${b} 3`);
+
+const empty = "";
+const empty2 = `${empty}`;
