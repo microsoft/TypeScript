@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/usingDeclarationWithGlobalInterfaceModification.ts] ////
+
+=== usingDeclarationWithGlobalInterfaceModification.ts ===
+// Test case that demonstrates the issue from https://github.com/microsoft/TypeScript/issues/62121
+// When an empty global Disposable interface is declared, it should NOT affect
+// the checking for Symbol.dispose properties
+
+declare global {
+>global : Symbol(global, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 0, 0))
+
+  interface Disposable {}
+>Disposable : Symbol(Disposable, Decl(lib.esnext.disposable.d.ts, --, --), Decl(usingDeclarationWithGlobalInterfaceModification.ts, 4, 16))
+}
+
+// This should pass - has Symbol.dispose method
+const validDisposable = {
+>validDisposable : Symbol(validDisposable, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 9, 5))
+
+    [Symbol.dispose]() {
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationWithGlobalInterfaceModification.ts, 9, 25))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+        // disposed
+    }
+};
+
+// This should fail - no Symbol.dispose method
+const invalidDisposable = {
+>invalidDisposable : Symbol(invalidDisposable, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 16, 5))
+
+    cleanup() {
+>cleanup : Symbol(cleanup, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 16, 27))
+
+        // cleanup
+    }
+};
+
+// With the fix, the checker should directly check for Symbol.dispose properties
+// rather than relying on assignability to the global Disposable interface
+using valid = validDisposable;      // should pass
+>valid : Symbol(valid, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 24, 5))
+>validDisposable : Symbol(validDisposable, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 9, 5))
+
+using invalid = invalidDisposable;  // should error
+>invalid : Symbol(invalid, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 25, 5))
+>invalidDisposable : Symbol(invalidDisposable, Decl(usingDeclarationWithGlobalInterfaceModification.ts, 16, 5))
+
+export {};
