@@ -646,6 +646,8 @@ function executeCommandLineWorker(
         const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
         const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
+            // eslint-disable-next-line no-restricted-syntax
+            sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
             if (configParseResult.errors.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
                     sys,
@@ -655,8 +657,6 @@ function executeCommandLineWorker(
                 configParseResult.errors.forEach(reportDiagnostic);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            // eslint-disable-next-line no-restricted-syntax
-            sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
