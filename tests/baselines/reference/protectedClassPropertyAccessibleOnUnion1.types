@@ -1,0 +1,146 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleOnUnion1.ts] ////
+
+=== protectedClassPropertyAccessibleOnUnion1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59289
+
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+  protected pro: number;
+>pro : number
+>    : ^^^^^^
+
+  constructor(foo?: Foo | Bar) {
+>foo : Foo | Bar | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+    this.pro = foo ? foo.pro + 1 : Math.random();
+>this.pro = foo ? foo.pro + 1 : Math.random() : number
+>                                             : ^^^^^^
+>this.pro : number
+>         : ^^^^^^
+>this : this
+>     : ^^^^
+>pro : number
+>    : ^^^^^^
+>foo ? foo.pro + 1 : Math.random() : number
+>                                  : ^^^^^^
+>foo : Foo | Bar | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>foo.pro + 1 : number
+>            : ^^^^^^
+>foo.pro : number
+>        : ^^^^^^
+>foo : Foo | Bar
+>    : ^^^^^^^^^
+>pro : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+  }
+}
+
+class Bar extends Foo {}
+>Bar : Bar
+>    : ^^^
+>Foo : Foo
+>    : ^^^
+
+class Baz {
+>Baz : Baz
+>    : ^^^
+
+  protected pro: number;
+>pro : number
+>    : ^^^^^^
+
+  constructor(arg?: Baz | Qwe) {
+>arg : Baz | Qwe | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+    this.pro = arg ? arg.pro + 1 : Math.random(); // error
+>this.pro = arg ? arg.pro + 1 : Math.random() : any
+>                                             : ^^^
+>this.pro : number
+>         : ^^^^^^
+>this : this
+>     : ^^^^
+>pro : number
+>    : ^^^^^^
+>arg ? arg.pro + 1 : Math.random() : any
+>                                  : ^^^
+>arg : Baz | Qwe | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>arg.pro + 1 : any
+>            : ^^^
+>arg.pro : any
+>        : ^^^
+>arg : Baz | Qwe
+>    : ^^^^^^^^^
+>pro : any
+>    : ^^^
+>1 : 1
+>  : ^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+  }
+}
+
+class Qwe {
+>Qwe : Qwe
+>    : ^^^
+
+  protected pro: number = 42;
+>pro : number
+>    : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/46049
+
+export class A {
+>A : A
+>  : ^
+
+  protected bar(): void {}
+>bar : () => void
+>    : ^^^^^^    
+
+  baz() {
+>baz : () => void
+>    : ^^^^^^^^^^
+
+    const unionRef: this | A = this;
+>unionRef : A | this
+>         : ^^^^^^^^
+>this : this
+>     : ^^^^
+
+    unionRef.bar();
+>unionRef.bar() : void
+>               : ^^^^
+>unionRef.bar : () => void
+>             : ^^^^^^    
+>unionRef : A | this
+>         : ^^^^^^^^
+>bar : () => void
+>    : ^^^^^^    
+  }
+}
+

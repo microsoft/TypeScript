@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleOnUnion1.ts] ////
+
+=== protectedClassPropertyAccessibleOnUnion1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59289
+
+class Foo {
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 0, 0))
+
+  protected pro: number;
+>pro : Symbol(Foo.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 2, 11))
+
+  constructor(foo?: Foo | Bar) {
+>foo : Symbol(foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 5, 14))
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 8, 1))
+
+    this.pro = foo ? foo.pro + 1 : Math.random();
+>this.pro : Symbol(Foo.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 2, 11))
+>this : Symbol(Foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 0, 0))
+>pro : Symbol(Foo.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 2, 11))
+>foo : Symbol(foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 5, 14))
+>foo.pro : Symbol(Foo.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 2, 11))
+>foo : Symbol(foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 5, 14))
+>pro : Symbol(Foo.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 2, 11))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+class Bar extends Foo {}
+>Bar : Symbol(Bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 0, 0))
+
+class Baz {
+>Baz : Symbol(Baz, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 10, 24))
+
+  protected pro: number;
+>pro : Symbol(Baz.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 12, 11))
+
+  constructor(arg?: Baz | Qwe) {
+>arg : Symbol(arg, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 15, 14))
+>Baz : Symbol(Baz, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 10, 24))
+>Qwe : Symbol(Qwe, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 18, 1))
+
+    this.pro = arg ? arg.pro + 1 : Math.random(); // error
+>this.pro : Symbol(Baz.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 12, 11))
+>this : Symbol(Baz, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 10, 24))
+>pro : Symbol(Baz.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 12, 11))
+>arg : Symbol(arg, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 15, 14))
+>arg : Symbol(arg, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 15, 14))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+class Qwe {
+>Qwe : Symbol(Qwe, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 18, 1))
+
+  protected pro: number = 42;
+>pro : Symbol(Qwe.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 20, 11))
+}
+
+// https://github.com/microsoft/TypeScript/issues/46049
+
+export class A {
+>A : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+
+  protected bar(): void {}
+>bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+
+  baz() {
+>baz : Symbol(A.baz, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 27, 26))
+
+    const unionRef: this | A = this;
+>unionRef : Symbol(unionRef, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 29, 9))
+>A : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+>this : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+
+    unionRef.bar();
+>unionRef.bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+>unionRef : Symbol(unionRef, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 29, 9))
+>bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+  }
+}
+
