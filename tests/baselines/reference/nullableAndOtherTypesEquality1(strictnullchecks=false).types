@@ -1,0 +1,255 @@
+//// [tests/cases/compiler/nullableAndOtherTypesEquality1.ts] ////
+
+=== nullableAndOtherTypesEquality1.ts ===
+// https://github.com/microsoft/TypeScript/issues/11920
+
+if (null === undefined) {
+>null === undefined : boolean
+>                   : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (null == undefined) {
+>null == undefined : boolean
+>                  : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+declare const str: string;
+>str : string
+>    : ^^^^^^
+
+declare const strOrNull: string | null;
+>strOrNull : string
+>          : ^^^^^^
+
+declare const strOrUndef: string | undefined;
+>strOrUndef : string
+>           : ^^^^^^
+
+declare const strOrNullUndef: string | null | undefined;
+>strOrNullUndef : string
+>               : ^^^^^^
+
+if (str === null) {
+>str === null : boolean
+>             : ^^^^^^^
+>str : string
+>    : ^^^^^^
+}
+if (str === undefined) {
+>str === undefined : boolean
+>                  : ^^^^^^^
+>str : string
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (str == null) {
+>str == null : boolean
+>            : ^^^^^^^
+>str : string
+>    : ^^^^^^
+}
+if (str == undefined) {
+>str == undefined : boolean
+>                 : ^^^^^^^
+>str : string
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+switch (str) {
+>str : string
+>    : ^^^^^^
+
+  case null:
+  case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  case "a":
+>"a" : "a"
+>    : ^^^
+
+  default:
+}
+
+if (strOrNull === null) {
+>strOrNull === null : boolean
+>                   : ^^^^^^^
+>strOrNull : string
+>          : ^^^^^^
+}
+if (strOrNull === undefined) {
+>strOrNull === undefined : boolean
+>                        : ^^^^^^^
+>strOrNull : string
+>          : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (strOrNull == null) {
+>strOrNull == null : boolean
+>                  : ^^^^^^^
+>strOrNull : string
+>          : ^^^^^^
+}
+if (strOrNull == undefined) {
+>strOrNull == undefined : boolean
+>                       : ^^^^^^^
+>strOrNull : string
+>          : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+switch (strOrNull) {
+>strOrNull : string
+>          : ^^^^^^
+
+  case null:
+  case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  case "a":
+>"a" : "a"
+>    : ^^^
+
+  default:
+}
+
+if (strOrUndef === null) {
+>strOrUndef === null : boolean
+>                    : ^^^^^^^
+>strOrUndef : string
+>           : ^^^^^^
+}
+if (strOrUndef === undefined) {
+>strOrUndef === undefined : boolean
+>                         : ^^^^^^^
+>strOrUndef : string
+>           : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (strOrUndef == null) {
+>strOrUndef == null : boolean
+>                   : ^^^^^^^
+>strOrUndef : string
+>           : ^^^^^^
+}
+if (strOrUndef == undefined) {
+>strOrUndef == undefined : boolean
+>                        : ^^^^^^^
+>strOrUndef : string
+>           : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+switch (strOrUndef) {
+>strOrUndef : string
+>           : ^^^^^^
+
+  case null:
+  case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  case "a":
+>"a" : "a"
+>    : ^^^
+
+  default:
+}
+
+if (strOrNullUndef === null) {
+>strOrNullUndef === null : boolean
+>                        : ^^^^^^^
+>strOrNullUndef : string
+>               : ^^^^^^
+}
+if (strOrNullUndef === undefined) {
+>strOrNullUndef === undefined : boolean
+>                             : ^^^^^^^
+>strOrNullUndef : string
+>               : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (strOrNullUndef == null) {
+>strOrNullUndef == null : boolean
+>                       : ^^^^^^^
+>strOrNullUndef : string
+>               : ^^^^^^
+}
+if (strOrNullUndef == undefined) {
+>strOrNullUndef == undefined : boolean
+>                            : ^^^^^^^
+>strOrNullUndef : string
+>               : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+switch (strOrNullUndef) {
+>strOrNullUndef : string
+>               : ^^^^^^
+
+  case null:
+  case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  case "a":
+>"a" : "a"
+>    : ^^^
+
+  default:
+}
+
+if (typeof str === undefined) {
+>typeof str === undefined : boolean
+>                         : ^^^^^^^
+>typeof str : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (typeof strOrNull === undefined) {
+>typeof strOrNull === undefined : boolean
+>                               : ^^^^^^^
+>typeof strOrNull : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strOrNull : string
+>          : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (typeof strOrUndef === undefined) {
+>typeof strOrUndef === undefined : boolean
+>                                : ^^^^^^^
+>typeof strOrUndef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strOrUndef : string
+>           : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+if (typeof strOrNullUndef === undefined) {
+>typeof strOrNullUndef === undefined : boolean
+>                                    : ^^^^^^^
+>typeof strOrNullUndef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strOrNullUndef : string
+>               : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+

@@ -13,6 +13,7 @@ b.js(58,1): error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBa
       Type 'string' is not assignable to type 'number'.
 b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
+b.js(66,38): error TS2367: This comparison appears to be unintentional because the types 'string | number' and 'undefined' have no overlap.
 b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
@@ -21,7 +22,7 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
 ==== a.ts (0 errors) ====
     var W: string;
     
-==== b.js (10 errors) ====
+==== b.js (11 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
     
@@ -114,6 +115,8 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
                                          ~~~~~~~~
 !!! error TS2454: Variable 'numOrStr' is used before being assigned.
+                                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string | number' and 'undefined' have no overlap.
     	str = numOrStr; // Error, no narrowing occurred
     	~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'string'.

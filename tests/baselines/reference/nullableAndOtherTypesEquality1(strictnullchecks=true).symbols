@@ -1,0 +1,145 @@
+//// [tests/cases/compiler/nullableAndOtherTypesEquality1.ts] ////
+
+=== nullableAndOtherTypesEquality1.ts ===
+// https://github.com/microsoft/TypeScript/issues/11920
+
+if (null === undefined) {
+>undefined : Symbol(undefined)
+}
+if (null == undefined) {
+>undefined : Symbol(undefined)
+}
+
+declare const str: string;
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+
+declare const strOrNull: string | null;
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+
+declare const strOrUndef: string | undefined;
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+
+declare const strOrNullUndef: string | null | undefined;
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+
+if (str === null) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+}
+if (str === undefined) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+>undefined : Symbol(undefined)
+}
+if (str == null) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+}
+if (str == undefined) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+>undefined : Symbol(undefined)
+}
+
+switch (str) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+
+  case null:
+  case undefined:
+>undefined : Symbol(undefined)
+
+  case "a":
+  default:
+}
+
+if (strOrNull === null) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+}
+if (strOrNull === undefined) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+>undefined : Symbol(undefined)
+}
+if (strOrNull == null) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+}
+if (strOrNull == undefined) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+>undefined : Symbol(undefined)
+}
+
+switch (strOrNull) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+
+  case null:
+  case undefined:
+>undefined : Symbol(undefined)
+
+  case "a":
+  default:
+}
+
+if (strOrUndef === null) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+}
+if (strOrUndef === undefined) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+>undefined : Symbol(undefined)
+}
+if (strOrUndef == null) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+}
+if (strOrUndef == undefined) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+>undefined : Symbol(undefined)
+}
+
+switch (strOrUndef) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+
+  case null:
+  case undefined:
+>undefined : Symbol(undefined)
+
+  case "a":
+  default:
+}
+
+if (strOrNullUndef === null) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+}
+if (strOrNullUndef === undefined) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+>undefined : Symbol(undefined)
+}
+if (strOrNullUndef == null) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+}
+if (strOrNullUndef == undefined) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+>undefined : Symbol(undefined)
+}
+
+switch (strOrNullUndef) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+
+  case null:
+  case undefined:
+>undefined : Symbol(undefined)
+
+  case "a":
+  default:
+}
+
+if (typeof str === undefined) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrNull === undefined) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrUndef === undefined) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrNullUndef === undefined) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+>undefined : Symbol(undefined)
+}
+

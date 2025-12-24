@@ -1,0 +1,127 @@
+nullableAndOtherTypesEquality1.ts(3,5): error TS2367: This comparison appears to be unintentional because the types 'null' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(13,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
+nullableAndOtherTypesEquality1.ts(15,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(23,8): error TS2678: Type 'null' is not comparable to type 'string'.
+nullableAndOtherTypesEquality1.ts(24,8): error TS2678: Type 'undefined' is not comparable to type 'string'.
+nullableAndOtherTypesEquality1.ts(31,5): error TS2367: This comparison appears to be unintentional because the types 'string | null' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(40,8): error TS2678: Type 'undefined' is not comparable to type 'string | null'.
+nullableAndOtherTypesEquality1.ts(45,5): error TS2367: This comparison appears to be unintentional because the types 'string | undefined' and 'null' have no overlap.
+nullableAndOtherTypesEquality1.ts(55,8): error TS2678: Type 'null' is not comparable to type 'string | undefined'.
+nullableAndOtherTypesEquality1.ts(77,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(79,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(81,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(83,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+
+
+==== nullableAndOtherTypesEquality1.ts (13 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/11920
+    
+    if (null === undefined) {
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'null' and 'undefined' have no overlap.
+    }
+    if (null == undefined) {
+    }
+    
+    declare const str: string;
+    declare const strOrNull: string | null;
+    declare const strOrUndef: string | undefined;
+    declare const strOrNullUndef: string | null | undefined;
+    
+    if (str === null) {
+        ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
+    }
+    if (str === undefined) {
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (str == null) {
+    }
+    if (str == undefined) {
+    }
+    
+    switch (str) {
+      case null:
+           ~~~~
+!!! error TS2678: Type 'null' is not comparable to type 'string'.
+      case undefined:
+           ~~~~~~~~~
+!!! error TS2678: Type 'undefined' is not comparable to type 'string'.
+      case "a":
+      default:
+    }
+    
+    if (strOrNull === null) {
+    }
+    if (strOrNull === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string | null' and 'undefined' have no overlap.
+    }
+    if (strOrNull == null) {
+    }
+    if (strOrNull == undefined) {
+    }
+    
+    switch (strOrNull) {
+      case null:
+      case undefined:
+           ~~~~~~~~~
+!!! error TS2678: Type 'undefined' is not comparable to type 'string | null'.
+      case "a":
+      default:
+    }
+    
+    if (strOrUndef === null) {
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string | undefined' and 'null' have no overlap.
+    }
+    if (strOrUndef === undefined) {
+    }
+    if (strOrUndef == null) {
+    }
+    if (strOrUndef == undefined) {
+    }
+    
+    switch (strOrUndef) {
+      case null:
+           ~~~~
+!!! error TS2678: Type 'null' is not comparable to type 'string | undefined'.
+      case undefined:
+      case "a":
+      default:
+    }
+    
+    if (strOrNullUndef === null) {
+    }
+    if (strOrNullUndef === undefined) {
+    }
+    if (strOrNullUndef == null) {
+    }
+    if (strOrNullUndef == undefined) {
+    }
+    
+    switch (strOrNullUndef) {
+      case null:
+      case undefined:
+      case "a":
+      default:
+    }
+    
+    if (typeof str === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrNull === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrUndef === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrNullUndef === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    
