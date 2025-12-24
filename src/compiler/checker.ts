@@ -15645,6 +15645,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propTypes.push(type);
         }
         addRange(propTypes, indexTypes);
+        if (indexTypes && compilerOptions.noUncheckedIndexedAccess) {
+            append(propTypes, missingType);
+        }
         const result = createSymbol(propFlags | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
         result.links.containingType = containingType;
         if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
@@ -28235,6 +28238,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             errorType;
     }
 
+    function includeUndefinedInIndexSignature(type: Type): Type;
+    function includeUndefinedInIndexSignature(type: Type | undefined): Type | undefined;
     function includeUndefinedInIndexSignature(type: Type | undefined): Type | undefined {
         if (!type) return type;
         return compilerOptions.noUncheckedIndexedAccess ?
@@ -34890,8 +34895,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             propType = indexInfo.type;
-            if (compilerOptions.noUncheckedIndexedAccess && getAssignmentTargetKind(node) !== AssignmentKind.Definite) {
-                propType = getUnionType([propType, missingType]);
+            if (getAssignmentTargetKind(node) !== AssignmentKind.Definite) {
+                propType = includeUndefinedInIndexSignature(propType);
             }
             if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                 error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
