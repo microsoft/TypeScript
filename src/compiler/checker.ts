@@ -19317,7 +19317,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const symbolName = getFullyQualifiedName((indexType as UniqueESSymbolType).symbol, accessExpression);
                                     errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, "[" + symbolName + "]", typeToString(objectType));
                                 }
-                                else if (indexType.flags & TypeFlags.StringLiteral) {
+
+                                // Handle literals, type parameters (like K extends string), and keyof types
+                                else if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.TypeParameter | TypeFlags.Index)) {
+
+                                    // 1. Try specific property (only for literals)
+                                    if (indexType.flags & TypeFlags.StringLiteral) {
+                                        const prop = getPropertyOfType(objectType, escapeLeadingUnderscores((indexType as StringLiteralType).value));
+                                        if (prop) return getTypeOfSymbol(prop);
+                                    }
+
+                                    // 2. Fallback to string index signature for anything string-like
+                                    if (isTypeAssignableTo(indexType, stringType)) {
+                                        const indexInfo = getIndexInfoOfType(objectType, stringType);
+                                        if (indexInfo) return indexInfo.type;
+                                    }
+
                                     errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as StringLiteralType).value, typeToString(objectType));
                                 }
                                 else if (indexType.flags & TypeFlags.NumberLiteral) {
