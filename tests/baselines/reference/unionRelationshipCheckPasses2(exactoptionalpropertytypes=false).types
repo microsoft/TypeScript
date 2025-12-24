@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/unionRelationshipCheckPasses2.ts] ////
+
+=== unionRelationshipCheckPasses2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61678
+
+export type U = { type: "A"; value: null } | { type: "B"; value: string };
+>U : U
+>  : ^
+>type : "A"
+>     : ^^^
+>value : null
+>      : ^^^^
+>type : "B"
+>     : ^^^
+>value : string
+>      : ^^^^^^
+
+function call<T>(f: () => T): T {
+>call : <T>(f: () => T) => T
+>     : ^ ^^ ^^       ^^^^^ 
+>f : () => T
+>  : ^^^^^^ 
+
+  return f();
+>f() : T
+>    : ^
+>f : () => T
+>  : ^^^^^^ 
+}
+
+export function functionCall(): U {
+>functionCall : () => U
+>             : ^^^^^^ 
+
+  return call(() => {  // error
+>call(() => {  // error    if (Math.random()) {      return { type: "A" };    }    return { type: "B", value: "test" };  }) : { type: "A"; value?: undefined; } | { type: "B"; value: string; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>call : <T>(f: () => T) => T
+>     : ^ ^^ ^^       ^^^^^ 
+>() => {  // error    if (Math.random()) {      return { type: "A" };    }    return { type: "B", value: "test" };  } : () => { type: "A"; value?: undefined; } | { type: "B"; value: string; }
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      return { type: "A" };
+>{ type: "A" } : { type: "A"; }
+>              : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" : "A"
+>    : ^^^
+    }
+
+    return { type: "B", value: "test" };
+>{ type: "B", value: "test" } : { type: "B"; value: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+  });
+}
+
+export function directReturn(): U {
+>directReturn : () => U
+>             : ^^^^^^ 
+
+  if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    return { type: "A" }; // error
+>{ type: "A" } : { type: "A"; }
+>              : ^^^^^^^^^^^^^^
+>type : "A"
+>     : ^^^
+>"A" : "A"
+>    : ^^^
+  }
+
+  return { type: "B", value: "test" };
+>{ type: "B", value: "test" } : { type: "B"; value: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "B"
+>     : ^^^
+>"B" : "B"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+}
+
