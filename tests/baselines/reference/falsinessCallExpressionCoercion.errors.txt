@@ -1,0 +1,140 @@
+falsinessCallExpressionCoercion.ts(4,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(25,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(41,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(66,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(91,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(107,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== falsinessCallExpressionCoercion.ts (6 errors) ====
+    function test1() {
+        function canAccess() { return false; }
+    
+        if (!canAccess) { // error
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test2() {
+        function canAccess() { return false; }
+    
+        if (!canAccess) { // ok
+        }
+    
+        canAccess();
+    }
+    
+    function test3() {
+        function canAccess() { return false; }
+    
+        if (!!!canAccess) { // ok
+        }
+    }
+    
+    function test4(canAccess: () => boolean) {
+        if (!canAccess) { // error
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test5(canAccess?: () => boolean) {
+        if (!canAccess) { // ok
+        }
+    }
+    
+    function test6() {
+        const x = {
+            foo: {
+                bar() { return true; }
+            }
+        };
+    
+        if (!x.foo.bar) { // error
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test7() {
+        const x = {
+            foo: {
+                bar() { return true; }
+            }
+        };
+    
+        if (!x.foo.bar) { // ok
+        }
+    
+        x.foo.bar();
+    }
+    
+    class Test8 {
+        maybeIsUser?: () => boolean;
+    
+        isUser() {
+            return true;
+        }
+    
+        test() {
+            if (!this.isUser) { // error
+                 ~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            }
+    
+            if (!this.maybeIsUser) { // ok
+            }
+        }
+    }
+    
+    class Test9 {
+        isUser() {
+            return true;
+        }
+    
+        test() {
+            if (!this.isUser) { // ok
+            }
+    
+            this.isUser();
+        }
+    }
+    
+    function test10() {
+        function canAccess() { return false; }
+    
+        const res = canAccess
+        if (!res) { // error
+             ~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test11() {
+        function canAccess() { return false; }
+    
+        if (!canAccess) { // ok
+        } else {
+            canAccess()
+        }
+    }
+    
+    function test12() {
+        function canAccess() { return false; }
+    
+        if (!canAccess || Math.random()) { // error
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test13() {
+        function canAccess() { return false; }
+    
+        if (!canAccess || Math.random()) { // ok
+        }
+    
+        canAccess()
+    }
+    

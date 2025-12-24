@@ -1,0 +1,385 @@
+//// [tests/cases/compiler/falsinessCallExpressionCoercion.ts] ////
+
+=== falsinessCallExpressionCoercion.ts ===
+function test1() {
+>test1 : () => void
+>      : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess) { // error
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+    }
+}
+
+function test2() {
+>test2 : () => void
+>      : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess) { // ok
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+    }
+
+    canAccess();
+>canAccess() : boolean
+>            : ^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+}
+
+function test3() {
+>test3 : () => void
+>      : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!!!canAccess) { // ok
+>!!!canAccess : false
+>             : ^^^^^
+>!!canAccess : true
+>            : ^^^^
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+    }
+}
+
+function test4(canAccess: () => boolean) {
+>test4 : (canAccess: () => boolean) => void
+>      : ^         ^^             ^^^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^       
+
+    if (!canAccess) { // error
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^       
+    }
+}
+
+function test5(canAccess?: () => boolean) {
+>test5 : (canAccess?: () => boolean) => void
+>      : ^         ^^^             ^^^^^^^^^
+>canAccess : (() => boolean) | undefined
+>          : ^^^^^^^       ^^^^^^^^^^^^^
+
+    if (!canAccess) { // ok
+>!canAccess : boolean
+>           : ^^^^^^^
+>canAccess : (() => boolean) | undefined
+>          : ^^^^^^^       ^^^^^^^^^^^^^
+    }
+}
+
+function test6() {
+>test6 : () => void
+>      : ^^^^^^^^^^
+
+    const x = {
+>x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: {
+>foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>{            bar() { return true; }        } : { bar(): boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^
+
+            bar() { return true; }
+>bar : () => boolean
+>    : ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+        }
+    };
+
+    if (!x.foo.bar) { // error
+>!x.foo.bar : false
+>           : ^^^^^
+>x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
+>x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
+>x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>bar : () => boolean
+>    : ^^^^^^^^^^^^^
+    }
+}
+
+function test7() {
+>test7 : () => void
+>      : ^^^^^^^^^^
+
+    const x = {
+>x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: {
+>foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>{            bar() { return true; }        } : { bar(): boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^
+
+            bar() { return true; }
+>bar : () => boolean
+>    : ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+        }
+    };
+
+    if (!x.foo.bar) { // ok
+>!x.foo.bar : false
+>           : ^^^^^
+>x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
+>x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
+>x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>bar : () => boolean
+>    : ^^^^^^^^^^^^^
+    }
+
+    x.foo.bar();
+>x.foo.bar() : boolean
+>            : ^^^^^^^
+>x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
+>x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
+>x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>bar : () => boolean
+>    : ^^^^^^^^^^^^^
+}
+
+class Test8 {
+>Test8 : Test8
+>      : ^^^^^
+
+    maybeIsUser?: () => boolean;
+>maybeIsUser : (() => boolean) | undefined
+>            : ^^^^^^^       ^^^^^^^^^^^^^
+
+    isUser() {
+>isUser : () => boolean
+>       : ^^^^^^^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+
+    test() {
+>test : () => void
+>     : ^^^^^^^^^^
+
+        if (!this.isUser) { // error
+>!this.isUser : false
+>             : ^^^^^
+>this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>isUser : () => boolean
+>       : ^^^^^^^^^^^^^
+        }
+
+        if (!this.maybeIsUser) { // ok
+>!this.maybeIsUser : boolean
+>                  : ^^^^^^^
+>this.maybeIsUser : (() => boolean) | undefined
+>                 : ^^^^^^^       ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>maybeIsUser : (() => boolean) | undefined
+>            : ^^^^^^^       ^^^^^^^^^^^^^
+        }
+    }
+}
+
+class Test9 {
+>Test9 : Test9
+>      : ^^^^^
+
+    isUser() {
+>isUser : () => boolean
+>       : ^^^^^^^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+
+    test() {
+>test : () => void
+>     : ^^^^^^^^^^
+
+        if (!this.isUser) { // ok
+>!this.isUser : false
+>             : ^^^^^
+>this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>isUser : () => boolean
+>       : ^^^^^^^^^^^^^
+        }
+
+        this.isUser();
+>this.isUser() : boolean
+>              : ^^^^^^^
+>this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>isUser : () => boolean
+>       : ^^^^^^^^^^^^^
+    }
+}
+
+function test10() {
+>test10 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    const res = canAccess
+>res : () => boolean
+>    : ^^^^^^^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+
+    if (!res) { // error
+>!res : false
+>     : ^^^^^
+>res : () => boolean
+>    : ^^^^^^^^^^^^^
+    }
+}
+
+function test11() {
+>test11 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess) { // ok
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+
+    } else {
+        canAccess()
+>canAccess() : boolean
+>            : ^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+    }
+}
+
+function test12() {
+>test12 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess || Math.random()) { // error
+>!canAccess || Math.random() : number
+>                            : ^^^^^^
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+    }
+}
+
+function test13() {
+>test13 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess || Math.random()) { // ok
+>!canAccess || Math.random() : number
+>                            : ^^^^^^
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+    }
+
+    canAccess()
+>canAccess() : boolean
+>            : ^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+}
+
