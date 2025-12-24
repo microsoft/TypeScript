@@ -41,3 +41,46 @@ export class Cls {
 >seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 8, 16))
     }
 }
+
+export class Cls2 {
+>Cls2 : Symbol(Cls2, Decl(classPropInitializationInferenceWithElementAccess.ts, 15, 1))
+
+    x;
+>x : Symbol(Cls2.x, Decl(classPropInitializationInferenceWithElementAccess.ts, 17, 19))
+
+    y;
+>y : Symbol(Cls2.y, Decl(classPropInitializationInferenceWithElementAccess.ts, 18, 6))
+
+    z;
+>z : Symbol(Cls2.z, Decl(classPropInitializationInferenceWithElementAccess.ts, 19, 6))
+    
+    0;
+>0 : Symbol(Cls2[0], Decl(classPropInitializationInferenceWithElementAccess.ts, 20, 6))
+
+    constructor(seed: number) {
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 24, 16))
+
+        (() => {
+            this['x'] = [seed];
+>this : Symbol(Cls2, Decl(classPropInitializationInferenceWithElementAccess.ts, 15, 1))
+>'x' : Symbol(Cls2.x, Decl(classPropInitializationInferenceWithElementAccess.ts, 17, 19))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 24, 16))
+
+            this['y'] = { seed };
+>this : Symbol(Cls2, Decl(classPropInitializationInferenceWithElementAccess.ts, 15, 1))
+>'y' : Symbol(Cls2.y, Decl(classPropInitializationInferenceWithElementAccess.ts, 18, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 27, 25))
+
+            this['z'] = `${seed}`;
+>this : Symbol(Cls2, Decl(classPropInitializationInferenceWithElementAccess.ts, 15, 1))
+>'z' : Symbol(Cls2.z, Decl(classPropInitializationInferenceWithElementAccess.ts, 19, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 24, 16))
+
+            this[0] = [seed];
+>this : Symbol(Cls2, Decl(classPropInitializationInferenceWithElementAccess.ts, 15, 1))
+>0 : Symbol(Cls2[0], Decl(classPropInitializationInferenceWithElementAccess.ts, 20, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 24, 16))
+
+        })();
+    }
+}

@@ -1,0 +1,119 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts] ////
+
+=== classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts ===
+type State = { type: "running"; speed: number } | { type: "stopped" };
+>State : Symbol(State, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 0, 0))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 0, 14))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 0, 31))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 0, 51))
+
+declare const initialState: State;
+>initialState : Symbol(initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 13))
+>State : Symbol(State, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 0, 0))
+
+class Actor1 {
+>Actor1 : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+
+  static initialState;
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+
+  static {
+    this.initialState = initialState;
+>this.initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>this : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>initialState : Symbol(initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 13))
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+>localSetAsInitiallyRunning : Symbol(localSetAsInitiallyRunning, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 10, 9))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 10, 40))
+
+      this.initialState = { type: "running", speed };
+>this.initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>this : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 11, 27))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 11, 44))
+
+      this.initialState = { type: "runnnning", speed }; // error
+>this.initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>this : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 12, 27))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 12, 46))
+    }
+  }
+
+  static setAsInitiallyRunning(speed: number) {
+>setAsInitiallyRunning : Symbol(Actor1.setAsInitiallyRunning, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 14, 3))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 16, 31))
+
+    this.initialState = { type: "running", speed };
+>this.initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>this : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 17, 25))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 17, 42))
+
+    this.initialState = { type: "runnnning", speed }; // error
+>this.initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>this : Symbol(Actor1, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 34))
+>initialState : Symbol(Actor1.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 4, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 18, 25))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 18, 44))
+  }
+}
+
+class Actor2 {
+>Actor2 : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+
+  static accessor initialState;
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+
+  static {
+    this.initialState = initialState;
+>this.initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>this : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>initialState : Symbol(initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 2, 13))
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+>localSetAsInitiallyRunning : Symbol(localSetAsInitiallyRunning, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 28, 9))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 28, 40))
+
+      this.initialState = { type: "running", speed };
+>this.initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>this : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 29, 27))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 29, 44))
+
+      this.initialState = { type: "runnnning", speed }; // error
+>this.initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>this : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 30, 27))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 30, 46))
+    }
+  }
+
+  static setAsInitiallyRunning(speed: number) {
+>setAsInitiallyRunning : Symbol(Actor2.setAsInitiallyRunning, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 32, 3))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 34, 31))
+
+    this.initialState = { type: "running", speed };
+>this.initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>this : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 35, 25))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 35, 42))
+
+    this.initialState = { type: "runnnning", speed }; // error
+>this.initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>this : Symbol(Actor2, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 20, 1))
+>initialState : Symbol(Actor2.initialState, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 22, 14))
+>type : Symbol(type, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 36, 25))
+>speed : Symbol(speed, Decl(classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts, 36, 44))
+  }
+}
+

@@ -1,0 +1,129 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticPropInferenceTemplate1.ts] ////
+
+=== classStaticPropInferenceTemplate1.ts ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(classStaticPropInferenceTemplate1.ts, 0, 0))
+
+  static property;
+>property : Symbol(MyClass.property, Decl(classStaticPropInferenceTemplate1.ts, 0, 15))
+
+  static property2;
+>property2 : Symbol(MyClass.property2, Decl(classStaticPropInferenceTemplate1.ts, 1, 18))
+
+  static {
+    const variable = "something";
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 5, 9))
+
+    this.property = `foo`;
+>this.property : Symbol(MyClass.property, Decl(classStaticPropInferenceTemplate1.ts, 0, 15))
+>this : Symbol(MyClass, Decl(classStaticPropInferenceTemplate1.ts, 0, 0))
+>property : Symbol(MyClass.property, Decl(classStaticPropInferenceTemplate1.ts, 0, 15))
+
+    this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass.property2, Decl(classStaticPropInferenceTemplate1.ts, 1, 18))
+>this : Symbol(MyClass, Decl(classStaticPropInferenceTemplate1.ts, 0, 0))
+>property2 : Symbol(MyClass.property2, Decl(classStaticPropInferenceTemplate1.ts, 1, 18))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 5, 9))
+
+    const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(classStaticPropInferenceTemplate1.ts, 10, 9))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 5, 9))
+  }
+}
+
+class MyClass2 {
+>MyClass2 : Symbol(MyClass2, Decl(classStaticPropInferenceTemplate1.ts, 12, 1))
+
+  static accessor property;
+>property : Symbol(MyClass2.property, Decl(classStaticPropInferenceTemplate1.ts, 14, 16))
+
+  static accessor property2;
+>property2 : Symbol(MyClass2.property2, Decl(classStaticPropInferenceTemplate1.ts, 15, 27))
+
+  static {
+    const variable = "something";
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 19, 9))
+
+    this.property = `foo`;
+>this.property : Symbol(MyClass2.property, Decl(classStaticPropInferenceTemplate1.ts, 14, 16))
+>this : Symbol(MyClass2, Decl(classStaticPropInferenceTemplate1.ts, 12, 1))
+>property : Symbol(MyClass2.property, Decl(classStaticPropInferenceTemplate1.ts, 14, 16))
+
+    this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass2.property2, Decl(classStaticPropInferenceTemplate1.ts, 15, 27))
+>this : Symbol(MyClass2, Decl(classStaticPropInferenceTemplate1.ts, 12, 1))
+>property2 : Symbol(MyClass2.property2, Decl(classStaticPropInferenceTemplate1.ts, 15, 27))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 19, 9))
+
+    const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(classStaticPropInferenceTemplate1.ts, 24, 9))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 19, 9))
+  }
+}
+
+class MyClass3 {
+>MyClass3 : Symbol(MyClass3, Decl(classStaticPropInferenceTemplate1.ts, 26, 1))
+
+  static property;
+>property : Symbol(MyClass3.property, Decl(classStaticPropInferenceTemplate1.ts, 28, 16))
+
+  static property2;
+>property2 : Symbol(MyClass3.property2, Decl(classStaticPropInferenceTemplate1.ts, 29, 18))
+
+  static {
+    (() => {
+      const variable = "something";
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 34, 11))
+
+      this.property = `foo`;
+>this.property : Symbol(MyClass3.property, Decl(classStaticPropInferenceTemplate1.ts, 28, 16))
+>this : Symbol(MyClass3, Decl(classStaticPropInferenceTemplate1.ts, 26, 1))
+>property : Symbol(MyClass3.property, Decl(classStaticPropInferenceTemplate1.ts, 28, 16))
+
+      this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass3.property2, Decl(classStaticPropInferenceTemplate1.ts, 29, 18))
+>this : Symbol(MyClass3, Decl(classStaticPropInferenceTemplate1.ts, 26, 1))
+>property2 : Symbol(MyClass3.property2, Decl(classStaticPropInferenceTemplate1.ts, 29, 18))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 34, 11))
+
+      const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(classStaticPropInferenceTemplate1.ts, 39, 11))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 34, 11))
+
+    })();
+  }
+}
+
+class MyClass4 {
+>MyClass4 : Symbol(MyClass4, Decl(classStaticPropInferenceTemplate1.ts, 42, 1))
+
+  static accessor property;
+>property : Symbol(MyClass4.property, Decl(classStaticPropInferenceTemplate1.ts, 44, 16))
+
+  static accessor property2;
+>property2 : Symbol(MyClass4.property2, Decl(classStaticPropInferenceTemplate1.ts, 45, 27))
+
+  static {
+    (() => {
+      const variable = "something";
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 50, 11))
+
+      this.property = `foo`;
+>this.property : Symbol(MyClass4.property, Decl(classStaticPropInferenceTemplate1.ts, 44, 16))
+>this : Symbol(MyClass4, Decl(classStaticPropInferenceTemplate1.ts, 42, 1))
+>property : Symbol(MyClass4.property, Decl(classStaticPropInferenceTemplate1.ts, 44, 16))
+
+      this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass4.property2, Decl(classStaticPropInferenceTemplate1.ts, 45, 27))
+>this : Symbol(MyClass4, Decl(classStaticPropInferenceTemplate1.ts, 42, 1))
+>property2 : Symbol(MyClass4.property2, Decl(classStaticPropInferenceTemplate1.ts, 45, 27))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 50, 11))
+
+      const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(classStaticPropInferenceTemplate1.ts, 55, 11))
+>variable : Symbol(variable, Decl(classStaticPropInferenceTemplate1.ts, 50, 11))
+
+    })();
+  }
+}
+

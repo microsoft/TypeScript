@@ -1,0 +1,239 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts] ////
+
+=== classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts ===
+type State = { type: "running"; speed: number } | { type: "stopped" };
+>State : State
+>      : ^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+>type : "stopped"
+>     : ^^^^^^^^^
+
+declare const initialState: State;
+>initialState : State
+>             : ^^^^^
+
+class Actor1 {
+>Actor1 : Actor1
+>       : ^^^^^^
+
+  static initialState;
+>initialState : State
+>             : ^^^^^
+
+  static {
+    this.initialState = initialState;
+>this.initialState = initialState : State
+>                                 : ^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor1
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>initialState : State
+>             : ^^^^^
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+>localSetAsInitiallyRunning : (speed: number) => void
+>                           : ^     ^^      ^^^^^^^^^
+>(speed: number) => {      this.initialState = { type: "running", speed };      this.initialState = { type: "runnnning", speed }; // error    } : (speed: number) => void
+>                                                                                                                                               : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.initialState = { type: "running", speed };
+>this.initialState = { type: "running", speed } : { type: "running"; speed: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor1
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.initialState = { type: "runnnning", speed }; // error
+>this.initialState = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor1
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+    }
+  }
+
+  static setAsInitiallyRunning(speed: number) {
+>setAsInitiallyRunning : (speed: number) => void
+>                      : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+    this.initialState = { type: "running", speed };
+>this.initialState = { type: "running", speed } : { type: "running"; speed: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor1
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+    this.initialState = { type: "runnnning", speed }; // error
+>this.initialState = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor1
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+  }
+}
+
+class Actor2 {
+>Actor2 : Actor2
+>       : ^^^^^^
+
+  static accessor initialState;
+>initialState : State
+>             : ^^^^^
+
+  static {
+    this.initialState = initialState;
+>this.initialState = initialState : State
+>                                 : ^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor2
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>initialState : State
+>             : ^^^^^
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+>localSetAsInitiallyRunning : (speed: number) => void
+>                           : ^     ^^      ^^^^^^^^^
+>(speed: number) => {      this.initialState = { type: "running", speed };      this.initialState = { type: "runnnning", speed }; // error    } : (speed: number) => void
+>                                                                                                                                               : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.initialState = { type: "running", speed };
+>this.initialState = { type: "running", speed } : { type: "running"; speed: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor2
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.initialState = { type: "runnnning", speed }; // error
+>this.initialState = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor2
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+    }
+  }
+
+  static setAsInitiallyRunning(speed: number) {
+>setAsInitiallyRunning : (speed: number) => void
+>                      : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+    this.initialState = { type: "running", speed };
+>this.initialState = { type: "running", speed } : { type: "running"; speed: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor2
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+    this.initialState = { type: "runnnning", speed }; // error
+>this.initialState = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.initialState : State
+>                  : ^^^^^
+>this : typeof Actor2
+>     : ^^^^^^^^^^^^^
+>initialState : State
+>             : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+  }
+}
+

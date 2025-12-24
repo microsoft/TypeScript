@@ -20,7 +20,7 @@ class MyClass {
 >'something' : "something"
 >            : ^^^^^^^^^^^
 
-        this.property = `foo`; // Correctly inferred as `string`
+        this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
 >this.property : string
@@ -32,7 +32,7 @@ class MyClass {
 >`foo` : "foo"
 >      : ^^^^^
 
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
 >this.property2 : string
@@ -46,7 +46,7 @@ class MyClass {
 >variable : "something"
 >         : ^^^^^^^^^^^
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
 >localProperty : "foo-something"
 >              : ^^^^^^^^^^^^^^^
 >`foo-${variable}` : "foo-something"
@@ -75,7 +75,7 @@ class MyClass2 {
 >'something' : "something"
 >            : ^^^^^^^^^^^
 
-        this.property = `foo`; // Correctly inferred as `string`
+        this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
 >this.property : string
@@ -87,7 +87,7 @@ class MyClass2 {
 >`foo` : "foo"
 >      : ^^^^^
 
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
 >this.property2 : string
@@ -101,13 +101,143 @@ class MyClass2 {
 >variable : "something"
 >         : ^^^^^^^^^^^
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
 >localProperty : "foo-something"
 >              : ^^^^^^^^^^^^^^^
 >`foo-${variable}` : "foo-something"
 >                  : ^^^^^^^^^^^^^^^
 >variable : "something"
 >         : ^^^^^^^^^^^
+    }
+}
+
+class MyClass3 {
+>MyClass3 : MyClass3
+>         : ^^^^^^^^
+
+    property;
+>property : string
+>         : ^^^^^^
+
+    property2;
+>property2 : string
+>          : ^^^^^^
+
+    constructor() {
+        (() => {
+>(() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        })() : void
+>                                                                                                                                                                                                  : ^^^^
+>(() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        }) : () => void
+>                                                                                                                                                                                                : ^^^^^^^^^^
+>() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        } : () => void
+>                                                                                                                                                                                              : ^^^^^^^^^^
+
+            const variable = 'something'
+>variable : "something"
+>         : ^^^^^^^^^^^
+>'something' : "something"
+>            : ^^^^^^^^^^^
+
+            this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+            this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : this
+>     : ^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+            const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+        })();
+    }
+}
+
+class MyClass4 {
+>MyClass4 : MyClass4
+>         : ^^^^^^^^
+
+    accessor property;
+>property : string
+>         : ^^^^^^
+
+    accessor property2;
+>property2 : string
+>          : ^^^^^^
+
+    constructor() {
+        (() => {
+>(() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        })() : void
+>                                                                                                                                                                                                  : ^^^^
+>(() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        }) : () => void
+>                                                                                                                                                                                                : ^^^^^^^^^^
+>() => {            const variable = 'something'            this.property = `foo`;            this.property2 = `foo-${variable}`;            const localProperty = `foo-${variable}`;        } : () => void
+>                                                                                                                                                                                              : ^^^^^^^^^^
+
+            const variable = 'something'
+>variable : "something"
+>         : ^^^^^^^^^^^
+>'something' : "something"
+>            : ^^^^^^^^^^^
+
+            this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+            this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : this
+>     : ^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+            const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+        })();
     }
 }
 
