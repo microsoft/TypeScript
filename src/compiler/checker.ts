@@ -20239,10 +20239,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(type.flags & TypeFlags.Freshable) && (type as LiteralType).freshType === type;
     }
 
-    function getStringLiteralType(value: string): StringLiteralType {
-        let type;
-        return stringLiteralTypes.get(value) ||
-            (stringLiteralTypes.set(value, type = createLiteralType(TypeFlags.StringLiteral, value) as StringLiteralType), type);
+    function getStringLiteralType(value: string, avoidCache?: boolean): StringLiteralType {
+        let type = stringLiteralTypes.get(value);
+        if (type === undefined) {
+            type = createLiteralType(TypeFlags.StringLiteral, value) as StringLiteralType;
+        }
+        if (!avoidCache) {
+            stringLiteralTypes.set(value, type);
+        }
+        return type;
     }
 
     function getNumberLiteralType(value: number): NumberLiteralType {
@@ -22170,7 +22175,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (t & TypeFlags.Never) return false;
         if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
         if (
-            s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
+            s & TypeFlags.StringLiteral &&
             t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
             (source as StringLiteralType).value === (target as StringLiteralType).value
         ) return true;
@@ -41786,13 +41791,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NullKeyword:
                 return nullWideningType;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.StringLiteral:
+            case SyntaxKind.StringLiteral: {
+                const stringLiteralText = (node as StringLiteralLike).text;
                 return hasSkipDirectInferenceFlag(node) ?
                     blockedStringType :
-                    getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral:
+                    getFreshTypeOfLiteralType(
+                        getStringLiteralType(
+                            stringLiteralText,
+                            /*avoidCache*/ stringLiteralText.length >= 32 && node.parent.kind !== SyntaxKind.LiteralType,
+                        ),
+                    );
+            }
+            case SyntaxKind.NumericLiteral: {
                 checkGrammarNumericLiteral(node as NumericLiteral);
                 return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
+            }
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
