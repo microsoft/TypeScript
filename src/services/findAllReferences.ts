@@ -149,6 +149,7 @@ import {
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxSelfClosingElement,
     isJumpStatementTarget,
@@ -202,6 +203,7 @@ import {
     isVoidExpression,
     isWriteAccess,
     JSDocPropertyLikeTag,
+    JsxNamespacedName,
     length,
     map,
     mapDefined,
@@ -325,7 +327,7 @@ export interface SpanEntry {
 function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
-        node: (node as NamedDeclaration).name || node,
+        node: isJsxNamespacedName(node) ? node : ((node as NamedDeclaration).name || node),
         context: getContextNodeForNodeEntry(node),
     };
 }
@@ -1835,6 +1837,10 @@ export namespace Core {
                 // falls through I guess
             case SyntaxKind.Identifier:
                 return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
+            case SyntaxKind.JsxNamespacedName: {
+                const { namespace, name } = node as JsxNamespacedName;
+                return (namespace.text.length + 1 + name.text.length) === searchSymbolName.length;
+            }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
