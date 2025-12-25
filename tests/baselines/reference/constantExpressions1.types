@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/constantExpressions1.ts] ////
+
+=== constantExpressions1.ts ===
+const C00 = "a";
+>C00 : "a"
+>    : ^^^
+>"a" : "a"
+>    : ^^^
+
+const C01 = "b" as const;
+>C01 : "b"
+>    : ^^^
+>"b" as const : "b"
+>             : ^^^
+>"b" : "b"
+>    : ^^^
+
+const C02: "c" = "c";
+>C02 : "c"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
+
+declare const C03: "d";
+>C03 : "d"
+>    : ^^^
+
+const enum E0 {
+>E0 : E0
+>   : ^^
+
+    A = C00,
+>A : E0.A
+>  : ^^^^
+>C00 : "a"
+>    : ^^^
+
+    B = C01,
+>B : E0.B
+>  : ^^^^
+>C01 : "b"
+>    : ^^^
+
+    C = C02,
+>C : E0.C
+>  : ^^^^
+>C02 : "c"
+>    : ^^^
+
+    D = C03,
+>D : E0.D
+>  : ^^^^
+>C03 : "d"
+>    : ^^^
+}
+
+const C10 = 1;
+>C10 : 1
+>    : ^
+>1 : 1
+>  : ^
+
+const C11 = 2 as const;
+>C11 : 2
+>    : ^
+>2 as const : 2
+>           : ^
+>2 : 2
+>  : ^
+
+const C12: 3 = 3;
+>C12 : 3
+>    : ^
+>3 : 3
+>  : ^
+
+declare const C13: 4;
+>C13 : 4
+>    : ^
+
+const enum E1 {
+>E1 : E1
+>   : ^^
+
+    A = C10,
+>A : E1.A
+>  : ^^^^
+>C10 : 1
+>    : ^
+
+    B = C11,
+>B : E1.B
+>  : ^^^^
+>C11 : 2
+>    : ^
+
+    C = C12,
+>C : E1.C
+>  : ^^^^
+>C12 : 3
+>    : ^
+
+    D = C13,
+>D : E1.D
+>  : ^^^^
+>C13 : 4
+>    : ^
+}
+
+const C1: string = "x";
+>C1 : string
+>   : ^^^^^^
+>"x" : "x"
+>    : ^^^
+
+const C2: "x" | "y" = "x";
+>C2 : "x" | "y"
+>   : ^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+
+const enum EE {
+>EE : EE
+>   : ^^
+
+    A = C1,  // Error
+>A : EE.A
+>  : ^^^^
+>C1 : string
+>   : ^^^^^^
+
+    B = C2,  // Error
+>B : EE.B
+>  : ^^^^
+>C2 : "x"
+>   : ^^^
+}
+
