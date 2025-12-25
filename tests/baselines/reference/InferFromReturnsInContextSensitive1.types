@@ -1,0 +1,749 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/InferFromReturnsInContextSensitive1.ts] ////
+
+=== InferFromReturnsInContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60720
+
+type Options<TContext> = {
+>Options : Options<TContext>
+>        : ^^^^^^^^^^^^^^^^^
+
+  onStart?: () => TContext;
+>onStart : (() => TContext) | undefined
+>        : ^^^^^^^        ^^^^^^^^^^^^^
+
+  onEnd?: (context: TContext) => void;
+>onEnd : ((context: TContext) => void) | undefined
+>      : ^^       ^^        ^^^^^    ^^^^^^^^^^^^^
+>context : TContext
+>        : ^^^^^^^^
+
+};
+
+function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
+>create : <TContext>(builder: (arg: boolean) => Options<TContext>) => Options<TContext>
+>       : ^        ^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^
+>builder : (arg: boolean) => Options<TContext>
+>        : ^   ^^       ^^^^^                 
+>arg : boolean
+>    : ^^^^^^^
+
+  return builder(true);
+>builder(true) : Options<TContext>
+>              : ^^^^^^^^^^^^^^^^^
+>builder : (arg: boolean) => Options<TContext>
+>        : ^   ^^       ^^^^^                 
+>true : true
+>     : ^^^^
+}
+
+create((arg) => ({
+>create((arg) => ({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},})) : Options<{ time: Date; }>
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <TContext>(builder: (arg: boolean) => Options<TContext>) => Options<TContext>
+>       : ^        ^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => ({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},}) : (arg: boolean) => { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},}) : { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},} : { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onStart: () => ({ time: new Date() }),
+>onStart : () => { time: Date; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>() => ({ time: new Date() }) : () => { time: Date; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>({ time: new Date() }) : { time: Date; }
+>                       : ^^^^^^^^^^^^^^^
+>{ time: new Date() } : { time: Date; }
+>                     : ^^^^^^^^^^^^^^^
+>time : Date
+>     : ^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+  onEnd: (context) => {},
+>onEnd : (context: { time: Date; }) => void
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(context) => {} : (context: { time: Date; }) => void
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>context : { time: Date; }
+>        : ^^^^^^^^^^^^^^^
+
+}));
+
+create((arg) => ({
+>create((arg) => ({  onEnd: (context) => {},  onStart: () => ({ time: new Date() }),})) : Options<{ time: Date; }>
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <TContext>(builder: (arg: boolean) => Options<TContext>) => Options<TContext>
+>       : ^        ^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => ({  onEnd: (context) => {},  onStart: () => ({ time: new Date() }),}) : (arg: boolean) => { onEnd: (context: { time: Date; }) => void; onStart: () => { time: Date; }; }
+>                                                                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>({  onEnd: (context) => {},  onStart: () => ({ time: new Date() }),}) : { onEnd: (context: { time: Date; }) => void; onStart: () => { time: Date; }; }
+>                                                                      : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  onEnd: (context) => {},  onStart: () => ({ time: new Date() }),} : { onEnd: (context: { time: Date; }) => void; onStart: () => { time: Date; }; }
+>                                                                    : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onEnd: (context) => {},
+>onEnd : (context: { time: Date; }) => void
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(context) => {} : (context: { time: Date; }) => void
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>context : { time: Date; }
+>        : ^^^^^^^^^^^^^^^
+
+  onStart: () => ({ time: new Date() }),
+>onStart : () => { time: Date; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>() => ({ time: new Date() }) : () => { time: Date; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>({ time: new Date() }) : { time: Date; }
+>                       : ^^^^^^^^^^^^^^^
+>{ time: new Date() } : { time: Date; }
+>                     : ^^^^^^^^^^^^^^^
+>time : Date
+>     : ^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+}));
+
+// https://github.com/microsoft/TypeScript/issues/57021
+
+type Schema = Record<string, unknown>;
+>Schema : Schema
+>       : ^^^^^^
+
+type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction : StepFunction<TSchema>
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>anything : unknown
+>         : ^^^^^^^
+
+  readonly schema: TSchema;
+>schema : TSchema
+>       : ^^^^^^^
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : ((keys: keyof TSchema) => unknown) | undefined
+>          : ^^    ^^             ^^^^^       ^^^^^^^^^^^^^
+>keys : keyof TSchema
+>     : ^^^^^^^^^^^^^
+
+};
+
+function step<TSchema extends Schema = Schema>(
+>step : <TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>) => StepFunction<TSchema>
+>     : ^       ^^^^^^^^^      ^^^^^^^^^^^       ^^                     ^^^^^                     
+
+  stepVal: StepFunction<TSchema>,
+>stepVal : StepFunction<TSchema>
+>        : ^^^^^^^^^^^^^^^^^^^^^
+
+): StepFunction<TSchema> {
+  return stepVal;
+>stepVal : StepFunction<TSchema>
+>        : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+const stepResult1 = step((_something) => ({
+>stepResult1 : StepFunction<{ attribute: string; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step((_something) => ({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },})) : StepFunction<{ attribute: string; }>
+>                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step : <TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>) => StepFunction<TSchema>
+>     : ^       ^^^^^^^^^      ^^^^^^^^^^^       ^^                     ^^^^^                     
+>(_something) => ({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },}) : (_something: unknown) => { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                                              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },}) : { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },} : { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { attribute: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>{    attribute: "anything",  } : { attribute: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+
+    attribute: "anything",
+>attribute : string
+>          : ^^^^^^
+>"anything" : "anything"
+>           : ^^^^^^^^^^
+
+  },
+  toAnswers: (keys) => {
+>toAnswers : (keys: "attribute") => { test: "true"; }
+>          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  } : (keys: "attribute") => { test: "true"; }
+>                                                                                                                                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : "true"
+>     : ^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    const test: Test = "true"; // ok
+>test : "true"
+>     : ^^^^^^
+>"true" : "true"
+>       : ^^^^^^
+
+    return { test };
+>{ test } : { test: "true"; }
+>         : ^^^^^^^^^^^^^^^^^
+>test : "true"
+>     : ^^^^^^
+
+  },
+}));
+
+const stepResult2 = step((_something) => ({
+>stepResult2 : StepFunction<{ attribute: string; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step((_something) => ({  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },  schema: {    attribute: "anything",  },})) : StepFunction<{ attribute: string; }>
+>                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step : <TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>) => StepFunction<TSchema>
+>     : ^       ^^^^^^^^^      ^^^^^^^^^^^       ^^                     ^^^^^                     
+>(_something) => ({  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },  schema: {    attribute: "anything",  },}) : (_something: unknown) => { toAnswers: (keys: "attribute") => { test: "true"; }; schema: { attribute: string; }; }
+>                                                                                                                                                                                                              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },  schema: {    attribute: "anything",  },}) : { toAnswers: (keys: "attribute") => { test: "true"; }; schema: { attribute: string; }; }
+>                                                                                                                                                                                              : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },  schema: {    attribute: "anything",  },} : { toAnswers: (keys: "attribute") => { test: "true"; }; schema: { attribute: string; }; }
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  toAnswers: (keys) => {
+>toAnswers : (keys: "attribute") => { test: "true"; }
+>          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  } : (keys: "attribute") => { test: "true"; }
+>                                                                                                                                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : "true"
+>     : ^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    const test: Test = "true"; // ok
+>test : "true"
+>     : ^^^^^^
+>"true" : "true"
+>       : ^^^^^^
+
+    return { test };
+>{ test } : { test: "true"; }
+>         : ^^^^^^^^^^^^^^^^^
+>test : "true"
+>     : ^^^^^^
+
+  },
+  schema: {
+>schema : { attribute: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>{    attribute: "anything",  } : { attribute: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+
+    attribute: "anything",
+>attribute : string
+>          : ^^^^^^
+>"anything" : "anything"
+>           : ^^^^^^^^^^
+
+  },
+}));
+
+type Fn1<T, T2> = (anything: unknown) => {
+>Fn1 : Fn1<T, T2>
+>    : ^^^^^^^^^^
+>anything : unknown
+>         : ^^^^^^^
+
+  stuff: T;
+>stuff : T
+>      : ^
+
+  consume: (arg: T) => (anything: unknown) => {
+>consume : (arg: T) => (anything: unknown) => { stuff2: T2; consume2: (arg: T2) => void; }
+>        : ^   ^^ ^^^^^                                                                   
+>arg : T
+>    : ^
+>anything : unknown
+>         : ^^^^^^^
+
+    stuff2: T2;
+>stuff2 : T2
+>       : ^^
+
+    consume2: (arg: T2) => void;
+>consume2 : (arg: T2) => void
+>         : ^   ^^  ^^^^^    
+>arg : T2
+>    : ^^
+
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>fn : Fn1<T, T2>
+>   : ^^^^^^^^^^
+
+const res1 = test1((_something) => ({
+>res1 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  stuff: "foo",  consume: (arg) => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },})) : [string, number]
+>                                                                                                                                                      : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  stuff: "foo",  consume: (arg) => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : (_something: unknown) => { stuff: string; consume: (arg: string) => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                               : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  stuff: "foo",  consume: (arg) => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : { stuff: string; consume: (arg: string) => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{  stuff: "foo",  consume: (arg) => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },} : { stuff: string; consume: (arg: string) => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: (arg) => {
+>consume : (arg: string) => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>        : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>(arg) => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  } : (arg: string) => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                                                                : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return (_something) => ({
+>(_something) => ({      stuff2: 42,      consume2: (arg2) => {},    }) : (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                                       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({      stuff2: 42,      consume2: (arg2) => {},    }) : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>{      stuff2: 42,      consume2: (arg2) => {},    } : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+>res2 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  consume: (arg) => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",})) : [string, number]
+>                                                                                                                                                      : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  consume: (arg) => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : (_something: unknown) => { consume: (arg: string) => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                                               : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  consume: (arg) => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : { consume: (arg: string) => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                               : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  consume: (arg) => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",} : { consume: (arg: string) => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                             : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  consume: (arg) => {
+>consume : (arg: string) => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>        : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  } : (arg: string) => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                                                                : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return (_something) => ({
+>(_something) => ({      consume2: (arg2) => {},      stuff2: 42,    }) : (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                                       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({      consume2: (arg2) => {},      stuff2: 42,    }) : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                       : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      consume2: (arg2) => {},      stuff2: 42,    } : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                     : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+  },
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+}));
+
+const res3 = test1((_something) => ({
+>res3 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  stuff: "foo",  consume: () => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },})) : [string, number]
+>                                                                                                                                                   : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  stuff: "foo",  consume: () => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : (_something: unknown) => { stuff: string; consume: () => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                            : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  stuff: "foo",  consume: () => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : { stuff: string; consume: () => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{  stuff: "foo",  consume: () => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  },} : { stuff: string; consume: () => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: () => {
+>consume : () => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>        : ^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>() => {    return (_something) => ({      stuff2: 42,      consume2: (arg2) => {},    });  } : () => (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                                                             : ^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+    return (_something) => ({
+>(_something) => ({      stuff2: 42,      consume2: (arg2) => {},    }) : (_something: unknown) => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                                       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({      stuff2: 42,      consume2: (arg2) => {},    }) : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>{      stuff2: 42,      consume2: (arg2) => {},    } : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+    });
+  },
+}));
+
+const res4 = test1((_something) => ({
+>res4 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  consume: () => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",})) : [string, number]
+>                                                                                                                                                   : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  consume: () => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : (_something: unknown) => { consume: () => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                                            : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  consume: () => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : { consume: () => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                            : ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  consume: () => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",} : { consume: () => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  consume: () => {
+>consume : () => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>        : ^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {    return (_something) => ({      consume2: (arg2) => {},      stuff2: 42,    });  } : () => (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                                                             : ^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return (_something) => ({
+>(_something) => ({      consume2: (arg2) => {},      stuff2: 42,    }) : (_something: unknown) => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                                       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({      consume2: (arg2) => {},      stuff2: 42,    }) : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                       : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      consume2: (arg2) => {},      stuff2: 42,    } : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                     : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+  },
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+}));
+
+const res5 = test1((_something) => ({
+>res5 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: (arg2) => {},    });  },})) : [string, number]
+>                                                                                                                                         : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : (_something: unknown) => { stuff: string; consume: () => () => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                  : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: (arg2) => {},    });  },}) : { stuff: string; consume: () => () => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: (arg2) => {},    });  },} : { stuff: string; consume: () => () => { stuff2: number; consume2: (arg2: number) => void; }; }
+>                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: () => {
+>consume : () => () => { stuff2: number; consume2: (arg2: number) => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>() => {    return () => ({      stuff2: 42,      consume2: (arg2) => {},    });  } : () => () => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+    return () => ({
+>() => ({      stuff2: 42,      consume2: (arg2) => {},    }) : () => { stuff2: number; consume2: (arg2: number) => void; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>({      stuff2: 42,      consume2: (arg2) => {},    }) : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>{      stuff2: 42,      consume2: (arg2) => {},    } : { stuff2: number; consume2: (arg2: number) => void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+    });
+  },
+}));
+
+const res6 = test1((_something) => ({
+>res6 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  consume: () => {    return () => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",})) : [string, number]
+>                                                                                                                                         : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  consume: () => {    return () => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : (_something: unknown) => { consume: () => () => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                                  : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  consume: () => {    return () => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",}) : { consume: () => () => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  consume: () => {    return () => ({      consume2: (arg2) => {},      stuff2: 42,    });  },  stuff: "foo",} : { consume: () => () => { consume2: (arg2: number) => void; stuff2: number; }; stuff: string; }
+>                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  consume: () => {
+>consume : () => () => { consume2: (arg2: number) => void; stuff2: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {    return () => ({      consume2: (arg2) => {},      stuff2: 42,    });  } : () => () => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return () => ({
+>() => ({      consume2: (arg2) => {},      stuff2: 42,    }) : () => { consume2: (arg2: number) => void; stuff2: number; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({      consume2: (arg2) => {},      stuff2: 42,    }) : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                       : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      consume2: (arg2) => {},      stuff2: 42,    } : { consume2: (arg2: number) => void; stuff2: number; }
+>                                                     : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+  },
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+}));
+
+const res7 = test1((_something) => ({
+>res7 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: () => {},    });  },})) : [string, number]
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: () => {},    });  },}) : (_something: unknown) => { stuff: string; consume: () => () => { stuff2: number; consume2: () => void; }; }
+>                                                                                                                              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: () => {},    });  },}) : { stuff: string; consume: () => () => { stuff2: number; consume2: () => void; }; }
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  stuff: "foo",  consume: () => {    return () => ({      stuff2: 42,      consume2: () => {},    });  },} : { stuff: string; consume: () => () => { stuff2: number; consume2: () => void; }; }
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: () => {
+>consume : () => () => { stuff2: number; consume2: () => void; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {    return () => ({      stuff2: 42,      consume2: () => {},    });  } : () => () => { stuff2: number; consume2: () => void; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return () => ({
+>() => ({      stuff2: 42,      consume2: () => {},    }) : () => { stuff2: number; consume2: () => void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({      stuff2: 42,      consume2: () => {},    }) : { stuff2: number; consume2: () => void; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      stuff2: 42,      consume2: () => {},    } : { stuff2: number; consume2: () => void; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: () => {},
+>consume2 : () => void
+>         : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+    });
+  },
+}));
+
+const res8 = test1((_something) => ({
+>res8 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  consume: () => {    return () => ({      consume2: () => {},      stuff2: 42,    });  },  stuff: "foo",})) : [string, number]
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  consume: () => {    return () => ({      consume2: () => {},      stuff2: 42,    });  },  stuff: "foo",}) : (_something: unknown) => { consume: () => () => { consume2: () => void; stuff2: number; }; stuff: string; }
+>                                                                                                                              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  consume: () => {    return () => ({      consume2: () => {},      stuff2: 42,    });  },  stuff: "foo",}) : { consume: () => () => { consume2: () => void; stuff2: number; }; stuff: string; }
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  consume: () => {    return () => ({      consume2: () => {},      stuff2: 42,    });  },  stuff: "foo",} : { consume: () => () => { consume2: () => void; stuff2: number; }; stuff: string; }
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  consume: () => {
+>consume : () => () => { consume2: () => void; stuff2: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {    return () => ({      consume2: () => {},      stuff2: 42,    });  } : () => () => { consume2: () => void; stuff2: number; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return () => ({
+>() => ({      consume2: () => {},      stuff2: 42,    }) : () => { consume2: () => void; stuff2: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({      consume2: () => {},      stuff2: 42,    }) : { consume2: () => void; stuff2: number; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      consume2: () => {},      stuff2: 42,    } : { consume2: () => void; stuff2: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      consume2: () => {},
+>consume2 : () => void
+>         : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+      stuff2: 42,
+>stuff2 : number
+>       : ^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+  },
+  stuff: "foo",
+>stuff : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+}));
+

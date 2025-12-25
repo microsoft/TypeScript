@@ -1339,11 +1339,14 @@ export const enum CheckMode {
     Inferential = 1 << 1,                           // Inferential typing
     SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
-    IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
-    RestBindingElement = 1 << 5,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    SkipReturnTypeFromBodyInference = 1 << 4,       // Skip inferring from return types of context sensitive functions
+                                                    //   it's used to prevent inferring within return types of generic functions,
+                                                    //   as that could create overlapping inferences that would interfere with the logic `instantiateTypeWithSingleGenericCallSignature` that handles them better
+    IsForSignatureHelp = 1 << 5,                    // Call resolution for purposes of signature help
+    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -39563,7 +39566,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeOfSymbol(getSymbolOfDeclaration(node));
     }
 
-    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode) {
+    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode = CheckMode.Normal) {
         const links = getNodeLinks(node);
         // Check if function expression is contextually typed and assign parameter types if so.
         if (!(links.flags & NodeCheckFlags.ContextChecked)) {
@@ -39577,11 +39580,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!signature) {
                     return;
                 }
-                if (isContextSensitive(node)) {
+                const isNodeContextSensitive = isContextSensitive(node);
+                if (isNodeContextSensitive) {
                     if (contextualSignature) {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
-                        if (checkMode && checkMode & CheckMode.Inferential) {
+                        if (checkMode & CheckMode.Inferential) {
                             inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
@@ -39599,15 +39603,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
                     const inferenceContext = getInferenceContext(node);
-                    if (checkMode && checkMode & CheckMode.Inferential) {
+                    if (checkMode & CheckMode.Inferential) {
                         inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
-                    const returnType = getReturnTypeFromBody(node, checkMode);
-                    if (!signature.resolvedReturnType) {
-                        signature.resolvedReturnType = returnType;
+                    let contextualReturnType: Type;
+                    let returnType: Type;
+
+                    if (node.typeParameters) {
+                        checkMode |= CheckMode.SkipReturnTypeFromBodyInference;
                     }
+
+                    if (
+                        isNodeContextSensitive && ((checkMode & (CheckMode.Inferential | CheckMode.SkipReturnTypeFromBodyInference)) === CheckMode.Inferential) &&
+                        couldContainTypeVariables(contextualReturnType = getReturnTypeOfSignature(contextualSignature))
+                    ) {
+                        const inferenceContext = getInferenceContext(node);
+                        const isReturnContextSensitive = !!node.body && (node.body.kind === SyntaxKind.Block ? forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression)) : isContextSensitive(node.body));
+                        returnType = getReturnTypeFromBody(node, checkMode | (isReturnContextSensitive ? CheckMode.SkipContextSensitive : 0));
+                        inferTypes(inferenceContext!.inferences, returnType, contextualReturnType);
+                        if (isReturnContextSensitive) {
+                            returnType = getReturnTypeFromBody(node, checkMode);
+                        }
+                    }
+                    else {
+                        returnType = getReturnTypeFromBody(node, checkMode);
+                    }
+                    signature.resolvedReturnType ??= returnType;
                 }
                 checkSignatureDeclaration(node);
             }

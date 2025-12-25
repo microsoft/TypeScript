@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/genericFunctionInference3.ts] ////
+
+=== genericFunctionInference3.ts ===
+const enum SyntaxKind {
+>SyntaxKind : SyntaxKind
+>           : ^^^^^^^^^^
+
+  JSDocAllType,
+>JSDocAllType : SyntaxKind.JSDocAllType
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  JSDocUnknownType,
+>JSDocUnknownType : SyntaxKind.JSDocUnknownType
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface Node {
+  readonly kind: SyntaxKind;
+>kind : SyntaxKind
+>     : ^^^^^^^^^^
+}
+
+interface TypeNode extends Node {
+  _typeNodeBrand: any;
+>_typeNodeBrand : any
+}
+
+interface JSDocType extends TypeNode {
+  _jsDocTypeBrand: any;
+>_jsDocTypeBrand : any
+}
+
+export interface JSDocAllType extends JSDocType {
+  readonly kind: SyntaxKind.JSDocAllType;
+>kind : SyntaxKind.JSDocAllType
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+export interface JSDocUnknownType extends JSDocType {
+  readonly kind: SyntaxKind.JSDocUnknownType;
+>kind : SyntaxKind.JSDocUnknownType
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SyntaxKind : any
+>           : ^^^
+}
+
+type Mutable<T extends object> = { -readonly [K in keyof T]: T[K] };
+>Mutable : Mutable<T>
+>        : ^^^^^^^^^^
+
+declare function createJSDocPrimaryTypeWorker<T extends JSDocType>(
+>createJSDocPrimaryTypeWorker : <T extends JSDocType>(kind: T["kind"]) => Mutable<T>
+>                             : ^ ^^^^^^^^^         ^^    ^^         ^^^^^          
+
+  kind: T["kind"],
+>kind : T["kind"]
+>     : ^^^^^^^^^
+
+): Mutable<T>;
+
+declare function memoizeOne<A extends string | number | boolean | undefined, T>(
+>memoizeOne : <A extends string | number | boolean | undefined, T>(callback: (arg: A) => T) => (arg: A) => T
+>           : ^ ^^^^^^^^^                                     ^^ ^^        ^^             ^^^^^             
+
+  callback: (arg: A) => T,
+>callback : (arg: A) => T
+>         : ^   ^^ ^^^^^ 
+>arg : A
+>    : ^
+
+): (arg: A) => T;
+>arg : A
+>    : ^
+
+export const getJSDocPrimaryTypeCreateFunction = memoizeOne(
+>getJSDocPrimaryTypeCreateFunction : <T extends JSDocType>(arg: T["kind"]) => () => Mutable<T>
+>                                  : ^ ^^^^^^^^^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>memoizeOne(  <T extends JSDocType>(kind: T["kind"]) =>    () =>      createJSDocPrimaryTypeWorker(kind),) : <T extends JSDocType>(arg: T["kind"]) => () => Mutable<T>
+>                                                                                                          : ^ ^^^^^^^^^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>memoizeOne : <A extends string | number | boolean | undefined, T>(callback: (arg: A) => T) => (arg: A) => T
+>           : ^ ^^^^^^^^^                                     ^^ ^^        ^^             ^^^^^             
+
+  <T extends JSDocType>(kind: T["kind"]) =>
+><T extends JSDocType>(kind: T["kind"]) =>    () =>      createJSDocPrimaryTypeWorker(kind) : <T extends JSDocType>(kind: T["kind"]) => () => Mutable<T>
+>                                                                                           : ^ ^^^^^^^^^         ^^    ^^         ^^^^^^^^^^^^^^^^^^^^^
+>kind : T["kind"]
+>     : ^^^^^^^^^
+
+    () =>
+>() =>      createJSDocPrimaryTypeWorker(kind) : () => Mutable<T>
+>                                              : ^^^^^^^^^^^^^^^^
+
+      createJSDocPrimaryTypeWorker(kind),
+>createJSDocPrimaryTypeWorker(kind) : Mutable<T>
+>                                   : ^^^^^^^^^^
+>createJSDocPrimaryTypeWorker : <T_1 extends JSDocType>(kind: T_1["kind"]) => Mutable<T_1>
+>                             : ^^^^^^^^^^^^^         ^^    ^^           ^^^^^            
+>kind : T["kind"]
+>     : ^^^^^^^^^
+
+);
+

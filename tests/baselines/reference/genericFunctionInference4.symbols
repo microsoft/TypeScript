@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/genericFunctionInference4.ts] ////
+
+=== genericFunctionInference4.ts ===
+declare function inner<T>(kind: T): T;
+>inner : Symbol(inner, Decl(genericFunctionInference4.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 0, 23))
+>kind : Symbol(kind, Decl(genericFunctionInference4.ts, 0, 26))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 0, 23))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 0, 23))
+
+declare function outer<A extends string | number, T>(
+>outer : Symbol(outer, Decl(genericFunctionInference4.ts, 0, 38))
+>A : Symbol(A, Decl(genericFunctionInference4.ts, 2, 23))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 2, 49))
+
+  callback: (arg: A) => (num: number) => T,
+>callback : Symbol(callback, Decl(genericFunctionInference4.ts, 2, 53))
+>arg : Symbol(arg, Decl(genericFunctionInference4.ts, 3, 13))
+>A : Symbol(A, Decl(genericFunctionInference4.ts, 2, 23))
+>num : Symbol(num, Decl(genericFunctionInference4.ts, 3, 25))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 2, 49))
+
+): (arg: A) => T;
+>arg : Symbol(arg, Decl(genericFunctionInference4.ts, 4, 4))
+>A : Symbol(A, Decl(genericFunctionInference4.ts, 2, 23))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 2, 49))
+
+export const result = outer(
+>result : Symbol(result, Decl(genericFunctionInference4.ts, 6, 12))
+>outer : Symbol(outer, Decl(genericFunctionInference4.ts, 0, 38))
+
+  <T extends number>(arg: T) =>
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 7, 3))
+>arg : Symbol(arg, Decl(genericFunctionInference4.ts, 7, 21))
+>T : Symbol(T, Decl(genericFunctionInference4.ts, 7, 3))
+
+    (num) =>
+>num : Symbol(num, Decl(genericFunctionInference4.ts, 8, 5))
+
+      inner(arg),
+>inner : Symbol(inner, Decl(genericFunctionInference4.ts, 0, 0))
+>arg : Symbol(arg, Decl(genericFunctionInference4.ts, 7, 21))
+
+);

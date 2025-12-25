@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/genericFunctionInference4.ts] ////
+
+=== genericFunctionInference4.ts ===
+declare function inner<T>(kind: T): T;
+>inner : <T>(kind: T) => T
+>      : ^ ^^    ^^ ^^^^^ 
+>kind : T
+>     : ^
+
+declare function outer<A extends string | number, T>(
+>outer : <A extends string | number, T>(callback: (arg: A) => (num: number) => T) => (arg: A) => T
+>      : ^ ^^^^^^^^^               ^^ ^^        ^^                              ^^^^^             
+
+  callback: (arg: A) => (num: number) => T,
+>callback : (arg: A) => (num: number) => T
+>         : ^   ^^ ^^^^^                  
+>arg : A
+>    : ^
+>num : number
+>    : ^^^^^^
+
+): (arg: A) => T;
+>arg : A
+>    : ^
+
+export const result = outer(
+>result : <T extends number>(arg: T) => T
+>       : ^ ^^^^^^^^^      ^^   ^^^^^^^^^
+>outer(  <T extends number>(arg: T) =>    (num) =>      inner(arg),) : <T extends number>(arg: T) => T
+>                                                                    : ^ ^^^^^^^^^      ^^   ^^^^^^^^^
+>outer : <A extends string | number, T>(callback: (arg: A) => (num: number) => T) => (arg: A) => T
+>      : ^ ^^^^^^^^^               ^^ ^^        ^^                              ^^^^^             
+
+  <T extends number>(arg: T) =>
+><T extends number>(arg: T) =>    (num) =>      inner(arg) : <T extends number>(arg: T) => (num: number) => T
+>                                                          : ^ ^^^^^^^^^      ^^   ^^ ^^^^^^   ^^^^^^^^^^^^^^
+>arg : T
+>    : ^
+
+    (num) =>
+>(num) =>      inner(arg) : (num: number) => T
+>                         : ^   ^^^^^^^^^^^^^^
+>num : number
+>    : ^^^^^^
+
+      inner(arg),
+>inner(arg) : T
+>           : ^
+>inner : <T_1>(kind: T_1) => T_1
+>      : ^^^^^^    ^^   ^^^^^   
+>arg : T
+>    : ^
+
+);
