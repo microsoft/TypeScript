@@ -16547,9 +16547,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // where different generations of the same type parameter are in scope). This leads to a lot of new type
         // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
         // that uses the original type identities for all unconstrained type parameters.
+        let typeArguments: TypeParameter[] | undefined;
+        if (signature.typeParameters) {
+            typeArguments = [];
+            let needsMapper = false;
+            for (const tp of signature.typeParameters) {
+                if (tp.target && !getConstraintOfTypeParameter(tp.target)) {
+                    needsMapper = true;
+                    typeArguments.push(tp.target);
+                }
+                else {
+                    typeArguments.push(tp);
+                }
+            }
+            // Whenever a type parameter is replaced with its original other type parameters must be cloned
+            // and appropriate mapper must be associated with them. This is necessary to ensure that their constraints
+            // refer to those replacement type parameters.
+            if (needsMapper) {
+                const mapper = createTypeMapper(signature.typeParameters, typeArguments);
+                for (let i = 0; i < typeArguments.length; i++) {
+                    if (typeArguments[i] === signature.typeParameters[i] && getConstraintFromTypeParameter(typeArguments[i])) {
+                        const clone = cloneTypeParameter(typeArguments[i]);
+                        clone.mapper = combineTypeMappers(typeArguments[i].mapper, mapper);
+                        typeArguments[i] = clone;
+                    }
+                }
+            }
+        }
         return getSignatureInstantiation(
             signature,
-            map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp),
+            typeArguments,
             isInJSFile(signature.declaration),
         );
     }
