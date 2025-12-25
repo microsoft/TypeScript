@@ -6888,8 +6888,9 @@ declare namespace ts {
         LiteralKeyof = 256,
         NoConstraints = 512,
         AlwaysStrict = 1024,
-        MaxValue = 2048,
-        PriorityImpliesCombination = 416,
+        ReturnMapper = 2048,
+        MaxValue = 4096,
+        PriorityImpliesCombination = 2464,
         Circularity = -1,
     }
     interface FileExtensionInfo {
