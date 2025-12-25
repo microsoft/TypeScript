@@ -37094,7 +37094,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // that the user will not add any.
         const constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
         if (constructSignatures.length) {
-            if (!isConstructorAccessible(node, constructSignatures[0])) {
+            const accessibilityError = getConstructorAccessibilityError(node, constructSignatures, ModifierFlags.NonPublicAccessibilityModifier);
+            if (accessibilityError) {
+                if (accessibilityError.kind & ModifierFlags.Private) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(accessibilityError.declaringClass));
+                }
+                if (accessibilityError.kind & ModifierFlags.Protected) {
+                    error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, typeToString(accessibilityError.declaringClass));
+                }
                 return resolveErrorCall(node);
             }
             // If the expression is a class of abstract type, or an abstract construct signature,
@@ -37175,41 +37182,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return typeHasProtectedAccessibleBase(target, firstBase as InterfaceType);
     }
 
-    function isConstructorAccessible(node: NewExpression, signature: Signature) {
-        if (!signature || !signature.declaration) {
-            return true;
-        }
+    function getConstructorAccessibilityError(node: Expression, signatures: readonly Signature[], modifiersMask: ModifierFlags) {
+        for (const signature of signatures) {
+            if (!signature.declaration) {
+                continue;
+            }
+            const declaration = signature.declaration;
+            const modifiers = getSelectedEffectiveModifierFlags(declaration, modifiersMask);
 
-        const declaration = signature.declaration;
-        const modifiers = getSelectedEffectiveModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier);
+            // (1) Public constructors and (2) constructor functions are always accessible.
+            if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
+                continue;
+            }
 
-        // (1) Public constructors and (2) constructor functions are always accessible.
-        if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
-            return true;
-        }
+            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol)!;
 
-        const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol)!;
-        const declaringClass = getDeclaredTypeOfSymbol(declaration.parent.symbol) as InterfaceType;
-
-        // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
-        if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-            const containingClass = getContainingClass(node);
-            if (containingClass && modifiers & ModifierFlags.Protected) {
-                const containingType = getTypeOfNode(containingClass);
-                if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
-                    return true;
+            // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
+            if (!isNodeWithinClass(node, declaringClassDeclaration)) {
+                const containingClass = getContainingClass(node);
+                if (containingClass && modifiers & ModifierFlags.Protected) {
+                    const containingType = getTypeOfNode(containingClass);
+                    if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
+                        continue;
+                    }
                 }
+                return {
+                    kind: modifiers,
+                    declaringClass: getDeclaredTypeOfSymbol(declaration.parent.symbol),
+                };
             }
-            if (modifiers & ModifierFlags.Private) {
-                error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
-            }
-            if (modifiers & ModifierFlags.Protected) {
-                error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
-            }
-            return false;
         }
-
-        return true;
+        return undefined;
     }
 
     function invocationErrorDetails(errorTarget: Node, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain; relatedMessage: DiagnosticMessage | undefined; } {
@@ -47387,14 +47390,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkBaseTypeAccessibility(type: Type, node: ExpressionWithTypeArguments) {
         const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-        if (signatures.length) {
-            const declaration = signatures[0].declaration;
-            if (declaration && hasEffectiveModifier(declaration, ModifierFlags.Private)) {
-                const typeClassDeclaration = getClassLikeDeclarationOfSymbol(type.symbol)!;
-                if (!isNodeWithinClass(node, typeClassDeclaration)) {
-                    error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol));
-                }
-            }
+        const accessibilityError = getConstructorAccessibilityError(node, signatures, ModifierFlags.Private);
+        if (accessibilityError) {
+            error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(accessibilityError.declaringClass.symbol));
         }
     }
 
