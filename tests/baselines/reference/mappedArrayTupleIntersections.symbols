@@ -60,3 +60,71 @@ type X = Hmm<[3, 4, 5]>;
 >X : Symbol(X, Decl(mappedArrayTupleIntersections.ts, 15, 10))
 >Hmm : Symbol(Hmm, Decl(mappedArrayTupleIntersections.ts, 11, 38))
 
+type MustHaveFooBar<T extends { foo: unknown; bar: unknown }> = T;
+>MustHaveFooBar : Symbol(MustHaveFooBar, Decl(mappedArrayTupleIntersections.ts, 17, 24))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 19, 20))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 19, 31))
+>bar : Symbol(bar, Decl(mappedArrayTupleIntersections.ts, 19, 45))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 19, 20))
+
+type Hmm2<T> = T extends { foo: string }[]
+>Hmm2 : Symbol(Hmm2, Decl(mappedArrayTupleIntersections.ts, 19, 66))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 21, 10))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 21, 10))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 21, 26))
+
+  ? T extends { bar: number }[]
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 21, 10))
+>bar : Symbol(bar, Decl(mappedArrayTupleIntersections.ts, 22, 15))
+
+    ? MustBeArray<{ [I in keyof T]: MustHaveFooBar<T[I]> }>
+>MustBeArray : Symbol(MustBeArray, Decl(mappedArrayTupleIntersections.ts, 7, 43))
+>I : Symbol(I, Decl(mappedArrayTupleIntersections.ts, 23, 21))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 21, 10))
+>MustHaveFooBar : Symbol(MustHaveFooBar, Decl(mappedArrayTupleIntersections.ts, 17, 24))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 21, 10))
+>I : Symbol(I, Decl(mappedArrayTupleIntersections.ts, 23, 21))
+
+    : never
+  : never;
+
+type Y = Hmm2<[{ foo: string; bar: number }]>;
+>Y : Symbol(Y, Decl(mappedArrayTupleIntersections.ts, 25, 10))
+>Hmm2 : Symbol(Hmm2, Decl(mappedArrayTupleIntersections.ts, 19, 66))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 27, 16))
+>bar : Symbol(bar, Decl(mappedArrayTupleIntersections.ts, 27, 29))
+
+type MustHaveFoo<T extends { foo: unknown }> = T;
+>MustHaveFoo : Symbol(MustHaveFoo, Decl(mappedArrayTupleIntersections.ts, 27, 46))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 29, 17))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 29, 28))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 29, 17))
+
+type Hmm3<T extends { foo: string }[]> = T extends { bar: string }
+>Hmm3 : Symbol(Hmm3, Decl(mappedArrayTupleIntersections.ts, 29, 49))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 31, 10))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 31, 21))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 31, 10))
+>bar : Symbol(bar, Decl(mappedArrayTupleIntersections.ts, 31, 52))
+
+  ? MustBeArray<{ [I in keyof T]: MustHaveFoo<T[I]> }>
+>MustBeArray : Symbol(MustBeArray, Decl(mappedArrayTupleIntersections.ts, 7, 43))
+>I : Symbol(I, Decl(mappedArrayTupleIntersections.ts, 32, 19))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 31, 10))
+>MustHaveFoo : Symbol(MustHaveFoo, Decl(mappedArrayTupleIntersections.ts, 27, 46))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 31, 10))
+>I : Symbol(I, Decl(mappedArrayTupleIntersections.ts, 32, 19))
+
+  : never;
+
+type Z1 = Hmm3<[{ foo: string }]>;
+>Z1 : Symbol(Z1, Decl(mappedArrayTupleIntersections.ts, 33, 10))
+>Hmm3 : Symbol(Hmm3, Decl(mappedArrayTupleIntersections.ts, 29, 49))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 35, 17))
+
+type Z2 = Hmm3<[{ foo: string }] & { bar: string }>;
+>Z2 : Symbol(Z2, Decl(mappedArrayTupleIntersections.ts, 35, 34))
+>Hmm3 : Symbol(Hmm3, Decl(mappedArrayTupleIntersections.ts, 29, 49))
+>foo : Symbol(foo, Decl(mappedArrayTupleIntersections.ts, 36, 17))
+>bar : Symbol(bar, Decl(mappedArrayTupleIntersections.ts, 36, 36))
+
