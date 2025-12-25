@@ -210,7 +210,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
       "kind": "discover"
     }
@@ -219,7 +218,6 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -463,7 +461,6 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [
         "/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/jsconfig.json
@@ -492,7 +489,6 @@ Info seq  [hh:mm:ss:mss] event:
         "typings": [
           "/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -588,7 +584,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
       "kind": "discover"
     }
@@ -596,7 +591,6 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -635,7 +629,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/jsconfig.json
@@ -662,7 +655,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -709,7 +701,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
       "kind": "discover"
     }
@@ -717,7 +708,6 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -756,7 +746,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -781,7 +770,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

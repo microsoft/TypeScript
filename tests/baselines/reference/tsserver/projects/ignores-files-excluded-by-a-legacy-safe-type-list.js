@@ -166,14 +166,12 @@ TI:: [hh:mm:ss:mss] Got install request
         ],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/home/src/Vscode/Projects/bin",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["blissfuljs"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["blissfuljs"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -224,7 +222,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -246,7 +243,6 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
