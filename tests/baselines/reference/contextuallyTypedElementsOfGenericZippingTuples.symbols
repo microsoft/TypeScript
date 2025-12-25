@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts] ////
+
+=== contextuallyTypedElementsOfGenericZippingTuples.ts ===
+declare function test<T extends unknown[], T2 extends unknown[]>(
+>test : Symbol(test, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 0))
+>T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))
+>T2 : Symbol(T2, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 42))
+
+  a: [
+>a : Symbol(a, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 65))
+
+    ...{
+      [K in keyof T]: {
+>K : Symbol(K, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 3, 7))
+>T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))
+
+        produce: (seed: string) => T[K];
+>produce : Symbol(produce, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 3, 23))
+>seed : Symbol(seed, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 4, 18))
+>T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))
+>K : Symbol(K, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 3, 7))
+
+      };
+    }
+  ],
+  b: [
+>b : Symbol(b, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 7, 4))
+
+    ...{
+      [K in keyof T2]: {
+>K : Symbol(K, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 10, 7))
+>T2 : Symbol(T2, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 42))
+
+        consume: (arg: T[K & keyof T]) => T2[K];
+>consume : Symbol(consume, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 10, 24))
+>arg : Symbol(arg, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 11, 18))
+>T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))
+>K : Symbol(K, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 10, 7))
+>T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))
+>T2 : Symbol(T2, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 42))
+>K : Symbol(K, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 10, 7))
+
+      };
+    }
+  ]
+): void;
+
+test(
+>test : Symbol(test, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 0))
+
+  [
+    {
+      produce: () => "",
+>produce : Symbol(produce, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 19, 5))
+
+    },
+    {
+      produce: () => 42,
+>produce : Symbol(produce, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 22, 5))
+
+    },
+  ],
+  [
+    {
+      consume: (arg) => {
+>consume : Symbol(consume, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 27, 5))
+>arg : Symbol(arg, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 28, 16))
+
+        const received: string = arg;
+>received : Symbol(received, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 29, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 28, 16))
+
+        return received;
+>received : Symbol(received, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 29, 13))
+
+      },
+    },
+    {
+      consume: (arg) => {
+>consume : Symbol(consume, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 33, 5))
+>arg : Symbol(arg, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 34, 16))
+
+        const received: number = arg;
+>received : Symbol(received, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 35, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 34, 16))
+
+        return received;
+>received : Symbol(received, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 35, 13))
+
+      },
+    },
+  ]
+);
+

@@ -32295,7 +32295,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
+    function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type): Type | undefined {
         return mapType(type, t => {
             if (t.flags & TypeFlags.Intersection) {
                 let types: Type[] | undefined;
@@ -32374,6 +32374,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeFromIndexInfosOfContextualType(type: Type, name: __String, nameType: Type | undefined) {
         if (isTupleType(type) && isNumericLiteralName(name) && +name >= 0) {
+            if (type.target.combinedFlags & ElementFlags.Variable) {
+                const restElement = getTypeArguments(type)[type.target.fixedLength];
+                if (restElement !== type) {
+                    const propType = getTypeOfPropertyOfContextualType(restElement, name);
+                    if (propType) {
+                        return propType;
+                    }
+                }
+            }
             const restType = getElementTypeOfSliceOfTupleType(type, type.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
             if (restType) {
                 return restType;
