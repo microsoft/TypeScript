@@ -311,7 +311,7 @@ interface AA {
 const aa: AA = { [sym]: '123' };
 
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
-const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Error
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 
 // Repro from #45772
@@ -484,7 +484,7 @@ const a = { [id]: 'test' };
 let aid = a[id];
 const aa = { [sym]: '123' };
 const obj1 = { [sym]: 'hello ' };
-const obj2 = { [sym]: 'hello ' }; // Permitted for backwards compatibility
+const obj2 = { [sym]: 'hello ' }; // Error
 const obj3 = { [sym]: 'hello ' }; // Error
 
 

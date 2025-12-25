@@ -903,7 +903,7 @@ const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 309, 41))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
 
-const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Error
 >obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 310, 5))
 >key : Symbol(key, Decl(indexSignatures1.ts, 310, 15))
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 310, 41))
