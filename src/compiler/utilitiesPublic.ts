@@ -140,6 +140,7 @@ import {
     isJSDocDeprecatedTag,
     isJSDocEnumTag,
     isJSDocFunctionType,
+    isJSDocIgnoreTag,
     isJSDocImplementsTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
@@ -183,6 +184,7 @@ import {
     JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocIgnoreTag,
     JSDocImplementsTag,
     JSDocLink,
     JSDocLinkCode,
@@ -1172,6 +1174,11 @@ export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefine
 /** @internal */
 export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined {
     return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
+}
+
+/** Gets the JSDoc ignore tag for the node if present */
+export function getJSDocIgnoreTag(node: Node): JSDocIgnoreTag | undefined {
+    return getFirstJSDocTag(node, isJSDocIgnoreTag);
 }
 
 /** Gets the JSDoc enum tag for the node if present */
