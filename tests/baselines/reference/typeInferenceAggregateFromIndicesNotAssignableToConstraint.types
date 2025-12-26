@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
+interface Expression extends Node {
+    _expressionBrand: any;
+>_expressionBrand : any
+}
+
+declare function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+>setParent : <T extends Node>(child: T, parent: T["parent"] | undefined) => T
+>          : ^ ^^^^^^^^^    ^^     ^^ ^^      ^^                       ^^^^^ 
+>child : T
+>      : ^
+>parent : T["parent"] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+
+interface Node {
+    readonly kind: number;
+>kind : number
+>     : ^^^^^^
+
+    readonly parent: Node;
+>parent : Node
+>       : ^^^^
+}
+
+declare const expr: Expression
+>expr : Expression
+>     : ^^^^^^^^^^
+
+declare const node: Node
+>node : Node
+>     : ^^^^
+
+const res = setParent(expr, node) // Expression
+>res : Expression
+>    : ^^^^^^^^^^
+>setParent(expr, node) : Expression
+>                      : ^^^^^^^^^^
+>setParent : <T extends Node>(child: T, parent: T["parent"] | undefined) => T
+>          : ^ ^^^^^^^^^    ^^     ^^ ^^      ^^                       ^^^^^ 
+>expr : Expression
+>     : ^^^^^^^^^^
+>node : Node
+>     : ^^^^
+

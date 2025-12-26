@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/typeInferenceIndexingUsingOtherTypeParameter1.ts] ////
+
+=== typeInferenceIndexingUsingOtherTypeParameter1.ts ===
+type FieldValues = Record<string, any>;
+>FieldValues : FieldValues
+>            : ^^^^^^^^^^^
+
+type UseControllerProps<
+>UseControllerProps : UseControllerProps<TFieldValues, TName>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends keyof TFieldValues = keyof TFieldValues,
+> = {
+  name: TName;
+>name : TName
+>     : ^^^^^
+
+  defaultValue?: TFieldValues[TName];
+>defaultValue : TFieldValues[TName] | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare function useController<
+>useController : <TFieldValues extends FieldValues = FieldValues, TName extends keyof TFieldValues = keyof TFieldValues>(props: UseControllerProps<TFieldValues, TName>) => { name: TName; values: TFieldValues; }
+>              : ^            ^^^^^^^^^           ^^^^^^^^^^^^^^^^     ^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^     ^^                                       ^^^^^                                      
+
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends keyof TFieldValues = keyof TFieldValues,
+>(
+  props: UseControllerProps<TFieldValues, TName>,
+>props : UseControllerProps<TFieldValues, TName>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): { name: TName; values: TFieldValues };
+>name : TName
+>     : ^^^^^
+>values : TFieldValues
+>       : ^^^^^^^^^^^^
+
+export const { name, values } = useController({
+>name : "test"
+>     : ^^^^^^
+>values : Record<"test", string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>useController({  name: "test",  defaultValue: "",}) : { name: "test"; values: Record<"test", string>; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useController : <TFieldValues extends FieldValues = FieldValues, TName extends keyof TFieldValues = keyof TFieldValues>(props: UseControllerProps<TFieldValues, TName>) => { name: TName; values: TFieldValues; }
+>              : ^            ^^^^^^^^^           ^^^^^^^^^^^^^^^^     ^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^     ^^                                       ^^^^^                                      
+>{  name: "test",  defaultValue: "",} : { name: "test"; defaultValue: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  name: "test",
+>name : "test"
+>     : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+  defaultValue: "",
+>defaultValue : string
+>             : ^^^^^^
+>"" : ""
+>   : ^^
+
+});
+
+declare function fn1<T, U>(arg: T[keyof T & keyof U], u: U): T;
+>fn1 : <T, U>(arg: T[keyof T & keyof U], u: U) => T
+>    : ^ ^^ ^^   ^^                    ^^ ^^ ^^^^^ 
+>arg : T[keyof T & keyof U]
+>    : ^^^^^^^^^^^^^^^^^^^^
+>u : U
+>  : ^
+
+const res1 = fn1("foo", { prop: 42 });
+>res1 : Record<"prop", "foo">
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>fn1("foo", { prop: 42 }) : Record<"prop", "foo">
+>                         : ^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <T, U>(arg: T[keyof T & keyof U], u: U) => T
+>    : ^ ^^ ^^   ^^                    ^^ ^^ ^^^^^ 
+>"foo" : "foo"
+>      : ^^^^^
+>{ prop: 42 } : { prop: number; }
+>             : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+

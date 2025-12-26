@@ -14664,23 +14664,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             inferredProp.declarations = prop.declarations;
             inferredProp.links.nameType = getSymbolLinks(prop).nameType;
             inferredProp.links.propertyType = getTypeOfSymbol(prop);
-            if (
-                type.constraintType.type.flags & TypeFlags.IndexedAccess
-                && (type.constraintType.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
-                && (type.constraintType.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter
-            ) {
-                // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
-                // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-                // type identities produced, we simplify such indexed access occurences
-                const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
-                const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
-                inferredProp.links.mappedType = newMappedType as MappedType;
-                inferredProp.links.constraintType = getIndexType(newTypeParam) as IndexType;
-            }
-            else {
-                inferredProp.links.mappedType = type.mappedType;
-                inferredProp.links.constraintType = type.constraintType;
-            }
+            inferredProp.links.mappedType = type.mappedType;
+            inferredProp.links.constraintType = type.constraintType;
             members.set(prop.escapedName, inferredProp);
         }
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos);
@@ -20568,7 +20553,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Maps forward-references to later types parameters to the empty object type.
+     * Maps forward-references to later types parameters to the unknown type.
      * This is used during inference when instantiating type parameter defaults.
      */
     function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
@@ -26285,6 +26270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             topLevel: true,
             isFixed: false,
             impliedArity: undefined,
+            indexes: undefined,
         };
     }
 
@@ -26298,6 +26284,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             topLevel: inference.topLevel,
             isFixed: inference.isFixed,
             impliedArity: inference.impliedArity,
+            indexes: inference.indexes && inference.indexes.slice(),
         };
     }
 
@@ -26383,6 +26370,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
+        // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+        // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+        // type identities produced, we simplify such indexed access occurences
+        if (constraint.type.flags & TypeFlags.IndexedAccess) {
+            const newTypeParam = (constraint.type as IndexedAccessType).objectType;
+            target = replaceIndexedAccess(target, constraint.type as ReplaceableIndexedAccessType, newTypeParam) as MappedType;
+            constraint = getIndexType(newTypeParam) as IndexType;
+        }
         const cacheKey = source.id + "," + target.id + "," + constraint.id;
         if (reverseHomomorphicMappedCache.has(cacheKey)) {
             return reverseHomomorphicMappedCache.get(cacheKey);
@@ -26445,9 +26440,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function inferReverseMappedTypeWorker(sourceType: Type, target: MappedType, constraint: IndexType): Type {
-        const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
+        const typeParameter = getTypeParameterFromMappedType(target);
+        const inferenceTarget = getIndexedAccessType(constraint.type, typeParameter);
         const templateType = getTemplateTypeFromMappedType(target);
-        const inference = createInferenceInfo(typeParameter);
+        const inference = createInferenceInfo(inferenceTarget);
         inferTypes([inference], sourceType, templateType);
         return getWidenedType(getTypeFromInference(inference) || unknownType);
     }
@@ -26518,7 +26514,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeFromInference(inference: InferenceInfo) {
         return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
             inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
-            undefined;
+            getAggregateInference(inference);
     }
 
     function hasSkipDirectInferenceFlag(node: Node) {
@@ -26889,6 +26885,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                 inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
                 inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
+            }
+            else if (!(priority & InferencePriority.NakedTypeVariable) && target.flags & TypeFlags.IndexedAccess) {
+                if (isFromInferenceBlockedSource(source)) {
+                    return;
+                }
+                const inference = getInferenceInfoForType(getActualTypeVariable((target as IndexedAccessType).objectType));
+                if (inference) {
+                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
+                        return;
+                    }
+                    if (!hasInferenceCandidates(inference)) {
+                        const recordSymbol = getGlobalRecordSymbol();
+                        if (recordSymbol) {
+                            inference.indexes = append(inference.indexes, getTypeAliasInstantiation(recordSymbol, [(target as IndexedAccessType).indexType, source]));
+                        }
+                    }
+                }
             }
             else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
                 if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
@@ -27538,6 +27551,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getWidenedType(unwidenedType);
     }
 
+    function getAggregateInference(inference: InferenceInfo, constraintType?: Type, compareTypes?: TypeComparer, mapper?: TypeMapper | undefined): Type | undefined {
+        if (!inference.indexes) {
+            return undefined;
+        }
+        const typeEraser = createTypeEraser([inference.typeParameter.flags & TypeFlags.IndexedAccess ? (inference.typeParameter as IndexedAccessType).objectType : inference.typeParameter]);
+        const aggregateInference = instantiateType(getIntersectionType(inference.indexes), mapper ? mergeTypeMappers(typeEraser, mapper) : typeEraser);
+        if (getReducedType(aggregateInference).flags & TypeFlags.Never) {
+            // `never` inference isn't that useful of an inference given its assignable to every other type
+            return undefined;
+        }
+        if (!constraintType || (compareTypes ??= compareTypesAssignable)(aggregateInference, getTypeWithThisArgument(constraintType, aggregateInference))) {
+            return aggregateInference;
+        }
+        if (constraintType.flags & TypeFlags.Union) {
+            const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), constraintType);
+            if (discriminantProps) {
+                let match: Type | undefined;
+                findDiscriminant:
+                for (const p of discriminantProps) {
+                    const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
+                    for (const type of (constraintType as UnionType).types) {
+                        const propType = getTypeOfPropertyOfType(type, p.escapedName);
+                        if (propType && candidatePropType && isTypeAssignableTo(candidatePropType, propType)) {
+                            if (match && match !== type) {
+                                match = undefined;
+                                break findDiscriminant;
+                            }
+                            else {
+                                match = type;
+                            }
+                        }
+                    }
+                }
+                if (match) {
+                    const combinedType = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
+                    if (compareTypes(combinedType, getTypeWithThisArgument(constraintType, combinedType))) {
+                        return combinedType;
+                    }
+                }
+            }
+        }
+        // if the aggregate inference isn't assignable to the constraint return undefined
+        // this way the compiler keeps preferring the default type
+        return undefined;
+    }
+
     function getInferredType(context: InferenceContext, index: number): Type {
         const inference = context.inferences[index];
         if (!inference.inferredType) {
@@ -27562,11 +27621,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
+                else if (inference.indexes) {
+                    const instantiatedConstraint = instantiateType(getConstraintOfTypeParameter(inference.typeParameter), context.nonFixingMapper);
+                    inferredType = getAggregateInference(inference, instantiatedConstraint, context.compareTypes, context.nonFixingMapper);
+                }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
                     inferredType = silentNeverType;
                 }
-                else {
+                if (!inferredType) {
                     // Infer either the default or the empty object type when no inferences were
                     // made. It is important to remember that in this case, inference still
                     // succeeds, meaning there is no error for not having inference candidates. An
@@ -27575,7 +27638,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
                     if (defaultType) {
                         // Instantiate the default type. Any forward reference to a type
-                        // parameter should be instantiated to the empty object type.
+                        // parameter should be instantiated to the unknown type.
                         inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
                     }
                 }

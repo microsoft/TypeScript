@@ -202,8 +202,6 @@ p12.bar = p12.bar + 1;
 
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 
-type Dictionary<T> = { [x: string]: T }
-
 type Computed<T> = {
     get?(): T;
     set?(value: T): void;

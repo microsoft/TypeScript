@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/indexAccessCombinedInference2.ts] ////
+
+=== indexAccessCombinedInference2.ts ===
+type TLArrowShape = {
+>TLArrowShape : TLArrowShape
+>             : ^^^^^^^^^^^^
+
+  type: "arrow";
+>type : "arrow"
+>     : ^^^^^^^
+
+  id: string;
+>id : string
+>   : ^^^^^^
+
+  x: number;
+>x : number
+>  : ^^^^^^
+
+  y: number;
+>y : number
+>  : ^^^^^^
+
+  props: {
+>props : { dir: 1 | -1; }
+>      : ^^^^^^^      ^^^
+
+    dir: 1 | -1;
+>dir : 1 | -1
+>    : ^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+  };
+};
+
+type NodeShape = {
+>NodeShape : NodeShape
+>          : ^^^^^^^^^
+
+  type: "node";
+>type : "node"
+>     : ^^^^^^
+
+  id: string;
+>id : string
+>   : ^^^^^^
+
+  x: number;
+>x : number
+>  : ^^^^^^
+
+  y: number;
+>y : number
+>  : ^^^^^^
+
+  props: {
+>props : { nodeType: string; }
+>      : ^^^^^^^^^^^^      ^^^
+
+    nodeType: string;
+>nodeType : string
+>         : ^^^^^^
+
+  };
+};
+
+type TLShape = TLArrowShape | NodeShape;
+>TLShape : TLShape
+>        : ^^^^^^^
+
+export type TLShapePartial<T extends TLShape = TLShape> = T extends T
+>TLShapePartial : TLShapePartial<T>
+>               : ^^^^^^^^^^^^^^^^^
+
+  ? {
+      id: string;
+>id : string
+>   : ^^^^^^
+
+      type: T["type"];
+>type : T["type"]
+>     : ^^^^^^^^^
+
+      props?: Partial<T["props"]>;
+>props : Partial<T["props"]> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    } & Partial<Omit<T, "type" | "id" | "props">>
+  : never;
+
+declare class Editor {
+>Editor : Editor
+>       : ^^^^^^
+
+  updateShape<T extends TLShape = TLShape>(
+>updateShape : <T extends TLShape = TLShape>(partial: TLShapePartial<T> | null | undefined) => T
+>            : ^ ^^^^^^^^^       ^^^^^^^^^^^^       ^^                                    ^^^^^ 
+
+    partial: TLShapePartial<T> | null | undefined,
+>partial : TLShapePartial<T> | null | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ): T;
+}
+
+declare const x: number;
+>x : number
+>  : ^^^^^^
+
+declare const y: number;
+>y : number
+>  : ^^^^^^
+
+declare const editor: Editor;
+>editor : Editor
+>       : ^^^^^^
+
+declare const node1: NodeShape;
+>node1 : NodeShape
+>      : ^^^^^^^^^
+
+const node2 = editor.updateShape({ ...node1, x, y });
+>node2 : { type: "node"; x: number; y: number; id: string; props: { nodeType: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^                     ^^^
+>editor.updateShape({ ...node1, x, y }) : { type: "node"; x: number; y: number; id: string; props: { nodeType: string; }; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^                     ^^^
+>editor.updateShape : <T extends TLShape = TLShape>(partial: TLShapePartial<T> | null | undefined) => T
+>                   : ^ ^^^^^^^^^       ^^^^^^^^^^^^       ^^                                    ^^^^^ 
+>editor : Editor
+>       : ^^^^^^
+>updateShape : <T extends TLShape = TLShape>(partial: TLShapePartial<T> | null | undefined) => T
+>            : ^ ^^^^^^^^^       ^^^^^^^^^^^^       ^^                                    ^^^^^ 
+>{ ...node1, x, y } : { x: number; y: number; type: "node"; id: string; props: { nodeType: string; }; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^                     ^^^
+>node1 : NodeShape
+>      : ^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+declare const shape1: TLShape;
+>shape1 : TLShape
+>       : ^^^^^^^
+
+const shape2 = editor.updateShape({ ...shape1, x, y });
+>shape2 : TLShape
+>       : ^^^^^^^
+>editor.updateShape({ ...shape1, x, y }) : TLShape
+>                                        : ^^^^^^^
+>editor.updateShape : <T extends TLShape = TLShape>(partial: TLShapePartial<T> | null | undefined) => T
+>                   : ^ ^^^^^^^^^       ^^^^^^^^^^^^       ^^                                    ^^^^^ 
+>editor : Editor
+>       : ^^^^^^
+>updateShape : <T extends TLShape = TLShape>(partial: TLShapePartial<T> | null | undefined) => T
+>            : ^ ^^^^^^^^^       ^^^^^^^^^^^^       ^^                                    ^^^^^ 
+>{ ...shape1, x, y } : { x: number; y: number; type: "arrow"; id: string; props: { dir: 1 | -1; }; } | { x: number; y: number; type: "node"; id: string; props: { nodeType: string; }; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^      ^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^                     ^^^
+>shape1 : TLShape
+>       : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+

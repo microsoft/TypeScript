@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/typeInferenceOnIndexUnion.ts] ////
+
+=== typeInferenceOnIndexUnion.ts ===
+type Options = { k: "a", a: number } | { k: "b", b: string };
+>Options : Options
+>        : ^^^^^^^
+>k : "a"
+>  : ^^^
+>a : number
+>  : ^^^^^^
+>k : "b"
+>  : ^^^
+>b : string
+>  : ^^^^^^
+
+declare function f<T extends Options>(p: T["k"]): T;
+>f : <T extends Options>(p: T["k"]) => T
+>  : ^ ^^^^^^^^^       ^^ ^^      ^^^^^ 
+>p : T["k"]
+>  : ^^^^^^
+
+const x = f("a");  // expect it to be `{ k: "a", a: number }`
+>x : { k: "a"; a: number; }
+>  : ^^^^^^^^^^^^^      ^^^
+>f("a") : { k: "a"; a: number; }
+>       : ^^^^^^^^^^^^^      ^^^
+>f : <T extends Options>(p: T["k"]) => T
+>  : ^ ^^^^^^^^^       ^^ ^^      ^^^^^ 
+>"a" : "a"
+>    : ^^^
+
+type Options2 = { k: "a", a: number, c: {} } | { k: "b", b: string, c: {} };
+>Options2 : Options2
+>         : ^^^^^^^^
+>k : "a"
+>  : ^^^
+>a : number
+>  : ^^^^^^
+>c : {}
+>  : ^^
+>k : "b"
+>  : ^^^
+>b : string
+>  : ^^^^^^
+>c : {}
+>  : ^^
+
+declare function f2<T extends Options2>(p: T["k"], c: T["c"]): T;
+>f2 : <T extends Options2>(p: T["k"], c: T["c"]) => T
+>   : ^ ^^^^^^^^^        ^^ ^^      ^^ ^^      ^^^^^ 
+>p : T["k"]
+>  : ^^^^^^
+>c : T["c"]
+>  : ^^^^^^
+
+const x2 = f2("a", { x: 1, y: 2 });  // expect it to be `{ k: "a", a: number, c: {x: number, y: number} }`
+>x2 : { k: "a"; c: { x: number; y: number; }; a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>f2("a", { x: 1, y: 2 }) : { k: "a"; c: { x: number; y: number; }; a: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>f2 : <T extends Options2>(p: T["k"], c: T["c"]) => T
+>   : ^ ^^^^^^^^^        ^^ ^^      ^^ ^^      ^^^^^ 
+>"a" : "a"
+>    : ^^^
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+

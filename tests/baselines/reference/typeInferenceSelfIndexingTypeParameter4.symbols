@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/typeInferenceSelfIndexingTypeParameter4.ts] ////
+
+=== typeInferenceSelfIndexingTypeParameter4.ts ===
+declare function f1<T>(
+>f1 : Symbol(f1, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 20))
+
+  arg: {
+>arg : Symbol(arg, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 23))
+
+    [K in keyof T]: T[K][keyof T[K]];
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 2, 5))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 20))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 2, 5))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 2, 5))
+  }
+): T;
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 20))
+
+const res1 = f1({
+>res1 : Symbol(res1, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 6, 5))
+>f1 : Symbol(f1, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 0, 0))
+
+  a: "hello",
+>a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 6, 17))
+
+  b: 100,
+>b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 7, 13))
+
+});
+
+type Inner<O> = {
+>Inner : Symbol(Inner, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 9, 3))
+>O : Symbol(O, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 11, 11))
+
+  [I in keyof O]: O[I][keyof O[I]];
+>I : Symbol(I, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 12, 3))
+>O : Symbol(O, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 11, 11))
+>O : Symbol(O, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 11, 11))
+>I : Symbol(I, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 12, 3))
+>O : Symbol(O, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 11, 11))
+>I : Symbol(I, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 12, 3))
+
+};
+
+declare function f2<T>(fields: {
+>f2 : Symbol(f2, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 13, 2))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 15, 20))
+>fields : Symbol(fields, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 15, 23))
+
+  [K in keyof T]: {
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 16, 3))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 15, 20))
+
+    label: string;
+>label : Symbol(label, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 16, 19))
+
+    values: Inner<T[K]>;
+>values : Symbol(values, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 17, 18))
+>Inner : Symbol(Inner, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 9, 3))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 15, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 16, 3))
+
+  };
+}): T;
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 15, 20))
+
+const res2 = f2({
+>res2 : Symbol(res2, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 22, 5))
+>f2 : Symbol(f2, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 13, 2))
+
+  prop: {
+>prop : Symbol(prop, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 22, 17))
+
+    label: "first",
+>label : Symbol(label, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 23, 9))
+
+    values: {
+>values : Symbol(values, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 24, 19))
+
+      foo: 123,
+>foo : Symbol(foo, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 25, 13))
+
+      bar: true,
+>bar : Symbol(bar, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 26, 15))
+
+    },
+  },
+  other: {
+>other : Symbol(other, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 29, 4))
+
+    label: "second",
+>label : Symbol(label, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 30, 10))
+
+    values: {
+>values : Symbol(values, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 31, 20))
+
+      baz: "",
+>baz : Symbol(baz, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 32, 13))
+
+      qwe: [true],
+>qwe : Symbol(qwe, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 33, 14))
+
+    },
+  },
+});
+
+
+declare function f3<T>(
+>f3 : Symbol(f3, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 37, 3))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+
+  arg: {
+>arg : Symbol(arg, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 23))
+
+    [K in keyof T]: {
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 5))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+
+      a: T[K][keyof T[K] & "A"];
+>a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 21))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 5))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 5))
+
+      b: T[K][keyof T[K] & "B"];
+>b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 43, 32))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 5))
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+>K : Symbol(K, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 42, 5))
+    }
+  }
+): T;
+>T : Symbol(T, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 40, 20))
+
+const res3 = f3({
+>res3 : Symbol(res3, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 49, 5))
+>f3 : Symbol(f3, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 37, 3))
+
+  x: {
+>x : Symbol(x, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 49, 17))
+
+    a: "foo",
+>a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 50, 6))
+
+    b: 42,
+>b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 51, 13))
+
+  },
+  y: {
+>y : Symbol(y, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 53, 4))
+
+    a: 100,
+>a : Symbol(a, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 54, 6))
+
+    b: "bar",
+>b : Symbol(b, Decl(typeInferenceSelfIndexingTypeParameter4.ts, 55, 11))
+
+  },
+});
+

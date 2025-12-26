@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/typeInferenceOnIndexUnion.ts] ////
+
+=== typeInferenceOnIndexUnion.ts ===
+type Options = { k: "a", a: number } | { k: "b", b: string };
+>Options : Symbol(Options, Decl(typeInferenceOnIndexUnion.ts, 0, 0))
+>k : Symbol(k, Decl(typeInferenceOnIndexUnion.ts, 0, 16))
+>a : Symbol(a, Decl(typeInferenceOnIndexUnion.ts, 0, 24))
+>k : Symbol(k, Decl(typeInferenceOnIndexUnion.ts, 0, 40))
+>b : Symbol(b, Decl(typeInferenceOnIndexUnion.ts, 0, 48))
+
+declare function f<T extends Options>(p: T["k"]): T;
+>f : Symbol(f, Decl(typeInferenceOnIndexUnion.ts, 0, 61))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 1, 19))
+>Options : Symbol(Options, Decl(typeInferenceOnIndexUnion.ts, 0, 0))
+>p : Symbol(p, Decl(typeInferenceOnIndexUnion.ts, 1, 38))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 1, 19))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 1, 19))
+
+const x = f("a");  // expect it to be `{ k: "a", a: number }`
+>x : Symbol(x, Decl(typeInferenceOnIndexUnion.ts, 2, 5))
+>f : Symbol(f, Decl(typeInferenceOnIndexUnion.ts, 0, 61))
+
+type Options2 = { k: "a", a: number, c: {} } | { k: "b", b: string, c: {} };
+>Options2 : Symbol(Options2, Decl(typeInferenceOnIndexUnion.ts, 2, 17))
+>k : Symbol(k, Decl(typeInferenceOnIndexUnion.ts, 4, 17))
+>a : Symbol(a, Decl(typeInferenceOnIndexUnion.ts, 4, 25))
+>c : Symbol(c, Decl(typeInferenceOnIndexUnion.ts, 4, 36))
+>k : Symbol(k, Decl(typeInferenceOnIndexUnion.ts, 4, 48))
+>b : Symbol(b, Decl(typeInferenceOnIndexUnion.ts, 4, 56))
+>c : Symbol(c, Decl(typeInferenceOnIndexUnion.ts, 4, 67))
+
+declare function f2<T extends Options2>(p: T["k"], c: T["c"]): T;
+>f2 : Symbol(f2, Decl(typeInferenceOnIndexUnion.ts, 4, 76))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 5, 20))
+>Options2 : Symbol(Options2, Decl(typeInferenceOnIndexUnion.ts, 2, 17))
+>p : Symbol(p, Decl(typeInferenceOnIndexUnion.ts, 5, 40))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 5, 20))
+>c : Symbol(c, Decl(typeInferenceOnIndexUnion.ts, 5, 50))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 5, 20))
+>T : Symbol(T, Decl(typeInferenceOnIndexUnion.ts, 5, 20))
+
+const x2 = f2("a", { x: 1, y: 2 });  // expect it to be `{ k: "a", a: number, c: {x: number, y: number} }`
+>x2 : Symbol(x2, Decl(typeInferenceOnIndexUnion.ts, 6, 5))
+>f2 : Symbol(f2, Decl(typeInferenceOnIndexUnion.ts, 4, 76))
+>x : Symbol(x, Decl(typeInferenceOnIndexUnion.ts, 6, 20))
+>y : Symbol(y, Decl(typeInferenceOnIndexUnion.ts, 6, 26))
+

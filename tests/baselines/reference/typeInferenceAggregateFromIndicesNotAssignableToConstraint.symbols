@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
+interface Expression extends Node {
+>Expression : Symbol(Expression, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 0, 0))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))
+
+    _expressionBrand: any;
+>_expressionBrand : Symbol(Expression._expressionBrand, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 0, 35))
+}
+
+declare function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+>setParent : Symbol(setParent, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 2, 1))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 27))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))
+>child : Symbol(child, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 43))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 27))
+>parent : Symbol(parent, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 52))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 27))
+>T : Symbol(T, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 27))
+
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))
+
+    readonly kind: number;
+>kind : Symbol(Node.kind, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 6, 16))
+
+    readonly parent: Node;
+>parent : Symbol(Node.parent, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 7, 26))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))
+}
+
+declare const expr: Expression
+>expr : Symbol(expr, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 11, 13))
+>Expression : Symbol(Expression, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 0, 0))
+
+declare const node: Node
+>node : Symbol(node, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 12, 13))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))
+
+const res = setParent(expr, node) // Expression
+>res : Symbol(res, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 14, 5))
+>setParent : Symbol(setParent, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 2, 1))
+>expr : Symbol(expr, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 11, 13))
+>node : Symbol(node, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 12, 13))
+

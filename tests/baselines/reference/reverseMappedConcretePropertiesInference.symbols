@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/reverseMappedConcretePropertiesInference.ts] ////
+
+=== reverseMappedConcretePropertiesInference.ts ===
+declare function test1<T extends Record<string, Record<"A" | "B", unknown>>>(
+>test1 : Symbol(test1, Decl(reverseMappedConcretePropertiesInference.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  arg: {
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 0, 77))
+
+    [K in keyof T]: {
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 2, 5))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 23))
+
+      a: T[K]["A"];
+>a : Symbol(a, Decl(reverseMappedConcretePropertiesInference.ts, 2, 21))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 2, 5))
+
+      b: T[K]["B"];
+>b : Symbol(b, Decl(reverseMappedConcretePropertiesInference.ts, 3, 19))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 2, 5))
+    }
+  }
+): T;
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 23))
+
+const res1 = test1({
+>res1 : Symbol(res1, Decl(reverseMappedConcretePropertiesInference.ts, 9, 5))
+>test1 : Symbol(test1, Decl(reverseMappedConcretePropertiesInference.ts, 0, 0))
+
+  x: {
+>x : Symbol(x, Decl(reverseMappedConcretePropertiesInference.ts, 9, 20))
+
+    a: "foo",
+>a : Symbol(a, Decl(reverseMappedConcretePropertiesInference.ts, 10, 6))
+
+    b: 42,
+>b : Symbol(b, Decl(reverseMappedConcretePropertiesInference.ts, 11, 13))
+
+  },
+  y: {
+>y : Symbol(y, Decl(reverseMappedConcretePropertiesInference.ts, 13, 4))
+
+    a: 100,
+>a : Symbol(a, Decl(reverseMappedConcretePropertiesInference.ts, 14, 6))
+
+    b: "bar",
+>b : Symbol(b, Decl(reverseMappedConcretePropertiesInference.ts, 15, 11))
+
+  },
+});
+
+declare function test2<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
+>test2 : Symbol(test2, Decl(reverseMappedConcretePropertiesInference.ts, 18, 3))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(reverseMappedConcretePropertiesInference.ts, 20, 49))
+>bar : Symbol(bar, Decl(reverseMappedConcretePropertiesInference.ts, 20, 63))
+>a : Symbol(a, Decl(reverseMappedConcretePropertiesInference.ts, 20, 81))
+
+  [K in keyof T]: {
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 21, 3))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+
+    foo: T[K]["foo"];
+>foo : Symbol(foo, Decl(reverseMappedConcretePropertiesInference.ts, 21, 19))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 21, 3))
+
+    onFoo: (fooArg: T[K]["foo"]) => void;
+>onFoo : Symbol(onFoo, Decl(reverseMappedConcretePropertiesInference.ts, 22, 21))
+>fooArg : Symbol(fooArg, Decl(reverseMappedConcretePropertiesInference.ts, 23, 12))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 21, 3))
+
+    bar: T[K]["bar"];
+>bar : Symbol(bar, Decl(reverseMappedConcretePropertiesInference.ts, 23, 41))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 21, 3))
+
+    onBar: (barArg: T[K]["bar"]) => void;
+>onBar : Symbol(onBar, Decl(reverseMappedConcretePropertiesInference.ts, 24, 21))
+>barArg : Symbol(barArg, Decl(reverseMappedConcretePropertiesInference.ts, 25, 12))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 21, 3))
+
+  };
+}): T;
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 20, 23))
+
+const res2 = test2({
+>res2 : Symbol(res2, Decl(reverseMappedConcretePropertiesInference.ts, 29, 5))
+>test2 : Symbol(test2, Decl(reverseMappedConcretePropertiesInference.ts, 18, 3))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedConcretePropertiesInference.ts, 29, 20))
+
+        foo: 'answer',
+>foo : Symbol(foo, Decl(reverseMappedConcretePropertiesInference.ts, 30, 8))
+
+        onFoo: (arg) => arg.length,
+>onFoo : Symbol(onFoo, Decl(reverseMappedConcretePropertiesInference.ts, 31, 22))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 32, 16))
+>arg.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 32, 16))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        bar: 42,
+>bar : Symbol(bar, Decl(reverseMappedConcretePropertiesInference.ts, 32, 35))
+
+        onBar: (arg) => arg + 10
+>onBar : Symbol(onBar, Decl(reverseMappedConcretePropertiesInference.ts, 33, 16))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 34, 16))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 34, 16))
+
+    },
+    b: {
+>b : Symbol(b, Decl(reverseMappedConcretePropertiesInference.ts, 35, 6))
+
+        foo: true,
+>foo : Symbol(foo, Decl(reverseMappedConcretePropertiesInference.ts, 36, 8))
+
+        onFoo: (arg) => !!arg,
+>onFoo : Symbol(onFoo, Decl(reverseMappedConcretePropertiesInference.ts, 37, 18))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 38, 16))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 38, 16))
+
+        bar: [1, 2, 3],
+>bar : Symbol(bar, Decl(reverseMappedConcretePropertiesInference.ts, 38, 30))
+
+        onBar: (arg) => [arg, arg]
+>onBar : Symbol(onBar, Decl(reverseMappedConcretePropertiesInference.ts, 39, 23))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 40, 16))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 40, 16))
+>arg : Symbol(arg, Decl(reverseMappedConcretePropertiesInference.ts, 40, 16))
+
+    },
+})
+
+interface QueryFunctionContext<TQueryKey extends string> {
+>QueryFunctionContext : Symbol(QueryFunctionContext, Decl(reverseMappedConcretePropertiesInference.ts, 42, 2))
+>TQueryKey : Symbol(TQueryKey, Decl(reverseMappedConcretePropertiesInference.ts, 44, 31))
+
+  queryKey: TQueryKey;
+>queryKey : Symbol(QueryFunctionContext.queryKey, Decl(reverseMappedConcretePropertiesInference.ts, 44, 58))
+>TQueryKey : Symbol(TQueryKey, Decl(reverseMappedConcretePropertiesInference.ts, 44, 31))
+}
+
+type QueryOptions = {
+>QueryOptions : Symbol(QueryOptions, Decl(reverseMappedConcretePropertiesInference.ts, 46, 1))
+
+  key: string;
+>key : Symbol(key, Decl(reverseMappedConcretePropertiesInference.ts, 48, 21))
+
+  fnData?: unknown;
+>fnData : Symbol(fnData, Decl(reverseMappedConcretePropertiesInference.ts, 49, 14))
+
+};
+
+type UseQueriesOptions<T extends ReadonlyArray<QueryOptions>> = {
+>UseQueriesOptions : Symbol(UseQueriesOptions, Decl(reverseMappedConcretePropertiesInference.ts, 51, 2))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>QueryOptions : Symbol(QueryOptions, Decl(reverseMappedConcretePropertiesInference.ts, 46, 1))
+
+  [K in keyof T]: {
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 54, 3))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+
+    queryKey: T[K]["key"];
+>queryKey : Symbol(queryKey, Decl(reverseMappedConcretePropertiesInference.ts, 54, 19))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 54, 3))
+
+    queryFn?: (
+>queryFn : Symbol(queryFn, Decl(reverseMappedConcretePropertiesInference.ts, 55, 26))
+
+      ctx: QueryFunctionContext<T[K]["key"]>
+>ctx : Symbol(ctx, Decl(reverseMappedConcretePropertiesInference.ts, 56, 15))
+>QueryFunctionContext : Symbol(QueryFunctionContext, Decl(reverseMappedConcretePropertiesInference.ts, 42, 2))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 54, 3))
+
+    ) => Promise<T[K]["fnData"]> | T[K]["fnData"];
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 54, 3))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 53, 23))
+>K : Symbol(K, Decl(reverseMappedConcretePropertiesInference.ts, 54, 3))
+
+  };
+};
+
+declare function useQueries<T extends ReadonlyArray<QueryOptions>>(
+>useQueries : Symbol(useQueries, Decl(reverseMappedConcretePropertiesInference.ts, 60, 2))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 62, 28))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>QueryOptions : Symbol(QueryOptions, Decl(reverseMappedConcretePropertiesInference.ts, 46, 1))
+
+  queries: [...UseQueriesOptions<T>]
+>queries : Symbol(queries, Decl(reverseMappedConcretePropertiesInference.ts, 62, 67))
+>UseQueriesOptions : Symbol(UseQueriesOptions, Decl(reverseMappedConcretePropertiesInference.ts, 51, 2))
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 62, 28))
+
+): T;
+>T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 62, 28))
+
+const resQueries = useQueries([
+>resQueries : Symbol(resQueries, Decl(reverseMappedConcretePropertiesInference.ts, 66, 5))
+>useQueries : Symbol(useQueries, Decl(reverseMappedConcretePropertiesInference.ts, 60, 2))
+  {
+    queryKey: "users",
+>queryKey : Symbol(queryKey, Decl(reverseMappedConcretePropertiesInference.ts, 67, 3))
+
+    queryFn: (key) => [{ name: "Andarist" }],
+>queryFn : Symbol(queryFn, Decl(reverseMappedConcretePropertiesInference.ts, 68, 22))
+>key : Symbol(key, Decl(reverseMappedConcretePropertiesInference.ts, 69, 14))
+>name : Symbol(name, Decl(reverseMappedConcretePropertiesInference.ts, 69, 24))
+
+  },
+  {
+    queryKey: "posts",
+>queryKey : Symbol(queryKey, Decl(reverseMappedConcretePropertiesInference.ts, 71, 3))
+
+    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),
+>queryFn : Symbol(queryFn, Decl(reverseMappedConcretePropertiesInference.ts, 72, 22))
+>key : Symbol(key, Decl(reverseMappedConcretePropertiesInference.ts, 73, 14))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>title : Symbol(title, Decl(reverseMappedConcretePropertiesInference.ts, 73, 40))
+  }
+]);
+

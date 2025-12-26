@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/correlatedUnions.ts] ////
 
-=== Performance Stats ===
-Type Count: 1,000
-
 === correlatedUnions.ts ===
 // Various repros from #30581
 
@@ -775,8 +772,8 @@ function ff1() {
 >     : ^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^
 
     const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
->funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>funs : { sum: (a: number, b: number) => void; concat: (a: string, b: string, c: string) => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[P]
 >     : ^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^
 >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
@@ -829,20 +826,20 @@ function ff1() {
 >     : ^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^
 
         const fn = funs[funKey];
->fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
->funs[funKey] : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
->funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>fn : { sum: (a: number, b: number) => void; concat: (a: string, b: string, c: string) => void; }[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+>funs[funKey] : { sum: (a: number, b: number) => void; concat: (a: string, b: string, c: string) => void; }[K]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+>funs : { sum: (a: number, b: number) => void; concat: (a: string, b: string, c: string) => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >funKey : K
 >       : ^
 
         fn(...args);
 >fn(...args) : void
 >            : ^^^^
->fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
+>fn : { sum: (a: number, b: number) => void; concat: (a: string, b: string, c: string) => void; }[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
 >...args : string | number
 >        : ^^^^^^^^^^^^^^^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
