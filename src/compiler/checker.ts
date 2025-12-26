@@ -39585,7 +39585,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
-                                instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
+                                const info = find(inferenceContext!.inferences, info => info.typeParameter === restType);
+                                const mapper = combineTypeMappers(info && !hasInferenceCandidates(info) ? inferenceContext!.returnMapper : undefined, inferenceContext!.nonFixingMapper);
+                                instantiatedContextualSignature = instantiateSignature(contextualSignature, mapper);
                             }
                         }
                         instantiatedContextualSignature ||= inferenceContext ?

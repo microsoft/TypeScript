@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/contextuallyTypeParametersUsingInstantiatedRestReturnMapper1.ts] ////
+
+=== contextuallyTypeParametersUsingInstantiatedRestReturnMapper1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62336
+
+declare function call<T>(fn: (a: string, b: T) => unknown): (b: T) => unknown;
+>call : <T>(fn: (a: string, b: T) => unknown) => (b: T) => unknown
+>     : ^ ^^  ^^                            ^^^^^                 
+>fn : (a: string, b: T) => unknown
+>   : ^ ^^      ^^ ^^ ^^^^^       
+>a : string
+>  : ^^^^^^
+>b : T
+>  : ^
+>b : T
+>  : ^
+
+declare function fn<Args extends any[]>(
+>fn : <Args extends any[]>(fn: (...args: Args) => unknown) => (...args: Args) => unknown
+>   : ^    ^^^^^^^^^     ^^  ^^                          ^^^^^                          
+
+  fn: (...args: Args) => unknown,
+>fn : (...args: Args) => unknown
+>   : ^^^^    ^^    ^^^^^       
+>args : Args
+>     : ^^^^
+
+): (...args: Args) => unknown;
+>args : Args
+>     : ^^^^
+
+call(
+>call(  fn(function (a, b: number) {    a; // string  }),) : (b: number) => unknown
+>                                                          : ^ ^^^^^^^^^^^^^       
+>call : <T>(fn: (a: string, b: T) => unknown) => (b: T) => unknown
+>     : ^ ^^  ^^                            ^^^^^                 
+
+  fn(function (a, b: number) {
+>fn(function (a, b: number) {    a; // string  }) : (a: string, b: number) => unknown
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>fn : <Args extends any[]>(fn: (...args: Args) => unknown) => (...args: Args) => unknown
+>   : ^    ^^^^^^^^^     ^^  ^^                          ^^^^^                          
+>function (a, b: number) {    a; // string  } : (a: string, b: number) => void
+>                                             : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+    a; // string
+>a : string
+>  : ^^^^^^
+
+  }),
+);
+
