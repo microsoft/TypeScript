@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference1.ts] ////
+
+=== contextSensitiveAnnotatedParametersInference1.ts ===
+declare function test<T, A, B>(obj: {
+>test : <T, A, B>(obj: { ctx: T; a: (a: A, ctx: T) => void; b: (b: B, ctx: T, a: A) => void; }) => void
+>     : ^ ^^ ^^ ^^   ^^                                                                       ^^^^^    
+>obj : { ctx: T; a: (a: A, ctx: T) => void; b: (b: B, ctx: T, a: A) => void; }
+>    : ^^^^^^^ ^^^^^                      ^^^^^                            ^^^
+
+  ctx: T;
+>ctx : T
+>    : ^
+
+  a: (a: A, ctx: T) => void;
+>a : (a: A, ctx: T) => void
+>  : ^ ^^ ^^   ^^ ^^^^^    
+>a : A
+>  : ^
+>ctx : T
+>    : ^
+
+  b: (b: B, ctx: T, a: A) => void;
+>b : (b: B, ctx: T, a: A) => void
+>  : ^ ^^ ^^   ^^ ^^ ^^ ^^^^^    
+>b : B
+>  : ^
+>ctx : T
+>    : ^
+>a : A
+>  : ^
+
+}): void;
+
+test({
+>test({  ctx: 'foo',  a: (a: string, ctx) => {},  b: (b: string, ctx, a) => {},}) : void
+>                                                                                 : ^^^^
+>test : <T, A, B>(obj: { ctx: T; a: (a: A, ctx: T) => void; b: (b: B, ctx: T, a: A) => void; }) => void
+>     : ^ ^^ ^^ ^^   ^^                                                                       ^^^^^    
+>{  ctx: 'foo',  a: (a: string, ctx) => {},  b: (b: string, ctx, a) => {},} : { ctx: string; a: (a: string, ctx: string) => void; b: (b: string, ctx: string, a: string) => void; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^ ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+  ctx: 'foo',
+>ctx : string
+>    : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+  a: (a: string, ctx) => {},
+>a : (a: string, ctx: string) => void
+>  : ^ ^^      ^^   ^^^^^^^^^^^^^^^^^
+>(a: string, ctx) => {} : (a: string, ctx: string) => void
+>                       : ^ ^^      ^^   ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>ctx : string
+>    : ^^^^^^
+
+  b: (b: string, ctx, a) => {},
+>b : (b: string, ctx: string, a: string) => void
+>  : ^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>(b: string, ctx, a) => {} : (b: string, ctx: string, a: string) => void
+>                          : ^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>b : string
+>  : ^^^^^^
+>ctx : string
+>    : ^^^^^^
+>a : string
+>  : ^^^^^^
+
+});
+
+test({
+>test({  ctx: 'foo',  b: (b: string, ctx, a) => {},  a: (a: string, ctx) => {},}) : void
+>                                                                                 : ^^^^
+>test : <T, A, B>(obj: { ctx: T; a: (a: A, ctx: T) => void; b: (b: B, ctx: T, a: A) => void; }) => void
+>     : ^ ^^ ^^ ^^   ^^                                                                       ^^^^^    
+>{  ctx: 'foo',  b: (b: string, ctx, a) => {},  a: (a: string, ctx) => {},} : { ctx: string; b: (b: string, ctx: string, a: string) => void; a: (a: string, ctx: string) => void; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^   ^^^^^^^^^^^^^^^^^^^^
+
+  ctx: 'foo',
+>ctx : string
+>    : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+  b: (b: string, ctx, a) => {},
+>b : (b: string, ctx: string, a: string) => void
+>  : ^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>(b: string, ctx, a) => {} : (b: string, ctx: string, a: string) => void
+>                          : ^ ^^      ^^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>b : string
+>  : ^^^^^^
+>ctx : string
+>    : ^^^^^^
+>a : string
+>  : ^^^^^^
+
+  a: (a: string, ctx) => {},
+>a : (a: string, ctx: string) => void
+>  : ^ ^^      ^^   ^^^^^^^^^^^^^^^^^
+>(a: string, ctx) => {} : (a: string, ctx: string) => void
+>                       : ^ ^^      ^^   ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>ctx : string
+>    : ^^^^^^
+
+});
+

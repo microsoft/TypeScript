@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference2.ts] ////
+
+=== contextSensitiveAnnotatedParametersInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60047
+
+type Map<T> = {
+>Map : Symbol(Map, Decl(contextSensitiveAnnotatedParametersInference2.ts, 0, 0))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference2.ts, 2, 9))
+
+  [P in keyof T]: T[P] extends boolean ? "boolean" : "other";
+>P : Symbol(P, Decl(contextSensitiveAnnotatedParametersInference2.ts, 3, 3))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference2.ts, 2, 9))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference2.ts, 2, 9))
+>P : Symbol(P, Decl(contextSensitiveAnnotatedParametersInference2.ts, 3, 3))
+
+};
+
+export function buildCommand<F extends Record<string, unknown>>(builderArgs: {
+>buildCommand : Symbol(buildCommand, Decl(contextSensitiveAnnotatedParametersInference2.ts, 4, 2))
+>F : Symbol(F, Decl(contextSensitiveAnnotatedParametersInference2.ts, 6, 29))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>builderArgs : Symbol(builderArgs, Decl(contextSensitiveAnnotatedParametersInference2.ts, 6, 64))
+
+  func: (p: F) => void;
+>func : Symbol(func, Decl(contextSensitiveAnnotatedParametersInference2.ts, 6, 78))
+>p : Symbol(p, Decl(contextSensitiveAnnotatedParametersInference2.ts, 7, 9))
+>F : Symbol(F, Decl(contextSensitiveAnnotatedParametersInference2.ts, 6, 29))
+
+  params: Map<NoInfer<F>>;
+>params : Symbol(params, Decl(contextSensitiveAnnotatedParametersInference2.ts, 7, 23))
+>Map : Symbol(Map, Decl(contextSensitiveAnnotatedParametersInference2.ts, 0, 0))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>F : Symbol(F, Decl(contextSensitiveAnnotatedParametersInference2.ts, 6, 29))
+
+}) {}
+
+type Foo = { foo: boolean };
+>Foo : Symbol(Foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 9, 5))
+>foo : Symbol(foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 11, 12))
+
+buildCommand({
+>buildCommand : Symbol(buildCommand, Decl(contextSensitiveAnnotatedParametersInference2.ts, 4, 2))
+
+  func: function (p: Foo) {},
+>func : Symbol(func, Decl(contextSensitiveAnnotatedParametersInference2.ts, 13, 14))
+>p : Symbol(p, Decl(contextSensitiveAnnotatedParametersInference2.ts, 14, 18))
+>Foo : Symbol(Foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 9, 5))
+
+  params: {
+>params : Symbol(params, Decl(contextSensitiveAnnotatedParametersInference2.ts, 14, 29))
+
+    foo: "boolean",
+>foo : Symbol(foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 15, 11))
+
+  },
+});
+
+buildCommand({
+>buildCommand : Symbol(buildCommand, Decl(contextSensitiveAnnotatedParametersInference2.ts, 4, 2))
+
+  func(p: Foo) {},
+>func : Symbol(func, Decl(contextSensitiveAnnotatedParametersInference2.ts, 20, 14))
+>p : Symbol(p, Decl(contextSensitiveAnnotatedParametersInference2.ts, 21, 7))
+>Foo : Symbol(Foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 9, 5))
+
+  params: {
+>params : Symbol(params, Decl(contextSensitiveAnnotatedParametersInference2.ts, 21, 18))
+
+    foo: "boolean",
+>foo : Symbol(foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 22, 11))
+
+  },
+});
+
+buildCommand({
+>buildCommand : Symbol(buildCommand, Decl(contextSensitiveAnnotatedParametersInference2.ts, 4, 2))
+
+  func: (p: Foo) => {},
+>func : Symbol(func, Decl(contextSensitiveAnnotatedParametersInference2.ts, 27, 14))
+>p : Symbol(p, Decl(contextSensitiveAnnotatedParametersInference2.ts, 28, 9))
+>Foo : Symbol(Foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 9, 5))
+
+  params: {
+>params : Symbol(params, Decl(contextSensitiveAnnotatedParametersInference2.ts, 28, 23))
+
+    foo: "boolean",
+>foo : Symbol(foo, Decl(contextSensitiveAnnotatedParametersInference2.ts, 29, 11))
+
+  },
+});
+
