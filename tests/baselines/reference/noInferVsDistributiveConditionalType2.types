@@ -1,0 +1,282 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferVsDistributiveConditionalType2.ts] ////
+
+=== noInferVsDistributiveConditionalType2.ts ===
+type EventObject = {
+>EventObject : EventObject
+>            : ^^^^^^^^^^^
+
+  type: string;
+>type : string
+>     : ^^^^^^
+
+};
+
+type FooEvent = { type: "FOO" };
+>FooEvent : FooEvent
+>         : ^^^^^^^^
+>type : "FOO"
+>     : ^^^^^
+
+type BarEvent = { type: "BAR" };
+>BarEvent : BarEvent
+>         : ^^^^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+type Input = FooEvent | BarEvent;
+>Input : Input
+>      : ^^^^^
+
+type ExtractEventSimplified<
+>ExtractEventSimplified : ExtractEventSimplified<TEvent, K>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TEvent extends EventObject,
+  K extends TEvent["type"],
+> = string extends TEvent["type"] ? TEvent : Extract<TEvent, { type: K }>;
+>type : K
+>     : ^
+
+type Result = ExtractEventSimplified<NoInfer<Input>, "FOO">;
+>Result : FooEvent
+>       : ^^^^^^^^
+
+type EventDescriptorMatches<
+>EventDescriptorMatches : EventDescriptorMatches<TEventType, TNormalizedDescriptor>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TEventType extends string,
+  TNormalizedDescriptor,
+> = TEventType extends TNormalizedDescriptor ? true : false;
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type PartialEventDescriptor<TEventType extends string> =
+>PartialEventDescriptor : PartialEventDescriptor<TEventType>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TEventType extends `${infer TLeading}.${infer TTail}`
+    ? `${TLeading}.*` | `${TLeading}.${PartialEventDescriptor<TTail>}`
+    : never;
+
+type EventDescriptor<TEvent extends EventObject> =
+>EventDescriptor : EventDescriptor<TEvent>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  | TEvent["type"]
+  | PartialEventDescriptor<TEvent["type"]>
+  | "*";
+
+type NormalizeDescriptor<TDescriptor extends string> = TDescriptor extends "*"
+>NormalizeDescriptor : NormalizeDescriptor<TDescriptor>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? string
+  : TDescriptor extends `${infer TLeading}.*`
+  ? `${TLeading}.${string}`
+  : TDescriptor;
+
+type ExtractEvent<
+>ExtractEvent : ExtractEvent<TEvent, TDescriptor>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TEvent extends EventObject,
+  TDescriptor extends EventDescriptor<TEvent>,
+> = string extends TEvent["type"]
+  ? TEvent
+  : NormalizeDescriptor<TDescriptor> extends infer TNormalizedDescriptor
+  ? TEvent extends any
+    ? // true is the check type here to match both true and boolean
+      true extends EventDescriptorMatches<TEvent["type"], TNormalizedDescriptor>
+>true : true
+>     : ^^^^
+
+      ? TEvent
+      : never
+    : never
+  : never;
+
+type ActionFunction<
+>ActionFunction : ActionFunction<TExpressionEvent, TEvent>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TExpressionEvent extends EventObject,
+  TEvent extends EventObject,
+> = {
+  (args: { event: TExpressionEvent }): void;
+>args : { event: TExpressionEvent; }
+>     : ^^^^^^^^^                ^^^
+>event : TExpressionEvent
+>      : ^^^^^^^^^^^^^^^^
+
+  _out_TEvent?: TEvent;
+>_out_TEvent : TEvent | undefined
+>            : ^^^^^^^^^^^^^^^^^^
+
+};
+
+type TransitionsConfig<TEvent extends EventObject> = {
+>TransitionsConfig : TransitionsConfig<TEvent>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in EventDescriptor<TEvent>]?: {
+    actions?: ActionFunction<ExtractEvent<TEvent, K>, TEvent>;
+>actions : ActionFunction<ExtractEvent<TEvent, K>, TEvent> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+};
+
+declare function createMachine<TEvent extends EventObject>(config: {
+>createMachine : <TEvent extends EventObject>(config: { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }) => void
+>              : ^      ^^^^^^^^^           ^^      ^^                                                                          ^^^^^    
+>config : { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }
+>       : ^^^^^^^^^^                    ^^^^^^^                                  ^^^
+
+  types?: {
+>types : { events?: TEvent; } | undefined
+>      : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+
+    events?: TEvent;
+>events : TEvent | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  };
+  on?: TransitionsConfig<NoInfer<TEvent>>;
+>on : TransitionsConfig<NoInfer<TEvent>> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}): void;
+
+createMachine({
+>createMachine({  types: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  },}) : void
+>                                                                                                                                                                                        : ^^^^
+>createMachine : <TEvent extends EventObject>(config: { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }) => void
+>              : ^      ^^^^^^^^^           ^^      ^^                                                                          ^^^^^    
+>{  types: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  },} : { types: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: { actions: ({ event }: { event: { type: "FOO"; }; }) => void; }; }; }
+>                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  types: {
+>types : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>      : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "BAR" },  } : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : { type: "FOO"; } | { type: "BAR"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "BAR" } : { type: "FOO"; } | { type: "BAR"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { FOO: { actions: ({ event }: { event: { type: "FOO"; }; }) => void; }; }
+>   : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>{    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  } : { FOO: { actions: ({ event }: { event: { type: "FOO"; }; }) => void; }; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
+
+    FOO: {
+>FOO : { actions: ({ event }: { event: { type: "FOO"; }; }) => void; }
+>    : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>{      actions: ({ event }) => {        event; // { type: "FOO"; }      },    } : { actions: ({ event }: { event: { type: "FOO"; }; }) => void; }
+>                                                                                : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+      actions: ({ event }) => {
+>actions : ({ event }: { event: { type: "FOO"; }; }) => void
+>        : ^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>({ event }) => {        event; // { type: "FOO"; }      } : ({ event }: { event: { type: "FOO"; }; }) => void
+>                                                          : ^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>event : { type: "FOO"; }
+>      : ^^^^^^^^     ^^^
+
+        event; // { type: "FOO"; }
+>event : { type: "FOO"; }
+>      : ^^^^^^^^     ^^^
+
+      },
+    },
+  },
+});
+
+createMachine({
+>createMachine({  types: {} as {    events:      | { type: "mouse.click.up"; direction: "up" }      | { type: "mouse.click.down"; direction: "down" }      | { type: "mouse.move" }      | { type: "mouse" }      | { type: "keypress" };  },  on: {    "mouse.*": {      actions: ({ event }) => {        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }      },    },  },}) : void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^
+>createMachine : <TEvent extends EventObject>(config: { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }) => void
+>              : ^      ^^^^^^^^^           ^^      ^^                                                                          ^^^^^    
+>{  types: {} as {    events:      | { type: "mouse.click.up"; direction: "up" }      | { type: "mouse.click.down"; direction: "down" }      | { type: "mouse.move" }      | { type: "mouse" }      | { type: "keypress" };  },  on: {    "mouse.*": {      actions: ({ event }) => {        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }      },    },  },} : { types: { events: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; } | { type: "mouse"; } | { type: "keypress"; }; }; on: { "mouse.*": { actions: ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void; }; }; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  types: {} as {
+>types : { events: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; } | { type: "mouse"; } | { type: "keypress"; }; }
+>      : ^^^^^^^^^^                                                                                                                                                                      ^^^
+>{} as {    events:      | { type: "mouse.click.up"; direction: "up" }      | { type: "mouse.click.down"; direction: "down" }      | { type: "mouse.move" }      | { type: "mouse" }      | { type: "keypress" };  } : { events: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; } | { type: "mouse"; } | { type: "keypress"; }; }
+>                                                                                                                                                                                                                    : ^^^^^^^^^^                                                                                                                                                                      ^^^
+>{} : {}
+>   : ^^
+
+    events:
+>events : { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; } | { type: "mouse"; } | { type: "keypress"; }
+>       : ^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^          ^^^
+
+      | { type: "mouse.click.up"; direction: "up" }
+>type : "mouse.click.up"
+>     : ^^^^^^^^^^^^^^^^
+>direction : "up"
+>          : ^^^^
+
+      | { type: "mouse.click.down"; direction: "down" }
+>type : "mouse.click.down"
+>     : ^^^^^^^^^^^^^^^^^^
+>direction : "down"
+>          : ^^^^^^
+
+      | { type: "mouse.move" }
+>type : "mouse.move"
+>     : ^^^^^^^^^^^^
+
+      | { type: "mouse" }
+>type : "mouse"
+>     : ^^^^^^^
+
+      | { type: "keypress" };
+>type : "keypress"
+>     : ^^^^^^^^^^
+
+  },
+  on: {
+>on : { "mouse.*": { actions: ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^
+>{    "mouse.*": {      actions: ({ event }) => {        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }      },    },  } : { "mouse.*": { actions: ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void; }; }
+>                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^
+
+    "mouse.*": {
+>"mouse.*" : { actions: ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void; }
+>          : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^
+>{      actions: ({ event }) => {        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }      },    } : { actions: ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void; }
+>                                                                                                                                                                                      : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^
+
+      actions: ({ event }) => {
+>actions : ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void
+>        : ^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
+>({ event }) => {        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }      } : ({ event }: { event: { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }; }) => void
+>                                                                                                                                                                : ^         ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
+>event : { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }
+>      : ^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^
+
+        event; // { type: "mouse.click.up"; direction: "up" } | { type: "mouse.click.down"; direction: "down" } | { type: "mouse.move" }
+>event : { type: "mouse.click.up"; direction: "up"; } | { type: "mouse.click.down"; direction: "down"; } | { type: "mouse.move"; }
+>      : ^^^^^^^^                ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^            ^^^
+
+      },
+    },
+  },
+});
+

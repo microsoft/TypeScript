@@ -19838,7 +19838,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
                     const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
-                    const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                    let newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                    if (newCheckType && isNoInferType(newCheckType)) {
+                        newCheckType = (newCheckType as SubstitutionType).baseType;
+                    }
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
                         mapper = newRootMapper;
@@ -20934,7 +20937,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!result) {
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
                 const checkType = root.checkType;
-                const distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
+                let distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
+                if (distributionType && isNoInferType(distributionType)) {
+                    distributionType = (distributionType as SubstitutionType).baseType;
+                }
                 // Distributive conditional types are distributed over union types. For example, when the
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
