@@ -1,0 +1,211 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRestSpread1.ts] ////
+
+=== noInferRestSpread1.ts ===
+declare function call<A extends readonly unknown[]>(
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+
+  arg: (...args: NoInfer<A>) => void,
+>arg : (...args: NoInfer<A>) => void
+>    : ^^^^    ^^          ^^^^^    
+>args : NoInfer<A>
+>     : ^^^^^^^^^^
+
+  ...args: A
+>args : A
+>     : ^
+
+): A;
+
+const result1 = call((a: number) => {}, 1, 2);
+>result1 : [number, number]
+>        : ^^^^^^^^^^^^^^^^
+>call((a: number) => {}, 1, 2) : [number, number]
+>                              : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a: number) => {} : (a: number) => void
+>                  : ^ ^^      ^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const result2 = call((a: number, b: number) => {}, 1); // error
+>result2 : [number]
+>        : ^^^^^^^^
+>call((a: number, b: number) => {}, 1) : [number]
+>                                      : ^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a: number, b: number) => {} : (a: number, b: number) => void
+>                             : ^ ^^      ^^ ^^      ^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const result3 = call((a) => {}, 1, ''); // test contextual parameters
+>result3 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a) => {}, 1, '') : [number, string]
+>                       : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a) => {} : (a: number) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result4 = call((a, b) => {}, 1, ''); // test contextual parameters
+>result4 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a, b) => {}, 1, '') : [number, string]
+>                          : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a, b) => {} : (a: number, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result5 = call((...args) => {}, 1, ''); // test contextual parameters
+>result5 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((...args) => {}, 1, '') : [number, string]
+>                             : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(...args) => {} : (args_0: number, args_1: string) => void
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : [number, string]
+>     : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result6 = call((a, ...rest) => {}, 1, ''); // test contextual parameters
+>result6 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a, ...rest) => {}, 1, '') : [number, string]
+>                                : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a, ...rest) => {} : (a: number, rest_0: string) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>rest : [string]
+>     : ^^^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+declare function fn1<A extends unknown[]>(
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+
+  cb: (a: [number, ...NoInfer<A>]) => void,
+>cb : (a: [number, ...NoInfer<A>]) => void
+>   : ^ ^^                       ^^^^^    
+>a : [number, ...NoInfer<A>]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  args: A,
+>args : A
+>     : ^
+
+): A;
+
+declare const singleStr: [string];
+>singleStr : [string]
+>          : ^^^^^^^^
+
+const result7 = fn1((arg) => {
+>result7 : [string]
+>        : ^^^^^^^^
+>fn1((arg) => {  arg.length;}, singleStr) : [string]
+>                                         : ^^^^^^^^
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+>(arg) => {  arg.length;} : (arg: [number, string]) => void
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+
+  arg.length;
+>arg.length : 2
+>           : ^
+>arg : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+>length : 2
+>       : ^
+
+}, singleStr);
+>singleStr : [string]
+>          : ^^^^^^^^
+
+declare const tupleUnion: [string] | [number, boolean];
+>tupleUnion : [string] | [number, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const result8 = fn1((arg) => {
+>result8 : [string] | [number, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1((arg) => {  arg.length;}, tupleUnion) : [string] | [number, boolean]
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+>(arg) => {  arg.length;} : (arg: [number, string] | [number, number, boolean]) => void
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [number, string] | [number, number, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arg.length;
+>arg.length : 2 | 3
+>           : ^^^^^
+>arg : [number, string] | [number, number, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : 2 | 3
+>       : ^^^^^
+
+}, tupleUnion);
+>tupleUnion : [string] | [number, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+>fn2 : (arg: (...args: NoInfer<[string, number]>) => void) => void
+>    : ^   ^^                                            ^^^^^    
+>arg : (args_0: string, args_1: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>args : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+
+fn2((a, ...rest) => {});
+>fn2((a, ...rest) => {}) : void
+>                        : ^^^^
+>fn2 : (arg: (...args: NoInfer<[string, number]>) => void) => void
+>    : ^   ^^                                            ^^^^^    
+>(a, ...rest) => {} : (a: string, rest_0: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : [number]
+>     : ^^^^^^^^
+
