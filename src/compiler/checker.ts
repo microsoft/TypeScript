@@ -13212,6 +13212,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseTypes(type: InterfaceType): BaseType[] {
+        if (!(getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference))) {
+            return emptyArray;
+        }
         if (!type.baseTypesResolved) {
             if (pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseTypes)) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
@@ -35053,28 +35056,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
      */
     function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
-        if (!(prop.parent!.flags & SymbolFlags.Class)) {
-            return false;
-        }
-        let classType: InterfaceType | undefined = getTypeOfSymbol(prop.parent!) as InterfaceType;
-        while (true) {
-            classType = classType.symbol && getSuperClass(classType) as InterfaceType | undefined;
-            if (!classType) {
-                return false;
-            }
-            const superProperty = getPropertyOfType(classType, prop.escapedName);
-            if (superProperty && superProperty.valueDeclaration) {
-                return true;
+        if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
+            const baseTypes = getBaseTypes(getDeclaredTypeOfSymbol(prop.parent) as InterfaceType);
+            if (baseTypes.length) {
+                const superProperty = getPropertyOfType(baseTypes[0], prop.escapedName);
+                return !!(superProperty && superProperty.valueDeclaration);
             }
         }
-    }
-
-    function getSuperClass(classType: InterfaceType): Type | undefined {
-        const x = getBaseTypes(classType);
-        if (x.length === 0) {
-            return undefined;
-        }
-        return getIntersectionType(x);
+        return false;
     }
 
     function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
