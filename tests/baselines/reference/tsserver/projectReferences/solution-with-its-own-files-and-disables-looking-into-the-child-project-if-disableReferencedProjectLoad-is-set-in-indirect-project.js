@@ -295,6 +295,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 4,
               "offset": 5
             },
@@ -1047,6 +1061,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 4,
               "offset": 5
             },
@@ -1284,6 +1312,20 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/tsconfig.json",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './own'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
           {
             "start": {
               "line": 4,

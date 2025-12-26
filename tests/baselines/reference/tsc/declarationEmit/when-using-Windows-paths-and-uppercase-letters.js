@@ -95,6 +95,12 @@ declare const console: { log(msg: any): void; };
 
 D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
+[96mtsconfig.json[0m:[93m13[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m13[0m     "outDir": "./dist",
+[7m  [0m [91m    ~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
   Visit https://aka.ms/ts6 for migration information.
 
@@ -118,21 +124,21 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 2 errors in the same file, starting at: tsconfig.json[90m:14[0m
+Found 3 errors in the same file, starting at: tsconfig.json[90m:13[0m
 
 
 
 //// [D:/home/src/tslibs/TS/Lib/lib.es2017.full.d.ts] *Lib*
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.js.map]
-{"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.js.map]
+{"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.js]
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=type-helpers.js.map
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.d.ts]
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.d.ts]
 export type MyReturnType = {
     new (...args: any[]): any;
 };
@@ -141,10 +147,10 @@ export interface MyType<T = any> extends Function {
 }
 
 
-//// [D:/Work/pkg1/dist/utils/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
+//// [D:/Work/pkg1/dist/src/utils/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
 
-//// [D:/Work/pkg1/dist/utils/index.js]
+//// [D:/Work/pkg1/dist/src/utils/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PartialType = PartialType;
@@ -156,15 +162,15 @@ function PartialType(classRef) {
 }
 //# sourceMappingURL=index.js.map
 
-//// [D:/Work/pkg1/dist/utils/index.d.ts]
+//// [D:/Work/pkg1/dist/src/utils/index.d.ts]
 import { MyType, MyReturnType } from './type-helpers';
 export declare function PartialType<T>(classRef: MyType<T>): MyReturnType;
 
 
-//// [D:/Work/pkg1/dist/main.js.map]
-{"version":3,"file":"main.js","sourceRoot":"","sources":["../src/main.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAEtC,MAAM,MAAM;CAAG;AAEf,MAAa,GAAI,SAAQ,IAAA,mBAAW,EAAC,MAAM,CAAC;CAE3C;AAFD,kBAEC"}
+//// [D:/Work/pkg1/dist/src/main.js.map]
+{"version":3,"file":"main.js","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAEtC,MAAM,MAAM;CAAG;AAEf,MAAa,GAAI,SAAQ,IAAA,mBAAW,EAAC,MAAM,CAAC;CAE3C;AAFD,kBAEC"}
 
-//// [D:/Work/pkg1/dist/main.js]
+//// [D:/Work/pkg1/dist/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sub = void 0;
@@ -176,7 +182,7 @@ class Sub extends (0, utils_1.PartialType)(Common) {
 exports.Sub = Sub;
 //# sourceMappingURL=main.js.map
 
-//// [D:/Work/pkg1/dist/main.d.ts]
+//// [D:/Work/pkg1/dist/src/main.d.ts]
 declare const Sub_base: import("./utils/type-helpers").MyReturnType;
 export declare class Sub extends Sub_base {
     id: string;

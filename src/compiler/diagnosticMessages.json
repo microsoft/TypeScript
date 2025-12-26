@@ -4480,6 +4480,10 @@
         "category": "Error",
         "code": 5010
     },
+    "The common source directory of '{0}' is '{1}'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.": {
+        "category": "Error",
+        "code": 5011
+    },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012

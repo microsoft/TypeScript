@@ -646,7 +646,7 @@ export function getCommonSourceDirectory(
         commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
         checkSourceFilesBelongToPath?.(options.rootDir);
     }
-    else if (options.composite && options.configFilePath) {
+    else if (options.configFilePath) {
         // Project compilations never infer their root from the input source paths
         commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
         checkSourceFilesBelongToPath?.(commonSourceDirectory);
@@ -654,6 +654,23 @@ export function getCommonSourceDirectory(
     else {
         commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles(), currentDirectory, getCanonicalFileName);
     }
+
+    if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+        // Make sure directory path ends with directory separator so this string can directly
+        // used to replace with "" to get the relative path of the source file and the relative path doesn't
+        // start with / making it rooted path
+        commonSourceDirectory += directorySeparator;
+    }
+    return commonSourceDirectory;
+}
+
+/** @internal */
+export function getComputedCommonSourceDirectory(
+    emittedFiles: readonly string[],
+    currentDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
+    let commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles, currentDirectory, getCanonicalFileName);
 
     if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
         // Make sure directory path ends with directory separator so this string can directly

@@ -2889,7 +2889,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                 const commonSourceDirGuesses: string[] = [];
                 // A `rootDir` compiler option strongly indicates the root location
                 // A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
-                if (state.compilerOptions.rootDir || (state.compilerOptions.composite && state.compilerOptions.configFilePath)) {
+                if (state.compilerOptions.rootDir || state.compilerOptions.configFilePath) {
                     const commonDir = toAbsolutePath(getCommonSourceDirectory(state.compilerOptions, () => [], state.host.getCurrentDirectory?.() || "", getCanonicalFileName));
                     commonSourceDirGuesses.push(commonDir);
                 }

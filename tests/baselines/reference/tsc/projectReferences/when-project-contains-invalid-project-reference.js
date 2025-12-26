@@ -38,6 +38,12 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "outFile": "theApp.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/Util/Dates' not found.
 
 [7m7[0m     {
@@ -48,12 +54,12 @@ Output::
 [7m [0m [91m~~~~~[0m
 
 
-Found 2 errors in the same file, starting at: tsconfig.json[90m:3[0m
+Found 3 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 
 
 //// [/home/src/workspaces/project/theApp.js]
-define("main", ["require", "exports"], function (require, exports) {
+define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
