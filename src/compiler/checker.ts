@@ -13213,7 +13213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getBaseTypes(type: InterfaceType): BaseType[] {
         if (!(getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference))) {
-            return emptyArray
+            return emptyArray;
         }
         if (!type.baseTypesResolved) {
             if (pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseTypes)) {
@@ -35057,13 +35057,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
         if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-            const baseTypes = getBaseTypes(getDeclaredTypeOfSymbol(prop.parent) as InterfaceType)
+            const baseTypes = getBaseTypes(getDeclaredTypeOfSymbol(prop.parent) as InterfaceType);
             if (baseTypes.length) {
-                const superProperty = getPropertyOfType(baseTypes[0], prop.escapedName)
-                return !!(superProperty && superProperty.valueDeclaration)
+                const superProperty = getPropertyOfType(baseTypes[0], prop.escapedName);
+                return !!(superProperty && superProperty.valueDeclaration);
             }
         }
-        return false
+        return false;
     }
 
     function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
