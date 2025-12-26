@@ -1,0 +1,100 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferSubstitutionTypes1.ts] ////
+
+=== noInferSubstitutionTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59826
+
+declare function g<A>(a: A, b: A extends string ? `rel:${NoInfer<A>}` : never): A;
+>g : Symbol(g, Decl(noInferSubstitutionTypes1.ts, 0, 0))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 2, 19))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 2, 22))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 2, 19))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 2, 27))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 2, 19))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 2, 19))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 2, 19))
+
+const result1 = g("5", "rel:7"); // error
+>result1 : Symbol(result1, Decl(noInferSubstitutionTypes1.ts, 3, 5))
+>g : Symbol(g, Decl(noInferSubstitutionTypes1.ts, 0, 0))
+
+declare function g2<A>(a: A, b: A extends string ? NoInfer<`rel:${A}`> : never): A;
+>g2 : Symbol(g2, Decl(noInferSubstitutionTypes1.ts, 3, 32))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 5, 20))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 5, 23))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 5, 20))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 5, 28))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 5, 20))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 5, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 5, 20))
+
+const result2 = g2("5", "rel:7"); // error
+>result2 : Symbol(result2, Decl(noInferSubstitutionTypes1.ts, 6, 5))
+>g2 : Symbol(g2, Decl(noInferSubstitutionTypes1.ts, 3, 32))
+
+declare function g3<A>(a: A, b: NoInfer<A extends string ? `rel:${A}` : never>): A;
+>g3 : Symbol(g3, Decl(noInferSubstitutionTypes1.ts, 6, 33))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 8, 20))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 8, 23))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 8, 20))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 8, 28))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 8, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 8, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 8, 20))
+
+const result3 = g3("5", "rel:7"); // error
+>result3 : Symbol(result3, Decl(noInferSubstitutionTypes1.ts, 9, 5))
+>g3 : Symbol(g3, Decl(noInferSubstitutionTypes1.ts, 6, 33))
+
+declare function h<const A>(a: A, b: A extends string ? NoInfer<A> : never): A;
+>h : Symbol(h, Decl(noInferSubstitutionTypes1.ts, 9, 33))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 11, 19))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 11, 28))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 11, 19))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 11, 33))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 11, 19))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 11, 19))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 11, 19))
+
+const result4 = h("foo", "bar"); // error
+>result4 : Symbol(result4, Decl(noInferSubstitutionTypes1.ts, 12, 5))
+>h : Symbol(h, Decl(noInferSubstitutionTypes1.ts, 9, 33))
+
+declare function h2<const A>(a: A, b: NoInfer<A> extends string ? NoInfer<A> : never): A;
+>h2 : Symbol(h2, Decl(noInferSubstitutionTypes1.ts, 12, 32))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 14, 20))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 14, 29))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 14, 20))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 14, 34))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 14, 20))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 14, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 14, 20))
+
+const result5 = h2("foo", "bar"); // error
+>result5 : Symbol(result5, Decl(noInferSubstitutionTypes1.ts, 15, 5))
+>h2 : Symbol(h2, Decl(noInferSubstitutionTypes1.ts, 12, 32))
+
+declare function h3<const A>(a: A, b: NoInfer<A> extends string ? A : never): A;
+>h3 : Symbol(h3, Decl(noInferSubstitutionTypes1.ts, 15, 33))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 17, 20))
+>a : Symbol(a, Decl(noInferSubstitutionTypes1.ts, 17, 29))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 17, 20))
+>b : Symbol(b, Decl(noInferSubstitutionTypes1.ts, 17, 34))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 17, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 17, 20))
+>A : Symbol(A, Decl(noInferSubstitutionTypes1.ts, 17, 20))
+
+const result6 = h3("foo", "bar"); // no error
+>result6 : Symbol(result6, Decl(noInferSubstitutionTypes1.ts, 18, 5))
+>h3 : Symbol(h3, Decl(noInferSubstitutionTypes1.ts, 15, 33))
+
+const result7 = h3("foo", 42); // error
+>result7 : Symbol(result7, Decl(noInferSubstitutionTypes1.ts, 19, 5))
+>h3 : Symbol(h3, Decl(noInferSubstitutionTypes1.ts, 15, 33))
+
