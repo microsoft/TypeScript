@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferIntersectedWithEmptyObjectKeyof1.ts] ////
+
+=== noInferIntersectedWithEmptyObjectKeyof1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61091
+
+type Keys = keyof (NoInfer<{ foo: string }> & {}); // "foo"
+>Keys : Symbol(Keys, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 0, 0))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 2, 28))
+
+type LowInfer<T> = T & {};
+>LowInfer : Symbol(LowInfer, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 2, 50))
+>T : Symbol(T, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 4, 14))
+>T : Symbol(T, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 4, 14))
+
+type PropertyAssigner<TContext> = {
+>PropertyAssigner : Symbol(PropertyAssigner, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 4, 26))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 5, 22))
+
+  [K in keyof TContext]?: (context: TContext) => TContext[K];
+>K : Symbol(K, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 6, 3))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 5, 22))
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 6, 27))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 5, 22))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 5, 22))
+>K : Symbol(K, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 6, 3))
+
+};
+type Source = {
+>Source : Symbol(Source, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 7, 2))
+
+  count: () => number;
+>count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 8, 15))
+
+};
+type Target = PropertyAssigner<LowInfer<NoInfer<{ count: number }>>>;
+>Target : Symbol(Target, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 10, 2))
+>PropertyAssigner : Symbol(PropertyAssigner, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 4, 26))
+>LowInfer : Symbol(LowInfer, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 2, 50))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 11, 49))
+
+declare const source: Source;
+>source : Symbol(source, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 12, 13))
+>Source : Symbol(Source, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 7, 2))
+
+const target: Target = source; // ok
+>target : Symbol(target, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 13, 5))
+>Target : Symbol(Target, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 10, 2))
+>source : Symbol(source, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 12, 13))
+
+type ActionFunction<TContext> = {
+>ActionFunction : Symbol(ActionFunction, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 13, 30))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 15, 20))
+
+  (args: { context: TContext }): void;
+>args : Symbol(args, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 16, 3))
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 16, 10))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 15, 20))
+
+  _out_TContext?: TContext;
+>_out_TContext : Symbol(_out_TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 16, 38))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 15, 20))
+
+};
+
+type TransitionsConfig<TContext> = Record<
+>TransitionsConfig : Symbol(TransitionsConfig, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 18, 2))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 20, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  string,
+  {
+    actions?: ActionFunction<TContext>;
+>actions : Symbol(actions, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 22, 3))
+>ActionFunction : Symbol(ActionFunction, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 13, 30))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 20, 23))
+  }
+>;
+
+declare function assign<TContext>(
+>assign : Symbol(assign, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 25, 2))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 27, 24))
+
+  assignment: PropertyAssigner<LowInfer<TContext>>,
+>assignment : Symbol(assignment, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 27, 34))
+>PropertyAssigner : Symbol(PropertyAssigner, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 4, 26))
+>LowInfer : Symbol(LowInfer, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 2, 50))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 27, 24))
+
+): ActionFunction<TContext>;
+>ActionFunction : Symbol(ActionFunction, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 13, 30))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 27, 24))
+
+declare function createMachine<TContext>(config: {
+>createMachine : Symbol(createMachine, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 29, 28))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 31, 31))
+>config : Symbol(config, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 31, 41))
+
+  types?: {
+>types : Symbol(types, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 31, 50))
+
+    context?: TContext;
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 32, 11))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 31, 31))
+
+  };
+  on?: TransitionsConfig<NoInfer<TContext>>;
+>on : Symbol(on, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 34, 4))
+>TransitionsConfig : Symbol(TransitionsConfig, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 18, 2))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TContext : Symbol(TContext, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 31, 31))
+
+}): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 29, 28))
+
+  types: {
+>types : Symbol(types, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 38, 15))
+
+    context: {
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 39, 10))
+
+      count: 0,
+>count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 40, 14))
+
+    },
+  },
+  on: {
+>on : Symbol(on, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 43, 4))
+
+    FOO: {
+>FOO : Symbol(FOO, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 44, 7))
+
+      actions: assign({
+>actions : Symbol(actions, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 45, 10))
+>assign : Symbol(assign, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 25, 2))
+
+        count: (context) => context.count + 1,
+>count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 46, 23))
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 47, 16))
+>context.count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 40, 14))
+>context : Symbol(context, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 47, 16))
+>count : Symbol(count, Decl(noInferIntersectedWithEmptyObjectKeyof1.ts, 40, 14))
+
+      }),
+    },
+  },
+});
+
