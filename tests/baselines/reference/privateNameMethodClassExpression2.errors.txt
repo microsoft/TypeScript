@@ -1,0 +1,19 @@
+privateNameMethodClassExpression2.ts(5,6): error TS18013: Property '#method' is not accessible outside class '(Anonymous class)' because it has a private identifier.
+privateNameMethodClassExpression2.ts(9,6): error TS18013: Property '#field' is not accessible outside class '(Anonymous class)' because it has a private identifier.
+
+
+==== privateNameMethodClassExpression2.ts (2 errors) ====
+    new (class {
+      #method() {
+        return 42;
+      }
+    })().#method; // error
+         ~~~~~~~
+!!! error TS18013: Property '#method' is not accessible outside class '(Anonymous class)' because it has a private identifier.
+    
+    new (class {
+      #field = 42;
+    })().#field; // error
+         ~~~~~~
+!!! error TS18013: Property '#field' is not accessible outside class '(Anonymous class)' because it has a private identifier.
+    

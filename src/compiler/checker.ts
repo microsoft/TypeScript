@@ -24325,13 +24325,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const privateIdentifierDescription = unmatchedProperty.valueDeclaration.name.escapedText;
                 const symbolTableKey = getSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription);
                 if (symbolTableKey && getPropertyOfType(source, symbolTableKey)) {
-                    const sourceName = factory.getDeclarationName(source.symbol.valueDeclaration);
-                    const targetName = factory.getDeclarationName(target.symbol.valueDeclaration);
                     reportError(
                         Diagnostics.Property_0_in_type_1_refers_to_a_different_member_that_cannot_be_accessed_from_within_type_2,
                         diagnosticName(privateIdentifierDescription),
-                        diagnosticName(sourceName.escapedText === "" ? anon : sourceName),
-                        diagnosticName(targetName.escapedText === "" ? anon : targetName),
+                        symbolToString(source.symbol),
+                        symbolToString(target.symbol),
                     );
                     return;
                 }
@@ -34787,7 +34785,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 right,
                 Diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_identifier,
                 diagName,
-                diagnosticName(typeClass.name || anon),
+                symbolToString(typeClass.symbol),
             );
             return true;
         }
