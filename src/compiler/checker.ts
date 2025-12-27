@@ -29463,6 +29463,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             propType = removeNullable && optionalChain ? getOptionalType(propType) : propType;
             const narrowedPropType = narrowType(propType);
+            // If the narrowed property type is never and the type is not a union, return never
+            // This handles cases where a non-union type has a single discriminant value that's been exhausted
+            if (narrowedPropType.flags & TypeFlags.Never && !(type.flags & TypeFlags.Union)) {
+                return neverType;
+            }
             return filterType(type, t => {
                 const discriminantType = getTypeOfPropertyOrIndexSignatureOfType(t, propName) || unknownType;
                 return !(discriminantType.flags & TypeFlags.Never) && !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
@@ -29776,6 +29781,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return caseType;
             }
             const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)), (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))));
+            // Allow non-union types to narrow to never when all values are handled
+            // This applies when caseType is never (meaning we're in a default-like position)
+            if (caseType.flags & TypeFlags.Never && !(type.flags & TypeFlags.Union) && isUnitLikeType(type)) {
+                const regularType = type.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(type));
+                if (isUnitType(regularType) && contains(switchTypes, regularType, (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))) {
+                    return neverType;
+                }
+            }
+            // Also handle single-member unions
+            if (caseType.flags & TypeFlags.Never && type.flags & TypeFlags.Union && (type as UnionType).types.length === 1) {
+                const singleType = (type as UnionType).types[0];
+                if (isUnitLikeType(singleType)) {
+                    const regularType = singleType.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(singleType));
+                    if (isUnitType(regularType) && contains(switchTypes, regularType, (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))) {
+                        return neverType;
+                    }
+                }
+            }
             return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
         }
 

@@ -1,0 +1,254 @@
+//// [tests/cases/compiler/exhaustiveSwitchSingleEnumMember.ts] ////
+
+=== exhaustiveSwitchSingleEnumMember.ts ===
+// Test exhaustiveness checking for single-member enums
+// Repro for #23155
+
+// Single enum member should narrow to never in default case
+enum SingleMemberEnum {
+>SingleMemberEnum : SingleMemberEnum
+>                 : ^^^^^^^^^^^^^^^^
+
+  VALUE = 'VALUE'
+>VALUE : SingleMemberEnum.VALUE
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>'VALUE' : "VALUE"
+>        : ^^^^^^^
+}
+
+function testSingleEnumExhaustive(x: SingleMemberEnum) {
+>testSingleEnumExhaustive : (x: SingleMemberEnum) => number
+>                         : ^ ^^                ^^^^^^^^^^^
+>x : SingleMemberEnum
+>  : ^^^^^^^^^^^^^^^^
+
+  switch (x) {
+>x : SingleMemberEnum
+>  : ^^^^^^^^^^^^^^^^
+
+    case SingleMemberEnum.VALUE:
+>SingleMemberEnum.VALUE : SingleMemberEnum
+>                       : ^^^^^^^^^^^^^^^^
+>SingleMemberEnum : typeof SingleMemberEnum
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>VALUE : SingleMemberEnum
+>      : ^^^^^^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+  }
+  // x should be narrowed to never here
+  const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+}
+
+// With explicit default clause
+function testSingleEnumWithDefault(x: SingleMemberEnum) {
+>testSingleEnumWithDefault : (x: SingleMemberEnum) => number
+>                          : ^ ^^                ^^^^^^^^^^^
+>x : SingleMemberEnum
+>  : ^^^^^^^^^^^^^^^^
+
+  switch (x) {
+>x : SingleMemberEnum
+>  : ^^^^^^^^^^^^^^^^
+
+    case SingleMemberEnum.VALUE:
+>SingleMemberEnum.VALUE : SingleMemberEnum
+>                       : ^^^^^^^^^^^^^^^^
+>SingleMemberEnum : typeof SingleMemberEnum
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>VALUE : SingleMemberEnum
+>      : ^^^^^^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+
+    default:
+      // x should be narrowed to never in default
+      const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+
+      throw new Error("unreachable");
+>new Error("unreachable") : Error
+>                         : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"unreachable" : "unreachable"
+>              : ^^^^^^^^^^^^^
+  }
+}
+
+// Numeric enum
+enum NumericSingleMember {
+>NumericSingleMember : NumericSingleMember
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+  ONE = 1
+>ONE : NumericSingleMember.ONE
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+function testNumericSingleEnum(x: NumericSingleMember) {
+>testNumericSingleEnum : (x: NumericSingleMember) => string
+>                      : ^ ^^                   ^^^^^^^^^^^
+>x : NumericSingleMember
+>  : ^^^^^^^^^^^^^^^^^^^
+
+  switch (x) {
+>x : NumericSingleMember
+>  : ^^^^^^^^^^^^^^^^^^^
+
+    case NumericSingleMember.ONE:
+>NumericSingleMember.ONE : NumericSingleMember
+>                        : ^^^^^^^^^^^^^^^^^^^
+>NumericSingleMember : typeof NumericSingleMember
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ONE : NumericSingleMember
+>    : ^^^^^^^^^^^^^^^^^^^
+
+      return 'one';
+>'one' : "one"
+>      : ^^^^^
+  }
+  const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+}
+
+// Test that non-enum single types also work
+type SingleLiteral = 'onlyValue';
+>SingleLiteral : "onlyValue"
+>              : ^^^^^^^^^^^
+
+function testSingleLiteral(x: SingleLiteral) {
+>testSingleLiteral : (x: SingleLiteral) => number
+>                  : ^ ^^             ^^^^^^^^^^^
+>x : "onlyValue"
+>  : ^^^^^^^^^^^
+
+  switch (x) {
+>x : "onlyValue"
+>  : ^^^^^^^^^^^
+
+    case 'onlyValue':
+>'onlyValue' : "onlyValue"
+>            : ^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+  }
+  const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+}
+
+// Ensure unions still work correctly (existing behavior)
+enum MultiMemberEnum {
+>MultiMemberEnum : MultiMemberEnum
+>                : ^^^^^^^^^^^^^^^
+
+  A = 'A',
+>A : MultiMemberEnum.A
+>  : ^^^^^^^^^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+  B = 'B'
+>B : MultiMemberEnum.B
+>  : ^^^^^^^^^^^^^^^^^
+>'B' : "B"
+>    : ^^^
+}
+
+function testMultiEnum(x: MultiMemberEnum) {
+>testMultiEnum : (x: MultiMemberEnum) => 1 | 2
+>              : ^ ^^               ^^^^^^^^^^
+>x : MultiMemberEnum
+>  : ^^^^^^^^^^^^^^^
+
+  switch (x) {
+>x : MultiMemberEnum
+>  : ^^^^^^^^^^^^^^^
+
+    case MultiMemberEnum.A:
+>MultiMemberEnum.A : MultiMemberEnum.A
+>                  : ^^^^^^^^^^^^^^^^^
+>MultiMemberEnum : typeof MultiMemberEnum
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>A : MultiMemberEnum.A
+>  : ^^^^^^^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+
+    case MultiMemberEnum.B:
+>MultiMemberEnum.B : MultiMemberEnum.B
+>                  : ^^^^^^^^^^^^^^^^^
+>MultiMemberEnum : typeof MultiMemberEnum
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>B : MultiMemberEnum.B
+>  : ^^^^^^^^^^^^^^^^^
+
+      return 2;
+>2 : 2
+>  : ^
+  }
+  // Should narrow to never
+  const n: never = x;
+>n : never
+>  : ^^^^^
+>x : never
+>  : ^^^^^
+}
+
+// Test incomplete coverage - should error
+function testIncomplete(x: MultiMemberEnum) {
+>testIncomplete : (x: MultiMemberEnum) => 1 | undefined
+>               : ^ ^^               ^^^^^^^^^^^^^^^^^^
+>x : MultiMemberEnum
+>  : ^^^^^^^^^^^^^^^
+
+  switch (x) {
+>x : MultiMemberEnum
+>  : ^^^^^^^^^^^^^^^
+
+    case MultiMemberEnum.A:
+>MultiMemberEnum.A : MultiMemberEnum.A
+>                  : ^^^^^^^^^^^^^^^^^
+>MultiMemberEnum : typeof MultiMemberEnum
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>A : MultiMemberEnum.A
+>  : ^^^^^^^^^^^^^^^^^
+
+      return 1;
+>1 : 1
+>  : ^
+  }
+  // Should NOT narrow to never - B is not handled
+  const n: never = x; // Error expected
+>n : never
+>  : ^^^^^
+>x : MultiMemberEnum.B
+>  : ^^^^^^^^^^^^^^^^^
+}
+
+// Note: Discriminated union narrowing for single-member types requires
+// narrowing through property access, which is more complex and not yet implemented.
+
