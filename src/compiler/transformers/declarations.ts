@@ -203,6 +203,7 @@ import {
     tryCast,
     TypeAliasDeclaration,
     TypeNode,
+    TypeOperatorNode,
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -216,7 +217,12 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
-
+import {
+    idText,
+    isIdentifier,
+    PrivateIdentifier,
+} from "../_namespaces/ts.js";
+import { collectExternalModuleInfo } from "./utilities.js";
 /** @internal */
 export function getDeclarationDiagnostics(
     host: EmitHost,
@@ -1459,6 +1465,15 @@ export function transformDeclarations(context: TransformationContext): Transform
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
+
+                    // Before emitting expando properties, get all exported names for the file
+                    const moduleInfo = collectExternalModuleInfo(context, input.parent as SourceFile);
+                    const topLevelExportNames = new Set(
+                        (moduleInfo.exportedNames ?? [])
+                            .filter(n => isIdentifier(n) || isPrivateIdentifier(n))
+                            .map(n => idText(n as Identifier | PrivateIdentifier)),
+                    );
+
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
                         if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
@@ -1468,7 +1483,12 @@ export function transformDeclarations(context: TransformationContext): Transform
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags | InternalNodeBuilderFlags.NoSyntacticPrinter, symbolTracker);
+                        let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags | InternalNodeBuilderFlags.NoSyntacticPrinter, symbolTracker);
+                        const wasUniqueSymbol = isUniqueSymbolType(type);
+                        // If this is a unique symbol and also exported at the top level, emit typeof <name>
+                        if (wasUniqueSymbol && topLevelExportNames.has(nameStr)) {
+                            type = factory.createTypeQueryNode(factory.createIdentifier(nameStr));
+                        }
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
@@ -1476,7 +1496,10 @@ export function transformDeclarations(context: TransformationContext): Transform
                             exportMappings.push([name, nameStr]);
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                        return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
+                        const modifiers = isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)];
+                        const isConst = wasUniqueSymbol;
+                        const variableDeclarationList = factory.createVariableDeclarationList([varDecl], isConst ? NodeFlags.Const : NodeFlags.None);
+                        return factory.createVariableStatement(modifiers, variableDeclarationList);
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
@@ -1812,6 +1835,13 @@ export function transformDeclarations(context: TransformationContext): Transform
 
     function isScopeMarker(node: Node) {
         return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    function isUniqueSymbolType(type: TypeNode | undefined): boolean {
+        return !!type &&
+            type.kind === SyntaxKind.TypeOperator &&
+            (type as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword &&
+            (type as TypeOperatorNode).type.kind === SyntaxKind.SymbolKeyword;
     }
 
     function hasScopeMarker(statements: readonly Statement[]) {
