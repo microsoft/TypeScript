@@ -1,12 +1,16 @@
 downlevelLetConst16.ts(151,15): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 downlevelLetConst16.ts(164,17): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
+downlevelLetConst16.ts(195,14): error TS2532: Object is possibly 'undefined'.
+downlevelLetConst16.ts(202,14): error TS2532: Object is possibly 'undefined'.
 downlevelLetConst16.ts(202,15): error TS2339: Property 'a' does not exist on type 'undefined'.
 downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array type.
+downlevelLetConst16.ts(216,16): error TS2532: Object is possibly 'undefined'.
+downlevelLetConst16.ts(223,16): error TS2532: Object is possibly 'undefined'.
 downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on type 'undefined'.
 
 
-==== downlevelLetConst16.ts (6 errors) ====
+==== downlevelLetConst16.ts (10 errors) ====
     'use strict'
     
     declare function use(a: any);
@@ -208,6 +212,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
         for (let [x] of []) {
                  ~~~
 !!! error TS2461: Type 'undefined' is not an array type.
+                 ~~~
+!!! error TS2532: Object is possibly 'undefined'.
             use(x);
         }
         use(x);
@@ -215,6 +221,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     
     function foo9() {
         for (let {a: x} of []) {
+                 ~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
                   ~
 !!! error TS2339: Property 'a' does not exist on type 'undefined'.
             use(x);
@@ -233,6 +241,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
         for (const [x] of []) {
                    ~~~
 !!! error TS2461: Type 'undefined' is not an array type.
+                   ~~~
+!!! error TS2532: Object is possibly 'undefined'.
             use(x);
         }
         use(x);
@@ -240,6 +250,8 @@ downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on typ
     
     function foo12() {
         for (const {a: x} of []) {
+                   ~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
                     ~
 !!! error TS2339: Property 'a' does not exist on type 'undefined'.
             use(x);

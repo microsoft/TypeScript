@@ -1,0 +1,18 @@
+restUnion2.ts(3,19): error TS18048: 'undefinedUnion' is possibly 'undefined'.
+restUnion2.ts(8,19): error TS18047: 'nullUnion' is possibly 'null'.
+
+
+==== restUnion2.ts (2 errors) ====
+    declare const undefinedUnion: { n: number } | undefined;
+    var rest2: { n: number };
+    var {...rest2 } = undefinedUnion;
+                      ~~~~~~~~~~~~~~
+!!! error TS18048: 'undefinedUnion' is possibly 'undefined'.
+    
+    
+    declare const nullUnion: { n: number } | null;
+    var rest3: { n: number };
+    var {...rest3 } = nullUnion;
+                      ~~~~~~~~~
+!!! error TS18047: 'nullUnion' is possibly 'null'.
+    

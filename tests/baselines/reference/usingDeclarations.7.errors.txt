@@ -1,8 +1,9 @@
 usingDeclarations.7.ts(3,11): error TS1492: 'using' declarations may not have binding patterns.
 usingDeclarations.7.ts(3,12): error TS2339: Property 'b' does not exist on type 'null'.
+usingDeclarations.7.ts(3,17): error TS18050: The value 'null' cannot be used here.
 
 
-==== usingDeclarations.7.ts (2 errors) ====
+==== usingDeclarations.7.ts (3 errors) ====
     {
         using a = null,
               {b} = null,
@@ -10,5 +11,7 @@ usingDeclarations.7.ts(3,12): error TS2339: Property 'b' does not exist on type 
 !!! error TS1492: 'using' declarations may not have binding patterns.
                ~
 !!! error TS2339: Property 'b' does not exist on type 'null'.
+                    ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
               c = null;
     }

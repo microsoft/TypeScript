@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/es6/destructuring/bindingPatternWithNullableInitializer2.ts] ////
+
+=== bindingPatternWithNullableInitializer2.ts ===
+export async function focus(
+>focus : ({ emitSynthFocused, }?: { emitSynthFocused: boolean; }) => Promise<void>
+>      : ^                     ^^^                              ^^^^^^^^^^^^^^^^^^
+  {
+    emitSynthFocused,
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+  }: {
+    emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+  } = { emitSynthFocused: true },
+>{ emitSynthFocused: true } : { emitSynthFocused: true; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>emitSynthFocused : true
+>                 : ^^^^
+>true : true
+>     : ^^^^
+
+) {}
+
+export declare function focus2({
+>focus2 : ({ emitSynthFocused, }?: { emitSynthFocused: boolean; }) => Promise<void>
+>       : ^                     ^^^                              ^^^^^             
+
+  emitSynthFocused,
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+}?: {
+  emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+}): Promise<void>;
+
+export class View {
+>View : View
+>     : ^^^^
+
+  async focus(
+>focus : ({ emitSynthFocused, }?: { emitSynthFocused: boolean; }) => Promise<void>
+>      : ^                     ^^^                              ^^^^^^^^^^^^^^^^^^
+    {
+      emitSynthFocused,
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+    }: {
+      emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+    } = { emitSynthFocused: true },
+>{ emitSynthFocused: true } : { emitSynthFocused: true; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>emitSynthFocused : true
+>                 : ^^^^
+>true : true
+>     : ^^^^
+
+  ) {}
+}
+
+// emit of the above
+export declare class View2 {
+>View2 : View2
+>      : ^^^^^
+
+  focus({ emitSynthFocused }?: {
+>focus : ({ emitSynthFocused }?: { emitSynthFocused: boolean; }) => Promise<void>
+>      : ^                    ^^^                              ^^^^^             
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+    emitSynthFocused: boolean;
+>emitSynthFocused : boolean
+>                 : ^^^^^^^
+
+  }): Promise<void>;
+}
+
