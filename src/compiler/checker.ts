@@ -33826,7 +33826,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) &&
             getSemanticJsxChildren(parent.children).length > 0
         ) {
-            const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
+            // Compute contextual type for fragment children before checking them
+            let childrenContextualType: Type | undefined;
+            if (isJsxOpeningFragment(openingLikeElement) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                // For fragments, get the props type from the Fragment factory's signature
+                const fragmentType = getJSXFragmentType(openingLikeElement);
+                const signatures = getSignaturesOfType(fragmentType, SignatureKind.Call);
+                if (signatures.length > 0) {
+                    const contextualType = getTypeOfFirstParameterOfSignature(signatures[0]);
+                    childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
+                }
+            }
+
+            // Check children with contextual type (only for fragments)
+            const childrenTypes: Type[] = checkJsxChildren(parent, checkMode, childrenContextualType);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                 // Error if there is a attribute named "children" explicitly specified and children element.
@@ -33877,7 +33890,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
+    function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode, childrenContextualType?: Type) {
         const childrenTypes: Type[] = [];
         for (const child of node.children) {
             // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
@@ -33891,7 +33904,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 continue; // empty jsx expressions don't *really* count as present children
             }
             else {
-                childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
+                // If we have a contextual type for children, use it when checking child expressions
+                if (childrenContextualType && child.kind === SyntaxKind.JsxExpression && child.expression) {
+                    childrenTypes.push(checkExpressionForMutableLocationWithContextualType(child.expression, childrenContextualType));
+                }
+                else {
+                    childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
+                }
             }
         }
         return childrenTypes;
@@ -37439,15 +37458,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const jsxFragmentFactoryName = getJsxNamespace(node);
 
         // #38720/60122, allow null as jsxFragmentFactory
-        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
+        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
         if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
 
         const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
+        // When using react-jsx/react-jsxdev, the fragment comes from the jsx-runtime module as "Fragment" export
+        // Use "Fragment" in error message instead of the default "React" namespace
+        const isModernJsx = compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev;
+        const fragmentFactoryNameForError = isModernJsx ? ReactNames.Fragment : jsxFragmentFactoryName;
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(
                 node,
-                jsxFragmentFactoryName,
+                fragmentFactoryNameForError,
                 shouldModuleRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                 /*nameNotFoundMessage*/ jsxFactoryRefErr,
                 /*isUse*/ true,
