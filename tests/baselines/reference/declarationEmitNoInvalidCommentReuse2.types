@@ -2,14 +2,14 @@
 
 === a.ts ===
 import { object } from "./obj.ts";
->object : { foo: import("id").Id<{}>; }
->       : ^^^^^^^                         ^^^
+>object : { foo: import("./id").Id<{}>; }
+>       : ^^^^^^^                     ^^^
 
 export const _ = object;
->_ : { foo: import("id").Id<{}>; }
->  : ^^^^^^^                         ^^^
->object : { foo: import("id").Id<{}>; }
->       : ^^^^^^^                         ^^^
+>_ : { foo: import("./id").Id<{}>; }
+>  : ^^^^^^^                     ^^^
+>object : { foo: import("./id").Id<{}>; }
+>       : ^^^^^^^                     ^^^
 
 ///////////
 /**

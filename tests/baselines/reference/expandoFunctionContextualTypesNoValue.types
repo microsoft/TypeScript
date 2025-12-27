@@ -7,16 +7,16 @@ import Foo from "blah";
 >    : ^^^
 
 export function Foo() { }
->Foo : typeof import("expandoFunctionContextualTypesNoValue").Foo
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof import("./expandoFunctionContextualTypesNoValue").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Foo.bar = () => { };
 >Foo.bar = () => { } : () => void
 >                    : ^^^^^^^^^^
 >Foo.bar : () => void
 >        : ^^^^^^^^^^
->Foo : typeof import("expandoFunctionContextualTypesNoValue").Foo
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof import("./expandoFunctionContextualTypesNoValue").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : () => void
 >    : ^^^^^^^^^^
 >() => { } : () => void

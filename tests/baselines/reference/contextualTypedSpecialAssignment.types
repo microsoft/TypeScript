@@ -144,8 +144,8 @@ exports.x = {
 >                                              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >exports.x : DoneStatus
 >          : ^^^^^^^^^^
->exports : typeof import("test")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./test")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
@@ -166,8 +166,8 @@ exports.x = {
 exports.x
 >exports.x : DoneStatus
 >          : ^^^^^^^^^^
->exports : typeof import("test")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./test")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : DoneStatus
 >  : ^^^^^^^^^^
 

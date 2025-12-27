@@ -2,32 +2,32 @@
 
 === /src/a.ts ===
 import { a } from "a";
->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
+>a : (x: import("a/node_modules/x").default) => void
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
 
 import { b } from "b";
->b : import("/node_modules/a/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : import("a/node_modules/x").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import { c } from "c";
->c : import("/node_modules/c/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : import("c/node_modules/x").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 a(b); // Works
 >a(b) : void
 >     : ^^^^
->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
->b : import("/node_modules/a/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : (x: import("a/node_modules/x").default) => void
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
+>b : import("a/node_modules/x").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 a(c); // Error, these are from different versions of the library.
 >a(c) : void
 >     : ^^^^
->a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
->c : import("/node_modules/c/node_modules/x/index").default
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : (x: import("a/node_modules/x").default) => void
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    
+>c : import("c/node_modules/x").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === /node_modules/a/index.d.ts ===
 import X from "x";

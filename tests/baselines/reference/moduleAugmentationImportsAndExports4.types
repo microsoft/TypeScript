@@ -68,8 +68,8 @@ import C = N.Cls;
 >    : ^
 
 declare module "./f1" {
->"./f1" : typeof import("f1")
->       : ^^^^^^^^^^^^^^^^^^^
+>"./f1" : typeof import("./f1")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     interface A {
         foo(): B;
@@ -102,14 +102,14 @@ let b = a.foo().n;
 >  : ^^^^^^
 >a.foo().n : number
 >          : ^^^^^^
->a.foo() : import("f2").B
->        : ^^^^^^^^^^^^^^
->a.foo : () => import("f2").B
->      : ^^^^^^       ^^^^  ^
+>a.foo() : import("./f2").B
+>        : ^^^^^^^^^^^^^^^^
+>a.foo : () => import("./f2").B
+>      : ^^^^^^       ^^^^^^  ^
 >a : A
 >  : ^
->foo : () => import("f2").B
->    : ^^^^^^       ^^^^  ^
+>foo : () => import("./f2").B
+>    : ^^^^^^       ^^^^^^  ^
 >n : number
 >  : ^^^^^^
 

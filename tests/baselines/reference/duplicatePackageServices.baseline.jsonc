@@ -496,7 +496,7 @@
    {
     "kind": "class",
     "name": "X",
-    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "containerName": "\"x\"",
     "isLocal": false,
     "isAmbient": true,
     "unverified": false
@@ -520,7 +520,7 @@
    {
     "kind": "class",
     "name": "X",
-    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "containerName": "\"x\"",
     "isLocal": false,
     "isAmbient": true,
     "unverified": false

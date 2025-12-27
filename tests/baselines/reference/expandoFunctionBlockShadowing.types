@@ -93,8 +93,8 @@ if (Math.random()) {
 >          : ^^^^^^    ^^^^^^^^      ^^^
 >test : string
 >     : ^^^^^^
->aliasTopY : typeof import("expandoFunctionBlockShadowing").Y
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>aliasTopY : typeof import("./expandoFunctionBlockShadowing").Y
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   const blockYcheck: { (): void; test: number } = Y;
 >blockYcheck : { (): void; test: number; }

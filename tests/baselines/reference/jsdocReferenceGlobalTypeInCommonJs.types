@@ -26,8 +26,8 @@ Puppeteer.connect;
 
 === puppet.d.ts ===
 export as namespace Puppeteer;
->Puppeteer : typeof import("puppet")
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+>Puppeteer : typeof import("./puppet")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface Keyboard {
     key: string

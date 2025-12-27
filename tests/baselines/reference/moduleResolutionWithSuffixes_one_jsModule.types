@@ -15,8 +15,8 @@ exports.__esModule = true;
 >                          : ^^^^
 >exports.__esModule : true
 >                   : ^^^^
->exports : typeof import("/foo.ios")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./foo.ios")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__esModule : true
 >           : ^^^^
 >true : true
@@ -31,8 +31,8 @@ exports.ios = ios;
 >                  : ^^^^^^^^^^
 >exports.ios : () => void
 >            : ^^^^^^^^^^
->exports : typeof import("/foo.ios")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./foo.ios")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ios : () => void
 >    : ^^^^^^^^^^
 >ios : () => void
@@ -48,8 +48,8 @@ exports.__esModule = true;
 >                          : ^^^^
 >exports.__esModule : true
 >                   : ^^^^
->exports : typeof import("/foo")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >__esModule : true
 >           : ^^^^
 >true : true
@@ -64,8 +64,8 @@ exports.base = base;
 >                    : ^^^^^^^^^^
 >exports.base : () => void
 >             : ^^^^^^^^^^
->exports : typeof import("/foo")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >base : () => void
 >     : ^^^^^^^^^^
 >base : () => void

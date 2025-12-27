@@ -4,8 +4,8 @@
 const Foo = require("./exporter.mjs");
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->require("./exporter.mjs") : typeof import("/exporter", { with: { "resolution-mode": "import" } })
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require("./exporter.mjs") : typeof import("./exporter.mjs", { with: { "resolution-mode": "import" } })
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >"./exporter.mjs" : "./exporter.mjs"

@@ -6,8 +6,8 @@ exports.x = 0;
 >              : ^
 >exports.x : 0
 >          : ^
->exports : typeof import("/a")
->        : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >x : 0
 >  : ^
 >0 : 0
@@ -16,8 +16,8 @@ exports.x = 0;
 exports.x;
 >exports.x : 0
 >          : ^
->exports : typeof import("/a")
->        : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >x : 0
 >  : ^
 
@@ -29,8 +29,8 @@ exports.x;
 >                                                   : ^^^^^^^^^^
 >exports.Cls : typeof Cls
 >            : ^^^^^^^^^^
->exports : typeof import("/a")
->        : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >Cls : typeof Cls
 >    : ^^^^^^^^^^
 >function() {        this.x = 0;    } : typeof Cls
@@ -56,8 +56,8 @@ const instance = new exports.Cls();
 >                  : ^^^
 >exports.Cls : typeof Cls
 >            : ^^^^^^^^^^
->exports : typeof import("/a")
->        : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >Cls : typeof Cls
 >    : ^^^^^^^^^^
 

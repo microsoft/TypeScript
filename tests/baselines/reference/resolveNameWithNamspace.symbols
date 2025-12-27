@@ -37,6 +37,6 @@ exports.equal = myAssert.equal
 
 exports.equal()
 >exports.equal : Symbol(equal, Decl(app.js, 0, 0))
->exports : Symbol("app", Decl(app.js, 0, 0))
+>exports : Symbol("./app", Decl(app.js, 0, 0))
 >equal : Symbol(equal, Decl(app.js, 0, 0))
 

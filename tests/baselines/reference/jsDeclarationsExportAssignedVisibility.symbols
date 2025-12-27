@@ -4,7 +4,7 @@
 const Obj = require("./obj");
 >Obj : Symbol(Obj, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./obj" : Symbol("obj", Decl(obj.js, 0, 0))
+>"./obj" : Symbol("./obj", Decl(obj.js, 0, 0))
 
 class Container {
 >Container : Symbol(Container, Decl(index.js, 0, 29))

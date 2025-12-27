@@ -42,8 +42,8 @@ export = y;
 
 === foo3.ts ===
 namespace x {
->x : typeof import("foo3")
->  : ^^^^^^^^^^^^^^^^^^^^^
+>x : typeof import("./foo3")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 	export var x = 10;
 >x : number

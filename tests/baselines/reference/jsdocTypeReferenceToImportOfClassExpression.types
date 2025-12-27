@@ -13,18 +13,18 @@ const MW = require("./MW");
 /** @typedef {number} Cictema */
 
 module.exports = class MC {
->module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("MC")
->                                                                   : ^^^^^^^^^^^^^^^^^^^
->module.exports : typeof import("MC")
->               : ^^^^^^^^^^^^^^^^^^^
->module : { exports: typeof import("MC"); }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("MC")
->        : ^^^^^^^^^^^^^^^^^^^
->class MC {  watch() {    return new MW(this);  }} : typeof import("MC")
->                                                  : ^^^^^^^^^^^^^^^^^^^
->MC : typeof import("MC")
->   : ^^^^^^^^^^^^^^^^^^^
+>module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("./MC")
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^
+>module.exports : typeof import("./MC")
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof import("./MC"); }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./MC")
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>class MC {  watch() {    return new MW(this);  }} : typeof import("./MC")
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^
+>MC : typeof import("./MC")
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
   watch() {
 >watch : () => MW
@@ -51,19 +51,19 @@ class MW {
    * @param {MC} compiler the compiler
    */
   constructor(compiler) {
->compiler : import("MC")
->         : ^^^^^^^^^^^^
+>compiler : import("./MC")
+>         : ^^^^^^^^^^^^^^
 
     this.compiler = compiler;
->this.compiler = compiler : import("MC")
->                         : ^^^^^^^^^^^^
+>this.compiler = compiler : import("./MC")
+>                         : ^^^^^^^^^^^^^^
 >this.compiler : any
 >this : this
 >     : ^^^^
 >compiler : any
 >         : ^^^
->compiler : import("MC")
->         : ^^^^^^^^^^^^
+>compiler : import("./MC")
+>         : ^^^^^^^^^^^^^^
   }
 }
 

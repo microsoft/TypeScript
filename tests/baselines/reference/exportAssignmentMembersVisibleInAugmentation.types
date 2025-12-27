@@ -2,8 +2,8 @@
 
 === /node_modules/foo/index.d.ts ===
 export = foo;
->foo : typeof import("/node_modules/foo/index.d.ts")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : typeof import("foo")
+>    : ^^^^^^^^^^^^^^^^^^^^
 
 declare namespace foo {
     export type T = number;

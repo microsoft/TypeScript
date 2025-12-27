@@ -4,7 +4,7 @@
 const {myTypes} = require('./file.js');
 >myTypes : Symbol(myTypes, Decl(file2.js, 0, 7))
 >require : Symbol(require)
->'./file.js' : Symbol("file", Decl(file.js, 0, 0))
+>'./file.js' : Symbol("./file.js", Decl(file.js, 0, 0))
 
 /**
  * @namespace testFnTypes

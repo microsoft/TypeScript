@@ -12,7 +12,7 @@
    {
     "kind": "interface",
     "name": "A",
-    "containerName": "\"/b\"",
+    "containerName": "\"./b\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false

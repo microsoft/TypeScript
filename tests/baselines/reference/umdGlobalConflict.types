@@ -2,8 +2,8 @@
 
 === v1/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof import("v1/index")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Alpha : typeof import(".")
+>      : ^^^^^^^^^^^^^^^^^^
 
 export var x: string;
 >x : string
@@ -11,8 +11,8 @@ export var x: string;
 
 === v2/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof import("v2/index")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Alpha : typeof import(".")
+>      : ^^^^^^^^^^^^^^^^^^
 
 export var y: number;
 >y : number

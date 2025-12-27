@@ -49,8 +49,8 @@ namespace N {
 }
 
 declare module "./f1" {
->"./f1" : typeof import("f1")
->       : ^^^^^^^^^^^^^^^^^^^
+>"./f1" : typeof import("./f1")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     import {B} from "./f2";
 >B : any

@@ -17,7 +17,7 @@ module.exports = {}
  * @type {exports}
  */
 var x
->x : typeof import("bug27342")
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : typeof import("./bug27342")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

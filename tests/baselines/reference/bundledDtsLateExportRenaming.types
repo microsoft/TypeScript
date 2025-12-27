@@ -22,18 +22,18 @@ export function f() {
 
 === nested/derived.ts ===
 import { f } from "./base";
->f : () => import("index").B
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => import("nested").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function g() {
->g : () => import("index").B
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => import("nested").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     return f();
->f() : import("index").B
->    : ^^^^^^^^^^^^^^^^^
->f : () => import("index").B
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>f() : import("nested").B
+>    : ^^^^^^^^^^^^^^^^^^
+>f : () => import("nested").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 === nested/index.ts ===

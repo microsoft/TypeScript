@@ -53,7 +53,7 @@ const chart = new Chart({
             const value = /*RENAME*/newFunction.call(this);
             return '$' + value;
 
-            function newFunction(this: import("/project/index.esm").Scale<import("/project/index.esm").CoreScaleOptions>) {
+            function newFunction(this: import("./index.esm").Scale<import("./index.esm").CoreScaleOptions>) {
                 return this.getLabelForValue(tickValue as number);
             }
         }

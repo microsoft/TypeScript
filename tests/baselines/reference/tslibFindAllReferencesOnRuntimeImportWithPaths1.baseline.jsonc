@@ -19,7 +19,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/project/src/dir/tslib\"",
+    "name": "module \"./tslib\"",
     "displayParts": [
      {
       "text": "module",
@@ -30,7 +30,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/tests/cases/fourslash/project/src/dir/tslib\"",
+      "text": "\"./tslib\"",
       "kind": "stringLiteral"
      }
     ]
