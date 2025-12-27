@@ -1,0 +1,122 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergeTwoInterfaces3.ts] ////
+
+=== mergeTwoInterfaces3.ts ===
+interface Chainable<Subject = any> {
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+
+    within(fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>;
+>within : Symbol(Chainable.within, Decl(mergeTwoInterfaces3.ts, 0, 36), Decl(mergeTwoInterfaces3.ts, 4, 59))
+>fn : Symbol(fn, Decl(mergeTwoInterfaces3.ts, 1, 11))
+>prevSubject : Symbol(prevSubject, Decl(mergeTwoInterfaces3.ts, 1, 16))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+}
+
+interface Chainable<Subject = any, ExtraType = undefined> {
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 4, 34))
+
+    within(fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>;
+>within : Symbol(Chainable.within, Decl(mergeTwoInterfaces3.ts, 0, 36), Decl(mergeTwoInterfaces3.ts, 4, 59))
+>fn : Symbol(fn, Decl(mergeTwoInterfaces3.ts, 5, 11))
+>prevSubject : Symbol(prevSubject, Decl(mergeTwoInterfaces3.ts, 5, 16))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>extra : Symbol(extra, Decl(mergeTwoInterfaces3.ts, 5, 37))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 4, 34))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 0, 20), Decl(mergeTwoInterfaces3.ts, 4, 20))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 4, 34))
+}
+
+interface ChainableLike<Subject = any, ExtraType = undefined> {
+>ChainableLike : Symbol(ChainableLike, Decl(mergeTwoInterfaces3.ts, 6, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 8, 38))
+
+    within(fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>;
+>within : Symbol(ChainableLike.within, Decl(mergeTwoInterfaces3.ts, 8, 63), Decl(mergeTwoInterfaces3.ts, 9, 81))
+>fn : Symbol(fn, Decl(mergeTwoInterfaces3.ts, 9, 11))
+>prevSubject : Symbol(prevSubject, Decl(mergeTwoInterfaces3.ts, 9, 16))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+
+    within(fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>;
+>within : Symbol(ChainableLike.within, Decl(mergeTwoInterfaces3.ts, 8, 63), Decl(mergeTwoInterfaces3.ts, 9, 81))
+>fn : Symbol(fn, Decl(mergeTwoInterfaces3.ts, 10, 11))
+>prevSubject : Symbol(prevSubject, Decl(mergeTwoInterfaces3.ts, 10, 16))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>extra : Symbol(extra, Decl(mergeTwoInterfaces3.ts, 10, 37))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 8, 38))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+>Subject : Symbol(Subject, Decl(mergeTwoInterfaces3.ts, 8, 24))
+>ExtraType : Symbol(ExtraType, Decl(mergeTwoInterfaces3.ts, 8, 38))
+}
+
+type ChainableWithSecondType = Chainable<string, string>;
+>ChainableWithSecondType : Symbol(ChainableWithSecondType, Decl(mergeTwoInterfaces3.ts, 11, 1))
+>Chainable : Symbol(Chainable, Decl(mergeTwoInterfaces3.ts, 0, 0), Decl(mergeTwoInterfaces3.ts, 2, 1))
+
+type Merged = ChainableWithSecondType['within'];
+>Merged : Symbol(Merged, Decl(mergeTwoInterfaces3.ts, 13, 57))
+>ChainableWithSecondType : Symbol(ChainableWithSecondType, Decl(mergeTwoInterfaces3.ts, 11, 1))
+
+type Ordinary = ChainableLike<string, string>['within'];
+>Ordinary : Symbol(Ordinary, Decl(mergeTwoInterfaces3.ts, 14, 48))
+>ChainableLike : Symbol(ChainableLike, Decl(mergeTwoInterfaces3.ts, 6, 1))
+
+declare let m: Merged;
+>m : Symbol(m, Decl(mergeTwoInterfaces3.ts, 17, 11))
+>Merged : Symbol(Merged, Decl(mergeTwoInterfaces3.ts, 13, 57))
+
+m((p: string) => null!);
+>m : Symbol(m, Decl(mergeTwoInterfaces3.ts, 17, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 18, 3))
+
+m((p: string, e: string) => null!);
+>m : Symbol(m, Decl(mergeTwoInterfaces3.ts, 17, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 19, 3))
+>e : Symbol(e, Decl(mergeTwoInterfaces3.ts, 19, 13))
+
+m((p) => null!);
+>m : Symbol(m, Decl(mergeTwoInterfaces3.ts, 17, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 20, 3))
+
+m((p, e) => null!);
+>m : Symbol(m, Decl(mergeTwoInterfaces3.ts, 17, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 21, 3))
+>e : Symbol(e, Decl(mergeTwoInterfaces3.ts, 21, 5))
+
+declare let o: Ordinary;
+>o : Symbol(o, Decl(mergeTwoInterfaces3.ts, 23, 11))
+>Ordinary : Symbol(Ordinary, Decl(mergeTwoInterfaces3.ts, 14, 48))
+
+o((p: string) => null!);
+>o : Symbol(o, Decl(mergeTwoInterfaces3.ts, 23, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 24, 3))
+
+o((p: string, e: string) => null!);
+>o : Symbol(o, Decl(mergeTwoInterfaces3.ts, 23, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 25, 3))
+>e : Symbol(e, Decl(mergeTwoInterfaces3.ts, 25, 13))
+
+o((p) => null!);
+>o : Symbol(o, Decl(mergeTwoInterfaces3.ts, 23, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 26, 3))
+
+o((p, e) => null!);
+>o : Symbol(o, Decl(mergeTwoInterfaces3.ts, 23, 11))
+>p : Symbol(p, Decl(mergeTwoInterfaces3.ts, 27, 3))
+>e : Symbol(e, Decl(mergeTwoInterfaces3.ts, 27, 5))
+
