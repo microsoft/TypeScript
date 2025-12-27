@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/stringLiteralIndexingWithIndexSignature.ts] ////
+
+=== stringLiteralIndexingWithIndexSignature.ts ===
+interface Dic<T> {
+>Dic : Symbol(Dic, Decl(stringLiteralIndexingWithIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(stringLiteralIndexingWithIndexSignature.ts, 0, 14))
+
+    [key: string]: T;
+>key : Symbol(key, Decl(stringLiteralIndexingWithIndexSignature.ts, 1, 5))
+>T : Symbol(T, Decl(stringLiteralIndexingWithIndexSignature.ts, 0, 14))
+}
+
+function getVal<T, K extends string>(obj: Dic<T>, key: K) {
+>getVal : Symbol(getVal, Decl(stringLiteralIndexingWithIndexSignature.ts, 2, 1))
+>T : Symbol(T, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 16))
+>K : Symbol(K, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 18))
+>obj : Symbol(obj, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 37))
+>Dic : Symbol(Dic, Decl(stringLiteralIndexingWithIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 16))
+>key : Symbol(key, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 49))
+>K : Symbol(K, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 18))
+
+    // This is the classic failure point for #30408
+    // It should resolve to 'T', but often resolves to 'any' or errors
+    return obj[key];
+>obj : Symbol(obj, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 37))
+>key : Symbol(key, Decl(stringLiteralIndexingWithIndexSignature.ts, 4, 49))
+}
+
+type Specific = Dic<number>["some_literal"]; // Should be 'number'
+>Specific : Symbol(Specific, Decl(stringLiteralIndexingWithIndexSignature.ts, 8, 1))
+>Dic : Symbol(Dic, Decl(stringLiteralIndexingWithIndexSignature.ts, 0, 0))
+
