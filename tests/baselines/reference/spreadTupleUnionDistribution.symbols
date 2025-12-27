@@ -1,0 +1,129 @@
+//// [tests/cases/conformance/types/spread/spreadTupleUnionDistribution.ts] ////
+
+=== spreadTupleUnionDistribution.ts ===
+// Repro from #62812
+// Spread operator fails to distribute over union when recursive type call is inlined instead of aliased
+
+type CrossProduct<Union, Counter extends unknown[]> =
+>CrossProduct : Symbol(CrossProduct, Decl(spreadTupleUnionDistribution.ts, 0, 0))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 3, 18))
+>Counter : Symbol(Counter, Decl(spreadTupleUnionDistribution.ts, 3, 24))
+
+    Counter extends [infer Zero, ...infer Rest]
+>Counter : Symbol(Counter, Decl(spreadTupleUnionDistribution.ts, 3, 24))
+>Zero : Symbol(Zero, Decl(spreadTupleUnionDistribution.ts, 4, 26))
+>Rest : Symbol(Rest, Decl(spreadTupleUnionDistribution.ts, 4, 41))
+
+    ? (Union extends infer Member
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 3, 18))
+>Member : Symbol(Member, Decl(spreadTupleUnionDistribution.ts, 5, 26))
+
+        ? [Member, ...CrossProduct<Union, Rest>]
+>Member : Symbol(Member, Decl(spreadTupleUnionDistribution.ts, 5, 26))
+>CrossProduct : Symbol(CrossProduct, Decl(spreadTupleUnionDistribution.ts, 0, 0))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 3, 18))
+>Rest : Symbol(Rest, Decl(spreadTupleUnionDistribution.ts, 4, 41))
+
+        : never)
+    : [];
+
+// Basic test - this works
+let test1: CrossProduct<number | string, [undefined]>;  // [string] | [number]
+>test1 : Symbol(test1, Decl(spreadTupleUnionDistribution.ts, 11, 3))
+>CrossProduct : Symbol(CrossProduct, Decl(spreadTupleUnionDistribution.ts, 0, 0))
+
+type Depth1 = CrossProduct<number | string, [undefined]> // [string] | [number]
+>Depth1 : Symbol(Depth1, Decl(spreadTupleUnionDistribution.ts, 11, 54))
+>CrossProduct : Symbol(CrossProduct, Decl(spreadTupleUnionDistribution.ts, 0, 0))
+
+// With alias - this should work and give full cross product
+let test2: (number | string extends infer Union ? (Union extends unknown ? [Union, ...Depth1]: never) : never);
+>test2 : Symbol(test2, Decl(spreadTupleUnionDistribution.ts, 15, 3))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 15, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 15, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 15, 41))
+>Depth1 : Symbol(Depth1, Decl(spreadTupleUnionDistribution.ts, 11, 54))
+
+// Expected: [string, string] | [number, number] | [string, number] | [number, string]
+
+// With inlined type - this should also work but currently doesn't distribute properly
+let test3: (number | string extends infer Union ? (Union extends unknown ? [Union, ...CrossProduct<number | string, [undefined]>]: never) : never);
+>test3 : Symbol(test3, Decl(spreadTupleUnionDistribution.ts, 19, 3))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 19, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 19, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 19, 41))
+>CrossProduct : Symbol(CrossProduct, Decl(spreadTupleUnionDistribution.ts, 0, 0))
+
+// Expected: [string, string] | [number, number] | [string, number] | [number, string]
+// Actual (bug): [string, string] | [number, number]
+
+// With literal union - this works
+let test4: (number | string extends infer Union ? (Union extends unknown ? [Union, ...([string] | [number])]: never) : never);
+>test4 : Symbol(test4, Decl(spreadTupleUnionDistribution.ts, 24, 3))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 24, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 24, 41))
+>Union : Symbol(Union, Decl(spreadTupleUnionDistribution.ts, 24, 41))
+
+// Expected: [string, string] | [number, number] | [string, number] | [number, string]
+
+// Test that the types are actually correct by checking assignability
+type Expected = [string, string] | [number, number] | [string, number] | [number, string];
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+
+// These should all be true (no error)
+type Test1Check = Expected extends typeof test2 ? true : false;
+>Test1Check : Symbol(Test1Check, Decl(spreadTupleUnionDistribution.ts, 28, 90))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+>test2 : Symbol(test2, Decl(spreadTupleUnionDistribution.ts, 15, 3))
+
+type Test2Check = typeof test2 extends Expected ? true : false;
+>Test2Check : Symbol(Test2Check, Decl(spreadTupleUnionDistribution.ts, 31, 63))
+>test2 : Symbol(test2, Decl(spreadTupleUnionDistribution.ts, 15, 3))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+
+// If the bug is fixed, these will also be true (no error)
+type Test3Check = Expected extends typeof test3 ? true : false;
+>Test3Check : Symbol(Test3Check, Decl(spreadTupleUnionDistribution.ts, 32, 63))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+>test3 : Symbol(test3, Decl(spreadTupleUnionDistribution.ts, 19, 3))
+
+type Test4Check = typeof test3 extends Expected ? true : false;
+>Test4Check : Symbol(Test4Check, Decl(spreadTupleUnionDistribution.ts, 35, 63))
+>test3 : Symbol(test3, Decl(spreadTupleUnionDistribution.ts, 19, 3))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+
+type Test5Check = Expected extends typeof test4 ? true : false;
+>Test5Check : Symbol(Test5Check, Decl(spreadTupleUnionDistribution.ts, 36, 63))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+>test4 : Symbol(test4, Decl(spreadTupleUnionDistribution.ts, 24, 3))
+
+type Test6Check = typeof test4 extends Expected ? true : false;
+>Test6Check : Symbol(Test6Check, Decl(spreadTupleUnionDistribution.ts, 38, 63))
+>test4 : Symbol(test4, Decl(spreadTupleUnionDistribution.ts, 24, 3))
+>Expected : Symbol(Expected, Decl(spreadTupleUnionDistribution.ts, 24, 126))
+
+// Force an error if checks fail
+const _check1: Test1Check = true;
+>_check1 : Symbol(_check1, Decl(spreadTupleUnionDistribution.ts, 42, 5))
+>Test1Check : Symbol(Test1Check, Decl(spreadTupleUnionDistribution.ts, 28, 90))
+
+const _check2: Test2Check = true;
+>_check2 : Symbol(_check2, Decl(spreadTupleUnionDistribution.ts, 43, 5))
+>Test2Check : Symbol(Test2Check, Decl(spreadTupleUnionDistribution.ts, 31, 63))
+
+const _check3: Test3Check = true;  // This will error if bug exists
+>_check3 : Symbol(_check3, Decl(spreadTupleUnionDistribution.ts, 44, 5))
+>Test3Check : Symbol(Test3Check, Decl(spreadTupleUnionDistribution.ts, 32, 63))
+
+const _check4: Test4Check = true;  // This will error if bug exists
+>_check4 : Symbol(_check4, Decl(spreadTupleUnionDistribution.ts, 45, 5))
+>Test4Check : Symbol(Test4Check, Decl(spreadTupleUnionDistribution.ts, 35, 63))
+
+const _check5: Test5Check = true;
+>_check5 : Symbol(_check5, Decl(spreadTupleUnionDistribution.ts, 46, 5))
+>Test5Check : Symbol(Test5Check, Decl(spreadTupleUnionDistribution.ts, 36, 63))
+
+const _check6: Test6Check = true;
+>_check6 : Symbol(_check6, Decl(spreadTupleUnionDistribution.ts, 47, 5))
+>Test6Check : Symbol(Test6Check, Decl(spreadTupleUnionDistribution.ts, 38, 63))
+

@@ -17204,8 +17204,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 covariant = !covariant;
             }
             // Always substitute on type parameters, regardless of variance, since even
-            // in contravariant positions, they may rely on substituted constraints to be valid
-            if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType) {
+            // in contravariant positions, they may rely on substituted constraints to be valid.
+            // For union/intersection types that don't contain type variables, don't apply narrowing
+            // based on structural equality with the check type - different occurrences of
+            // `number | string` in the code are independent even if they resolve to the same
+            // canonical type. Named types (interfaces, etc.) should still be narrowed since
+            // different references to the same named type refer to the same entity.
+            const isStructuralTypeWithoutTypeVariables = !!(type.flags & TypeFlags.UnionOrIntersection) && !couldContainTypeVariables(type);
+            if (!isStructuralTypeWithoutTypeVariables && (covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType) {
                 const constraint = getImpliedConstraint(type, (parent as ConditionalTypeNode).checkType, (parent as ConditionalTypeNode).extendsType);
                 if (constraint) {
                     constraints = append(constraints, constraint);
