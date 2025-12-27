@@ -1,0 +1,103 @@
+//// [tests/cases/compiler/declarationEmitUsingAliasSymbolChain1.ts] ////
+
+=== node_modules/effect/dist/declarations/src/Data.d.ts ===
+import type * as Types from "./Types.js";
+>Types : typeof Types
+
+import type * as Equal from "./Equal.js";
+>Equal : typeof Equal
+
+export type Data<A extends Readonly<Record<string, any>> | ReadonlyArray<any>> =
+>Data : Data<A>
+
+  Readonly<A> & Equal.Equal;
+>Equal : any
+
+export declare const TaggedClass: <Key extends string>(
+>TaggedClass : <Key extends string>(tag: Key) => new <A extends Record<string, any>>(args: Types.Equals<Omit<A, keyof Equal.Equal>, {}> extends true ? void : Omit<A, keyof Equal.Equal>) => Data<A & { _tag: Key; }>
+
+  tag: Key,
+>tag : Key
+
+) => new <A extends Record<string, any>>(
+  args: Types.Equals<Omit<A, keyof Equal.Equal>, {}> extends true
+>args : Types.Equals<Omit<A, keyof Equal.Equal>, {}> extends true ? void : Omit<A, keyof Equal.Equal>
+>Types : any
+>Equal : any
+>true : true
+
+    ? void
+    : Omit<A, keyof Equal.Equal>,
+>Equal : any
+
+) => Data<
+  A & {
+    _tag: Key;
+>_tag : Key
+  }
+>;
+
+=== node_modules/effect/dist/declarations/src/Equal.d.ts ===
+import * as Hash from "./Hash.js";
+>Hash : typeof Hash
+
+export declare const symbol: unique symbol;
+>symbol : unique symbol
+
+export interface Equal extends Hash.Hash {
+>Hash : typeof Hash
+
+  [symbol](that: Equal): boolean;
+>[symbol] : (that: Equal) => boolean
+>symbol : unique symbol
+>that : Equal
+}
+
+=== node_modules/effect/dist/declarations/src/Hash.d.ts ===
+export declare const symbol: unique symbol;
+>symbol : unique symbol
+
+export interface Hash {
+  [symbol](): number;
+>[symbol] : () => number
+>symbol : unique symbol
+}
+
+=== node_modules/effect/dist/declarations/src/Types.d.ts ===
+export type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
+>Equals : Equals<X, Y>
+
+  T,
+>() => T extends Y ? 1 : 2
+  ? true
+>true : true
+
+  : false;
+>false : false
+
+=== node_modules/effect/dist/declarations/src/index.d.ts ===
+export * as Data from "./Data.js";
+>Data : typeof import("node_modules/effect/dist/declarations/src/Data")
+
+export * as Equal from "./Equal.js";
+>Equal : typeof import("node_modules/effect/dist/declarations/src/Equal")
+
+export * as Types from "./Types.js";
+>Types : typeof import("node_modules/effect/dist/declarations/src/Types")
+
+=== node_modules/effect/dist/effect.cjs.d.ts ===
+
+export * from "./declarations/src/index";
+
+=== src/index.ts ===
+import { Data } from "effect";
+>Data : typeof Data
+
+export class Foo extends Data.TaggedClass("Foo")<{}> {}
+>Foo : Foo
+>Data.TaggedClass("Foo") : Data.Data<{ _tag: "Foo"; }>
+>Data.TaggedClass : <Key extends string>(tag: Key) => new <A extends Record<string, any>>(args: import("node_modules/effect/dist/effect.cjs").Types.Equals<Omit<A, keyof import("node_modules/effect/dist/effect.cjs").Equal.Equal>, {}> extends true ? void : Omit<A, keyof import("node_modules/effect/dist/effect.cjs").Equal.Equal>) => Data.Data<A & { _tag: Key; }>
+>Data : typeof Data
+>TaggedClass : <Key extends string>(tag: Key) => new <A extends Record<string, any>>(args: import("node_modules/effect/dist/effect.cjs").Types.Equals<Omit<A, keyof import("node_modules/effect/dist/effect.cjs").Equal.Equal>, {}> extends true ? void : Omit<A, keyof import("node_modules/effect/dist/effect.cjs").Equal.Equal>) => Data.Data<A & { _tag: Key; }>
+>"Foo" : "Foo"
+
