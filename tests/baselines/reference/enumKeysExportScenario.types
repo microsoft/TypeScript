@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/enumKeysExportScenario.ts] ////
+
+=== enumKeysExportScenario.ts ===
+// Test that export scenario with enum bracket notation doesn't crash
+// This tests the trackComputedName -> getFirstIdentifier path
+
+enum Type {
+>Type : Type
+>     : ^^^^
+
+    Foo = 'foo',
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    '3x14' = '3x14'
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+// Export interface with bracket notation computed property
+// This should trigger the tracker path
+export interface TypeMap {
+    [Type['3x14']]: number;
+>[Type['3x14']] : number
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+export type TypeMap2 = {
+>TypeMap2 : TypeMap2
+>         : ^^^^^^^^
+
+    [Type['3x14']]: string;
+>[Type['3x14']] : string
+>               : ^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+

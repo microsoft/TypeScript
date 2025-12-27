@@ -412,6 +412,7 @@ import {
     LanguageVariant,
     last,
     lastOrUndefined,
+    LateBindableAccessExpression,
     LateVisibilityPaintedStatement,
     length,
     libMap,
@@ -7454,8 +7455,13 @@ export function isEntityNameExpression(node: Node): node is EntityNameExpression
     return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
 }
 
-/** @internal */
-export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
+/**
+ * Gets the first identifier in a name chain.
+ * Supports qualified names (a.b.c), property access expressions (a.b.c),
+ * and element access expressions (a['b']['c']).
+ * @internal
+ */
+export function getFirstIdentifier(node: EntityNameOrEntityNameExpression | ElementAccessExpression): Identifier {
     switch (node.kind) {
         case SyntaxKind.Identifier:
             return node;
@@ -7466,12 +7472,41 @@ export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Iden
             while (node.kind !== SyntaxKind.Identifier);
             return node;
         case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+            let expr: Expression = node;
             do {
-                node = node.expression;
+                expr = skipParentheses((expr as PropertyAccessExpression | ElementAccessExpression).expression);
             }
-            while (node.kind !== SyntaxKind.Identifier);
-            return node;
+            while (expr.kind !== SyntaxKind.Identifier);
+            return expr as Identifier;
     }
+}
+
+/**
+ * Returns true if the expression is a valid late-bindable access expression.
+ * A late-bindable access expression is:
+ * - An Identifier
+ * - A PropertyAccessExpression where the base is a late-bindable access expression
+ * - An ElementAccessExpression with a string/numeric literal key where the base is a late-bindable access expression
+ *
+ * This supports mixed chains like: obj.a['b'].c['d']
+ * Parentheses are skipped to support expressions like: (obj.a)['b']
+ * @internal
+ */
+export function isLateBindableAccessExpression(node: Node): node is LateBindableAccessExpression {
+    node = skipParentheses(node as Expression);
+
+    if (isIdentifier(node)) {
+        return true;
+    }
+    // For PropertyAccessExpression, require the name to be an Identifier (not PrivateIdentifier)
+    if (isPropertyAccessExpression(node) && isIdentifier(node.name)) {
+        return isLateBindableAccessExpression(node.expression);
+    }
+    if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(skipParentheses(node.argumentExpression))) {
+        return isLateBindableAccessExpression(node.expression);
+    }
+    return false;
 }
 
 /** @internal */

@@ -1813,10 +1813,18 @@ export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
 }
 
 /** @internal */
-// A name that supports late-binding (used in checker)
+// A name that supports late-binding (used in checker).
+// Supports both property access chains (a.b.c) and element access chains (a['b']['c']).
 export interface LateBoundName extends ComputedPropertyName {
-    readonly expression: EntityNameExpression;
+    readonly expression: EntityNameExpression | ElementAccessExpression;
 }
+
+/**
+ * An expression that can be used in a late-bindable computed property name.
+ * Includes property access chains (a.b.c) and element access chains with literal keys (a['b']['c']).
+ * @internal
+ */
+export type LateBindableAccessExpression = EntityNameExpression | ElementAccessExpression;
 
 export interface Decorator extends Node {
     readonly kind: SyntaxKind.Decorator;
@@ -5917,7 +5925,7 @@ export interface EmitResolver {
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
     isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags | undefined, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
+    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression | ElementAccessExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getEnumMemberValue(node: EnumMember): EvaluatorResult | undefined;
@@ -10614,7 +10622,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     requiresAddingImplicitUndefined(declaration: ParameterDeclaration | PropertySignature | JSDocParameterTag | JSDocPropertyTag | PropertyDeclaration, symbol: Symbol | undefined, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
-    isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression | ElementAccessExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
     serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature, symbol: Symbol | undefined): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
