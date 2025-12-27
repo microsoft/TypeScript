@@ -7,6 +7,8 @@ declare global {
         interface IntrinsicElements {
             "a-b": any;
             "a-c": any;
+            "abcde:abcde": any;
+            "namespace-name:tagname-tag": any;
         }
     }
 }
@@ -24,10 +26,14 @@ const x = { video: () => null }
 ; <\u{0061}-b></a-b>
 ; <a-\u{0063}></a-c>
 ; <Comp\u{0061} x={12} />
+; <a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde>
+; <n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag>
 
 // attribute name
 ;<video data-\u0076ideo />
 ;<video \u0073rc="" />
+;<video m\u0075t\u0065d />
+;<video m\u{75}t\u{65}d />
 
 
 //// [file.js]
@@ -43,5 +49,9 @@ React.createElement("a", null);
 React.createElement("a-b", null);
 React.createElement("a-c", null);
 React.createElement(Comp\u{0061}, { x: 12 });
+React.createElement("abcde:abcde", { x: 12 });
+React.createElement("namespace-name:tagname-tag", { x: 12 });
 React.createElement("video", { "data-video": true });
 React.createElement("video", { \u0073rc: "" });
+React.createElement("video", { m\u0075t\u0065d: true });
+React.createElement("video", { m\u{75}t\u{65}d: true });

@@ -1,0 +1,299 @@
+regularExpressionGroupNameUnicodeEscapes.ts(11,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(11,11): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(11,16): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(11,26): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(12,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(12,16): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(12,21): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(12,31): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(13,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(13,18): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(13,23): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(13,33): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(29,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(29,12): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(29,18): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(29,31): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(30,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(30,19): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(30,25): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(30,38): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(31,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(31,22): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(31,28): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(31,41): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,11): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,22): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,35): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,40): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(40,50): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(41,6): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(41,12): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(41,13): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(41,24): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(41,25): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(41,39): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(41,45): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(41,56): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(44,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(44,12): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(44,26): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(44,43): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(44,49): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(44,62): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(45,6): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(45,13): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(45,14): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(45,28): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(45,29): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(45,47): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(45,54): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(45,68): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(48,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(48,16): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(48,29): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(48,39): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(49,6): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(49,17): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(49,18): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(49,32): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(49,43): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(52,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(52,16): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(52,29): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(52,39): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(53,6): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(53,17): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionGroupNameUnicodeEscapes.ts(53,18): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(53,32): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(53,43): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(56,5): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(56,13): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionGroupNameUnicodeEscapes.ts(56,26): error TS1514: Expected a capturing group name.
+regularExpressionGroupNameUnicodeEscapes.ts(56,34): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionGroupNameUnicodeEscapes.ts(57,6): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(57,14): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionGroupNameUnicodeEscapes.ts(57,28): error TS1005: '>' expected.
+regularExpressionGroupNameUnicodeEscapes.ts(57,36): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+
+
+==== regularExpressionGroupNameUnicodeEscapes.ts (78 errors) ====
+    // U+13A0 CHEROKEE LETTER A: character inside BMP with both the Unicode properties ID_Start and ID_Continue
+    /(?<Ꭰ>)\k<Ꭰ>\k<\u13A0>\k<\u{13A0}>/;
+    /(?<\u13A0>)\k<Ꭰ>\k<\u13A0>\k<\u{13A0}>/;
+    /(?<\u{13A0}>)\k<Ꭰ>\k<\u13A0>\k<\u{13A0}>/;
+    
+    /(?<_Ꭰ>)\k<_Ꭰ>\k<_\u13A0>\k<_\u{13A0}>/;
+    /(?<_\u13A0>)\k<_Ꭰ>\k<_\u13A0>\k<_\u{13A0}>/;
+    /(?<_\u{13A0}>)\k<_Ꭰ>\k<_\u13A0>\k<_\u{13A0}>/;
+    
+    // U+19D4 NEW TAI LUE DIGIT FOUR: character inside BMP with only ID_Continue
+    /(?<᧔>)\k<᧔>\k<\u19D4>\k<\u{19D4}>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+              
+!!! error TS1514: Expected a capturing group name.
+                   
+!!! error TS1514: Expected a capturing group name.
+                             
+!!! error TS1514: Expected a capturing group name.
+    /(?<\u19D4>)\k<᧔>\k<\u19D4>\k<\u{19D4}>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+                   
+!!! error TS1514: Expected a capturing group name.
+                        
+!!! error TS1514: Expected a capturing group name.
+                                  
+!!! error TS1514: Expected a capturing group name.
+    /(?<\u{19D4}>)\k<᧔>\k<\u19D4>\k<\u{19D4}>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+                     
+!!! error TS1514: Expected a capturing group name.
+                          
+!!! error TS1514: Expected a capturing group name.
+                                    
+!!! error TS1514: Expected a capturing group name.
+    
+    /(?<_᧔>)\k<_᧔>\k<_\u19D4>\k<_\u{19D4}>/;
+    /(?<_\u19D4>)\k<_᧔>\k<_\u19D4>\k<_\u{19D4}>/;
+    /(?<_\u{19D4}>)\k<_᧔>\k<_\u19D4>\k<_\u{19D4}>/;
+    
+    // U+102A7 CARIAN LETTER A2: character outside BMP with both ID_Start and ID_Continue
+    /(?<𐊧>)\k<𐊧>\k<\u{102A7}>\k<\uD800\uDEA7>/;
+    /(?<\u{102A7}>)\k<𐊧>\k<\u{102A7}>\k<\uD800\uDEA7>/;
+    /(?<\uD800\uDEA7>)\k<𐊧>\k<\u{102A7}>\k<\uD800\uDEA7>/;
+    
+    /(?<_𐊧>)\k<_𐊧>\k<_\u{102A7}>\k<_\uD800\uDEA7>/;
+    /(?<_\u{102A7}>)\k<_𐊧>\k<_\u{102A7}>\k<_\uD800\uDEA7>/;
+    /(?<_\uD800\uDEA7>)\k<_𐊧>\k<_\u{102A7}>\k<_\uD800\uDEA7>/;
+    
+    // U+1113D CHAKMA DIGIT SEVEN: character outside BMP with only ID_Continue
+    /(?<𑄽>)\k<𑄽>\k<\u{1113D}>\k<\uD804\uDD3D>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+               
+!!! error TS1514: Expected a capturing group name.
+                     
+!!! error TS1514: Expected a capturing group name.
+                                  
+!!! error TS1514: Expected a capturing group name.
+    /(?<\u{1113D}>)\k<𑄽>\k<\u{1113D}>\k<\uD804\uDD3D>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+                      
+!!! error TS1514: Expected a capturing group name.
+                            
+!!! error TS1514: Expected a capturing group name.
+                                         
+!!! error TS1514: Expected a capturing group name.
+    /(?<\uD804\uDD3D>)\k<𑄽>\k<\u{1113D}>\k<\uD804\uDD3D>/; // invalid
+        
+!!! error TS1514: Expected a capturing group name.
+                         
+!!! error TS1514: Expected a capturing group name.
+                               
+!!! error TS1514: Expected a capturing group name.
+                                            
+!!! error TS1514: Expected a capturing group name.
+    
+    /(?<_𑄽>)\k<_𑄽>\k<_\u{1113D}>\k<_\uD804\uDD3D>/;
+    /(?<_\u{1113D}>)\k<_𑄽>\k<_\u{1113D}>\k<_\uD804\uDD3D>/;
+    /(?<_\uD804\uDD3D>)\k<_𑄽>\k<_\u{1113D}>\k<_\uD804\uDD3D>/;
+    
+    // The following cases are all invalid:
+    
+    // U+2F47 KANGXI RADICAL SUN: character inside BMP without both properties
+    /(?<⽇>)(?<\u2F47>)(?<\u{2F47}>)\k<⽇>\k<\u2F47>\k<\u{2F47}>/;
+        
+!!! error TS1514: Expected a capturing group name.
+              
+!!! error TS1514: Expected a capturing group name.
+                         
+!!! error TS1514: Expected a capturing group name.
+                                      
+!!! error TS1514: Expected a capturing group name.
+                                           
+!!! error TS1514: Expected a capturing group name.
+                                                     
+!!! error TS1514: Expected a capturing group name.
+    /(?<_⽇>)(?<_\u2F47>)(?<_\u{2F47}>)\k<_⽇>\k<_\u2F47>\k<_\u{2F47}>/;
+         
+!!! error TS1005: '>' expected.
+               ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                
+!!! error TS1005: '>' expected.
+                           ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                            
+!!! error TS1005: '>' expected.
+                                          
+!!! error TS1005: '>' expected.
+                                                
+!!! error TS1005: '>' expected.
+                                                           
+!!! error TS1005: '>' expected.
+    
+    // U+1F31A NEW MOON WITH FACE: character outside BMP without both properties
+    /(?<🌚>)(?<\u{1F31A}>)(?<\uD83C\uDF1A>)\k<🌚>\k<\u{1F31A}>\k<\uD83C\uDF1A>/;
+        
+!!! error TS1514: Expected a capturing group name.
+               
+!!! error TS1514: Expected a capturing group name.
+                             
+!!! error TS1514: Expected a capturing group name.
+                                              
+!!! error TS1514: Expected a capturing group name.
+                                                    
+!!! error TS1514: Expected a capturing group name.
+                                                                 
+!!! error TS1514: Expected a capturing group name.
+    /(?<_🌚>)(?<_\u{1F31A}>)(?<_\uD83C\uDF1A>)\k<_🌚>\k<_\u{1F31A}>\k<_\uD83C\uDF1A>/;
+         
+!!! error TS1005: '>' expected.
+                ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                 
+!!! error TS1005: '>' expected.
+                               ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                
+!!! error TS1005: '>' expected.
+                                                  
+!!! error TS1005: '>' expected.
+                                                         
+!!! error TS1005: '>' expected.
+                                                                       
+!!! error TS1005: '>' expected.
+    
+    // Lone leading surrogate
+    /(?<\uD800>)(?<\u{D800}>)\k<\uD800>\k<\u{D800}>/;
+        
+!!! error TS1514: Expected a capturing group name.
+                   
+!!! error TS1514: Expected a capturing group name.
+                                
+!!! error TS1514: Expected a capturing group name.
+                                          
+!!! error TS1514: Expected a capturing group name.
+    /(?<_\uD800>)(?<_\u{D800}>)\k<_\uD800>\k<_\u{D800}>/;
+         
+!!! error TS1005: '>' expected.
+                    ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                     
+!!! error TS1005: '>' expected.
+                                   
+!!! error TS1005: '>' expected.
+                                              
+!!! error TS1005: '>' expected.
+    
+    // Lone trailing surrogate
+    /(?<\uDFFF>)(?<\u{DFFF}>)\k<\uDFFF>\k<\u{DFFF}>/;
+        
+!!! error TS1514: Expected a capturing group name.
+                   
+!!! error TS1514: Expected a capturing group name.
+                                
+!!! error TS1514: Expected a capturing group name.
+                                          
+!!! error TS1514: Expected a capturing group name.
+    /(?<_\uDFFF>)(?<_\u{DFFF}>)\k<_\uDFFF>\k<_\u{DFFF}>/;
+         
+!!! error TS1005: '>' expected.
+                    ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                     
+!!! error TS1005: '>' expected.
+                                   
+!!! error TS1005: '>' expected.
+                                              
+!!! error TS1005: '>' expected.
+    
+    // Fake surrogate pair with extended Unicode escapes – invalid even if the intended character has both properties
+    /(?<\u{D800}\u{DC00}>)\k<\u{D800}\u{DC00}>/;
+        
+!!! error TS1514: Expected a capturing group name.
+                ~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+                             
+!!! error TS1514: Expected a capturing group name.
+                                     ~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    /(?<_\u{D800}\u{DC00}>)\k<_\u{D800}\u{DC00}>/;
+         
+!!! error TS1005: '>' expected.
+                 ~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+                               
+!!! error TS1005: '>' expected.
+                                       ~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    
+    // Cases with Unicode escapes and extended Unicode escapes mixed
+    /(?<RegExp>)\k<RegExp>\k<\u{52}\u0065gE\u{78}p>\k<\u0052e\u0067\u{45}x\u{70}>/;
+    /(?<_RegExp>)\k<_RegExp>\k<_\u{52}\u0065gE\u{78}p>\k<_\u0052e\u0067\u{45}x\u{70}>/;
+    

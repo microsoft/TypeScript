@@ -13,19 +13,29 @@ const a\u{0061} = 12;
 >12 : 12
 >   : ^^
 
-console.log(a + aa);
->console.log(a + aa) : void
->                    : ^^^^
+const a\u{62}c\u{64}e = 12;
+>a\u{62}c\u{64}e : 12
+>                : ^^
+>12 : 12
+>   : ^^
+
+console.log(a + aa + abcde);
+>console.log(a + aa + abcde) : void
+>                            : ^^^^
 >console.log : (...data: any[]) => void
 >            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
+>a + aa + abcde : number
+>               : ^^^^^^
 >a + aa : number
 >       : ^^^^^^
 >a : 12
 >  : ^^
 >aa : 12
 >   : ^^
+>abcde : 12
+>      : ^^
 

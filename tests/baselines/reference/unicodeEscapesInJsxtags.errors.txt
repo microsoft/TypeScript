@@ -1,23 +1,31 @@
-file.tsx(15,4): error TS17021: Unicode escape sequence cannot appear here.
-file.tsx(16,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(17,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(18,4): error TS17021: Unicode escape sequence cannot appear here.
-file.tsx(19,6): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(19,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(20,4): error TS17021: Unicode escape sequence cannot appear here.
-file.tsx(21,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(21,6): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(22,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(23,4): error TS17021: Unicode escape sequence cannot appear here.
-file.tsx(26,9): error TS17021: Unicode escape sequence cannot appear here.
-file.tsx(27,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(24,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(25,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(26,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(26,20): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(27,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(27,44): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(30,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(31,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(32,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(33,9): error TS17021: Unicode escape sequence cannot appear here.
 
 
-==== file.tsx (11 errors) ====
+==== file.tsx (17 errors) ====
     import * as React from "react";
     declare global {
         namespace JSX {
             interface IntrinsicElements {
                 "a-b": any;
                 "a-c": any;
+                "abcde:abcde": any;
+                "namespace-name:tagname-tag": any;
             }
         }
     }
@@ -53,6 +61,16 @@ file.tsx(27,9): error TS17021: Unicode escape sequence cannot appear here.
     ; <Comp\u{0061} x={12} />
        ~~~~~~~~~~~~
 !!! error TS17021: Unicode escape sequence cannot appear here.
+    ; <a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde>
+       ~~~~~~~~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
+                       ~~~~~~~~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
+    ; <n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag>
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
     
     // attribute name
     ;<video data-\u0076ideo />
@@ -60,5 +78,11 @@ file.tsx(27,9): error TS17021: Unicode escape sequence cannot appear here.
 !!! error TS17021: Unicode escape sequence cannot appear here.
     ;<video \u0073rc="" />
             ~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
+    ;<video m\u0075t\u0065d />
+            ~~~~~~~~~~~~~~~
+!!! error TS17021: Unicode escape sequence cannot appear here.
+    ;<video m\u{75}t\u{65}d />
+            ~~~~~~~~~~~~~~~
 !!! error TS17021: Unicode escape sequence cannot appear here.
     
