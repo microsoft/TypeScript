@@ -27683,6 +27683,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
                 }
                 else {
+                    // Check if there's a type symbol with the same name
+                    const typeSymbol = resolveName(node, node.escapedText, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*isUse*/ false);
+                    if (typeSymbol && !(typeSymbol.flags & SymbolFlags.Value)) {
+                        return Diagnostics.Cannot_find_name_0_1_only_refers_to_a_type_but_is_being_used_as_a_value_here;
+                    }
                     return Diagnostics.Cannot_find_name_0;
                 }
         }
