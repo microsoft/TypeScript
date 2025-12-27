@@ -37,10 +37,10 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_dev_runtime_1 = require("/jsx/jsx-dev-runtime");
 var _jsxFileName = "/test.tsx";
-var Title = function (props) { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 47 }, _this); };
-(0, jsx_dev_runtime_1.jsxDEV)(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 74 }, this);
-var Wrong = function (props) { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.offspring }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 48 }, _this); };
-(0, jsx_dev_runtime_1.jsxDEV)(Wrong, { children: "Byebye, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 76 }, this);
+var Title = function (props) { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 48 }, _this); };
+(0, jsx_dev_runtime_1.jsxDEV)(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 1 }, this);
+var Wrong = function (props) { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.offspring }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 49 }, _this); };
+(0, jsx_dev_runtime_1.jsxDEV)(Wrong, { children: "Byebye, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 7, columnNumber: 1 }, this);
 //// [jsx-runtime.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
