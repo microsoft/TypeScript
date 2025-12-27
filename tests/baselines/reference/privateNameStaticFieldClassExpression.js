@@ -32,6 +32,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    var d = Object.getOwnPropertyDescriptor(f, "name");
+    if (d && d.writable !== false) return f;
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a, _B_foo, _B_foo2, _b, _c;
