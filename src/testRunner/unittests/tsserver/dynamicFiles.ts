@@ -270,4 +270,27 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
         verifyPathRecognizedAsDynamic("walkThroughSnippet", "walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts");
         verifyPathRecognizedAsDynamic("untitled", "untitled:/Users/matb/projects/san/^newFile.ts");
     });
+
+    it("chat block with imports", () => {
+        const host = TestServerHost.createServerHost({
+            "/user/username/projects/myproject/a.ts": "",
+            "/user/username/projects/myproject/tsconfig.json": "{}",
+        });
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
+        openFilesForSession([{ file: "/user/username/projects/myproject/a.ts", projectRootPath: "/user/username/projects/myproject" }], session);
+        // Without projectRoot
+        openFilesForSession([{
+            file: "^/chat-editing-snapshot-text-model/ts-nul-authority/c/temp/codeRepo/src/services/user.service.ts",
+            content: "",
+            scriptKindName: "TS",
+        }], session);
+        // with "/" as project root
+        openFilesForSession([{
+            file: '^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq/response_6b1244f1-9aca-4b8b-8f65-0ff7ed4e6b4e/2#{"references":[]}',
+            content: `import { UserService from './src/services/user.service';}`,
+            projectRootPath: "/",
+            scriptKindName: "TS",
+        }], session);
+        baselineTsserverLogs("dynamicFiles", "chat block with imports", session);
+    });
 });

@@ -240,8 +240,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["undici-types"]
 TI:: [hh:mm:ss:mss] 'undici-types':: Entry for package 'undici-types' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
