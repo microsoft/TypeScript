@@ -14785,6 +14785,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (existingProp) {
                     existingProp.links.nameType = getUnionType([existingProp.links.nameType!, propNameType]);
                     existingProp.links.keyType = getUnionType([existingProp.links.keyType, keyType]);
+                    const modifiersProp = isTypeUsableAsPropertyName(keyType) ? getPropertyOfType(modifiersType, getPropertyNameFromType(keyType)) : undefined;
+                    const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
+                        !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
+                    const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
+                        !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
+                    if (isOptional && !(existingProp.flags & SymbolFlags.Optional)) {
+                        existingProp.flags |= SymbolFlags.Optional;
+                        existingProp.links.checkFlags &= ~CheckFlags.StripOptional;
+                    }
+                    if (isReadonly) {
+                        existingProp.links.checkFlags |= CheckFlags.Readonly;
+                    }
                 }
                 else {
                     const modifiersProp = isTypeUsableAsPropertyName(keyType) ? getPropertyOfType(modifiersType, getPropertyNameFromType(keyType)) : undefined;

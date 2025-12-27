@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/mappedTypeRemappingModifierMerging.ts] ////
+
+=== mappedTypeRemappingModifierMerging.ts ===
+// Mapped types with key remapping should merge modifiers consistently
+// when multiple keys map to the same output key
+
+type RemapKeyToInitialPart<T> = {
+>RemapKeyToInitialPart : Symbol(RemapKeyToInitialPart, Decl(mappedTypeRemappingModifierMerging.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeRemappingModifierMerging.ts, 3, 27))
+
+    [K in keyof T as K extends `${infer First}.${infer _Rest}` ? First : K]: null;
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 4, 5))
+>T : Symbol(T, Decl(mappedTypeRemappingModifierMerging.ts, 3, 27))
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 4, 5))
+>First : Symbol(First, Decl(mappedTypeRemappingModifierMerging.ts, 4, 39))
+>_Rest : Symbol(_Rest, Decl(mappedTypeRemappingModifierMerging.ts, 4, 54))
+>First : Symbol(First, Decl(mappedTypeRemappingModifierMerging.ts, 4, 39))
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 4, 5))
+
+};
+
+// Both should produce { foo?: null } since at least one input is optional
+type FirstOptional = RemapKeyToInitialPart<{
+>FirstOptional : Symbol(FirstOptional, Decl(mappedTypeRemappingModifierMerging.ts, 5, 2))
+>RemapKeyToInitialPart : Symbol(RemapKeyToInitialPart, Decl(mappedTypeRemappingModifierMerging.ts, 0, 0))
+
+    "foo.bar"?: string;
+>"foo.bar" : Symbol("foo.bar", Decl(mappedTypeRemappingModifierMerging.ts, 8, 44))
+
+    "foo.baz": number;
+>"foo.baz" : Symbol("foo.baz", Decl(mappedTypeRemappingModifierMerging.ts, 9, 23))
+
+}>;
+
+type FirstRequired = RemapKeyToInitialPart<{
+>FirstRequired : Symbol(FirstRequired, Decl(mappedTypeRemappingModifierMerging.ts, 11, 3))
+>RemapKeyToInitialPart : Symbol(RemapKeyToInitialPart, Decl(mappedTypeRemappingModifierMerging.ts, 0, 0))
+
+    "foo.baz": number;
+>"foo.baz" : Symbol("foo.baz", Decl(mappedTypeRemappingModifierMerging.ts, 13, 44))
+
+    "foo.bar"?: string;
+>"foo.bar" : Symbol("foo.bar", Decl(mappedTypeRemappingModifierMerging.ts, 14, 22))
+
+}>;
+
+// Test that they are equivalent
+const testOptional: FirstOptional = { foo: null };
+>testOptional : Symbol(testOptional, Decl(mappedTypeRemappingModifierMerging.ts, 19, 5))
+>FirstOptional : Symbol(FirstOptional, Decl(mappedTypeRemappingModifierMerging.ts, 5, 2))
+>foo : Symbol(foo, Decl(mappedTypeRemappingModifierMerging.ts, 19, 37))
+
+const testOptional2: FirstOptional = {};
+>testOptional2 : Symbol(testOptional2, Decl(mappedTypeRemappingModifierMerging.ts, 20, 5))
+>FirstOptional : Symbol(FirstOptional, Decl(mappedTypeRemappingModifierMerging.ts, 5, 2))
+
+const testRequired: FirstRequired = { foo: null };
+>testRequired : Symbol(testRequired, Decl(mappedTypeRemappingModifierMerging.ts, 22, 5))
+>FirstRequired : Symbol(FirstRequired, Decl(mappedTypeRemappingModifierMerging.ts, 11, 3))
+>foo : Symbol(foo, Decl(mappedTypeRemappingModifierMerging.ts, 22, 37))
+
+const testRequired2: FirstRequired = {};
+>testRequired2 : Symbol(testRequired2, Decl(mappedTypeRemappingModifierMerging.ts, 23, 5))
+>FirstRequired : Symbol(FirstRequired, Decl(mappedTypeRemappingModifierMerging.ts, 11, 3))
+
+// Readonly should work the same way
+type RemapWithReadonly<T> = {
+>RemapWithReadonly : Symbol(RemapWithReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 23, 40))
+>T : Symbol(T, Decl(mappedTypeRemappingModifierMerging.ts, 26, 23))
+
+    [K in keyof T as K extends `${infer First}.${string}` ? First : K]: null;
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 27, 5))
+>T : Symbol(T, Decl(mappedTypeRemappingModifierMerging.ts, 26, 23))
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 27, 5))
+>First : Symbol(First, Decl(mappedTypeRemappingModifierMerging.ts, 27, 39))
+>First : Symbol(First, Decl(mappedTypeRemappingModifierMerging.ts, 27, 39))
+>K : Symbol(K, Decl(mappedTypeRemappingModifierMerging.ts, 27, 5))
+
+};
+
+type FirstReadonly = RemapWithReadonly<{
+>FirstReadonly : Symbol(FirstReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 28, 2))
+>RemapWithReadonly : Symbol(RemapWithReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 23, 40))
+
+    readonly "foo.bar": string;
+>"foo.bar" : Symbol("foo.bar", Decl(mappedTypeRemappingModifierMerging.ts, 30, 40))
+
+    "foo.baz": number;
+>"foo.baz" : Symbol("foo.baz", Decl(mappedTypeRemappingModifierMerging.ts, 31, 31))
+
+}>;
+
+type SecondReadonly = RemapWithReadonly<{
+>SecondReadonly : Symbol(SecondReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 33, 3))
+>RemapWithReadonly : Symbol(RemapWithReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 23, 40))
+
+    "foo.baz": number;
+>"foo.baz" : Symbol("foo.baz", Decl(mappedTypeRemappingModifierMerging.ts, 35, 41))
+
+    readonly "foo.bar": string;
+>"foo.bar" : Symbol("foo.bar", Decl(mappedTypeRemappingModifierMerging.ts, 36, 22))
+
+}>;
+
+declare const ro1: FirstReadonly;
+>ro1 : Symbol(ro1, Decl(mappedTypeRemappingModifierMerging.ts, 40, 13))
+>FirstReadonly : Symbol(FirstReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 28, 2))
+
+declare const ro2: SecondReadonly;
+>ro2 : Symbol(ro2, Decl(mappedTypeRemappingModifierMerging.ts, 41, 13))
+>SecondReadonly : Symbol(SecondReadonly, Decl(mappedTypeRemappingModifierMerging.ts, 33, 3))
+
+// Both should be readonly
+ro1.foo = null; // Error
+>ro1.foo : Symbol(foo)
+>ro1 : Symbol(ro1, Decl(mappedTypeRemappingModifierMerging.ts, 40, 13))
+>foo : Symbol(foo)
+
+ro2.foo = null; // Error
+>ro2.foo : Symbol(foo)
+>ro2 : Symbol(ro2, Decl(mappedTypeRemappingModifierMerging.ts, 41, 13))
+>foo : Symbol(foo)
+

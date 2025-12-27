@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/mappedTypeRemappingModifierMerging.ts] ////
+
+=== mappedTypeRemappingModifierMerging.ts ===
+// Mapped types with key remapping should merge modifiers consistently
+// when multiple keys map to the same output key
+
+type RemapKeyToInitialPart<T> = {
+>RemapKeyToInitialPart : RemapKeyToInitialPart<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T as K extends `${infer First}.${infer _Rest}` ? First : K]: null;
+};
+
+// Both should produce { foo?: null } since at least one input is optional
+type FirstOptional = RemapKeyToInitialPart<{
+>FirstOptional : RemapKeyToInitialPart<{ "foo.bar"?: string; "foo.baz": number; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+
+    "foo.bar"?: string;
+>"foo.bar" : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+
+    "foo.baz": number;
+>"foo.baz" : number
+>          : ^^^^^^
+
+}>;
+
+type FirstRequired = RemapKeyToInitialPart<{
+>FirstRequired : RemapKeyToInitialPart<{ "foo.baz": number; "foo.bar"?: string; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^
+
+    "foo.baz": number;
+>"foo.baz" : number
+>          : ^^^^^^
+
+    "foo.bar"?: string;
+>"foo.bar" : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+
+}>;
+
+// Test that they are equivalent
+const testOptional: FirstOptional = { foo: null };
+>testOptional : RemapKeyToInitialPart<{ "foo.bar"?: string; "foo.baz": number; }>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+>{ foo: null } : { foo: null; }
+>              : ^^^^^^^^^^^^^^
+>foo : null
+>    : ^^^^
+
+const testOptional2: FirstOptional = {};
+>testOptional2 : RemapKeyToInitialPart<{ "foo.bar"?: string; "foo.baz": number; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+>{} : {}
+>   : ^^
+
+const testRequired: FirstRequired = { foo: null };
+>testRequired : RemapKeyToInitialPart<{ "foo.baz": number; "foo.bar"?: string; }>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^
+>{ foo: null } : { foo: null; }
+>              : ^^^^^^^^^^^^^^
+>foo : null
+>    : ^^^^
+
+const testRequired2: FirstRequired = {};
+>testRequired2 : RemapKeyToInitialPart<{ "foo.baz": number; "foo.bar"?: string; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^
+>{} : {}
+>   : ^^
+
+// Readonly should work the same way
+type RemapWithReadonly<T> = {
+>RemapWithReadonly : RemapWithReadonly<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T as K extends `${infer First}.${string}` ? First : K]: null;
+};
+
+type FirstReadonly = RemapWithReadonly<{
+>FirstReadonly : RemapWithReadonly<{ readonly "foo.bar": string; "foo.baz": number; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+
+    readonly "foo.bar": string;
+>"foo.bar" : string
+>          : ^^^^^^
+
+    "foo.baz": number;
+>"foo.baz" : number
+>          : ^^^^^^
+
+}>;
+
+type SecondReadonly = RemapWithReadonly<{
+>SecondReadonly : RemapWithReadonly<{ "foo.baz": number; readonly "foo.bar": string; }>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+    "foo.baz": number;
+>"foo.baz" : number
+>          : ^^^^^^
+
+    readonly "foo.bar": string;
+>"foo.bar" : string
+>          : ^^^^^^
+
+}>;
+
+declare const ro1: FirstReadonly;
+>ro1 : RemapWithReadonly<{ readonly "foo.bar": string; "foo.baz": number; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+
+declare const ro2: SecondReadonly;
+>ro2 : RemapWithReadonly<{ "foo.baz": number; readonly "foo.bar": string; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+// Both should be readonly
+ro1.foo = null; // Error
+>ro1.foo = null : null
+>               : ^^^^
+>ro1.foo : any
+>        : ^^^
+>ro1 : RemapWithReadonly<{ readonly "foo.bar": string; "foo.baz": number; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+>foo : any
+>    : ^^^
+
+ro2.foo = null; // Error
+>ro2.foo = null : null
+>               : ^^^^
+>ro2.foo : any
+>        : ^^^
+>ro2 : RemapWithReadonly<{ "foo.baz": number; readonly "foo.bar": string; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>foo : any
+>    : ^^^
+
