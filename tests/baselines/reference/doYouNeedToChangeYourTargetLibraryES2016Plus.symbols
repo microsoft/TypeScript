@@ -132,4 +132,7 @@ const testStringReplaceAll = "".replaceAll();
 >testStringReplaceAll : Symbol(testStringReplaceAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 43, 5))
 
 // esnext
+const testDateToTemporalInstant = new Date().toTemporalInstant();
+>testDateToTemporalInstant : Symbol(testDateToTemporalInstant, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 46, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

@@ -10,3 +10,5 @@
 /// <reference lib="esnext.error" />
 /// <reference lib="esnext.sharedmemory" />
 /// <reference lib="esnext.typedarrays" />
+/// <reference lib="esnext.temporal" />
+/// <reference lib="esnext.date" />
