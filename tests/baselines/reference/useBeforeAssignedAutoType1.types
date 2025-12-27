@@ -1,0 +1,338 @@
+//// [tests/cases/compiler/useBeforeAssignedAutoType1.ts] ////
+
+=== useBeforeAssignedAutoType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59804
+
+let test1 = undefined;
+>test1 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+test1 = "" as string | undefined;
+>test1 = "" as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test1 : any
+>      : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test1?.length;
+>test1?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test1 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test2 = null;
+>test2 : any
+>      : ^^^
+
+test2 = "" as string | undefined;
+>test2 = "" as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test2 : any
+>      : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test2?.length;
+>test2?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test2 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test3;
+>test3 : any
+>      : ^^^
+
+test3 = "" as string | undefined;
+>test3 = "" as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test3 : any
+>      : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test3?.length;
+>test3?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test3 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test4 = undefined;
+>test4 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other1 = test4;
+>other1 : undefined
+>       : ^^^^^^^^^
+>test4 : undefined
+>      : ^^^^^^^^^
+
+let test5 = null;
+>test5 : any
+>      : ^^^
+
+let other2 = test5;
+>other2 : null
+>       : ^^^^
+>test5 : null
+>      : ^^^^
+
+let test6;
+>test6 : any
+>      : ^^^
+
+test6 = undefined;
+>test6 = undefined : undefined
+>                  : ^^^^^^^^^
+>test6 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other3 = test6;
+>other3 : undefined
+>       : ^^^^^^^^^
+>test6 : undefined
+>      : ^^^^^^^^^
+
+let test7 = undefined;
+>test7 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+test7 = undefined;
+>test7 = undefined : undefined
+>                  : ^^^^^^^^^
+>test7 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other4 = test7;
+>other4 : undefined
+>       : ^^^^^^^^^
+>test7 : undefined
+>      : ^^^^^^^^^
+
+let test8 = null;
+>test8 : any
+>      : ^^^
+
+test8 = undefined;
+>test8 = undefined : undefined
+>                  : ^^^^^^^^^
+>test8 : any
+>      : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other5 = test8;
+>other5 : undefined
+>       : ^^^^^^^^^
+>test8 : undefined
+>      : ^^^^^^^^^
+
+let test9;
+>test9 : any
+>      : ^^^
+
+let other6 = test9;
+>other6 : undefined
+>       : ^^^^^^^^^
+>test9 : undefined
+>      : ^^^^^^^^^
+
+let test10 = undefined;
+>test10 : any
+>       : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+test10 = "" as string | undefined;
+>test10 = "" as string | undefined : string | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^
+>test10 : any
+>       : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test10?.charAt(0);
+>test10?.charAt(0) : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>test10?.charAt : ((pos: number) => string) | undefined
+>               : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>test10 : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>charAt : ((pos: number) => string) | undefined
+>       : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+let test11 = null;
+>test11 : any
+>       : ^^^
+
+test11 = "" as string | undefined;
+>test11 = "" as string | undefined : string | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^
+>test11 : any
+>       : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test11?.charAt(0);
+>test11?.charAt(0) : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>test11?.charAt : ((pos: number) => string) | undefined
+>               : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>test11 : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>charAt : ((pos: number) => string) | undefined
+>       : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+let test12;
+>test12 : any
+>       : ^^^
+
+test12 = "" as string | undefined;
+>test12 = "" as string | undefined : string | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^
+>test12 : any
+>       : ^^^
+>"" as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+test12?.charAt(0);
+>test12?.charAt(0) : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>test12?.charAt : ((pos: number) => string) | undefined
+>               : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>test12 : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>charAt : ((pos: number) => string) | undefined
+>       : ^^   ^^      ^^^^^      ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+let test13;
+>test13 : any
+>       : ^^^
+
+test13.length;
+>test13.length : any
+>              : ^^^
+>test13 : undefined
+>       : ^^^^^^^^^
+>length : any
+>       : ^^^
+
+function fn1() {
+>fn1 : () => { length: any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  return { length: test13.length };
+>{ length: test13.length } : { length: any; }
+>                          : ^^^^^^^^^^^^^^^^
+>length : any
+>       : ^^^
+>test13.length : any
+>              : ^^^
+>test13 : any
+>       : ^^^
+>length : any
+>       : ^^^
+}
+
+let test14 = [];
+>test14 : any[]
+>       : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+test14.length;
+>test14.length : number
+>              : ^^^^^^
+>test14 : any[]
+>       : ^^^^^
+>length : number
+>       : ^^^^^^
+
+function fn2() {
+>fn2 : () => { length: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return { length: test14.length };
+>{ length: test14.length } : { length: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+>test14.length : number
+>              : ^^^^^^
+>test14 : any[]
+>       : ^^^^^
+>length : number
+>       : ^^^^^^
+}
+
+let test15;
+>test15 : any
+>       : ^^^
+
+test15 = [];
+>test15 = [] : never[]
+>            : ^^^^^^^
+>test15 : any
+>       : ^^^
+>[] : never[]
+>   : ^^^^^^^
+
+test15.length;
+>test15.length : number
+>              : ^^^^^^
+>test15 : any[]
+>       : ^^^^^
+>length : number
+>       : ^^^^^^
+
+function fn3() {
+>fn3 : () => { length: any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  return { length: test15.length };
+>{ length: test15.length } : { length: any; }
+>                          : ^^^^^^^^^^^^^^^^
+>length : any
+>       : ^^^
+>test15.length : any
+>              : ^^^
+>test15 : any
+>       : ^^^
+>length : any
+>       : ^^^
+}
+
