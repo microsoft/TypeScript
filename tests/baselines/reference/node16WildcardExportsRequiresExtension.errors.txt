@@ -1,0 +1,30 @@
+/app.ts(2,23): error TS2307: Cannot find module '@repo/library/utils' or its corresponding type declarations.
+
+
+==== /node_modules/@repo/library/package.json (0 errors) ====
+    {
+        "name": "@repo/library",
+        "type": "module",
+        "exports": {
+            "./*": "./src/*"
+        }
+    }
+    
+==== /node_modules/@repo/library/src/utils.ts (0 errors) ====
+    export function greet(): string {
+        return "hello";
+    }
+    
+==== /package.json (0 errors) ====
+    {
+        "type": "module"
+    }
+    
+==== /app.ts (1 errors) ====
+    // This import should FAIL in node16 mode - extensionless imports not supported
+    import { greet } from "@repo/library/utils";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@repo/library/utils' or its corresponding type declarations.
+    
+    greet();
+    
