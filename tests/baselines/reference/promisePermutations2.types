@@ -1417,10 +1417,10 @@ var s8: Promise<number>;
 >   : ^^^^^^^^^^^^^^^
 
 var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
->s8a : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s8.then(testFunction8, testFunction8, testFunction8) : Promise<unknown>
->                                                     : ^^^^^^^^^^^^^^^^
+>s8a : Promise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>s8.then(testFunction8, testFunction8, testFunction8) : Promise<IPromise<any>>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >s8.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s8 : Promise<number>
@@ -1435,10 +1435,10 @@ var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
 >              : ^ ^^ ^^ ^^  ^^           ^^^^^           
 
 var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
->s8b : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s8.then(testFunction8P, testFunction8P, testFunction8P) : Promise<unknown>
->                                                        : ^^^^^^^^^^^^^^^^
+>s8b : Promise<Promise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>s8.then(testFunction8P, testFunction8P, testFunction8P) : Promise<Promise<any>>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^
 >s8.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s8 : Promise<number>
@@ -1453,10 +1453,10 @@ var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
 >               : ^ ^^ ^^ ^^  ^^           ^^^^^          
 
 var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
->s8c : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s8.then(testFunction8P, testFunction8, testFunction8) : Promise<unknown>
->                                                      : ^^^^^^^^^^^^^^^^
+>s8c : Promise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>s8.then(testFunction8P, testFunction8, testFunction8) : Promise<IPromise<any>>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^
 >s8.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s8 : Promise<number>
@@ -1611,10 +1611,10 @@ var s9: Promise<number>;
 >   : ^^^^^^^^^^^^^^^
 
 var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
->s9a : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s9.then(testFunction9, testFunction9, testFunction9) : Promise<unknown>
->                                                     : ^^^^^^^^^^^^^^^^
+>s9a : Promise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>s9.then(testFunction9, testFunction9, testFunction9) : Promise<IPromise<any>>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >s9.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s9 : Promise<number>
@@ -1629,10 +1629,10 @@ var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
 >              : ^ ^^ ^^ ^^  ^^              ^^^^^           
 
 var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
->s9b : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s9.then(testFunction9P, testFunction9P, testFunction9P) : Promise<unknown>
->                                                        : ^^^^^^^^^^^^^^^^
+>s9b : Promise<Promise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>s9.then(testFunction9P, testFunction9P, testFunction9P) : Promise<Promise<any>>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^
 >s9.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s9 : Promise<number>
@@ -1647,10 +1647,10 @@ var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
 >               : ^ ^^ ^^ ^^  ^^              ^^^^^          
 
 var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
->s9c : Promise<unknown>
->    : ^^^^^^^^^^^^^^^^
->s9.then(testFunction9P, testFunction9, testFunction9) : Promise<unknown>
->                                                      : ^^^^^^^^^^^^^^^^
+>s9c : Promise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>s9.then(testFunction9P, testFunction9, testFunction9) : Promise<IPromise<any>>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^
 >s9.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >        : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^^        ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >s9 : Promise<number>

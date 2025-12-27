@@ -1366,10 +1366,10 @@ var nPromise: (x: any) => Promise<number>;
 >  : ^^^
 
 var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
->r8a : IPromise<unknown>
->    : ^^^^^^^^^^^^^^^^^
->r8.then(testFunction8, testFunction8, testFunction8) : IPromise<unknown>
->                                                     : ^^^^^^^^^^^^^^^^^
+>r8a : IPromise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>r8.then(testFunction8, testFunction8, testFunction8) : IPromise<IPromise<any>>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >r8.then : <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >        : ^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >r8 : IPromise<number>
@@ -1506,10 +1506,10 @@ var r9: IPromise<number>;
 >   : ^^^^^^^^^^^^^^^^
 
 var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
->r9a : IPromise<unknown>
->    : ^^^^^^^^^^^^^^^^^
->r9.then(testFunction9, testFunction9, testFunction9) : IPromise<unknown>
->                                                     : ^^^^^^^^^^^^^^^^^
+>r9a : IPromise<IPromise<any>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>r9.then(testFunction9, testFunction9, testFunction9) : IPromise<IPromise<any>>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >r9.then : <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >        : ^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >r9 : IPromise<number>
