@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/functionDeclarationAsStatementInStrictMode.ts] ////
+
+=== functionDeclarationAsStatementInStrictMode.ts ===
+// Error cases - function declarations as direct children of statements in strict mode
+if (true) function f1() {}
+>true : true
+>     : ^^^^
+>f1 : () => void
+>   : ^^^^^^^^^^
+
+while (true) function f2() {}
+>true : true
+>     : ^^^^
+>f2 : () => void
+>   : ^^^^^^^^^^
+
+do function f3() {} while (false);
+>f3 : () => void
+>   : ^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+for (;;) function f4() {}
+>f4 : () => void
+>   : ^^^^^^^^^^
+
+for (let x in {}) function f5() {}
+>x : string
+>  : ^^^^^^
+>{} : {}
+>   : ^^
+>f5 : () => void
+>   : ^^^^^^^^^^
+
+for (let x of []) function f6() {}
+>x : never
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>f6 : () => void
+>   : ^^^^^^^^^^
+
+label: function f7() {}
+>label : any
+>      : ^^^
+>f7 : () => void
+>   : ^^^^^^^^^^
+
+// Valid cases - function declarations inside blocks
+if (true) { function g1() {} }
+>true : true
+>     : ^^^^
+>g1 : () => void
+>   : ^^^^^^^^^^
+
+while (true) { function g2() {} }
+>true : true
+>     : ^^^^
+>g2 : () => void
+>   : ^^^^^^^^^^
+
+do { function g3() {} } while (false);
+>g3 : () => void
+>   : ^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+for (;;) { function g4() {} }
+>g4 : () => void
+>   : ^^^^^^^^^^
+
+for (let x in {}) { function g5() {} }
+>x : string
+>  : ^^^^^^
+>{} : {}
+>   : ^^
+>g5 : () => void
+>   : ^^^^^^^^^^
+
+for (let x of []) { function g6() {} }
+>x : never
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>g6 : () => void
+>   : ^^^^^^^^^^
+
+label: { function g7() {} }
+>label : any
+>      : ^^^
+>g7 : () => void
+>   : ^^^^^^^^^^
+
+// Valid - top level
+function topLevel() {}
+>topLevel : () => void
+>         : ^^^^^^^^^^
+
+// Valid - inside function body
+function outer() {
+>outer : () => void
+>      : ^^^^^^^^^^
+
+    function inner() {}
+>inner : () => void
+>      : ^^^^^^^^^^
+}
+

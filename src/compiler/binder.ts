@@ -2707,6 +2707,28 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
+    // Function declarations are not allowed as the direct child of a statement in strict mode.
+    // For example: `if (true) function f() {}` is a syntax error in strict mode.
+    function checkStrictModeFunctionDeclarationAsStatementChild(node: FunctionDeclaration) {
+        if (!inStrictMode) {
+            return;
+        }
+        const parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.LabeledStatement:
+                const errorSpan = getErrorSpanForNode(file, node);
+                file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, Diagnostics.In_strict_mode_code_functions_can_only_be_declared_at_top_level_or_inside_a_block));
+                break;
+        }
+    }
+
     function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {
         // Grammar checking
         // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -3713,6 +3735,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
 
         checkStrictModeFunctionName(node);
+        checkStrictModeFunctionDeclarationAsStatementChild(node);
         if (inStrictMode) {
             checkStrictModeFunctionDeclaration(node);
             bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);

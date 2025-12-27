@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/functionDeclarationAsStatementInStrictMode.ts] ////
+
+=== functionDeclarationAsStatementInStrictMode.ts ===
+// Error cases - function declarations as direct children of statements in strict mode
+if (true) function f1() {}
+>f1 : Symbol(f1, Decl(functionDeclarationAsStatementInStrictMode.ts, 1, 9))
+
+while (true) function f2() {}
+>f2 : Symbol(f2, Decl(functionDeclarationAsStatementInStrictMode.ts, 2, 12))
+
+do function f3() {} while (false);
+>f3 : Symbol(f3, Decl(functionDeclarationAsStatementInStrictMode.ts, 3, 2))
+
+for (;;) function f4() {}
+>f4 : Symbol(f4, Decl(functionDeclarationAsStatementInStrictMode.ts, 4, 8))
+
+for (let x in {}) function f5() {}
+>x : Symbol(x, Decl(functionDeclarationAsStatementInStrictMode.ts, 5, 8))
+>f5 : Symbol(f5, Decl(functionDeclarationAsStatementInStrictMode.ts, 5, 17))
+
+for (let x of []) function f6() {}
+>x : Symbol(x, Decl(functionDeclarationAsStatementInStrictMode.ts, 6, 8))
+>f6 : Symbol(f6, Decl(functionDeclarationAsStatementInStrictMode.ts, 6, 17))
+
+label: function f7() {}
+>f7 : Symbol(f7, Decl(functionDeclarationAsStatementInStrictMode.ts, 7, 6))
+
+// Valid cases - function declarations inside blocks
+if (true) { function g1() {} }
+>g1 : Symbol(g1, Decl(functionDeclarationAsStatementInStrictMode.ts, 10, 11))
+
+while (true) { function g2() {} }
+>g2 : Symbol(g2, Decl(functionDeclarationAsStatementInStrictMode.ts, 11, 14))
+
+do { function g3() {} } while (false);
+>g3 : Symbol(g3, Decl(functionDeclarationAsStatementInStrictMode.ts, 12, 4))
+
+for (;;) { function g4() {} }
+>g4 : Symbol(g4, Decl(functionDeclarationAsStatementInStrictMode.ts, 13, 10))
+
+for (let x in {}) { function g5() {} }
+>x : Symbol(x, Decl(functionDeclarationAsStatementInStrictMode.ts, 14, 8))
+>g5 : Symbol(g5, Decl(functionDeclarationAsStatementInStrictMode.ts, 14, 19))
+
+for (let x of []) { function g6() {} }
+>x : Symbol(x, Decl(functionDeclarationAsStatementInStrictMode.ts, 15, 8))
+>g6 : Symbol(g6, Decl(functionDeclarationAsStatementInStrictMode.ts, 15, 19))
+
+label: { function g7() {} }
+>g7 : Symbol(g7, Decl(functionDeclarationAsStatementInStrictMode.ts, 16, 8))
+
+// Valid - top level
+function topLevel() {}
+>topLevel : Symbol(topLevel, Decl(functionDeclarationAsStatementInStrictMode.ts, 16, 27))
+
+// Valid - inside function body
+function outer() {
+>outer : Symbol(outer, Decl(functionDeclarationAsStatementInStrictMode.ts, 19, 22))
+
+    function inner() {}
+>inner : Symbol(inner, Decl(functionDeclarationAsStatementInStrictMode.ts, 22, 18))
+}
+
