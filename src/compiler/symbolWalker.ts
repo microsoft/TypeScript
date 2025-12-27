@@ -45,6 +45,9 @@ export function createGetSymbolWalker(
         const visitedTypes: Type[] = []; // Sparse array from id to type
         const visitedSymbols: Symbol[] = []; // Sparse array from id to symbol
 
+        const maxRecursionDepth = 100;
+        let level = 0;
+
         return {
             walkType: type => {
                 try {
@@ -76,41 +79,57 @@ export function createGetSymbolWalker(
             if (visitedTypes[type.id]) {
                 return;
             }
-            visitedTypes[type.id] = type;
 
-            // Reuse visitSymbol to visit the type's symbol,
-            //  but be sure to bail on recuring into the type if accept declines the symbol.
-            const shouldBail = visitSymbol(type.symbol);
-            if (shouldBail) return;
+            // Prevent infinite recursion by limiting depth
+            if (level >= maxRecursionDepth) {
+                return;
+            }
 
-            // Visit the type's related types, if any
-            if (type.flags & TypeFlags.Object) {
-                const objectType = type as ObjectType;
-                const objectFlags = objectType.objectFlags;
-                if (objectFlags & ObjectFlags.Reference) {
-                    visitTypeReference(type as TypeReference);
+            // Increment recursion level
+            level++;
+
+            // Wrap logic in try-finally to ensure level is decremented even on early return or error
+            try {
+                visitedTypes[type.id] = type;
+
+                // Reuse visitSymbol to visit the type's symbol,
+                //  but be sure to bail on recuring into the type if accept declines the symbol.
+                const shouldBail = visitSymbol(type.symbol);
+                if (shouldBail) return;
+
+                // Visit the type's related types, if any
+                if (type.flags & TypeFlags.Object) {
+                    const objectType = type as ObjectType;
+                    const objectFlags = objectType.objectFlags;
+                    if (objectFlags & ObjectFlags.Reference) {
+                        visitTypeReference(type as TypeReference);
+                    }
+                    if (objectFlags & ObjectFlags.Mapped) {
+                        visitMappedType(type as MappedType);
+                    }
+                    if (objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                        visitInterfaceType(type as InterfaceType);
+                    }
+                    if (objectFlags & (ObjectFlags.Tuple | ObjectFlags.Anonymous)) {
+                        visitObjectType(objectType);
+                    }
                 }
-                if (objectFlags & ObjectFlags.Mapped) {
-                    visitMappedType(type as MappedType);
+                if (type.flags & TypeFlags.TypeParameter) {
+                    visitTypeParameter(type as TypeParameter);
                 }
-                if (objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)) {
-                    visitInterfaceType(type as InterfaceType);
+                if (type.flags & TypeFlags.UnionOrIntersection) {
+                    visitUnionOrIntersectionType(type as UnionOrIntersectionType);
                 }
-                if (objectFlags & (ObjectFlags.Tuple | ObjectFlags.Anonymous)) {
-                    visitObjectType(objectType);
+                if (type.flags & TypeFlags.Index) {
+                    visitIndexType(type as IndexType);
+                }
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    visitIndexedAccessType(type as IndexedAccessType);
                 }
             }
-            if (type.flags & TypeFlags.TypeParameter) {
-                visitTypeParameter(type as TypeParameter);
-            }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                visitUnionOrIntersectionType(type as UnionOrIntersectionType);
-            }
-            if (type.flags & TypeFlags.Index) {
-                visitIndexType(type as IndexType);
-            }
-            if (type.flags & TypeFlags.IndexedAccess) {
-                visitIndexedAccessType(type as IndexedAccessType);
+            finally {
+                // Decrement recursion level when exiting
+                level--;
             }
         }
 
