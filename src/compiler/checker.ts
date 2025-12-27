@@ -34452,10 +34452,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop) &&
             (isThisProperty(location) || isThisInitializedObjectBindingExpression(location) || isObjectBindingPattern(location.parent) && isThisInitializedDeclaration(location.parent.parent))
         ) {
-            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-            if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(location)) {
+            const parentSymbol = getParentOfSymbol(prop);
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Class && isNodeUsedDuringClassInitialization(location)) {
                 if (errorNode) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!));
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), symbolToString(parentSymbol));
                 }
                 return false;
             }
