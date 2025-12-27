@@ -34,7 +34,7 @@ declare let dec: any, obj: any;
             static { __setFunctionName(_classThis, "x"); }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: "x", metadata: _metadata }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -76,7 +76,7 @@ declare let dec: any, obj: any;
             static { __setFunctionName(_classThis, "x"); }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: "x", metadata: _metadata }, null, _classExtraInitializers);
                 class_2 = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -116,7 +116,7 @@ declare let dec: any, obj: any;
             static { __setFunctionName(_classThis, "x"); }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: "x", metadata: _metadata }, null, _classExtraInitializers);
                 class_3 = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
                 __runInitializers(_classThis, _classExtraInitializers);
