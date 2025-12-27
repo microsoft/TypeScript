@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/discriminatedUnionIncompatibleMemberMessage.ts] ////
+
+=== discriminatedUnionIncompatibleMemberMessage.ts ===
+// Test case for issue #62737: Show incompatible union members in discriminated union discriminator errors
+
+type Discriminated =
+>Discriminated : Discriminated
+>              : ^^^^^^^^^^^^^
+
+  | { discriminator: "foo" }
+>discriminator : "foo"
+>              : ^^^^^
+
+  | { discriminator: "bar" };
+>discriminator : "bar"
+>              : ^^^^^
+
+type UnionType = "foo" | "bar" | "baz";
+>UnionType : UnionType
+>          : ^^^^^^^^^
+
+const obj = { discriminator: "foo" as UnionType };
+>obj : { discriminator: UnionType; }
+>    : ^^^^^^^^^^^^^^^^^         ^^^
+>{ discriminator: "foo" as UnionType } : { discriminator: UnionType; }
+>                                      : ^^^^^^^^^^^^^^^^^         ^^^
+>discriminator : UnionType
+>              : ^^^^^^^^^
+>"foo" as UnionType : UnionType
+>                   : ^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+// This error should identify "baz" as the problematic type, not "foo"
+const err: Discriminated = obj;
+>err : Discriminated
+>    : ^^^^^^^^^^^^^
+>obj : { discriminator: UnionType; }
+>    : ^^^^^^^^^^^^^^^^^         ^^^
+
+// Additional test case with multiple incompatible members
+type UnionType2 = "foo" | "bar" | "baz" | "qux";
+>UnionType2 : UnionType2
+>           : ^^^^^^^^^^
+
+const obj2 = { discriminator: "foo" as UnionType2 };
+>obj2 : { discriminator: UnionType2; }
+>     : ^^^^^^^^^^^^^^^^^          ^^^
+>{ discriminator: "foo" as UnionType2 } : { discriminator: UnionType2; }
+>                                       : ^^^^^^^^^^^^^^^^^          ^^^
+>discriminator : UnionType2
+>              : ^^^^^^^^^^
+>"foo" as UnionType2 : UnionType2
+>                    : ^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const err2: Discriminated = obj2;
+>err2 : Discriminated
+>     : ^^^^^^^^^^^^^
+>obj2 : { discriminator: UnionType2; }
+>     : ^^^^^^^^^^^^^^^^^          ^^^
+
+// Test case with expected error (expectedError reference)
+const expectedError: Discriminated = { discriminator: "foo" } as { discriminator: UnionType };
+>expectedError : Discriminated
+>              : ^^^^^^^^^^^^^
+>{ discriminator: "foo" } as { discriminator: UnionType } : { discriminator: UnionType; }
+>                                                         : ^^^^^^^^^^^^^^^^^         ^^^
+>{ discriminator: "foo" } : { discriminator: "foo"; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>discriminator : "foo"
+>              : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>discriminator : UnionType
+>              : ^^^^^^^^^
+
+

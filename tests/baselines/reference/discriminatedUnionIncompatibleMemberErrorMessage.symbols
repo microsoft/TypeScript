@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/discriminatedUnionIncompatibleMemberErrorMessage.ts] ////
+
+=== discriminatedUnionIncompatibleMemberErrorMessage.ts ===
+// Test case for issue #62737
+// Improve error messages when assigning objects with wider discriminator unions to discriminated union types
+
+// Basic case - single incompatible type
+type Discriminated =
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 0, 0))
+
+  | { discriminator: "foo" }
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 5, 5))
+
+  | { discriminator: "bar" };
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 6, 5))
+
+type UnionType = "foo" | "bar" | "baz";
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 6, 29))
+
+const obj = { discriminator: "foo" as UnionType };
+>obj : Symbol(obj, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 10, 5))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 10, 13))
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 6, 29))
+
+const err: Discriminated = obj; // Error: "baz" is not present in discriminator
+>err : Symbol(err, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 11, 5))
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 0, 0))
+>obj : Symbol(obj, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 10, 5))
+
+// Multiple incompatible types
+type WiderUnion = "foo" | "bar" | "baz" | "qux";
+>WiderUnion : Symbol(WiderUnion, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 11, 31))
+
+const obj2 = { discriminator: "foo" as WiderUnion };
+>obj2 : Symbol(obj2, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 15, 5))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 15, 14))
+>WiderUnion : Symbol(WiderUnion, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 11, 31))
+
+const err2: Discriminated = obj2; // Error: "baz" | "qux" are not present in discriminator
+>err2 : Symbol(err2, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 16, 5))
+>Discriminated : Symbol(Discriminated, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 0, 0))
+>obj2 : Symbol(obj2, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 15, 5))
+
+// Different discriminator property name
+type Shape =
+>Shape : Symbol(Shape, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 16, 33))
+
+  | { kind: "circle"; radius: number }
+>kind : Symbol(kind, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 20, 5))
+>radius : Symbol(radius, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 20, 21))
+
+  | { kind: "square"; side: number };
+>kind : Symbol(kind, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 21, 5))
+>side : Symbol(side, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 21, 21))
+
+type ShapeKind = "circle" | "square" | "triangle";
+>ShapeKind : Symbol(ShapeKind, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 21, 37))
+
+const shape = { kind: "circle" as ShapeKind };
+>shape : Symbol(shape, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 24, 5))
+>kind : Symbol(kind, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 24, 15))
+>ShapeKind : Symbol(ShapeKind, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 21, 37))
+
+const err3: Shape = shape; // Error: "triangle" is not present in discriminator "kind"
+>err3 : Symbol(err3, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 25, 5))
+>Shape : Symbol(Shape, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 16, 33))
+>shape : Symbol(shape, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 24, 5))
+
+// From issue #62603
+type Discriminated2 =
+>Discriminated2 : Symbol(Discriminated2, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 25, 26))
+
+  | { discriminator: "foo" }
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 29, 5))
+
+  | { discriminator: "bar" };
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 30, 5))
+
+const unexpectedError: Discriminated2 = { discriminator: "foo" } as { discriminator: UnionType };
+>unexpectedError : Symbol(unexpectedError, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 32, 5))
+>Discriminated2 : Symbol(Discriminated2, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 25, 26))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 32, 41))
+>discriminator : Symbol(discriminator, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 32, 69))
+>UnionType : Symbol(UnionType, Decl(discriminatedUnionIncompatibleMemberErrorMessage.ts, 6, 29))
+
+

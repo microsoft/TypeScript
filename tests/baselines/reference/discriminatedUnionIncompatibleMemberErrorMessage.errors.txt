@@ -1,0 +1,58 @@
+discriminatedUnionIncompatibleMemberErrorMessage.ts(12,7): error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+  Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+discriminatedUnionIncompatibleMemberErrorMessage.ts(17,7): error TS2322: Type '{ discriminator: WiderUnion; }' is not assignable to type 'Discriminated'.
+  Type '{ discriminator: WiderUnion; }' is not assignable to type 'Discriminated'. The type(s) '"baz" | "qux"' are not present in the discriminator 'discriminator' of the target.
+discriminatedUnionIncompatibleMemberErrorMessage.ts(26,7): error TS2322: Type '{ kind: ShapeKind; }' is not assignable to type 'Shape'.
+  Type '{ kind: ShapeKind; }' is not assignable to type 'Shape'. The type(s) '"triangle"' are not present in the discriminator 'kind' of the target.
+discriminatedUnionIncompatibleMemberErrorMessage.ts(33,7): error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated2'.
+  Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated2'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+
+
+==== discriminatedUnionIncompatibleMemberErrorMessage.ts (4 errors) ====
+    // Test case for issue #62737
+    // Improve error messages when assigning objects with wider discriminator unions to discriminated union types
+    
+    // Basic case - single incompatible type
+    type Discriminated =
+      | { discriminator: "foo" }
+      | { discriminator: "bar" };
+    
+    type UnionType = "foo" | "bar" | "baz";
+    
+    const obj = { discriminator: "foo" as UnionType };
+    const err: Discriminated = obj; // Error: "baz" is not present in discriminator
+          ~~~
+!!! error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'.
+!!! error TS2322:   Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+    
+    // Multiple incompatible types
+    type WiderUnion = "foo" | "bar" | "baz" | "qux";
+    const obj2 = { discriminator: "foo" as WiderUnion };
+    const err2: Discriminated = obj2; // Error: "baz" | "qux" are not present in discriminator
+          ~~~~
+!!! error TS2322: Type '{ discriminator: WiderUnion; }' is not assignable to type 'Discriminated'.
+!!! error TS2322:   Type '{ discriminator: WiderUnion; }' is not assignable to type 'Discriminated'. The type(s) '"baz" | "qux"' are not present in the discriminator 'discriminator' of the target.
+    
+    // Different discriminator property name
+    type Shape =
+      | { kind: "circle"; radius: number }
+      | { kind: "square"; side: number };
+    
+    type ShapeKind = "circle" | "square" | "triangle";
+    const shape = { kind: "circle" as ShapeKind };
+    const err3: Shape = shape; // Error: "triangle" is not present in discriminator "kind"
+          ~~~~
+!!! error TS2322: Type '{ kind: ShapeKind; }' is not assignable to type 'Shape'.
+!!! error TS2322:   Type '{ kind: ShapeKind; }' is not assignable to type 'Shape'. The type(s) '"triangle"' are not present in the discriminator 'kind' of the target.
+    
+    // From issue #62603
+    type Discriminated2 =
+      | { discriminator: "foo" }
+      | { discriminator: "bar" };
+    
+    const unexpectedError: Discriminated2 = { discriminator: "foo" } as { discriminator: UnionType };
+          ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated2'.
+!!! error TS2322:   Type '{ discriminator: UnionType; }' is not assignable to type 'Discriminated2'. The type(s) '"baz"' are not present in the discriminator 'discriminator' of the target.
+    
+    
