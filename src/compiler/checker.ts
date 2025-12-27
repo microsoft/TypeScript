@@ -42730,6 +42730,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
             }
+            // Also check if the type reference is an alias that is deprecated (e.g., ImportEqualsDeclaration with @deprecated)
+            if (node.kind !== SyntaxKind.ImportType) {
+                const name = getTypeReferenceName(node as TypeReferenceType);
+                if (name) {
+                    const aliasSymbol = resolveEntityName(name, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+                    if (aliasSymbol && aliasSymbol !== unknownSymbol && aliasSymbol !== symbol && aliasSymbol.flags & SymbolFlags.Alias) {
+                        if (isDeprecatedSymbol(aliasSymbol) && aliasSymbol.declarations) {
+                            addDeprecatedSuggestion(
+                                getDeprecatedSuggestionNode(node),
+                                aliasSymbol.declarations,
+                                aliasSymbol.escapedName as string,
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
 
