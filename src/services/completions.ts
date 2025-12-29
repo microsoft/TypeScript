@@ -3367,14 +3367,19 @@ function getCompletionData(
                 const typeExpression = tryGetTypeExpressionFromTag(tag);
                 if (typeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position);
-                    if (
-                        !currentToken ||
-                        (!isDeclarationName(currentToken) &&
-                            (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                                (currentToken.parent as JSDocPropertyTag).name !== currentToken))
-                    ) {
-                        // Use as type location if inside tag's type expression
-                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(typeExpression);
+                    // Enable type completions if in type expression, unless token is a declaration
+                    // name inside it (e.g., property name in `{ prop: Type }`). See #62281.
+                    if (isCurrentlyEditingNode(typeExpression)) {
+                        const tokenIsInsideTypeExpression = currentToken && isCurrentlyEditingNode(currentToken);
+                        if (
+                            !currentToken ||
+                            !tokenIsInsideTypeExpression ||
+                            (!isDeclarationName(currentToken) &&
+                                (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
+                                    (currentToken.parent as JSDocPropertyTag).name !== currentToken))
+                        ) {
+                            insideJsDocTagTypeExpression = true;
+                        }
                     }
                 }
                 if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
@@ -3388,6 +3393,22 @@ function getCompletionData(
             // comment or the plain text part of a jsDoc comment, so no completion should be available
             log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
             return undefined;
+        }
+    }
+    else {
+        // Handle inline JSDoc on function parameters. For these, isInComment returns undefined
+        // but we can still find a JSDocTag ancestor from the currentToken. See #62281.
+        const tag = getJsDocTagAtPosition(currentToken, position);
+        if (tag) {
+            if (isJSDocImportTag(tag)) {
+                insideJsDocImportTag = true;
+            }
+            else {
+                const typeExpression = tryGetTypeExpressionFromTag(tag);
+                if (typeExpression && isCurrentlyEditingNode(typeExpression)) {
+                    insideJsDocTagTypeExpression = true;
+                }
+            }
         }
     }
 
