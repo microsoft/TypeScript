@@ -3367,19 +3367,14 @@ function getCompletionData(
                 const typeExpression = tryGetTypeExpressionFromTag(tag);
                 if (typeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position);
-                    // Enable type completions if in type expression, unless token is a declaration
-                    // name inside it (e.g., property name in `{ prop: Type }`). See #62281.
-                    if (isCurrentlyEditingNode(typeExpression)) {
-                        const tokenIsInsideTypeExpression = currentToken && isCurrentlyEditingNode(currentToken);
-                        if (
-                            !currentToken ||
-                            !tokenIsInsideTypeExpression ||
-                            (!isDeclarationName(currentToken) &&
-                                (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                                    (currentToken.parent as JSDocPropertyTag).name !== currentToken))
-                        ) {
-                            insideJsDocTagTypeExpression = true;
-                        }
+                    if (
+                        !currentToken ||
+                        (!isDeclarationName(currentToken) &&
+                            (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
+                                (currentToken.parent as JSDocPropertyTag).name !== currentToken))
+                    ) {
+                        // Use as type location if inside tag's type expression
+                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(typeExpression);
                     }
                 }
                 if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
