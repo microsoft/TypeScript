@@ -147,16 +147,17 @@ verify.completions({
   exact: undefined,
 });
 
-// Cases 5 & 6: Parser limitations - NO completions
-// (the JSDoc is orphaned because the parser creates a function with 0 parameters
-// when there's no identifier after `*/`)
+// Cases 5 & 6: Previously parser limitations, now FIXED with orphaned JSDoc handling.
 verify.completions(
   {
     marker: "case5",
-    exact: undefined,
+    exact: [
+      { name: "MyType", kind: "interface", kindModifiers: "export" },
+      { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
   },
   {
     marker: "case6",
-    exact: undefined,
+    includes: [{ name: "SomeNumber", kind: "type" }],
   }
 );

@@ -226,6 +226,7 @@ import {
     isParameterPropertyModifier,
     isPartOfTypeNode,
     isPossiblyTypeArgumentPosition,
+    isQualifiedName,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPropertyAccessExpression,
@@ -256,10 +257,12 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
+    isTypeReferenceNode,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
     JsDoc,
+    JSDoc,
     JSDocImportTag,
     JSDocParameterTag,
     JSDocPropertyTag,
@@ -315,6 +318,7 @@ import {
     ObjectTypeDeclaration,
     or,
     ParameterDeclaration,
+    parseIsolatedJSDocComment,
     ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
@@ -3321,6 +3325,9 @@ function getCompletionData(
     let insideJsDocTagTypeExpression = false;
     let insideJsDocImportTag = false;
     let isInSnippetScope = false;
+    // For orphaned JSDoc with qualified name (e.g., t. in function foo(/** @type {t.} */) {})
+    // we need to track the left identifier text to enable member completions. See #62281.
+    let orphanedJsDocQualifiedNameLeft: Identifier | undefined;
     if (insideComment) {
         if (hasDocComment(sourceFile, position)) {
             if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
@@ -3379,6 +3386,39 @@ function getCompletionData(
                 }
                 if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
                     return { kind: CompletionDataKind.JsDocParameterName, tag };
+                }
+            }
+        }
+        else {
+            // Fallback: Handle orphaned JSDoc comments not attached to any AST node.
+            // For example: function foo(/** @type {t.} */) {} - no parameter name means
+            // the parser creates 0 parameters and the JSDoc is not attached. See #62281.
+            const commentText = sourceFile.text.substring(insideComment.pos, insideComment.end);
+            const parsed = parseIsolatedJSDocComment(commentText);
+            if (parsed?.jsDoc?.tags) {
+                const posInComment = position - insideComment.pos;
+                for (const parsedTag of parsed.jsDoc.tags) { // TODO: Too slow (?)
+                    const typeExpression = tryGetTypeExpressionFromTag(parsedTag);
+                    if (typeExpression && typeExpression.pos < posInComment && posInComment <= typeExpression.end) {
+                        insideJsDocTagTypeExpression = true;
+                        // Check if we're after a dot in a QualifiedName (for member completions)
+                        if (typeExpression.kind !== SyntaxKind.JSDocTypeExpression) break;
+                        const typeNode = typeExpression.type;
+                        if (isTypeReferenceNode(typeNode) && isQualifiedName(typeNode.typeName)) {
+                            const qualifiedName = typeNode.typeName;
+                            // Position after the dot means we want to complete members of the left side
+                            const dotPos = qualifiedName.left.end;
+                            if (posInComment > dotPos && isIdentifier(qualifiedName.left)) {
+                                const leftText = commentText.substring(qualifiedName.left.pos, qualifiedName.left.end).trim();
+                                // Find the corresponding JSDocImportTag in the source file
+                                const found = findJsDocImportNamespaceIdentifier(sourceFile, leftText);
+                                if (found) {
+                                    orphanedJsDocQualifiedNameLeft = found;
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -3456,7 +3496,8 @@ function getCompletionData(
             isNewIdentifierLocation = importStatementCompletionInfo.isNewIdentifierLocation;
         }
         // Bail out if this is a known invalid completion location
-        if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
+        // Skip the blocker check if we're inside a JSDoc type expression (including orphaned JSDoc). See #62281.
+        if (!importStatementCompletionInfo.replacementSpan && !insideJsDocTagTypeExpression && !insideJsDocImportTag && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
                 ? keywordCompletionData(keywordFilters, isJsOnlyLocation, computeCommitCharactersAndIsNewIdentifier().isNewIdentifierLocation)
@@ -3596,6 +3637,14 @@ function getCompletionData(
         }
     }
 
+    // Handle orphaned JSDoc with qualified name (e.g., function foo(/** @type {t.} */) {}).
+    // We found the left identifier's AST node earlier; now use it for member completions.
+    if (orphanedJsDocQualifiedNameLeft) {
+        isRightOfDot = true;
+        node = orphanedJsDocQualifiedNameLeft;
+    }
+
+
     const semanticStart = timestamp();
     let completionKind = CompletionKind.None;
     let hasUnresolvedAutoImports = false;
@@ -3716,6 +3765,30 @@ function getCompletionData(
         }
         if (isJSDocAugmentsTag(tag) || isJSDocImplementsTag(tag)) {
             return tag.class;
+        }
+        return undefined;
+    }
+
+    /**
+     * Find a JSDocImportTag in the source file that creates a namespace with the given name.
+     * Used to enable member completions for orphaned JSDoc comments. See #62281.
+     */
+    function findJsDocImportNamespaceIdentifier(sf: SourceFile, namespaceName: string): Identifier | undefined {
+        for (const statement of sf.statements) {
+            // JSDoc comments are attached to statements via the jsDoc property
+            const jsDocNodes = (statement as Node & { jsDoc?: JSDoc[] }).jsDoc;
+            if (!jsDocNodes) continue;
+            for (const jsDoc of jsDocNodes) {
+                if (!jsDoc.tags) continue;
+                for (const tag of jsDoc.tags) {
+                    if (isJSDocImportTag(tag) && tag.importClause?.namedBindings) {
+                        const namedBindings = tag.importClause.namedBindings;
+                        if (isNamespaceImport(namedBindings) && namedBindings.name.text === namespaceName) {
+                            return namedBindings.name;
+                        }
+                    }
+                }
+            }
         }
         return undefined;
     }
