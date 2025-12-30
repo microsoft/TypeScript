@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// Tests for https://github.com/microsoft/TypeScript/issues/62281
+// Tests based on issue #62281
 // JSDoc @type completion in function parameter contexts
 
 // @allowJs: true
@@ -30,43 +30,133 @@
 ////
 /////** @typedef {number} SomeNumber */
 ////
-//// // --- @import namespace completions ---
+//// // ============================================================
+//// // Case 1: Regular @type on variable
+//// // ============================================================
 ////
-/////** @param {t./*importInParam*/} p */
-////function f1(p) {}
-////
-////function f2(/** @type {t./*importInline*/} */ p) {}
-////
-/////** @type {t./*importOutside*/} */
+/////** @type {t./*case1*/} */
 ////const x = {};
 ////
-//// // --- @typedef completions ---
+//// // ============================================================
+//// // Case 2: Inline @type with named parameter
+//// // ============================================================
+////
+////function f2(/** @type {t./*case2*/} */ p) {}
+////
+//// // ============================================================
+//// // Case 3: Property name in type literal (correctly NO completions)
+//// // ============================================================
+////
+/////** @type { {/*case3*/ageX: number} } */
+////var y;
+////
+//// // ============================================================
+//// // Case 4: @import with named argument
+//// // ============================================================
+////
+////function f4(/** @type {t./*case4*/} */arg) {}
+////
+//// // ============================================================
+//// // Case 5: @import with unnamed argument (PARSER LIMITATION)
+//// // The function is parsed with 0 parameters, JSDoc is orphaned.
+//// // ============================================================
+////
+////function f5(/** @type {t./*case5*/} */) {}
+////
+//// // ============================================================
+//// // Case 6: @typedef with unnamed argument (PARSER LIMITATION)
+//// // The function is parsed with 0 parameters, JSDoc is orphaned.
+//// // ============================================================
+////
+////function f6(/** @type {Some/*case6*/} */) {}
+////
+//// // ============================================================
+//// // Case 7: @typedef with named argument
+//// // ============================================================
+////
+////function f7(/** @type {Some/*case7*/} */arg) {}
+////
+//// // ============================================================
+//// // Case 8: @param tag in function JSDoc (already worked)
+//// // ============================================================
+////
+/////**
+//// * @param {t./*case8*/} p
+//// */
+////function f8(p) {}
+////
+//// // ============================================================
+//// // Additional: @typedef namespace completions
+//// // ============================================================
 ////
 /////** @param {MyNamespace./*typedefInParam*/} p */
-////function f3(p) {}
+////function f9(p) {}
 ////
-////function f4(/** @type {MyNamespace./*typedefInline*/} */ p) {}
-////
-////function f5(/** @type {Some/*typedefPartial*/} */ p) {}
+////function f10(/** @type {MyNamespace./*typedefInline*/} */ p) {}
 
+// Cases that SHOULD have completions
 verify.completions(
-    {
-        marker: ["importInParam", "importInline", "importOutside"],
-        exact: [
-            { name: "MyType", kind: "interface", kindModifiers: "export" },
-            { name: "OtherType", kind: "interface", kindModifiers: "export" },
-        ],
-    },
-    {
-        marker: ["typedefInParam", "typedefInline"],
-        includes: [{ name: "NestedType", kind: "type" }],
-    },
-    {
-        marker: "typedefPartial",
-        includes: [{ name: "SomeNumber", kind: "type" }],
-    },
+  // Case 1: Regular @type on variable
+  {
+    marker: "case1",
+    exact: [
+      { name: "MyType", kind: "interface", kindModifiers: "export" },
+      { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
+  },
+  // Case 2: Inline @type with named parameter
+  {
+    marker: "case2",
+    exact: [
+      { name: "MyType", kind: "interface", kindModifiers: "export" },
+      { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
+  },
+  // Case 4: @import with named argument
+  {
+    marker: "case4",
+    exact: [
+      { name: "MyType", kind: "interface", kindModifiers: "export" },
+      { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
+  },
+  // Case 7: @typedef with named argument
+  {
+    marker: "case7",
+    includes: [{ name: "SomeNumber", kind: "type" }],
+  },
+  // Case 8: @param tag in function JSDoc
+  {
+    marker: "case8",
+    exact: [
+      { name: "MyType", kind: "interface", kindModifiers: "export" },
+      { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
+  },
+  // Additional: @typedef namespace completions
+  {
+    marker: ["typedefInParam", "typedefInline"],
+    includes: [{ name: "NestedType", kind: "type" }],
+  }
 );
 
-// NOTE: The case WITHOUT a parameter name (e.g., `function foo(/** @type {t.} */)`)
-// is a parser limitation - the function is parsed with 0 parameters and the JSDoc
-// is orphaned. This would require parser-level changes to fix.
+// Case 3: Property name in type literal - NO completions
+// (defining a property name, not referencing a type)
+verify.completions({
+  marker: "case3",
+  exact: undefined,
+});
+
+// Cases 5 & 6: Parser limitations - NO completions
+// (the JSDoc is orphaned because the parser creates a function with 0 parameters
+// when there's no identifier after `*/`)
+verify.completions(
+  {
+    marker: "case5",
+    exact: undefined,
+  },
+  {
+    marker: "case6",
+    exact: undefined,
+  }
+);
