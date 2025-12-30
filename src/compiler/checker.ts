@@ -31825,6 +31825,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                 // for 'this' is the non-null form of the contextual type for the containing object literal or
                 // the type of the object literal itself.
+                // If we're in an inference context and the contextual type contains a mapped type (like reverse
+                // mapped types used for inference), use the object literal type to allow proper inference
+                // of method return types that reference other methods via this. This avoids leaking type
+                // parameters like T[K] when methods call each other.
+                if (contextualType && someType(contextualType, t => !!(getObjectFlags(t) & ObjectFlags.Mapped)) && getInferenceContext(containingLiteral)) {
+                    return getWidenedType(checkExpressionCached(containingLiteral));
+                }
                 return getWidenedType(contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral));
             }
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the

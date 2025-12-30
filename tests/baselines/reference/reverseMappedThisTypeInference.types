@@ -1,0 +1,147 @@
+//// [tests/cases/compiler/reverseMappedThisTypeInference.ts] ////
+
+=== reverseMappedThisTypeInference.ts ===
+// Issue #62779: Type parameter leak caused by `this` and reverse mapped type
+declare function testReverseMapped<T extends Record<string, unknown>>(obj: {
+>testReverseMapped : <T extends Record<string, unknown>>(obj: { [K in keyof T]: () => T[K]; }) => T
+>                  : ^ ^^^^^^^^^                       ^^   ^^                               ^^^^^ 
+>obj : { [K in keyof T]: () => T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^    ^^^
+
+    [K in keyof T]: () => T[K];
+}): T;
+
+const obj = testReverseMapped({
+>obj : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped({    a() {        return 0;    },    b() {        return this.a();    },}) : { a: number; b: number; }
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped : <T extends Record<string, unknown>>(obj: { [K in keyof T]: () => T[K]; }) => T
+>                  : ^ ^^^^^^^^^                       ^^   ^^                               ^^^^^ 
+>{    a() {        return 0;    },    b() {        return this.a();    },} : { a(): number; b(): number; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a() {
+>a : () => number
+>  : ^^^^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+
+    },
+    b() {
+>b : () => number
+>  : ^^^^^^^^^^^^
+
+        return this.a();
+>this.a() : number
+>         : ^^^^^^
+>this.a : () => number
+>       : ^^^^^^^^^^^^
+>this : { a: () => number; b: () => number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : () => number
+>  : ^^^^^^^^^^^^
+
+    },
+});
+
+// Intersection with mapped type
+declare function testReverseMapped2<T extends Record<string, unknown>, T2>(
+>testReverseMapped2 : <T extends Record<string, unknown>, T2>(obj: T2 & { [K in keyof T]: () => T[K]; }) => T
+>                   : ^ ^^^^^^^^^                       ^^  ^^   ^^                                    ^^^^^ 
+
+    obj: T2 & {
+>obj : T2 & { [K in keyof T]: () => T[K]; }
+>    : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^    ^^^
+
+        [K in keyof T]: () => T[K];
+    },
+): T;
+
+const obj2 = testReverseMapped2({
+>obj2 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped2({    a() {        return 0;    },    b() {        return this.a();    },}) : { a: number; b: number; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped2 : <T extends Record<string, unknown>, T2>(obj: T2 & { [K in keyof T]: () => T[K]; }) => T
+>                   : ^ ^^^^^^^^^                       ^^  ^^   ^^                                    ^^^^^ 
+>{    a() {        return 0;    },    b() {        return this.a();    },} : { a(): number; b(): number; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a() {
+>a : () => number
+>  : ^^^^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+
+    },
+    b() {
+>b : () => number
+>  : ^^^^^^^^^^^^
+
+        return this.a();
+>this.a() : number
+>         : ^^^^^^
+>this.a : (() => number) & (() => number)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { a(): number; b(): number; } & { a: () => number; b: () => number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : (() => number) & (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    },
+});
+
+// Union with mapped type
+declare function testReverseMapped3<T extends Record<string, unknown>, T2>(
+>testReverseMapped3 : <T extends Record<string, unknown>, T2>(obj: T2 | { [K in keyof T]: () => T[K]; }) => T
+>                   : ^ ^^^^^^^^^                       ^^  ^^   ^^                                    ^^^^^ 
+
+    obj: T2 | {
+>obj : T2 | { [K in keyof T]: () => T[K]; }
+>    : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^    ^^^
+
+        [K in keyof T]: () => T[K];
+    },
+): T;
+
+const obj3 = testReverseMapped3({
+>obj3 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped3({    a() {        return 0;    },    b() {        return this.a();    },}) : { a: number; b: number; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReverseMapped3 : <T extends Record<string, unknown>, T2>(obj: T2 | { [K in keyof T]: () => T[K]; }) => T
+>                   : ^ ^^^^^^^^^                       ^^  ^^   ^^                                    ^^^^^ 
+>{    a() {        return 0;    },    b() {        return this.a();    },} : { a(): number; b(): number; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a() {
+>a : () => number
+>  : ^^^^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+
+    },
+    b() {
+>b : () => number
+>  : ^^^^^^^^^^^^
+
+        return this.a();
+>this.a() : number
+>         : ^^^^^^
+>this.a : (() => number) | (() => number)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { a(): number; b(): number; } | { a: () => number; b: () => number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : (() => number) | (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    },
+});
+

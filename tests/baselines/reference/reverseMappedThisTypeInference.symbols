@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/reverseMappedThisTypeInference.ts] ////
+
+=== reverseMappedThisTypeInference.ts ===
+// Issue #62779: Type parameter leak caused by `this` and reverse mapped type
+declare function testReverseMapped<T extends Record<string, unknown>>(obj: {
+>testReverseMapped : Symbol(testReverseMapped, Decl(reverseMappedThisTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 1, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(reverseMappedThisTypeInference.ts, 1, 70))
+
+    [K in keyof T]: () => T[K];
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 2, 5))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 1, 35))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 1, 35))
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 2, 5))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 1, 35))
+
+const obj = testReverseMapped({
+>obj : Symbol(obj, Decl(reverseMappedThisTypeInference.ts, 5, 5))
+>testReverseMapped : Symbol(testReverseMapped, Decl(reverseMappedThisTypeInference.ts, 0, 0))
+
+    a() {
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 5, 31))
+
+        return 0;
+    },
+    b() {
+>b : Symbol(b, Decl(reverseMappedThisTypeInference.ts, 8, 6))
+
+        return this.a();
+>this.a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 5, 31))
+>this : Symbol(__type, Decl(reverseMappedThisTypeInference.ts, 1, 74))
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 5, 31))
+
+    },
+});
+
+// Intersection with mapped type
+declare function testReverseMapped2<T extends Record<string, unknown>, T2>(
+>testReverseMapped2 : Symbol(testReverseMapped2, Decl(reverseMappedThisTypeInference.ts, 12, 3))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 15, 36))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(reverseMappedThisTypeInference.ts, 15, 70))
+
+    obj: T2 & {
+>obj : Symbol(obj, Decl(reverseMappedThisTypeInference.ts, 15, 75))
+>T2 : Symbol(T2, Decl(reverseMappedThisTypeInference.ts, 15, 70))
+
+        [K in keyof T]: () => T[K];
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 17, 9))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 15, 36))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 15, 36))
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 17, 9))
+
+    },
+): T;
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 15, 36))
+
+const obj2 = testReverseMapped2({
+>obj2 : Symbol(obj2, Decl(reverseMappedThisTypeInference.ts, 21, 5))
+>testReverseMapped2 : Symbol(testReverseMapped2, Decl(reverseMappedThisTypeInference.ts, 12, 3))
+
+    a() {
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 21, 33))
+
+        return 0;
+    },
+    b() {
+>b : Symbol(b, Decl(reverseMappedThisTypeInference.ts, 24, 6))
+
+        return this.a();
+>this.a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 21, 33), Decl(reverseMappedThisTypeInference.ts, 21, 33))
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 21, 33), Decl(reverseMappedThisTypeInference.ts, 21, 33))
+
+    },
+});
+
+// Union with mapped type
+declare function testReverseMapped3<T extends Record<string, unknown>, T2>(
+>testReverseMapped3 : Symbol(testReverseMapped3, Decl(reverseMappedThisTypeInference.ts, 28, 3))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 31, 36))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(reverseMappedThisTypeInference.ts, 31, 70))
+
+    obj: T2 | {
+>obj : Symbol(obj, Decl(reverseMappedThisTypeInference.ts, 31, 75))
+>T2 : Symbol(T2, Decl(reverseMappedThisTypeInference.ts, 31, 70))
+
+        [K in keyof T]: () => T[K];
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 33, 9))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 31, 36))
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 31, 36))
+>K : Symbol(K, Decl(reverseMappedThisTypeInference.ts, 33, 9))
+
+    },
+): T;
+>T : Symbol(T, Decl(reverseMappedThisTypeInference.ts, 31, 36))
+
+const obj3 = testReverseMapped3({
+>obj3 : Symbol(obj3, Decl(reverseMappedThisTypeInference.ts, 37, 5))
+>testReverseMapped3 : Symbol(testReverseMapped3, Decl(reverseMappedThisTypeInference.ts, 28, 3))
+
+    a() {
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 37, 33))
+
+        return 0;
+    },
+    b() {
+>b : Symbol(b, Decl(reverseMappedThisTypeInference.ts, 40, 6))
+
+        return this.a();
+>this.a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 37, 33), Decl(reverseMappedThisTypeInference.ts, 37, 33))
+>a : Symbol(a, Decl(reverseMappedThisTypeInference.ts, 37, 33), Decl(reverseMappedThisTypeInference.ts, 37, 33))
+
+    },
+});
+
