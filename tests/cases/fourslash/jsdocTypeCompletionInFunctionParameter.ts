@@ -68,16 +68,16 @@
 //// // The function is parsed with 0 parameters, JSDoc is orphaned.
 //// // ============================================================
 ////
-////function f6(/** @type {Some/*case6*/} */) {}
+////function f6(/** @type {S/*case6*/} */) {}
 ////
 //// // ============================================================
 //// // Case 7: @typedef with named argument
 //// // ============================================================
 ////
-////function f7(/** @type {Some/*case7*/} */arg) {}
+////function f7(/** @type {S/*case7*/} */arg) {}
 ////
 //// // ============================================================
-//// // Case 8: @param tag in function JSDoc (already worked)
+//// // Case 8: @param tag in function JSDoc
 //// // ============================================================
 ////
 /////**
