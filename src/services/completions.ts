@@ -3397,28 +3397,22 @@ function getCompletionData(
             const parsed = parseIsolatedJSDocComment(commentText);
             if (parsed?.jsDoc?.tags) {
                 const posInComment = position - insideComment.pos;
-                for (const parsedTag of parsed.jsDoc.tags) { // TODO: Too slow (?)
+                for (const parsedTag of parsed.jsDoc.tags) {
                     const typeExpression = tryGetTypeExpressionFromTag(parsedTag);
-                    if (typeExpression && typeExpression.pos < posInComment && posInComment <= typeExpression.end) {
-                        insideJsDocTagTypeExpression = true;
-                        // Check if we're after a dot in a QualifiedName (for member completions)
-                        if (typeExpression.kind !== SyntaxKind.JSDocTypeExpression) break;
-                        const typeNode = typeExpression.type;
-                        if (isTypeReferenceNode(typeNode) && isQualifiedName(typeNode.typeName)) {
-                            const qualifiedName = typeNode.typeName;
-                            // Position after the dot means we want to complete members of the left side
-                            const dotPos = qualifiedName.left.end;
-                            if (posInComment > dotPos && isIdentifier(qualifiedName.left)) {
-                                const leftText = commentText.substring(qualifiedName.left.pos, qualifiedName.left.end).trim();
-                                // Find the corresponding JSDocImportTag in the source file
-                                const found = findJsDocImportNamespaceIdentifier(sourceFile, leftText);
-                                if (found) {
-                                    orphanedJsDocQualifiedNameLeft = found;
-                                }
-                            }
-                        }
-                        break;
+                    if (!typeExpression || typeExpression.pos >= posInComment || posInComment > typeExpression.end) {
+                        continue;
                     }
+                    insideJsDocTagTypeExpression = true;
+
+                    // For member completions after a dot (e.g., t.), find the namespace identifier
+                    if (typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+                        const typeNode = typeExpression.type;
+                        if (isTypeReferenceNode(typeNode) && isQualifiedName(typeNode.typeName) && posInComment > typeNode.typeName.left.end && isIdentifier(typeNode.typeName.left)) {
+                            const leftText = commentText.substring(typeNode.typeName.left.pos, typeNode.typeName.left.end).trim();
+                            orphanedJsDocQualifiedNameLeft = findJsDocImportNamespaceIdentifier(sourceFile, leftText);
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -3775,16 +3769,13 @@ function getCompletionData(
      */
     function findJsDocImportNamespaceIdentifier(sf: SourceFile, namespaceName: string): Identifier | undefined {
         for (const statement of sf.statements) {
-            // JSDoc comments are attached to statements via the jsDoc property
             const jsDocNodes = (statement as Node & { jsDoc?: JSDoc[] }).jsDoc;
-            if (!jsDocNodes) continue;
-            for (const jsDoc of jsDocNodes) {
-                if (!jsDoc.tags) continue;
-                for (const tag of jsDoc.tags) {
-                    if (isJSDocImportTag(tag) && tag.importClause?.namedBindings) {
-                        const namedBindings = tag.importClause.namedBindings;
-                        if (isNamespaceImport(namedBindings) && namedBindings.name.text === namespaceName) {
-                            return namedBindings.name;
+            for (const jsDoc of jsDocNodes || []) {
+                for (const tag of jsDoc.tags || []) {
+                    if (isJSDocImportTag(tag)) {
+                        const bindings = tag.importClause?.namedBindings;
+                        if (bindings && isNamespaceImport(bindings) && bindings.name.text === namespaceName) {
+                            return bindings.name;
                         }
                     }
                 }
