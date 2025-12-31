@@ -93,6 +93,11 @@
 ////// Branch 14: Non-existent namespace - falls back to type completions
 ////// ============================================================
 ////function branch14(/** @type {nonexistent./*b14*/} */) {}
+////
+////// ============================================================
+////// Branch 15: @satisfies tag (not just @type) - should also work
+////// ============================================================
+////function branch15(/** @satisfies {t./*b15*/} */) {}
 
 // Branch 1: Qualified name with namespace import - MEMBER completions
 verify.completions({
@@ -199,4 +204,14 @@ verify.completions({
 verify.completions({
     marker: "b14",
     includes: [{ name: "string", kind: "keyword", sortText: completion.SortText.GlobalsOrKeywords }],
+});
+
+// Branch 15: @satisfies tag - works just like @type
+verify.completions({
+    marker: "b15",
+    exact: [
+        { name: "MyType", kind: "interface", kindModifiers: "export" },
+        { name: "Nested", kind: "module", kindModifiers: "export" },
+        { name: "OtherType", kind: "interface", kindModifiers: "export" },
+    ],
 });
