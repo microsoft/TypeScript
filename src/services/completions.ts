@@ -3408,7 +3408,7 @@ function getCompletionData(
                     if (typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                         const typeNode = typeExpression.type;
                         if (isTypeReferenceNode(typeNode) && isQualifiedName(typeNode.typeName) && posInComment > typeNode.typeName.left.end && isIdentifier(typeNode.typeName.left)) {
-                            const leftText = commentText.substring(typeNode.typeName.left.pos, typeNode.typeName.left.end).trim();
+                            const leftText = commentText.substring(typeNode.typeName.left.pos, typeNode.typeName.left.end);
                             orphanedJsDocQualifiedNameLeft = findJsDocImportNamespaceIdentifier(sourceFile, leftText);
                         }
                     }
@@ -3769,8 +3769,8 @@ function getCompletionData(
     function findJsDocImportNamespaceIdentifier(sf: SourceFile, namespaceName: string): Identifier | undefined {
         for (const statement of sf.statements) {
             const jsDocNodes = (statement as Node & { jsDoc?: JSDoc[]; }).jsDoc;
-            for (const jsDoc of jsDocNodes || []) {
-                for (const tag of jsDoc.tags || []) {
+            for (const jsDoc of jsDocNodes ?? []) {
+                for (const tag of jsDoc.tags ?? []) {
                     if (isJSDocImportTag(tag)) {
                         const bindings = tag.importClause?.namedBindings;
                         if (bindings && isNamespaceImport(bindings) && bindings.name.text === namespaceName) {
