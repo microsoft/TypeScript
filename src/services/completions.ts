@@ -226,13 +226,13 @@ import {
     isParameterPropertyModifier,
     isPartOfTypeNode,
     isPossiblyTypeArgumentPosition,
-    isQualifiedName,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPropertyAccessExpression,
     isPropertyAssignment,
     isPropertyDeclaration,
     isPropertyNameLiteral,
+    isQualifiedName,
     isRegularExpressionLiteral,
     isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
@@ -261,8 +261,8 @@ import {
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocImportTag,
     JSDocParameterTag,
     JSDocPropertyTag,
@@ -318,8 +318,8 @@ import {
     ObjectTypeDeclaration,
     or,
     ParameterDeclaration,
-    parseIsolatedJSDocComment,
     ParenthesizedTypeNode,
+    parseIsolatedJSDocComment,
     positionBelongsToNode,
     positionIsASICandidate,
     positionsAreOnSameLine,
@@ -3638,7 +3638,6 @@ function getCompletionData(
         node = orphanedJsDocQualifiedNameLeft;
     }
 
-
     const semanticStart = timestamp();
     let completionKind = CompletionKind.None;
     let hasUnresolvedAutoImports = false;
@@ -3769,7 +3768,7 @@ function getCompletionData(
      */
     function findJsDocImportNamespaceIdentifier(sf: SourceFile, namespaceName: string): Identifier | undefined {
         for (const statement of sf.statements) {
-            const jsDocNodes = (statement as Node & { jsDoc?: JSDoc[] }).jsDoc;
+            const jsDocNodes = (statement as Node & { jsDoc?: JSDoc[]; }).jsDoc;
             for (const jsDoc of jsDocNodes || []) {
                 for (const tag of jsDoc.tags || []) {
                     if (isJSDocImportTag(tag)) {
