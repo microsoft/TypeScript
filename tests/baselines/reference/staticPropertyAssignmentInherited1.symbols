@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/salsa/staticPropertyAssignmentInherited1.ts] ////
+
+=== staticPropertyAssignmentInherited1.js ===
+let v = Math.random() ? '' : 0;
+>v : Symbol(v, Decl(staticPropertyAssignmentInherited1.js, 0, 3))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+class Base {
+>Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 31))
+
+  static value1 = v;
+>value1 : Symbol(Base.value1, Decl(staticPropertyAssignmentInherited1.js, 2, 12))
+>v : Symbol(v, Decl(staticPropertyAssignmentInherited1.js, 0, 3))
+
+  static value2 = v;
+>value2 : Symbol(Base.value2, Decl(staticPropertyAssignmentInherited1.js, 3, 20))
+>v : Symbol(v, Decl(staticPropertyAssignmentInherited1.js, 0, 3))
+
+  static value3 = v;
+>value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>v : Symbol(v, Decl(staticPropertyAssignmentInherited1.js, 0, 3))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 31))
+
+  static {
+    this.value1 = 10;
+>this.value1 : Symbol(Derived.value1, Decl(staticPropertyAssignmentInherited1.js, 9, 10))
+>this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>value1 : Symbol(Derived.value1, Decl(staticPropertyAssignmentInherited1.js, 9, 10))
+
+    this.value4 = {
+>this.value4 : Symbol(Derived.value4, Decl(staticPropertyAssignmentInherited1.js, 10, 21))
+>this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>value4 : Symbol(Derived.value4, Decl(staticPropertyAssignmentInherited1.js, 10, 21))
+
+      [this.value2 = 20]: ''
+>[this.value2 = 20] : Symbol([this.value2 = 20], Decl(staticPropertyAssignmentInherited1.js, 11, 19))
+>this.value2 : Symbol(Derived.value2, Decl(staticPropertyAssignmentInherited1.js, 12, 7))
+>this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>value2 : Symbol(Derived.value2, Decl(staticPropertyAssignmentInherited1.js, 12, 7))
+    }
+    this.value5 = {
+>this.value5 : Symbol(Derived.value5, Decl(staticPropertyAssignmentInherited1.js, 13, 5))
+>this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>value5 : Symbol(Derived.value5, Decl(staticPropertyAssignmentInherited1.js, 13, 5))
+
+      get [this.value3 = 30]() { return ''; }
+>[this.value3 = 30] : Symbol([this.value3 = 30], Decl(staticPropertyAssignmentInherited1.js, 14, 19))
+>this.value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
+>value3 : Symbol(Derived.value3, Decl(staticPropertyAssignmentInherited1.js, 15, 11))
+    }
+  }
+}
+
+/** @param {typeof Derived} cls  */
+function test(cls) {
+>test : Symbol(test, Decl(staticPropertyAssignmentInherited1.js, 18, 1))
+>cls : Symbol(cls, Decl(staticPropertyAssignmentInherited1.js, 21, 14))
+
+  cls.value1;
+>cls.value1 : Symbol(Derived.value1, Decl(staticPropertyAssignmentInherited1.js, 9, 10))
+>cls : Symbol(cls, Decl(staticPropertyAssignmentInherited1.js, 21, 14))
+>value1 : Symbol(Derived.value1, Decl(staticPropertyAssignmentInherited1.js, 9, 10))
+
+  cls.value2;
+>cls.value2 : Symbol(Derived.value2, Decl(staticPropertyAssignmentInherited1.js, 12, 7))
+>cls : Symbol(cls, Decl(staticPropertyAssignmentInherited1.js, 21, 14))
+>value2 : Symbol(Derived.value2, Decl(staticPropertyAssignmentInherited1.js, 12, 7))
+
+  cls.value3;
+>cls.value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>cls : Symbol(cls, Decl(staticPropertyAssignmentInherited1.js, 21, 14))
+>value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+}
+

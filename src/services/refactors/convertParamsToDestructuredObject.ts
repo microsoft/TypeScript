@@ -434,7 +434,7 @@ function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
 
 function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
     const node = getTouchingToken(file, startPosition);
-    const functionDeclaration = getContainingFunctionDeclaration(node);
+    const functionDeclaration = getContainingFunctionDeclaration(node, /*includeComputedPropertyName*/ true);
 
     // don't offer refactor on top-level JSDoc
     if (isTopLevelJSDoc(node)) return undefined;

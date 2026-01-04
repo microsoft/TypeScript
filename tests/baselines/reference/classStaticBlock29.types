@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+class C {
+>C : C
+>  : ^
+
+  static {
+    const o1 = { [await 1]: '' };
+>o1 : { 1: string; }
+>   : ^^^^^^^^^^^^^^
+>{ [await 1]: '' } : { 1: string; }
+>                  : ^^^^^^^^^^^^^^
+>[await 1] : string
+>          : ^^^^^^
+>await 1 : 1
+>        : ^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+    const o2 = { [await 1]() { return ''; } };
+>o2 : { 1(): string; }
+>   : ^^^^^^^^^^^^^^^^
+>{ [await 1]() { return ''; } } : { 1(): string; }
+>                               : ^^^^^^^^^^^^^^^^
+>[await 1] : () => string
+>          : ^^^^^^^^^^^^
+>await 1 : 1
+>        : ^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+    const o3 = { get [await 1]() { return ''; } };
+>o3 : {}
+>   : ^^
+>{ get [await 1]() { return ''; } } : {}
+>                                   : ^^
+>[await 1] : string
+>          : ^^^^^^
+>await 1 : 1
+>        : ^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+  }
+}
+

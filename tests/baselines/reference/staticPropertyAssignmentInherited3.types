@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/salsa/staticPropertyAssignmentInherited3.ts] ////
+
+=== staticPropertyAssignmentInherited3.js ===
+let v = Math.random() ? '' : 0;
+>v : string | number
+>  : ^^^^^^^^^^^^^^^
+>Math.random() ? '' : 0 : "" | 0
+>                       : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>'' : ""
+>   : ^^
+>0 : 0
+>  : ^
+
+class Base {
+>Base : Base
+>     : ^^^^
+
+  static value1 = v;
+>value1 : string | number
+>       : ^^^^^^^^^^^^^^^
+>v : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  static value2 = v;
+>value2 : string | number
+>       : ^^^^^^^^^^^^^^^
+>v : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  static value3 = v;
+>value3 : string | number
+>       : ^^^^^^^^^^^^^^^
+>v : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+class Derived extends Base {}
+>Derived : Derived
+>        : ^^^^^^^
+>Base : Base
+>     : ^^^^
+
+Derived.value1 = 10;
+>Derived.value1 = 10 : 10
+>                    : ^^
+>Derived.value1 : number
+>               : ^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>value1 : number
+>       : ^^^^^^
+>10 : 10
+>   : ^^
+
+Derived.value4 = {
+>Derived.value4 = {  [Derived.value2 = 20]: ''} : { 20: string; }
+>                                               : ^^^^^^^^^^^^^^^
+>Derived.value4 : { 20: string; }
+>               : ^^^^^^^^^^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>value4 : { 20: string; }
+>       : ^^^^^^^^^^^^^^^
+>{  [Derived.value2 = 20]: ''} : { 20: string; }
+>                              : ^^^^^^^^^^^^^^^
+
+  [Derived.value2 = 20]: ''
+>[Derived.value2 = 20] : string
+>                      : ^^^^^^
+>Derived.value2 = 20 : 20
+>                    : ^^
+>Derived.value2 : string | number
+>               : ^^^^^^^^^^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>value2 : string | number
+>       : ^^^^^^^^^^^^^^^
+>20 : 20
+>   : ^^
+>'' : ""
+>   : ^^
+}
+Derived.value5 = {
+>Derived.value5 = {  get [Derived.value3 = 30]() { return ''; }} : {}
+>                                                                : ^^
+>Derived.value5 : {}
+>               : ^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>value5 : {}
+>       : ^^
+>{  get [Derived.value3 = 30]() { return ''; }} : {}
+>                                               : ^^
+
+  get [Derived.value3 = 30]() { return ''; }
+>[Derived.value3 = 30] : string
+>                      : ^^^^^^
+>Derived.value3 = 30 : 30
+>                    : ^^
+>Derived.value3 : string | number
+>               : ^^^^^^^^^^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>value3 : string | number
+>       : ^^^^^^^^^^^^^^^
+>30 : 30
+>   : ^^
+>'' : ""
+>   : ^^
+}
+
+/** @param {typeof Derived} cls  */
+function test(cls) {
+>test : (cls: typeof Derived) => void
+>     : ^   ^^              ^^^^^^^^^
+>cls : typeof Derived
+>    : ^^^^^^^^^^^^^^
+
+  cls.value1;
+>cls.value1 : number
+>           : ^^^^^^
+>cls : typeof Derived
+>    : ^^^^^^^^^^^^^^
+>value1 : number
+>       : ^^^^^^
+
+  cls.value2;
+>cls.value2 : string | number
+>           : ^^^^^^^^^^^^^^^
+>cls : typeof Derived
+>    : ^^^^^^^^^^^^^^
+>value2 : string | number
+>       : ^^^^^^^^^^^^^^^
+
+  cls.value3;
+>cls.value3 : string | number
+>           : ^^^^^^^^^^^^^^^
+>cls : typeof Derived
+>    : ^^^^^^^^^^^^^^
+>value3 : string | number
+>       : ^^^^^^^^^^^^^^^
+}
+

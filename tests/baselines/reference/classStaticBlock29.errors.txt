@@ -1,0 +1,20 @@
+classStaticBlock29.ts(3,19): error TS18037: 'await' expression cannot be used inside a class static block.
+classStaticBlock29.ts(4,19): error TS18037: 'await' expression cannot be used inside a class static block.
+classStaticBlock29.ts(5,23): error TS18037: 'await' expression cannot be used inside a class static block.
+
+
+==== classStaticBlock29.ts (3 errors) ====
+    class C {
+      static {
+        const o1 = { [await 1]: '' };
+                      ~~~~~~~
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
+        const o2 = { [await 1]() { return ''; } };
+                      ~~~~~~~
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
+        const o3 = { get [await 1]() { return ''; } };
+                          ~~~~~~~
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
+      }
+    }
+    

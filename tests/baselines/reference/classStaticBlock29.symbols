@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock29.ts, 0, 0))
+
+  static {
+    const o1 = { [await 1]: '' };
+>o1 : Symbol(o1, Decl(classStaticBlock29.ts, 2, 9))
+>[await 1] : Symbol([await 1], Decl(classStaticBlock29.ts, 2, 16))
+
+    const o2 = { [await 1]() { return ''; } };
+>o2 : Symbol(o2, Decl(classStaticBlock29.ts, 3, 9))
+>[await 1] : Symbol([await 1], Decl(classStaticBlock29.ts, 3, 16))
+
+    const o3 = { get [await 1]() { return ''; } };
+>o3 : Symbol(o3, Decl(classStaticBlock29.ts, 4, 9))
+>[await 1] : Symbol([await 1], Decl(classStaticBlock29.ts, 4, 16))
+  }
+}
+

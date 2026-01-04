@@ -3078,12 +3078,30 @@ export function forEachTsConfigPropArray<T>(tsConfigSourceFile: TsConfigSourceFi
 
 /** @internal */
 export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
-    return findAncestor(node.parent, isFunctionLike);
+    while (node = node.parent) {
+        if (node.kind === SyntaxKind.ComputedPropertyName) {
+            node = node.parent.parent;
+            continue;
+        }
+        if (isFunctionLike(node)) {
+            return node;
+        }
+    }
+    return undefined;
 }
 
 /** @internal */
-export function getContainingFunctionDeclaration(node: Node): FunctionLikeDeclaration | undefined {
-    return findAncestor(node.parent, isFunctionLikeDeclaration);
+export function getContainingFunctionDeclaration(node: Node, includeComputedPropertyName: boolean): FunctionLikeDeclaration | undefined {
+    while (node = node.parent) {
+        if (!includeComputedPropertyName && node.kind === SyntaxKind.ComputedPropertyName) {
+            node = node.parent.parent;
+            continue;
+        }
+        if (isFunctionLikeDeclaration(node)) {
+            return node;
+        }
+    }
+    return undefined;
 }
 
 /** @internal */
@@ -3103,7 +3121,16 @@ export function getContainingClassStaticBlock(node: Node): Node | undefined {
 
 /** @internal */
 export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
-    return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
+    while (node = node.parent) {
+        if (node.kind === SyntaxKind.ComputedPropertyName) {
+            node = node.parent.parent;
+            continue;
+        }
+        if (isFunctionLikeOrClassStaticBlockDeclaration(node)) {
+            return node;
+        }
+    }
+    return undefined;
 }
 
 /** @internal */
