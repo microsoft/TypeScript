@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/salsa/staticPropertyAssignmentInherited3.ts] ////
 
 //// [staticPropertyAssignmentInherited3.js]
-let v = Math.random() ? '' : 0;
+let v = Math.random() ? '' : Math.random() ? 0 : undefined;
 
 class Base {
   static value1 = v;
@@ -32,11 +32,11 @@ function test(cls) {
 //// [staticPropertyAssignmentInherited3.d.ts]
 /** @param {typeof Derived} cls  */
 declare function test(cls: typeof Derived): void;
-declare let v: string | number;
+declare let v: string | number | undefined;
 declare class Base {
-    static value1: string | number;
-    static value2: string | number;
-    static value3: string | number;
+    static value1: string | number | undefined;
+    static value2: string | number | undefined;
+    static value3: string | number | undefined;
 }
 declare class Derived extends Base {
 }

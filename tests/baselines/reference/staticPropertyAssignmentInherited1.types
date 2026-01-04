@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/salsa/staticPropertyAssignmentInherited1.ts] ////
 
 === staticPropertyAssignmentInherited1.js ===
-let v = Math.random() ? '' : 0;
->v : string | number
->  : ^^^^^^^^^^^^^^^
->Math.random() ? '' : 0 : "" | 0
->                       : ^^^^^^
+let v = Math.random() ? '' : Math.random() ? 0 : undefined;
+>v : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() ? '' : Math.random() ? 0 : undefined : "" | 0 | undefined
+>                                                   : ^^^^^^^^^^^^^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
@@ -16,30 +16,42 @@ let v = Math.random() ? '' : 0;
 >       : ^^^^^^      
 >'' : ""
 >   : ^^
+>Math.random() ? 0 : undefined : 0 | undefined
+>                              : ^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
 >0 : 0
 >  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 class Base {
 >Base : Base
 >     : ^^^^
 
   static value1 = v;
->value1 : string | number
->       : ^^^^^^^^^^^^^^^
->v : string | number
->  : ^^^^^^^^^^^^^^^
+>value1 : string | number | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   static value2 = v;
->value2 : string | number
->       : ^^^^^^^^^^^^^^^
->v : string | number
->  : ^^^^^^^^^^^^^^^
+>value2 : string | number | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   static value3 = v;
->value3 : string | number
->       : ^^^^^^^^^^^^^^^
->v : string | number
->  : ^^^^^^^^^^^^^^^
+>value3 : string | number | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class Derived extends Base {
@@ -106,12 +118,12 @@ class Derived extends Base {
 >                   : ^^^^^^
 >this.value3 = 30 : 30
 >                 : ^^
->this.value3 : string | number
->            : ^^^^^^^^^^^^^^^
+>this.value3 : string | number | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof Derived
 >     : ^^^^^^^^^^^^^^
->value3 : string | number
->       : ^^^^^^^^^^^^^^^
+>value3 : string | number | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >30 : 30
 >   : ^^
 >'' : ""
@@ -144,11 +156,11 @@ function test(cls) {
 >       : ^^^^^^^^^^^^^^^^^^
 
   cls.value3;
->cls.value3 : string | number
->           : ^^^^^^^^^^^^^^^
+>cls.value3 : string | number | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof Derived
 >    : ^^^^^^^^^^^^^^
->value3 : string | number
->       : ^^^^^^^^^^^^^^^
+>value3 : string | number | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

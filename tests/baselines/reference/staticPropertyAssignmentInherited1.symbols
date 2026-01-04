@@ -1,14 +1,18 @@
 //// [tests/cases/conformance/salsa/staticPropertyAssignmentInherited1.ts] ////
 
 === staticPropertyAssignmentInherited1.js ===
-let v = Math.random() ? '' : 0;
+let v = Math.random() ? '' : Math.random() ? 0 : undefined;
 >v : Symbol(v, Decl(staticPropertyAssignmentInherited1.js, 0, 3))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
 
 class Base {
->Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 31))
+>Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 59))
 
   static value1 = v;
 >value1 : Symbol(Base.value1, Decl(staticPropertyAssignmentInherited1.js, 2, 12))
@@ -25,7 +29,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
->Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 31))
+>Base : Symbol(Base, Decl(staticPropertyAssignmentInherited1.js, 0, 59))
 
   static {
     this.value1 = 10;

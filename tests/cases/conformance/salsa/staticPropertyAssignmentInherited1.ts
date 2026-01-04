@@ -5,7 +5,7 @@
 
 // @filename: staticPropertyAssignmentInherited1.js
 
-let v = Math.random() ? '' : 0;
+let v = Math.random() ? '' : Math.random() ? 0 : undefined;
 
 class Base {
   static value1 = v;
