@@ -55,7 +55,7 @@ class Derived extends Base {
 
       get [this.value3 = 30]() { return ''; }
 >[this.value3 = 30] : Symbol([this.value3 = 30], Decl(staticPropertyAssignmentInherited1.js, 14, 19))
->this.value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>this.value3 : Symbol(Derived.value3, Decl(staticPropertyAssignmentInherited1.js, 15, 11))
 >this : Symbol(Derived, Decl(staticPropertyAssignmentInherited1.js, 6, 1))
 >value3 : Symbol(Derived.value3, Decl(staticPropertyAssignmentInherited1.js, 15, 11))
     }
@@ -78,8 +78,8 @@ function test(cls) {
 >value2 : Symbol(Derived.value2, Decl(staticPropertyAssignmentInherited1.js, 12, 7))
 
   cls.value3;
->cls.value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>cls.value3 : Symbol(Derived.value3, Decl(staticPropertyAssignmentInherited1.js, 15, 11))
 >cls : Symbol(cls, Decl(staticPropertyAssignmentInherited1.js, 21, 14))
->value3 : Symbol(Base.value3, Decl(staticPropertyAssignmentInherited1.js, 4, 20))
+>value3 : Symbol(Derived.value3, Decl(staticPropertyAssignmentInherited1.js, 15, 11))
 }
 

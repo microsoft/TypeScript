@@ -3111,12 +3111,19 @@ export function getContainingClass(node: Node): ClassLikeDeclaration | undefined
 
 /** @internal */
 export function getContainingClassStaticBlock(node: Node): Node | undefined {
-    return findAncestor(node.parent, n => {
-        if (isClassLike(n) || isFunctionLike(n)) {
-            return "quit";
+    while (node = node.parent) {
+        if (node.kind === SyntaxKind.ComputedPropertyName) {
+            node = node.parent.parent;
+            continue;
         }
-        return isClassStaticBlockDeclaration(n);
-    });
+        if (isClassLike(node) || isFunctionLike(node)) {
+            return undefined;
+        }
+        if (isClassStaticBlockDeclaration(node)) {
+            return node;
+        }
+    }
+    return undefined;
 }
 
 /** @internal */

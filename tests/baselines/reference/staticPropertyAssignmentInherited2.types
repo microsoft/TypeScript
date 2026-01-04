@@ -118,12 +118,12 @@ class Derived extends Base {
 >                   : ^^^^^^
 >this.value3 = 30 : 30
 >                 : ^^
->this.value3 : string | number | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.value3 : number | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >this : typeof Derived
 >     : ^^^^^^^^^^^^^^
->value3 : string | number | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value3 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >30 : 30
 >   : ^^
 >'' : ""
@@ -156,11 +156,11 @@ function test(cls) {
 >       : ^^^^^^^^^^^^^^^^^^
 
   cls.value3;
->cls.value3 : string | number | undefined
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cls.value3 : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >cls : typeof Derived
 >    : ^^^^^^^^^^^^^^
->value3 : string | number | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value3 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 }
 

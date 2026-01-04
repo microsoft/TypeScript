@@ -13676,7 +13676,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     && !getContainingClassStaticBlock(derived.valueDeclaration)
             ) {
                 symbols.set(base.escapedName, base);
-                symbols.set(base.escapedName, base);
             }
         }
     }
