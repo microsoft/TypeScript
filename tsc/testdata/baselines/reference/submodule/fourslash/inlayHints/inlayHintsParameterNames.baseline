@@ -46,7 +46,7 @@
         "range": {
           "start": {
             "line": 0,
-            "character": 26
+            "character": 27
           },
           "end": {
             "line": 0,
@@ -110,7 +110,7 @@ foo3({}, 1);
         "range": {
           "start": {
             "line": 4,
-            "character": 21
+            "character": 22
           },
           "end": {
             "line": 4,
@@ -238,7 +238,7 @@ foo4(1, +1, -1, +"1");
         "range": {
           "start": {
             "line": 9,
-            "character": 24
+            "character": 25
           },
           "end": {
             "line": 9,
@@ -270,7 +270,7 @@ foo4(1, +1, -1, +"1");
         "range": {
           "start": {
             "line": 9,
-            "character": 35
+            "character": 36
           },
           "end": {
             "line": 9,
@@ -302,7 +302,7 @@ foo4(1, +1, -1, +"1");
         "range": {
           "start": {
             "line": 9,
-            "character": 46
+            "character": 47
           },
           "end": {
             "line": 9,
@@ -333,8 +333,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 11,
-            "character": 14
+            "line": 12,
+            "character": 4
           },
           "end": {
             "line": 12,
@@ -365,8 +365,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 12,
-            "character": 14
+            "line": 13,
+            "character": 4
           },
           "end": {
             "line": 13,
@@ -397,8 +397,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 13,
-            "character": 17
+            "line": 14,
+            "character": 4
           },
           "end": {
             "line": 14,
@@ -429,8 +429,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 14,
-            "character": 12
+            "line": 15,
+            "character": 4
           },
           "end": {
             "line": 15,
@@ -461,8 +461,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 15,
-            "character": 15
+            "line": 16,
+            "character": 4
           },
           "end": {
             "line": 16,
@@ -493,8 +493,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 16,
-            "character": 15
+            "line": 17,
+            "character": 4
           },
           "end": {
             "line": 17,
@@ -525,8 +525,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 17,
-            "character": 14
+            "line": 18,
+            "character": 4
           },
           "end": {
             "line": 18,
@@ -557,8 +557,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 18,
-            "character": 14
+            "line": 19,
+            "character": 4
           },
           "end": {
             "line": 19,
@@ -589,8 +589,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 19,
-            "character": 14
+            "line": 20,
+            "character": 4
           },
           "end": {
             "line": 20,
@@ -621,8 +621,8 @@ foo4(1, +1, -1, +"1");
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 20,
-            "character": 14
+            "line": 21,
+            "character": 4
           },
           "end": {
             "line": 21,
@@ -717,8 +717,8 @@ trace(``);
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 42,
-            "character": 19
+            "line": 43,
+            "character": 4
           },
           "end": {
             "line": 43,
@@ -749,8 +749,8 @@ trace(``);
         "uri": "file:///inlayHintsParameterNames.ts",
         "range": {
           "start": {
-            "line": 43,
-            "character": 19
+            "line": 44,
+            "character": 4
           },
           "end": {
             "line": 44,

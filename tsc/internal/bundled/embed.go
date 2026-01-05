@@ -22,6 +22,11 @@ func libPath() string {
 	return scheme + "libs"
 }
 
+func IsBundled(path string) bool {
+	_, ok := splitPath(path)
+	return ok
+}
+
 // wrappedFS is implemented directly rather than going through [io/fs.FS].
 // Our vfs.FS works with file contents in terms of strings, and that's
 // what go:embed does under the hood, but going through fs.FS will cause

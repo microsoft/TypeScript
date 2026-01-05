@@ -78,7 +78,7 @@ call(1, 2);
         "range": {
           "start": {
             "line": 2,
-            "character": 15
+            "character": 16
           },
           "end": {
             "line": 2,
@@ -206,7 +206,7 @@ foo(1, 2)
         "range": {
           "start": {
             "line": 10,
-            "character": 31
+            "character": 32
           },
           "end": {
             "line": 10,
@@ -302,7 +302,7 @@ new Class(1, 2)
         "range": {
           "start": {
             "line": 16,
-            "character": 26
+            "character": 27
           },
           "end": {
             "line": 16,

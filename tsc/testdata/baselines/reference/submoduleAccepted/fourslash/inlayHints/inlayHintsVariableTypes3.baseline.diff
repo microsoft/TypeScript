@@ -1,0 +1,12 @@
+--- old.inlayHintsVariableTypes3.baseline
++++ new.inlayHintsVariableTypes3.baseline
+@@= skipped -31, +31 lines =@@
+       "value": "; "
+     },
+     {
+-      "value": "prototype"
++      "value": "prototype",
++      "location": {},
+     },
+     {
+       "value": ": "

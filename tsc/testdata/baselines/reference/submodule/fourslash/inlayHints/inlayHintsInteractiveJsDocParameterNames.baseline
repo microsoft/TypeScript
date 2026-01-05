@@ -46,7 +46,7 @@ y.foo(1, 2)
         "range": {
           "start": {
             "line": 3,
-            "character": 27
+            "character": 28
           },
           "end": {
             "line": 3,

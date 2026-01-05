@@ -29,19 +29,58 @@ const div = getCtor("div");
       "value": ": "
     },
     {
-      "value": "DivElement"
+      "value": "DivElement",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
     },
     {
       "value": "; "
     },
     {
-      "value": "prototype"
+      "value": "prototype",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 2
+          },
+          "end": {
+            "line": 2,
+            "character": 11
+          }
+        }
+      }
     },
     {
       "value": ": "
     },
     {
-      "value": "DivElement"
+      "value": "DivElement",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes3.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
     },
     {
       "value": " "

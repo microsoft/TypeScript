@@ -14,7 +14,7 @@ foo(a, 2);
         "range": {
           "start": {
             "line": 0,
-            "character": 24
+            "character": 25
           },
           "end": {
             "line": 0,
@@ -46,7 +46,7 @@ foo(v.a, v.a);
         "range": {
           "start": {
             "line": 0,
-            "character": 24
+            "character": 25
           },
           "end": {
             "line": 0,
@@ -142,7 +142,7 @@ foo(v.c, v.c);
         "range": {
           "start": {
             "line": 0,
-            "character": 24
+            "character": 25
           },
           "end": {
             "line": 0,

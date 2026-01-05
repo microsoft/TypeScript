@@ -20,7 +20,20 @@ let foo = {
       "value": "["
     },
     {
-      "value": "MySymbol"
+      "value": "MySymbol",
+      "location": {
+        "uri": "file:///inlayHintsElementAccess.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 18
+          }
+        }
+      }
     },
     {
       "value": "["

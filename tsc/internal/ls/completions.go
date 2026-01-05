@@ -2483,20 +2483,6 @@ func strPtrTo(v string) *string {
 	return &v
 }
 
-func ptrIsTrue(ptr *bool) bool {
-	if ptr == nil {
-		return false
-	}
-	return *ptr
-}
-
-func ptrIsFalse(ptr *bool) bool {
-	if ptr == nil {
-		return false
-	}
-	return !*ptr
-}
-
 func boolToPtr(v bool) *bool {
 	if v {
 		return ptrTo(true)
@@ -5902,7 +5888,12 @@ func getJSDocParamAnnotation(
 						nodebuilder.FlagsUseSingleQuotesForStringLiteralType,
 						nodebuilder.FlagsNone,
 					)
-					typeNode := typeChecker.TypeToTypeNode(inferredType, ast.FindAncestor(initializer, ast.IsFunctionLike), builderFlags)
+					typeNode := typeChecker.TypeToTypeNode(
+						inferredType,
+						ast.FindAncestor(initializer, ast.IsFunctionLike),
+						builderFlags,
+						nil, /*idToSymbol*/
+					)
 					if typeNode != nil {
 						emitContext := printer.NewEmitContext()
 						// !!! snippet p

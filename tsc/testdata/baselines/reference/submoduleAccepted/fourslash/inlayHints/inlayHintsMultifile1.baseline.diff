@@ -10,13 +10,15 @@
 +      "value": ": "
 +    },
 +    {
-+      "value": "Promise"
++      "value": "Promise",
++      "location": {},
 +    },
 +    {
 +      "value": "<"
 +    },
 +    {
-+      "value": "Foo"
++      "value": "Foo",
++      "location": {},
 +    },
 +    {
 +      "value": ">"
@@ -25,7 +27,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +24 lines =@@
+@@= skipped -8, +26 lines =@@
  function bar () { return import('./a') }
                 ^
  {
@@ -35,7 +37,8 @@
 +      "value": ": "
 +    },
 +    {
-+      "value": "Promise"
++      "value": "Promise",
++      "location": {},
 +    },
 +    {
 +      "value": "<"
@@ -59,7 +62,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +33 lines =@@
+@@= skipped -8, +34 lines =@@
  async function main () {
                        ^
  {
@@ -69,7 +72,8 @@
 +      "value": ": "
 +    },
 +    {
-+      "value": "Promise"
++      "value": "Promise",
++      "location": {},
 +    },
 +    {
 +      "value": "<"
@@ -84,7 +88,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +24 lines =@@
+@@= skipped -8, +25 lines =@@
      const a = await foo()
             ^
  {
@@ -94,7 +98,8 @@
 +      "value": ": "
 +    },
 +    {
-+      "value": "Foo"
++      "value": "Foo",
++      "location": {},
 +    }
 +  ],
    "kind": 1,

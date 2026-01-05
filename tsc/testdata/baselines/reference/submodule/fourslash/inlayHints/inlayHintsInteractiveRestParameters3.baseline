@@ -46,7 +46,7 @@ fn(...foo, 3, 4);
         "range": {
           "start": {
             "line": 0,
-            "character": 33
+            "character": 34
           },
           "end": {
             "line": 0,
@@ -78,7 +78,7 @@ fn(...foo, 3, 4);
         "range": {
           "start": {
             "line": 0,
-            "character": 44
+            "character": 45
           },
           "end": {
             "line": 0,

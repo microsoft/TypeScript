@@ -142,7 +142,7 @@ foo2(1, 2, 3)
         "range": {
           "start": {
             "line": 2,
-            "character": 24
+            "character": 25
           },
           "end": {
             "line": 2,

@@ -35,7 +35,8 @@
 +      "value": " "
 +    },
 +    {
-+      "value": "foo"
++      "value": "foo",
++      "location": {},
 +    },
 +    {
 +      "value": ": "
@@ -47,7 +48,8 @@
 +      "value": "; "
 +    },
 +    {
-+      "value": "bar"
++      "value": "bar",
++      "location": {},
 +    },
 +    {
 +      "value": ": "
@@ -65,7 +67,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +45 lines =@@
+@@= skipped -8, +47 lines =@@
  const b = array;
         ^
  {

@@ -20,7 +20,20 @@ test((state) => {});
       "value": "["
     },
     {
-      "value": "STATE_SIGNAL"
+      "value": "STATE_SIGNAL",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes5.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
     },
     {
       "value": "]"

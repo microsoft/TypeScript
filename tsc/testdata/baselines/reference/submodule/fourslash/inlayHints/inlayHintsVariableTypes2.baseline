@@ -39,7 +39,20 @@ const a = object;
       "value": " "
     },
     {
-      "value": "foo"
+      "value": "foo",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -51,7 +64,20 @@ const a = object;
       "value": "; "
     },
     {
-      "value": "bar"
+      "value": "bar",
+      "location": {
+        "uri": "file:///inlayHintsVariableTypes2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 25
+          },
+          "end": {
+            "line": 0,
+            "character": 28
+          }
+        }
+      }
     },
     {
       "value": ": "

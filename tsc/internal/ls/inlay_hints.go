@@ -310,20 +310,24 @@ func (s *inlayHintState) getParameterDeclarationTypeHints(symbol *ast.Symbol) *l
 func (s *inlayHintState) typeToInlayHintParts(t *checker.Type) lsproto.StringOrInlayHintLabelParts {
 	flags := nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsAllowUniqueESSymbolType |
 		nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope
-	typeNode := s.checker.TypeToTypeNode(t, nil /*enclosingDeclaration*/, flags)
+	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+	// !!! Avoid type node reuse so we collect identifier symbols.
+	typeNode := s.checker.TypeToTypeNode(t, nil /*enclosingDeclaration*/, flags, idToSymbol)
 	debug.AssertIsDefined(typeNode, "should always get typenode")
 	return lsproto.StringOrInlayHintLabelParts{
-		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode)),
+		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}
 }
 
 func (s *inlayHintState) typePredicateToInlayHintParts(typePredicate *checker.TypePredicate) lsproto.StringOrInlayHintLabelParts {
 	flags := nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsAllowUniqueESSymbolType |
 		nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope
-	typeNode := s.checker.TypePredicateToTypePredicateNode(typePredicate, nil /*enclosingDeclaration*/, flags)
+	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+	// !!! Avoid type node reuse so we collect identifier symbols.
+	typeNode := s.checker.TypePredicateToTypePredicateNode(typePredicate, nil /*enclosingDeclaration*/, flags, idToSymbol)
 	debug.AssertIsDefined(typeNode, "should always get typePredicateNode")
 	return lsproto.StringOrInlayHintLabelParts{
-		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode)),
+		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}
 }
 
@@ -414,7 +418,7 @@ func isModuleReferenceType(t *checker.Type) bool {
 	return symbol != nil && symbol.Flags&ast.SymbolFlagsModule != 0
 }
 
-func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.InlayHintLabelPart {
+func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) []*lsproto.InlayHintLabelPart {
 	var parts []*lsproto.InlayHintLabelPart
 
 	var visitForDisplayParts func(node *ast.Node)
@@ -441,9 +445,8 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 		case ast.KindIdentifier:
 			identifierText := node.Text()
 			var name *ast.Node
-			// !!! This won't work in Corsa since we don't store symbols on identifiers. We need another strategy for it.
-			if node.Symbol() != nil && len(node.Symbol().Declarations) != 0 {
-				name = ast.GetNameOfDeclaration(node.Symbol().Declarations[0])
+			if symbol := idToSymbol[node]; symbol != nil && len(symbol.Declarations) != 0 {
+				name = ast.GetNameOfDeclaration(symbol.Declarations[0])
 			}
 			if name != nil {
 				parts = append(parts, s.getNodeDisplayPart(identifierText, name))
@@ -760,11 +763,13 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node) []*lsproto.Inlay
 
 func (s *inlayHintState) getNodeDisplayPart(text string, node *ast.Node) *lsproto.InlayHintLabelPart {
 	file := ast.GetSourceFileOfNode(node)
+	pos := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/)
+	end := node.End()
 	return &lsproto.InlayHintLabelPart{
 		Value: text,
 		Location: &lsproto.Location{
 			Uri:   lsconv.FileNameToDocumentURI(file.FileName()),
-			Range: s.converters.ToLSPRange(file, node.Loc),
+			Range: s.converters.ToLSPRange(file, core.NewTextRange(pos, end)),
 		},
 	}
 }

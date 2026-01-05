@@ -177,10 +177,19 @@ func (b *NodeBuilder) TypeToTypeNode(typ *Type, enclosingDeclaration *ast.Node, 
 // var _ NodeBuilderInterface = NewNodeBuilderAPI(nil, nil)
 
 func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
-	impl := newNodeBuilderImpl(ch, e)
+	return NewNodeBuilderEx(ch, e, nil /*idToSymbol*/)
+}
+
+func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
+	impl := newNodeBuilderImpl(ch, e, idToSymbol)
 	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), basicHost: ch.program}
 }
 
 func (c *Checker) getNodeBuilder() *NodeBuilder {
-	return NewNodeBuilder(c, printer.NewEmitContext())
+	return c.getNodeBuilderEx(nil /*idToSymbol*/)
+}
+
+func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
+	b := NewNodeBuilderEx(c, printer.NewEmitContext(), idToSymbol)
+	return b
 }

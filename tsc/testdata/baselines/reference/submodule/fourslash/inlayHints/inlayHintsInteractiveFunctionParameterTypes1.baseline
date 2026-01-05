@@ -115,7 +115,20 @@
       "value": "("
     },
     {
-      "value": "c"
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 24
+          },
+          "end": {
+            "line": 7,
+            "character": 25
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -124,7 +137,20 @@
       "value": "("
     },
     {
-      "value": "d"
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 28
+          },
+          "end": {
+            "line": 7,
+            "character": 29
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -226,13 +252,39 @@
       "value": "<"
     },
     {
-      "value": "X"
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 6
+          },
+          "end": {
+            "line": 22,
+            "character": 7
+          }
+        }
+      }
     },
     {
       "value": ", "
     },
     {
-      "value": "Y"
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 9
+          },
+          "end": {
+            "line": 22,
+            "character": 10
+          }
+        }
+      }
     },
     {
       "value": ">"
@@ -241,13 +293,39 @@
       "value": "("
     },
     {
-      "value": "x"
+      "value": "x",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 12
+          },
+          "end": {
+            "line": 22,
+            "character": 13
+          }
+        }
+      }
     },
     {
       "value": ": "
     },
     {
-      "value": "X"
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 6
+          },
+          "end": {
+            "line": 22,
+            "character": 7
+          }
+        }
+      }
     },
     {
       "value": ")"
@@ -256,7 +334,20 @@
       "value": ": "
     },
     {
-      "value": "Y"
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 9
+          },
+          "end": {
+            "line": 22,
+            "character": 10
+          }
+        }
+      }
     },
     {
       "value": "; "
@@ -286,7 +377,20 @@
       "value": "; "
     },
     {
-      "value": "a"
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 5
+          },
+          "end": {
+            "line": 14,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -298,7 +402,20 @@
       "value": "; "
     },
     {
-      "value": "b"
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 5
+          },
+          "end": {
+            "line": 15,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -316,7 +433,20 @@
       "value": " "
     },
     {
-      "value": "c"
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 14
+          },
+          "end": {
+            "line": 16,
+            "character": 15
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -328,7 +458,20 @@
       "value": "; "
     },
     {
-      "value": "d"
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 5
+          },
+          "end": {
+            "line": 17,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": "?"
@@ -343,7 +486,20 @@
       "value": "; "
     },
     {
-      "value": "e"
+      "value": "e",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 18,
+            "character": 5
+          },
+          "end": {
+            "line": 18,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": "("
@@ -361,7 +517,20 @@
       "value": "; "
     },
     {
-      "value": "f"
+      "value": "f",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 5
+          },
+          "end": {
+            "line": 19,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": "?"
@@ -382,13 +551,39 @@
       "value": "; "
     },
     {
-      "value": "g"
+      "value": "g",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 5
+          },
+          "end": {
+            "line": 20,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": "<"
     },
     {
-      "value": "T"
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 7
+          },
+          "end": {
+            "line": 20,
+            "character": 8
+          }
+        }
+      }
     },
     {
       "value": ">"
@@ -403,13 +598,39 @@
       "value": ": "
     },
     {
-      "value": "T"
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 7
+          },
+          "end": {
+            "line": 20,
+            "character": 8
+          }
+        }
+      }
     },
     {
       "value": "; "
     },
     {
-      "value": "h"
+      "value": "h",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 5
+          },
+          "end": {
+            "line": 21,
+            "character": 6
+          }
+        }
+      }
     },
     {
       "value": "?"
@@ -418,13 +639,39 @@
       "value": "<"
     },
     {
-      "value": "X"
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 8
+          },
+          "end": {
+            "line": 21,
+            "character": 9
+          }
+        }
+      }
     },
     {
       "value": ", "
     },
     {
-      "value": "Y"
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 11
+          },
+          "end": {
+            "line": 21,
+            "character": 12
+          }
+        }
+      }
     },
     {
       "value": ">"
@@ -433,13 +680,39 @@
       "value": "("
     },
     {
-      "value": "x"
+      "value": "x",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 14
+          },
+          "end": {
+            "line": 21,
+            "character": 15
+          }
+        }
+      }
     },
     {
       "value": ": "
     },
     {
-      "value": "X"
+      "value": "X",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 8
+          },
+          "end": {
+            "line": 21,
+            "character": 9
+          }
+        }
+      }
     },
     {
       "value": ")"
@@ -448,7 +721,20 @@
       "value": ": "
     },
     {
-      "value": "Y"
+      "value": "Y",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 21,
+            "character": 11
+          },
+          "end": {
+            "line": 21,
+            "character": 12
+          }
+        }
+      }
     },
     {
       "value": " "
@@ -501,7 +787,20 @@ foo4(p => {})
       "value": ": "
     },
     {
-      "value": "Thing"
+      "value": "Thing",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 10
+          },
+          "end": {
+            "line": 30,
+            "character": 15
+          }
+        }
+      }
     }
   ],
   "kind": 1,

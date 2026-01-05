@@ -11,13 +11,39 @@ async function foo () {
       "value": ": "
     },
     {
-      "value": "Promise"
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
     },
     {
       "value": "<"
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///a.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
     },
     {
       "value": ">"
@@ -39,7 +65,20 @@ function bar () { return import('./a') }
       "value": ": "
     },
     {
-      "value": "Promise"
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
     },
     {
       "value": "<"
@@ -76,7 +115,20 @@ async function main () {
       "value": ": "
     },
     {
-      "value": "Promise"
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
     },
     {
       "value": "<"
@@ -104,7 +156,20 @@ async function main () {
       "value": ": "
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///a.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
     }
   ],
   "kind": 1,

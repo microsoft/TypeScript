@@ -99,7 +99,8 @@
 +      "value": "("
 +    },
 +    {
-+      "value": "c"
++      "value": "c",
++      "location": {},
 +    },
 +    {
 +      "value": ": "
@@ -108,7 +109,8 @@
 +      "value": "("
 +    },
 +    {
-+      "value": "d"
++      "value": "d",
++      "location": {},
 +    },
 +    {
 +      "value": ": "
@@ -144,7 +146,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +57 lines =@@
+@@= skipped -8, +59 lines =@@
      a(d => {})
         ^
  {
@@ -198,7 +200,8 @@
 +      "value": " "
 +    },
 +    {
-+      "value": "a"
++      "value": "a",
++      "location": {},
 +    },
 +    {
 +      "value": ": "
@@ -210,7 +213,8 @@
 +      "value": "; "
 +    },
 +    {
-+      "value": "b"
++      "value": "b",
++      "location": {},
 +    },
 +    {
 +      "value": ": "

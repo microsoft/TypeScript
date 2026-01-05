@@ -46,7 +46,7 @@ function c2 () { foo2(1, 2); }
         "range": {
           "start": {
             "line": 1,
-            "character": 25
+            "character": 26
           },
           "end": {
             "line": 1,
@@ -110,7 +110,7 @@ function c3 () { foo3(1, 2); }
         "range": {
           "start": {
             "line": 2,
-            "character": 25
+            "character": 26
           },
           "end": {
             "line": 2,
@@ -174,7 +174,7 @@ function c4 () { foo4(1, 2); }
         "range": {
           "start": {
             "line": 3,
-            "character": 25
+            "character": 26
           },
           "end": {
             "line": 3,

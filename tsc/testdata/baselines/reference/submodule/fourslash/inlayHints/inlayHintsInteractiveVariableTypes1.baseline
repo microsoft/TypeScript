@@ -85,7 +85,20 @@
       "value": ": "
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 10
+          },
+          "end": {
+            "line": 2,
+            "character": 13
+          }
+        }
+      }
     },
     {
       "value": "[]"
@@ -97,7 +110,20 @@
       "value": " => "
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 10
+          },
+          "end": {
+            "line": 2,
+            "character": 13
+          }
+        }
+      }
     }
   ],
   "kind": 1,
@@ -143,13 +169,39 @@
       "value": " "
     },
     {
-      "value": "a"
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 21
+          },
+          "end": {
+            "line": 19,
+            "character": 22
+          }
+        }
+      }
     },
     {
       "value": ": "
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 10
+          },
+          "end": {
+            "line": 2,
+            "character": 13
+          }
+        }
+      }
     },
     {
       "value": " "
@@ -164,7 +216,20 @@
       "value": " => "
     },
     {
-      "value": "Foo"
+      "value": "Foo",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 10
+          },
+          "end": {
+            "line": 2,
+            "character": 13
+          }
+        }
+      }
     }
   ],
   "kind": 1,

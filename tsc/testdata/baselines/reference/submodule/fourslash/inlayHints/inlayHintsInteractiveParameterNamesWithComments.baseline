@@ -78,7 +78,7 @@ fn(/* nobody knows exactly what this param is */ 42);
         "range": {
           "start": {
             "line": 2,
-            "character": 33
+            "character": 34
           },
           "end": {
             "line": 2,
@@ -110,7 +110,7 @@ fn(/* nobody knows exactly what this param is */ 42);
         "range": {
           "start": {
             "line": 2,
-            "character": 53
+            "character": 54
           },
           "end": {
             "line": 2,

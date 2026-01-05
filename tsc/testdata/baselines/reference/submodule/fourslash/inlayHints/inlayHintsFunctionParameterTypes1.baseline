@@ -115,7 +115,20 @@ foo3(a => {
       "value": "("
     },
     {
-      "value": "c"
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 23
+          },
+          "end": {
+            "line": 7,
+            "character": 24
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -124,7 +137,20 @@ foo3(a => {
       "value": "("
     },
     {
-      "value": "d"
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 27
+          },
+          "end": {
+            "line": 7,
+            "character": 28
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -223,7 +249,20 @@ const foo5: F2 = (a) => { }
       "value": " "
     },
     {
-      "value": "a"
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 4
+          },
+          "end": {
+            "line": 14,
+            "character": 5
+          }
+        }
+      }
     },
     {
       "value": ": "
@@ -235,7 +274,20 @@ const foo5: F2 = (a) => { }
       "value": "; "
     },
     {
-      "value": "b"
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 4
+          },
+          "end": {
+            "line": 15,
+            "character": 5
+          }
+        }
+      }
     },
     {
       "value": ": "
