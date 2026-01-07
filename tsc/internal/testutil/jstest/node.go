@@ -38,7 +38,7 @@ func EvalNodeScriptWithTS[T any](t testing.TB, script string, dir string, args .
 	if dir == "" {
 		dir = t.TempDir()
 	}
-	tsSrc := tspath.NormalizePath(filepath.Join(repo.RootPath, "node_modules/typescript/lib/typescript.js"))
+	tsSrc := tspath.NormalizePath(filepath.Join(repo.RootPath(), "node_modules/typescript/lib/typescript.js"))
 	if tsSrc[0] == '/' {
 		tsSrc = "file://" + tsSrc
 	} else {

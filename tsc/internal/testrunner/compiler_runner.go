@@ -119,7 +119,7 @@ func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 	}
 }
 
-var localBasePath = filepath.Join(repo.TestDataPath, "baselines", "local")
+var localBasePath = filepath.Join(repo.TestDataPath(), "baselines", "local")
 
 func (r *CompilerBaselineRunner) cleanUpLocal(t *testing.T) {
 	localPath := filepath.Join(localBasePath, core.IfElse(r.isSubmodule, "diff", ""), r.testSuitName)
@@ -402,7 +402,7 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, is
 		}
 
 		defer testutil.RecoverAndFail(t, "Panic on creating js output for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
 		if isSubmodule {
 			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
 		}
@@ -425,7 +425,7 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, is
 func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string, isSubmodule bool) {
 	t.Run("sourcemap", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map output for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
 		if isSubmodule {
 			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
 		}
@@ -445,7 +445,7 @@ func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string, isS
 func (c *compilerTest) verifySourceMapRecord(t *testing.T, suiteName string, isSubmodule bool) {
 	t.Run("sourcemap record", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map record for test "+c.filename)
-		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
 		if isSubmodule {
 			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
 		}
@@ -475,7 +475,7 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isS
 		},
 	)
 
-	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
 	if isSubmodule {
 		headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
 	}

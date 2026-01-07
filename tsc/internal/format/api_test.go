@@ -51,7 +51,7 @@ func TestFormat(t *testing.T) {
 			InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 		}, "\n")
 		repo.SkipIfNoTypeScriptSubmodule(t)
-		filePath := filepath.Join(repo.TypeScriptSubmodulePath, "src/compiler/checker.ts")
+		filePath := filepath.Join(repo.TypeScriptSubmodulePath(), "src/compiler/checker.ts")
 		fileContent, err := os.ReadFile(filePath)
 		assert.NilError(t, err)
 		text := string(fileContent)
@@ -80,7 +80,7 @@ func BenchmarkFormat(b *testing.B) {
 		InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 	}, "\n")
 	repo.SkipIfNoTypeScriptSubmodule(b)
-	filePath := filepath.Join(repo.TypeScriptSubmodulePath, "src/compiler/checker.ts")
+	filePath := filepath.Join(repo.TypeScriptSubmodulePath(), "src/compiler/checker.ts")
 	fileContent, err := os.ReadFile(filePath)
 	assert.NilError(b, err)
 	text := string(fileContent)

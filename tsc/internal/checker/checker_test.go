@@ -66,7 +66,7 @@ func BenchmarkNewChecker(b *testing.B) {
 	fs := osvfs.FS()
 	fs = bundled.WrapFS(fs)
 
-	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
+	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath()), "src", "compiler")
 
 	host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil)
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, nil, host, nil)

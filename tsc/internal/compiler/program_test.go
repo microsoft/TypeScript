@@ -292,7 +292,7 @@ func BenchmarkNewProgram(b *testing.B) {
 	b.Run("compiler", func(b *testing.B) {
 		repo.SkipIfNoTypeScriptSubmodule(b)
 
-		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
+		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath(), "src", "compiler"))
 
 		fs := osvfs.FS()
 		fs = bundled.WrapFS(fs)

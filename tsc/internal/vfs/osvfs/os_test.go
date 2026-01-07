@@ -21,7 +21,7 @@ func TestOS(t *testing.T) {
 	t.Run("ReadFile", func(t *testing.T) {
 		t.Parallel()
 
-		goMod := filepath.Join(repo.RootPath, "go.mod")
+		goMod := filepath.Join(repo.RootPath(), "go.mod")
 		goModPath := tspath.NormalizePath(goMod)
 
 		expectedRaw, err := os.ReadFile(goMod)

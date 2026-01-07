@@ -80,7 +80,7 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 var submoduleAcceptedFileNames = sync.OnceValue(func() *collections.Set[string] {
 	var set collections.Set[string]
 
-	submoduleAccepted := filepath.Join(repo.TestDataPath, "submoduleAccepted.txt")
+	submoduleAccepted := filepath.Join(repo.TestDataPath(), "submoduleAccepted.txt")
 	if content, err := os.ReadFile(submoduleAccepted); err == nil {
 		for line := range strings.SplitSeq(string(content), "\n") {
 			line = strings.TrimSpace(line)
@@ -214,7 +214,7 @@ func writeComparison(t *testing.T, actualContent string, local, reference string
 }
 
 var (
-	localRoot              = filepath.Join(repo.TestDataPath, "baselines", "local")
-	referenceRoot          = filepath.Join(repo.TestDataPath, "baselines", "reference")
-	submoduleReferenceRoot = filepath.Join(repo.TypeScriptSubmodulePath, "tests", "baselines", "reference")
+	localRoot              = filepath.Join(repo.TestDataPath(), "baselines", "local")
+	referenceRoot          = filepath.Join(repo.TestDataPath(), "baselines", "reference")
+	submoduleReferenceRoot = filepath.Join(repo.TypeScriptSubmodulePath(), "tests", "baselines", "reference")
 )

@@ -106,7 +106,7 @@ func FuzzParser(f *testing.F) {
 	}
 
 	for _, test := range tests {
-		root := filepath.Join(repo.TypeScriptSubmodulePath, test)
+		root := filepath.Join(repo.TypeScriptSubmodulePath(), test)
 
 		for file := range allParsableFiles(f, root) {
 			sourceText, err := os.ReadFile(file.path)
@@ -117,9 +117,9 @@ func FuzzParser(f *testing.F) {
 	}
 
 	testDirs := []string{
-		filepath.Join(repo.TypeScriptSubmodulePath, "tests/cases/compiler"),
-		filepath.Join(repo.TypeScriptSubmodulePath, "tests/cases/conformance"),
-		filepath.Join(repo.TestDataPath, "tests/cases/compiler"),
+		filepath.Join(repo.TypeScriptSubmodulePath(), "tests/cases/compiler"),
+		filepath.Join(repo.TypeScriptSubmodulePath(), "tests/cases/conformance"),
+		filepath.Join(repo.TestDataPath(), "tests/cases/compiler"),
 	}
 
 	for _, testDir := range testDirs {

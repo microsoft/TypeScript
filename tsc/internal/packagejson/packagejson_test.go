@@ -17,8 +17,8 @@ import (
 )
 
 var packageJsonFixtures = []filefixture.Fixture{
-	filefixture.FromFile("package.json", filepath.Join(repo.RootPath, "package.json")),
-	filefixture.FromFile("date-fns.json", filepath.Join(repo.TestDataPath, "fixtures", "packagejson", "date-fns.json")),
+	filefixture.FromFile("package.json", filepath.Join(repo.RootPath(), "package.json")),
+	filefixture.FromFile("date-fns.json", filepath.Join(repo.TestDataPath(), "fixtures", "packagejson", "date-fns.json")),
 }
 
 func BenchmarkPackageJSON(b *testing.B) {

@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	libInputDir     = filepath.Join(repo.TypeScriptSubmodulePath, "src", "lib")
-	copyrightNotice = filepath.Join(repo.TypeScriptSubmodulePath, "scripts", "CopyrightNotice.txt")
+	libInputDir     = filepath.Join(repo.TypeScriptSubmodulePath(), "src", "lib")
+	copyrightNotice = filepath.Join(repo.TypeScriptSubmodulePath(), "scripts", "CopyrightNotice.txt")
 )
 
 func main() {

@@ -20,7 +20,7 @@ import (
 )
 
 var testFiles = []string{
-	filepath.Join(repo.TypeScriptSubmodulePath, "src/services/mapCode.ts"),
+	filepath.Join(repo.TypeScriptSubmodulePath(), "src/services/mapCode.ts"),
 }
 
 func TestGetTokenAtPosition(t *testing.T) {

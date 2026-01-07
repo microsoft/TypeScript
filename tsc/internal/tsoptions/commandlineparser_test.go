@@ -312,7 +312,7 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
 		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, &tsoptionstest.VfsParseConfigHost{
 			Vfs:              osvfs.FS(),
-			CurrentDirectory: tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath),
+			CurrentDirectory: tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath()),
 		})
 
 		newBaselineProjects := strings.Join(parsed.Projects, ",")
@@ -416,7 +416,7 @@ func createSubScenario(scenarioKind string, subScenarioName string, commandline 
 	baselineFileName := "tests/baselines/reference/config/commandLineParsing/" + subScenarioName + ".js"
 
 	result := &commandLineSubScenario{
-		filefixture.FromFile(subScenarioName, filepath.Join(repo.TypeScriptSubmodulePath, baselineFileName)),
+		filefixture.FromFile(subScenarioName, filepath.Join(repo.TypeScriptSubmodulePath(), baselineFileName)),
 		subScenarioName,
 		commandline,
 		nil,
