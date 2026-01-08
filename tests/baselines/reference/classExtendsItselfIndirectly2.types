@@ -13,7 +13,7 @@ class C extends N.E { foo: string; } // error
 >foo : string
 >    : ^^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -27,7 +27,7 @@ module M {
 
 }
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -44,7 +44,7 @@ module N {
 >    : ^^^^^^
 }
 
-module O {
+namespace O {
 >O : typeof O
 >  : ^^^^^^^^
 
@@ -60,7 +60,7 @@ module O {
 >foo : T
 >    : ^
 
-    module P {
+    namespace P {
 >P : typeof P
 >  : ^^^^^^^^
 
@@ -73,7 +73,7 @@ module O {
 >    : ^
     }
 
-    module Q {
+    namespace Q {
 >Q : typeof Q
 >  : ^^^^^^^^
 

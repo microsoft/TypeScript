@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/missingTypeArguments3.ts] ////
 
 === missingTypeArguments3.ts ===
-declare module linq {
+declare namespace linq {
 >linq : Symbol(linq, Decl(missingTypeArguments3.ts, 0, 0))
 
     interface Enumerable<T> {
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
 
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
@@ -21,7 +21,7 @@ declare module linq {
 >element : Symbol(element, Decl(missingTypeArguments3.ts, 4, 36))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
@@ -38,7 +38,7 @@ declare module linq {
 >element : Symbol(element, Decl(missingTypeArguments3.ts, 5, 85))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
 >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 5, 16))
 >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
@@ -58,7 +58,7 @@ declare module linq {
     interface OrderedEnumerable<T> extends Enumerable<T> {
 >OrderedEnumerable : Symbol(OrderedEnumerable, Decl(missingTypeArguments3.ts, 7, 5))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
 
         ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
@@ -76,7 +76,7 @@ declare module linq {
 >Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 13, 23))
 >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 13, 28))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 13, 28))
 
         Key(): TKey;
@@ -95,7 +95,7 @@ declare module linq {
         Get(key): Enumerable<any>;
 >Get : Symbol(Lookup.Get, Decl(missingTypeArguments3.ts, 18, 24))
 >key : Symbol(key, Decl(missingTypeArguments3.ts, 19, 12))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 
         Contains(key): boolean;
 >Contains : Symbol(Lookup.Contains, Decl(missingTypeArguments3.ts, 19, 34))
@@ -103,7 +103,7 @@ declare module linq {
 
         ToEnumerable(): Enumerable<Grouping<TKey, any>>;
 >ToEnumerable : Symbol(Lookup.ToEnumerable, Decl(missingTypeArguments3.ts, 20, 31))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 17, 21))
     }
@@ -151,7 +151,7 @@ declare module linq {
 
         ToEnumerable(): Enumerable<KeyValuePair<TKey, TValue>>;
 >ToEnumerable : Symbol(Dictionary.ToEnumerable, Decl(missingTypeArguments3.ts, 31, 24))
->Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 24))
 >KeyValuePair : Symbol(KeyValuePair, Decl(missingTypeArguments3.ts, 33, 5))
 >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
 >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))

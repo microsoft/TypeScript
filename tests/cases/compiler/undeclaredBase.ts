@@ -1,2 +1,2 @@
-module M { export class C extends M.I { } }
+namespace M { export class C extends M.I { } }
 

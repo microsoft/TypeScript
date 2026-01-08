@@ -1,5 +1,5 @@
 // @module: esnext
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @outdir: out/
 // @fullEmitPaths: true
 // @resolveJsonModule: true

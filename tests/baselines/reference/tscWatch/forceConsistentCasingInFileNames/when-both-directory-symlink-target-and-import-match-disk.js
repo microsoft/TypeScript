@@ -26,7 +26,6 @@ a;b;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -59,6 +58,11 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_mod
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY/a.ts
@@ -68,7 +72,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -164,11 +168,7 @@ Program files::
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/XY/a.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -209,6 +209,11 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
   options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY/a.ts
@@ -218,7 +223,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -293,11 +298,7 @@ Program files::
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/XY/a.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

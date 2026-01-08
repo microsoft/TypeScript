@@ -3,14 +3,14 @@
 //// [circularImportAlias.ts]
 // expected no error
 
-module B {
+namespace B {
     export import a = A;
     export class D extends a.C {
         id: number;
     }
 }
 
-module A {
+namespace A {
     export class C { name: string }
     export import b = B;
 }

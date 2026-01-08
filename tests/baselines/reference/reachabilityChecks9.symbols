@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/reachabilityChecks9.ts] ////
+
+=== reachabilityChecks9.ts ===
+// https://github.com/microsoft/TypeScript/issues/55562
+
+function g(str: string) {
+>g : Symbol(g, Decl(reachabilityChecks9.ts, 0, 0))
+>str : Symbol(str, Decl(reachabilityChecks9.ts, 2, 11))
+
+  switch (str) {
+>str : Symbol(str, Decl(reachabilityChecks9.ts, 2, 11))
+
+    case "a":
+      return;
+      console.log("1");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+      console.log("2");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    case "b":
+      console.log("3");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+function h(str: string) {
+>h : Symbol(h, Decl(reachabilityChecks9.ts, 11, 1))
+>str : Symbol(str, Decl(reachabilityChecks9.ts, 13, 11))
+
+  switch (str) {
+>str : Symbol(str, Decl(reachabilityChecks9.ts, 13, 11))
+
+    case "a":
+      console.log("1");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    default:
+      return;
+      console.log("2");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+      console.log("3");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    case "b":
+      console.log("4");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+

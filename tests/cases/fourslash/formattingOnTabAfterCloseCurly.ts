@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module Tools {/*1*/
+////namespace Tools {/*1*/
 ////    export enum NodeType {/*2*/
 ////        Error,/*3*/
 ////        Comment,/*4*/
@@ -13,7 +13,7 @@
 
 format.document();
 goTo.marker("1");
-verify.currentLineContentIs("module Tools {");
+verify.currentLineContentIs("namespace Tools {");
 goTo.marker("2");
 verify.currentLineContentIs("    export enum NodeType {");
 goTo.marker("3");

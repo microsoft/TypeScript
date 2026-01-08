@@ -1,0 +1,51 @@
+packages/lab/tsconfig.json(5,9): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== packages/lab/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "dist",
+            "declaration": true,
+            "baseUrl": "../",
+            ~~~~~~~~~
+!!! error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5101:   Visit https://aka.ms/ts6 for migration information.
+            "paths": {
+                "@ts-bug/core": ["./core/src"],
+                "@ts-bug/core/*": ["./core/src/*"],
+                "@ts-bug/lab": ["./lab/src"],
+                "@ts-bug/lab/*": ["./lab/src/*"],
+                "@ts-bug/styles": ["./styles/src"],
+                "@ts-bug/styles/*": ["./styles/src/*"]
+            }
+        }
+    }
+==== packages/lab/src/index.ts (0 errors) ====
+    import { createSvgIcon } from "@ts-bug/core/utils";
+    export default createSvgIcon("Hello", "ArrowLeft");
+    
+==== packages/core/src/index.d.ts (0 errors) ====
+    export * from "./utils";
+    export { default as SvgIcon } from "./SvgIcon";
+    
+==== packages/core/src/SvgIcon.d.ts (0 errors) ====
+    import { StyledComponentProps } from "@ts-bug/styles";
+    export interface SvgIconProps extends StyledComponentProps<"root"> {
+        children?: string[];
+    }
+    export interface SomeInterface {
+        myProp: string;
+    }
+    declare const SvgIcon: SomeInterface;
+    export default SvgIcon;
+    
+==== packages/core/src/utils.d.ts (0 errors) ====
+    import SvgIcon from "./SvgIcon";
+    export function createSvgIcon(path: string, displayName: string): typeof SvgIcon;
+    
+==== packages/styles/src/index.d.ts (0 errors) ====
+    export interface StyledComponentProps<ClassKey extends string> {
+        classes?: Record<ClassKey, string>;
+    }
+    

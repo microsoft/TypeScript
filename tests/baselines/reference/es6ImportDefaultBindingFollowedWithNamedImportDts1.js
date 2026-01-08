@@ -29,19 +29,22 @@ var a = /** @class */ (function () {
 exports.default = a;
 //// [client.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x6 = exports.x5 = exports.x4 = exports.x3 = exports.x2 = exports.x1 = void 0;
-var server_1 = require("./server");
+var server_1 = __importDefault(require("./server"));
 exports.x1 = new server_1.default();
-var server_2 = require("./server");
+var server_2 = __importDefault(require("./server"));
 exports.x2 = new server_2.default();
-var server_3 = require("./server");
+var server_3 = __importDefault(require("./server"));
 exports.x3 = new server_3.default();
-var server_4 = require("./server");
+var server_4 = __importDefault(require("./server"));
 exports.x4 = new server_4.default();
-var server_5 = require("./server");
+var server_5 = __importDefault(require("./server"));
 exports.x5 = new server_5.default();
-var server_6 = require("./server");
+var server_6 = __importDefault(require("./server"));
 exports.x6 = new server_6.default();
 
 

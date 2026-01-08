@@ -21,7 +21,7 @@ verify.completions({
         },
         {
             name: "Test1",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "function Test1(): void",
             kind: "function",
@@ -33,7 +33,7 @@ verify.completions({
     preferences: { includeCompletionsForModuleExports: true },
 }).andApplyCodeAction({
     name: "Test1",
-    source: "/a",
+    source: "./a",
     description: `Update import from "./a"`,
     newFileContent: `import { Test1, Test2 } from "./a";
 t`,

@@ -1,4 +1,4 @@
-module M
+namespace M
 {
     export interface P { x: number; y: number; }
     export var a = 1;

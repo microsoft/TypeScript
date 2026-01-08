@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
 
 === react.d.ts ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	}
@@ -82,7 +82,7 @@ interface ComponentClass<P> {
 >        : ^^^
 }
 
-declare module TestMod {
+declare namespace TestMod {
 >TestMod : typeof TestMod
 >        : ^^^^^^^^^^^^^^
 

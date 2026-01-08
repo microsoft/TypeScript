@@ -20,7 +20,7 @@ class A {
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(logicalNotOperatorWithStringType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(logicalNotOperatorWithStringType.ts, 9, 1))
 
     export var n: string;

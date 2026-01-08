@@ -1,4 +1,4 @@
-module A.B {
+namespace A.B {
  
   export var x = 1;
  
@@ -6,7 +6,7 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
  
   export var x = 1;
  
@@ -19,7 +19,7 @@ var tmpOK = AA.B.x;
 var tmpError = A.B.x;
 
 
-module A.B.C
+namespace A.B.C
  
 {
  
@@ -29,7 +29,7 @@ module A.B.C
  
  
  
-module M
+namespace M
  
 {
  

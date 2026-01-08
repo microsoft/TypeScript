@@ -1,0 +1,14 @@
+inferenceFromGenericClassNoCrash1.ts(5,3): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
+
+
+==== inferenceFromGenericClassNoCrash1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61633#issuecomment-2841778576
+    
+    function RenderFlagsMixin<T extends new (...args: any[]) => object>(Base?: T) {}
+    class Container<T> {
+      t: T;
+      ~
+!!! error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
+    }
+    RenderFlagsMixin(Container);
+    

@@ -3,12 +3,12 @@
 === assignmentCompatWithObjectMembersAccessibility.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
-module TargetIsPublic {
+namespace TargetIsPublic {
 >TargetIsPublic : Symbol(TargetIsPublic, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 0, 0), Decl(assignmentCompatWithObjectMembersAccessibility.ts, 53, 1))
 
     // targets
     class Base {
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 23))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 26))
 
         public foo: string;
 >foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 4, 16))
@@ -27,7 +27,7 @@ module TargetIsPublic {
 
     var b: Base;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 23))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 26))
 
     var i: I;
 >i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
@@ -141,12 +141,12 @@ module TargetIsPublic {
 
 }
 
-module TargetIsPublic {
+namespace TargetIsPublic {
 >TargetIsPublic : Symbol(TargetIsPublic, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 0, 0), Decl(assignmentCompatWithObjectMembersAccessibility.ts, 53, 1))
 
     // targets
     class Base {
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 26))
 
         private foo: string;
 >foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 57, 16))
@@ -154,7 +154,7 @@ module TargetIsPublic {
 
     interface I extends Base {
 >I : Symbol(I, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 59, 5))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 26))
     }
 
     var a: { foo: string; }
@@ -163,7 +163,7 @@ module TargetIsPublic {
 
     var b: Base;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 26))
 
     var i: I;
 >i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))

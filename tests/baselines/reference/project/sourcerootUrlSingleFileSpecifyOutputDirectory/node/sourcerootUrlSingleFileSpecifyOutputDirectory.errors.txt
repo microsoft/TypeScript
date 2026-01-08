@@ -1,0 +1,14 @@
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== test.ts (0 errors) ====
+    var a1 = 10;
+    class c1 {
+        public p1: number;
+    }
+    
+    var instance1 = new c1();
+    function f1() {
+        return instance1;
+    }

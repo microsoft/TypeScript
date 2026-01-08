@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/underscoreTest1.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
+Type Count: 1,000 -> 2,500
 
 === underscoreTest1_underscoreTests.ts ===
 /// <reference path="underscoreTest1_underscore.ts" />
@@ -3171,7 +3171,7 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 >  : ^^
 }
 
-module Underscore {
+namespace Underscore {
     export interface WrappedObject<T> {
         keys(): string[];
 >keys : () => string[]

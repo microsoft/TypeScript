@@ -10,7 +10,7 @@ export var x = 1;  // Makes this an external module
 interface Iterator<T> {
 }
 
-module Query {
+namespace Query {
 >Query : typeof Query
 >      : ^^^^^^^^^^^^
 

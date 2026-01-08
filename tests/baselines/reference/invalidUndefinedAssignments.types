@@ -75,7 +75,7 @@ I = x;
 >x : any
 >  : ^^^
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >  : ^^^^^^^^
 >x : number

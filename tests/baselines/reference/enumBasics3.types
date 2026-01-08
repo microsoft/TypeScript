@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/enumBasics3.ts] ////
 
 === enumBasics3.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -32,7 +32,7 @@ module M {
   }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

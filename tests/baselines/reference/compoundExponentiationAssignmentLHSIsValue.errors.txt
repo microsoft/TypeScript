@@ -73,7 +73,7 @@ compoundExponentiationAssignmentLHSIsValue.ts(85,1): error TS2362: The left-hand
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     
     // identifiers: module, class, enum, function
-    module M { export var a; }
+    namespace M { export var a; }
     M **= value;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

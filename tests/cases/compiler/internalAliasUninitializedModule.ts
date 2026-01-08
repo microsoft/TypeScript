@@ -1,13 +1,13 @@
 // @declaration: true
-module a {
-    export module b {
+namespace a {
+    export namespace b {
         export interface I {
             foo();
         }
     }
 }
 
-module c {
+namespace c {
     import b = a.b;
     export var x: b.I;
     x.foo();

@@ -5,18 +5,18 @@
 */
 
 /*! Don't keep this pinned comment */
-declare module C {
+declare namespace C {
     function foo();
 }
 
 // Don't keep this comment.
-declare module D {
+declare namespace D {
     class bar { }
 }
 
 //@filename: b.ts
 ///<reference path="a.ts"/>
-declare module E {
+declare namespace E {
     class foobar extends D.bar {
         foo();
     }

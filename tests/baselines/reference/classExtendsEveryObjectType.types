@@ -34,7 +34,7 @@ class C3 extends x { } // error
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >  : ^^^^^^^^
 >x : number

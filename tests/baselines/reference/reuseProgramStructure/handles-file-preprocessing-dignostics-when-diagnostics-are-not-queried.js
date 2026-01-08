@@ -263,9 +263,7 @@ fp-ts/lib/struct: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 Skipped diagnostics
 
@@ -537,9 +535,7 @@ fp-ts/lib/struct: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 Skipped diagnostics
 
@@ -881,9 +877,7 @@ fp-ts/lib/struct: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
@@ -1271,9 +1265,7 @@ fp-ts/lib/struct: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 Skipped diagnostics
 
@@ -1503,9 +1495,7 @@ fp-ts/lib/struct: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:

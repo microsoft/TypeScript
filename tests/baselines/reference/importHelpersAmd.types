@@ -30,6 +30,7 @@ export declare function __assign(t: any, ...sources: any[]): any;
 >__assign : (t: any, ...sources: any[]) => any
 >         : ^ ^^   ^^^^^       ^^     ^^^^^   
 >t : any
+>  : ^^^
 >sources : any[]
 >        : ^^^^^
 
@@ -37,6 +38,7 @@ export declare function __rest(t: any, propertyNames: string[]): any;
 >__rest : (t: any, propertyNames: string[]) => any
 >       : ^ ^^   ^^             ^^        ^^^^^   
 >t : any
+>  : ^^^
 >propertyNames : string[]
 >              : ^^^^^^^^
 
@@ -46,9 +48,11 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 >decorators : Function[]
 >           : ^^^^^^^^^^
 >target : any
+>       : ^^^
 >key : string | symbol
 >    : ^^^^^^^^^^^^^^^
 >desc : any
+>     : ^^^
 
 export declare function __param(paramIndex: number, decorator: Function): Function;
 >__param : (paramIndex: number, decorator: Function) => Function
@@ -62,13 +66,17 @@ export declare function __metadata(metadataKey: any, metadataValue: any): Functi
 >__metadata : (metadataKey: any, metadataValue: any) => Function
 >           : ^           ^^   ^^             ^^   ^^^^^        
 >metadataKey : any
+>            : ^^^
 >metadataValue : any
+>              : ^^^
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
 >          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
+>        : ^^^
 >_arguments : any
+>           : ^^^
 >P : Function
 >  : ^^^^^^^^
 >generator : Function
@@ -78,6 +86,7 @@ export declare function __generator(thisArg: any, body: Function): any;
 >__generator : (thisArg: any, body: Function) => any
 >            : ^       ^^   ^^    ^^        ^^^^^   
 >thisArg : any
+>        : ^^^
 >body : Function
 >     : ^^^^^^^^
 
@@ -85,5 +94,7 @@ export declare function __exportStar(m: any, exports: any): void;
 >__exportStar : (m: any, exports: any) => void
 >             : ^ ^^   ^^       ^^   ^^^^^    
 >m : any
+>  : ^^^
 >exports : any
+>        : ^^^
 

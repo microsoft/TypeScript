@@ -3,13 +3,13 @@ exportEqualErrorType_1.ts(3,23): error TS2339: Property 'static' does not exist 
 
 ==== exportEqualErrorType_1.ts (1 errors) ====
     ///<reference path='exportEqualErrorType_0.ts'/>
-    import connect = require('exportEqualErrorType_0');
+    import connect = require('./exportEqualErrorType_0');
     connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
                           ~~~~~~
 !!! error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
     
 ==== exportEqualErrorType_0.ts (0 errors) ====
-    module server {
+    namespace server {
         export interface connectModule {
             (res, req, next): void;
         }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleVisibilityTest1.ts] ////
 
 === moduleVisibilityTest1.ts ===
-module OuterMod {
+namespace OuterMod {
 >OuterMod : typeof OuterMod
 >         : ^^^^^^^^^^^^^^^
 
@@ -13,7 +13,7 @@ module OuterMod {
 >1 : 1
 >  : ^
 
-	export module OuterInnerMod {
+	export namespace OuterInnerMod {
 >OuterInnerMod : typeof OuterInnerMod
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -33,11 +33,11 @@ import OuterInnerAlias = OuterMod.OuterInnerMod;
 >OuterInnerMod : typeof OuterInnerAlias
 >              : ^^^^^^^^^^^^^^^^^^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-	export module InnerMod {
+	export namespace InnerMod {
 >InnerMod : typeof InnerMod
 >         : ^^^^^^^^^^^^^^^
 
@@ -181,7 +181,7 @@ module M {
 >  : ^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

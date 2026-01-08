@@ -4,7 +4,7 @@ classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interfac
 
 
 ==== classExtendsInterfaceInModule.ts (3 errors) ====
-    module M {
+    namespace M {
       export interface I1 {}
       export interface I2<T> {}
     }
@@ -15,7 +15,7 @@ classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interfac
                         ~
 !!! error TS2689: Cannot extend an interface 'M.I2'. Did you mean 'implements'?
     
-    module Mod {
+    namespace Mod {
     	export namespace Nested {
     		export interface I {}
     	}

@@ -25,7 +25,7 @@ parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
     4+:5
       ~
 !!! error TS1109: Expression expected.
-    module M {
+    namespace M {
     function a(
         : T) { }
         ~

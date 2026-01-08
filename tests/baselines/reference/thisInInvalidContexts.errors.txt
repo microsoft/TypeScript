@@ -32,7 +32,7 @@ thisInInvalidContexts.ts(40,9): error TS2332: 'this' cannot be referenced in cur
         }
     }
     
-    module M {
+    namespace M {
         //'this' in module variable
         var x = this; // Error
                 ~~~~

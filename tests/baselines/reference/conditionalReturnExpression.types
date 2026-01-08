@@ -1,0 +1,167 @@
+//// [tests/cases/compiler/conditionalReturnExpression.ts] ////
+
+=== conditionalReturnExpression.ts ===
+function return1(x: boolean): 3 {
+>return1 : (x: boolean) => 3
+>        : ^ ^^       ^^^^^ 
+>x : boolean
+>  : ^^^^^^^
+
+    return (x ? (1) : 2);
+>(x ? (1) : 2) : 1 | 2
+>              : ^^^^^
+>x ? (1) : 2 : 1 | 2
+>            : ^^^^^
+>x : boolean
+>  : ^^^^^^^
+>(1) : 1
+>    : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+declare function getAny(): any;
+>getAny : () => any
+>       : ^^^^^^   
+
+function return2(x: string): string {
+>return2 : (x: string) => string
+>        : ^ ^^      ^^^^^      
+>x : string
+>  : ^^^^^^
+
+    return x.startsWith("a") ? getAny() : 1;
+>x.startsWith("a") ? getAny() : 1 : any
+>                                 : ^^^
+>x.startsWith("a") : boolean
+>                  : ^^^^^^^
+>x.startsWith : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
+>x : string
+>  : ^^^^^^
+>startsWith : (searchString: string, position?: number) => boolean
+>           : ^            ^^      ^^        ^^^      ^^^^^       
+>"a" : "a"
+>    : ^^^
+>getAny() : any
+>         : ^^^
+>getAny : () => any
+>       : ^^^^^^   
+>1 : 1
+>  : ^
+}
+
+function return3(x: string): string {
+>return3 : (x: string) => string
+>        : ^ ^^      ^^^^^      
+>x : string
+>  : ^^^^^^
+
+    return x.startsWith("a") ? "a" : x;
+>x.startsWith("a") ? "a" : x : string
+>                            : ^^^^^^
+>x.startsWith("a") : boolean
+>                  : ^^^^^^^
+>x.startsWith : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
+>x : string
+>  : ^^^^^^
+>startsWith : (searchString: string, position?: number) => boolean
+>           : ^            ^^      ^^        ^^^      ^^^^^       
+>"a" : "a"
+>    : ^^^
+>"a" : "a"
+>    : ^^^
+>x : string
+>  : ^^^^^^
+}
+
+function return4(x: string): string {
+>return4 : (x: string) => string
+>        : ^ ^^      ^^^^^      
+>x : string
+>  : ^^^^^^
+
+    return (x.startsWith("a") ? getAny() : 1) as string;
+>(x.startsWith("a") ? getAny() : 1) as string : string
+>                                             : ^^^^^^
+>(x.startsWith("a") ? getAny() : 1) : any
+>                                   : ^^^
+>x.startsWith("a") ? getAny() : 1 : any
+>                                 : ^^^
+>x.startsWith("a") : boolean
+>                  : ^^^^^^^
+>x.startsWith : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
+>x : string
+>  : ^^^^^^
+>startsWith : (searchString: string, position?: number) => boolean
+>           : ^            ^^      ^^        ^^^      ^^^^^       
+>"a" : "a"
+>    : ^^^
+>getAny() : any
+>         : ^^^
+>getAny : () => any
+>       : ^^^^^^   
+>1 : 1
+>  : ^
+}
+
+const return5 = (x: string): string => x.startsWith("a") ? getAny() : 1;
+>return5 : (x: string) => string
+>        : ^ ^^      ^^^^^      
+>(x: string): string => x.startsWith("a") ? getAny() : 1 : (x: string) => string
+>                                                        : ^ ^^      ^^^^^      
+>x : string
+>  : ^^^^^^
+>x.startsWith("a") ? getAny() : 1 : any
+>                                 : ^^^
+>x.startsWith("a") : boolean
+>                  : ^^^^^^^
+>x.startsWith : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
+>x : string
+>  : ^^^^^^
+>startsWith : (searchString: string, position?: number) => boolean
+>           : ^            ^^      ^^        ^^^      ^^^^^       
+>"a" : "a"
+>    : ^^^
+>getAny() : any
+>         : ^^^
+>getAny : () => any
+>       : ^^^^^^   
+>1 : 1
+>  : ^
+
+const return6 = (x: string): string => (x.startsWith("a") ? getAny() : 1) as string;
+>return6 : (x: string) => string
+>        : ^ ^^      ^^^^^      
+>(x: string): string => (x.startsWith("a") ? getAny() : 1) as string : (x: string) => string
+>                                                                    : ^ ^^      ^^^^^      
+>x : string
+>  : ^^^^^^
+>(x.startsWith("a") ? getAny() : 1) as string : string
+>                                             : ^^^^^^
+>(x.startsWith("a") ? getAny() : 1) : any
+>                                   : ^^^
+>x.startsWith("a") ? getAny() : 1 : any
+>                                 : ^^^
+>x.startsWith("a") : boolean
+>                  : ^^^^^^^
+>x.startsWith : (searchString: string, position?: number) => boolean
+>             : ^            ^^      ^^        ^^^      ^^^^^       
+>x : string
+>  : ^^^^^^
+>startsWith : (searchString: string, position?: number) => boolean
+>           : ^            ^^      ^^        ^^^      ^^^^^       
+>"a" : "a"
+>    : ^^^
+>getAny() : any
+>         : ^^^
+>getAny : () => any
+>       : ^^^^^^   
+>1 : 1
+>  : ^
+

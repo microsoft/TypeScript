@@ -24,7 +24,7 @@ verify.completions({
     marker: "",
     exact: [
         "n",
-        { name: "publicSym", source: "/a", insertText: "[publicSym]", replacementSpan: test.ranges()[0], hasAction: true },
+        { name: "publicSym", source: "./a", insertText: "[publicSym]", sortText: completion.SortText.GlobalsOrKeywords, replacementSpan: test.ranges()[0], hasAction: true },
     ],
     preferences: {
         includeInsertTextCompletions: true,
@@ -34,7 +34,7 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
     name: "publicSym",
-    source: "/a",
+    source: "./a",
     description: `Update import from "./a"`,
     newFileContent:
 `import { i, publicSym } from "./a";

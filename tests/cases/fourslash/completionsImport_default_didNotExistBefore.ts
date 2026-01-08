@@ -12,7 +12,7 @@ verify.completions({
     marker: "",
     includes: {
         name: "foo",
-        source: "/a",
+        source: "./a",
         sourceDisplay: "./a",
         text: "function foo(): void",
         kind: "function",
@@ -24,7 +24,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import foo from "./a";
 

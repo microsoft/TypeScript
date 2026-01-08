@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts] ////
 
 === importStatementsInterfaces.ts ===
-module A {
+namespace A {
     export interface Point {
         x: number;
 >x : number
@@ -12,7 +12,7 @@ module A {
 >  : ^^^^^^
     }
 
-    export module inA {
+    export namespace inA {
         export interface Point3D extends Point {
             z: number;
 >z : number
@@ -22,7 +22,7 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
     import a = A;
 >a : any
 >  : ^^^
@@ -31,7 +31,7 @@ module B {
 }
 
 // no code gen expected
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -81,7 +81,7 @@ module C {
 }
 
 // no code gen expected
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -99,7 +99,7 @@ module D {
 }
 
 // no code gen expected
-module E {
+namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 

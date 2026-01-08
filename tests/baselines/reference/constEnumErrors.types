@@ -10,7 +10,7 @@ const enum E {
 >  : ^^^
 }
 
-module E {
+namespace E {
 >E : typeof E
 >  : ^^^^^^^^
 

@@ -28,7 +28,7 @@ classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a
                      ~
 !!! error TS2507: Type '{ foo: string; }' is not a constructor function type.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     class C4 extends M { } // error
                      ~
 !!! error TS2507: Type 'typeof M' is not a constructor function type.

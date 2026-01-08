@@ -2,14 +2,14 @@
 //@jsx: preserve
 //@sourceMap: true
 
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
 
-module M {
+namespace M {
 	export class Foo { constructor() { } }
-	export module S {
+	export namespace S {
 		export class Bar { }
 
 		// Emit Foo
@@ -17,11 +17,11 @@ module M {
 	}
 }
 
-module M {
+namespace M {
 	// Emit M.Foo
 	Foo, <Foo />;
 
-	export module S {
+	export namespace S {
 		// Emit M.Foo
 		Foo, <Foo />;
 
@@ -31,12 +31,12 @@ module M {
 
 }
 
-module M {
+namespace M {
 	// Emit M.S.Bar
 	S.Bar, <S.Bar />;
 }
 
-module M {
+namespace M {
 	var M = 100;
 	// Emit M_1.Foo
 	Foo, <Foo />;

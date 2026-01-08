@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution15.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementAttributesProperty { pr1: any; pr2: any; }
 	interface IntrinsicElements { }

@@ -2,7 +2,7 @@
 
 //// [constDeclarations2.ts]
 // No error
-module M {
+namespace M {
     export const c1 = false;
     export const c2: number = 23;
     export const c3 = 0, c4 :string = "", c5 = null;

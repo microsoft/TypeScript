@@ -1,0 +1,101 @@
+genericCallAtYieldExpressionInGenericCall1.ts(26,25): error TS2488: Type '() => T' must have a '[Symbol.iterator]()' method that returns an iterator.
+genericCallAtYieldExpressionInGenericCall1.ts(56,8): error TS2345: Argument of type '<T>(value: T) => Generator<number, void, any>' is not assignable to parameter of type '(value: unknown) => Generator<never, unknown, unknown>'.
+  Call signature return types 'Generator<number, void, any>' and 'Generator<never, unknown, unknown>' are incompatible.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<never, unknown>'.
+        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<never, unknown>'.
+          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<never>'.
+            Type 'number' is not assignable to type 'never'.
+genericCallAtYieldExpressionInGenericCall1.ts(61,8): error TS2345: Argument of type '<T>(value: T) => Generator<number, void, any>' is not assignable to parameter of type '(value: unknown) => Generator<never, unknown, unknown>'.
+  Call signature return types 'Generator<number, void, any>' and 'Generator<never, unknown, unknown>' are incompatible.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<never, unknown>'.
+        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<never, unknown>'.
+          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<never>'.
+            Type 'number' is not assignable to type 'never'.
+
+
+==== genericCallAtYieldExpressionInGenericCall1.ts (3 errors) ====
+    declare const inner: {
+      <A>(value: A): {
+        (): A;
+        [Symbol.iterator](): {
+          next(...args: ReadonlyArray<any>): IteratorResult<any, A>;
+        };
+      };
+    };
+    
+    declare function outer<A>(body: (value: A) => Generator<any, any, any>): void;
+    
+    outer(function* <T>(value: T) {
+      const result = yield* inner(value); // ok
+    });
+    
+    outer(function* <T>(value: T) {
+      const x = inner(value);
+      const result = yield* x; // ok
+    });
+    
+    declare const inner2: {
+      <A>(value: A): () => A;
+    };
+    
+    outer(function* <T>(value: T) {
+      const result = yield* inner2(value); // error
+                            ~~~~~~~~~~~~~
+!!! error TS2488: Type '() => T' must have a '[Symbol.iterator]()' method that returns an iterator.
+    });
+    
+    declare const inner3: {
+      <A>(value: A): {
+        (): A;
+        [Symbol.iterator](): {
+          next(...args: ReadonlyArray<any>): IteratorResult<number, A>;
+        };
+      };
+    };
+    
+    declare function outer2<A, Y>(body: (value: A) => Generator<Y, any, any>): Y;
+    
+    // number
+    const result1 = outer2(function* <T>(value: T) {
+      yield* inner3(value);
+    });
+    
+    // number
+    const result2 = outer2(function* <T>(value: T) {
+      const x = inner3(value);
+      yield* x;
+    });
+    
+    declare function outer3<A>(
+      body: (value: A) => Generator<never, unknown, unknown>,
+    ): void;
+    
+    // error
+    outer3(function* <T>(value: T) {
+           ~~~~~~~~
+!!! error TS2345: Argument of type '<T>(value: T) => Generator<number, void, any>' is not assignable to parameter of type '(value: unknown) => Generator<never, unknown, unknown>'.
+!!! error TS2345:   Call signature return types 'Generator<number, void, any>' and 'Generator<never, unknown, unknown>' are incompatible.
+!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<never, unknown>'.
+!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<never, unknown>'.
+!!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<never>'.
+!!! error TS2345:             Type 'number' is not assignable to type 'never'.
+      yield* inner3(value);
+    });
+    
+    // error
+    outer3(function* <T>(value: T) {
+           ~~~~~~~~
+!!! error TS2345: Argument of type '<T>(value: T) => Generator<number, void, any>' is not assignable to parameter of type '(value: unknown) => Generator<never, unknown, unknown>'.
+!!! error TS2345:   Call signature return types 'Generator<number, void, any>' and 'Generator<never, unknown, unknown>' are incompatible.
+!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<never, unknown>'.
+!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<never, unknown>'.
+!!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<never>'.
+!!! error TS2345:             Type 'number' is not assignable to type 'never'.
+      const x = inner3(value);
+      yield* x;
+    });
+    

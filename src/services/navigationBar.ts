@@ -59,6 +59,7 @@ import {
     isBindingPattern,
     isCallExpression,
     isClassDeclaration,
+    isClassExpression,
     isClassLike,
     isComputedPropertyName,
     isDeclaration,
@@ -104,6 +105,7 @@ import {
     removeFileExtension,
     setTextRange,
     ShorthandPropertyAssignment,
+    skipOuterExpressions,
     SourceFile,
     SpreadAssignment,
     SyntaxKind,
@@ -444,8 +446,8 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
 
         case SyntaxKind.ExportAssignment: {
-            const expression = (node as ExportAssignment).expression;
-            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
+            const expression = skipOuterExpressions((node as ExportAssignment).expression);
+            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) || isClassExpression(expression) ? expression :
                 isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
             if (child) {
                 startNode(node);

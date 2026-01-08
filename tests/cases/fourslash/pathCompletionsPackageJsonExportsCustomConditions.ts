@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 // @customConditions: custom-condition
 
 // @Filename: /node_modules/foo/package.json
@@ -9,7 +9,7 @@
 ////   "exports": {
 ////     "./only-with-custom-conditions": {
 ////       "custom-condition": "./something.js"
-////     },
+////     }
 ////   }
 //// }
 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts] ////
 
 === internalAliasEnumInsideLocalModuleWithoutExport.ts ===
-export module a {
+export namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
@@ -23,7 +23,7 @@ export module a {
     }
 }
 
-export module c {
+export namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

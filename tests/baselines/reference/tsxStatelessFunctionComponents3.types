@@ -11,6 +11,7 @@ const Foo = (props: any) => <div/>;
 >(props: any) => <div/> : (props: any) => JSX.Element
 >                       : ^     ^^   ^^^^^^^^^^^^^^^^
 >props : any
+>      : ^^^
 ><div/> : JSX.Element
 >       : ^^^^^^^^^^^
 >div : any
@@ -61,6 +62,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >React : any
 >      : ^^^
 >children : any
+>         : ^^^
 >({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >                                                       : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : any

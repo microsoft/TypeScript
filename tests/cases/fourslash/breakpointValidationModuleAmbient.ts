@@ -2,9 +2,9 @@
 
 // @BaselineFile: bpSpan_moduleAmbient.baseline
 // @Filename: bpSpan_moduleAmbient.ts
-////declare module Bar {
+////declare namespace Bar {
 ////}
-////declare module Foo {
+////declare namespace Foo {
 ////    var x;
 ////}
 

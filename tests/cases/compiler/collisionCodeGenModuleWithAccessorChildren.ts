@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export var x = 3;
     class c {
         private y;
@@ -8,7 +8,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
     class d {
         private y;
         set Z(p) {
@@ -18,7 +18,7 @@ module M {
     }
 }
 
-module M { // Shouldnt be _M
+namespace M { // Shouldnt be _M
     class e {
         private y;
         set M(p) {
@@ -27,7 +27,7 @@ module M { // Shouldnt be _M
     }
 }
 
-module M {
+namespace M {
     class f {
         get Z() {
             var M = 10;
@@ -36,7 +36,7 @@ module M {
     }
 }
 
-module M { // Shouldnt be _M
+namespace M { // Shouldnt be _M
     class e {
         get M() {
             return x;

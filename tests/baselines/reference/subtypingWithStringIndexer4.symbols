@@ -33,11 +33,11 @@ class B extends A {
 >x : Symbol(x, Decl(subtypingWithStringIndexer4.ts, 11, 5))
 }
 
-module Generics {
+namespace Generics {
 >Generics : Symbol(Generics, Decl(subtypingWithStringIndexer4.ts, 12, 1))
 
     class A<T extends Derived> {
->A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 17))
+>A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 20))
 >T : Symbol(T, Decl(subtypingWithStringIndexer4.ts, 15, 12))
 >Derived : Symbol(Derived, Decl(subtypingWithStringIndexer4.ts, 2, 31))
 
@@ -48,7 +48,7 @@ module Generics {
 
     class B extends A<Base> {
 >B : Symbol(B, Decl(subtypingWithStringIndexer4.ts, 17, 5))
->A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 17))
+>A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 20))
 >Base : Symbol(Base, Decl(subtypingWithStringIndexer4.ts, 0, 0))
 
         [x: string]: string; // error
@@ -59,7 +59,7 @@ module Generics {
 >B3 : Symbol(B3, Decl(subtypingWithStringIndexer4.ts, 21, 5))
 >T : Symbol(T, Decl(subtypingWithStringIndexer4.ts, 23, 13))
 >Derived : Symbol(Derived, Decl(subtypingWithStringIndexer4.ts, 2, 31))
->A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 17))
+>A : Symbol(A, Decl(subtypingWithStringIndexer4.ts, 14, 20))
 >T : Symbol(T, Decl(subtypingWithStringIndexer4.ts, 23, 13))
 
         [x: string]: string; // error

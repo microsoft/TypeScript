@@ -23,7 +23,7 @@ noImplicitAnyParametersInAmbientModule.ts(44,21): error TS7019: Rest parameter '
 
 
 ==== noImplicitAnyParametersInAmbientModule.ts (22 errors) ====
-    declare module D_M {
+    declare namespace D_M {
         // No implicit-'any' errors.
         function dm_f1(): void;
     

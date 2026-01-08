@@ -105,9 +105,9 @@ class C {
 >MyPromise : Symbol(MyPromise, Decl(asyncAwaitIsolatedModules_es5.ts, 0, 8))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(asyncAwaitIsolatedModules_es5.ts, 34, 1))
 
 	export async function f1() { }
->f1 : Symbol(f1, Decl(asyncAwaitIsolatedModules_es5.ts, 36, 10))
+>f1 : Symbol(f1, Decl(asyncAwaitIsolatedModules_es5.ts, 36, 13))
 }

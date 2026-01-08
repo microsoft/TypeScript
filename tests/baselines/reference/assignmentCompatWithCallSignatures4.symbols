@@ -3,16 +3,16 @@
 === assignmentCompatWithCallSignatures4.ts ===
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 
-module Errors {
+namespace Errors {
 >Errors : Symbol(Errors, Decl(assignmentCompatWithCallSignatures4.ts, 0, 0))
 
     class Base { foo: string; }
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >foo : Symbol(Base.foo, Decl(assignmentCompatWithCallSignatures4.ts, 3, 16))
 
     class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >bar : Symbol(Derived.bar, Decl(assignmentCompatWithCallSignatures4.ts, 4, 32))
 
     class Derived2 extends Derived { baz: string; }
@@ -22,10 +22,10 @@ module Errors {
 
     class OtherDerived extends Base { bing: string; }
 >OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithCallSignatures4.ts, 5, 51))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithCallSignatures4.ts, 6, 37))
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
 >WithNonGenericSignaturesInBaseType : Symbol(WithNonGenericSignaturesInBaseType, Decl(assignmentCompatWithCallSignatures4.ts, 6, 53))
 
         // target type with non-generic call signatures
@@ -37,31 +37,31 @@ module Errors {
 >a7 : Symbol(a7, Decl(assignmentCompatWithCallSignatures4.ts, 11, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 11, 17))
 >arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures4.ts, 11, 21))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 >r : Symbol(r, Decl(assignmentCompatWithCallSignatures4.ts, 11, 48))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures4.ts, 4, 47))
 
         var a8: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : Symbol(a8, Decl(assignmentCompatWithCallSignatures4.ts, 12, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 12, 17))
 >arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures4.ts, 12, 21))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 12, 43))
 >arg2 : Symbol(arg2, Decl(assignmentCompatWithCallSignatures4.ts, 12, 48))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 >r : Symbol(r, Decl(assignmentCompatWithCallSignatures4.ts, 12, 76))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 
         var a10: (...x: Base[]) => Base;
 >a10 : Symbol(a10, Decl(assignmentCompatWithCallSignatures4.ts, 13, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 13, 18))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 
         var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : Symbol(a11, Decl(assignmentCompatWithCallSignatures4.ts, 14, 11))
@@ -70,17 +70,17 @@ module Errors {
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 14, 37))
 >foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures4.ts, 14, 42))
 >bar : Symbol(bar, Decl(assignmentCompatWithCallSignatures4.ts, 14, 55))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 
         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures4.ts, 15, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 15, 18))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 15, 33))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures4.ts, 4, 47))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 
         var a14: {
@@ -138,7 +138,7 @@ module Errors {
 
                     <T extends Base>(a: T): T;
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 34, 21))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures4.ts, 34, 37))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 34, 21))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 34, 21))
@@ -156,7 +156,7 @@ module Errors {
 
                     <T extends Base>(a: T): T;
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 38, 21))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures4.ts, 38, 37))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 38, 21))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 38, 21))
@@ -183,7 +183,7 @@ module Errors {
         var b7: <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : Symbol(b7, Decl(assignmentCompatWithCallSignatures4.ts, 46, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 46, 17))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >U : Symbol(U, Decl(assignmentCompatWithCallSignatures4.ts, 46, 32))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 >V : Symbol(V, Decl(assignmentCompatWithCallSignatures4.ts, 46, 51))
@@ -207,7 +207,7 @@ module Errors {
         var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : Symbol(b8, Decl(assignmentCompatWithCallSignatures4.ts, 50, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 50, 17))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >U : Symbol(U, Decl(assignmentCompatWithCallSignatures4.ts, 50, 32))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 50, 52))
@@ -268,14 +268,14 @@ module Errors {
         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures4.ts, 63, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 63, 18))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures4.ts, 4, 47))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 63, 45))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 63, 60))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 63, 18))
 
         a12 = b12;
@@ -307,7 +307,7 @@ module Errors {
         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : Symbol(b15a, Decl(assignmentCompatWithCallSignatures4.ts, 71, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 71, 19))
->Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 18))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 71, 35))
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures4.ts, 71, 39))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 71, 19))
@@ -356,7 +356,7 @@ module Errors {
 >a17 : Symbol(a17, Decl(assignmentCompatWithCallSignatures4.ts, 31, 11))
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : Symbol(WithGenericSignaturesInBaseType, Decl(assignmentCompatWithCallSignatures4.ts, 82, 5))
 
         // target type has generic call signature

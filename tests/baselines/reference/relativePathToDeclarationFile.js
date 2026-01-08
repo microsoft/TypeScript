@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
 
 //// [foo.d.ts]
-export declare module M2 {
+export declare namespace M2 {
 	export var x: boolean;
 }
 
 //// [other.d.ts]
-export declare module M2 {
+export declare namespace M2 {
 	export var x: string;
 }
 

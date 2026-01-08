@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyImportParseErrors.ts] ////
 
 === privacyImportParseErrors.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
-    export module m1_M1_public {
+    export namespace m1_M1_public {
 >m1_M1_public : typeof m1_M1_public
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ export module m1 {
 >   : ^^
     }
 
-    module m1_M2_private {
+    namespace m1_M2_private {
 >m1_M2_private : typeof m1_M2_private
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -499,11 +499,11 @@ export module m1 {
 >              : ^^^
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
-    export module m2_M1_public {
+    export namespace m2_M1_public {
 >m2_M1_public : typeof m2_M1_public
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -532,7 +532,7 @@ module m2 {
 >   : ^^
     }
 
-    module m2_M2_private {
+    namespace m2_M2_private {
 >m2_M2_private : typeof m2_M2_private
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -998,7 +998,7 @@ module m2 {
 >              : ^^^
 }
 
-export module glo_M1_public {
+export namespace glo_M1_public {
 >glo_M1_public : typeof glo_M1_public
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -1048,7 +1048,7 @@ export declare module "glo_M2_public" {
 >   : ^^
 }
 
-export module glo_M3_private {
+export namespace glo_M3_private {
 >glo_M3_private : typeof glo_M3_private
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -1572,7 +1572,7 @@ export declare module "use_glo_M1_public" {
 >use_glo_M2_public : any
 >                  : ^^^
 
-    module m2 {
+    namespace m2 {
         import errorImport = require("glo_M2_public");
 >errorImport : any
 >            : ^^^
@@ -1583,7 +1583,7 @@ export declare module "use_glo_M1_public" {
 >glo_M1_public : typeof nonerrorImport
 >              : ^^^^^^^^^^^^^^^^^^^^^
 
-        module m5 {
+        namespace m5 {
             import m5_errorImport = require("glo_M2_public");
 >m5_errorImport : any
 >               : ^^^
@@ -1676,7 +1676,7 @@ declare module "use_glo_M3_private" {
 >use_glo_M4_private : any
 >                   : ^^^
 
-    module m2 {
+    namespace m2 {
         import errorImport = require("glo_M4_private");
 >errorImport : any
 >            : ^^^
@@ -1687,7 +1687,7 @@ declare module "use_glo_M3_private" {
 >glo_M3_private : typeof nonerrorImport
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
-        module m5 {
+        namespace m5 {
             import m5_errorImport = require("glo_M4_private");
 >m5_errorImport : any
 >               : ^^^
@@ -1705,14 +1705,14 @@ declare module "anotherParseError" {
 >"anotherParseError" : any
 >                    : ^^^
 
-    module m2 {
+    namespace m2 {
         declare module "abc" {
 >"abc" : typeof import("abc")
 >      : ^^^^^^^^^^^^^^^^^^^^
         }
     }
 
-    module m2 {
+    namespace m2 {
         module "abc2" {
 >"abc2" : typeof import("abc2")
 >       : ^^^^^^^^^^^^^^^^^^^^^
@@ -1728,14 +1728,14 @@ declare export module "anotherParseError2" {
 >"anotherParseError2" : any
 >                     : ^^^
 
-    module m2 {
+    namespace m2 {
         declare module "abc" {
 >"abc" : typeof import("abc")
 >      : ^^^^^^^^^^^^^^^^^^^^
         }
     }
 
-    module m2 {
+    namespace m2 {
         module "abc2" {
 >"abc2" : typeof import("abc2")
 >       : ^^^^^^^^^^^^^^^^^^^^^
@@ -1747,7 +1747,7 @@ declare export module "anotherParseError2" {
     }
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -1755,7 +1755,7 @@ module m2 {
 >m3 : any
 >   : ^^^
 
-    module m4 {
+    namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 
@@ -1772,7 +1772,7 @@ module m2 {
 
 }
 
-export module m3 {
+export namespace m3 {
 >m3 : typeof import("privacyImportParseErrors").m3
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1780,7 +1780,7 @@ export module m3 {
 >m3 : any
 >   : ^^^
 
-    module m4 {
+    namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

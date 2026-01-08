@@ -51,7 +51,7 @@ var withOverloadSignature = overload1;
 
 function f(n: () => void) { }
 
-module m2 {
+namespace m2 {
     export function foo(n: () => void ) {
     }
 

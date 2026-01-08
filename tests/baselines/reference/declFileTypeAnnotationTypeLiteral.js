@@ -5,7 +5,7 @@ class c {
 }
 class g<T> {
 }
-module m {
+namespace m {
     export class c {
     }
 }

@@ -21,7 +21,7 @@ class D extends C {
 >baz : Symbol(D.baz, Decl(privateStaticNotAccessibleInClodule2.ts, 7, 19))
 }
 
-module D {
+namespace D {
 >D : Symbol(D, Decl(privateStaticNotAccessibleInClodule2.ts, 5, 1), Decl(privateStaticNotAccessibleInClodule2.ts, 9, 1))
 
     export var y = D.bar; // error

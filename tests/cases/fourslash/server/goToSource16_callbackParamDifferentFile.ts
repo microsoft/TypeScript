@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // This is just modified repro to ensure we are resolving module specifier thats not already present in the file
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/yargs/package.json

@@ -6,7 +6,7 @@
 var a;
 >a : any
 
-module M { }
+namespace M { }
 import a = M;
 >a : any
 >  : ^^^

@@ -1,4 +1,4 @@
-module A {
+namespace A {
 
     export function fn(s: string) {
         return true;

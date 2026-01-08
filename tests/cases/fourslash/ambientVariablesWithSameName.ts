@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-////declare module M {
+////declare namespace M {
 ////    export var x: string;
 ////}
 ////declare var x: number;

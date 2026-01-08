@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unspecializedConstraints.ts] ////
 
 //// [unspecializedConstraints.ts]
-module ts {
+namespace ts {
     interface Map<T> {
         [index: string]: T;
     }

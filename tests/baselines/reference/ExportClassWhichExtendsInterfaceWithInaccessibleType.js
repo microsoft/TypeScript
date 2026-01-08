@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts] ////
 
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.ts]
-module A {
+namespace A {
 
     interface Point {
         x: number;

@@ -10,7 +10,7 @@ class A {
     public a: boolean;
     static foo() { return true; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 

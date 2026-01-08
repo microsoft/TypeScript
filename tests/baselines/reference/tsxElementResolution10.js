@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution10.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementClass {
 		render: any;

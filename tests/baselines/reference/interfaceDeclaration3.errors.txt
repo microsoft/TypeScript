@@ -10,7 +10,7 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
 ==== interfaceDeclaration3.ts (3 errors) ====
     interface I1 { item:number; }
     
-    module M1 {
+    namespace M1 {
         interface I1 { item:string; }  
         interface I2 { item:number; }   
         class C1 implements I1 {
@@ -35,10 +35,10 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
         }
     }
     
-    export module M2 {
+    export namespace M2 {
         export interface I1 { item:string; }
         export interface I2 { item:string; }
-        export module M3 {
+        export namespace M3 {
             export interface I1 { item:string; }
         }
         class C1 implements I1 {

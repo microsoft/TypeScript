@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportEqualMemberMissing.ts] ////
 
 //// [exportEqualMemberMissing_0.ts]
-module server {
+namespace server {
     export interface connectModule {
         (res, req, next): void;
     }

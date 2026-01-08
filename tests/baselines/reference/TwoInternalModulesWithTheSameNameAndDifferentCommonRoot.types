@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.ts] ////
 
 === part1.ts ===
-module Root {
+namespace Root {
 >Root : typeof Root
 >     : ^^^^^^^^^^^
 
-    export module A {
+    export namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -19,7 +19,7 @@ module Root {
 >  : ^^^^^^
         }
 
-        export module Utils {
+        export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 
@@ -54,11 +54,11 @@ module Root {
 }
 
 === part2.ts ===
-module otherRoot {
+namespace otherRoot {
 >otherRoot : typeof otherRoot
 >          : ^^^^^^^^^^^^^^^^
 
-    export module A {
+    export namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -81,7 +81,7 @@ module otherRoot {
 >0 : 0
 >  : ^
 
-        export module Utils {
+        export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 

@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts] ////
 
 //// [overloadsInDifferentContainersDisagreeOnAmbient.ts]
-declare module M {
+declare namespace M {
     // Error because body is not ambient and this overload is
     export function f();
 }
 
-module M {
+namespace M {
     export function f() { }
 }
 

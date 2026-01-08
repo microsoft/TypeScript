@@ -56,11 +56,11 @@ function F2(x: number): boolean { return x < 42; }
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 20, 12))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 20, 12))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(ifDoWhileStatements.ts, 20, 50))
 
     export class A {
->A : Symbol(A, Decl(ifDoWhileStatements.ts, 22, 10))
+>A : Symbol(A, Decl(ifDoWhileStatements.ts, 22, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(ifDoWhileStatements.ts, 23, 20))
@@ -74,11 +74,11 @@ module M {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
-module N {
+namespace N {
 >N : Symbol(N, Decl(ifDoWhileStatements.ts, 28, 1))
 
     export class A {
->A : Symbol(A, Decl(ifDoWhileStatements.ts, 30, 10))
+>A : Symbol(A, Decl(ifDoWhileStatements.ts, 30, 13))
 
         id: number;
 >id : Symbol(A.id, Decl(ifDoWhileStatements.ts, 31, 20))

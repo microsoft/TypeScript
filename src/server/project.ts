@@ -109,6 +109,7 @@ import {
     resolutionExtensionIsTSOrJson,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
+    ResolvedRefAndOutputDts,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolvePackageNameToPackageJson,
     returnFalse,
@@ -462,7 +463,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
-    getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
+    getRedirectFromSourceFile(_fileName: string): ResolvedRefAndOutputDts | undefined {
         return undefined;
     }
 
@@ -3044,9 +3045,9 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    override getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
+    override getRedirectFromSourceFile(fileName: string): ResolvedRefAndOutputDts | undefined {
         const program = this.getCurrentProgram();
-        return program && program.getResolvedProjectReferenceToRedirect(fileName);
+        return program && program.getRedirectFromSourceFile(fileName);
     }
 
     /** @internal */

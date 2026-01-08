@@ -170,8 +170,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2019.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2018.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.d.ts 500 undefined WatchType: Closed Script info
@@ -373,8 +371,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -527,9 +523,6 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
   {}
@@ -850,9 +843,6 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
@@ -1086,8 +1076,10 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1099,7 +1091,7 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 3,
       "success": true,
       "body": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1821,11 +1813,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/@types/react/index",
+            "source": "react",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "Component",
               "exportMapKey": "9 * Component ",
+              "moduleSpecifier": "react",
               "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
             }
           },
@@ -1850,6 +1849,115 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.core.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.date.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.object.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.string.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.array.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.object.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.string.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+  {"pollingInterval":250}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1

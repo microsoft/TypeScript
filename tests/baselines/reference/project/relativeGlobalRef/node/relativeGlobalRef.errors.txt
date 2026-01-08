@@ -1,0 +1,19 @@
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== decl.d.ts (0 errors) ====
+    declare module "decl"
+    {
+        export function call();
+    }
+==== consume.ts (0 errors) ====
+    ///<reference path="decl.d.ts" />
+    import decl = require("decl");
+    var str = decl.call();
+    
+    declare function fail();
+    
+    if(str !== "success") {
+        fail();
+    }

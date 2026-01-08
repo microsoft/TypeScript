@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyGloInterface.ts] ////
 
 //// [privacyGloInterface.ts]
-module m1 {
+namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -89,7 +89,7 @@ interface C7_public {
     f3(): C5_public;
 }
 
-module m3 {
+namespace m3 {
     export interface m3_i_public {
         f1(): number;
     }

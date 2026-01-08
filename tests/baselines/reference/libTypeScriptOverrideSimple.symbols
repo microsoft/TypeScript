@@ -15,3 +15,4 @@ const a: ABC = { abc: "Hello" }
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage
+

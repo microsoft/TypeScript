@@ -1,7 +1,7 @@
-module M {
+namespace M {
     export var v = 10;
     v;
 }
-module M {
+namespace M {
     v;
 }

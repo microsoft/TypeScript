@@ -270,7 +270,7 @@ function bar2() {
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
 }
 
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(downlevelLetConst16.ts, 98, 1))
 
     let x = 1;
@@ -297,7 +297,7 @@ module M1 {
 >z : Symbol(z, Decl(downlevelLetConst16.ts, 105, 9))
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(downlevelLetConst16.ts, 107, 1))
     {
         let x = 1;
@@ -328,7 +328,7 @@ module M2 {
 >x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(downlevelLetConst16.ts, 119, 1))
 
     const x = 1;
@@ -356,7 +356,7 @@ module M3 {
 
 }
 
-module M4 {
+namespace M4 {
 >M4 : Symbol(M4, Decl(downlevelLetConst16.ts, 129, 1))
     {
         const x = 1;

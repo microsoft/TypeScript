@@ -1,8 +1,8 @@
-module A {
+namespace A {
     export interface X { s: string }
     export var X: X;
 }
-module B {
+namespace B {
     interface A { n: number }
     import Y = A; // Alias only for module A
     import Z = A.X; // Alias for both type and member A.X

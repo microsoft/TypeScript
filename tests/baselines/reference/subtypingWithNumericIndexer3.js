@@ -19,7 +19,7 @@ class B2 extends A {
     [x: number]: Derived2; // ok
 }
 
-module Generics {
+namespace Generics {
     class A<T extends Derived> {
         [x: number]: T;
     }

@@ -13,6 +13,6 @@ export = a;
 
 === es6ImportDefaultBindingInEs5_1.ts ===
 import defaultBinding from "./es6ImportDefaultBindingInEs5_0";
->defaultBinding : any
->               : ^^^
+>defaultBinding : number
+>               : ^^^^^^
 

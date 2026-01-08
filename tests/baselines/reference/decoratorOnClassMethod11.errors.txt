@@ -2,7 +2,7 @@ decoratorOnClassMethod11.ts(5,11): error TS2331: 'this' cannot be referenced in 
 
 
 ==== decoratorOnClassMethod11.ts (1 errors) ====
-    module M {
+    namespace M {
         class C {
             decorator(target: Object, key: string): void { }
     

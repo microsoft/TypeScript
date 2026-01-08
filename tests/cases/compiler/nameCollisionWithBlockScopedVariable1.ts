@@ -1,8 +1,8 @@
 // @target: es6
-module M {
+namespace M {
     export class C { }
 }
-module M {
+namespace M {
     {
         let M = 0;
         new C();

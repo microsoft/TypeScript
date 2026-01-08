@@ -1,6 +1,6 @@
 // @declaration: true
-module M {
-    module N {
+namespace M {
+    namespace N {
         class C {
         }
         

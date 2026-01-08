@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 ////// Completion after invalid character
-////module testModule {
+////namespace testModule {
 ////    export var foo = 1;
 ////}
 ////@

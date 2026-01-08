@@ -3,11 +3,11 @@
 === constructSignatureAssignabilityInInheritance.ts ===
 // Checking basic subtype relations with construct signatures
 
-module ConstructSignature {
+namespace ConstructSignature {
 >ConstructSignature : Symbol(ConstructSignature, Decl(constructSignatureAssignabilityInInheritance.ts, 0, 0))
 
     interface Base { // T
->Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 2, 27))
+>Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 2, 30))
 
         // M's
         new (x: number): void; // BUG 842221
@@ -21,7 +21,7 @@ module ConstructSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(constructSignatureAssignabilityInInheritance.ts, 7, 5))
->Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 2, 27))
+>Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 2, 30))
 
         // N's
         new (x: number): number; // satisfies subtype for both of base's call signatures
@@ -63,11 +63,11 @@ module ConstructSignature {
     }
 }
 
-module MemberWithConstructSignature {
+namespace MemberWithConstructSignature {
 >MemberWithConstructSignature : Symbol(MemberWithConstructSignature, Decl(constructSignatureAssignabilityInInheritance.ts, 32, 1))
 
     interface Base { // T
->Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 37))
+>Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 40))
 
         // M's
         a: new (x: number) => void;
@@ -88,7 +88,7 @@ module MemberWithConstructSignature {
 
     var b: Base;
 >b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance.ts, 42, 7))
->Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 37))
+>Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 40))
 
     var r = new b.a(1);
 >r : Symbol(r, Decl(constructSignatureAssignabilityInInheritance.ts, 43, 7))
@@ -99,7 +99,7 @@ module MemberWithConstructSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(constructSignatureAssignabilityInInheritance.ts, 43, 23))
->Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 37))
+>Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 40))
 
         // N's
         a: new (x: number) => number; // ok because base returns void

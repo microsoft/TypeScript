@@ -23,7 +23,7 @@ voidOperatorWithAnyOtherType.ts(48,27): error TS2365: Operator '+' cannot be app
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();

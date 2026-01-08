@@ -3,7 +3,7 @@
 === objectLiteralShorthandPropertiesWithModule.ts ===
 // module export
 
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module m {
 >x : any
 }
 
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

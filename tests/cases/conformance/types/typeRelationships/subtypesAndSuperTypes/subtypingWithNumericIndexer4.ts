@@ -12,7 +12,7 @@ class B extends A {
     [x: number]: string; // error
 }
 
-module Generics {
+namespace Generics {
     class A<T extends Derived> {
         [x: number]: T;
     }

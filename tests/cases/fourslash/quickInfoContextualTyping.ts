@@ -17,7 +17,7 @@
 ////    }
 ////}
 ////// CONTEXT: Module property declaration
-////module C2T5 {
+////namespace C2T5 {
 ////    export var /*4*/foo: (i: number, s: string) => number = function(/*5*/i) {
 ////        return /*6*/i;
 ////    }
@@ -58,7 +58,7 @@
 ////    }
 ////}
 ////// CONTEXT: Module property assignment
-////module C5T5 {
+////namespace C5T5 {
 ////    export var /*38*/foo: (i: number, s: string) => string;
 ////    foo = function(/*39*/i, /*40*/s) {
 ////        return s;

@@ -5,6 +5,7 @@ import {x} from "D"
 export var x
 
 Diagnostics::
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 c.ts(1,17): error TS1261: Already included file name '/a/b/D.ts' differs from file name 'd.ts' only in casing.
   The file is in the program because:
     Imported via "D" from file 'c.ts'

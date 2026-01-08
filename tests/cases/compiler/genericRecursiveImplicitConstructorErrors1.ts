@@ -1,5 +1,5 @@
 //@module: amd
-export declare module TypeScript {
+export declare namespace TypeScript {
   class PullSymbol { }
   class PullSignatureSymbol <A,B,C> extends PullSymbol {
   public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;

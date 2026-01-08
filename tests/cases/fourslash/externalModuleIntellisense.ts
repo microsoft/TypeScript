@@ -3,7 +3,7 @@
 // @Filename: externalModuleIntellisense_file0.ts
 ////export = express;
 ////function express(): express.ExpressServer;
-////module express {
+////namespace express {
 ////    export interface ExpressServer {
 ////        enable(name: string): ExpressServer;
 ////        post(path: RegExp, handler: (req: Function) => void): void;

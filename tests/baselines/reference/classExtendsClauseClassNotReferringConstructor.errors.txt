@@ -3,7 +3,7 @@ classExtendsClauseClassNotReferringConstructor.ts(4,21): error TS2507: Type 'num
 
 ==== classExtendsClauseClassNotReferringConstructor.ts (1 errors) ====
     class A { a: number; }
-    module Foo {
+    namespace Foo {
         var A = 1;
         class B extends A { b: string; }
                         ~

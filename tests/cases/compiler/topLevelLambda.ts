@@ -1,3 +1,3 @@
-module M {
+namespace M {
 	var f = () => {this.window;}
 }

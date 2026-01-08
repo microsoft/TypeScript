@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxViaImport.2.tsx] ////
 
 //// [component.d.ts]
-declare module JSX {
+declare namespace JSX {
   interface ElementAttributesProperty { props; }
 }
-declare module React {
+declare namespace React {
   class Component<T, U> { }
 }
 declare module "BaseComponent" {
@@ -39,9 +39,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="component.d.ts" />
-var BaseComponent_1 = require("BaseComponent");
+var BaseComponent_1 = __importDefault(require("BaseComponent"));
 var TestComponent = /** @class */ (function (_super) {
     __extends(TestComponent, _super);
     function TestComponent() {

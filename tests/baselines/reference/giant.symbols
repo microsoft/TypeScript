@@ -182,7 +182,7 @@ interface I {
 >pa1 : Symbol(pa1, Decl(giant.ts, 75, 9))
 >pa2 : Symbol(pa2, Decl(giant.ts, 75, 13))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(giant.ts, 76, 1))
 
     var V;
@@ -350,7 +350,7 @@ module M {
 >pa1 : Symbol(pa1, Decl(giant.ts, 139, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 139, 17))
     }
-    module M {
+    namespace M {
 >M : Symbol(M, Decl(giant.ts, 140, 5))
 
         var V;
@@ -365,7 +365,7 @@ module M {
         interface I { };
 >I : Symbol(I, Decl(giant.ts, 144, 20))
 
-        module M { };
+        namespace M { };
 >M : Symbol(M, Decl(giant.ts, 145, 24))
 
         export var eV;
@@ -380,7 +380,7 @@ module M {
         export interface eI { };
 >eI : Symbol(eI, Decl(giant.ts, 149, 28))
 
-        export module eM { };
+        export namespace eM { };
 >eM : Symbol(eM, Decl(giant.ts, 150, 32))
 
         export declare var eaV;
@@ -392,7 +392,7 @@ module M {
         export declare class eaC { };
 >eaC : Symbol(eaC, Decl(giant.ts, 153, 42))
 
-        export declare module eaM { };
+        export declare namespace eaM { };
 >eaM : Symbol(eaM, Decl(giant.ts, 154, 37))
     }
     export var eV;
@@ -560,7 +560,7 @@ module M {
 >pa1 : Symbol(pa1, Decl(giant.ts, 218, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 218, 17))
     }
-    export module eM {
+    export namespace eM {
 >eM : Symbol(eM, Decl(giant.ts, 219, 5))
 
         var V;
@@ -575,7 +575,7 @@ module M {
         interface I { };
 >I : Symbol(I, Decl(giant.ts, 223, 20))
 
-        module M { };
+        namespace M { };
 >M : Symbol(M, Decl(giant.ts, 224, 24))
 
         export var eV;
@@ -590,7 +590,7 @@ module M {
         export interface eI { };
 >eI : Symbol(eI, Decl(giant.ts, 228, 28))
 
-        export module eM { };
+        export namespace eM { };
 >eM : Symbol(eM, Decl(giant.ts, 229, 32))
 
         export declare var eaV;
@@ -602,7 +602,7 @@ module M {
         export declare class eaC { };
 >eaC : Symbol(eaC, Decl(giant.ts, 232, 42))
 
-        export declare module eaM { };
+        export declare namespace eaM { };
 >eaM : Symbol(eaM, Decl(giant.ts, 233, 37))
     }
     export declare var eaV;
@@ -675,7 +675,7 @@ module M {
         static get tgF()
 >tgF : Symbol(eaC.tgF, Decl(giant.ts, 256, 24))
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : Symbol(eaM, Decl(giant.ts, 258, 5))
 
         var V;
@@ -690,7 +690,7 @@ module M {
         interface I { }
 >I : Symbol(I, Decl(giant.ts, 262, 19))
 
-        module M { }
+        namespace M { }
 >M : Symbol(M, Decl(giant.ts, 263, 23))
 
         export var eV;
@@ -705,7 +705,7 @@ module M {
         export interface eI { }
 >eI : Symbol(eI, Decl(giant.ts, 267, 27))
 
-        export module eM { }
+        export namespace eM { }
 >eM : Symbol(eM, Decl(giant.ts, 268, 31))
     }
 }
@@ -874,7 +874,7 @@ export interface eI {
 >pa1 : Symbol(pa1, Decl(giant.ts, 333, 9))
 >pa2 : Symbol(pa2, Decl(giant.ts, 333, 13))
 }
-export module eM {
+export namespace eM {
 >eM : Symbol(eM, Decl(giant.ts, 334, 1))
 
     var V;
@@ -1042,7 +1042,7 @@ export module eM {
 >pa1 : Symbol(pa1, Decl(giant.ts, 397, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 397, 17))
     }
-    module M {
+    namespace M {
 >M : Symbol(M, Decl(giant.ts, 398, 5))
 
         var V;
@@ -1057,7 +1057,7 @@ export module eM {
         interface I { };
 >I : Symbol(I, Decl(giant.ts, 402, 20))
 
-        module M { };
+        namespace M { };
 >M : Symbol(M, Decl(giant.ts, 403, 24))
 
         export var eV;
@@ -1072,7 +1072,7 @@ export module eM {
         export interface eI { };
 >eI : Symbol(eI, Decl(giant.ts, 407, 28))
 
-        export module eM { };
+        export namespace eM { };
 >eM : Symbol(eM, Decl(giant.ts, 408, 32))
 
         export declare var eaV;
@@ -1084,7 +1084,7 @@ export module eM {
         export declare class eaC { };
 >eaC : Symbol(eaC, Decl(giant.ts, 411, 42))
 
-        export declare module eaM { };
+        export declare namespace eaM { };
 >eaM : Symbol(eaM, Decl(giant.ts, 412, 37))
     }
     export var eV;
@@ -1252,7 +1252,7 @@ export module eM {
 >pa1 : Symbol(pa1, Decl(giant.ts, 476, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 476, 17))
     }
-    export module eM {
+    export namespace eM {
 >eM : Symbol(eM, Decl(giant.ts, 477, 5))
 
         var V;
@@ -1267,7 +1267,7 @@ export module eM {
         interface I { };
 >I : Symbol(I, Decl(giant.ts, 481, 20))
 
-        module M { };
+        namespace M { };
 >M : Symbol(M, Decl(giant.ts, 482, 24))
 
         export var eV;
@@ -1282,7 +1282,7 @@ export module eM {
         export interface eI { };
 >eI : Symbol(eI, Decl(giant.ts, 486, 28))
 
-        export module eM { };
+        export namespace eM { };
 >eM : Symbol(eM, Decl(giant.ts, 487, 32))
 
         export declare var eaV;
@@ -1294,7 +1294,7 @@ export module eM {
         export declare class eaC { };
 >eaC : Symbol(eaC, Decl(giant.ts, 490, 42))
 
-        export declare module eaM { };
+        export declare namespace eaM { };
 >eaM : Symbol(eaM, Decl(giant.ts, 491, 37))
     }
     export declare var eaV;
@@ -1367,7 +1367,7 @@ export module eM {
         static get tgF()
 >tgF : Symbol(eaC.tgF, Decl(giant.ts, 514, 24))
     }
-    export declare module eaM {
+    export declare namespace eaM {
 >eaM : Symbol(eaM, Decl(giant.ts, 516, 5))
 
         var V;
@@ -1382,7 +1382,7 @@ export module eM {
         interface I { }
 >I : Symbol(I, Decl(giant.ts, 520, 19))
 
-        module M { }
+        namespace M { }
 >M : Symbol(M, Decl(giant.ts, 521, 23))
 
         export var eV;
@@ -1397,7 +1397,7 @@ export module eM {
         export interface eI { }
 >eI : Symbol(eI, Decl(giant.ts, 525, 27))
 
-        export module eM { }
+        export namespace eM { }
 >eM : Symbol(eM, Decl(giant.ts, 526, 31))
     }
 }
@@ -1471,7 +1471,7 @@ export declare class eaC {
     static get tgF()
 >tgF : Symbol(eaC.tgF, Decl(giant.ts, 550, 20))
 }
-export declare module eaM {
+export declare namespace eaM {
 >eaM : Symbol(eaM, Decl(giant.ts, 552, 1))
 
     var V;
@@ -1591,7 +1591,7 @@ export declare module eaM {
 >pa1 : Symbol(pa1, Decl(giant.ts, 601, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 601, 17))
     }
-    module M {
+    namespace M {
 >M : Symbol(M, Decl(giant.ts, 602, 5))
 
         var V;
@@ -1606,7 +1606,7 @@ export declare module eaM {
         interface I { }
 >I : Symbol(I, Decl(giant.ts, 606, 19))
 
-        module M { }
+        namespace M { }
 >M : Symbol(M, Decl(giant.ts, 607, 23))
 
         export var eV;
@@ -1621,7 +1621,7 @@ export declare module eaM {
         export interface eI { }
 >eI : Symbol(eI, Decl(giant.ts, 611, 27))
 
-        export module eM { }
+        export namespace eM { }
 >eM : Symbol(eM, Decl(giant.ts, 612, 31))
 
         export declare var eaV
@@ -1633,7 +1633,7 @@ export declare module eaM {
         export declare class eaC { }
 >eaC : Symbol(eaC, Decl(giant.ts, 615, 42))
 
-        export declare module eaM { }
+        export declare namespace eaM { }
 >eaM : Symbol(eaM, Decl(giant.ts, 616, 36))
     }
     export var eV;
@@ -1756,7 +1756,7 @@ export declare module eaM {
 >pa1 : Symbol(pa1, Decl(giant.ts, 667, 13))
 >pa2 : Symbol(pa2, Decl(giant.ts, 667, 17))
     }
-    export module eM {
+    export namespace eM {
 >eM : Symbol(eM, Decl(giant.ts, 668, 5))
 
         var V;
@@ -1768,7 +1768,7 @@ export declare module eaM {
         class C { }
 >C : Symbol(C, Decl(giant.ts, 671, 25))
 
-        module M { }
+        namespace M { }
 >M : Symbol(M, Decl(giant.ts, 672, 19))
 
         export var eV;
@@ -1783,7 +1783,7 @@ export declare module eaM {
         export interface eI { }
 >eI : Symbol(eI, Decl(giant.ts, 676, 27))
 
-        export module eM { }
+        export namespace eM { }
 >eM : Symbol(eM, Decl(giant.ts, 677, 31))
     }
 }

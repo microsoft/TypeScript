@@ -1,6 +1,6 @@
 //@module: commonjs
-export module m1 {
-    export module m1_M1_public {
+export namespace m1 {
+    export namespace m1_M1_public {
         export class c1 {
         }
         export function f1() {
@@ -10,7 +10,7 @@ export module m1 {
         export var v2: c1;
     }
 
-    module m1_M2_private {
+    namespace m1_M2_private {
         export class c1 {
         }
         export function f1() {
@@ -83,8 +83,8 @@ export module m1 {
     export import m1_im4_public = require("m1_M4_private");
 }
 
-module m2 {
-    export module m2_M1_public {
+namespace m2 {
+    export namespace m2_M1_public {
         export class c1 {
         }
         export function f1() {
@@ -94,7 +94,7 @@ module m2 {
         export var v2: c1;
     }
 
-    module m2_M2_private {
+    namespace m2_M2_private {
         export class c1 {
         }
         export function f1() {
@@ -168,7 +168,7 @@ module m2 {
     export import m1_im4_public = require("m2_M4_private");
 }
 
-export module glo_M1_public {
+export namespace glo_M1_public {
     export class c1 {
     }
     export function f1() {
@@ -186,7 +186,7 @@ export declare module "glo_M2_public" {
     export var v2: c1;
 }
 
-export module glo_M3_private {
+export namespace glo_M3_private {
     export class c1 {
     }
     export function f1() {
@@ -270,11 +270,11 @@ export declare module "use_glo_M1_public" {
     var use_glo_M2_public_v2_private: use_glo_M2_public;
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
 
-    module m2 {
+    namespace m2 {
         import errorImport = require("glo_M2_public");
         import nonerrorImport = glo_M1_public;
 
-        module m5 {
+        namespace m5 {
             import m5_errorImport = require("glo_M2_public");
             import m5_nonerrorImport = glo_M1_public;
         }
@@ -299,11 +299,11 @@ declare module "use_glo_M3_private" {
     var use_glo_M4_private_v2_private: use_glo_M4_private;
     var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
 
-    module m2 {
+    namespace m2 {
         import errorImport = require("glo_M4_private");
         import nonerrorImport = glo_M3_private;
 
-        module m5 {
+        namespace m5 {
             import m5_errorImport = require("glo_M4_private");
             import m5_nonerrorImport = glo_M3_private;
         }
@@ -311,12 +311,12 @@ declare module "use_glo_M3_private" {
 }
 
 declare module "anotherParseError" {
-    module m2 {
+    namespace m2 {
         declare module "abc" {
         }
     }
 
-    module m2 {
+    namespace m2 {
         module "abc2" {
         }
     }
@@ -325,12 +325,12 @@ declare module "anotherParseError" {
 }
 
 declare export module "anotherParseError2" {
-    module m2 {
+    namespace m2 {
         declare module "abc" {
         }
     }
 
-    module m2 {
+    namespace m2 {
         module "abc2" {
         }
     }
@@ -338,18 +338,18 @@ declare export module "anotherParseError2" {
     }
 }
 
-module m2 {
+namespace m2 {
     import m3 = require("use_glo_M1_public");
-    module m4 {
+    namespace m4 {
         var a = 10;
         import m2 = require("use_glo_M1_public");
     }
 
 }
 
-export module m3 {
+export namespace m3 {
     import m3 = require("use_glo_M1_public");
-    module m4 {
+    namespace m4 {
         var a = 10;
         import m2 = require("use_glo_M1_public");
     }

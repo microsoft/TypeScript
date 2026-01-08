@@ -2,12 +2,12 @@
 
 === Performance Stats ===
 Assignability cache: 2,500,000
-Type Count: 25,000
+Type Count: 10,000
 
 === relationComplexityError.ts ===
 // Repro from #55630
 
-type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
 >Digits : Digits
 >       : ^^^^^^
 

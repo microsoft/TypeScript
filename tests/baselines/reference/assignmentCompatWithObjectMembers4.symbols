@@ -3,21 +3,21 @@
 === assignmentCompatWithObjectMembers4.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 
-module OnlyDerived {
+namespace OnlyDerived {
 >OnlyDerived : Symbol(OnlyDerived, Decl(assignmentCompatWithObjectMembers4.ts, 0, 0))
 
     class Base { foo: string; }
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 23))
 >foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembers4.ts, 3, 16))
 
     class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 3, 31))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 23))
 >bar : Symbol(Derived.bar, Decl(assignmentCompatWithObjectMembers4.ts, 4, 32))
 
     class Derived2 extends Base { baz: string; }
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 4, 47))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 23))
 >baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembers4.ts, 5, 33))
 
     class S { foo: Derived; }
@@ -153,27 +153,27 @@ module OnlyDerived {
 >t : Symbol(t, Decl(assignmentCompatWithObjectMembers4.ts, 10, 7))
 }
 
-module WithBase {
+namespace WithBase {
 >WithBase : Symbol(WithBase, Decl(assignmentCompatWithObjectMembers4.ts, 45, 1))
 
     class Base { foo: string; }
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 >foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembers4.ts, 48, 16))
 
     class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 48, 31))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 >bar : Symbol(Derived.bar, Decl(assignmentCompatWithObjectMembers4.ts, 49, 32))
 
     class Derived2 extends Base { baz: string; }
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 49, 47))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 >baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembers4.ts, 50, 33))
 
     class S { foo: Base; }
 >S : Symbol(S, Decl(assignmentCompatWithObjectMembers4.ts, 50, 48))
 >foo : Symbol(S.foo, Decl(assignmentCompatWithObjectMembers4.ts, 52, 13))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 
     class T { foo: Derived2; }
 >T : Symbol(T, Decl(assignmentCompatWithObjectMembers4.ts, 52, 26))
@@ -191,7 +191,7 @@ module WithBase {
     interface S2 { foo: Base; }
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers4.ts, 55, 13))
 >foo : Symbol(S2.foo, Decl(assignmentCompatWithObjectMembers4.ts, 57, 18))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 
     interface T2 { foo: Derived2; }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers4.ts, 57, 31))
@@ -209,7 +209,7 @@ module WithBase {
     var a: { foo: Base; }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembers4.ts, 62, 7))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 62, 12))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 
     var b: { foo: Derived2; }
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembers4.ts, 63, 7))
@@ -219,7 +219,7 @@ module WithBase {
     var a2 = { foo: new Base() };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers4.ts, 65, 7))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 65, 14))
->Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 20))
 
     var b2 = { foo: new Derived2() };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers4.ts, 66, 7))

@@ -33,7 +33,7 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     // string named numeric properties work correctly, errors below unless otherwise noted
     
-    module JustStrings {
+    namespace JustStrings {
         class S { '1': string; }
         class T { '1.': string; }
         var s: S;
@@ -122,7 +122,7 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
 !!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
     }
     
-    module NumbersAndStrings {
+    namespace NumbersAndStrings {
         class S { '1': string; }
         class T { 1: string; }
         var s: S;

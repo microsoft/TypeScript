@@ -87,16 +87,16 @@ export function exportedFunction() {
 >simpleFunction : Symbol(simpleFunction, Decl(withExportDecl.ts, 23, 52))
 }
 
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(withExportDecl.ts, 35, 1))
 
     export function foo() {
->foo : Symbol(foo, Decl(withExportDecl.ts, 37, 11))
+>foo : Symbol(foo, Decl(withExportDecl.ts, 37, 14))
 
         return "Hello";
     }
 }
-export declare module m2 {
+export declare namespace m2 {
 >m2 : Symbol(m2, Decl(withExportDecl.ts, 41, 1))
 
     export var a: number;
@@ -104,16 +104,16 @@ export declare module m2 {
 }
 
 
-export module m3 {
+export namespace m3 {
 >m3 : Symbol(m3, Decl(withExportDecl.ts, 45, 1))
 
     export function foo() {
->foo : Symbol(foo, Decl(withExportDecl.ts, 48, 18))
+>foo : Symbol(foo, Decl(withExportDecl.ts, 48, 21))
 
         return m1.foo();
->m1.foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 11))
+>m1.foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 14))
 >m1 : Symbol(m1, Decl(withExportDecl.ts, 35, 1))
->foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 11))
+>foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 14))
     }
 }
 

@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts] ////
 
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts]
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export interface I {
             foo();
         }

@@ -72,7 +72,7 @@ b2 = a; // error
 >a : A
 >  : ^
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 >         : ^^^^^^^^^^^^^^^
 

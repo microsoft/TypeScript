@@ -1,3 +1,3 @@
-module X {
+namespace X {
     export function f() { }
 }

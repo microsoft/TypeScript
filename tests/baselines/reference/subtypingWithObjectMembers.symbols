@@ -89,11 +89,11 @@ class B3 extends A3 {
 >'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers.ts, 32, 17))
 }
 
-module TwoLevels {
+namespace TwoLevels {
 >TwoLevels : Symbol(TwoLevels, Decl(subtypingWithObjectMembers.ts, 34, 1))
 
     class A {
->A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 18))
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 21))
 
         foo: Base;
 >foo : Symbol(A.foo, Decl(subtypingWithObjectMembers.ts, 37, 13))
@@ -106,7 +106,7 @@ module TwoLevels {
 
     class B extends A {
 >B : Symbol(B, Decl(subtypingWithObjectMembers.ts, 40, 5))
->A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 18))
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 21))
 
         foo: Derived2; // ok
 >foo : Symbol(B.foo, Decl(subtypingWithObjectMembers.ts, 42, 23))

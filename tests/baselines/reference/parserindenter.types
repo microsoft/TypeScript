@@ -19,7 +19,7 @@
 ///<reference path='formatting.ts' />
 
 
-module Formatting {
+namespace Formatting {
 >Formatting : typeof Formatting
 >           : ^^^^^^^^^^^^^^^^^
 

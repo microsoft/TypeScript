@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/expressions/functionCalls/forgottenNew.ts] ////
 
 === forgottenNew.ts ===
-module Tools {
+namespace Tools {
 >Tools : typeof Tools
 >      : ^^^^^^^^^^^^
 

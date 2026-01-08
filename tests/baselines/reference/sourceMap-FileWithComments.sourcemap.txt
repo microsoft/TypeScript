@@ -30,7 +30,7 @@ sourceFile:sourceMap-FileWithComments.ts
 5 >           ^^^^^^^^^^->
 1->
   >
-2 >module 
+2 >namespace 
 3 >    Shapes
 4 >           {
   >          
@@ -58,8 +58,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >              var b = 10;
   >          }
 1->Emitted(2, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(2, 5) Source(7, 8) + SourceIndex(0)
-3 >Emitted(2, 11) Source(7, 14) + SourceIndex(0)
+2 >Emitted(2, 5) Source(7, 11) + SourceIndex(0)
+3 >Emitted(2, 11) Source(7, 17) + SourceIndex(0)
 4 >Emitted(2, 12) Source(31, 2) + SourceIndex(0)
 ---
 >>>(function (Shapes) {
@@ -67,11 +67,11 @@ sourceFile:sourceMap-FileWithComments.ts
 2 >^^^^^^^^^^^
 3 >           ^^^^^^
 1->
-2 >module 
+2 >namespace 
 3 >           Shapes
 1->Emitted(3, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(3, 12) Source(7, 8) + SourceIndex(0)
-3 >Emitted(3, 18) Source(7, 14) + SourceIndex(0)
+2 >Emitted(3, 12) Source(7, 11) + SourceIndex(0)
+3 >Emitted(3, 18) Source(7, 17) + SourceIndex(0)
 ---
 >>>    // Class
 1 >^^^^
@@ -514,10 +514,10 @@ sourceFile:sourceMap-FileWithComments.ts
   >                    }
 1->Emitted(27, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(27, 2) Source(31, 2) + SourceIndex(0)
-3 >Emitted(27, 4) Source(7, 8) + SourceIndex(0)
-4 >Emitted(27, 10) Source(7, 14) + SourceIndex(0)
-5 >Emitted(27, 15) Source(7, 8) + SourceIndex(0)
-6 >Emitted(27, 21) Source(7, 14) + SourceIndex(0)
+3 >Emitted(27, 4) Source(7, 11) + SourceIndex(0)
+4 >Emitted(27, 10) Source(7, 17) + SourceIndex(0)
+5 >Emitted(27, 15) Source(7, 11) + SourceIndex(0)
+6 >Emitted(27, 21) Source(7, 17) + SourceIndex(0)
 7 >Emitted(27, 29) Source(31, 2) + SourceIndex(0)
 ---
 >>>/** Local Variable */

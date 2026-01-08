@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: NodeNext
+// @module: node18
 // @traceResolution: true
 
 // @filename: node_modules/inner/index.d.mts

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/declarationEmitClassInherritsAny.ts] ////
+
+=== declarationEmitClassInherritsAny.ts ===
+const anyThing = class {} as any;
+>anyThing : Symbol(anyThing, Decl(declarationEmitClassInherritsAny.ts, 0, 5))
+
+export class Foo extends anyThing {}
+>Foo : Symbol(Foo, Decl(declarationEmitClassInherritsAny.ts, 0, 33))
+>anyThing : Symbol(anyThing, Decl(declarationEmitClassInherritsAny.ts, 0, 5))
+

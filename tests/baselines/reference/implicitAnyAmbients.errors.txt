@@ -10,7 +10,7 @@ implicitAnyAmbients.ts(22,13): error TS7005: Variable 'y' implicitly has an 'any
 
 
 ==== implicitAnyAmbients.ts (9 errors) ====
-    declare module m {
+    declare namespace m {
         var x; // error
             ~
 !!! error TS7005: Variable 'x' implicitly has an 'any' type.
@@ -46,7 +46,7 @@ implicitAnyAmbients.ts(22,13): error TS7005: Variable 'y' implicitly has an 'any
             foo3(x: any): any;
         }
     
-        module n {
+        namespace n {
             var y; // error
                 ~
 !!! error TS7005: Variable 'y' implicitly has an 'any' type.

@@ -1,4 +1,4 @@
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @module: commonjs
 // @baseUrl: c:/root
 // @traceResolution: true

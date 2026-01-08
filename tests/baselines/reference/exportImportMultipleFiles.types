@@ -7,6 +7,7 @@ import lib = require('./exportImportMultipleFiles_library');
 
 lib.math.add(3, 4); // Shouldnt be error
 >lib.math.add(3, 4) : any
+>                   : ^^^
 >lib.math.add : (a: any, b: any) => any
 >             : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >lib.math : typeof lib.math
@@ -27,10 +28,15 @@ export function add(a, b) { return a + b; }
 >add : (a: any, b: any) => any
 >    : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >a + b : any
+>      : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 === exportImportMultipleFiles_library.ts ===
 export import math = require("exportImportMultipleFiles_math");
@@ -39,6 +45,7 @@ export import math = require("exportImportMultipleFiles_math");
 
 math.add(3, 4); // OK
 >math.add(3, 4) : any
+>               : ^^^
 >math.add : (a: any, b: any) => any
 >         : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >math : typeof math

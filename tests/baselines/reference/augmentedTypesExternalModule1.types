@@ -13,4 +13,4 @@ class c5 { public foo() { } }
 >foo : () => void
 >    : ^^^^^^^^^^
 
-module c5 { } // should be ok everywhere
+namespace c5 { } // should be ok everywhere

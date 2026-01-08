@@ -43,7 +43,7 @@ declare module "foo"
 >"foo" : typeof import("foo")
 >      : ^^^^^^^^^^^^^^^^^^^^
 {
-    module B {
+    namespace B {
         export interface A {
         }
     }

@@ -36,7 +36,7 @@ class A {
 >1 : 1
 >  : ^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

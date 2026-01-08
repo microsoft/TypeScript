@@ -20,11 +20,8 @@ for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a
         marker,
         includes: {
             name: "x",
-            source: "/src/a",
+            source: sourceDisplay,
             sourceDisplay,
-            text: "const x: 0",
-            kind: "const",
-            kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
@@ -32,7 +29,7 @@ for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a
     });
     verify.applyCodeActionFromCompletion(marker, {
         name: "x",
-        source: "/src/a",
+        source: sourceDisplay,
         description: `Add import from "${sourceDisplay}"`,
         newFileContent: `import { x } from "${sourceDisplay}";\n\nx`,
     });

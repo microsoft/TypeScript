@@ -15,7 +15,7 @@ duplicateStringIndexers.ts(31,9): error TS2374: Duplicate index signature for ty
 ==== duplicateStringIndexers.ts (12 errors) ====
     // it is an error to have duplicate index signatures of the same kind in a type
     
-    module test {
+    namespace test {
         interface Number {
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~

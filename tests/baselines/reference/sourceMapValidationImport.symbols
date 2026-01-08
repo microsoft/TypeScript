@@ -1,22 +1,22 @@
 //// [tests/cases/compiler/sourceMapValidationImport.ts] ////
 
 === sourceMapValidationImport.ts ===
-export module m {
+export namespace m {
 >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
 
     export class c {
->c : Symbol(c, Decl(sourceMapValidationImport.ts, 0, 17))
+>c : Symbol(c, Decl(sourceMapValidationImport.ts, 0, 20))
     }
 }
 import a = m.c;
 >a : Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
 >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
->c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
+>c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 20))
 
 export import b = m.c;
 >b : Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
 >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
->c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
+>c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 20))
 
 var x = new a();
 >x : Symbol(x, Decl(sourceMapValidationImport.ts, 6, 3))

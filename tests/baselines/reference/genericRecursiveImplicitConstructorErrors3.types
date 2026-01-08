@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts] ////
 
 === genericRecursiveImplicitConstructorErrors3.ts ===
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -22,7 +22,7 @@ module TypeScript {
     }
 }
  
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 

@@ -32,7 +32,8 @@ export const x = "type1";
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -53,7 +54,8 @@ export const y = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -71,7 +73,8 @@ export const z = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -90,7 +93,8 @@ export const z = 10
       "dom",
       "webworker"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -107,7 +111,6 @@ interface ScriptHostInterface { }
 export const unrelated = 10;
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -122,7 +125,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -146,7 +148,6 @@ interface WebWorkerInterface { }
 interface ScriptHostInterface { }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -192,6 +193,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -335,7 +337,7 @@ Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
 	/home/src/workspace/projects/project1/file.ts Text-1 "export const file = 10;"
@@ -397,7 +399,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 7,
-            "dtsSize": 576,
+            "dtsSize": 537,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -410,7 +412,8 @@ Info seq  [hh:mm:ss:mss] event:
               "es5",
               "dom"
             ],
-            "traceResolution": true
+            "traceResolution": true,
+            "libReplacement": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -730,7 +733,7 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
 	/home/src/workspace/projects/project1/file.ts Text-1 "export const file = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
@@ -1002,7 +1005,7 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/core.d.ts Text-1 "export const core = 10;"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
@@ -1206,7 +1209,7 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/workspace/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
@@ -1440,7 +1443,7 @@ Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
@@ -1625,7 +1628,8 @@ Before running Timeout callback:: count: 2
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1670,6 +1674,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -1724,7 +1729,7 @@ Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
@@ -1869,7 +1874,8 @@ Before running Timeout callback:: count: 3
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1964,6 +1970,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -2049,7 +2056,7 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/workspace/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
@@ -2389,7 +2396,7 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/tslibs/TS/Lib/lib.webworker.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/workspace/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
@@ -2712,7 +2719,7 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/tslibs/TS/Lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebWorkerInterface { }"
 	/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
-	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/workspace/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/workspace/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"

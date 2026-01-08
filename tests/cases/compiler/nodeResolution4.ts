@@ -1,6 +1,5 @@
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: ref.ts
 var x = 1;
 

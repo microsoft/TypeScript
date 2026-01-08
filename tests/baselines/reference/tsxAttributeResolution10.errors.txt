@@ -2,7 +2,7 @@ file.tsx(11,14): error TS2322: Type 'string' is not assignable to type 'boolean'
 
 
 ==== react.d.ts (0 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}

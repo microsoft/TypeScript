@@ -4,10 +4,6 @@
         "target": "esnext",
         "moduleResolution": "nodenext",
         "moduleDetection": "force",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "resolvePackageJsonExports": true,
-        "resolvePackageJsonImports": true,
         "useDefineForClassFields": true
     }
 }

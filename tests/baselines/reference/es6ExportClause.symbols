@@ -7,7 +7,7 @@ class c {
 interface i {
 >i : Symbol(i, Decl(server.ts, 1, 1))
 }
-module m {
+namespace m {
 >m : Symbol(m, Decl(server.ts, 3, 1))
 
     export var x = 10;
@@ -16,7 +16,7 @@ module m {
 var x = 10;
 >x : Symbol(x, Decl(server.ts, 7, 3))
 
-module uninstantiated {
+namespace uninstantiated {
 >uninstantiated : Symbol(uninstantiated, Decl(server.ts, 7, 11))
 }
 export { c };

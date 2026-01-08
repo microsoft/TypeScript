@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/enumBasics3.ts] ////
 
 //// [enumBasics3.ts]
-module M {
+namespace M {
   export namespace N {
     export enum E1 {
       a = 1,
@@ -10,7 +10,7 @@ module M {
   }
 }
 
-module M {
+namespace M {
   export namespace N {
     export enum E2 {
       b = M.N.E1.a,

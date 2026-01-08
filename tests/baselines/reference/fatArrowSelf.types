@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/fatArrowSelf.ts] ////
 
 === fatArrowSelf.ts ===
-module Events {
+namespace Events {
 >Events : typeof Events
 >       : ^^^^^^^^^^^^^
 
@@ -24,7 +24,7 @@ module Events {
     }
 }
 
-module Consumer {
+namespace Consumer {
 >Consumer : typeof Consumer
 >         : ^^^^^^^^^^^^^^^
 

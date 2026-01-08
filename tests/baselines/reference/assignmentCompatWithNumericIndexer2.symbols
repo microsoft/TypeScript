@@ -55,11 +55,11 @@ b2 = a; // error
 >b2 : Symbol(b2, Decl(assignmentCompatWithNumericIndexer2.ts, 15, 3))
 >a : Symbol(a, Decl(assignmentCompatWithNumericIndexer2.ts, 10, 3))
 
-module Generics {
+namespace Generics {
 >Generics : Symbol(Generics, Decl(assignmentCompatWithNumericIndexer2.ts, 17, 7))
 
     interface A<T extends Base> {
->A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 17))
+>A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 20))
 >T : Symbol(T, Decl(assignmentCompatWithNumericIndexer2.ts, 20, 16))
 >Base : Symbol(Base, Decl(assignmentCompatWithNumericIndexer2.ts, 0, 0))
 
@@ -70,7 +70,7 @@ module Generics {
 
     interface B extends A<Base> {
 >B : Symbol(B, Decl(assignmentCompatWithNumericIndexer2.ts, 22, 5))
->A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 17))
+>A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 20))
 >Base : Symbol(Base, Decl(assignmentCompatWithNumericIndexer2.ts, 0, 0))
 
         [x: number]: Derived; // ok
@@ -85,7 +85,7 @@ module Generics {
 
         var a: A<T>;
 >a : Symbol(a, Decl(assignmentCompatWithNumericIndexer2.ts, 29, 11))
->A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 17))
+>A : Symbol(A, Decl(assignmentCompatWithNumericIndexer2.ts, 19, 20))
 >T : Symbol(T, Decl(assignmentCompatWithNumericIndexer2.ts, 28, 17))
 
         var b: { [x: number]: Derived; }

@@ -25,7 +25,7 @@ bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot 
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();

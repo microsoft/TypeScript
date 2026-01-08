@@ -1,6 +1,6 @@
 // Import this module when test harness supports external modules. Also remove the internal module below.
 // import Foo = require("interfaceDeclaration5")
-module Foo {
+namespace Foo {
     export interface I1 { item: string; }
     export class C1 { }
 }

@@ -1,5 +1,5 @@
 //@module: commonjs
-export module x {
+export namespace x {
     export class c {
         foo(a: number) {
             return a;
@@ -7,8 +7,8 @@ export module x {
     }
 }
 
-export module m2 {
-    export module m3 {
+export namespace m2 {
+    export namespace m3 {
         import c = x.c;
         export var cProp = new c();
         var cReturnVal = cProp.foo(10);

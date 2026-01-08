@@ -2,7 +2,7 @@ assignToExistingClass.ts(8,13): error TS2629: Cannot assign to 'Mocked' because 
 
 
 ==== assignToExistingClass.ts (1 errors) ====
-    module Test {
+    namespace Test {
         class Mocked {
             myProp: string;
         }

@@ -104,7 +104,6 @@ interface ScriptHostInterface { }
 export const unrelated = 10;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -131,93 +130,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project1/tsconfig.json'...
 
-======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-webworker' was not resolved. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-scripthost' was not resolved. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-es5' was not resolved. ========
 ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
@@ -225,35 +137,6 @@ File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' doe
 File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-dom' was not resolved. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -280,22 +163,6 @@ project1/typeroot1/sometype/index.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...
 
-======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project2/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project2/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-es5' was not resolved. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project2/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project2/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-dom' was not resolved. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
@@ -308,22 +175,6 @@ project2/utils.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project3/tsconfig.json'...
 
-======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project3/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project3/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
-Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-es5' was not resolved. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project3/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project3/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-dom' was not resolved. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
@@ -336,51 +187,6 @@ project3/utils.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project4/tsconfig.json'...
 
-======== Resolving module '@typescript/lib-esnext' from '/home/src/workspace/projects/project4/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project4/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-File '/home/src/workspace/projects/node_modules/@typescript/lib-esnext.ts' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-esnext.tsx' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-esnext.d.ts' does not exist.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
-Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspace/projects/project4/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-esnext.js' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-esnext.jsx' does not exist.
-Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-esnext' was not resolved. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project4/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project4/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-dom' was not resolved. ========
-======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project4/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspace/projects/project4/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker'
-Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/workspace/projects'.
-======== Module name '@typescript/lib-webworker' was not resolved. ========
 ../../tslibs/TS/Lib/lib.esnext.d.ts
   Library 'lib.esnext.d.ts' specified in compilerOptions
 ../../tslibs/TS/Lib/lib.dom.d.ts
@@ -429,7 +235,7 @@ export declare const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","../../../tslibs/ts/lib/lib.webworker.d.ts","../../../tslibs/ts/lib/lib.scripthost.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","../../../tslibs/ts/lib/lib.webworker.d.ts","../../../tslibs/ts/lib/lib.scripthost.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -448,11 +254,11 @@ export declare const x = "type1";
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.es5.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../../../tslibs/ts/lib/lib.dom.d.ts": {
@@ -540,7 +346,7 @@ export declare const x = "type1";
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1636
+  "size": 1596
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
@@ -555,7 +361,7 @@ export declare const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -568,11 +374,11 @@ export declare const y = 10;
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.es5.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../../../tslibs/ts/lib/lib.dom.d.ts": {
@@ -612,7 +418,7 @@ export declare const y = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 937
+  "size": 897
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
@@ -627,7 +433,7 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es5.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -640,11 +446,11 @@ export declare const z = 10;
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.es5.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../../../tslibs/ts/lib/lib.dom.d.ts": {
@@ -684,7 +490,7 @@ export declare const z = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 937
+  "size": 897
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
@@ -699,7 +505,7 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.esnext.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","../../../tslibs/ts/lib/lib.webworker.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.esnext.d.ts","../../../tslibs/ts/lib/lib.dom.d.ts","../../../tslibs/ts/lib/lib.webworker.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -713,11 +519,11 @@ export declare const z = 10;
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.esnext.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../../../tslibs/ts/lib/lib.dom.d.ts": {
@@ -766,7 +572,7 @@ export declare const z = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1069
+  "size": 1029
 }
 
 
@@ -819,8 +625,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.es5.d.ts (used version)
-/home/src/tslibs/ts/lib/lib.webworker.d.ts (used version)
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
 /home/src/workspace/projects/project1/core.d.ts (used version)
 /home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
 /home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
@@ -828,6 +632,8 @@ Shape signatures in builder refreshed for::
 /home/src/workspace/projects/project1/utils.d.ts (used version)
 /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts (used version)
 /home/src/tslibs/ts/lib/lib.dom.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.webworker.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
 
 Program root files: [
   "/home/src/workspace/projects/project2/index.ts",

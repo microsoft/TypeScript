@@ -1,0 +1,43 @@
+usingDeclarations.17.ts(3,9): error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+usingDeclarations.17.ts(7,9): error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+usingDeclarations.17.ts(11,9): error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+usingDeclarations.17.ts(17,13): error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+usingDeclarations.17.ts(21,13): error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+
+
+==== usingDeclarations.17.ts (5 errors) ====
+    switch (Math.random()) {
+        case 0:
+            using d20 = { [Symbol.dispose]() {} };
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+            break;
+    
+        case 1:
+            using d21 = { [Symbol.dispose]() {} };
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+            break;
+    
+        default:
+            using d22 = { [Symbol.dispose]() {} };
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+    }
+    
+    if (true)
+        switch (0) {
+            case 0:
+                using d23 = { [Symbol.dispose]() {} };
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+                break;
+    
+            default:
+                using d24 = { [Symbol.dispose]() {} };
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1547: 'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.
+        }
+    
+    export {};
+    

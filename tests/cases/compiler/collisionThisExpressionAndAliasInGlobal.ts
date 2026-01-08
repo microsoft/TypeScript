@@ -1,4 +1,4 @@
-module a {
+namespace a {
     export var b = 10;
 }
 var f = () => this;

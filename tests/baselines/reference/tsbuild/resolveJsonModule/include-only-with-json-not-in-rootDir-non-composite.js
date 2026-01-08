@@ -23,7 +23,6 @@ export default hello.hello
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -52,6 +51,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
 TSFILE: /home/src/workspaces/solution/project/dist/index.js
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
@@ -60,6 +65,9 @@ project/hello.json
   Imported via "../hello.json" from file 'project/src/index.ts'
 project/src/index.ts
   Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
+
+Found 1 error.
+
 
 
 //// [/home/src/workspaces/solution/project/dist/index.js]
@@ -73,16 +81,17 @@ exports.default = hello_json_1.default.hello;
 
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo]
-{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./src/index.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 53
+  "size": 67
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

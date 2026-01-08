@@ -15,7 +15,7 @@ taggedTemplateStringsWithOverloadResolution3.ts(63,18): error TS2769: No overloa
     Argument of type 'boolean' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
-taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
+taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 
 
 ==== taggedTemplateStringsWithOverloadResolution3.ts (6 errors) ====
@@ -112,7 +112,8 @@ taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property '
     function fn5() { return undefined; }
     fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
                      ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
     fn5 `${ (n) => n.substr(0) }`;
     
     

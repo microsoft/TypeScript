@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/override/overrideDynamicName1.ts] ////
+
+=== overrideDynamicName1.ts ===
+let prop = "foo"
+>prop : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+class Base1 {
+>Base1 : Base1
+>      : ^^^^^
+
+  [prop]() {}
+>[prop] : () => void
+>       : ^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+}
+
+class Derived1 extends Base1 {
+>Derived1 : Derived1
+>         : ^^^^^^^^
+>Base1 : Base1
+>      : ^^^^^
+
+  override [prop]() {}
+>[prop] : () => void
+>       : ^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+}
+
+class Base2 {
+>Base2 : Base2
+>      : ^^^^^
+
+  [prop]() {}
+>[prop] : () => void
+>       : ^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Derived2
+>         : ^^^^^^^^
+>Base2 : Base2
+>      : ^^^^^
+
+  [prop]() {}
+>[prop] : () => void
+>       : ^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+}
+
+class Base3 {}
+>Base3 : Base3
+>      : ^^^^^
+
+class Derived3 extends Base3 {
+>Derived3 : Derived3
+>         : ^^^^^^^^
+>Base3 : Base3
+>      : ^^^^^
+
+  override [prop]() {}
+>[prop] : () => void
+>       : ^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+}
+

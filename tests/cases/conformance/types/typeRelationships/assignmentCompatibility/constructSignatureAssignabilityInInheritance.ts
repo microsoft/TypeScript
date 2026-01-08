@@ -1,6 +1,6 @@
 // Checking basic subtype relations with construct signatures
 
-module ConstructSignature {
+namespace ConstructSignature {
     interface Base { // T
         // M's
         new (x: number): void; // BUG 842221
@@ -32,7 +32,7 @@ module ConstructSignature {
     }
 }
 
-module MemberWithConstructSignature {
+namespace MemberWithConstructSignature {
     interface Base { // T
         // M's
         a: new (x: number) => void;

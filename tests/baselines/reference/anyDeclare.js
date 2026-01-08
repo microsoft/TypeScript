@@ -2,7 +2,7 @@
 
 //// [anyDeclare.ts]
 declare var x: any;
-module myMod {
+namespace myMod {
     var myFn;
     function myFn() {  }
 }

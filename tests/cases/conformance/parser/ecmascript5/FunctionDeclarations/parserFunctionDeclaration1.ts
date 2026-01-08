@@ -1,3 +1,3 @@
-declare module M {
+declare namespace M {
   declare function F();
 }

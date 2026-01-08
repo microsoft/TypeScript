@@ -32,7 +32,7 @@
 ////  }
 ////}
 ////
-////module Foo.Bar {
+////namespace Foo.Bar {
 ////  const sameName = () => new Foo.C();
 ////}
 

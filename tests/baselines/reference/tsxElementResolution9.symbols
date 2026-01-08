@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution9.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { something; }
->Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
 >something : Symbol(Element.something, Decl(file.tsx, 1, 20))
 
 	interface IntrinsicElements { }

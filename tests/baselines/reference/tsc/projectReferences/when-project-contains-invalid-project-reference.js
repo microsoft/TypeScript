@@ -17,7 +17,6 @@ export const x = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -34,6 +33,11 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
 [96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/Util/Dates' not found.
 
 [7m7[0m     {
@@ -44,7 +48,7 @@ Output::
 [7m [0m [91m~~~~~[0m
 
 
-Found 1 error in tsconfig.json[90m:7[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 
 

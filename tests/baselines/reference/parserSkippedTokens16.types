@@ -23,7 +23,7 @@ function Foo      () ¬   { }
 >5 : 5
 >  : ^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

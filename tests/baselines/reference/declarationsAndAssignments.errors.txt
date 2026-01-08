@@ -165,7 +165,7 @@ declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assigna
                     ~~~~~~~~~~~~
 !!! error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
     
-    module M {
+    namespace M {
         export var [a, b] = [1, 2];
     }
     

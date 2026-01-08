@@ -1,6 +1,6 @@
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/proto.ts ===
-// module M {
+// namespace M {
 //     export interface __proto__ {}
 // }
 // <|var [|__proto__|]: M.__proto__;|>

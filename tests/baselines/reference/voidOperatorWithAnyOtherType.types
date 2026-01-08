@@ -72,7 +72,7 @@ class A {
 >  : ^^^
     }
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

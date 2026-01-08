@@ -12,7 +12,7 @@ export default a;
 >  : ^^^^^^
 
 === client.ts ===
-export import defaultBinding from "server";
+export import defaultBinding from "./server";
 >defaultBinding : number
 >               : ^^^^^^
 
@@ -22,7 +22,7 @@ export var x = defaultBinding;
 >defaultBinding : number
 >               : ^^^^^^
 
-export import defaultBinding2 from "server"; // non referenced
+export import defaultBinding2 from "./server"; // non referenced
 >defaultBinding2 : number
 >                : ^^^^^^
 

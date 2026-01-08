@@ -47,7 +47,7 @@ class A {
 >a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 15, 11))
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
 
     export var n: any;

@@ -504,13 +504,11 @@ class someClass2 { }`,
             modifySystem: sys => {
                 sys.writeFile(
                     getTypeScriptLibTestLocation("esnext.full"),
-                    `/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />`,
+                    `/// <reference lib="esnext" />`,
                 );
                 sys.writeFile(
                     libFile.path,
-                    `/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />`,
+                    `/// <reference lib="esnext" />`,
                 );
                 sys.writeFile(
                     "core/tsconfig.json",

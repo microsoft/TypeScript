@@ -1,4 +1,4 @@
-module x {
+namespace x {
     interface c {
     }
 }

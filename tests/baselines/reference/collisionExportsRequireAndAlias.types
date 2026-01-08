@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
 
 === collisionExportsRequireAndAlias_file2.ts ===
-import require = require('collisionExportsRequireAndAlias_file1'); // Error
+import require = require('./collisionExportsRequireAndAlias_file1'); // Error
 >require : typeof require
 >        : ^^^^^^^^^^^^^^
 
-import exports = require('collisionExportsRequireAndAlias_file3333'); // Error
+import exports = require('./collisionExportsRequireAndAlias_file3333'); // Error
 >exports : typeof exports
 >        : ^^^^^^^^^^^^^^
 

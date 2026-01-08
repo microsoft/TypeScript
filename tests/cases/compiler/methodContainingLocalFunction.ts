@@ -33,7 +33,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     export function exhibitBug() {
         function localFunction() { }
         var x: { (): void; };

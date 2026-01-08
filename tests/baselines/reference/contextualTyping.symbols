@@ -44,7 +44,7 @@ class C1T5 {
 }
 
 // CONTEXT: Module property declaration
-module C2T5 {
+namespace C2T5 {
 >C2T5 : Symbol(C2T5, Decl(contextualTyping.ts, 17, 1))
 
     export var foo: (i: number, s: string) => number = function(i) {
@@ -186,7 +186,7 @@ class C4T5 {
 }
 
 // CONTEXT: Module property assignment
-module C5T5 {
+namespace C5T5 {
 >C5T5 : Symbol(C5T5, Decl(contextualTyping.ts, 62, 1))
 
     export var foo: (i: number, s: string) => string;

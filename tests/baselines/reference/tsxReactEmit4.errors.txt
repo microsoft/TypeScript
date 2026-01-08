@@ -2,7 +2,7 @@ file.tsx(12,5): error TS2304: Cannot find name 'blah'.
 
 
 ==== file.tsx (1 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;
