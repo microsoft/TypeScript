@@ -315,6 +315,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 			result.Closed[uri] = events.closeChange.Hash
 			delete(newOverlays, path)
+			o = nil
 		}
 
 		if events.watchChanged {
@@ -364,7 +365,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			newOverlays[path] = o
 		}
 
-		if events.created && o == nil {
+		if events.created {
 			result.Created.Add(uri)
 		}
 

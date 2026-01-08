@@ -89,7 +89,7 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 		newProjectCollection.configuredProjects = configuredProjects
 	}
 
-	if !changed && !maps.Equal(b.fileDefaultProjects, b.base.fileDefaultProjects) {
+	if !maps.Equal(b.fileDefaultProjects, b.base.fileDefaultProjects) {
 		ensureCloned()
 		newProjectCollection.fileDefaultProjects = b.fileDefaultProjects
 	}
@@ -338,6 +338,16 @@ func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 	}
 }
 
+func (b *ProjectCollectionBuilder) cleanupInferredProject(logger *logging.LogTree) {
+	var inferredProjectFiles []string
+	for path, overlay := range b.fs.overlays {
+		if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
+			inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
+		}
+	}
+	b.updateInferredProjectRoots(inferredProjectFiles, logger)
+}
+
 func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, logger *logging.LogTree) {
 	startTime := time.Now()
 	fileName := uri.FileName()
@@ -349,6 +359,9 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, logge
 		if result := b.findDefaultProject(fileName, path); result != nil {
 			hasChanges = b.updateProgram(result, logger) || hasChanges
 			if result.Value() != nil {
+				if hasChanges {
+					b.cleanupInferredProject(logger)
+				}
 				return
 			}
 		}
@@ -361,15 +374,7 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, logge
 		if hasChanges {
 			// If the structure of other projects changed, we might need to move files
 			// in/out of the inferred project.
-			var inferredProjectFiles []string
-			for path, overlay := range b.fs.overlays {
-				if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
-					inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
-				}
-			}
-			if len(inferredProjectFiles) > 0 {
-				b.updateInferredProjectRoots(inferredProjectFiles, logger)
-			}
+			b.cleanupInferredProject(logger)
 		}
 
 		if b.inferredProject.Value() != nil {
