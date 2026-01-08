@@ -383,6 +383,7 @@ import {
     getTextOfPropertyName,
     getThisContainer,
     getThisParameter,
+    getTokenPosOfNode,
     getTrailingSemicolonDeferringWriter,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
@@ -13211,6 +13212,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseTypes(type: InterfaceType): BaseType[] {
+        if (!(getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference))) {
+            return emptyArray;
+        }
         if (!type.baseTypesResolved) {
             if (pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseTypes)) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
@@ -34448,10 +34452,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop) &&
             (isThisProperty(location) || isThisInitializedObjectBindingExpression(location) || isObjectBindingPattern(location.parent) && isThisInitializedDeclaration(location.parent.parent))
         ) {
-            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-            if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(location)) {
+            const parentSymbol = getParentOfSymbol(prop);
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Class && isNodeUsedDuringClassInitialization(location)) {
                 if (errorNode) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!));
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), symbolToString(parentSymbol));
                 }
                 return false;
             }
@@ -35052,28 +35056,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
      */
     function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
-        if (!(prop.parent!.flags & SymbolFlags.Class)) {
-            return false;
-        }
-        let classType: InterfaceType | undefined = getTypeOfSymbol(prop.parent!) as InterfaceType;
-        while (true) {
-            classType = classType.symbol && getSuperClass(classType) as InterfaceType | undefined;
-            if (!classType) {
-                return false;
-            }
-            const superProperty = getPropertyOfType(classType, prop.escapedName);
-            if (superProperty && superProperty.valueDeclaration) {
-                return true;
+        if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
+            const baseTypes = getBaseTypes(getDeclaredTypeOfSymbol(prop.parent) as InterfaceType);
+            if (baseTypes.length) {
+                const superProperty = getPropertyOfType(baseTypes[0], prop.escapedName);
+                return !!(superProperty && superProperty.valueDeclaration);
             }
         }
-    }
-
-    function getSuperClass(classType: InterfaceType): Type | undefined {
-        const x = getBaseTypes(classType);
-        if (x.length === 0) {
-            return undefined;
-        }
-        return getIntersectionType(x);
+        return false;
     }
 
     function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
@@ -49232,8 +49222,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const sourceFile = getSourceFileOfNode(node);
 
-        let start = node.pos;
-        let end = node.end;
+        let startNode = node;
+        let endNode = node;
 
         const parent = node.parent;
         if (canHaveStatements(parent)) {
@@ -49263,13 +49253,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     reportedUnreachableNodes.add(nextNode);
                 }
 
-                start = statements[first].pos;
-                end = statements[last].end;
+                startNode = statements[first];
+                endNode = statements[last];
             }
         }
 
-        start = skipTrivia(sourceFile.text, start);
-        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+        const start = getTokenPosOfNode(startNode, sourceFile);
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, endNode.end - start, Diagnostics.Unreachable_code_detected));
 
         return true;
     }
