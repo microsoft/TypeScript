@@ -13,7 +13,6 @@ export function f(p: C) { return p; }
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -131,7 +130,7 @@ Output::
 [7m1[0m export class C {}
 [7m [0m [91m~~~~~~[0m
 
-[96mb.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS1286: [0mESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+[96mb.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS1295: [0mECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
 
 [7m1[0m import {C} from './a';
 [7m [0m [91m        ~[0m

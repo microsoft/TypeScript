@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export function lastOf(items: any[]): any {
         return (items === null || items.length === 0) ? null : items[items.length - 1];
     }

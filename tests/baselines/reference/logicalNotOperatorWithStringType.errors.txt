@@ -16,7 +16,7 @@ logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma oper
         public a: string;
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     

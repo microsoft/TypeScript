@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericCallbacksAndClassHierarchy.ts] ////
 
 //// [genericCallbacksAndClassHierarchy.ts]
-module M {
+namespace M {
     export interface I<T> {
         subscribe(callback: (newValue: T) => void ): any;
     }

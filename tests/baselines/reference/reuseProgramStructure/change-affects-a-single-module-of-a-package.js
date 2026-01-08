@@ -60,9 +60,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -129,9 +127,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 

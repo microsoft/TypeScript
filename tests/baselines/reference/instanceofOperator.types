@@ -6,7 +6,7 @@
 // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
 // Boolean primitive type.
 
-module test {
+namespace test {
 >test : typeof test
 >     : ^^^^^^^^^^^
 

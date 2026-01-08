@@ -28,7 +28,7 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
         public a: number;
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     

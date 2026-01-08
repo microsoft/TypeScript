@@ -49,7 +49,7 @@ namespace Merged2 {
     export enum E {
         a, b, c
     }
-    export module E {
+    export namespace E {
         export let d = 5;
     }
 }

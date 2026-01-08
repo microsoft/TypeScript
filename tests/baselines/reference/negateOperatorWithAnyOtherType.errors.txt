@@ -23,7 +23,7 @@ negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operat
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();

@@ -1,11 +1,11 @@
 //@module: amd
 //@filename: m1.ts
 
-module foo {
+namespace foo {
     const enum E { X }
 }
 
-module foo {
+namespace foo {
     var x = 1;
 }
 

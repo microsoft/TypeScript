@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // Actual yargs doesn't work like this because the implementation package's
 // main entry exports a small function wrapper function whose return value
 // is derived from something imported from another file where all the

@@ -16,7 +16,7 @@ class B2 implements A {
     [x: string]: Derived2; // ok
 }
 
-module Generics {
+namespace Generics {
     interface A<T extends Base> {
         [x: number]: T;
     }

@@ -12,7 +12,7 @@ logicalNotOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma ope
         public a: boolean;
         static foo() { return false; }
     }
-    module M {
+    namespace M {
         export var n: boolean;
     }
     

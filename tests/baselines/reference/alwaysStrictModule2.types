@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/alwaysStrictModule2.ts] ////
 
 === a.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -18,7 +18,7 @@ module M {
 }
 
 === b.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

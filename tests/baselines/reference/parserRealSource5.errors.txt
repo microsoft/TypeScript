@@ -17,7 +17,7 @@ parserRealSource5.ts(61,65): error TS2304: Cannot find name 'IAstWalker'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
         // TODO: refactor indent logic for use in emit
         export class PrintContext {
             public builder = "";

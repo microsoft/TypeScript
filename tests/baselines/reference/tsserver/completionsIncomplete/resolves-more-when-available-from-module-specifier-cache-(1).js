@@ -4,7 +4,7 @@ Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/t
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/project/project/tsconfig.json]
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "moduleResolution": "node10" } }
 
 //// [/home/src/project/project/index.ts]
 
@@ -2610,7 +2610,6 @@ export const aa_49__48 = 48;
 export const aa_49__49 = 49;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -2720,6 +2719,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/project/project/tsconfig.json : {
  ],
  "options": {
   "module": 1,
+  "moduleResolution": 2,
   "configFilePath": "/home/src/project/project/tsconfig.json"
  }
 }
@@ -2794,7 +2794,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (52)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-0 ""
 	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"
@@ -2982,12 +2982,13 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "commonjs"
+            "module": "commonjs",
+            "moduleResolution": "node10"
           },
           "typeAcquisition": {
             "enable": false,
@@ -3014,7 +3015,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/project/project/index.ts",
         "configFile": "/home/src/project/project/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 66
+            },
+            "end": {
+              "line": 1,
+              "offset": 74
+            },
+            "text": "Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/project/project/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
@@ -3638,7 +3654,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (52)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-1 "a"
 	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"

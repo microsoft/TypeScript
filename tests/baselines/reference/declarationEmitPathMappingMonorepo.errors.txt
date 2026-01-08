@@ -1,0 +1,34 @@
+packages/b/tsconfig.json(5,9): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== packages/b/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "dist",
+            "declaration": true,
+            "baseUrl": ".",
+            ~~~~~~~~~
+!!! error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5101:   Visit https://aka.ms/ts6 for migration information.
+            "paths": {
+                "@ts-bug/a": ["../a"]
+            }
+        }
+    }
+    
+    
+==== packages/b/src/index.ts (0 errors) ====
+    import { a } from "@ts-bug/a";
+    
+    export function b(text: string) {
+      return a(text);
+    }
+==== packages/a/index.d.ts (0 errors) ====
+    declare module "@ts-bug/a" {
+        export type AText = {
+          value: string;
+        };
+        export function a(text: string): AText;
+      }
+      

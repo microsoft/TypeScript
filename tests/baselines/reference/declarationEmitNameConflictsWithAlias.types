@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts] ////
 
 === declarationEmitNameConflictsWithAlias.ts ===
-export module C { export interface I { } }
+export namespace C { export interface I { } }
 export import v = C;
 >v : any
 >  : ^^^
 >C : error
 
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module C { export interface I { } }
+    export namespace C { export interface I { } }
     export var w: v.I; // Gets emitted as C.I, which is the wrong interface
 >w : v.I
 >  : ^^^

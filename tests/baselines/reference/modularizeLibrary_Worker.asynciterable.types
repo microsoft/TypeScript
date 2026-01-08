@@ -28,17 +28,17 @@ navigator.storage.getDirectory().then(async directory => {
     for await (const [key, handle] of directory) {
 >key : string
 >    : ^^^^^^
->handle : FileSystemHandle
->       : ^^^^^^^^^^^^^^^^
+>handle : FileSystemDirectoryHandle | FileSystemFileHandle
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directory : FileSystemDirectoryHandle
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         handle.kind;
->handle.kind : FileSystemHandleKind
+>handle.kind : "directory" | "file"
 >            : ^^^^^^^^^^^^^^^^^^^^
->handle : FileSystemHandle
->       : ^^^^^^^^^^^^^^^^
->kind : FileSystemHandleKind
+>handle : FileSystemDirectoryHandle | FileSystemFileHandle
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : "directory" | "file"
 >     : ^^^^^^^^^^^^^^^^^^^^
     }
 });

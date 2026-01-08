@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
 
 === classExtendsInterfaceInModule.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(classExtendsInterfaceInModule.ts, 0, 0))
 
   export interface I1 {}
->I1 : Symbol(I1, Decl(classExtendsInterfaceInModule.ts, 0, 10))
+>I1 : Symbol(I1, Decl(classExtendsInterfaceInModule.ts, 0, 13))
 
   export interface I2<T> {}
 >I2 : Symbol(I2, Decl(classExtendsInterfaceInModule.ts, 1, 24))
@@ -21,11 +21,11 @@ class C2<T> extends M.I2<T> {}
 >M : Symbol(M, Decl(classExtendsInterfaceInModule.ts, 0, 0))
 >T : Symbol(T, Decl(classExtendsInterfaceInModule.ts, 5, 9))
 
-module Mod {
+namespace Mod {
 >Mod : Symbol(Mod, Decl(classExtendsInterfaceInModule.ts, 5, 30))
 
 	export namespace Nested {
->Nested : Symbol(Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
+>Nested : Symbol(Nested, Decl(classExtendsInterfaceInModule.ts, 7, 15))
 
 		export interface I {}
 >I : Symbol(I, Decl(classExtendsInterfaceInModule.ts, 8, 26))
@@ -34,7 +34,7 @@ module Mod {
 
 class D extends Mod.Nested.I {}
 >D : Symbol(D, Decl(classExtendsInterfaceInModule.ts, 11, 1))
->Mod.Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
+>Mod.Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 15))
 >Mod : Symbol(Mod, Decl(classExtendsInterfaceInModule.ts, 5, 30))
->Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
+>Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 15))
 

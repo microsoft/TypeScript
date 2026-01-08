@@ -3,28 +3,28 @@
 //// [invalidModuleWithVarStatements.ts]
 // All of these should be an error
 
-module Y {
+namespace Y {
     public var x: number = 0;
 }
 
-module Y2 {
+namespace Y2 {
     public function fn(x: string) { }
 }
 
-module Y4 {
+namespace Y4 {
     static var x: number = 0;
 }
 
-module YY {
+namespace YY {
     static function fn(x: string) { }
 }
 
-module YY2 {
+namespace YY2 {
     private var x: number = 0;
 }
 
 
-module YY3 {
+namespace YY3 {
     private function fn(x: string) { }
 }
 

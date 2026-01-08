@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commentsFormatting.ts] ////
 
 === commentsFormatting.ts ===
-module m {
+namespace m {
 >m : Symbol(m, Decl(commentsFormatting.ts, 0, 0))
 
     /** this is first line - aligned to class declaration
@@ -19,7 +19,7 @@ module m {
            * this is 7 spaces right aligned
             * this is 8 spaces right aligned */
     export class c {
->c : Symbol(c, Decl(commentsFormatting.ts, 0, 10))
+>c : Symbol(c, Decl(commentsFormatting.ts, 0, 13))
     }
 
         /** this is first line - 4 spaces right aligned to class but in js file should be aligned to class declaration

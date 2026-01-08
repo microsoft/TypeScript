@@ -9,6 +9,6 @@ function Foo<T>(array: T[]): Foo<T> {
     return undefined;
 }
 
-module Foo {
+namespace Foo {
     export var x = "hello";
 }

@@ -4,6 +4,7 @@
 export interface Callback {
     (value: any): void;
 >value : any
+>      : ^^^
 }
 
 interface IMap {

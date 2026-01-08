@@ -414,7 +414,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

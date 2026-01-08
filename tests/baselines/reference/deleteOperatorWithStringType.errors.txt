@@ -29,7 +29,7 @@ deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' o
         public a: string;
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     

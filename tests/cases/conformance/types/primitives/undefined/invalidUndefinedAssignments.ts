@@ -13,7 +13,7 @@ var g: I;
 g = x;
 I = x;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = x;
 
 function i<T>(a: T) { }

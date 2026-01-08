@@ -70,7 +70,7 @@ var boolObj: Boolean = true;
 
 var strObj: String = "string";
 >strObj : Symbol(strObj, Decl(nonPrimitiveAssignError.ts, 22, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 a = numObj; // ok
 >a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))

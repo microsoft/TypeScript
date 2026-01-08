@@ -35,7 +35,7 @@ import fs = module("fs");
 >     : ^^^^
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
 >TypeScriptAllInOne : typeof TypeScriptAllInOne
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

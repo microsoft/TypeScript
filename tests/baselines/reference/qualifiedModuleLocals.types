@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/qualifiedModuleLocals.ts] ////
 
 === qualifiedModuleLocals.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

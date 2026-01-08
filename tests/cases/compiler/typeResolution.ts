@@ -1,8 +1,8 @@
 //@module: amd
 // @sourcemap: true
-export module TopLevelModule1 {
-    export module SubModule1 {
-        export module SubSubModule1 {
+export namespace TopLevelModule1 {
+    export namespace SubModule1 {
+        export namespace SubSubModule1 {
             export class ClassA {
                 public AisIn1_1_1() {
                     // Try all qualified names of this type
@@ -75,8 +75,8 @@ export module TopLevelModule1 {
         }
     }
 
-    export module SubModule2 {
-        export module SubSubModule2 {
+    export namespace SubModule2 {
+        export namespace SubSubModule2 {
             // No code here since these are the mirror of the above calls
             export class ClassA { public AisIn1_2_2() { } }
             export class ClassB { public BisIn1_2_2() { } }
@@ -96,13 +96,13 @@ export module TopLevelModule1 {
         YisIn1();
     }
     
-    module NotExportedModule {
+    namespace NotExportedModule {
         export class ClassA { }
     }
 }
 
-module TopLevelModule2 {
-    export module SubModule3 {
+namespace TopLevelModule2 {
+    export namespace SubModule3 {
         export class ClassA {
             public AisIn2_3() { }
         }

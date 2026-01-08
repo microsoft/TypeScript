@@ -2,7 +2,7 @@
 // @outDir: out/
 
 // @filename: a.js
-module foo {
+namespace foo {
     this.bar = 4;
 }
 

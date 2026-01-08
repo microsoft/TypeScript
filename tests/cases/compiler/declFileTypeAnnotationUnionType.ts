@@ -4,7 +4,7 @@
 class c {
     private p: string;
 }
-module m {
+namespace m {
     export class c {
         private q: string;
     }

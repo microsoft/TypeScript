@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arraySigChecking.ts] ////
 
 //// [arraySigChecking.ts]
-declare module M {
+declare namespace M {
     interface iBar { t: any; }
     interface iFoo extends iBar {
         s: any;

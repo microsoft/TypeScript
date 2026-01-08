@@ -12,6 +12,7 @@
 // @Filename: /x/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "resolveJsonModule": false,
 ////        "baseUrl": ".",
 ////        "paths": {
 ////            "foo/*": ["./*"]

@@ -4,7 +4,7 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases, so function calls will all result in 'any'
 
-module Errors {
+namespace Errors {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
@@ -108,7 +108,7 @@ module Errors {
     var r9 = foo17(r9arg); // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
 }
 
-module WithGenericSignaturesInBaseType {
+namespace WithGenericSignaturesInBaseType {
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
     declare function foo2(a2: any): any;
     var r2arg2 = <T>(x: T) => [''];

@@ -1,9 +1,9 @@
 // @declaration: true
-module a {
+namespace a {
     export var x = 10;
 }
 
-module c {
+namespace c {
     import b = a.x;
     export var bVal = b;
 }

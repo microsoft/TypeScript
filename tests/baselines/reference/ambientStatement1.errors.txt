@@ -3,7 +3,7 @@ ambientStatement1.ts(4,22): error TS1039: Initializers are not allowed in ambien
 
 
 ==== ambientStatement1.ts (2 errors) ====
-        declare module M1 {
+        declare namespace M1 {
         	while(true);
         	~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /home/src/workspaces/project/a.js
 //// export const a = { /*end*/a: 'a' };
 

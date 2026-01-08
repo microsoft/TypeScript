@@ -3,7 +3,7 @@
 // @noLib: true
 // @skipLibCheck: true
 // @target: es2015
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @libFiles: react.d.ts,lib.d.ts
 import * as React from "react";
 declare global {

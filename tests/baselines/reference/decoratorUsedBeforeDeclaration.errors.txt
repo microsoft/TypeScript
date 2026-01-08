@@ -1,0 +1,140 @@
+decoratorUsedBeforeDeclaration.ts(1,2): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(1,9): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(2,7): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(4,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(4,11): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(4,16): error TS2729: Property 'No' is used before its initialization.
+decoratorUsedBeforeDeclaration.ts(5,9): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(5,14): error TS2729: Property 'No' is used before its initialization.
+decoratorUsedBeforeDeclaration.ts(12,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(12,11): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(13,9): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(18,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(24,11): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(24,18): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(24,33): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(28,11): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+
+
+==== decoratorUsedBeforeDeclaration.ts (16 errors) ====
+    @lambda(Enum.No)
+     ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+            ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+    @deco(Enum.No)
+          ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+    class Greeter {
+      @lambda(Enum.No)
+       ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+              ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+                   ~~
+!!! error TS2729: Property 'No' is used before its initialization.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:36:3: 'No' is declared here.
+      @deco(Enum.No)
+            ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+                 ~~
+!!! error TS2729: Property 'No' is used before its initialization.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:36:3: 'No' is declared here.
+      greeting: string;
+    
+      constructor(message: string) {
+        this.greeting = message;
+      }
+    
+      @lambda(Enum.No)
+       ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+              ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+      @deco(Enum.No)
+            ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+      greet() {
+        return "Hello, " + this.greeting;
+      }
+    
+      @lambda
+       ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+      @deco
+      greet1() {
+        return "Hello, " + this.greeting;
+      }
+    
+      greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+              ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+                     ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+                                    ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
+        return "Hello, " + this.greeting;
+      }
+    
+      greet3(@lambda @deco param) {
+              ~~~~~~
+!!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
+!!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+        return "Hello, " + this.greeting;
+      }
+    }
+    
+    function deco(...args: any[]): any {}
+    
+    enum Enum {
+      No = 0,
+      Yes = 1,
+    }
+    
+    const lambda = (...args: any[]): any => {};
+    
+    @lambda(Enum.No)
+    @deco(Enum.No)
+    class Greeter1 {
+      @lambda(Enum.No)
+      @deco(Enum.No)
+      greeting: string;
+    
+      constructor(message: string) {
+        this.greeting = message;
+      }
+    
+      @lambda(Enum.No)
+      @deco(Enum.No)
+      greet() {
+        return "Hello, " + this.greeting;
+      }
+    
+      @lambda
+      @deco
+      greet1() {
+        return "Hello, " + this.greeting;
+      }
+    
+      greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+        return "Hello, " + this.greeting;
+      }
+    
+      greet3(@lambda @deco param) {
+        return "Hello, " + this.greeting;
+      }
+    }
+    

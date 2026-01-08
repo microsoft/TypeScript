@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es5ModuleInternalNamedImports.ts] ////
 
 === es5ModuleInternalNamedImports.ts ===
-export module M {
+export namespace M {
 >M : Symbol(M, Decl(es5ModuleInternalNamedImports.ts, 0, 0))
 
     // variable
@@ -17,17 +17,17 @@ export module M {
 >M_C : Symbol(M_C, Decl(es5ModuleInternalNamedImports.ts, 4, 28))
 
     // instantiated module
-    export module M_M { var x; }
+    export namespace M_M { var x; }
 >M_M : Symbol(M_M, Decl(es5ModuleInternalNamedImports.ts, 6, 24))
->x : Symbol(x, Decl(es5ModuleInternalNamedImports.ts, 8, 27))
+>x : Symbol(x, Decl(es5ModuleInternalNamedImports.ts, 8, 30))
 
     // uninstantiated module
-    export module M_MU { }
->M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 32))
+    export namespace M_MU { }
+>M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 35))
 
     // function
     export function M_F() { }
->M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 26))
+>M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 29))
 
     // enum
     export enum M_E { }
@@ -60,11 +60,11 @@ export module M {
 >m : Symbol(m, Decl(es5ModuleInternalNamedImports.ts, 24, 12))
 
     export {M_MU as mu};
->M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 32))
+>M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 35))
 >mu : Symbol(mu, Decl(es5ModuleInternalNamedImports.ts, 25, 12))
 
     export {M_F as f};
->M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 26))
+>M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 29))
 >f : Symbol(f, Decl(es5ModuleInternalNamedImports.ts, 26, 12))
 
     export {M_E as e};

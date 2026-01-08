@@ -7,11 +7,11 @@ class Bbb {
 
 class Aaa extends Bbb { }
 
-module Aaa {
+namespace Aaa {
     export class SomeType { }
 }
 
-module Bbb {
+namespace Bbb {
     export class SomeType { }
 
     export * from Aaa;      // this line causes the nullref

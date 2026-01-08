@@ -1,4 +1,4 @@
-declare module Module {
+declare namespace Module {
     class C extends D {
     }
     export class B extends Module.C {

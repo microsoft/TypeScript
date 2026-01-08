@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/jsdoc/importTag24.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== types.d.ts ===
+export type Foo = string;
+>Foo : string
+>    : ^^^^^^
+
+=== a.js ===
+/** @import { Foo } from './types.d.ts' */
+
+function f1() { return undefined; }
+>f1 : () => any
+>   : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+export function f2() {
+>f2 : () => Set<string>
+>   : ^^^^^^^^^^^^^^^^^
+
+    /** @type {Set<Foo>} */
+    const foo = new Set([ 'a', 'b' ]);
+>foo : Set<string>
+>    : ^^^^^^^^^^^
+>new Set([ 'a', 'b' ]) : Set<string>
+>                      : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[ 'a', 'b' ] : string[]
+>             : ^^^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
+
+    return foo;
+>foo : Set<string>
+>    : ^^^^^^^^^^^
+}
+
+function f3() { return undefined; }
+>f3 : () => any
+>   : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+/** @type {Set<Foo>} */
+export const foo = new Set([ 'a', 'b' ]);
+>foo : Set<string>
+>    : ^^^^^^^^^^^
+>new Set([ 'a', 'b' ]) : Set<string>
+>                      : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[ 'a', 'b' ] : string[]
+>             : ^^^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
+
+/**
+ * @returns {Foo}
+ */
+function f4() { return 1; }
+>f4 : () => Foo
+>   : ^^^^^^^^^
+>1 : 1
+>  : ^
+

@@ -1,10 +1,10 @@
-//@module: amd
-export module a {
+//@module: commonjs
+export namespace a {
     export interface I {
     }
 }
 
-export module c {
+export namespace c {
     import b = a.I;
     export var x: b;
 }

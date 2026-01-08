@@ -18,12 +18,12 @@ cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
 !!! error TS2300: Duplicate identifier 'foo'.
     }
     
-    module C {
+    namespace C {
         export var x = 1;
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
-    module C {
+    namespace C {
         export function foo() { }
                         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.

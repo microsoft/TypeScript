@@ -1,7 +1,7 @@
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // string named numeric properties work correctly, errors below unless otherwise noted
 
-module JustStrings {
+namespace JustStrings {
     class S { '1': string; }
     class T { '1.': string; }
     var s: S;
@@ -42,7 +42,7 @@ module JustStrings {
     a2 = t;
 }
 
-module NumbersAndStrings {
+namespace NumbersAndStrings {
     class S { '1': string; }
     class T { 1: string; }
     var s: S;

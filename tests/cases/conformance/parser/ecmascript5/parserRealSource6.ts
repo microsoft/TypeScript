@@ -3,7 +3,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class TypeCollectionContext {
         public script: Script = null;
 

@@ -1690,13 +1690,16 @@ export enum NodeResolutionFeatures {
     // allowing `*` in the LHS of an export to be followed by more content, eg `"./whatever/*.js"`
     // not supported in node 12 - https://github.com/nodejs/Release/issues/690
     ExportsPatternTrailers = 1 << 4,
-    AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers,
+    // allowing `#/` root imports in package.json imports field
+    // not supported until mass adoption - https://github.com/nodejs/node/pull/60864
+    ImportsPatternRoot = 1 << 6,
+    AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers | ImportsPatternRoot,
 
     Node16Default = Imports | SelfName | Exports | ExportsPatternTrailers,
 
     NodeNextDefault = AllFeatures,
 
-    BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
+    BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers | ImportsPatternRoot,
 
     EsmMode = 1 << 5,
 }
@@ -2646,7 +2649,7 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
 }
 
 function loadModuleFromImports(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    if (moduleName === "#" || startsWith(moduleName, "#/")) {
+    if (moduleName === "#" || (startsWith(moduleName, "#/") && !(state.features & NodeResolutionFeatures.ImportsPatternRoot))) {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Invalid_import_specifier_0_has_no_possible_resolutions, moduleName);
         }
@@ -2812,7 +2815,9 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetExportOrImport(subTarget, subpath, pattern, key);
                         if (result) {
-                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            if (result.value) {
+                                traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            }
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
                         }
@@ -2846,7 +2851,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_scope_0_explicitly_maps_specifier_1_to_null, scope.packageDirectory, moduleName);
             }
-            return toSearchResult(/*value*/ undefined);
+            return { value: undefined };
         }
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);

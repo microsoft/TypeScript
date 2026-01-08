@@ -22,13 +22,13 @@ function f1() {
     }
 }
 
-module M0 {
+namespace M0 {
     let x2;
     var x2;
     function x2() { }
 }
 
-module M1 {
+namespace M1 {
     let x2;
     {
         var x2;
@@ -48,7 +48,7 @@ function f2() {
     }
 }
 
-module M2 {
+namespace M2 {
     let x11;
     for (var x11; ;) {
     }

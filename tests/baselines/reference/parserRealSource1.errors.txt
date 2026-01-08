@@ -9,8 +9,8 @@ parserRealSource1.ts(4,21): error TS6053: File 'typescript.ts' not found.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
-        export module CompilerDiagnostics {
+    namespace TypeScript {
+        export namespace CompilerDiagnostics {
             export var debug = false;
             export interface IDiagnosticWriter {
                 Alert(output: string): void;

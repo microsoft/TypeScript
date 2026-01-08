@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export enum Color { Red, Blue }
     enum Day { Monday, Tuesday }
 }

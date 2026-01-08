@@ -26,7 +26,7 @@ export const {a: bar4} = { a: 1 };
 >bar4 : Symbol(bar4, Decl(downlevelLetConst13.ts, 8, 14))
 >a : Symbol(a, Decl(downlevelLetConst13.ts, 8, 26))
 
-export module M {
+export namespace M {
 >M : Symbol(M, Decl(downlevelLetConst13.ts, 8, 34))
 
     export let baz = 100;

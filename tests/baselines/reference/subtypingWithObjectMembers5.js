@@ -11,7 +11,7 @@ interface Derived extends Base {
 
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
-module NotOptional {
+namespace NotOptional {
     interface A {
         foo: Base;
     }
@@ -38,7 +38,7 @@ module NotOptional {
 }
 
 // same cases as above but with optional
-module Optional {
+namespace Optional {
     interface A {
         foo?: Base;
     }

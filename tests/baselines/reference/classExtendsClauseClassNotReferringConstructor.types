@@ -7,7 +7,7 @@ class A { a: number; }
 >a : number
 >  : ^^^^^^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

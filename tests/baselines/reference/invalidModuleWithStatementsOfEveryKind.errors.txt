@@ -24,7 +24,7 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
 ==== invalidModuleWithStatementsOfEveryKind.ts (21 errors) ====
     // All of these should be an error
     
-    module Y {
+    namespace Y {
         public class A { s: string }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
@@ -36,7 +36,7 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         }
     }
     
-    module Y2 {
+    namespace Y2 {
         public class AA<T> { s: T }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
@@ -49,21 +49,21 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
     }
     
-    module Y3 {
-        public module Module {
+    namespace Y3 {
+        public namespace Module {
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
             class A { s: string }
         }
     }
     
-    module Y4 {
+    namespace Y4 {
         public enum Color { Blue, Red }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
     }
     
-    module YY {
+    namespace YY {
         private class A { s: string }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
@@ -75,7 +75,7 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         }
     }
     
-    module YY2 {
+    namespace YY2 {
         private class AA<T> { s: T }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
@@ -88,22 +88,22 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
     }
     
-    module YY3 {
-        private module Module {
+    namespace YY3 {
+        private namespace Module {
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
             class A { s: string }
         }
     }
     
-    module YY4 {
+    namespace YY4 {
         private enum Color { Blue, Red }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
     }
     
     
-    module YYY {
+    namespace YYY {
         static class A { s: string }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
@@ -115,7 +115,7 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         }
     }
     
-    module YYY2 {
+    namespace YYY2 {
         static class AA<T> { s: T }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
@@ -128,15 +128,15 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
     }
     
-    module YYY3 {
-        static module Module {
+    namespace YYY3 {
+        static namespace Module {
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
             class A { s: string }
         }
     }
     
-    module YYY4 {
+    namespace YYY4 {
         static enum Color { Blue, Red }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.

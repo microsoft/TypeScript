@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constDeclarations-access3.ts] ////
 
 === constDeclarations-access3.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

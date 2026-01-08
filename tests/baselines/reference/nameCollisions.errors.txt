@@ -1,8 +1,8 @@
 nameCollisions.ts(2,9): error TS2300: Duplicate identifier 'x'.
-nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
-nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
+nameCollisions.ts(4,15): error TS2300: Duplicate identifier 'x'.
+nameCollisions.ts(10,15): error TS2300: Duplicate identifier 'z'.
 nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
-nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+nameCollisions.ts(15,15): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
 nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
 nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
@@ -14,21 +14,21 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
 
 
 ==== nameCollisions.ts (13 errors) ====
-    module T {
+    namespace T {
         var x = 2;
             ~
 !!! error TS2300: Duplicate identifier 'x'.
     
-        module x { // error
-               ~
+        namespace x { // error
+                  ~
 !!! error TS2300: Duplicate identifier 'x'.
             export class Bar {
                 test: number;
             }
         }
     
-        module z {
-               ~
+        namespace z {
+                  ~
 !!! error TS2300: Duplicate identifier 'z'.
             var t;
         }
@@ -36,8 +36,8 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
             ~
 !!! error TS2300: Duplicate identifier 'z'.
     
-        module y {
-               ~
+        namespace y {
+                  ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
             var b;
         }
@@ -45,7 +45,7 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
         class y { } // error
     
         var w;
-        module w { } //ok
+        namespace w { } //ok
     
         var f;
             ~

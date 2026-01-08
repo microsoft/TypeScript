@@ -312,3 +312,23 @@ function wrapI2() {
     })();
 }
 
+function foo18() {
+>foo18 : Symbol(foo18, Decl(blockScopedVariablesUseBeforeDef.ts, 149, 1))
+
+    let a = (() => Enum.Yes)();
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 7))
+>Enum.Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+>Enum : Symbol(Enum, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 31))
+>Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+
+    enum Enum {
+>Enum : Symbol(Enum, Decl(blockScopedVariablesUseBeforeDef.ts, 152, 31))
+
+        No = 0,
+>No : Symbol(Enum.No, Decl(blockScopedVariablesUseBeforeDef.ts, 153, 15))
+
+        Yes = 1,
+>Yes : Symbol(Enum.Yes, Decl(blockScopedVariablesUseBeforeDef.ts, 154, 15))
+    }
+}
+

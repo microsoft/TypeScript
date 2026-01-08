@@ -1,7 +1,7 @@
 // @lib: es2020,dom
 // @target: es2020
 // @allowArbitraryExtensions: true,false
-// @module: node18,nodenext
+// @module: node18,node20,nodenext
 // @filename: package.json
 {"type": "module"}
 // @filename: dir/package.json

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es5ModuleInternalNamedImports.ts] ////
 
 //// [es5ModuleInternalNamedImports.ts]
-export module M {
+export namespace M {
     // variable
     export var M_V = 0;
     // interface
@@ -9,9 +9,9 @@ export module M {
     //calss
     export class M_C { }
     // instantiated module
-    export module M_M { var x; }
+    export namespace M_M { var x; }
     // uninstantiated module
-    export module M_MU { }
+    export namespace M_MU { }
     // function
     export function M_F() { }
     // enum
@@ -38,34 +38,32 @@ import M3 from "M3";
 
 
 //// [es5ModuleInternalNamedImports.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.M = void 0;
-    var M;
-    (function (M) {
-        // variable
-        M.M_V = 0;
-        //calss
-        var M_C = /** @class */ (function () {
-            function M_C() {
-            }
-            return M_C;
-        }());
-        M.M_C = M_C;
-        // instantiated module
-        var M_M;
-        (function (M_M) {
-            var x;
-        })(M_M = M.M_M || (M.M_M = {}));
-        // function
-        function M_F() { }
-        M.M_F = M_F;
-        // enum
-        var M_E;
-        (function (M_E) {
-        })(M_E = M.M_E || (M.M_E = {}));
-        // alias
-        M.M_A = M_M;
-    })(M || (exports.M = M = {}));
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.M = void 0;
+var M;
+(function (M) {
+    // variable
+    M.M_V = 0;
+    //calss
+    var M_C = /** @class */ (function () {
+        function M_C() {
+        }
+        return M_C;
+    }());
+    M.M_C = M_C;
+    // instantiated module
+    var M_M;
+    (function (M_M) {
+        var x;
+    })(M_M = M.M_M || (M.M_M = {}));
+    // function
+    function M_F() { }
+    M.M_F = M_F;
+    // enum
+    var M_E;
+    (function (M_E) {
+    })(M_E = M.M_E || (M.M_E = {}));
+    // alias
+    M.M_A = M_M;
+})(M || (exports.M = M = {}));

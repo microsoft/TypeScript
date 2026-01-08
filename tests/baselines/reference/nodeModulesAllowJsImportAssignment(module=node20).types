@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportAssignment.ts] ////
+
+=== subfolder/index.js ===
+// cjs format file
+import fs = require("fs");
+>fs : any
+>   : ^^^
+
+fs.readFile;
+>fs.readFile : any
+>            : ^^^
+>fs : any
+>   : ^^^
+>readFile : any
+>         : ^^^
+
+export import fs2 = require("fs");
+>fs2 : any
+>    : ^^^
+
+=== index.js ===
+// esm format file
+import fs = require("fs");
+>fs : any
+>   : ^^^
+
+fs.readFile;
+>fs.readFile : any
+>            : ^^^
+>fs : any
+>   : ^^^
+>readFile : any
+>         : ^^^
+
+export import fs2 = require("fs");
+>fs2 : any
+>    : ^^^
+
+=== file.js ===
+// esm format file
+const __require = null;
+>__require : any
+>          : ^^^
+
+const _createRequire = null;
+>_createRequire : any
+>               : ^^^
+
+import fs = require("fs");
+>fs : any
+>   : ^^^
+
+fs.readFile;
+>fs.readFile : any
+>            : ^^^
+>fs : any
+>   : ^^^
+>readFile : any
+>         : ^^^
+
+export import fs2 = require("fs");
+>fs2 : any
+>    : ^^^
+
+=== types.d.ts ===
+declare module "fs";
+>"fs" : any
+>     : ^^^
+

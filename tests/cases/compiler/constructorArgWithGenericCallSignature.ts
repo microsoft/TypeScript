@@ -1,4 +1,4 @@
-module Test {
+namespace Test {
     export interface MyFunc {
         <T>(value1: T): T;
     }

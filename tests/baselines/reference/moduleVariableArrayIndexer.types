@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleVariableArrayIndexer.ts] ////
 
 === moduleVariableArrayIndexer.ts ===
-module Bar {
+namespace Bar {
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

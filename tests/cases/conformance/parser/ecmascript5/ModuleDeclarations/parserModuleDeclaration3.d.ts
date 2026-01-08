@@ -1,2 +1,2 @@
-declare module M {
+declare namespace M {
 }

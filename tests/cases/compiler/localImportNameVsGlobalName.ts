@@ -1,8 +1,8 @@
-module Keyboard {
+namespace Keyboard {
   export enum Key { UP, DOWN, LEFT, RIGHT }
 }
 
-module App {
+namespace App {
   import Key = Keyboard.Key;
 
   export function foo(key: Key): void {}

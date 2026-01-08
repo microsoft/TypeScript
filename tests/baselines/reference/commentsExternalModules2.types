@@ -76,7 +76,7 @@ export var newVar2 = new extMod.m4.m2.c();
 
 === commentsExternalModules2_0.ts ===
 /** Module comment*/
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -95,7 +95,7 @@ export module m1 {
 >  : ^^^^^^
     }
     /** m2 comments*/
-    export module m2 {
+    export namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -153,7 +153,7 @@ var myvar = new m1.m2.c();
 >  : ^^^^^^^^^^^^^^
 
 /** Module comment */
-export module m4 {
+export namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 
@@ -174,7 +174,7 @@ export module m4 {
     }
     /** m2 comments
     */
-    export module m2 {
+    export namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

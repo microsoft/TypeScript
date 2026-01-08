@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts] ////
 
 //// [ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts]
-module A {
+namespace A {
 
     export class Point {
         x: number;

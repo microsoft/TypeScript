@@ -7,7 +7,7 @@ export declare var exports: number;
 export declare var require: string;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 1, 18))
 
-declare module m1 {
+declare namespace m1 {
 >m1 : Symbol(m1, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 1, 35))
 
     var exports: string;
@@ -16,7 +16,7 @@ declare module m1 {
     var require: number;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 4, 7))
 }
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 5, 1))
 
     export declare var exports: number;
@@ -36,7 +36,7 @@ declare var exports: number;
 declare var require: string;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 1, 11))
 
-declare module m3 {
+declare namespace m3 {
 >m3 : Symbol(m3, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 1, 28))
 
     var exports: string;
@@ -45,7 +45,7 @@ declare module m3 {
     var require: number;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 4, 7))
 }
-module m4 {
+namespace m4 {
 >m4 : Symbol(m4, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 5, 1))
 
     export declare var exports: string;

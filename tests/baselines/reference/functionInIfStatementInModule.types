@@ -2,7 +2,7 @@
 
 === functionInIfStatementInModule.ts ===
  
-module Midori
+namespace Midori
 >Midori : typeof Midori
 >       : ^^^^^^^^^^^^^
 {

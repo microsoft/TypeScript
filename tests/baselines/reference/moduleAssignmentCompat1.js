@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/moduleAssignmentCompat1.ts] ////
 
 //// [moduleAssignmentCompat1.ts]
-module A {
+namespace A {
     export class C { }
 }
-module B {
+namespace B {
     export class C { }
     class D { }
 }

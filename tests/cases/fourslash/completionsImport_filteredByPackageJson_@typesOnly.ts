@@ -34,7 +34,7 @@ verify.completions({
   includes: {
     name: "React",
     hasAction: true,
-    source: "/node_modules/@types/react/index",
+    source: "react",
     sortText: completion.SortText.AutoImportSuggestions
   },
   excludes: "ReactFake",

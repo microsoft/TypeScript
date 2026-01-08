@@ -210,7 +210,7 @@ declare class Context {
      * @param {Input} input
      */
     constructor(input: Input);
-    state: any;
+    state: State;
     /**
      * @param {Input} input
      * @param {HookHandler=} handle

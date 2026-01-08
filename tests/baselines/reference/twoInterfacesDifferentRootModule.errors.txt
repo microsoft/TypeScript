@@ -5,7 +5,7 @@ twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does no
 ==== twoInterfacesDifferentRootModule.ts (2 errors) ====
     // two interfaces with different root modules should not merge
     
-    module M {
+    namespace M {
         export interface A {
             foo: string;
         }
@@ -15,7 +15,7 @@ twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does no
         }
     }
     
-    module M2 {
+    namespace M2 {
         export interface A {
             bar: number;
         }

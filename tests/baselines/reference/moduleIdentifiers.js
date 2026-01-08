@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleIdentifiers.ts] ////
 
 //// [moduleIdentifiers.ts]
-module M {
+namespace M {
     interface P { x: number; y: number; }
     export var a = 1
 }

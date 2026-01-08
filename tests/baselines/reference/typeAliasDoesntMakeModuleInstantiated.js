@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/typeAliasDoesntMakeModuleInstantiated.ts] ////
 
 //// [typeAliasDoesntMakeModuleInstantiated.ts]
-declare module m {
+declare namespace m {
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
 

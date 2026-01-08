@@ -110,7 +110,7 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
 !!! error TS1005: ';' expected.
     
     
-    module TypeScriptAllInOne {
+    namespace TypeScriptAllInOne {
         export class Program {
             static Main(...args: string[]) {
                 try {

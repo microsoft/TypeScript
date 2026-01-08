@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/duplicateAnonymousInners1.ts] ////
 
 === duplicateAnonymousInners1.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -25,7 +25,7 @@ module Foo {
 }
 
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
     

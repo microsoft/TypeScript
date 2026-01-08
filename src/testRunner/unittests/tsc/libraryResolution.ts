@@ -1,5 +1,4 @@
 import { emptyArray } from "../../_namespaces/ts.js";
-import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     forEachLibResolutionScenario,
@@ -56,27 +55,6 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                 commandLineArgs: ["--noLib"],
             },
         ],
-        baselinePrograms: true,
-    });
-
-    verifyTsc({
-        scenario: "libraryResolution",
-        subScenario: "when one of the file skips default lib inclusion",
-        sys: () =>
-            TestServerHost.createWatchedSystem({
-                "/home/src/workspaces/project/a.d.ts": dedent`
-                    /// <reference no-default-lib="true"/>
-                    /// <reference lib="es6"/>
-                    declare const a = "hello";
-                `,
-                "/home/src/workspaces/project/b.d.ts": `export const b = 10;`,
-                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        lib: ["es6", "dom"],
-                    },
-                }),
-            }),
-        commandLineArgs: ["-i", "--explainFiles"],
         baselinePrograms: true,
     });
 });

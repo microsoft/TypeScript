@@ -4,7 +4,7 @@ class C1T5 {
 	        return i;
 	    }
 }
-module C2T5 {}
+namespace C2T5 {}
 
 class  bigClass {
      public break = 1;

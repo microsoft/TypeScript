@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt3.ts] ////
 
 === moduleSharesNameWithImportDeclarationInsideIt3.ts ===
-module Z {
+namespace Z {
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 0))
 
-    export module M {
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 10))
+    export namespace M {
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 13))
 
         export function bar() {
->bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 21))
+>bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 24))
 
             return "";
         }
@@ -16,14 +16,14 @@ module Z {
     export interface I { }
 >I : Symbol(I, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 5, 5))
 }
-module A.M {
+namespace A.M {
 >A : Symbol(A, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 7, 1))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 9))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 12))
 
     import M = Z.M;
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 12))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 15))
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 0))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 10))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 13))
 
     import M = Z.I;
 >M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 9, 19))
@@ -34,7 +34,7 @@ module A.M {
 >bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 10, 19))
     }
     M.bar(); // Should call Z.M.bar
->M.bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 21))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 12))
->bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 21))
+>M.bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 24))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 8, 15))
+>bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 1, 24))
 }

@@ -30,7 +30,7 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'r5'.
     
-    module M {
+    namespace M {
         export var foo = '';
         export class C {
             foo: string;
@@ -54,7 +54,7 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
 !!! error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
     
     function foo() { }
-    module foo {
+    namespace foo {
         export var y = 1;
         export class C {
             foo: string;

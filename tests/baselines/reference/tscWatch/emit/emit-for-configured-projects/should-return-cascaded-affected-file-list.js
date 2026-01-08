@@ -22,7 +22,6 @@ export var Foo4 = 10;
 import {y} from "./file1Consumer1";
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

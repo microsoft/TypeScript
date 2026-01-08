@@ -2,28 +2,28 @@
 
 //// [isDeclarationVisibleNodeKinds.ts]
 // Function types
-module schema {
+namespace schema {
     export function createValidator1(schema: any): <T>(data: T) => T {
         return undefined;
     }
 }
 
 // Constructor types
-module schema {
+namespace schema {
     export function createValidator2(schema: any): new <T>(data: T) => T {
         return undefined;
     }
 }
 
 // union types
-module schema {
+namespace schema {
      export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
         return undefined;
     }
 }
 
 // Array types
-module schema {
+namespace schema {
      export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
         return undefined;
     }
@@ -31,35 +31,35 @@ module schema {
 
 
 // TypeLiterals
-module schema {
+namespace schema {
     export function createValidator5(schema: any): { new <T>(data: T): T } {
         return undefined;
     }
 }
 
 // Tuple types
-module schema {
+namespace schema {
     export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
         return undefined;
     }
 }
 
 // Paren Types
-module schema {
+namespace schema {
     export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
         return undefined;
     }
 }
 
 // Type reference
-module schema {
+namespace schema {
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
         return undefined;
     }
 }
 
 
-module schema {
+namespace schema {
     export class T {
         get createValidator9(): <T>(data: T) => T {
             return undefined;

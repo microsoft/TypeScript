@@ -496,7 +496,7 @@ var obj18: any;
 
 if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
 >obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 196, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     obj18.foo1;
 >obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 196, 3))

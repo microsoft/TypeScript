@@ -38,7 +38,7 @@ class A {
     public a: any;
 >a : any
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

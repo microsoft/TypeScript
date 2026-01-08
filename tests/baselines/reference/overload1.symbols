@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/overload1.ts] ////
 
 === overload1.ts ===
-module O {
+namespace O {
 >O : Symbol(O, Decl(overload1.ts, 0, 0))
 
     export class A {
->A : Symbol(A, Decl(overload1.ts, 0, 10))
+>A : Symbol(A, Decl(overload1.ts, 0, 13))
         
     }
 
     export class B extends A {
 >B : Symbol(B, Decl(overload1.ts, 3, 5))
->A : Symbol(A, Decl(overload1.ts, 0, 10))
+>A : Symbol(A, Decl(overload1.ts, 0, 13))
     }
 
     export class C extends B {
@@ -43,7 +43,7 @@ module O {
         g(a:A):C;
 >g : Symbol(I.g, Decl(overload1.ts, 14, 27), Decl(overload1.ts, 15, 38), Decl(overload1.ts, 16, 27), Decl(overload1.ts, 17, 17))
 >a : Symbol(a, Decl(overload1.ts, 17, 10))
->A : Symbol(A, Decl(overload1.ts, 0, 10))
+>A : Symbol(A, Decl(overload1.ts, 0, 13))
 >C : Symbol(C, Decl(overload1.ts, 6, 5))
 
         g(c:C):string;
@@ -73,9 +73,9 @@ var e:string=x.g(new O.A()); // matches overload but bad assignment
 >x.g : Symbol(O.I.g, Decl(overload1.ts, 14, 27), Decl(overload1.ts, 15, 38), Decl(overload1.ts, 16, 27), Decl(overload1.ts, 17, 17))
 >x : Symbol(x, Decl(overload1.ts, 24, 11))
 >g : Symbol(O.I.g, Decl(overload1.ts, 14, 27), Decl(overload1.ts, 15, 38), Decl(overload1.ts, 16, 27), Decl(overload1.ts, 17, 17))
->O.A : Symbol(O.A, Decl(overload1.ts, 0, 10))
+>O.A : Symbol(O.A, Decl(overload1.ts, 0, 13))
 >O : Symbol(O, Decl(overload1.ts, 0, 0))
->A : Symbol(O.A, Decl(overload1.ts, 0, 10))
+>A : Symbol(O.A, Decl(overload1.ts, 0, 13))
 
 var y:string=x.f(3); // good
 >y : Symbol(y, Decl(overload1.ts, 27, 3))

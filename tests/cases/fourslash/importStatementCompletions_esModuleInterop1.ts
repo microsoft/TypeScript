@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @Filename: /mod.ts
 //// const foo = 0;

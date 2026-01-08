@@ -220,7 +220,7 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

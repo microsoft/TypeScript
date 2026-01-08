@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
 
 //// [invalidInstantiatedModule.ts]
-module M {
+namespace M {
     export class Point { x: number; y: number }
     export var Point = 1;  // Error
 }
 
-module M2 {
+namespace M2 {
     export interface Point { x: number; y: number }
     export var Point = 1;
 }

@@ -1445,7 +1445,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         export const y = 2;
         output.push("after export y");
         `,
-            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System },
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System, ignoreDeprecations: "6.0" },
         );
 
         assert.strictEqual(x, 1);

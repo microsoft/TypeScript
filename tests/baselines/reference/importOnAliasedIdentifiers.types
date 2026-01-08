@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importOnAliasedIdentifiers.ts] ////
 
 === importOnAliasedIdentifiers.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module A {
 >X : X
 >  : ^
 }
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

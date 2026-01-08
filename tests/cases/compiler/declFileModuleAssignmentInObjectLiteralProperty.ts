@@ -1,6 +1,6 @@
 // @declaration: true
 
-module m1 {
+namespace m1 {
     export class c {
     }
 }

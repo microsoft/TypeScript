@@ -3,7 +3,7 @@
 // @filename: a.tsx
 
 declare const React: any;
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         ["package"]: any;
     }

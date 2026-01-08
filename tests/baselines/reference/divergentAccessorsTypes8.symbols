@@ -39,7 +39,7 @@ interface Element {
 
     get style(): CSSStyleDeclaration;
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
->CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
     set style(cssText: string);
 >style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))

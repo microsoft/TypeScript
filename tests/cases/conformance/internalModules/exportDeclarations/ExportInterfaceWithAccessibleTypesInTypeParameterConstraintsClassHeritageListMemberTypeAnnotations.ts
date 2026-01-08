@@ -1,4 +1,4 @@
-module A {
+namespace A {
 
     export interface Point {
         x: number;

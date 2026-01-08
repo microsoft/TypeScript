@@ -2,10 +2,10 @@
 //@module: commonjs
 
 //@filename: component.d.ts
-declare module JSX {
+declare namespace JSX {
   interface ElementAttributesProperty { props; }
 }
-declare module React {
+declare namespace React {
   class Component<T, U> { }
 }
 declare module "BaseComponent" {

@@ -11,7 +11,7 @@ foo_1.ts(1,22): error TS2306: File 'foo_0.ts' is not a module.
     }
     
 ==== foo_0.ts (0 errors) ====
-    module foo {
+    namespace foo {
     	export var answer = 42;
     }
     

@@ -31,7 +31,7 @@ incrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The ope
         public a: number;
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     

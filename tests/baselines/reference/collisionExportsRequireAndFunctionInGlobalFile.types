@@ -17,7 +17,7 @@ function require() {
 >"require" : "require"
 >          : ^^^^^^^^^
 }
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -38,7 +38,7 @@ module m3 {
 >          : ^^^^^^^^^
     }
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

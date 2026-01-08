@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrowFunctionInExpressionStatement2.ts] ////
 
 //// [arrowFunctionInExpressionStatement2.ts]
-module M {
+namespace M {
     () => 0;
 }
 

@@ -24,7 +24,7 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
 !!! error TS2304: Cannot find name 'V'.
     }
     
-    module M {
+    namespace M {
         interface B<T, U> {
                   ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -38,19 +38,19 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface B<T, U> {
             x: U;
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface B<U, T> { // ok, different declaration space than other M2
             y: T;
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface B<T, U> {
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -58,7 +58,7 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface B<U, T> { // error
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.

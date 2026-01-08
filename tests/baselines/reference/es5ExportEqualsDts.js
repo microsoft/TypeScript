@@ -8,7 +8,7 @@ class A {
     }
 }
 
-module A {
+namespace A {
     export interface B { }
 }
 

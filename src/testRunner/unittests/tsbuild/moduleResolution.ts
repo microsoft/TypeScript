@@ -91,6 +91,68 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             }),
         commandLineArgs: ["-b", "packages/pkg1.tsconfig.json", "packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "resolution from d.ts of referenced project",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/common.d.ts": "export type OnValue = (value: number) => void",
+                "/home/src/workspaces/project/producer/index.ts": dedent`
+                    export { ValueProducerDeclaration } from "./in-js"
+                    import { OnValue } from "@common"
+                    export interface ValueProducerFromTs {
+                        onValue: OnValue;
+                    }
+                `,
+                "/home/src/workspaces/project/producer/in-js.d.ts": dedent`
+                    import { OnValue } from "@common"
+                    export interface ValueProducerDeclaration {
+                        onValue: OnValue;
+                    }
+                `,
+                "/home/src/workspaces/project/producer/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        strict: true,
+                        composite: true,
+                        module: "nodenext",
+                        moduleResolution: "nodenext",
+                        paths: {
+                            "@common": ["../common.d.ts"],
+                        },
+                        libReplacement: false,
+                    },
+                }),
+                "/home/src/workspaces/project/consumer/index.ts": dedent`
+                    import { ValueProducerDeclaration, ValueProducerFromTs } from "@producer"
+                    declare let v: ValueProducerDeclaration;
+                    // n is implicitly any because onValue is actually any (despite what the tooltip says)
+                    v.onValue = (n) => {
+
+                    }
+
+                    // n is implicitly number as expected
+                    declare let v2: ValueProducerFromTs;
+                    v2.onValue = (n) => {
+
+                    }`,
+                "/home/src/workspaces/project/consumer/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        strict: true,
+                        module: "nodenext",
+                        moduleResolution: "nodenext",
+                        paths: {
+                            "@producer": ["../producer/index"],
+                        },
+                        libReplacement: false,
+                    },
+                    references: [
+                        { path: "../producer" },
+                    ],
+                }),
+            }),
+        commandLineArgs: ["--b", "consumer", "--traceResolution", "-v"],
+    });
 });
 
 describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {

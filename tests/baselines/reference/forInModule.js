@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/forInModule.ts] ////
 
 //// [forInModule.ts]
-module Foo {
+namespace Foo {
 	for (var i = 0; i < 1; i++) {
 		i+i;
 	}

@@ -22,7 +22,7 @@ class Sammy {
 >  : ^
    }
 }
-module Sammy {
+namespace Sammy {
 >Sammy : typeof Sammy
 >      : ^^^^^^^^^^^^
 

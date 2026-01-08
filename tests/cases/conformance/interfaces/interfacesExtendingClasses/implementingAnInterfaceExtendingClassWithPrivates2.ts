@@ -21,7 +21,7 @@ class Bar3 extends Foo implements I { // error
 }
 
 // another level of indirection
-module M {
+namespace M {
     class Foo {
         private x: string;
     }
@@ -51,7 +51,7 @@ module M {
 }
 
 // two levels of privates
-module M2 {
+namespace M2 {
     class Foo {
         private x: string;
     }

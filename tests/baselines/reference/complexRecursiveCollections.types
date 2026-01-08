@@ -139,7 +139,7 @@ interface N2<T> extends N1<T> {
 // Test that complex recursive collections can pass the `extends` assignability check without
 // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
 // started being checked.
-declare module Immutable {
+declare namespace Immutable {
 >Immutable : typeof Immutable
 >          : ^^^^^^^^^^^^^^^^
 
@@ -236,7 +236,7 @@ declare module Immutable {
 >hashCode : () => number
 >         : ^^^^^^      
   }
-  export module List {
+  export namespace List {
 >List : typeof List
 >     : ^^^^^^^^^^^
 
@@ -546,7 +546,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
   }
-  export module Map {
+  export namespace Map {
 >Map : typeof Map
 >    : ^^^^^^^^^^
 
@@ -884,7 +884,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
   }
-  export module OrderedMap {
+  export namespace OrderedMap {
 >OrderedMap : typeof OrderedMap
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -1022,7 +1022,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
   }
-  export module Set {
+  export namespace Set {
 >Set : typeof Set
 >    : ^^^^^^^^^^
 
@@ -1209,7 +1209,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
   }
-  export module OrderedSet {
+  export namespace OrderedSet {
 >OrderedSet : typeof OrderedSet
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -1361,7 +1361,7 @@ declare module Immutable {
 >collections : Collection<any, any>[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^
   }
-  export module Stack {
+  export namespace Stack {
 >Stack : typeof Stack
 >      : ^^^^^^^^^^^^
 
@@ -1539,7 +1539,7 @@ declare module Immutable {
 >Seq : any
 >    : ^^^
 
-  export module Record {
+  export namespace Record {
 >Record : typeof Record
 >       : ^^^^^^^^^^^^^
 
@@ -1788,7 +1788,7 @@ declare module Immutable {
 >Record : any
 >       : ^^^
 
-  export module Seq {
+  export namespace Seq {
 >Seq : typeof Seq
 >    : ^^^^^^^^^^
 
@@ -1810,7 +1810,7 @@ declare module Immutable {
 >Seq : any
 >    : ^^^
 
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K_1, V_1>(): Seq.Keyed<K_1, V_1>; (): Seq.Keyed<any, any>; }
 >      : ^^^ ^^ ^^          ^^                ^^^               ^^^^^^^^   ^^                       ^^^                      ^^^^^^^^^^^^^^^^                   ^^^^^^                   ^^^
@@ -1971,7 +1971,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
     }
-    module Indexed {
+    namespace Indexed {
 >Indexed : typeof Indexed
 >        : ^^^^^^^^^^^^^^
 
@@ -2089,7 +2089,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
     }
-    export module Set {
+    export namespace Set {
 >Set : typeof Set
 >    : ^^^^^^^^^^
 
@@ -2333,7 +2333,7 @@ declare module Immutable {
 >context : any
 >        : ^^^
   }
-  export module Collection {
+  export namespace Collection {
 >Collection : typeof Collection
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -2369,7 +2369,7 @@ declare module Immutable {
 >maybeOrdered : any
 >             : ^^^
 
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Collection.Keyed<string, V_1>; }
 >      : ^^^ ^^ ^^          ^^                ^^^                      ^^^^^^^^   ^^                       ^^^                             ^^^
@@ -2532,7 +2532,7 @@ declare module Immutable {
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
     }
-    export module Indexed {}
+    export namespace Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
 >Indexed : <T>(collection: Iterable<T>) => Collection.Indexed<T>
 >        : ^ ^^          ^^           ^^^^^                     
@@ -2775,7 +2775,7 @@ declare module Immutable {
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
     }
-    export module Set {}
+    export namespace Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
 >Set : <T>(collection: Iterable<T>) => Collection.Set<T>
 >    : ^ ^^          ^^           ^^^^^                 

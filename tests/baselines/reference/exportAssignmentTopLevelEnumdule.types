@@ -47,7 +47,7 @@ enum foo {
 >blue : foo.blue
 >     : ^^^^^^^^
 }
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

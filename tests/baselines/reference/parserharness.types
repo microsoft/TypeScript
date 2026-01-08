@@ -240,7 +240,7 @@ if (typeof ActiveXObject === "function") {
 >                  : ^^^^^^^^^^^^^^^^^
 }
 
-declare module process {
+declare namespace process {
 >process : typeof process
 >        : ^^^^^^^^^^^^^^
 
@@ -259,7 +259,7 @@ declare module process {
 >         : ^^^^^^^^
 }
 
-module Harness {
+namespace Harness {
 >Harness : typeof Harness
 >        : ^^^^^^^^^^^^^^
 
@@ -352,7 +352,7 @@ module Harness {
     }
 
     // Assert functions
-    export module Assert {
+    export namespace Assert {
 >Assert : typeof Assert
 >       : ^^^^^^^^^^^^^
 
@@ -2949,11 +2949,11 @@ module Harness {
     }
 
     // Performance test
-    export module Perf {
+    export namespace Perf {
 >Perf : typeof Perf
 >     : ^^^^^^^^^^^
 
-        export module Clock {
+        export namespace Clock {
 >Clock : typeof Clock
 >      : ^^^^^^^^^^^^
 
@@ -2965,7 +2965,7 @@ module Harness {
 >resolution : number
 >           : ^^^^^^
 
-            declare module WScript {
+            declare namespace WScript {
 >WScript : typeof WScript
 >        : ^^^^^^^^^^^^^^
 
@@ -2974,7 +2974,7 @@ module Harness {
 >                     : ^^^^^^^^^
             }
 
-            declare module TestUtilities {
+            declare namespace TestUtilities {
 >TestUtilities : typeof TestUtilities
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -4138,7 +4138,7 @@ module Harness {
     }
 
     /** Functionality for compiling TypeScript code */
-    export module Compiler {
+    export namespace Compiler {
 >Compiler : typeof Compiler
 >         : ^^^^^^^^^^^^^^^
 
@@ -5278,13 +5278,13 @@ module Harness {
 
             // TODO: Find an implementation of isIdenticalTo that works.
             //public isIdenticalTo(other: Type) {
-            //    var testCode = 'module __test1__ {\n';
+            //    var testCode = 'namespace __test1__ {\n';
             //    testCode += '    ' + this.code + ';\n';
             //    testCode += '    export var __val__ = ' + this.identifier + ';\n';
             //    testCode += '}\n';
             //    testCode += 'var __test1__val__ = __test1__.__val__;\n';
 
-            //    testCode += 'module __test2__ {\n';
+            //    testCode += 'namespace __test2__ {\n';
             //    testCode += '    ' + other.code + ';\n';
             //    testCode += '    export var __val__ = ' + other.identifier + ';\n';
             //    testCode += '}\n';
@@ -5501,11 +5501,11 @@ module Harness {
 >other : Type
 >      : ^^^^
 
-                var testCode = 'module __test1__ {\n';
+                var testCode = 'namespace __test1__ {\n';
 >testCode : string
 >         : ^^^^^^
->'module __test1__ {\n' : "module __test1__ {\n"
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>'namespace __test1__ {\n' : "namespace __test1__ {\n"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 testCode += '    ' + this.code + ';\n';
 >testCode += '    ' + this.code + ';\n' : string
@@ -5563,13 +5563,13 @@ module Harness {
 >'var __test1__val__ = __test1__.__val__;\n' : "var __test1__val__ = __test1__.__val__;\n"
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-                testCode += 'module __test2__ {\n';
->testCode += 'module __test2__ {\n' : string
->                                   : ^^^^^^
+                testCode += 'namespace __test2__ {\n';
+>testCode += 'namespace __test2__ {\n' : string
+>                                      : ^^^^^^
 >testCode : string
 >         : ^^^^^^
->'module __test2__ {\n' : "module __test2__ {\n"
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>'namespace __test2__ {\n' : "namespace __test2__ {\n"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 testCode += '    export ' + other.code + ';\n';
 >testCode += '    export ' + other.code + ';\n' : string
@@ -9618,7 +9618,7 @@ module Harness {
     /** Parses the test cases files 
      *  extracts options and individual files in a multifile test
      */
-    export module TestCaseParser {
+    export namespace TestCaseParser {
 >TestCaseParser : typeof TestCaseParser
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -12758,7 +12758,7 @@ module Harness {
     }
 
     /** Runs TypeScript or Javascript code. */
-    export module Runner {
+    export namespace Runner {
 >Runner : typeof Runner
 >       : ^^^^^^^^^^^^^
 
@@ -13023,7 +13023,7 @@ module Harness {
     }
 
     /** Support class for baseline files */
-    export module Baseline {
+    export namespace Baseline {
 >Baseline : typeof Baseline
 >         : ^^^^^^^^^^^^^^^
 

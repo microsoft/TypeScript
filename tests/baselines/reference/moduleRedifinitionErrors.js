@@ -3,7 +3,7 @@
 //// [moduleRedifinitionErrors.ts]
 class A {
 }
-module A {
+namespace A {
 }
 
 

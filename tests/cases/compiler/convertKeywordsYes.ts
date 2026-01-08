@@ -287,7 +287,7 @@ enum bigEnum {
     with,
 }
 
-module bigModule {
+namespace bigModule {
     class constructor { }
     class implements { }
     class interface { }

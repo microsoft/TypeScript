@@ -1,4 +1,4 @@
-module M {
+namespace M {
     var x: asdf;
     var y = x + asdf;
     var z = <asdf>x; // should be an error
@@ -22,7 +22,7 @@ module M {
     var a = () => asdf;
     var b = (asdf) => { return qwerty };
 
-    module N {
+    namespace N {
         var x = 1;
     }
     import c = N;

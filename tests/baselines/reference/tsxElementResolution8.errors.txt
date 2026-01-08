@@ -3,7 +3,7 @@ file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construc
 
 
 ==== file.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }

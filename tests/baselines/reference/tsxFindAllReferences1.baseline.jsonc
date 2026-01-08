@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements {
 //         /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}div|]: {
@@ -14,7 +14,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
+  // declare namespace JSX {
   //     interface Element { }
   //     interface IntrinsicElements {
   //         /*FIND ALL REFS*/<|[|div|]: {
@@ -172,7 +172,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements {
 //         <|[|{| isWriteAccess: true |}div|]: {
@@ -186,7 +186,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
+  // declare namespace JSX {
   //     interface Element { }
   //     interface IntrinsicElements {
   //         <|[|div|]: {

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeofInAnonymousType.ts] ////
 
 //// [declFileTypeofInAnonymousType.ts]
-module m1 {
+namespace m1 {
     export class c {
     }
     export enum e {

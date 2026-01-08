@@ -2,7 +2,7 @@
 
 // Should handle types that are members of a module in type references and heritage clauses
 
-//// module Foo {
+//// namespace Foo {
 ////     export interface Bar {
 ////         hello(): void;
 ////     }

@@ -1,5 +1,5 @@
 // @module: commonjs
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @allowJs: true
 // @traceResolution: true
 // @noEmit: true

@@ -11,9 +11,12 @@ Foo.bar = () => { };
 
 //// [expandoFunctionContextualTypesNoValue.js]
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
 // GH #38532
-var blah_1 = require("blah");
+var blah_1 = __importDefault(require("blah"));
 function Foo() { }
 blah_1.default.bar = function () { };

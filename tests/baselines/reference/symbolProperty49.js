@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/Symbols/symbolProperty49.ts] ////
 
 //// [symbolProperty49.ts]
-module M {
+namespace M {
     export var Symbol;
 
     class C {

@@ -1,6 +1,6 @@
 // @target: esnext
 
-module Generic {
+namespace Generic {
     class C<T> {
         get y(): T {
             return 1 as never;

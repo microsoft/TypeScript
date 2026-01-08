@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
 
 === noImplicitAnyParametersInAmbientModule.ts ===
-declare module D_M {
+declare namespace D_M {
 >D_M : typeof D_M
 >    : ^^^^^^^^^^
 

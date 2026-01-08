@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts] ////
 
 //// [classAbstractInAModule.ts]
-module M {
+namespace M {
     export abstract class A {}
     export class B extends A {}
 }

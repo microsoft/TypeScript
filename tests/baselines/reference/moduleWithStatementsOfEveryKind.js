@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
 
 //// [moduleWithStatementsOfEveryKind.ts]
-module A {
+namespace A {
     class A { s: string }
     class AA<T> { s: T }
     interface I { id: number }
@@ -11,7 +11,7 @@ module A {
         id: number;
     }
 
-    module Module {
+    namespace Module {
         class A { s: string }
     }
     enum Color { Blue, Red }
@@ -30,7 +30,7 @@ module A {
     }
 }
 
-module Y {
+namespace Y {
     export class A { s: string }
     export class AA<T> { s: T }
     export interface I { id: number }
@@ -40,7 +40,7 @@ module Y {
         id: number;
     }
 
-    export module Module {
+    export namespace Module {
         class A { s: string }
     }
     export enum Color { Blue, Red }

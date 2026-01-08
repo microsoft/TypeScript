@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisKeyword.ts] ////
 
 === thisKeyword.ts ===
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

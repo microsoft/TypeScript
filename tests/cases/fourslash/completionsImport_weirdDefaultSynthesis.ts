@@ -1,5 +1,9 @@
 /// <reference path="fourslash.ts" />
 
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
+
 // @Filename: /collection.ts
 //// class Collection {
 ////   public static readonly default: typeof Collection = Collection;
@@ -11,7 +15,7 @@
 
 verify.applyCodeActionFromCompletion("", {
   name: "Collection",
-  source: "/collection",
+  source: "./collection",
   description: `Add import from "./collection"`,
   preferences: {
     includeCompletionsForModuleExports: true

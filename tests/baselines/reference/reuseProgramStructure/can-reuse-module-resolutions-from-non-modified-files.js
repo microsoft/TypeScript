@@ -32,7 +32,6 @@ declare let z: string;
 File: f1.ts
 /// <reference path="a1.ts"/>
 /// <reference types="typerefs1"/>
-/// <reference no-default-lib="true"/>
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
@@ -132,7 +131,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program 2 Reused:: SafeModules
+Program 2 Reused:: Completely
 File: a1.ts
 
 
@@ -233,30 +232,17 @@ File '/node_modules/@types/typerefs2/package.json' does not exist.
 File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+======== Resolving module './b1' from '/f1.ts'. ========
+Explicitly specified module resolution kind: 'Classic'.
+File '/b1.ts' exists - use it as a name resolution result.
+======== Module name './b1' was successfully resolved to '/b1.ts'. ========
 ======== Resolving type reference directive 'typerefs1', containing file '/f1.ts', root directory '/node_modules/@types'. ========
 Resolving with primary search path '/node_modules/@types'.
 File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/@types/typerefs1/index.d.ts' exists - use it as a name resolution result.
 ======== Type reference directive 'typerefs1' was successfully resolved to '/node_modules/@types/typerefs1/index.d.ts', primary: true. ========
-======== Resolving module './b1' from '/f1.ts'. ========
-Explicitly specified module resolution kind: 'Classic'.
-File '/b1.ts' exists - use it as a name resolution result.
-======== Module name './b1' was successfully resolved to '/b1.ts'. ========
-Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old program, it was successfully resolved to '/node_modules/@types/typerefs2/index.d.ts'.
-Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
-Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -370,9 +356,7 @@ Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old 
 Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
 Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -486,9 +470,7 @@ Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old 
 Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
 Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -590,9 +572,7 @@ Explicitly specified module resolution kind: 'Classic'.
 File '/b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to '/b1.ts'. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -706,9 +686,7 @@ Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old 
 Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
 Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -809,9 +787,7 @@ Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old 
 Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
 Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.

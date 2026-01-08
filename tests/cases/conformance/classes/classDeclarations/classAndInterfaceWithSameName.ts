@@ -1,7 +1,7 @@
 class C { foo: string; }
 interface C { foo: string; }
 
-module M {
+namespace M {
     class D {
         bar: string;
     }

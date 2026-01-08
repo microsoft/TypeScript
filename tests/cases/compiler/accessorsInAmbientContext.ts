@@ -1,6 +1,6 @@
 // @target: es5
 
-declare module M {
+declare namespace M {
     class C {
         get X() { return 1; }
         set X(v) { }

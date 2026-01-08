@@ -1,4 +1,4 @@
-// @module: node16,node18,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @importHelpers: true
 // @allowJs: true

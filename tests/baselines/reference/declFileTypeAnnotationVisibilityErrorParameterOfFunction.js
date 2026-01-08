@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts] ////
 
 //// [declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts]
-module m {
+namespace m {
     class private1 {
     }
 
@@ -29,7 +29,7 @@ module m {
     export function foo14(param = new public1()) {
     }
 
-    module m2 {
+    namespace m2 {
         export class public2 {
         }
     }

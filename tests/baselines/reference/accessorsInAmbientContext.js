@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/accessorsInAmbientContext.ts] ////
 
 //// [accessorsInAmbientContext.ts]
-declare module M {
+declare namespace M {
     class C {
         get X() { return 1; }
         set X(v) { }

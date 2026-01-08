@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution8.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: {x: string};

@@ -1,4 +1,4 @@
-// @module: amd
+// @module: commonjs
 
 // @filename: file1.ts
 class foo {}

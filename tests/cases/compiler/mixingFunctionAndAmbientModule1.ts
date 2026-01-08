@@ -1,27 +1,27 @@
-module A {
-    declare module My {
+namespace A {
+    declare namespace My {
         export var x: number;
     }
     function My(s: string) { }
 }
 
-module B {
-    declare module My {
+namespace B {
+    declare namespace My {
         export var x: number;
     }
     function My(s: boolean);
     function My(s: any) { }
 }
 
-module C {
-    declare module My {
+namespace C {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
 }
 
-module D {
-    declare module My {
+namespace D {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
@@ -29,12 +29,12 @@ module D {
 }
 
 
-module E {
-    declare module My {
+namespace E {
+    declare namespace My {
         export var x: number;
     }
     declare function My(s: boolean);
-    declare module My {
+    declare namespace My {
         export var y: number;
     }
     declare function My(s: any);

@@ -49,11 +49,11 @@ bindAll({} as HTMLButtonElement, [
 >                        : ^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
->[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: MouseEvent) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }]
->                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: PointerEvent) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }]
+>                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   {
->{    type: "onclick",    listener: (event) => {},  } : { type: "onclick"; listener: (event: MouseEvent) => void; }
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: "onclick",    listener: (event) => {},  } : { type: "onclick"; listener: (event: PointerEvent) => void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: "onclick",
 >type : "onclick"
@@ -62,12 +62,12 @@ bindAll({} as HTMLButtonElement, [
 >          : ^^^^^^^^^
 
     listener: (event) => {},
->listener : (event: MouseEvent) => void
->         : ^     ^^^^^^^^^^^^^^^^^^^^^
->(event) => {} : (event: MouseEvent) => void
->              : ^     ^^^^^^^^^^^^^^^^^^^^^
->event : MouseEvent
->      : ^^^^^^^^^^
+>listener : (event: PointerEvent) => void
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^
+>(event) => {} : (event: PointerEvent) => void
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^^^
+>event : PointerEvent
+>      : ^^^^^^^^^^^^
 
   },
   {

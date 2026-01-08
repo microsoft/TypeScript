@@ -11,7 +11,7 @@ staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on
         return -1;
        }
     }
-    module Sammy {
+    namespace Sammy {
         export var x = 1;
     }
     interface JQueryStatic {

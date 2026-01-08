@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ipromise2.ts] ////
 
 //// [ipromise2.ts]
-declare module Windows.Foundation {
+declare namespace Windows.Foundation {
     export interface IPromise<T> {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;

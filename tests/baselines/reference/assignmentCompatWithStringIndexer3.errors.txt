@@ -23,7 +23,7 @@ assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not as
     a = b1; // error
     b1 = a; // error
     
-    module Generics {
+    namespace Generics {
         class A<T extends Derived> {
             [x: string]: T;
         }

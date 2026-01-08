@@ -1,3 +1,4 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(8,15): error TS2322: Type 'T & { "ignore-prop": number; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
   Type 'T & { "ignore-prop": number; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
     Types of property '"ignore-prop"' are incompatible.
@@ -11,6 +12,7 @@ file.tsx(31,52): error TS2322: Type '(val: string) => void' is not assignable to
     Type 'number' is not assignable to type 'string'.
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (4 errors) ====
     import React = require('react')
     

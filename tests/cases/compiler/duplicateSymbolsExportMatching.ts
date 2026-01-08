@@ -1,27 +1,27 @@
-//@module: amd
-module M {
+//@module: commonjs
+namespace M {
     export interface E { }
     interface I { }
 }
-module M {
+namespace M {
     export interface E { } // ok
     interface I { } // ok
 }
 
 // Doesn't match export visibility, but it's in a different parent, so it's ok
-module M {
+namespace M {
     interface E { } // ok
     export interface I { } // ok
 }
 
-module N {
+namespace N {
     interface I { }
     interface I { } // ok
     export interface E { }
     export interface E { } // ok
 }
 
-module N2 {
+namespace N2 {
     interface I { }
     export interface I { } // error
     export interface E { }
@@ -29,34 +29,34 @@ module N2 {
 }
 
 // Should report error only once for instantiated module
-module M {
-    module inst {
+namespace M {
+    namespace inst {
         var t;
     }
-    export module inst { // one error
+    export namespace inst { // one error
         var t;
     }
 }
 
 // Variables of the same / different type
-module M2 {
+namespace M2 {
     var v: string;
     export var v: string; // one error (visibility)
     var w: number;
     export var w: string; // two errors (visibility and type mismatch)
 }
 
-module M {
-    module F {
+namespace M {
+    namespace F {
         var t;
     }
     export function F() { } // Only one error for duplicate identifier (don't consider visibility)
 }
 
-module M {
+namespace M {
     class C { }
-    module C { }
-    export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+    namespace C { }
+    export namespace C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
         var t;
     }
 }

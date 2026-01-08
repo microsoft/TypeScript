@@ -17,13 +17,13 @@ var routes1 = <Route />;
 >routes1 : Symbol(routes1, Decl(test.tsx, 6, 3))
 >Route : Symbol(Route, Decl(test.tsx, 2, 45))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))
 
 	export var X: any;
 >X : Symbol(X, Decl(test.tsx, 9, 11))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))
 
 	// Should emit 'M.X' in both opening and closing tags
@@ -44,7 +44,7 @@ declare module 'react' {
 >x : Symbol(x, Decl(react.d.ts, 1, 4))
 }
 
-declare module ReactRouter {
+declare namespace ReactRouter {
 >ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))
 
 	var Route: any;

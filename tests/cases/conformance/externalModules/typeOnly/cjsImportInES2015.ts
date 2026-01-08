@@ -1,6 +1,5 @@
 // @module: es2015
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /project/node_modules/cjs-dep/index.d.ts
 declare class SpecialError extends Error {}
 export = SpecialError;

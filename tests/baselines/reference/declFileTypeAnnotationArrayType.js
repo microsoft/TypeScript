@@ -3,7 +3,7 @@
 //// [declFileTypeAnnotationArrayType.ts]
 class c {
 }
-module m {
+namespace m {
     export class c {
     }
     export class g<T> {

@@ -1,4 +1,4 @@
-module M {	
+namespace M {	
 	class Visibility {
 	    public foo() { };
 	    private bar() { };

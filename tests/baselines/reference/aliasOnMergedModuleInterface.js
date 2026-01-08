@@ -3,7 +3,7 @@
 //// [aliasOnMergedModuleInterface_0.ts]
 declare module "foo"
 {
-    module B {
+    namespace B {
         export interface A {
         }
     }

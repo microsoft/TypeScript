@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/staticInstanceResolution5.ts] ////
 
 === staticInstanceResolution5_1.ts ===
-import WinJS = require('staticInstanceResolution5_0');
+import WinJS = require('./staticInstanceResolution5_0');
 >WinJS : Symbol(WinJS, Decl(staticInstanceResolution5_1.ts, 0, 0))
 
 // these 3 should be errors

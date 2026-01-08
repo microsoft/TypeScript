@@ -5,7 +5,7 @@ import im = require('./declarationEmit_nameConflicts_1');
 >im : typeof im
 >   : ^^^^^^^^^
 
-export module M {
+export namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -17,7 +17,7 @@ export module M {
 >C : C
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -57,7 +57,7 @@ export module M {
 >   : ^^^^^^^^
 }
 
-export module M.P {
+export namespace M.P {
 >M : typeof M
 >  : ^^^^^^^^
 >P : typeof P
@@ -71,7 +71,7 @@ export module M.P {
 >C : C
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -146,7 +146,7 @@ export module M.P {
 >  : ^^^^^^^^^^
 }
 
-export module M.Q {
+export namespace M.Q {
 >M : typeof M
 >  : ^^^^^^^^
 >Q : typeof Q
@@ -160,7 +160,7 @@ export module M.Q {
 >C : C
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -182,7 +182,7 @@ export module M.Q {
 >c : typeof M.N
 >  : ^^^^^^^^^^
 
-    export module c {
+    export namespace c {
         export interface I extends M.c.I { } // ok
 >M.c : typeof M.N
 >    : ^^^^^^^^^^
@@ -193,7 +193,7 @@ export module M.Q {
     }
 }
 === declarationEmit_nameConflicts_1.ts ===
-module f { export class c { } }
+namespace f { export class c { } }
 >f : typeof f
 >  : ^^^^^^^^
 >c : c

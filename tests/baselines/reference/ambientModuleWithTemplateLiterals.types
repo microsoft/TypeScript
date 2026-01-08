@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ambientModuleWithTemplateLiterals.ts] ////
 
 === ambientModuleWithTemplateLiterals.ts ===
-declare module Foo {
+declare namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

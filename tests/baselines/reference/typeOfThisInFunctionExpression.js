@@ -29,7 +29,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     function fn() {
         var p = this;
         var p: any;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/clinterfaces.ts] ////
 
 //// [clinterfaces.ts]
-module M {
+namespace M {
     class C { }
     interface C { }
     interface D { }

@@ -11,6 +11,6 @@ function bar() {}
 
 === /foo.ts ===
 import bar from './bar';
->bar : any
->    : ^^^
+>bar : () => void
+>    : ^^^^^^^^^^
 

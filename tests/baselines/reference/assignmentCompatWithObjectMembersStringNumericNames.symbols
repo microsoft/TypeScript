@@ -4,11 +4,11 @@
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // string named numeric properties work correctly, errors below unless otherwise noted
 
-module JustStrings {
+namespace JustStrings {
 >JustStrings : Symbol(JustStrings, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 0, 0))
 
     class S { '1': string; }
->S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 3, 20))
+>S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 3, 23))
 >'1' : Symbol(S['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 4, 13))
 
     class T { '1.': string; }
@@ -17,7 +17,7 @@ module JustStrings {
 
     var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 6, 7))
->S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 3, 20))
+>S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 3, 23))
 
     var t: T;
 >t : Symbol(t, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 7, 7))
@@ -136,11 +136,11 @@ module JustStrings {
 >t : Symbol(t, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 7, 7))
 }
 
-module NumbersAndStrings {
+namespace NumbersAndStrings {
 >NumbersAndStrings : Symbol(NumbersAndStrings, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 42, 1))
 
     class S { '1': string; }
->S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 44, 26))
+>S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 44, 29))
 >'1' : Symbol(S['1'], Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 45, 13))
 
     class T { 1: string; }
@@ -149,7 +149,7 @@ module NumbersAndStrings {
 
     var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 47, 7))
->S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 44, 26))
+>S : Symbol(S, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 44, 29))
 
     var t: T;
 >t : Symbol(t, Decl(assignmentCompatWithObjectMembersStringNumericNames.ts, 48, 7))

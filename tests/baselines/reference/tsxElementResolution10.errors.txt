@@ -6,7 +6,7 @@ file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assig
 
 
 ==== file.tsx (3 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface ElementClass {
     		render: any;

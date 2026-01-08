@@ -23,7 +23,7 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     }
     
     // CONTEXT: Module property declaration
-    module C2T5 {
+    namespace C2T5 {
         export var foo: (i: number, s: string) => number = function(i) {
             return i;
         }
@@ -68,7 +68,7 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     }
     
     // CONTEXT: Module property assignment
-    module C5T5 {
+    namespace C5T5 {
         export var foo: (i: number, s: string) => string;
         foo = function(i, s) {
             return s;

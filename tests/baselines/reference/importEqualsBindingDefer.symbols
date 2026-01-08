@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/importDefer/importEqualsBindingDefer.ts] ////
+
+=== b.ts ===
+import defer = require("./a");
+>defer : Symbol(defer, Decl(b.ts, 0, 0))
+
+=== a.ts ===
+
+export = 2;
+

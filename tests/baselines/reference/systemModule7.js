@@ -2,12 +2,12 @@
 
 //// [systemModule7.ts]
 // filename: instantiatedModule.ts
-export module M {
+export namespace M {
     var x = 1;
 }
 
 // filename: nonInstantiatedModule.ts
-export module M {
+export namespace M {
     interface I {}
 }
 

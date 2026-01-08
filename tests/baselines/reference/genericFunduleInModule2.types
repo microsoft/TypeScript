@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericFunduleInModule2.ts] ////
 
 === genericFunduleInModule2.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -14,11 +14,11 @@ module A {
 >  : ^
 }
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
-    export module B {
+    export namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

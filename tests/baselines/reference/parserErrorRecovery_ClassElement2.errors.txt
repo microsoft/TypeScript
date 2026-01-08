@@ -2,7 +2,7 @@ parserErrorRecovery_ClassElement2.ts(4,3): error TS1068: Unexpected token. A con
 
 
 ==== parserErrorRecovery_ClassElement2.ts (1 errors) ====
-    module M {
+    namespace M {
       class C {
     
       enum E {

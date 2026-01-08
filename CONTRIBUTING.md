@@ -1,3 +1,7 @@
+# Note
+
+🚨 **Important** 🚨: All code changes should be submitted to the https://github.com/microsoft/typescript-go repo. Development in this codebase [is winding down](https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/#typescript-6.0-is-the-last-javascript-based-release) and PRs will only be merged if they fix **critical** 6.0 issues (at minimum, any bug that existed in 5.9 is not critical unless it's a security issue).
+
 # Instructions for Logging Issues
 
 ## 1. Read the FAQ
@@ -45,11 +49,11 @@ In general, things we find useful when reviewing suggestions are:
   * Code examples showing the generated JavaScript (if applicable)
 * If relevant, precedent in other languages can be useful for establishing context and expected behavior
 
-# Instructions for Contributing Code
+# Instructions for Contributing Code (Legacy)
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/issues?q=is%3Aissue%20label%3A%22Help%20Wanted%22)!
 1. [A GitHub account](https://github.com/join).
 2. A copy of the TypeScript code. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.

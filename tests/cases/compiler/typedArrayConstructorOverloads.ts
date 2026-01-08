@@ -12,6 +12,7 @@ type TypedArrayConstructor =
     | Uint16ArrayConstructor
     | Int32ArrayConstructor
     | Uint32ArrayConstructor
+    | Float16ArrayConstructor
     | Float32ArrayConstructor
     | Float64ArrayConstructor
     | BigInt64ArrayConstructor

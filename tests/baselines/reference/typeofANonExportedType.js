@@ -23,7 +23,7 @@ var i2: I;
 export var r5: typeof i;
 export var r5: typeof i2;
 
-module M {
+namespace M {
     export var foo = '';
     export class C {
         foo: string;
@@ -45,7 +45,7 @@ export var r11: typeof E.A;
 export var r12: typeof r12;
 
 function foo() { }
-module foo {
+namespace foo {
     export var y = 1;
     export class C {
         foo: string;

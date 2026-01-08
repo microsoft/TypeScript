@@ -1,5 +1,5 @@
 // @target: ES6
-// @module: amd
+// @module: commonjs
 
 
 // @Filename: constDeclarations_access_1.ts
@@ -7,7 +7,7 @@ export const x = 0;
 
 // @Filename: constDeclarations_access_2.ts
 ///<reference path='constDeclarations_access_1.ts'/>
-import m = require('constDeclarations_access_1');
+import m = require('./constDeclarations_access_1');
 // Errors
 m.x = 1;
 m.x += 2;

@@ -15,7 +15,7 @@ var x = new M.C(); // Declaration file wont get emitted because there are errors
 >  : ^^^^^^^^^^
 
 === declFile.d.ts ===
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -27,7 +27,7 @@ declare module M {
 >f : () => any
 >  : ^^^^^^^^^
 
-    declare module N { }
+    declare namespace N { }
 
     declare class C { }
 >C : C

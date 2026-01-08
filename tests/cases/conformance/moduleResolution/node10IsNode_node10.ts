@@ -1,4 +1,4 @@
-// @moduleResolution: node10
+// @moduleResolution: bundler
 // @module: commonjs
 // @noEmit: true
 // @traceResolution: true

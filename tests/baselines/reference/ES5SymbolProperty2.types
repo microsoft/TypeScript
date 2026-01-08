@@ -1,13 +1,12 @@
 //// [tests/cases/conformance/Symbols/ES5SymbolProperty2.ts] ////
 
 === ES5SymbolProperty2.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
     var Symbol: any;
 >Symbol : any
->       : ^^^
 
     export class C {
 >C : C
@@ -17,7 +16,6 @@ module M {
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
 >Symbol.iterator : any
->                : ^^^
 >Symbol : any
 >       : ^^^
 >iterator : any
@@ -33,7 +31,6 @@ module M {
 >C : typeof C
 >  : ^^^^^^^^
 >Symbol.iterator : any
->                : ^^^
 >Symbol : any
 >       : ^^^
 >iterator : any
@@ -41,8 +38,7 @@ module M {
 }
 
 (new M.C)[Symbol.iterator];
->(new M.C)[Symbol.iterator] : () => void
->                           : ^^^^^^^^^^
+>(new M.C)[Symbol.iterator] : error
 >(new M.C) : M.C
 >          : ^^^
 >new M.C : M.C
@@ -53,10 +49,10 @@ module M {
 >  : ^^^^^^^^
 >C : typeof M.C
 >  : ^^^^^^^^^^
->Symbol.iterator : any
->                : ^^^
->Symbol : any
->       : ^^^
->iterator : any
->         : ^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 

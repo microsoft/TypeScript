@@ -38,7 +38,7 @@ assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is 
     var j: { (): string } = x;
     var j2: { <T>(x: T): string } = x;
     
-    module M {
+    namespace M {
         export var foo = 1;
     }
     

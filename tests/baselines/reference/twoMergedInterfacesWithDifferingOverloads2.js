@@ -15,7 +15,7 @@ var r = a();
 var r2 = a(1);
 var r3 = a(1, 2);
 
-module G {
+namespace G {
     interface A<T> {
         (): string;
         (x: T): T;

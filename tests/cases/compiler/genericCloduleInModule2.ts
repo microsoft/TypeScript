@@ -1,12 +1,12 @@
-module A {
+namespace A {
     export class B<T> {
         foo() { }
         static bar() { }
     }
 }
 
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export var x = 1;
     }
 }

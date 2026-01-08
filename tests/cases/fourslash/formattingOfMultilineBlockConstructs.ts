@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-////module InternalModule/*1*/
+////namespace InternalModule/*1*/
 ////{
 ////}
 ////interface MyInterface/*2*/
@@ -39,7 +39,7 @@
 
 format.document();
 goTo.marker('1');
-verify.currentLineContentIs("module InternalModule {");
+verify.currentLineContentIs("namespace InternalModule {");
 goTo.marker('2');
 verify.currentLineContentIs("interface MyInterface {");
 goTo.marker('3');

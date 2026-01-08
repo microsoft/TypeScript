@@ -3,7 +3,7 @@
 === assignmentCompatWithConstructSignatures4.ts ===
 // checking assignment compatibility relations for function types.
 
-module Errors {
+namespace Errors {
 >Errors : typeof Errors
 >       : ^^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ module Errors {
 >bing : string
 >     : ^^^^^^
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
 >WithNonGenericSignaturesInBaseType : typeof WithNonGenericSignaturesInBaseType
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -438,7 +438,7 @@ module Errors {
 >    : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
