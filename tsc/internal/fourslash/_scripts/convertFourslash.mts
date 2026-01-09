@@ -548,28 +548,9 @@ function parseVerifyApplyCodeActionArgs(arg: ts.Expression): string | undefined 
                             }
                             dataProps.push(`ModuleSpecifier: ${getGoStringLiteral(moduleSpecifierInit.text)},`);
                             break;
-                        case "exportName":
-                            const exportNameInit = getStringLiteralLike(dataProp.initializer);
-                            if (!exportNameInit) {
-                                console.error(`Expected string literal for exportName in verify.applyCodeActionFromCompletion data, got ${dataProp.initializer.getText()}`);
-                                return undefined;
-                            }
-                            dataProps.push(`ExportName: ${getGoStringLiteral(exportNameInit.text)},`);
-                            break;
-                        case "fileName":
-                            const fileNameInit = getStringLiteralLike(dataProp.initializer);
-                            if (!fileNameInit) {
-                                console.error(`Expected string literal for fileName in verify.applyCodeActionFromCompletion data, got ${dataProp.initializer.getText()}`);
-                                return undefined;
-                            }
-                            dataProps.push(`FileName: ${getGoStringLiteral(fileNameInit.text)},`);
-                            break;
-                        default:
-                            console.error(`Unrecognized property in verify.applyCodeActionFromCompletion data: ${dataProp.getText()}`);
-                            return undefined;
                     }
                 }
-                props.push(`AutoImportData: &lsproto.AutoImportData{\n${dataProps.join("\n")}\n},`);
+                props.push(`AutoImportFix: &lsproto.AutoImportFix{\n${dataProps.join("\n")}\n},`);
                 break;
             case "description":
                 descInit = getStringLiteralLike(init);
@@ -1060,7 +1041,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                             break;
                         }
                         itemProps.push(`Data: &lsproto.CompletionItemData{
-                            AutoImport: &lsproto.AutoImportData{
+                            AutoImport: &lsproto.AutoImportFix{
                                 ModuleSpecifier: ${getGoStringLiteral(sourceInit.text)},
                             },
                         },`);

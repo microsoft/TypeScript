@@ -41,7 +41,7 @@ R/*0*/`
 					Label: "RangeParser",
 					Kind:  PtrTo(lsproto.CompletionItemKindFunction),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "range-parser",
 						},
 					},

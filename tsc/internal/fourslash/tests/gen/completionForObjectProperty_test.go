@@ -45,7 +45,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -66,7 +66,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -87,7 +87,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -108,7 +108,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -129,7 +129,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -150,7 +150,7 @@ const test8: { foo: string } = { foo/*8*/ }`
 				&lsproto.CompletionItem{
 					Label: "foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

@@ -78,7 +78,7 @@ ref/**/`
 				&lsproto.CompletionItem{
 					Label: "ref",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "vue",
 						},
 					},
@@ -89,13 +89,10 @@ ref/**/`
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:        "ref",
-		Source:      "vue",
-		Description: "Update import from \"vue\"",
-		AutoImportData: &lsproto.AutoImportData{
-			ExportName: "ref",
-			FileName:   "/node_modules/vue/dist/vue.d.ts",
-		},
+		Name:          "ref",
+		Source:        "vue",
+		Description:   "Update import from \"vue\"",
+		AutoImportFix: &lsproto.AutoImportFix{},
 		NewFileContent: PtrTo(`import { ref } from "vue";
 ref`),
 	})

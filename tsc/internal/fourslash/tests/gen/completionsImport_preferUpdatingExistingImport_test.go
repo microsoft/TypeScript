@@ -40,7 +40,7 @@ y/**/`
 					&lsproto.CompletionItem{
 						Label: "y",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./deep/module/why/you/want/this/path",
 							},
 						},

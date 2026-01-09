@@ -39,8 +39,18 @@ one/**/`
 					&lsproto.CompletionItem{
 						Label: "one",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
-								ModuleSpecifier: "./transient",
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "./r1",
+							},
+						},
+						AdditionalTextEdits: fourslash.AnyTextEdits,
+						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					},
+					&lsproto.CompletionItem{
+						Label: "one",
+						Data: &lsproto.CompletionItemData{
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "./r2",
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,

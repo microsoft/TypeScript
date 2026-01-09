@@ -44,7 +44,7 @@ import {} from "@reduxjs/toolkit";
 				&lsproto.CompletionItem{
 					Label: "configureStore",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "@reduxjs/toolkit",
 						},
 					},
@@ -57,9 +57,7 @@ import {} from "@reduxjs/toolkit";
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "configureStore",
 		Source: "@reduxjs/toolkit",
-		AutoImportData: &lsproto.AutoImportData{
-			ExportName:      "configureStore",
-			FileName:        "/src/configureStore.ts",
+		AutoImportFix: &lsproto.AutoImportFix{
 			ModuleSpecifier: "@reduxjs/toolkit",
 		},
 		Description: "Update import from \"@reduxjs/toolkit\"",

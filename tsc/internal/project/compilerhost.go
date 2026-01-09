@@ -1,10 +1,7 @@
 package project
 
 import (
-	"time"
-
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/project/logging"
@@ -20,29 +17,12 @@ type compilerHost struct {
 	currentDirectory string
 	sessionOptions   *SessionOptions
 
-	fs                 *snapshotFSBuilder
-	compilerFS         *compilerFS
+	sourceFS           *sourceFS
 	configFileRegistry *ConfigFileRegistry
-	seenFiles          *collections.SyncSet[tspath.Path]
 
 	project *Project
 	builder *ProjectCollectionBuilder
 	logger  *logging.LogTree
-}
-
-type builderFileSource struct {
-	seenFiles         *collections.SyncSet[tspath.Path]
-	snapshotFSBuilder *snapshotFSBuilder
-}
-
-func (c *builderFileSource) GetFile(fileName string) FileHandle {
-	path := c.snapshotFSBuilder.toPath(fileName)
-	c.seenFiles.Add(path)
-	return c.snapshotFSBuilder.GetFileByPath(fileName, path)
-}
-
-func (c *builderFileSource) FS() vfs.FS {
-	return c.snapshotFSBuilder.FS()
 }
 
 func newCompilerHost(
@@ -51,23 +31,13 @@ func newCompilerHost(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *compilerHost {
-	seenFiles := &collections.SyncSet[tspath.Path]{}
-	compilerFS := &compilerFS{
-		source: &builderFileSource{
-			seenFiles:         seenFiles,
-			snapshotFSBuilder: builder.fs,
-		},
-	}
-
 	return &compilerHost{
 		configFilePath:   project.configFilePath,
 		currentDirectory: currentDirectory,
 		sessionOptions:   builder.sessionOptions,
 
-		compilerFS: compilerFS,
-		seenFiles:  seenFiles,
+		sourceFS: newSourceFS(true, builder.fs, builder.toPath),
 
-		fs:      builder.fs,
 		project: project,
 		builder: builder,
 		logger:  logger,
@@ -80,9 +50,9 @@ func (c *compilerHost) freeze(snapshotFS *SnapshotFS, configFileRegistry *Config
 	if c.builder == nil {
 		panic("freeze can only be called once")
 	}
-	c.compilerFS.source = snapshotFS
+	c.sourceFS.source = snapshotFS
+	c.sourceFS.DisableTracking()
 	c.configFileRegistry = configFileRegistry
-	c.fs = nil
 	c.builder = nil
 	c.project = nil
 	c.logger = nil
@@ -101,7 +71,7 @@ func (c *compilerHost) DefaultLibraryPath() string {
 
 // FS implements compiler.CompilerHost.
 func (c *compilerHost) FS() vfs.FS {
-	return c.compilerFS
+	return c.sourceFS
 }
 
 // GetCurrentDirectory implements compiler.CompilerHost.
@@ -114,7 +84,8 @@ func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.
 	if c.builder == nil {
 		return c.configFileRegistry.GetConfig(path)
 	} else {
-		c.seenFiles.Add(path)
+		// acquireConfigForProject will bypass sourceFS, so track the file here.
+		c.sourceFS.Track(fileName)
 		return c.builder.configFileRegistryBuilder.acquireConfigForProject(fileName, path, c.project, c.logger)
 	}
 }
@@ -124,8 +95,7 @@ func (c *compilerHost) GetResolvedProjectReference(fileName string, path tspath.
 // be a corresponding release for each call made.
 func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 	c.ensureAlive()
-	c.seenFiles.Add(opts.Path)
-	if fh := c.fs.GetFileByPath(opts.FileName, opts.Path); fh != nil {
+	if fh := c.sourceFS.GetFileByPath(opts.FileName, opts.Path); fh != nil {
 		return c.builder.parseCache.Acquire(NewParseCacheKey(opts, fh.Hash(), fh.Kind()), fh)
 	}
 	return nil
@@ -133,72 +103,5 @@ func (c *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.Sourc
 
 // Trace implements compiler.CompilerHost.
 func (c *compilerHost) Trace(msg *diagnostics.Message, args ...any) {
-	panic("unimplemented")
-}
-
-var _ vfs.FS = (*compilerFS)(nil)
-
-type compilerFS struct {
-	source FileSource
-}
-
-// DirectoryExists implements vfs.FS.
-func (fs *compilerFS) DirectoryExists(path string) bool {
-	return fs.source.FS().DirectoryExists(path)
-}
-
-// FileExists implements vfs.FS.
-func (fs *compilerFS) FileExists(path string) bool {
-	if fh := fs.source.GetFile(path); fh != nil {
-		return true
-	}
-	return fs.source.FS().FileExists(path)
-}
-
-// GetAccessibleEntries implements vfs.FS.
-func (fs *compilerFS) GetAccessibleEntries(path string) vfs.Entries {
-	return fs.source.FS().GetAccessibleEntries(path)
-}
-
-// ReadFile implements vfs.FS.
-func (fs *compilerFS) ReadFile(path string) (contents string, ok bool) {
-	if fh := fs.source.GetFile(path); fh != nil {
-		return fh.Content(), true
-	}
-	return "", false
-}
-
-// Realpath implements vfs.FS.
-func (fs *compilerFS) Realpath(path string) string {
-	return fs.source.FS().Realpath(path)
-}
-
-// Stat implements vfs.FS.
-func (fs *compilerFS) Stat(path string) vfs.FileInfo {
-	return fs.source.FS().Stat(path)
-}
-
-// UseCaseSensitiveFileNames implements vfs.FS.
-func (fs *compilerFS) UseCaseSensitiveFileNames() bool {
-	return fs.source.FS().UseCaseSensitiveFileNames()
-}
-
-// WalkDir implements vfs.FS.
-func (fs *compilerFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	panic("unimplemented")
-}
-
-// WriteFile implements vfs.FS.
-func (fs *compilerFS) WriteFile(path string, data string, writeByteOrderMark bool) error {
-	panic("unimplemented")
-}
-
-// Remove implements vfs.FS.
-func (fs *compilerFS) Remove(path string) error {
-	panic("unimplemented")
-}
-
-// Chtimes implements vfs.FS.
-func (fs *compilerFS) Chtimes(path string, atime time.Time, mtime time.Time) error {
 	panic("unimplemented")
 }

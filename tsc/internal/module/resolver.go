@@ -11,8 +11,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/packagejson"
-	"github.com/microsoft/typescript-go/internal/semver"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type resolved struct {
@@ -1818,13 +1819,7 @@ func (r *resolutionState) conditionMatches(condition string) bool {
 	if !slices.Contains(r.conditions, "types") {
 		return false // only apply versioned types conditions if the types condition is applied
 	}
-	if !strings.HasPrefix(condition, "types@") {
-		return false
-	}
-	if versionRange, ok := semver.TryParseVersionRange(condition[len("types@"):]); ok {
-		return versionRange.Test(&typeScriptVersion)
-	}
-	return false
+	return IsApplicableVersionedTypesKey(condition)
 }
 
 func (r *resolutionState) getTraceFunc() func(m *diagnostics.Message, args ...any) {
@@ -2021,4 +2016,210 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host Resoluti
 		}
 	}
 	return result
+}
+
+type ResolvedEntrypoints struct {
+	Entrypoints           []*ResolvedEntrypoint
+	FailedLookupLocations []string
+}
+
+type Ending int
+
+const (
+	EndingFixed Ending = iota
+	EndingExtensionChangeable
+	EndingChangeable
+)
+
+type ResolvedEntrypoint struct {
+	ResolvedFileName  string
+	ModuleSpecifier   string
+	Ending            Ending
+	IncludeConditions *collections.Set[string]
+	ExcludeConditions *collections.Set[string]
+}
+
+func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string) *ResolvedEntrypoints {
+	extensions := extensionsTypeScript | extensionsDeclaration
+	features := NodeResolutionFeaturesAll
+	state := &resolutionState{resolver: r, extensions: extensions, features: features, compilerOptions: r.compilerOptions}
+	if packageJson.Exists() && packageJson.Contents.Exports.IsPresent() {
+		entrypoints := state.loadEntrypointsFromExportMap(packageJson, packageName, packageJson.Contents.Exports)
+		return &ResolvedEntrypoints{
+			Entrypoints:           entrypoints,
+			FailedLookupLocations: state.failedLookupLocations,
+		}
+	}
+
+	result := &ResolvedEntrypoints{}
+	mainResolution := state.loadNodeModuleFromDirectoryWorker(
+		extensions,
+		packageJson.PackageDirectory,
+		false, /*onlyRecordFailures*/
+		packageJson,
+	)
+
+	otherFiles := vfs.ReadDirectory(
+		r.host.FS(),
+		r.host.GetCurrentDirectory(),
+		packageJson.PackageDirectory,
+		extensions.Array(),
+		[]string{"node_modules"},
+		[]string{"**/*"},
+		nil,
+	)
+
+	if mainResolution.isResolved() {
+		result.Entrypoints = append(result.Entrypoints, &ResolvedEntrypoint{
+			ResolvedFileName: mainResolution.path,
+			ModuleSpecifier:  packageName,
+		})
+	}
+
+	comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.host.FS().UseCaseSensitiveFileNames()}
+	for _, file := range otherFiles {
+		if mainResolution.isResolved() && tspath.ComparePaths(file, mainResolution.path, comparePathsOptions) == 0 {
+			continue
+		}
+		result.Entrypoints = append(result.Entrypoints, &ResolvedEntrypoint{
+			ResolvedFileName: file,
+			ModuleSpecifier:  tspath.ResolvePath(packageName, tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)),
+			Ending:           EndingChangeable,
+		})
+	}
+
+	if len(result.Entrypoints) > 0 {
+		result.FailedLookupLocations = state.failedLookupLocations
+		return result
+	}
+	return nil
+}
+
+func (r *resolutionState) loadEntrypointsFromExportMap(
+	packageJson *packagejson.InfoCacheEntry,
+	packageName string,
+	exports packagejson.ExportsOrImports,
+) []*ResolvedEntrypoint {
+	var loadEntrypointsFromTargetExports func(subpath string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], exports packagejson.ExportsOrImports)
+	var entrypoints []*ResolvedEntrypoint
+
+	loadEntrypointsFromTargetExports = func(subpath string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], exports packagejson.ExportsOrImports) {
+		if exports.Type == packagejson.JSONValueTypeString && strings.HasPrefix(exports.AsString(), "./") {
+			if strings.ContainsRune(exports.AsString(), '*') {
+				if strings.IndexByte(exports.AsString(), '*') != strings.LastIndexByte(exports.AsString(), '*') {
+					return
+				}
+				patternPath := tspath.ResolvePath(packageJson.PackageDirectory, exports.AsString())
+				leadingSlice, trailingSlice, _ := strings.Cut(patternPath, "*")
+				caseSensitive := r.resolver.host.FS().UseCaseSensitiveFileNames()
+				files := vfs.ReadDirectory(
+					r.resolver.host.FS(),
+					r.resolver.host.GetCurrentDirectory(),
+					packageJson.PackageDirectory,
+					r.extensions.Array(),
+					nil,
+					[]string{
+						tspath.ChangeFullExtension(strings.Replace(exports.AsString(), "*", "**/*", 1), ".*"),
+					},
+					nil,
+				)
+				for _, file := range files {
+					matchedStar, ok := r.getMatchedStarForPatternEntrypoint(file, leadingSlice, trailingSlice, caseSensitive)
+					if !ok {
+						continue
+					}
+					moduleSpecifier := tspath.ResolvePath(packageName, strings.Replace(subpath, "*", matchedStar, 1))
+					entrypoints = append(entrypoints, &ResolvedEntrypoint{
+						ResolvedFileName:  file,
+						ModuleSpecifier:   moduleSpecifier,
+						IncludeConditions: includeConditions,
+						ExcludeConditions: excludeConditions,
+						Ending:            core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
+					})
+				}
+			} else {
+				partsAfterFirst := tspath.GetPathComponents(exports.AsString(), "")[2:]
+				if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
+					return
+				}
+				resolvedTarget := tspath.ResolvePath(packageJson.PackageDirectory, exports.AsString())
+				if result := r.loadFileNameFromPackageJSONField(r.extensions, resolvedTarget, exports.AsString(), false /*onlyRecordFailures*/); result.isResolved() {
+					entrypoints = append(entrypoints, &ResolvedEntrypoint{
+						ResolvedFileName:  result.path,
+						ModuleSpecifier:   tspath.ResolvePath(packageName, subpath),
+						IncludeConditions: includeConditions,
+						ExcludeConditions: excludeConditions,
+					})
+				}
+			}
+		} else if exports.Type == packagejson.JSONValueTypeArray {
+			for _, element := range exports.AsArray() {
+				loadEntrypointsFromTargetExports(subpath, includeConditions, excludeConditions, element)
+			}
+		} else if exports.Type == packagejson.JSONValueTypeObject {
+			var prevConditions []string
+			for condition, export := range exports.AsObject().Entries() {
+				if excludeConditions != nil && excludeConditions.Has(condition) {
+					continue
+				}
+
+				conditionAlwaysMatches := condition == "default" || condition == "types" || IsApplicableVersionedTypesKey(condition)
+				newIncludeConditions := includeConditions
+				if !(conditionAlwaysMatches) {
+					newIncludeConditions = includeConditions.Clone()
+					excludeConditions = excludeConditions.Clone()
+					if newIncludeConditions == nil {
+						newIncludeConditions = &collections.Set[string]{}
+					}
+					newIncludeConditions.Add(condition)
+					for _, prevCondition := range prevConditions {
+						if excludeConditions == nil {
+							excludeConditions = &collections.Set[string]{}
+						}
+						excludeConditions.Add(prevCondition)
+					}
+				}
+
+				prevConditions = append(prevConditions, condition)
+				loadEntrypointsFromTargetExports(subpath, newIncludeConditions, excludeConditions, export)
+				if conditionAlwaysMatches {
+					break
+				}
+			}
+		}
+	}
+
+	switch exports.Type {
+	case packagejson.JSONValueTypeArray:
+		for _, element := range exports.AsArray() {
+			loadEntrypointsFromTargetExports(".", nil, nil, element)
+		}
+	case packagejson.JSONValueTypeObject:
+		if exports.IsSubpaths() {
+			for subpath, export := range exports.AsObject().Entries() {
+				loadEntrypointsFromTargetExports(subpath, nil, nil, export)
+			}
+		} else {
+			loadEntrypointsFromTargetExports(".", nil, nil, exports)
+		}
+	default:
+		loadEntrypointsFromTargetExports(".", nil, nil, exports)
+	}
+
+	return entrypoints
+}
+
+func (r *resolutionState) getMatchedStarForPatternEntrypoint(file string, leadingSlice string, trailingSlice string, caseSensitive bool) (string, bool) {
+	if stringutil.HasPrefixAndSuffixWithoutOverlap(file, leadingSlice, trailingSlice, caseSensitive) {
+		return file[len(leadingSlice) : len(file)-len(trailingSlice)], true
+	}
+
+	if jsExtension := TryGetJSExtensionForFile(file, r.compilerOptions); len(jsExtension) > 0 {
+		swapped := tspath.ChangeFullExtension(file, jsExtension)
+		if stringutil.HasPrefixAndSuffixWithoutOverlap(swapped, leadingSlice, trailingSlice, caseSensitive) {
+			return swapped[len(leadingSlice) : len(swapped)-len(trailingSlice)], true
+		}
+	}
+
+	return "", false
 }

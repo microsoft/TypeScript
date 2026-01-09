@@ -36,7 +36,7 @@ export function Index() {
 				&lsproto.CompletionItem{
 					Label: "Component",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./component",
 						},
 					},

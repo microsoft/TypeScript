@@ -32,7 +32,7 @@ func (l *LanguageService) ProvideInlayHint(
 	}
 
 	program, file := l.getProgramAndFile(params.TextDocument.Uri)
-	quotePreference := getQuotePreference(file, userPreferences)
+	quotePreference := lsutil.GetQuotePreference(file, userPreferences)
 
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
@@ -53,7 +53,7 @@ type inlayHintState struct {
 	ctx             context.Context
 	span            core.TextRange
 	preferences     *lsutil.InlayHintsPreferences
-	quotePreference quotePreference
+	quotePreference lsutil.QuotePreference
 	file            *ast.SourceFile
 	checker         *checker.Checker
 	converters      *lsconv.Converters
@@ -777,7 +777,7 @@ func (s *inlayHintState) getNodeDisplayPart(text string, node *ast.Node) *lsprot
 func (s *inlayHintState) getLiteralText(node *ast.LiteralLikeNode) string {
 	switch node.Kind {
 	case ast.KindStringLiteral:
-		if s.quotePreference == quotePreferenceSingle {
+		if s.quotePreference == lsutil.QuotePreferenceSingle {
 			return `'` + printer.EscapeString(node.Text(), printer.QuoteCharSingleQuote) + `'`
 		}
 		return `"` + printer.EscapeString(node.Text(), printer.QuoteCharDoubleQuote) + `"`

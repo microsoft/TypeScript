@@ -39,7 +39,7 @@ declare module "foo" {
 					&lsproto.CompletionItem{
 						Label: "x",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "foo",
 							},
 						},
@@ -49,7 +49,7 @@ declare module "foo" {
 					&lsproto.CompletionItem{
 						Label: "y",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "foo",
 							},
 						},

@@ -8,7 +8,6 @@ import (
 )
 
 func TestImportNameCodeFixOptionalImport0(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: a/f1.ts
@@ -25,6 +24,9 @@ export { foo } from "./foo/bar";`
 ns.foo();`,
 		`import * as ns from "./foo";
 import { foo } from "./foo";
+foo();`,
+		`import * as ns from "./foo";
+import { foo } from "./foo/bar";
 foo();`,
 	}, nil /*preferences*/)
 }

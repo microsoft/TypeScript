@@ -42,7 +42,7 @@ access/**/`
 				&lsproto.CompletionItem{
 					Label: "accessSync",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "fs",
 						},
 					},
@@ -52,7 +52,7 @@ access/**/`
 				&lsproto.CompletionItem{
 					Label: "accessSync",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "fs-extra",
 						},
 					},
@@ -69,9 +69,7 @@ access/**/`
 		NewFileContent: PtrTo(`import { accessSync } from "fs-extra";
 
 access`),
-		AutoImportData: &lsproto.AutoImportData{
-			ExportName:      "accessSync",
-			FileName:        "/home/src/workspaces/project/node_modules/@types/fs-extra/index.d.ts",
+		AutoImportFix: &lsproto.AutoImportFix{
 			ModuleSpecifier: "fs-extra",
 		},
 	})

@@ -10,6 +10,12 @@ type MultiMap[K comparable, V comparable] struct {
 	M map[K][]V
 }
 
+func NewMultiMapWithSizeHint[K comparable, V comparable](hint int) *MultiMap[K, V] {
+	return &MultiMap[K, V]{
+		M: make(map[K][]V, hint),
+	}
+}
+
 func GroupBy[K comparable, V comparable](items []V, groupId func(V) K) *MultiMap[K, V] {
 	m := &MultiMap[K, V]{}
 	for _, item := range items {

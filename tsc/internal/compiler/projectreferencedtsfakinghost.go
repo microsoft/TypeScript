@@ -192,6 +192,7 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 				// Store the real path for the file
 				absolutePath := tspath.GetNormalizedAbsolutePath(fileOrDirectory, fs.projectReferenceFileMapper.opts.Host.GetCurrentDirectory())
 				fs.knownSymlinks.SetFile(
+					absolutePath,
 					fileOrDirectoryPath,
 					knownDirectoryLink.Real+absolutePath[len(directoryPath):],
 				)

@@ -59,10 +59,11 @@ func TestSetDirectory(t *testing.T) {
 func TestSetFile(t *testing.T) {
 	t.Parallel()
 	cache := NewKnownSymlink("/test/dir", true)
-	symlinkPath := tspath.ToPath("/test/symlink/file.ts", "/test/dir", true)
+	symlink := "/test/symlink/file.ts"
+	symlinkPath := tspath.ToPath(symlink, "/test/dir", true)
 	realpath := "/real/path/file.ts"
 
-	cache.SetFile(symlinkPath, realpath)
+	cache.SetFile(symlink, symlinkPath, realpath)
 
 	stored, ok := cache.Files().Load(symlinkPath)
 	if !ok {

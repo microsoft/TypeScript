@@ -60,7 +60,7 @@ alpha.f(new /*c1*/);`
 				&lsproto.CompletionItem{
 					Label: "Name",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

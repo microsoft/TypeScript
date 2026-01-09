@@ -339,7 +339,7 @@ func (f *FourslashTest) printOpenFilesDiff(t *testing.T, snapshot *project.Snaps
 	options := diffTableOptions{indent: "  ", sortKeys: true}
 	for fileName := range f.openFiles {
 		path := tspath.ToPath(fileName, "/", f.vfs.UseCaseSensitiveFileNames())
-		defaultProject := snapshot.ProjectCollection.GetDefaultProject(fileName, path)
+		defaultProject := snapshot.ProjectCollection.GetDefaultProject(path)
 		newFileInfo := &openFileInfo{}
 		if defaultProject != nil {
 			newFileInfo.defaultProjectName = defaultProject.Name()

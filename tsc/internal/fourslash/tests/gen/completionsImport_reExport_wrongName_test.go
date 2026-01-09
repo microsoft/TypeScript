@@ -35,7 +35,7 @@ export { x as y } from "./a";
 				&lsproto.CompletionItem{
 					Label: "x",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -46,7 +46,7 @@ export { x as y } from "./a";
 				&lsproto.CompletionItem{
 					Label: "y",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: ".",
 						},
 					},

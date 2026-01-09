@@ -41,7 +41,7 @@ Button/**/`
 					&lsproto.CompletionItem{
 						Label: "Button",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./lib/main",
 							},
 						},

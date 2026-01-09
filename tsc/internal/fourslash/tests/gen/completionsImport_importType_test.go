@@ -36,7 +36,7 @@ export const m = 0;
 				&lsproto.CompletionItem{
 					Label: "C",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -47,7 +47,7 @@ export const m = 0;
 				&lsproto.CompletionItem{
 					Label: "T",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

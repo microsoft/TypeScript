@@ -8,7 +8,6 @@ import (
 )
 
 func TestImportNameCodeFixDefaultExport7(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @lib: dom
@@ -19,9 +18,5 @@ foo/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToMarker(t, "")
-	f.VerifyImportFixAtPosition(t, []string{
-		`import foo from "./foo";
-
-foo`,
-	}, nil /*preferences*/)
+	f.VerifyImportFixAtPosition(t, []string{}, nil /*preferences*/)
 }

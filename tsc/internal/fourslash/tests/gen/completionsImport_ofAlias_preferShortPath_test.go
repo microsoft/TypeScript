@@ -36,7 +36,7 @@ fo/**/`
 					&lsproto.CompletionItem{
 						Label: "foo",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./foo",
 							},
 						},

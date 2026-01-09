@@ -38,8 +38,8 @@ func NewRefCountCache[K comparable, V any, AcquireArgs any](
 	}
 }
 
-// Acquire retrieves or creates a cache entry for the given identity and hash.
-// If an entry exists with matching identity and hash, its refcount is incremented
+// Acquire retrieves or creates a cache entry for the given identity.
+// If an entry exists with matching identity, its refcount is incremented
 // and the cached value is returned. Otherwise, parse() is called to create the
 // value, which is stored and returned with refcount 1.
 //

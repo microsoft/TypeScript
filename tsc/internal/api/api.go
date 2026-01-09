@@ -161,7 +161,7 @@ func (api *API) GetSymbolAtPosition(ctx context.Context, projectId Handle[projec
 		return nil, errors.New("project not found")
 	}
 
-	languageService := ls.NewLanguageService(project.GetProgram(), snapshot)
+	languageService := ls.NewLanguageService(project.ConfigFilePath(), project.GetProgram(), snapshot)
 	symbol, err := languageService.GetSymbolAtPosition(ctx, fileName, position)
 	if err != nil || symbol == nil {
 		return nil, err
@@ -203,7 +203,7 @@ func (api *API) GetSymbolAtLocation(ctx context.Context, projectId Handle[projec
 	if node == nil {
 		return nil, fmt.Errorf("node of kind %s not found at position %d in file %q", kind.String(), pos, sourceFile.FileName())
 	}
-	languageService := ls.NewLanguageService(project.GetProgram(), snapshot)
+	languageService := ls.NewLanguageService(project.ConfigFilePath(), project.GetProgram(), snapshot)
 	symbol := languageService.GetSymbolAtLocation(ctx, node)
 	if symbol == nil {
 		return nil, nil
@@ -233,7 +233,7 @@ func (api *API) GetTypeOfSymbol(ctx context.Context, projectId Handle[project.Pr
 	if !ok {
 		return nil, fmt.Errorf("symbol %q not found", symbolHandle)
 	}
-	languageService := ls.NewLanguageService(project.GetProgram(), snapshot)
+	languageService := ls.NewLanguageService(project.ConfigFilePath(), project.GetProgram(), snapshot)
 	t := languageService.GetTypeOfSymbol(ctx, symbol)
 	if t == nil {
 		return nil, nil

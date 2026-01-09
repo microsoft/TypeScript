@@ -52,7 +52,7 @@ C/**/`
 				&lsproto.CompletionItem{
 					Label: "Config",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "@jest/types",
 						},
 					},
@@ -74,7 +74,7 @@ C/**/`
 				&lsproto.CompletionItem{
 					Label: "Config",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "@jest/types",
 						},
 					},

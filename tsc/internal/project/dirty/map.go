@@ -19,6 +19,17 @@ func (e *MapEntry[K, V]) Change(apply func(V)) {
 	apply(e.value)
 }
 
+func (e *MapEntry[K, V]) Replace(newValue V) {
+	if e.delete {
+		panic("tried to change a deleted entry")
+	}
+	if !e.dirty {
+		e.dirty = true
+		e.m.dirty[e.key] = e
+	}
+	e.value = newValue
+}
+
 func (e *MapEntry[K, V]) ChangeIf(cond func(V) bool, apply func(V)) bool {
 	if cond(e.Value()) {
 		e.Change(apply)
@@ -96,10 +107,16 @@ func (m *Map[K, V]) Change(key K, apply func(V)) {
 	}
 }
 
-func (m *Map[K, V]) Delete(key K) {
+func (m *Map[K, V]) TryDelete(key K) bool {
 	if entry, ok := m.Get(key); ok {
 		entry.Delete()
-	} else {
+		return true
+	}
+	return false
+}
+
+func (m *Map[K, V]) Delete(key K) {
+	if !m.TryDelete(key) {
 		panic("tried to delete a non-existent entry")
 	}
 }

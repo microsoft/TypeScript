@@ -52,7 +52,7 @@ import "@scope/react";
 					&lsproto.CompletionItem{
 						Label: "render",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "@scope/react-dom",
 							},
 						},
@@ -62,7 +62,7 @@ import "@scope/react";
 					&lsproto.CompletionItem{
 						Label: "useState",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "@scope/react",
 							},
 						},

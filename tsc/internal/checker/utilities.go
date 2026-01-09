@@ -1622,14 +1622,6 @@ func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	return result
 }
 
-// See comment on `declareModuleMember` in `binder.go`.
-func GetCombinedLocalAndExportSymbolFlags(symbol *ast.Symbol) ast.SymbolFlags {
-	if symbol.ExportSymbol != nil {
-		return symbol.Flags | symbol.ExportSymbol.Flags
-	}
-	return symbol.Flags
-}
-
 func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
 	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
 		return checker.GetAliasedSymbol(symbol)

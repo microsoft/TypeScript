@@ -34,9 +34,7 @@ acb;`),
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("2"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "abc",
 		Source: "./a",
-		AutoImportData: &lsproto.AutoImportData{
-			ExportName:      "abc",
-			FileName:        "/a.ts",
+		AutoImportFix: &lsproto.AutoImportFix{
 			ModuleSpecifier: "./a",
 		},
 		Description: "Add import from \"./a\"",

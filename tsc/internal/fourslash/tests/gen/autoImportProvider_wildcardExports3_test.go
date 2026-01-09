@@ -60,7 +60,7 @@ export const Card = () => null;
 				&lsproto.CompletionItem{
 					Label: "Card",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "@repo/ui/Card",
 						},
 					},

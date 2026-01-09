@@ -47,7 +47,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionA",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "~/noIndex/a",
 						},
 					},
@@ -57,7 +57,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionB",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "~/withIndex",
 						},
 					},
@@ -78,7 +78,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionA",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "../noIndex/a",
 						},
 					},
@@ -88,7 +88,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionB",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "../withIndex",
 						},
 					},
@@ -109,7 +109,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionA",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "../noIndex/a",
 						},
 					},
@@ -119,7 +119,7 @@ myFunction/**/`
 				&lsproto.CompletionItem{
 					Label: "myFunctionB",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "../withIndex",
 						},
 					},

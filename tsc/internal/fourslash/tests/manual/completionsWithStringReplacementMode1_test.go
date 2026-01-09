@@ -44,55 +44,10 @@ f('[|login./**/|]')`
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "login.title",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.title",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
 					Label: "login.description",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "login.description",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
-					Label: "login.sendEmailAgree",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.sendEmailAgree",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
-					Label: "login.termsOfUse",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.termsOfUse",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
-					Label: "login.privacyPolicy",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.privacyPolicy",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
-					Label: "login.sendEmailButton",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.sendEmailButton",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -107,19 +62,10 @@ f('[|login./**/|]')`
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "login.errorWrongEmailTitle",
+					Label: "login.errorGeneralEmailDescription",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "login.errorWrongEmailTitle",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
-				},
-				&lsproto.CompletionItem{
-					Label: "login.errorWrongEmailDescription",
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "login.errorWrongEmailDescription",
+							NewText: "login.errorGeneralEmailDescription",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -134,19 +80,19 @@ f('[|login./**/|]')`
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "login.errorGeneralEmailDescription",
+					Label: "login.errorWrongEmailDescription",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "login.errorGeneralEmailDescription",
+							NewText: "login.errorWrongEmailDescription",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "login.loginErrorTitle",
+					Label: "login.errorWrongEmailTitle",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "login.loginErrorTitle",
+							NewText: "login.errorWrongEmailTitle",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -161,10 +107,19 @@ f('[|login./**/|]')`
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "login.openEmailAppErrorTitle",
+					Label: "login.loginErrorTitle",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "login.openEmailAppErrorTitle",
+							NewText: "login.loginErrorTitle",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.openEmailAppErrorConfirm",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.openEmailAppErrorConfirm",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -179,10 +134,55 @@ f('[|login./**/|]')`
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "login.openEmailAppErrorConfirm",
+					Label: "login.openEmailAppErrorTitle",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "login.openEmailAppErrorConfirm",
+							NewText: "login.openEmailAppErrorTitle",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.privacyPolicy",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.privacyPolicy",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.sendEmailAgree",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.sendEmailAgree",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.sendEmailButton",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.sendEmailButton",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.termsOfUse",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.termsOfUse",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+				&lsproto.CompletionItem{
+					Label: "login.title",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "login.title",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

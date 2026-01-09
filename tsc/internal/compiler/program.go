@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/module"
+	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/parser"
@@ -72,6 +73,11 @@ type Program struct {
 	knownSymlinks         *symlinks.KnownSymlinks
 	knownSymlinksOnce     sync.Once
 
+	// Used by auto-imports
+	packageNamesOnce       sync.Once
+	resolvedPackageNames   *collections.Set[string]
+	unresolvedPackageNames *collections.Set[string]
+
 	// Used by workspace/symbol
 	hasTSFileOnce sync.Once
 	hasTSFile     bool
@@ -89,7 +95,7 @@ func (p *Program) GetCurrentDirectory() string {
 
 // GetGlobalTypingsCacheLocation implements checker.Program.
 func (p *Program) GetGlobalTypingsCacheLocation() string {
-	return "" // !!! see src/tsserver/nodeServer.ts for strada's node-specific implementation
+	return p.opts.TypingsLocation
 }
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.
@@ -173,8 +179,8 @@ func (p *Program) UseCaseSensitiveFileNames() bool {
 	return p.Host().FS().UseCaseSensitiveFileNames()
 }
 
-func (p *Program) UsesUriStyleNodeCoreModules() bool {
-	return p.usesUriStyleNodeCoreModules.IsTrue()
+func (p *Program) UsesUriStyleNodeCoreModules() core.Tristate {
+	return p.usesUriStyleNodeCoreModules
 }
 
 var _ checker.Program = (*Program)(nil)
@@ -250,6 +256,8 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 		programDiagnostics:          p.programDiagnostics,
 		hasEmitBlockingDiagnostics:  p.hasEmitBlockingDiagnostics,
 		unresolvedImports:           p.unresolvedImports,
+		resolvedPackageNames:        p.resolvedPackageNames,
+		unresolvedPackageNames:      p.unresolvedPackageNames,
 		knownSymlinks:               p.knownSymlinks,
 	}
 	result.initCheckerPool()
@@ -1309,6 +1317,13 @@ func (p *Program) IsSourceFileDefaultLibrary(path tspath.Path) bool {
 	return ok
 }
 
+func (p *Program) IsGlobalTypingsFile(fileName string) bool {
+	if !tspath.IsDeclarationFileName(fileName) {
+		return false
+	}
+	return tspath.ContainsPath(p.GetGlobalTypingsCacheLocation(), fileName, p.comparePathsOptions)
+}
+
 func (p *Program) GetDefaultLibFile(path tspath.Path) *LibFile {
 	if libFile, ok := p.libFiles[path]; ok {
 		return libFile
@@ -1628,6 +1643,54 @@ func (p *Program) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
 
 func (p *Program) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
 	return sourceFileMayBeEmitted(sourceFile, p, forceDtsEmit)
+}
+
+func (p *Program) ResolvedPackageNames() *collections.Set[string] {
+	p.collectPackageNames()
+	return p.resolvedPackageNames
+}
+
+func (p *Program) UnresolvedPackageNames() *collections.Set[string] {
+	p.collectPackageNames()
+	return p.unresolvedPackageNames
+}
+
+func (p *Program) collectPackageNames() {
+	p.packageNamesOnce.Do(func() {
+		if p.resolvedPackageNames == nil {
+			p.resolvedPackageNames = &collections.Set[string]{}
+			p.unresolvedPackageNames = &collections.Set[string]{}
+			for _, file := range p.files {
+				if p.IsSourceFileDefaultLibrary(file.Path()) || p.IsSourceFileFromExternalLibrary(file) || strings.Contains(file.FileName(), "/node_modules/") {
+					// Checking for /node_modules/ is a little imprecise, but ATA treats locally installed typings
+					// as root files, which would not pass IsSourceFileFromExternalLibrary.
+					continue
+				}
+				for _, imp := range file.Imports() {
+					if tspath.IsExternalModuleNameRelative(imp.Text()) {
+						continue
+					}
+					if resolvedModules, ok := p.resolvedModules[file.Path()]; ok {
+						key := module.ModeAwareCacheKey{Name: imp.Text(), Mode: p.GetModeForUsageLocation(file, imp)}
+						if resolvedModule, ok := resolvedModules[key]; ok && resolvedModule.IsResolved() {
+							if !resolvedModule.IsExternalLibraryImport {
+								continue
+							}
+							name := resolvedModule.PackageId.Name
+							if name == "" {
+								// node_modules package, but no name in package.json - this can happen in a monorepo package,
+								// and unfortunately in lots of fourslash tests
+								name = modulespecifiers.GetPackageNameFromDirectory(resolvedModule.ResolvedFileName)
+							}
+							p.resolvedPackageNames.Add(name)
+							continue
+						}
+					}
+					p.unresolvedPackageNames.Add(imp.Text())
+				}
+			}
+		}
+	})
 }
 
 func (p *Program) IsLibFile(sourceFile *ast.SourceFile) bool {

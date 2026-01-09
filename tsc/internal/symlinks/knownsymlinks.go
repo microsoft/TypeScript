@@ -23,6 +23,7 @@ type KnownSymlinks struct {
 	directories               collections.SyncMap[tspath.Path, *KnownDirectoryLink]
 	directoriesByRealpath     collections.SyncMap[tspath.Path, *collections.SyncSet[string]]
 	files                     collections.SyncMap[tspath.Path, string]
+	filesByRealpath           collections.SyncMap[tspath.Path, *collections.SyncSet[string]]
 	cwd                       string
 	useCaseSensitiveFileNames bool
 }
@@ -46,6 +47,11 @@ func (cache *KnownSymlinks) Files() *collections.SyncMap[tspath.Path, string] {
 	return &cache.files
 }
 
+// Gets a map from realpath to symlinks
+func (cache *KnownSymlinks) FilesByRealpath() *collections.SyncMap[tspath.Path, *collections.SyncSet[string]] {
+	return &cache.filesByRealpath
+}
+
 func (cache *KnownSymlinks) SetDirectory(symlink string, symlinkPath tspath.Path, realDirectory *KnownDirectoryLink) {
 	if realDirectory != nil {
 		if _, ok := cache.directories.Load(symlinkPath); !ok {
@@ -56,7 +62,12 @@ func (cache *KnownSymlinks) SetDirectory(symlink string, symlinkPath tspath.Path
 	cache.directories.Store(symlinkPath, realDirectory)
 }
 
-func (cache *KnownSymlinks) SetFile(symlinkPath tspath.Path, realpath string) {
+func (cache *KnownSymlinks) SetFile(symlink string, symlinkPath tspath.Path, realpath string) {
+	if _, ok := cache.files.Load(symlinkPath); !ok {
+		realpathPath := tspath.ToPath(realpath, cache.cwd, cache.useCaseSensitiveFileNames)
+		set, _ := cache.filesByRealpath.LoadOrStore(realpathPath, &collections.SyncSet[string]{})
+		set.Add(symlink)
+	}
 	cache.files.Store(symlinkPath, realpath)
 }
 
@@ -83,7 +94,7 @@ func (cache *KnownSymlinks) ProcessResolution(originalPath string, resolvedFileN
 	if originalPath == "" || resolvedFileName == "" {
 		return
 	}
-	cache.SetFile(tspath.ToPath(originalPath, cache.cwd, cache.useCaseSensitiveFileNames), resolvedFileName)
+	cache.SetFile(originalPath, tspath.ToPath(originalPath, cache.cwd, cache.useCaseSensitiveFileNames), resolvedFileName)
 	commonResolved, commonOriginal := cache.guessDirectorySymlink(resolvedFileName, originalPath, cache.cwd)
 	if commonResolved != "" && commonOriginal != "" {
 		symlinkPath := tspath.ToPath(commonOriginal, cache.cwd, cache.useCaseSensitiveFileNames)

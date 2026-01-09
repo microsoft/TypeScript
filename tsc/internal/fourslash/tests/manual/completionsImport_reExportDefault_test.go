@@ -10,16 +10,17 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionsImport_defaultAndNamedConflict(t *testing.T) {
+func TestCompletionsImport_reExportDefault(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @noLib: true
-// @Filename: /someModule.ts
-export const someModule = 0;
-export default 1;
-// @Filename: /index.ts
-someMo/**/`
+	const content = `// @module: esnext
+// @Filename: /a/b/impl.ts
+export default function foo() {}
+// @Filename: /a/index.ts
+export { default as foo } from "./b/impl";
+// @Filename: /use.ts
+fo/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -32,42 +33,26 @@ someMo/**/`
 			Exact: CompletionGlobalsPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
-						Label: "someModule",
+						Label: "foo",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
-								ModuleSpecifier: "./someModule",
+							AutoImport: &lsproto.AutoImportFix{
+								ModuleSpecifier: "./a",
 							},
 						},
-						Detail:              PtrTo("(property) default: 1"),
-						Kind:                PtrTo(lsproto.CompletionItemKindField),
+						Detail:              PtrTo("(alias) function foo(): void\nexport foo"),
+						Kind:                PtrTo(lsproto.CompletionItemKindFunction),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
 					},
-					&lsproto.CompletionItem{
-						Label: "someModule",
-						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
-								ModuleSpecifier: "./someModule",
-							},
-						},
-						Detail:              PtrTo("const someModule: 0"),
-						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
-						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
-					},
-				}, true),
+				}, false),
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:   "someModule",
-		Source: "./someModule",
-		AutoImportData: &lsproto.AutoImportData{
-			ExportName: "default",
-			FileName:   "/someModule.ts",
-		},
-		Description: "Add import from \"./someModule\"",
-		NewFileContent: PtrTo(`import someModule from "./someModule";
+		Name:        "foo",
+		Source:      "./a",
+		Description: "Add import from \"./a\"",
+		NewFileContent: PtrTo(`import { foo } from "./a";
 
-someMo`),
+fo`),
 	})
 }

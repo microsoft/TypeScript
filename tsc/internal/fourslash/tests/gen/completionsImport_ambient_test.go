@@ -46,7 +46,7 @@ Ba/**/`
 					&lsproto.CompletionItem{
 						Label: "Bar",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "path1",
 							},
 						},
@@ -56,7 +56,7 @@ Ba/**/`
 					&lsproto.CompletionItem{
 						Label: "Bar",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "path2longer",
 							},
 						},

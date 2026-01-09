@@ -37,7 +37,7 @@ Table/**/`
 					&lsproto.CompletionItem{
 						Label: "Table",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "antd",
 							},
 						},
@@ -47,7 +47,7 @@ Table/**/`
 					&lsproto.CompletionItem{
 						Label: "Table",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "rc-table",
 							},
 						},

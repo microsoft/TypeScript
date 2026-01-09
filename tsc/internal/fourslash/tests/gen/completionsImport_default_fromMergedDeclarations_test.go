@@ -38,7 +38,7 @@ declare module "m" {
 				&lsproto.CompletionItem{
 					Label: "M",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "m",
 						},
 					},

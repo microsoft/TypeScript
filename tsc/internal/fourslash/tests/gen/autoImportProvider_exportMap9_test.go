@@ -59,7 +59,7 @@ fooFrom/**/`
 				&lsproto.CompletionItem{
 					Label: "fooFromIndex",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "dependency/lol",
 						},
 					},

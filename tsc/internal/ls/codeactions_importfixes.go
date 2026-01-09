@@ -1,26 +1,18 @@
 package ls
 
 import (
-	"cmp"
 	"context"
-	"fmt"
 	"slices"
-	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/checker"
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
-	"github.com/microsoft/typescript-go/internal/ls/change"
-	"github.com/microsoft/typescript-go/internal/ls/lsutil"
-	"github.com/microsoft/typescript-go/internal/ls/organizeimports"
+	"github.com/microsoft/typescript-go/internal/ls/autoimport"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/scanner"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 var importFixErrorCodes = []int32{
@@ -59,56 +51,51 @@ var ImportFixProvider = &CodeFixProvider{
 }
 
 type fixInfo struct {
-	fix                 *ImportFix
+	fix                 *autoimport.Fix
 	symbolName          string
 	errorIdentifierText string
 	isJsxNamespaceFix   bool
 }
 
-func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) []CodeAction {
-	info := getFixInfos(ctx, fixContext, fixContext.ErrorCode, fixContext.Span.Pos(), true /* useAutoImportProvider */)
+func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]CodeAction, error) {
+	info, err := getFixInfos(ctx, fixContext, fixContext.ErrorCode, fixContext.Span.Pos())
+	if err != nil {
+		return nil, err
+	}
 	if len(info) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	var actions []CodeAction
 	for _, fixInfo := range info {
-		tracker := change.NewTracker(ctx, fixContext.Program.Options(), fixContext.LS.FormatOptions(), fixContext.LS.converters)
-		msg := fixContext.LS.codeActionForFixWorker(
+		edits, description := fixInfo.fix.Edits(
 			ctx,
-			tracker,
 			fixContext.SourceFile,
-			fixInfo.symbolName,
-			fixInfo.fix,
-			fixInfo.symbolName != fixInfo.errorIdentifierText,
+			fixContext.Program.Options(),
+			fixContext.LS.FormatOptions(),
+			fixContext.LS.converters,
+			fixContext.LS.UserPreferences(),
 		)
 
-		if msg != "" {
-			// Convert changes to LSP edits
-			changes := tracker.GetChanges()
-			var edits []*lsproto.TextEdit
-			for _, fileChanges := range changes {
-				edits = append(edits, fileChanges...)
-			}
-
-			actions = append(actions, CodeAction{
-				Description: msg,
-				Changes:     edits,
-			})
-		}
+		actions = append(actions, CodeAction{
+			Description: description,
+			Changes:     edits,
+		})
 	}
-	return actions
+	return actions, nil
 }
 
-func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int32, pos int, useAutoImportProvider bool) []*fixInfo {
+func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int32, pos int) ([]*fixInfo, error) {
 	symbolToken := astnav.GetTokenAtPosition(fixContext.SourceFile, pos)
 
+	var view *autoimport.View
 	var info []*fixInfo
 
 	if errorCode == diagnostics.X_0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.Code() {
-		info = getFixesInfoForUMDImport(ctx, fixContext, symbolToken)
+		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile)
+		info = getFixesInfoForUMDImport(ctx, fixContext, symbolToken, view)
 	} else if !ast.IsIdentifier(symbolToken) {
-		return nil
+		return nil, nil
 	} else if errorCode == diagnostics.X_0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.Code() {
 		// Handle type-only import promotion
 		ch, done := fixContext.Program.GetTypeChecker(ctx)
@@ -121,18 +108,26 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 		symbolName := symbolNames[0]
 		fix := getTypeOnlyPromotionFix(ctx, fixContext.SourceFile, symbolToken, symbolName, fixContext.Program)
 		if fix != nil {
-			return []*fixInfo{{fix: fix, symbolName: symbolName, errorIdentifierText: symbolToken.Text()}}
+			return []*fixInfo{{fix: fix, symbolName: symbolName, errorIdentifierText: symbolToken.Text()}}, nil
 		}
-		return nil
+		return nil, nil
 	} else {
-		info = getFixesInfoForNonUMDImport(ctx, fixContext, symbolToken, useAutoImportProvider)
+		var err error
+		view, err = fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile)
+		if err != nil {
+			return nil, err
+		}
+		info = getFixesInfoForNonUMDImport(ctx, fixContext, symbolToken, view)
 	}
 
 	// Sort fixes by preference
-	return sortFixInfo(info, fixContext)
+	if view == nil {
+		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile)
+	}
+	return sortFixInfo(info, fixContext, view), nil
 }
 
-func getFixesInfoForUMDImport(ctx context.Context, fixContext *CodeFixContext, token *ast.Node) []*fixInfo {
+func getFixesInfoForUMDImport(ctx context.Context, fixContext *CodeFixContext, token *ast.Node, view *autoimport.View) []*fixInfo {
 	ch, done := fixContext.Program.GetTypeChecker(ctx)
 	defer done()
 
@@ -141,43 +136,18 @@ func getFixesInfoForUMDImport(ctx context.Context, fixContext *CodeFixContext, t
 		return nil
 	}
 
-	symbol := ch.GetAliasedSymbol(umdSymbol)
-	symbolName := umdSymbol.Name
-	exportInfo := []*SymbolExportInfo{{
-		symbol:            umdSymbol,
-		moduleSymbol:      symbol,
-		moduleFileName:    "",
-		exportKind:        ExportKindUMD,
-		targetFlags:       symbol.Flags,
-		isFromPackageJson: false,
-	}}
-
-	useRequire := shouldUseRequire(fixContext.SourceFile, fixContext.Program)
-	// `usagePosition` is undefined because `token` may not actually be a usage of the symbol we're importing.
-	// For example, we might need to import `React` in order to use an arbitrary JSX tag. We could send a position
-	// for other UMD imports, but `usagePosition` is currently only used to insert a namespace qualification
-	// before a named import, like converting `writeFile` to `fs.writeFile` (whether `fs` is already imported or
-	// not), and this function will only be called for UMD symbols, which are necessarily an `export =`, not a
-	// named export.
-	_, fixes := fixContext.LS.getImportFixes(
-		ch,
-		exportInfo,
-		nil, // usagePosition undefined for UMD
-		ptrTo(false),
-		&useRequire,
-		fixContext.SourceFile,
-		false, // fromCacheOnly
-	)
+	export := autoimport.SymbolToExport(umdSymbol, ch)
+	isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(token)
 
 	var result []*fixInfo
-	for _, fix := range fixes {
+	for _, fix := range view.GetFixes(ctx, export, false, isValidTypeOnlyUseSite, nil) {
 		errorIdentifierText := ""
 		if ast.IsIdentifier(token) {
 			errorIdentifierText = token.Text()
 		}
 		result = append(result, &fixInfo{
 			fix:                 fix,
-			symbolName:          symbolName,
+			symbolName:          umdSymbol.Name,
 			errorIdentifierText: errorIdentifierText,
 		})
 	}
@@ -219,13 +189,17 @@ func isUMDExportSymbol(symbol *ast.Symbol) bool {
 		ast.IsNamespaceExportDeclaration(symbol.Declarations[0])
 }
 
-func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext, symbolToken *ast.Node, useAutoImportProvider bool) []*fixInfo {
+func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View) []*fixInfo {
 	ch, done := fixContext.Program.GetTypeChecker(ctx)
 	defer done()
 	compilerOptions := fixContext.Program.Options()
 
+	isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(symbolToken)
 	symbolNames := getSymbolNamesToImport(fixContext.SourceFile, ch, symbolToken, compilerOptions)
 	var allInfo []*fixInfo
+
+	// Compute usage position for JSDoc import type fixes
+	usagePosition := fixContext.LS.converters.PositionToLineAndCharacter(fixContext.SourceFile, core.TextPos(scanner.GetTokenPosOfNode(symbolToken, fixContext.SourceFile, false)))
 
 	for _, symbolName := range symbolNames {
 		// "default" is a keyword and not a legal identifier for the import
@@ -233,49 +207,23 @@ func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext
 			continue
 		}
 
-		isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(symbolToken)
-		useRequire := shouldUseRequire(fixContext.SourceFile, fixContext.Program)
-		exportInfosMap := getExportInfos(
-			ctx,
-			symbolName,
-			ast.IsJsxTagName(symbolToken),
-			getMeaningFromLocation(symbolToken),
-			fixContext.SourceFile,
-			fixContext.Program,
-			fixContext.LS,
-		)
-
-		// Flatten all export infos from the map into a single slice
-		var allExportInfos []*SymbolExportInfo
-		for exportInfoList := range exportInfosMap.Values() {
-			allExportInfos = append(allExportInfos, exportInfoList...)
+		isJSXTagName := symbolName == symbolToken.Text() && ast.IsJsxTagName(symbolToken)
+		queryKind := autoimport.QueryKindExactMatch
+		if isJSXTagName {
+			queryKind = autoimport.QueryKindCaseInsensitiveMatch
 		}
 
-		// Sort by moduleFileName to ensure deterministic iteration order
-		// TODO: This might not work 100% of the time; need to revisit this
-		slices.SortStableFunc(allExportInfos, func(a, b *SymbolExportInfo) int {
-			return strings.Compare(a.moduleFileName, b.moduleFileName)
-		})
+		exports := view.Search(symbolName, queryKind)
+		for _, export := range exports {
+			if isJSXTagName && !(export.Name() == symbolName || export.IsRenameable()) {
+				continue
+			}
 
-		if len(allExportInfos) > 0 {
-			usagePos := scanner.GetTokenPosOfNode(symbolToken, fixContext.SourceFile, false)
-			lspPos := fixContext.LS.converters.PositionToLineAndCharacter(fixContext.SourceFile, core.TextPos(usagePos))
-			_, fixes := fixContext.LS.getImportFixes(
-				ch,
-				allExportInfos,
-				&lspPos,
-				&isValidTypeOnlyUseSite,
-				&useRequire,
-				fixContext.SourceFile,
-				false, // fromCacheOnly
-			)
-
+			fixes := view.GetFixes(ctx, export, isJSXTagName, isValidTypeOnlyUseSite, &usagePosition)
 			for _, fix := range fixes {
 				allInfo = append(allInfo, &fixInfo{
-					fix:                 fix,
-					symbolName:          symbolName,
-					errorIdentifierText: symbolToken.Text(),
-					isJsxNamespaceFix:   symbolName != symbolToken.Text(),
+					fix:        fix,
+					symbolName: symbolName,
 				})
 			}
 		}
@@ -284,7 +232,7 @@ func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext
 	return allInfo
 }
 
-func getTypeOnlyPromotionFix(ctx context.Context, sourceFile *ast.SourceFile, symbolToken *ast.Node, symbolName string, program *compiler.Program) *ImportFix {
+func getTypeOnlyPromotionFix(ctx context.Context, sourceFile *ast.SourceFile, symbolToken *ast.Node, symbolName string, program *compiler.Program) *autoimport.Fix {
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
@@ -300,9 +248,11 @@ func getTypeOnlyPromotionFix(ctx context.Context, sourceFile *ast.SourceFile, sy
 		return nil
 	}
 
-	return &ImportFix{
-		kind:                     ImportFixKindPromoteTypeOnly,
-		typeOnlyAliasDeclaration: typeOnlyAliasDeclaration,
+	return &autoimport.Fix{
+		AutoImportFix: &lsproto.AutoImportFix{
+			Kind: lsproto.AutoImportFixKindPromoteTypeOnly,
+		},
+		TypeOnlyAliasDeclaration: typeOnlyAliasDeclaration,
 	}
 }
 
@@ -343,89 +293,7 @@ func jsxModeNeedsExplicitImport(jsx core.JsxEmit) bool {
 	return jsx == core.JsxEmitReact || jsx == core.JsxEmitReactNative
 }
 
-func getExportInfos(
-	ctx context.Context,
-	symbolName string,
-	isJsxTagName bool,
-	currentTokenMeaning ast.SemanticMeaning,
-	fromFile *ast.SourceFile,
-	program *compiler.Program,
-	ls *LanguageService,
-) *collections.MultiMap[ast.SymbolId, *SymbolExportInfo] {
-	// For each original symbol, keep all re-exports of that symbol together
-	// Maps symbol id to info for modules providing that symbol (original export + re-exports)
-	originalSymbolToExportInfos := &collections.MultiMap[ast.SymbolId, *SymbolExportInfo]{}
-
-	ch, done := program.GetTypeChecker(ctx)
-	defer done()
-
-	packageJsonFilter := ls.createPackageJsonImportFilter(fromFile)
-
-	// Helper to add a symbol to the results map
-	addSymbol := func(moduleSymbol *ast.Symbol, toFile *ast.SourceFile, exportedSymbol *ast.Symbol, exportKind ExportKind, isFromPackageJson bool) {
-		if !ls.isImportable(fromFile, toFile, moduleSymbol, packageJsonFilter) {
-			return
-		}
-
-		// Get unique ID for the exported symbol
-		symbolID := ast.GetSymbolId(exportedSymbol)
-
-		moduleFileName := ""
-		if toFile != nil {
-			moduleFileName = toFile.FileName()
-		}
-
-		originalSymbolToExportInfos.Add(symbolID, &SymbolExportInfo{
-			symbol:            exportedSymbol,
-			moduleSymbol:      moduleSymbol,
-			moduleFileName:    moduleFileName,
-			exportKind:        exportKind,
-			targetFlags:       ch.SkipAlias(exportedSymbol).Flags,
-			isFromPackageJson: isFromPackageJson,
-		})
-	}
-
-	// Iterate through all external modules
-	forEachExternalModuleToImportFrom(
-		ch,
-		program,
-		ls.UserPreferences(),
-		func(moduleSymbol *ast.Symbol, sourceFile *ast.SourceFile, checker *checker.Checker, isFromPackageJson bool) {
-			// Check for cancellation
-			if ctx.Err() != nil {
-				return
-			}
-
-			compilerOptions := program.Options()
-
-			// Check default export
-			defaultInfo := getDefaultLikeExportInfo(moduleSymbol, checker)
-			if defaultInfo != nil &&
-				symbolFlagsHaveMeaning(checker.GetSymbolFlags(defaultInfo.exportingModuleSymbol), currentTokenMeaning) &&
-				forEachNameOfDefaultExport(defaultInfo.exportingModuleSymbol, checker, compilerOptions.GetEmitScriptTarget(), func(name, capitalizedName string) string {
-					actualName := name
-					if isJsxTagName && capitalizedName != "" {
-						actualName = capitalizedName
-					}
-					if actualName == symbolName {
-						return actualName
-					}
-					return ""
-				}) != "" {
-				addSymbol(moduleSymbol, sourceFile, defaultInfo.exportingModuleSymbol, defaultInfo.exportKind, isFromPackageJson)
-			}
-			// Check for named export with identical name
-			exportSymbol := checker.TryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol)
-			if exportSymbol != nil && symbolFlagsHaveMeaning(checker.GetSymbolFlags(exportSymbol), currentTokenMeaning) {
-				addSymbol(moduleSymbol, sourceFile, exportSymbol, ExportKindNamed, isFromPackageJson)
-			}
-		},
-	)
-
-	return originalSymbolToExportInfos
-}
-
-func sortFixInfo(fixes []*fixInfo, fixContext *CodeFixContext) []*fixInfo {
+func sortFixInfo(fixes []*fixInfo, fixContext *CodeFixContext, view *autoimport.View) []*fixInfo {
 	if len(fixes) == 0 {
 		return fixes
 	}
@@ -434,209 +302,16 @@ func sortFixInfo(fixes []*fixInfo, fixContext *CodeFixContext) []*fixInfo {
 	sorted := make([]*fixInfo, len(fixes))
 	copy(sorted, fixes)
 
-	// Create package.json filter for import filtering
-	packageJsonFilter := fixContext.LS.createPackageJsonImportFilter(fixContext.SourceFile)
-
 	// Sort by:
 	// 1. JSX namespace fixes last
-	// 2. Fix kind (UseNamespace and AddToExisting preferred)
-	// 3. Module specifier comparison
+	// 2. Fix comparison using view.CompareFixes
 	slices.SortFunc(sorted, func(a, b *fixInfo) int {
 		// JSX namespace fixes should come last
 		if cmp := core.CompareBooleans(a.isJsxNamespaceFix, b.isJsxNamespaceFix); cmp != 0 {
 			return cmp
 		}
-
-		// Compare fix kinds (lower is better)
-		if cmp := cmp.Compare(int(a.fix.kind), int(b.fix.kind)); cmp != 0 {
-			return cmp
-		}
-
-		// Compare module specifiers
-		return fixContext.LS.compareModuleSpecifiers(
-			a.fix,
-			b.fix,
-			fixContext.SourceFile,
-			packageJsonFilter.allowsImportingSpecifier,
-			func(fileName string) tspath.Path { return tspath.Path(fileName) },
-		)
+		return view.CompareFixesForSorting(a.fix, b.fix)
 	})
 
 	return sorted
-}
-
-func promoteFromTypeOnly(
-	changes *change.Tracker,
-	aliasDeclaration *ast.Declaration,
-	program *compiler.Program,
-	sourceFile *ast.SourceFile,
-	ls *LanguageService,
-) *ast.Declaration {
-	compilerOptions := program.Options()
-	// See comment in `doAddExistingFix` on constant with the same name.
-	convertExistingToTypeOnly := compilerOptions.VerbatimModuleSyntax
-
-	switch aliasDeclaration.Kind {
-	case ast.KindImportSpecifier:
-		spec := aliasDeclaration.AsImportSpecifier()
-		if spec.IsTypeOnly {
-			if spec.Parent != nil && spec.Parent.Kind == ast.KindNamedImports {
-				// TypeScript creates a new specifier with isTypeOnly=false, computes insertion index,
-				// and if different from current position, deletes and re-inserts at new position.
-				// For now, we just delete the range from the first token (type keyword) to the property name or name.
-				firstToken := lsutil.GetFirstToken(aliasDeclaration, sourceFile)
-				typeKeywordPos := scanner.GetTokenPosOfNode(firstToken, sourceFile, false)
-				var targetNode *ast.DeclarationName
-				if spec.PropertyName != nil {
-					targetNode = spec.PropertyName
-				} else {
-					targetNode = spec.Name()
-				}
-				targetPos := scanner.GetTokenPosOfNode(targetNode.AsNode(), sourceFile, false)
-				changes.DeleteRange(sourceFile, core.NewTextRange(typeKeywordPos, targetPos))
-			}
-			return aliasDeclaration
-		} else {
-			// The parent import clause is type-only
-			if spec.Parent == nil || spec.Parent.Kind != ast.KindNamedImports {
-				panic("ImportSpecifier parent must be NamedImports")
-			}
-			if spec.Parent.Parent == nil || spec.Parent.Parent.Kind != ast.KindImportClause {
-				panic("NamedImports parent must be ImportClause")
-			}
-			promoteImportClause(changes, spec.Parent.Parent.AsImportClause(), program, sourceFile, ls, convertExistingToTypeOnly, aliasDeclaration)
-			return spec.Parent.Parent
-		}
-
-	case ast.KindImportClause:
-		promoteImportClause(changes, aliasDeclaration.AsImportClause(), program, sourceFile, ls, convertExistingToTypeOnly, aliasDeclaration)
-		return aliasDeclaration
-
-	case ast.KindNamespaceImport:
-		// Promote the parent import clause
-		if aliasDeclaration.Parent == nil || aliasDeclaration.Parent.Kind != ast.KindImportClause {
-			panic("NamespaceImport parent must be ImportClause")
-		}
-		promoteImportClause(changes, aliasDeclaration.Parent.AsImportClause(), program, sourceFile, ls, convertExistingToTypeOnly, aliasDeclaration)
-		return aliasDeclaration.Parent
-
-	case ast.KindImportEqualsDeclaration:
-		// Remove the 'type' keyword (which is the second token: 'import' 'type' name '=' ...)
-		importEqDecl := aliasDeclaration.AsImportEqualsDeclaration()
-		// The type keyword is after 'import' and before the name
-		scan := scanner.GetScannerForSourceFile(sourceFile, importEqDecl.Pos())
-		// Skip 'import' keyword to get to 'type'
-		scan.Scan()
-		deleteTypeKeyword(changes, sourceFile, scan.TokenStart())
-		return aliasDeclaration
-	default:
-		panic(fmt.Sprintf("Unexpected alias declaration kind: %v", aliasDeclaration.Kind))
-	}
-}
-
-// promoteImportClause removes the type keyword from an import clause
-func promoteImportClause(
-	changes *change.Tracker,
-	importClause *ast.ImportClause,
-	program *compiler.Program,
-	sourceFile *ast.SourceFile,
-	ls *LanguageService,
-	convertExistingToTypeOnly core.Tristate,
-	aliasDeclaration *ast.Declaration,
-) {
-	// Delete the 'type' keyword
-	if importClause.PhaseModifier == ast.KindTypeKeyword {
-		deleteTypeKeyword(changes, sourceFile, importClause.Pos())
-	}
-
-	// Handle .ts extension conversion to .js if necessary
-	compilerOptions := program.Options()
-	if compilerOptions.AllowImportingTsExtensions.IsFalse() {
-		moduleSpecifier := checker.TryGetModuleSpecifierFromDeclaration(importClause.Parent)
-		if moduleSpecifier != nil {
-			resolvedModule := program.GetResolvedModuleFromModuleSpecifier(sourceFile, moduleSpecifier)
-			if resolvedModule != nil && resolvedModule.ResolvedUsingTsExtension {
-				moduleText := moduleSpecifier.AsStringLiteral().Text
-				changedExtension := tspath.ChangeExtension(
-					moduleText,
-					outputpaths.GetOutputExtension(moduleText, compilerOptions.Jsx),
-				)
-				// Replace the module specifier with the new extension
-				newStringLiteral := changes.NewStringLiteral(changedExtension, moduleSpecifier.AsStringLiteral().TokenFlags)
-				changes.ReplaceNode(sourceFile, moduleSpecifier, newStringLiteral, nil)
-			}
-		}
-	}
-
-	// Handle verbatimModuleSyntax conversion
-	// If convertExistingToTypeOnly is true, we need to add 'type' to other specifiers
-	// in the same import declaration
-	if convertExistingToTypeOnly.IsTrue() {
-		namedImports := importClause.NamedBindings
-		if namedImports != nil && namedImports.Kind == ast.KindNamedImports {
-			namedImportsData := namedImports.AsNamedImports()
-			if len(namedImportsData.Elements.Nodes) > 1 {
-				// Check if the list is sorted and if we need to reorder
-				_, isSorted := organizeimports.GetNamedImportSpecifierComparerWithDetection(
-					importClause.Parent,
-					sourceFile,
-					ls.UserPreferences(),
-				)
-
-				// If the alias declaration is an ImportSpecifier and the list is sorted,
-				// move it to index 0 (since it will be the only non-type-only import)
-				if isSorted.IsFalse() == false && // isSorted !== false
-					aliasDeclaration != nil &&
-					aliasDeclaration.Kind == ast.KindImportSpecifier {
-					// Find the index of the alias declaration
-					aliasIndex := -1
-					for i, element := range namedImportsData.Elements.Nodes {
-						if element == aliasDeclaration {
-							aliasIndex = i
-							break
-						}
-					}
-					// If not already at index 0, move it there
-					if aliasIndex > 0 {
-						// Delete the specifier from its current position
-						changes.Delete(sourceFile, aliasDeclaration)
-						// Insert it at index 0
-						changes.InsertImportSpecifierAtIndex(sourceFile, aliasDeclaration, namedImports, 0)
-					}
-				}
-
-				// Add 'type' keyword to all other import specifiers that aren't already type-only
-				for _, element := range namedImportsData.Elements.Nodes {
-					spec := element.AsImportSpecifier()
-					// Skip the specifier being promoted (if aliasDeclaration is an ImportSpecifier)
-					if aliasDeclaration != nil && aliasDeclaration.Kind == ast.KindImportSpecifier {
-						if element == aliasDeclaration {
-							continue
-						}
-					}
-					// Skip if already type-only
-					if !spec.IsTypeOnly {
-						changes.InsertModifierBefore(sourceFile, ast.KindTypeKeyword, element)
-					}
-				}
-			}
-		}
-	}
-}
-
-// deleteTypeKeyword deletes the 'type' keyword token starting at the given position,
-// including any trailing whitespace.
-func deleteTypeKeyword(changes *change.Tracker, sourceFile *ast.SourceFile, startPos int) {
-	scan := scanner.GetScannerForSourceFile(sourceFile, startPos)
-	if scan.Token() != ast.KindTypeKeyword {
-		return
-	}
-	typeStart := scan.TokenStart()
-	typeEnd := scan.TokenEnd()
-	// Skip trailing whitespace
-	text := sourceFile.Text()
-	for typeEnd < len(text) && (text[typeEnd] == ' ' || text[typeEnd] == '\t') {
-		typeEnd++
-	}
-	changes.DeleteRange(sourceFile, core.NewTextRange(typeStart, typeEnd))
 }

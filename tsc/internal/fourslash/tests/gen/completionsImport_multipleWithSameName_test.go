@@ -45,7 +45,7 @@ fo/**/`
 					&lsproto.CompletionItem{
 						Label: "foo",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./a",
 							},
 						},
@@ -57,7 +57,7 @@ fo/**/`
 					&lsproto.CompletionItem{
 						Label: "foo",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./b",
 							},
 						},

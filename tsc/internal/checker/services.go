@@ -26,7 +26,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 	// Copy the given symbol into symbol tables if the symbol has the given meaning
 	// and it doesn't already exists in the symbol table.
 	copySymbol := func(symbol *ast.Symbol, meaning ast.SymbolFlags) {
-		if GetCombinedLocalAndExportSymbolFlags(symbol)&meaning != 0 {
+		if symbol.CombinedLocalAndExportSymbolFlags()&meaning != 0 {
 			id := symbol.Name
 			// We will copy all symbol regardless of its reserved name because
 			// symbolsToArray will check whether the key is a reserved name and
@@ -391,6 +391,13 @@ func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 		result = append(result, c.GetRootSymbols(root)...)
 	}
 	return result
+}
+
+func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol {
+	if valueLinks := c.valueSymbolLinks.TryGet(symbol); valueLinks != nil {
+		return valueLinks.containingType.symbol
+	}
+	return nil
 }
 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {

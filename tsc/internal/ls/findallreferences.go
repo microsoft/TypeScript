@@ -198,7 +198,7 @@ func getContextNodeForNodeEntry(node *ast.Node) *ast.Node {
 		case ast.KindJsxSelfClosingElement, ast.KindLabeledStatement, ast.KindBreakStatement, ast.KindContinueStatement:
 			return node.Parent
 		case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
-			if validImport := tryGetImportFromModuleSpecifier(node); validImport != nil {
+			if validImport := ast.TryGetImportFromModuleSpecifier(node); validImport != nil {
 				declOrStatement := ast.FindAncestor(validImport, func(*ast.Node) bool {
 					return ast.IsDeclaration(node) || ast.IsStatement(node) || ast.IsJSDocTag(node)
 				})
@@ -736,7 +736,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	defer done()
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
-		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && tryGetImportFromModuleSpecifier(entry.node) != nil {
+		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
 			continue
 		}
 		textEdit := &lsproto.TextEdit{

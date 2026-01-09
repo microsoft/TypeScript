@@ -35,6 +35,14 @@ func (s *Symbol) IsStatic() bool {
 	return modifierFlags&ModifierFlagsStatic != 0
 }
 
+// See comment on `declareModuleMember` in `binder.go`.
+func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
+	if s.ExportSymbol != nil {
+		return s.Flags | s.ExportSymbol.Flags
+	}
+	return s.Flags
+}
+
 // SymbolTable
 
 type SymbolTable map[string]*Symbol

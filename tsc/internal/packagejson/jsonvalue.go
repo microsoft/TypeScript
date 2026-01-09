@@ -44,6 +44,10 @@ type JSONValue struct {
 	Value any
 }
 
+func (v *JSONValue) IsPresent() bool {
+	return v.Type != JSONValueTypeNotPresent
+}
+
 func (v *JSONValue) IsFalsy() bool {
 	switch v.Type {
 	case JSONValueTypeNotPresent, JSONValueTypeNull:
@@ -71,6 +75,13 @@ func (v JSONValue) AsArray() []JSONValue {
 		panic(fmt.Sprintf("expected array, got %v", v.Type))
 	}
 	return v.Value.([]JSONValue)
+}
+
+func (v JSONValue) AsString() string {
+	if v.Type != JSONValueTypeString {
+		panic(fmt.Sprintf("expected string, got %v", v.Type))
+	}
+	return v.Value.(string)
 }
 
 var _ json.UnmarshalerFrom = (*JSONValue)(nil)

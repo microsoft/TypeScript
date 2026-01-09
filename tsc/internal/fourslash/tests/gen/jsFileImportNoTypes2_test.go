@@ -46,7 +46,7 @@ import /**/`
 					Label:      "TestClassBaseline",
 					InsertText: PtrTo("import { TestClassBaseline } from \"./baseline\";"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./baseline",
 						},
 					},
@@ -55,7 +55,7 @@ import /**/`
 					Label:      "TestClassExportList",
 					InsertText: PtrTo("import { TestClassExportList } from \"./exportList\";"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./exportList",
 						},
 					},
@@ -64,7 +64,7 @@ import /**/`
 					Label:      "TestClassReExport",
 					InsertText: PtrTo("import { TestClassReExport } from \"./reExport\";"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./reExport",
 						},
 					},
@@ -73,7 +73,7 @@ import /**/`
 					Label:      "TestDefaultClass",
 					InsertText: PtrTo("import TestDefaultClass from \"./default\";"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./default",
 						},
 					},

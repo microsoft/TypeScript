@@ -34,7 +34,7 @@ export default function Foo() {};
 				&lsproto.CompletionItem{
 					Label: "Foo",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

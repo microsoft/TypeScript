@@ -47,7 +47,7 @@ type A = { name: string/**/ }`
 					Label:    "string",
 					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "fp-ts",
 						},
 					},

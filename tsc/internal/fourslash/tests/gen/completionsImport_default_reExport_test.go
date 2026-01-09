@@ -42,7 +42,7 @@ export default foo.b;`
 					&lsproto.CompletionItem{
 						Label: "a",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./file1",
 							},
 						},
@@ -52,7 +52,7 @@ export default foo.b;`
 					&lsproto.CompletionItem{
 						Label: "b",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./file1",
 							},
 						},

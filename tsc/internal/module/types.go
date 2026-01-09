@@ -135,13 +135,13 @@ func (e extensions) String() string {
 func (e extensions) Array() []string {
 	result := []string{}
 	if e&extensionsTypeScript != 0 {
-		result = append(result, tspath.ExtensionTs, tspath.ExtensionTsx)
+		result = append(result, tspath.SupportedTSImplementationExtensions...)
 	}
 	if e&extensionsJavaScript != 0 {
-		result = append(result, tspath.ExtensionJs, tspath.ExtensionJsx)
+		result = append(result, tspath.SupportedJSExtensionsFlat...)
 	}
 	if e&extensionsDeclaration != 0 {
-		result = append(result, tspath.ExtensionDts)
+		result = append(result, tspath.SupportedDeclarationExtensions...)
 	}
 	if e&extensionsJson != 0 {
 		result = append(result, tspath.ExtensionJson)

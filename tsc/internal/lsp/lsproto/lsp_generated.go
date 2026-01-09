@@ -21628,40 +21628,116 @@ type InitializationOptions struct {
 	CodeLensShowLocationsCommandName *string `json:"codeLensShowLocationsCommandName,omitzero"`
 }
 
-// ExportInfoMapKey uniquely identifies an export for auto-import purposes.
-type ExportInfoMapKey struct {
-	// The symbol name.
-	SymbolName string `json:"symbolName,omitzero"`
+// AutoImportFix contains information about an auto-import suggestion.
+type AutoImportFix struct {
+	Kind AutoImportFixKind `json:"kind,omitzero"`
 
-	// The symbol ID.
-	SymbolId uint64 `json:"symbolId,omitzero"`
+	Name string `json:"name,omitzero"`
 
-	// The ambient module name.
-	AmbientModuleName string `json:"ambientModuleName,omitzero"`
+	ImportKind ImportKind `json:"importKind"`
 
-	// The module file path.
-	ModuleFile string `json:"moduleFile,omitzero"`
-}
+	UseRequire bool `json:"useRequire,omitzero"`
 
-// AutoImportData contains information about an auto-import suggestion.
-type AutoImportData struct {
-	// The name of the property or export in the module's symbol table. Differs from the completion name in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
-	ExportName string `json:"exportName,omitzero"`
-
-	// The export map key for this auto-import.
-	ExportMapKey ExportInfoMapKey `json:"exportMapKey,omitzero"`
+	AddAsTypeOnly AddAsTypeOnly `json:"addAsTypeOnly"`
 
 	// The module specifier for this auto-import.
 	ModuleSpecifier string `json:"moduleSpecifier,omitzero"`
 
-	// The file name declaring the export's module symbol, if it was an external module.
-	FileName string `json:"fileName,omitzero"`
+	// Index of the import to modify when adding to an existing import declaration.
+	ImportIndex int32 `json:"importIndex"`
 
-	// The module name (with quotes stripped) of the export's module symbol, if it was an ambient module.
-	AmbientModuleName string `json:"ambientModuleName,omitzero"`
+	UsagePosition *Position `json:"usagePosition,omitzero"`
 
-	// True if the export was found in the package.json AutoImportProvider.
-	IsPackageJsonImport bool `json:"isPackageJsonImport,omitzero"`
+	NamespacePrefix string `json:"namespacePrefix,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*AutoImportFix)(nil)
+
+func (s *AutoImportFix) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	const (
+		missingImportKind uint = 1 << iota
+		missingAddAsTypeOnly
+		missingImportIndex
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"kind"`:
+			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
+				return err
+			}
+		case `"name"`:
+			if err := json.UnmarshalDecode(dec, &s.Name); err != nil {
+				return err
+			}
+		case `"importKind"`:
+			missing &^= missingImportKind
+			if err := json.UnmarshalDecode(dec, &s.ImportKind); err != nil {
+				return err
+			}
+		case `"useRequire"`:
+			if err := json.UnmarshalDecode(dec, &s.UseRequire); err != nil {
+				return err
+			}
+		case `"addAsTypeOnly"`:
+			missing &^= missingAddAsTypeOnly
+			if err := json.UnmarshalDecode(dec, &s.AddAsTypeOnly); err != nil {
+				return err
+			}
+		case `"moduleSpecifier"`:
+			if err := json.UnmarshalDecode(dec, &s.ModuleSpecifier); err != nil {
+				return err
+			}
+		case `"importIndex"`:
+			missing &^= missingImportIndex
+			if err := json.UnmarshalDecode(dec, &s.ImportIndex); err != nil {
+				return err
+			}
+		case `"usagePosition"`:
+			if err := json.UnmarshalDecode(dec, &s.UsagePosition); err != nil {
+				return err
+			}
+		case `"namespacePrefix"`:
+			if err := json.UnmarshalDecode(dec, &s.NamespacePrefix); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingImportKind != 0 {
+			missingProps = append(missingProps, "importKind")
+		}
+		if missing&missingAddAsTypeOnly != 0 {
+			missingProps = append(missingProps, "addAsTypeOnly")
+		}
+		if missing&missingImportIndex != 0 {
+			missingProps = append(missingProps, "importIndex")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
 }
 
 // CompletionItemData is preserved on a CompletionItem between CompletionRequest and CompletionResolveRequest.
@@ -21679,7 +21755,7 @@ type CompletionItemData struct {
 	Name string `json:"name,omitzero"`
 
 	// Auto-import data for this completion item.
-	AutoImport *AutoImportData `json:"autoImport,omitzero"`
+	AutoImport *AutoImportFix `json:"autoImport,omitzero"`
 }
 
 type CodeLensData struct {
@@ -22915,6 +22991,88 @@ const (
 	CodeLensKindReferences      CodeLensKind = "references"
 	CodeLensKindImplementations CodeLensKind = "implementations"
 )
+
+type AutoImportFixKind int32
+
+const (
+	// Augment an existing namespace import.
+	AutoImportFixKindUseNamespace AutoImportFixKind = 0
+	// Add a JSDoc-only type import.
+	AutoImportFixKindJsdocTypeImport AutoImportFixKind = 1
+	// Insert into an existing import declaration.
+	AutoImportFixKindAddToExisting AutoImportFixKind = 2
+	// Create a fresh import statement.
+	AutoImportFixKindAddNew AutoImportFixKind = 3
+	// Promote a type-only import when necessary.
+	AutoImportFixKindPromoteTypeOnly AutoImportFixKind = 4
+)
+
+const _AutoImportFixKind_name = "UseNamespaceJsdocTypeImportAddToExistingAddNewPromoteTypeOnly"
+
+var _AutoImportFixKind_index = [...]uint16{0, 12, 27, 40, 46, 61}
+
+func (e AutoImportFixKind) String() string {
+	i := int(e) - 0
+	if i < 0 || i >= len(_AutoImportFixKind_index)-1 {
+		return fmt.Sprintf("AutoImportFixKind(%d)", e)
+	}
+	return _AutoImportFixKind_name[_AutoImportFixKind_index[i]:_AutoImportFixKind_index[i+1]]
+}
+
+type ImportKind int32
+
+const (
+	// Adds a named import.
+	ImportKindNamed ImportKind = 0
+	// Adds a default import.
+	ImportKindDefault ImportKind = 1
+	// Adds a namespace import.
+	ImportKindNamespace ImportKind = 2
+	// Adds a CommonJS import assignment.
+	ImportKindCommonJS ImportKind = 3
+)
+
+const _ImportKind_name = "NamedDefaultNamespaceCommonJS"
+
+var _ImportKind_index = [...]uint16{0, 5, 12, 21, 29}
+
+func (e ImportKind) String() string {
+	i := int(e) - 0
+	if i < 0 || i >= len(_ImportKind_index)-1 {
+		return fmt.Sprintf("ImportKind(%d)", e)
+	}
+	return _ImportKind_name[_ImportKind_index[i]:_ImportKind_index[i+1]]
+}
+
+type AddAsTypeOnly int32
+
+const (
+	// Import may be marked type-only if needed.
+	AddAsTypeOnlyAllowed AddAsTypeOnly = 1
+	// Import must be marked type-only.
+	AddAsTypeOnlyRequired AddAsTypeOnly = 2
+	// Import cannot be marked type-only.
+	AddAsTypeOnlyNotAllowed AddAsTypeOnly = 4
+)
+
+const _AddAsTypeOnly_name = "AllowedRequiredNotAllowed"
+
+var (
+	_AddAsTypeOnly_index_0 = [...]uint16{0, 7, 15}
+	_AddAsTypeOnly_index_1 = [...]uint16{0, 10}
+)
+
+func (e AddAsTypeOnly) String() string {
+	switch {
+	case 1 <= e && e <= 2:
+		i := int(e) - 1
+		return _AddAsTypeOnly_name[0+_AddAsTypeOnly_index_0[i] : 0+_AddAsTypeOnly_index_0[i+1]]
+	case e == 4:
+		return _AddAsTypeOnly_name[15:25]
+	default:
+		return fmt.Sprintf("AddAsTypeOnly(%d)", e)
+	}
+}
 
 func unmarshalParams(method Method, data []byte) (any, error) {
 	switch method {

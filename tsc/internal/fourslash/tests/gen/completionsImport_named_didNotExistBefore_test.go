@@ -40,7 +40,7 @@ t/**/`
 					&lsproto.CompletionItem{
 						Label: "Test1",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "./a",
 							},
 						},

@@ -5,7 +5,6 @@ import (
 	"iter"
 	"slices"
 	"strings"
-	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
@@ -19,7 +18,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 var quoteReplacer = strings.NewReplacer("'", `\'`, `\"`, `"`)
@@ -42,37 +40,6 @@ func IsInString(sourceFile *ast.SourceFile, position int, previousToken *ast.Nod
 		}
 	}
 	return false
-}
-
-func importFromModuleSpecifier(node *ast.Node) *ast.Node {
-	if result := tryGetImportFromModuleSpecifier(node); result != nil {
-		return result
-	}
-	debug.FailBadSyntaxKind(node.Parent)
-	return nil
-}
-
-func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
-	switch node.Parent.Kind {
-	case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
-		return node.Parent
-	case ast.KindExternalModuleReference:
-		return node.Parent.Parent
-	case ast.KindCallExpression:
-		if ast.IsImportCall(node.Parent) || ast.IsRequireCall(node.Parent, false /*requireStringLiteralLikeArgument*/) {
-			return node.Parent
-		}
-		return nil
-	case ast.KindLiteralType:
-		if !ast.IsStringLiteral(node) {
-			return nil
-		}
-		if ast.IsImportTypeNode(node.Parent.Parent) {
-			return node.Parent.Parent
-		}
-		return nil
-	}
-	return nil
 }
 
 func isModuleSpecifierLike(node *ast.Node) bool {
@@ -98,45 +65,6 @@ func getNonModuleSymbolOfMergedModuleSymbol(symbol *ast.Symbol) *ast.Symbol {
 		return decl.Symbol()
 	}
 	return nil
-}
-
-func moduleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, target core.ScriptTarget, forceCapitalize bool) string {
-	return moduleSpecifierToValidIdentifier(stringutil.StripQuotes(moduleSymbol.Name), target, forceCapitalize)
-}
-
-func moduleSpecifierToValidIdentifier(moduleSpecifier string, target core.ScriptTarget, forceCapitalize bool) string {
-	baseName := tspath.GetBaseFileName(strings.TrimSuffix(tspath.RemoveFileExtension(moduleSpecifier), "/index"))
-	res := []rune{}
-	lastCharWasValid := true
-	baseNameRunes := []rune(baseName)
-	if len(baseNameRunes) > 0 && scanner.IsIdentifierStart(baseNameRunes[0]) {
-		if forceCapitalize {
-			res = append(res, unicode.ToUpper(baseNameRunes[0]))
-		} else {
-			res = append(res, baseNameRunes[0])
-		}
-	} else {
-		lastCharWasValid = false
-	}
-
-	for i := 1; i < len(baseNameRunes); i++ {
-		isValid := scanner.IsIdentifierPart(baseNameRunes[i])
-		if isValid {
-			if !lastCharWasValid {
-				res = append(res, unicode.ToUpper(baseNameRunes[i]))
-			} else {
-				res = append(res, baseNameRunes[i])
-			}
-		}
-		lastCharWasValid = isValid
-	}
-
-	// Need `"_"` to ensure result isn't empty.
-	resString := string(res)
-	if resString != "" && !isNonContextualKeyword(scanner.StringToToken(resString)) {
-		return resString
-	}
-	return "_" + resString
 }
 
 func getLocalSymbolForExportSpecifier(referenceLocation *ast.Identifier, referenceSymbol *ast.Symbol, exportSpecifier *ast.ExportSpecifier, ch *checker.Checker) *ast.Symbol {
@@ -378,47 +306,12 @@ func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) 
 
 func quote(file *ast.SourceFile, preferences *lsutil.UserPreferences, text string) string {
 	// Editors can pass in undefined or empty string - we want to infer the preference in those cases.
-	quotePreference := getQuotePreference(file, preferences)
+	quotePreference := lsutil.GetQuotePreference(file, preferences)
 	quoted, _ := core.StringifyJson(text, "" /*prefix*/, "" /*indent*/)
-	if quotePreference == quotePreferenceSingle {
+	if quotePreference == lsutil.QuotePreferenceSingle {
 		quoted = quoteReplacer.Replace(stringutil.StripQuotes(quoted))
 	}
 	return quoted
-}
-
-type quotePreference int
-
-const (
-	quotePreferenceSingle quotePreference = iota
-	quotePreferenceDouble
-)
-
-func quotePreferenceFromString(str *ast.StringLiteral) quotePreference {
-	if str.TokenFlags&ast.TokenFlagsSingleQuote != 0 {
-		return quotePreferenceSingle
-	}
-	return quotePreferenceDouble
-}
-
-func getQuotePreference(sourceFile *ast.SourceFile, preferences *lsutil.UserPreferences) quotePreference {
-	if preferences.QuotePreference != "" && preferences.QuotePreference != "auto" {
-		if preferences.QuotePreference == "single" {
-			return quotePreferenceSingle
-		}
-		return quotePreferenceDouble
-	}
-	// ignore synthetic import added when importHelpers: true
-	firstModuleSpecifier := core.Find(sourceFile.Imports(), func(n *ast.Node) bool {
-		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent)
-	})
-	if firstModuleSpecifier != nil {
-		return quotePreferenceFromString(firstModuleSpecifier.AsStringLiteral())
-	}
-	return quotePreferenceDouble
-}
-
-func isNonContextualKeyword(token ast.Kind) bool {
-	return ast.IsKeywordKind(token) && !ast.IsContextualKeyword(token)
 }
 
 var typeKeywords *collections.Set[ast.Kind] = collections.NewSetFromItems(
@@ -1589,4 +1482,8 @@ func toContextRange(textRange *core.TextRange, contextFile *ast.SourceFile, cont
 		return &contextRange
 	}
 	return nil
+}
+
+func ptrTo[T any](v T) *T {
+	return &v
 }

@@ -55,10 +55,7 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 		if ast.IsExternalModule(file) || (inAmbientModule && !tspath.IsExternalModuleNameRelative(nameText)) {
 			file.ModuleAugmentations = append(file.ModuleAugmentations, node.AsModuleDeclaration().Name())
 		} else if !inAmbientModule {
-			if file.IsDeclarationFile {
-				// for global .d.ts files record name of ambient module
-				file.AmbientModuleNames = append(file.AmbientModuleNames, nameText)
-			}
+			file.AmbientModuleNames = append(file.AmbientModuleNames, nameText)
 			// An AmbientExternalModuleDeclaration declares an external module.
 			// This type of declaration is permitted only in the global module.
 			// The StringLiteral must specify a top - level external module name.

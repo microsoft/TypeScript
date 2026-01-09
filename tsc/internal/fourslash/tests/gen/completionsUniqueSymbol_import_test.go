@@ -45,7 +45,7 @@ i[|./**/|];`
 					Label:      "publicSym",
 					InsertText: PtrTo("[publicSym]"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

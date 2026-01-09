@@ -47,7 +47,7 @@ readF/**/`
 				&lsproto.CompletionItem{
 					Label: "readFile",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "fs",
 						},
 					},

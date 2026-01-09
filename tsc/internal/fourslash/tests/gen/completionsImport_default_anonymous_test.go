@@ -46,7 +46,7 @@ fooB/*1*/`
 				&lsproto.CompletionItem{
 					Label: "fooBar",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./foo-bar",
 						},
 					},

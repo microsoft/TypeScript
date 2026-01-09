@@ -144,6 +144,66 @@ type ModuleSpecifierPreferences struct {
 	excludeRegexes                    []string
 }
 
+func GetAllowedEndingsInPreferredOrder(
+	prefs UserPreferences,
+	host ModuleSpecifierGenerationHost,
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	oldImportSpecifier string,
+	syntaxImpliedNodeFormat core.ResolutionMode,
+) []ModuleSpecifierEnding {
+	preferredEnding := getPreferredEnding(
+		prefs,
+		host,
+		compilerOptions,
+		importingSourceFile,
+		oldImportSpecifier,
+		core.ResolutionModeNone,
+	)
+	resolutionMode := host.GetDefaultResolutionModeForFile(importingSourceFile)
+	if resolutionMode != syntaxImpliedNodeFormat {
+		preferredEnding = getPreferredEnding(
+			prefs,
+			host,
+			compilerOptions,
+			importingSourceFile,
+			oldImportSpecifier,
+			syntaxImpliedNodeFormat,
+		)
+	}
+	moduleResolution := compilerOptions.GetModuleResolutionKind()
+	moduleResolutionIsNodeNext := core.ModuleResolutionKindNode16 <= moduleResolution && moduleResolution <= core.ModuleResolutionKindNodeNext
+	allowImportingTsExtension := shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.FileName())
+	if syntaxImpliedNodeFormat == core.ResolutionModeESM && moduleResolutionIsNodeNext {
+		if allowImportingTsExtension {
+			return []ModuleSpecifierEnding{ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
+		}
+		return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension}
+	}
+	switch preferredEnding {
+	case ModuleSpecifierEndingJsExtension:
+		if allowImportingTsExtension {
+			return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex}
+		}
+		return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex}
+	case ModuleSpecifierEndingTsExtension:
+		return []ModuleSpecifierEnding{ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingIndex}
+	case ModuleSpecifierEndingIndex:
+		if allowImportingTsExtension {
+			return []ModuleSpecifierEnding{ModuleSpecifierEndingIndex, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
+		}
+		return []ModuleSpecifierEnding{ModuleSpecifierEndingIndex, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingJsExtension}
+	case ModuleSpecifierEndingMinimal:
+		if allowImportingTsExtension {
+			return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
+		}
+		return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex, ModuleSpecifierEndingJsExtension}
+	default:
+		debug.AssertNever(preferredEnding)
+	}
+	return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal}
+}
+
 func getModuleSpecifierPreferences(
 	prefs UserPreferences,
 	host ModuleSpecifierGenerationHost,
@@ -170,59 +230,16 @@ func getModuleSpecifierPreferences(
 			// all others are shortest
 		}
 	}
-	filePreferredEnding := getPreferredEnding(
-		prefs,
-		host,
-		compilerOptions,
-		importingSourceFile,
-		oldImportSpecifier,
-		core.ResolutionModeNone,
-	)
 
 	getAllowedEndingsInPreferredOrder := func(syntaxImpliedNodeFormat core.ResolutionMode) []ModuleSpecifierEnding {
-		preferredEnding := filePreferredEnding
-		resolutionMode := host.GetDefaultResolutionModeForFile(importingSourceFile)
-		if resolutionMode != syntaxImpliedNodeFormat {
-			preferredEnding = getPreferredEnding(
-				prefs,
-				host,
-				compilerOptions,
-				importingSourceFile,
-				oldImportSpecifier,
-				syntaxImpliedNodeFormat,
-			)
-		}
-		moduleResolution := compilerOptions.GetModuleResolutionKind()
-		moduleResolutionIsNodeNext := core.ModuleResolutionKindNode16 <= moduleResolution && moduleResolution <= core.ModuleResolutionKindNodeNext
-		allowImportingTsExtension := shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.FileName())
-		if syntaxImpliedNodeFormat == core.ResolutionModeESM && moduleResolutionIsNodeNext {
-			if allowImportingTsExtension {
-				return []ModuleSpecifierEnding{ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
-			}
-			return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension}
-		}
-		switch preferredEnding {
-		case ModuleSpecifierEndingJsExtension:
-			if allowImportingTsExtension {
-				return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex}
-			}
-			return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex}
-		case ModuleSpecifierEndingTsExtension:
-			return []ModuleSpecifierEnding{ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingJsExtension, ModuleSpecifierEndingIndex}
-		case ModuleSpecifierEndingIndex:
-			if allowImportingTsExtension {
-				return []ModuleSpecifierEnding{ModuleSpecifierEndingIndex, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
-			}
-			return []ModuleSpecifierEnding{ModuleSpecifierEndingIndex, ModuleSpecifierEndingMinimal, ModuleSpecifierEndingJsExtension}
-		case ModuleSpecifierEndingMinimal:
-			if allowImportingTsExtension {
-				return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex, ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
-			}
-			return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal, ModuleSpecifierEndingIndex, ModuleSpecifierEndingJsExtension}
-		default:
-			debug.AssertNever(preferredEnding)
-		}
-		return []ModuleSpecifierEnding{ModuleSpecifierEndingMinimal}
+		return GetAllowedEndingsInPreferredOrder(
+			prefs,
+			host,
+			compilerOptions,
+			importingSourceFile,
+			oldImportSpecifier,
+			syntaxImpliedNodeFormat,
+		)
 	}
 
 	return ModuleSpecifierPreferences{

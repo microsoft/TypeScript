@@ -34,7 +34,7 @@ export = Foo;
 					Label:      "Foo",
 					InsertText: PtrTo("import type Foo from \"./foo\";"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./foo",
 						},
 					},

@@ -64,7 +64,7 @@ fooFrom/*mts*/`
 				&lsproto.CompletionItem{
 					Label: "fooFromLol",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "dependency/lol",
 						},
 					},
@@ -89,7 +89,7 @@ fooFrom/*mts*/`
 				&lsproto.CompletionItem{
 					Label: "fooFromIndex",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "dependency/lol",
 						},
 					},

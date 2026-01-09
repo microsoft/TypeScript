@@ -44,7 +44,7 @@ defaultExp/**/`
 					&lsproto.CompletionItem{
 						Label: "defaultExport",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "example",
 							},
 						},

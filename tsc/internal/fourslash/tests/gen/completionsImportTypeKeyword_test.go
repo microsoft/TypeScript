@@ -38,7 +38,7 @@ type/**/`
 				&lsproto.CompletionItem{
 					Label: "type",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "os",
 						},
 					},

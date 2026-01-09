@@ -37,7 +37,7 @@ declare module "./a" {
 					Label:  "foo",
 					Detail: PtrTo("const foo: 0"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
@@ -48,7 +48,7 @@ declare module "./a" {
 					Label:  "bar",
 					Detail: PtrTo("const bar: 0"),
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

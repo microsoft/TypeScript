@@ -1870,11 +1870,11 @@ func IsExpressionNode(node *Node) bool {
 		for node.Parent.Kind == KindQualifiedName {
 			node = node.Parent
 		}
-		return IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || isJSXTagName(node)
+		return IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || IsJsxTagName(node)
 	case KindPrivateIdentifier:
 		return IsBinaryExpression(node.Parent) && node.Parent.AsBinaryExpression().Left == node && node.Parent.AsBinaryExpression().OperatorToken.Kind == KindInKeyword
 	case KindIdentifier:
-		if IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || isJSXTagName(node) {
+		if IsTypeQueryNode(node.Parent) || IsJSDocLinkLike(node.Parent) || IsJSDocNameReference(node.Parent) || IsJsxTagName(node) {
 			return true
 		}
 		fallthrough
@@ -1989,15 +1989,6 @@ func IsJSDocLinkLike(node *Node) bool {
 
 func IsJSDocTag(node *Node) bool {
 	return node.Kind >= KindFirstJSDocTagNode && node.Kind <= KindLastJSDocTagNode
-}
-
-func isJSXTagName(node *Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
-	case KindJsxOpeningElement, KindJsxSelfClosingElement, KindJsxClosingElement:
-		return parent.TagName() == node
-	}
-	return false
 }
 
 func IsSuperCall(node *Node) bool {
@@ -3407,12 +3398,12 @@ func IsExternalModuleAugmentation(node *Node) bool {
 func GetSourceFileOfModule(module *Symbol) *SourceFile {
 	declaration := module.ValueDeclaration
 	if declaration == nil {
-		declaration = getNonAugmentationDeclaration(module)
+		declaration = GetNonAugmentationDeclaration(module)
 	}
 	return GetSourceFileOfNode(declaration)
 }
 
-func getNonAugmentationDeclaration(symbol *Symbol) *Node {
+func GetNonAugmentationDeclaration(symbol *Symbol) *Node {
 	return core.Find(symbol.Declarations, func(d *Node) bool {
 		return !IsExternalModuleAugmentation(d) && !IsGlobalScopeAugmentation(d)
 	})
@@ -3886,6 +3877,37 @@ func IsExpandoInitializer(initializer *Node) bool {
 
 func GetContainingFunction(node *Node) *Node {
 	return FindAncestor(node.Parent, IsFunctionLike)
+}
+
+func ImportFromModuleSpecifier(node *Node) *Node {
+	if result := TryGetImportFromModuleSpecifier(node); result != nil {
+		return result
+	}
+	debug.FailBadSyntaxKind(node.Parent)
+	return nil
+}
+
+func TryGetImportFromModuleSpecifier(node *StringLiteralLike) *Node {
+	switch node.Parent.Kind {
+	case KindImportDeclaration, KindJSImportDeclaration, KindExportDeclaration:
+		return node.Parent
+	case KindExternalModuleReference:
+		return node.Parent.Parent
+	case KindCallExpression:
+		if IsImportCall(node.Parent) || IsRequireCall(node.Parent, false /*requireStringLiteralLikeArgument*/) {
+			return node.Parent
+		}
+		return nil
+	case KindLiteralType:
+		if !IsStringLiteral(node) {
+			return nil
+		}
+		if IsImportTypeNode(node.Parent.Parent) {
+			return node.Parent.Parent
+		}
+		return nil
+	}
+	return nil
 }
 
 func IsImplicitlyExportedJSTypeAlias(node *Node) bool {

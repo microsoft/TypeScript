@@ -8,7 +8,6 @@ import (
 )
 
 func TestImportNameCodeFix_uriStyleNodeCoreModules1(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: commonjs
@@ -21,5 +20,5 @@ declare module "node:fs/promises" { export * from "fs/promises"; }
 writeFile/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyImportFixModuleSpecifiers(t, "", []string{"fs", "fs/promises", "node:fs", "node:fs/promises"}, nil /*preferences*/)
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"fs", "node:fs", "fs/promises", "node:fs/promises"}, nil /*preferences*/)
 }

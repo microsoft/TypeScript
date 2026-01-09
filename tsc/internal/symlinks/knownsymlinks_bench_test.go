@@ -24,10 +24,11 @@ func BenchmarkPopulateSymlinksFromResolutions(b *testing.B) {
 
 func BenchmarkSetFile(b *testing.B) {
 	cache := NewKnownSymlink("/project", true)
-	path := tspath.ToPath("/project/file.ts", "/project", true)
+	symlink := "/project/file.ts"
+	path := tspath.ToPath(symlink, "/project", true)
 
 	for b.Loop() {
-		cache.SetFile(path, "/real/file.ts")
+		cache.SetFile(symlink, path, "/real/file.ts")
 	}
 }
 
@@ -62,8 +63,9 @@ func BenchmarkConcurrentAccess(b *testing.B) {
 	b.RunParallel(func(pb *testing.PB) {
 		i := 0
 		for pb.Next() {
-			path := tspath.ToPath("/project/file"+string(rune('A'+(i%26)))+".ts", "/project", true)
-			cache.SetFile(path, "/real/file.ts")
+			symlink := "/project/file" + string(rune('A'+(i%26))) + ".ts"
+			path := tspath.ToPath(symlink, "/project", true)
+			cache.SetFile(symlink, path, "/real/file.ts")
 			cache.Files().Load(path)
 			i++
 		}

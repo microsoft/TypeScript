@@ -35,7 +35,7 @@ conca/**/`
 				&lsproto.CompletionItem{
 					Label: "concat",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "bar/concat",
 						},
 					},

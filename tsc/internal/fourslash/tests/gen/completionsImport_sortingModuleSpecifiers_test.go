@@ -43,7 +43,7 @@ normalize/**/`
 					&lsproto.CompletionItem{
 						Label: "normalize",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "path",
 							},
 						},
@@ -53,7 +53,7 @@ normalize/**/`
 					&lsproto.CompletionItem{
 						Label: "normalize",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "path/posix",
 							},
 						},
@@ -63,7 +63,7 @@ normalize/**/`
 					&lsproto.CompletionItem{
 						Label: "normalize",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "path/win32",
 							},
 						},

@@ -166,6 +166,8 @@ type noCopy struct{}
 func (*noCopy) Lock()   {}
 func (*noCopy) Unlock() {}
 
+var EmptyCompilerOptions = &CompilerOptions{}
+
 var optionsType = reflect.TypeFor[CompilerOptions]()
 
 // Clone creates a shallow copy of the CompilerOptions.

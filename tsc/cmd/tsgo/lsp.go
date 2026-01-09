@@ -64,6 +64,7 @@ func runLSP(args []string) int {
 	defer stop()
 
 	if err := s.Run(ctx); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
 	return 0

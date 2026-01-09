@@ -46,7 +46,7 @@ BrowserRouter/**/`
 					&lsproto.CompletionItem{
 						Label: "BrowserRouterFromDts",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "react-router-dom",
 							},
 						},

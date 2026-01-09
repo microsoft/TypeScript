@@ -56,7 +56,7 @@ export default methods.$;
 					Label:               "$",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "dom7",
 						},
 					},
@@ -66,7 +66,7 @@ export default methods.$;
 					Label:               "Dom7",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./dom7",
 						},
 					},

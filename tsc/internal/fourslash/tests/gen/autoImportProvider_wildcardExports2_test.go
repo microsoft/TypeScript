@@ -56,7 +56,7 @@ export function test(): void;
 				&lsproto.CompletionItem{
 					Label: "test",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "pkg/core/test",
 						},
 					},

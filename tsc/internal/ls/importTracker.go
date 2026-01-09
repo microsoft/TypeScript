@@ -25,6 +25,16 @@ type ImportExportSymbol struct {
 	exportInfo *ExportInfo
 }
 
+type ExportKind int
+
+const (
+	ExportKindNamed        ExportKind = 0
+	ExportKindDefault      ExportKind = 1
+	ExportKindExportEquals ExportKind = 2
+	ExportKindUMD          ExportKind = 3
+	ExportKindModule       ExportKind = 4
+)
+
 type ExportInfo struct {
 	exportingModuleSymbol *ast.Symbol
 	exportKind            ExportKind
@@ -87,7 +97,7 @@ func getDirectImportsMap(sourceFiles []*ast.SourceFile, checker *checker.Checker
 func forEachImport(sourceFile *ast.SourceFile, action func(importStatement *ast.Node, imported *ast.Node)) {
 	if sourceFile.ExternalModuleIndicator != nil || len(sourceFile.Imports()) != 0 {
 		for _, i := range sourceFile.Imports() {
-			action(importFromModuleSpecifier(i), i)
+			action(ast.ImportFromModuleSpecifier(i), i)
 		}
 	} else {
 		forEachPossibleImportOrExportStatement(sourceFile.AsNode(), func(node *ast.Node) bool {

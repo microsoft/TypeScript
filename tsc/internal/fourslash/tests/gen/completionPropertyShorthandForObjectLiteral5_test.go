@@ -33,7 +33,7 @@ const obj = { exp/**/`
 				&lsproto.CompletionItem{
 					Label: "exportedConstant",
 					Data: &lsproto.CompletionItemData{
-						AutoImport: &lsproto.AutoImportData{
+						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},

@@ -59,7 +59,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "fs",
 							},
 						},
@@ -69,7 +69,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "fs/promises",
 							},
 						},
@@ -91,7 +91,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs",
 							},
 						},
@@ -101,7 +101,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs/promises",
 							},
 						},
@@ -123,7 +123,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs",
 							},
 						},
@@ -133,7 +133,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs/promises",
 							},
 						},
@@ -155,7 +155,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs",
 							},
 						},
@@ -165,7 +165,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs/promises",
 							},
 						},
@@ -189,7 +189,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "fs",
 							},
 						},
@@ -199,7 +199,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "fs/promises",
 							},
 						},
@@ -221,7 +221,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs",
 							},
 						},
@@ -231,7 +231,7 @@ writeFile/*test2*/`
 					&lsproto.CompletionItem{
 						Label: "writeFile",
 						Data: &lsproto.CompletionItemData{
-							AutoImport: &lsproto.AutoImportData{
+							AutoImport: &lsproto.AutoImportFix{
 								ModuleSpecifier: "node:fs/promises",
 							},
 						},
