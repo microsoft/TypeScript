@@ -447,7 +447,7 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
         case SyntaxKind.ShorthandPropertyAssignment:
             return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
                 getContextNode(
-                    findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)) as BinaryExpression | ForInOrOfStatement,
+                    findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)),
                 ) :
                 node;
         case SyntaxKind.SwitchStatement:

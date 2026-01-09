@@ -2618,7 +2618,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (inStrictMode && isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
             // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
             // Assignment operator(11.13) or of a PostfixExpression(11.3)
-            checkStrictModeEvalOrArguments(node, node.left as Identifier);
+            checkStrictModeEvalOrArguments(node, node.left);
         }
     }
 
@@ -2713,7 +2713,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
         // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator.
         if (inStrictMode) {
-            checkStrictModeEvalOrArguments(node, node.operand as Identifier);
+            checkStrictModeEvalOrArguments(node, node.operand);
         }
     }
 
@@ -2721,7 +2721,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Grammar checking
         if (inStrictMode) {
             if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
-                checkStrictModeEvalOrArguments(node, node.operand as Identifier);
+                checkStrictModeEvalOrArguments(node, node.operand);
             }
         }
     }

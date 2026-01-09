@@ -810,7 +810,7 @@ function getCompletionEntriesForDirectoryFragment(
         // check for a version redirect
         const packageJsonPath = findPackageJson(baseDirectory, host);
         if (packageJsonPath) {
-            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined; });
+            const packageJson = readJson(packageJsonPath, host);
             const typesVersions = (packageJson as any).typesVersions;
             if (typeof typesVersions === "object") {
                 const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
@@ -1385,7 +1385,7 @@ function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPa
 
     const result: string[] = [];
     for (const packageJson of findPackageJsons(scriptPath, host)) {
-        const contents = readJson(packageJson, host as { readFile: (filename: string) => string | undefined; }); // Cast to assert that readFile is defined
+        const contents = readJson(packageJson, host); // Cast to assert that readFile is defined
         // Provide completions for all non @types dependencies
         for (const key of nodeModulesDependencyKeys) {
             const dependencies: object | undefined = (contents as any)[key];

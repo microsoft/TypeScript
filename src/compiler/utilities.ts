@@ -12269,7 +12269,7 @@ export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
         setOriginalNode(clone, node);
     }
     else {
-        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
+        clone = getSynthesizedDeepCloneWorker(node, replaceNode);
     }
 
     if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);

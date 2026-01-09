@@ -2243,7 +2243,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
     function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
         if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
             const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body as ModuleDeclaration);
-            return recursiveInnerModule || moduleDeclaration.body as ModuleDeclaration;
+            return recursiveInnerModule || moduleDeclaration.body;
         }
     }
 

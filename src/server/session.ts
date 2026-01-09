@@ -829,7 +829,7 @@ function getPerProjectReferences<TResult>(
                     symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
                         for (const symlinkedProject of symlinkedProjects) {
                             if (!symlinkedProject.isOrphan() && !resultsMap.has(symlinkedProject)) { // Optimization: don't enqueue if will be discarded
-                                queue.enqueue({ project: symlinkedProject, location: { fileName: symlinkedPath as string, pos: originalLocation.pos } });
+                                queue.enqueue({ project: symlinkedProject, location: { fileName: symlinkedPath, pos: originalLocation.pos } });
                             }
                         }
                     });

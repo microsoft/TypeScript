@@ -2631,7 +2631,7 @@ export function createLanguageService(
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
         [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
     }));
-    braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
+    braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key)));
 
     function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);

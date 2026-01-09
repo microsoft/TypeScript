@@ -38,7 +38,7 @@ describe("unittests:: tsserver:: inlayHints::", () => {
             arguments: {
                 preferences: {
                     includeInlayParameterNameHints: "all",
-                } as ts.UserPreferences,
+                },
             },
         });
         verifyInlayHintResponse(session);

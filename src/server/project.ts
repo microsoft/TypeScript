@@ -1753,7 +1753,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.moduleSpecifierCache.clear();
         }
 
-        const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
+        const oldExternalFiles = this.externalFiles || emptyArray;
         this.externalFiles = this.getExternalFiles();
         enumerateInsertsAndDeletes<string, string>(
             this.externalFiles,

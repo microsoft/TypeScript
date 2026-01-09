@@ -2063,7 +2063,7 @@ export class ProjectService {
             if (this.openFiles.has(fileOrDirectoryPath)) {
                 const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                 if (info.isAttached(project)) {
-                    const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
+                    const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update);
                     project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
                 }
                 else {

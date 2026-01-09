@@ -101,7 +101,7 @@ export function createGetSymbolWalker(
                 }
             }
             if (type.flags & TypeFlags.TypeParameter) {
-                visitTypeParameter(type as TypeParameter);
+                visitTypeParameter(type);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 visitUnionOrIntersectionType(type as UnionOrIntersectionType);

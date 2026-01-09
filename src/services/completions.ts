@@ -5714,7 +5714,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         // class C { blah \n constructor/**/ }
         || (isIdentifier(contextToken) && isPropertyDeclaration(contextToken.parent) && isClassLike(location))
     ) {
-        return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
+        return findAncestor(contextToken, isClassLike);
     }
 
     switch (contextToken.kind) {

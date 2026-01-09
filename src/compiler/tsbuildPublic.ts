@@ -432,7 +432,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
 
     // State of the solution
     const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
-    const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions) as CompilerHost & ReadBuildProgramHost;
+    const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions);
     setGetSourceFileAsHashVersioned(compilerHost);
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);

@@ -344,7 +344,7 @@ function convertClassificationsToResult(classifications: Classifications, text: 
     for (let i = 0; i < dense.length; i += 3) {
         const start = dense[i];
         const length = dense[i + 1];
-        const type = dense[i + 2] as ClassificationType;
+        const type = dense[i + 2];
 
         // Make a whitespace entry between the last item and this one.
         if (lastEnd >= 0) {

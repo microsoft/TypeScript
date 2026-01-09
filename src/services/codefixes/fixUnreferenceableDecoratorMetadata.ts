@@ -57,7 +57,7 @@ function getImportDeclaration(sourceFile: SourceFile, program: Program, start: n
 
     const checker = program.getTypeChecker();
     const symbol = checker.getSymbolAtLocation(identifier);
-    return find(symbol?.declarations || emptyArray, or(isImportClause, isImportSpecifier, isImportEqualsDeclaration) as (n: Node) => n is ImportClause | ImportSpecifier | ImportEqualsDeclaration);
+    return find(symbol?.declarations || emptyArray, or(isImportClause, isImportSpecifier, isImportEqualsDeclaration));
 }
 
 // Converts the import declaration of the offending import to a type-only import,

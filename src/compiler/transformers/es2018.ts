@@ -1373,7 +1373,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // Disable substitution in the generated super accessor itself.
         else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
             const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
-            enclosingSuperContainerFlags = 0 as NodeCheckFlags;
+            enclosingSuperContainerFlags = 0;
             previousOnEmitNode(hint, node, emitCallback);
             enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
             return;

@@ -10109,7 +10109,7 @@ namespace IncrementalParser {
                 Debug.assert(text === newText.substring(node.pos, node.end));
             }
 
-            forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
+            forEachChild(node, visitNode, visitArray);
             if (hasJSDocNodes(node)) {
                 for (const jsDocComment of node.jsDoc!) {
                     visitNode(jsDocComment);
@@ -10262,7 +10262,7 @@ namespace IncrementalParser {
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
+                forEachChild(child, visitNode, visitArray);
                 if (hasJSDocNodes(child)) {
                     for (const jsDocComment of child.jsDoc!) {
                         visitNode(jsDocComment);

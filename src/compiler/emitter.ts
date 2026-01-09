@@ -2620,7 +2620,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
         emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
-        const token = node.questionDotToken || setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken) as DotToken, node.expression.end, node.name.pos);
+        const token = node.questionDotToken || setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken), node.expression.end, node.name.pos);
         const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
         const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
 
@@ -4433,13 +4433,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (modifiers?.length) {
             if (every(modifiers, isModifier)) {
                 // if all modifier-likes are `Modifier`, simply emit the array as modifiers.
-                return emitModifierList(node, modifiers as NodeArray<Modifier>);
+                return emitModifierList(node, modifiers);
             }
 
             if (every(modifiers, isDecorator)) {
                 if (allowDecorators) {
                     // if all modifier-likes are `Decorator`, simply emit the array as decorators.
-                    return emitDecoratorList(node, modifiers as NodeArray<Decorator>);
+                    return emitDecoratorList(node, modifiers);
                 }
                 return node.pos;
             }

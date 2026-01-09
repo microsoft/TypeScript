@@ -699,7 +699,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
                         const typeParameterParts = mapToDisplayParts(writer => {
                             const param = typeChecker.typeParameterToDeclaration(
-                                type as TypeParameter,
+                                type,
                                 enclosingDeclaration,
                                 symbolDisplayNodeBuilderFlags,
                                 /*internalFlags*/ undefined,
