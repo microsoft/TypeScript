@@ -742,6 +742,7 @@ import {
     isShorthandAmbientModuleSymbol,
     isShorthandPropertyAssignment,
     isSideEffectImport,
+    isSignedNumericLiteral,
     isSingleOrDoubleQuote,
     isSourceFile,
     isSourceFileJS,
@@ -13720,12 +13721,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && isTypeUsableAsIndexSignature(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
     }
 
-    function isLateBindableAST(node: DeclarationName) {
-        if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
-            return false;
+    function isLateBindableExpression(expr: Expression): boolean {
+        while (isElementAccessExpression(expr)) {
+            const argument = skipParentheses(expr.argumentExpression);
+            if (!isStringOrNumericLiteralLike(argument) && !isSignedNumericLiteral(argument)) return false;
+            expr = expr.expression;
         }
-        const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
         return isEntityNameExpression(expr);
+    }
+
+    function isLateBindableAST(node: DeclarationName) {
+        if (isComputedPropertyName(node)) {
+            return isLateBindableExpression(node.expression);
+        }
+        else if (isElementAccessExpression(node)) {
+            return isLateBindableExpression(node.argumentExpression);
+        }
+        return false;
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
