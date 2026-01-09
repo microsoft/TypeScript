@@ -105,7 +105,6 @@ import {
     Type,
     TypeChecker,
     TypeFormatFlags,
-    TypeParameter,
     typeToDisplayParts,
     VariableDeclaration,
     WriterContextOut,

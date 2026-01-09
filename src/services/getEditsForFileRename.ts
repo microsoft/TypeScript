@@ -31,7 +31,6 @@ import {
     LanguageServiceHost,
     last,
     mapDefined,
-    ModuleResolutionHost,
     moduleSpecifiers,
     normalizePath,
     pathIsRelative,

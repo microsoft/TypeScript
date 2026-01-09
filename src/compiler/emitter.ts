@@ -62,7 +62,6 @@ import {
     DeleteExpression,
     directorySeparator,
     DoStatement,
-    DotToken,
     ElementAccessExpression,
     emitDetachedComments,
     EmitFileNames,

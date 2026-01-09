@@ -17,7 +17,6 @@ import {
     isImportClause,
     isImportEqualsDeclaration,
     isImportSpecifier,
-    Node,
     or,
     Program,
     refactor,
