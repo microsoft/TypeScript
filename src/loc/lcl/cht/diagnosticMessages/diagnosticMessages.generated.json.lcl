@@ -10635,11 +10635,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set_5096" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_one_of_noEmit_emitDeclarationOnly_or_rewrite_5096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.]]></Val>
+          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[僅在已設定 'noEmit' 或 'emitDeclarationOnly' 時，才能使用選項 'allowImportingTsExtensions'。]]></Val>
+            <Val><![CDATA[只有在設定 'noEmit'、'emitDeclarationOnly' 或 'rewriteRelativeImportExtensions' 其中一項時，才能使用 'allowImportingTsExtensions' 選項。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -5,7 +5,7 @@
   interface $ {
       addClass(className: string): $;
   }
-  module $ {
+  namespace $ {
     export interface AjaxSettings {
     }
     export function ajax(options: AjaxSettings) { }

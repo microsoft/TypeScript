@@ -38,7 +38,7 @@ namespace moduleType1 {
     export var baz1: number;
 >baz1 : Symbol(baz1, Decl(escapedIdentifiers.ts, 22, 14))
 }
-module moduleType\u0032 { 
+declare module moduleType\u0032 { 
 >moduleType\u0032 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
 
     export var baz2: number;

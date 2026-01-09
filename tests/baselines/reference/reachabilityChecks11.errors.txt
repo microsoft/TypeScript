@@ -10,24 +10,24 @@ reachabilityChecks11.ts(69,5): error TS7027: Unreachable code detected.
     // while (true);
     var x = 1;
     
-    module A {
+    namespace A {
         while (true);
         let x;
         ~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
     
-    module A1 {
+    namespace A1 {
         do {} while(true);
-        module A {
+        namespace A {
             interface F {}
         }
     }
     
-    module A2 {
+    namespace A2 {
         while (true);
-        module A {
-        ~~~~~~~~~~
+        namespace A {
+        ~~~~~~~~~~~~~
             var x = 1;
     ~~~~~~~~~~~~~~~~~~
         }
@@ -35,15 +35,15 @@ reachabilityChecks11.ts(69,5): error TS7027: Unreachable code detected.
 !!! error TS7027: Unreachable code detected.
     }
     
-    module A3 {
+    namespace A3 {
         while (true);
         type T = string;
     }
     
-    module A4 {
+    namespace A4 {
         while (true);
-        module A {
-        ~~~~~~~~~~
+        namespace A {
+        ~~~~~~~~~~~~~
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
@@ -70,9 +70,9 @@ reachabilityChecks11.ts(69,5): error TS7027: Unreachable code detected.
 !!! error TS7027: Unreachable code detected.
     }
     
-    module B {
+    namespace B {
         for (; ;);
-        module C {
+        namespace C {
         }
     }
     

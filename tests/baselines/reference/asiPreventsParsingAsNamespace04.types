@@ -7,11 +7,11 @@ let module = 10;
 >10 : 10
 >   : ^^
 
-namespace in {}
->namespace in {} : boolean
->                : ^^^^^^^
->namespace : any
->          : ^^^
+module in {}
+>module in {} : boolean
+>             : ^^^^^^^
+>module : number
+>       : ^^^^^^
 >{} : {}
 >   : ^^
 

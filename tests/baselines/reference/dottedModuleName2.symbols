@@ -3,7 +3,7 @@
 === dottedModuleName2.ts ===
 namespace A.B {
 >A : Symbol(A, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
->B : Symbol(B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
+>B : Symbol(B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
  
   export var x = 1;
 >x : Symbol(x, Decl(dottedModuleName2.ts, 2, 12))
@@ -34,16 +34,16 @@ var tmpOK = AA.B.x;
 var tmpError = A.B.x;
 >tmpError : Symbol(tmpError, Decl(dottedModuleName2.ts, 18, 3))
 >A.B.x : Symbol(A.B.x, Decl(dottedModuleName2.ts, 2, 12))
->A.B : Symbol(A.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
+>A.B : Symbol(A.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
 >A : Symbol(A, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
->B : Symbol(A.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
+>B : Symbol(A.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
 >x : Symbol(A.B.x, Decl(dottedModuleName2.ts, 2, 12))
 
 
-module A.B.C
+namespace A.B.C
 >A : Symbol(A, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
->B : Symbol(B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
->C : Symbol(C, Decl(dottedModuleName2.ts, 21, 11))
+>B : Symbol(B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
+>C : Symbol(C, Decl(dottedModuleName2.ts, 21, 14))
  
 {
  
@@ -54,7 +54,7 @@ module A.B.C
  
  
  
-module M
+namespace M
 >M : Symbol(M, Decl(dottedModuleName2.ts, 27, 1))
  
 {
@@ -66,13 +66,13 @@ module M
     import X2 = A.B;
 >X2 : Symbol(X2, Decl(dottedModuleName2.ts, 35, 18))
 >A : Symbol(X1, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
+>B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
  
     import X3 = A.B.C;
 >X3 : Symbol(X3, Decl(dottedModuleName2.ts, 37, 20))
 >A : Symbol(X1, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 9))
->C : Symbol(X2.C, Decl(dottedModuleName2.ts, 21, 11))
+>B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
+>C : Symbol(X2.C, Decl(dottedModuleName2.ts, 21, 14))
  
 }
 
