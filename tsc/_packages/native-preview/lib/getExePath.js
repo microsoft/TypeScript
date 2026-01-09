@@ -41,7 +41,13 @@ export default function getExePath() {
         }
     }
 
-    const exe = path.join(exeDir, "tsgo" + (process.platform === "win32" ? ".exe" : ""));
+    let exe = path.join(exeDir, "tsgo");
+    if (process.platform === "win32") {
+        exe += ".exe";
+        if (exe.length >= 248) {
+            exe = "\\\\?\\" + exe;
+        }
+    }
 
     if (!fs.existsSync(exe)) {
         throw new Error("Executable not found: " + exe);
