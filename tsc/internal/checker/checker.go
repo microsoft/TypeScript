@@ -25953,11 +25953,13 @@ func (c *Checker) getLiteralTypeFromProperties(t *Type, include TypeFlags, inclu
 	if includeOrigin && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 || t.alias != nil {
 		origin = c.newIndexType(t, IndexFlagsNone)
 	}
-	var types []*Type
-	for _, prop := range c.getPropertiesOfType(t) {
+	props := c.getPropertiesOfType(t)
+	indexInfos := c.getIndexInfosOfType(t)
+	types := make([]*Type, 0, len(props)+len(indexInfos))
+	for _, prop := range props {
 		types = append(types, c.getLiteralTypeFromProperty(prop, include, false))
 	}
-	for _, info := range c.getIndexInfosOfType(t) {
+	for _, info := range indexInfos {
 		if info != c.enumNumberIndexInfo && c.isKeyTypeIncluded(info.keyType, include) {
 			if info.keyType == c.stringType && include&TypeFlagsNumber != 0 {
 				types = append(types, c.stringOrNumberType)
