@@ -38,7 +38,7 @@
 // type Foo<T> = Promise<T>;
 //               ^^^^^^^
 // | ----------------------------------------------------------------------
-// | interface Promise<T>
+// | interface Promise<out T>
 // | Represents the completion of an asynchronous operation
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
@@ -489,6 +489,14 @@
         {
           "text": "<",
           "kind": "punctuation"
+        },
+        {
+          "text": "out",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
         },
         {
           "text": "T",

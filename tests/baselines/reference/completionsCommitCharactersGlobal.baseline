@@ -2693,9 +2693,9 @@
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
-// | interface Promise<T>
+// | interface Promise<out T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
-// | interface PromiseLike<T>
+// | interface PromiseLike<out T>
 // | type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void
 // | interface PropertyDescriptor
 // | interface PropertyDescriptorMap
@@ -2873,9 +2873,9 @@
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
-// | interface Promise<T>
+// | interface Promise<out T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
-// | interface PromiseLike<T>
+// | interface PromiseLike<out T>
 // | type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void
 // | interface PropertyDescriptor
 // | interface PropertyDescriptorMap
@@ -80791,6 +80791,14 @@
               "kind": "punctuation"
             },
             {
+              "text": "out",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
               "text": "T",
               "kind": "typeParameterName"
             },
@@ -81096,6 +81104,14 @@
             {
               "text": "<",
               "kind": "punctuation"
+            },
+            {
+              "text": "out",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
             },
             {
               "text": "T",
@@ -90262,6 +90278,14 @@
               "kind": "punctuation"
             },
             {
+              "text": "out",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
               "text": "T",
               "kind": "typeParameterName"
             },
@@ -90567,6 +90591,14 @@
             {
               "text": "<",
               "kind": "punctuation"
+            },
+            {
+              "text": "out",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
             },
             {
               "text": "T",

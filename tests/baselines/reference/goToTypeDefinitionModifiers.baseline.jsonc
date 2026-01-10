@@ -192,7 +192,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -245,7 +245,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -352,7 +352,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -404,7 +404,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -456,7 +456,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -508,7 +508,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|Promise|]<T> {
+// <|interface [|Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.

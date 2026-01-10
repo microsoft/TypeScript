@@ -12,7 +12,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|{| defId: 1 |}Promise|]<T> {
+// <|interface [|{| defId: 1 |}Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -73,7 +73,7 @@
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
-// <|interface [|{| defId: 1 |}Promise|]<T> {
+// <|interface [|{| defId: 1 |}Promise|]<out T> {
 //     /**
 //      * Attaches callbacks for the resolution and/or rejection of the Promise.
 //      * @param onfulfilled The callback to execute when the Promise is resolved.
