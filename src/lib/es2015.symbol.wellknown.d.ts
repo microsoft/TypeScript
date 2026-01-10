@@ -115,19 +115,19 @@ interface Date {
     [Symbol.toPrimitive](hint: string): string | number;
 }
 
-interface Map<K, V> {
+interface Map<out K, out V> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface WeakMap<K extends WeakKey, V> {
+interface WeakMap<out K extends WeakKey, out V> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface Set<T> {
+interface Set<out T> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface WeakSet<T extends WeakKey> {
+interface WeakSet<out T extends WeakKey> {
     readonly [Symbol.toStringTag]: string;
 }
 

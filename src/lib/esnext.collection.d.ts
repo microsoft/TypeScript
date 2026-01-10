@@ -1,6 +1,6 @@
 /// <reference lib="es2024.collection" />
 
-interface ReadonlySetLike<T> {
+interface ReadonlySetLike<out T> {
     /**
      * Despite its name, returns an iterator of the values in the set-like.
      */
@@ -15,7 +15,7 @@ interface ReadonlySetLike<T> {
     readonly size: number;
 }
 
-interface Set<T> {
+interface Set<out T> {
     /**
      * @returns a new Set containing all the elements in this Set and also all the elements in the argument.
      */
@@ -46,7 +46,7 @@ interface Set<T> {
     isDisjointFrom(other: ReadonlySetLike<unknown>): boolean;
 }
 
-interface ReadonlySet<T> {
+interface ReadonlySet<out T> {
     /**
      * @returns a new Set containing all the elements in this Set and also all the elements in the argument.
      */

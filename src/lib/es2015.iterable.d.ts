@@ -116,11 +116,11 @@ interface IArguments {
     [Symbol.iterator](): ArrayIterator<any>;
 }
 
-interface MapIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface MapIterator<out T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): MapIterator<T>;
 }
 
-interface Map<K, V> {
+interface Map<out K, out V> {
     /** Returns an iterable of entries in the map. */
     [Symbol.iterator](): MapIterator<[K, V]>;
 
@@ -140,7 +140,7 @@ interface Map<K, V> {
     values(): MapIterator<V>;
 }
 
-interface ReadonlyMap<K, V> {
+interface ReadonlyMap<out K, out V> {
     /** Returns an iterable of entries in the map. */
     [Symbol.iterator](): MapIterator<[K, V]>;
 
@@ -165,17 +165,17 @@ interface MapConstructor {
     new <K, V>(iterable?: Iterable<readonly [K, V]> | null): Map<K, V>;
 }
 
-interface WeakMap<K extends WeakKey, V> {}
+interface WeakMap<out K extends WeakKey, out V> {}
 
 interface WeakMapConstructor {
     new <K extends WeakKey, V>(iterable: Iterable<readonly [K, V]>): WeakMap<K, V>;
 }
 
-interface SetIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface SetIterator<out T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): SetIterator<T>;
 }
 
-interface Set<T> {
+interface Set<out T> {
     /** Iterates over values in the set. */
     [Symbol.iterator](): SetIterator<T>;
 
@@ -195,7 +195,7 @@ interface Set<T> {
     values(): SetIterator<T>;
 }
 
-interface ReadonlySet<T> {
+interface ReadonlySet<out T> {
     /** Iterates over values in the set. */
     [Symbol.iterator](): SetIterator<T>;
 
@@ -219,7 +219,7 @@ interface SetConstructor {
     new <T>(iterable?: Iterable<T> | null): Set<T>;
 }
 
-interface WeakSet<T extends WeakKey> {}
+interface WeakSet<out T extends WeakKey> {}
 
 interface WeakSetConstructor {
     new <T extends WeakKey = WeakKey>(iterable: Iterable<T>): WeakSet<T>;
@@ -245,7 +245,7 @@ interface PromiseConstructor {
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>;
 }
 
-interface StringIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+interface StringIterator<out T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
     [Symbol.iterator](): StringIterator<T>;
 }
 

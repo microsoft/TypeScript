@@ -1,4 +1,4 @@
-interface Map<K, V> {
+interface Map<out K, out V> {
     clear(): void;
     /**
      * @returns true if an element in the Map existed and has been removed, or false if the element does not exist.
@@ -34,14 +34,14 @@ interface MapConstructor {
 }
 declare var Map: MapConstructor;
 
-interface ReadonlyMap<K, V> {
+interface ReadonlyMap<out K, out V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
     readonly size: number;
 }
 
-interface WeakMap<K extends WeakKey, V> {
+interface WeakMap<out K extends WeakKey, out V> {
     /**
      * Removes the specified element from the WeakMap.
      * @returns true if the element was successfully removed, or false if it was not present.
@@ -68,7 +68,7 @@ interface WeakMapConstructor {
 }
 declare var WeakMap: WeakMapConstructor;
 
-interface Set<T> {
+interface Set<out T> {
     /**
      * Appends a new element with a specified value to the end of the Set.
      */
@@ -100,13 +100,13 @@ interface SetConstructor {
 }
 declare var Set: SetConstructor;
 
-interface ReadonlySet<T> {
+interface ReadonlySet<out T> {
     forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     readonly size: number;
 }
 
-interface WeakSet<T extends WeakKey> {
+interface WeakSet<out T extends WeakKey> {
     /**
      * Appends a new value to the end of the WeakSet.
      */
