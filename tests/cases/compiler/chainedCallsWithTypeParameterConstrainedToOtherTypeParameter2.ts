@@ -1,8 +1,8 @@
 class Chain<T> {
     constructor(public value: T) { }
     then<S extends T>(cb: (x: T) => S): Chain<S> {
-        var t: T;
-        var s: S;
+        var t!: T;
+        var s!: S;
         // Ok to go down the chain, but error to climb up the chain
         (new Chain(t)).then(tt => s).then(ss => t);
 
@@ -24,9 +24,9 @@ interface I {
 class Chain2<T extends I> {
     constructor(public value: T) { }
     then<S extends T>(cb: (x: T) => S): Chain2<S> {
-        var i: I;
-        var t: T;
-        var s: S;
+        var i!: I;
+        var t!: T;
+        var s!: S;
         // Ok to go down the chain, check the constraint at the end.
         // Should get an error that we are assigning a string to a number
         (new Chain2(i)).then(ii => t).then(tt => s).value.x = "";

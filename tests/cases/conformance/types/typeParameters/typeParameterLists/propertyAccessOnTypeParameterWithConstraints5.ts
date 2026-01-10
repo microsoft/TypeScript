@@ -10,7 +10,7 @@ class B extends A {
 
 class C<U extends T, T extends A> {
     f() {
-        var x: U;
+        var x: U = {} as any;
         var a = x['foo'](); // should be string
         return a + x.foo() + x.notHere();
     }
@@ -21,11 +21,11 @@ var r = (new C<B, A>()).f();
 interface I<U extends T, T extends A> {
     foo: U;
 }
-var i: I<B, A>;
+declare var i: I<B, A>;
 var r2 = i.foo.notHere();
 var r2b = i.foo['foo']();
 
-var a: {
+declare var a: {
     <U extends T, T extends A>(): U;
 }
 // BUG 794164

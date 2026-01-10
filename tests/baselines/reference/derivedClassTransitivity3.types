@@ -44,15 +44,15 @@ class E<T> extends D<T> {
 >  : ^^^^^^
 }
 
-var c: C<string>;
+declare var c: C<string>;
 >c : C<string>
 >  : ^^^^^^^^^
 
-var d: D<string>;
+declare var d: D<string>;
 >d : D<string>
 >  : ^^^^^^^^^
 
-var e: E<string>;
+declare var e: E<string>;
 >e : E<string>
 >  : ^^^^^^^^^
 

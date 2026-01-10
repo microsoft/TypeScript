@@ -34,6 +34,6 @@ interface I<T> {
     new (x: T, y: number): C2<T>;
 }
 
-var i2: I<number>;
+declare var i2: I<number>;
 var r4 = new i2(1, '');
 var r5 = new i2(1, 1);

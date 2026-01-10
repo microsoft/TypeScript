@@ -1,6 +1,6 @@
 
 // Invoke function call on value of type 'any' with no type arguments
-var anyVar: any;
+declare var anyVar: any;
 anyVar(0);
 anyVar('');
 
@@ -15,7 +15,7 @@ anyVar<Window>(undefined);
 interface SubFunc extends Function {
     prop: number;
 }
-var subFunc: SubFunc;
+declare var subFunc: SubFunc;
 subFunc(0);
 subFunc('');
 subFunc();
@@ -29,7 +29,7 @@ subFunc<any>();
 
 // Invoke function call on value of type Function with no call signatures with type arguments
 // These should be errors
-var func: Function;
+declare var func: Function;
 func<number>(0);
 func<string>('');
 func<any>();

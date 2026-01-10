@@ -17,7 +17,7 @@ declare namespace M {
 interface myInt {
     voidFn(): void;
 }
-var myVar: myInt;
+declare var myVar: myInt;
 var strArray: string[] = [myVar.voidFn()];
 
 
@@ -35,7 +35,6 @@ isEmpty(['a']);
 
 
 //// [arraySigChecking.js]
-var myVar;
 var strArray = [myVar.voidFn()];
 var myArray;
 myArray = [[1, 2]];

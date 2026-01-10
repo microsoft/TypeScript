@@ -12,7 +12,7 @@ interface Obj1type {
 >n : string
 >  : ^^^^^^
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 >Obj1 : Obj1type
 >     : ^^^^^^^^
 
@@ -33,7 +33,7 @@ interface Obj2type {
 >q : number
 >  : ^^^^^^
 }
-var Obj2: Obj2type;
+declare var Obj2: Obj2type;
 >Obj2 : Obj2type
 >     : ^^^^^^^^
 
@@ -54,7 +54,7 @@ interface Obj3type {
 >x : number
 >  : ^^^^^^
 }
-var Obj3: Obj3type;
+declare var Obj3: Obj3type;
 >Obj3 : Obj3type
 >     : ^^^^^^^^
 

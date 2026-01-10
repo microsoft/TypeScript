@@ -28,8 +28,8 @@ interfaceImplementation1.ts(34,5): error TS2322: Type '() => C2' is not assignab
         private iFn();
     	private iFn(n?:number, s?:string) { }
         private iAny:any;
-        private iNum:number;
-        private iObj:{ };
+        private iNum!:number;
+        private iObj!:{ };
     }
     
     interface I3 {
@@ -58,7 +58,7 @@ interfaceImplementation1.ts(34,5): error TS2322: Type '() => C2' is not assignab
     new b();
     */
     
-    var c:I4;
+    declare var c:I4;
     c[5];
     c["foo"];
     

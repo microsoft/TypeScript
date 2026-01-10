@@ -10,7 +10,7 @@ interface C<T extends A> {
     x: T;
 }
 
-var v1: C<A>; // should work
-var v2: C<B>; // should not work
+declare var v1: C<A>; // should work
+declare var v2: C<B>; // should not work
 
 var y = v1.x.a; // 'a' should be of type 'number'

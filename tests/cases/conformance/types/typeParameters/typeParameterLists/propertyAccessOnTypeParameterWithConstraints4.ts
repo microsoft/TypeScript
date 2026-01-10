@@ -1,6 +1,6 @@
 class C<T extends Date> {
     f() {
-        var x: T;
+        var x: T = {} as any;
         var a = x['notHere'](); // should be string
         return a + x.notHere();
     }
@@ -11,11 +11,11 @@ var r = (new C<Date>()).f();
 interface I<T extends Date> {
     foo: T;
 }
-var i: I<Date>;
+declare var i: I<Date>;
 var r2 = i.foo.notHere();
 var r2b = i.foo['notHere']();
 
-var a: {
+declare var a: {
     <T extends Date>(): T;
 }
 var r3: string = a().notHere();

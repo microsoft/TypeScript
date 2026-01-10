@@ -15,7 +15,7 @@ class C {
     foo(x = 1) { }
 }
 
-var c: C;
+declare var c: C;
 c.foo();
 c.foo(1);
 
@@ -43,7 +43,6 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var c;
 c.foo();
 c.foo(1);
 var b = {

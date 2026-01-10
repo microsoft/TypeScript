@@ -36,8 +36,8 @@ interface Magenta {
 	[p:Purple]; // error
 }
 
-var yellow: Yellow;
-var blue: Blue;
+declare var yellow: Yellow;
+declare var blue: Blue;
 var s = "some string";
 
 yellow[5]; // ok
@@ -50,7 +50,7 @@ s[<any>{}]; // ok
 
 yellow[blue]; // error
 
-var x:number[];
+declare var x:number[];
 x[0];
 
 class Benchmark {

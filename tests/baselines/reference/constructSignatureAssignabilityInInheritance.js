@@ -43,7 +43,7 @@ namespace MemberWithConstructSignature {
         a3: new <T>(x: T) => void;
     }
 
-    var b: Base;
+    declare var b: Base;
     var r = new b.a(1);
 
     // S's
@@ -77,6 +77,5 @@ namespace MemberWithConstructSignature {
 // Checking basic subtype relations with construct signatures
 var MemberWithConstructSignature;
 (function (MemberWithConstructSignature) {
-    var b;
     var r = new b.a(1);
 })(MemberWithConstructSignature || (MemberWithConstructSignature = {}));

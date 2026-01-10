@@ -31,7 +31,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
     	new(n: string): { x: number };
     	new(n: number): { y: string };
     }
-    var Obj1: Obj1;
+    declare var Obj1: Obj1;
     <Obj1 />; // Error, return type is not an object type
      ~~~~
 !!! error TS2769: No overload matches this call.
@@ -44,7 +44,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
     	(n: string): { x: number };
     	(n: number): { y: string };
     }
-    var Obj2: Obj2;
+    declare var Obj2: Obj2;
     <Obj2 />; // Error, return type is not an object type
      ~~~~
 !!! error TS2769: No overload matches this call.
@@ -62,7 +62,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
     	(n: string): { x: number };
     	(n: number): { x: number; y: string };
     }
-    var Obj3: Obj3;
+    declare var Obj3: Obj3;
     <Obj3 x={42} />; // OK
      ~~~~
 !!! error TS2769: No overload matches this call.

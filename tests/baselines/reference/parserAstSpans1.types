@@ -58,7 +58,7 @@ class c1 implements i1 {
 >c1 : c1
 >   : ^^
 
-    public i1_p1: number;
+    public i1_p1!: number;
 >i1_p1 : number
 >      : ^^^^^^
 
@@ -66,11 +66,11 @@ class c1 implements i1 {
 >i1_f1 : () => void
 >      : ^^^^^^^^^^
     }
-    public i1_l1: () => void;
+    public i1_l1!: () => void;
 >i1_l1 : () => void
 >      : ^^^^^^    
 
-    public i1_nc_p1: number;
+    public i1_nc_p1!: number;
 >i1_nc_p1 : number
 >         : ^^^^^^
 
@@ -78,12 +78,12 @@ class c1 implements i1 {
 >i1_nc_f1 : () => void
 >         : ^^^^^^^^^^
     }
-    public i1_nc_l1: () => void;
+    public i1_nc_l1!: () => void;
 >i1_nc_l1 : () => void
 >         : ^^^^^^    
 
     /** c1_p1*/
-    public p1: number;
+    public p1!: number;
 >p1 : number
 >   : ^^^^^^
 
@@ -93,12 +93,12 @@ class c1 implements i1 {
 >   : ^^^^^^^^^^
     }
     /** c1_l1*/
-    public l1: () => void;
+    public l1!: () => void;
 >l1 : () => void
 >   : ^^^^^^    
 
     /** c1_nc_p1*/
-    public nc_p1: number;
+    public nc_p1!: number;
 >nc_p1 : number
 >      : ^^^^^^
 
@@ -108,7 +108,7 @@ class c1 implements i1 {
 >      : ^^^^^^^^^^
     }
     /** c1_nc_l1*/
-    public nc_l1: () => void;
+    public nc_l1!: () => void;
 >nc_l1 : () => void
 >      : ^^^^^^    
 }
@@ -396,7 +396,7 @@ class c2 {
 >10 : 10
 >   : ^^
     }
-    public c2_nc_p1: number;
+    public c2_nc_p1!: number;
 >c2_nc_p1 : number
 >         : ^^^^^^
 
@@ -413,7 +413,7 @@ class c2 {
 >   : ^^
     }
     /** c2 p1*/
-    public p1: number;
+    public p1!: number;
 >p1 : number
 >   : ^^^^^^
 
@@ -431,7 +431,7 @@ class c2 {
 >10 : 10
 >   : ^^
     }
-    public nc_p1: number;
+    public nc_p1!: number;
 >nc_p1 : number
 >      : ^^^^^^
 
@@ -497,7 +497,7 @@ class c3 extends c2 {
 >      : ^^^^^^
     }
     /** c3 p1*/
-    public p1: number;
+    public p1!: number;
 >p1 : number
 >   : ^^^^^^
 
@@ -515,7 +515,7 @@ class c3 extends c2 {
 >10 : 10
 >   : ^^
     }
-    public nc_p1: number;
+    public nc_p1!: number;
 >nc_p1 : number
 >      : ^^^^^^
 
@@ -1040,7 +1040,7 @@ class c5 {
 >c5 : c5
 >   : ^^
 
-    public b: number;
+    public b!: number;
 >b : number
 >  : ^^^^^^
 }
@@ -1050,7 +1050,7 @@ class c6 extends c5 {
 >c5 : c5
 >   : ^^
 
-    public d;
+    public d!: any;
 >d : any
 >  : ^^^
 

@@ -31,7 +31,7 @@ decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmet
 
 ==== decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
     // -- operator on boolean type
-    var BOOLEAN: boolean;
+    declare var BOOLEAN: boolean;
     
     function foo(): boolean { return true; }
     

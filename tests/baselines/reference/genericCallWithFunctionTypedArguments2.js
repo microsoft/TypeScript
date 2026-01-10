@@ -14,9 +14,9 @@ interface I {
 interface I2<T> {
     new (x: T): T;
 }
-var i: I;
-var i2: I2<string>;
-var a: {
+declare var i: I;
+declare var i2: I2<string>;
+declare var a: {
     new <T>(x: T): T;
 }
 
@@ -49,9 +49,6 @@ var r9 = foo3<string, string>('', i2, ''); // string
 function foo(x) {
     return new x(null);
 }
-var i;
-var i2;
-var a;
 var r = foo(i); // any
 var r2 = foo(i); // string 
 var r3 = foo(i2); // string

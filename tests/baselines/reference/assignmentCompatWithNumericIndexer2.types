@@ -21,11 +21,11 @@ interface A {
 >  : ^^^^^^
 }
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 
-var b: { [x: number]: Derived; }
+declare var b: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -47,7 +47,7 @@ b = a; // error
 >a : A
 >  : ^
 
-var b2: { [x: number]: Derived2; }
+declare var b2: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -89,11 +89,11 @@ namespace Generics {
 >foo : <T extends Base>() => void
 >    : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
-        var a: A<T>;
+        var a!: A<T>;
 >a : A<T>
 >  : ^^^^
 
-        var b: { [x: number]: Derived; }
+        var b!: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -115,7 +115,7 @@ namespace Generics {
 >a : A<T>
 >  : ^^^^
 
-        var b2: { [x: number]: Derived2; }
+        var b2!: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -137,7 +137,7 @@ namespace Generics {
 >a : A<T>
 >  : ^^^^
 
-        var b3: { [x: number]: T; }
+        var b3!: { [x: number]: T; }
 >b3 : { [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >x : number

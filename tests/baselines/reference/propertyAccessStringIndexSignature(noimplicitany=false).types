@@ -5,7 +5,7 @@ interface Flags { [name: string]: boolean };
 >name : string
 >     : ^^^^^^
 
-let flags: Flags;
+declare let flags: Flags;
 >flags : Flags
 >      : ^^^^^
 
@@ -42,7 +42,7 @@ flags['this is fine'];
 >               : ^^^^^^^^^^^^^^
 
 interface Empty { }
-let empty: Empty;
+declare let empty: Empty;
 >empty : Empty
 >      : ^^^^^
 

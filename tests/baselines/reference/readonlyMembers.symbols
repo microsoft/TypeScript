@@ -207,25 +207,25 @@ N.c = 1;
 >N : Symbol(N, Decl(readonlyMembers.ts, 52, 8))
 >c : Symbol(N.c, Decl(readonlyMembers.ts, 57, 14))
 
-let xx: { readonly [x: string]: string };
->xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 3))
->x : Symbol(x, Decl(readonlyMembers.ts, 63, 20))
+declare let xx: { readonly [x: string]: string };
+>xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 11))
+>x : Symbol(x, Decl(readonlyMembers.ts, 63, 28))
 
 let s = xx["foo"];
 >s : Symbol(s, Decl(readonlyMembers.ts, 64, 3))
->xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 3))
+>xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 11))
 
 xx["foo"] = "abc";  // Error
->xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 3))
+>xx : Symbol(xx, Decl(readonlyMembers.ts, 63, 11))
 
-let yy: { readonly [x: number]: string, [x: string]: string };
->yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 3))
->x : Symbol(x, Decl(readonlyMembers.ts, 67, 20))
->x : Symbol(x, Decl(readonlyMembers.ts, 67, 41))
+declare let yy: { readonly [x: number]: string, [x: string]: string };
+>yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 11))
+>x : Symbol(x, Decl(readonlyMembers.ts, 67, 28))
+>x : Symbol(x, Decl(readonlyMembers.ts, 67, 49))
 
 yy[1] = "abc";  // Error
->yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 3))
+>yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 11))
 
 yy["foo"] = "abc";
->yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 3))
+>yy : Symbol(yy, Decl(readonlyMembers.ts, 67, 11))
 

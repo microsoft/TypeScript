@@ -3,7 +3,7 @@ class C {
     constructor(private x: string, protected z: string) { }
 }
 
-var c: C;
+declare var c: C;
 var r = c.y;
 var r2 = c.x; // error
 var r3 = c.z; // error
@@ -13,7 +13,7 @@ class D<T> {
     constructor(a: T, private x: T, protected z: T) { }
 }
 
-var d: D<string>;
+declare var d: D<string>;
 var r = d.y;
 var r2 = d.x; // error
 var r3 = d.a; // error

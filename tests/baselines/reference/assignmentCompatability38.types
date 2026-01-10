@@ -29,7 +29,7 @@ namespace __test2__ {
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 
-    export var aa:{ new <Tstring>(param: Tstring); };;
+    export declare var aa:{ new <Tstring>(param: Tstring); };;
 >aa : new <Tstring>(param: Tstring) => any
 >   : ^^^^^       ^^     ^^       ^^^^^^^^
 >param : Tstring

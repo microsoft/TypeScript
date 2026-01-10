@@ -1,4 +1,4 @@
-genericConstraintSatisfaction1.ts(6,6): error TS2322: Type 'number' is not assignable to type 'string'.
+genericConstraintSatisfaction1.ts(7,6): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== genericConstraintSatisfaction1.ts (1 errors) ====
@@ -7,6 +7,7 @@ genericConstraintSatisfaction1.ts(6,6): error TS2322: Type 'number' is not assig
     }
      
     var x: I<{s: string}>
+    declare var x: I<{s: string}>
     x.f({s: 1})
          ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.

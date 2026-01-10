@@ -1,2 +1,2 @@
-var foo: boolean;
+declare var foo: boolean;
 foo.toBAZ();

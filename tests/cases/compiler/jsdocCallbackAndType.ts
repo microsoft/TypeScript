@@ -8,6 +8,6 @@
  * @callback B
  */
 /** @type {B<string>} */
-let b;
+let b = {};
 b();
 b(1);

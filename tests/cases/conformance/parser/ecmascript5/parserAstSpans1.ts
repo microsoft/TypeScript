@@ -17,28 +17,28 @@ interface i1 {
     nc_l1: () => void;
 }
 class c1 implements i1 {
-    public i1_p1: number;
+    public i1_p1!: number;
     public i1_f1() {
     }
-    public i1_l1: () => void;
-    public i1_nc_p1: number;
+    public i1_l1!: () => void;
+    public i1_nc_p1!: number;
     public i1_nc_f1() {
     }
-    public i1_nc_l1: () => void;
+    public i1_nc_l1!: () => void;
     /** c1_p1*/
-    public p1: number;
+    public p1!: number;
     /** c1_f1*/
     public f1() {
     }
     /** c1_l1*/
-    public l1: () => void;
+    public l1!: () => void;
     /** c1_nc_p1*/
-    public nc_p1: number;
+    public nc_p1!: number;
     /** c1_nc_f1*/
     public nc_f1() {
     }
     /** c1_nc_l1*/
-    public nc_l1: () => void;
+    public nc_l1!: () => void;
 }
 var i1_i: i1;
 i1_i.i1_f1();
@@ -79,14 +79,14 @@ class c2 {
     public get c2_prop() {
         return 10;
     }
-    public c2_nc_p1: number;
+    public c2_nc_p1!: number;
     public c2_nc_f1() {
     }
     public get c2_nc_prop() {
         return 10;
     }
     /** c2 p1*/
-    public p1: number;
+    public p1!: number;
     /** c2 f1*/
     public f1() {
     }
@@ -94,7 +94,7 @@ class c2 {
     public get prop() {
         return 10;
     }
-    public nc_p1: number;
+    public nc_p1!: number;
     public nc_f1() {
     }
     public get nc_prop() {
@@ -111,7 +111,7 @@ class c3 extends c2 {
         this.p1 = super.c2_p1;
     }
     /** c3 p1*/
-    public p1: number;
+    public p1!: number;
     /** c3 f1*/
     public f1() {
     }
@@ -119,7 +119,7 @@ class c3 extends c2 {
     public get prop() {
         return 10;
     }
-    public nc_p1: number;
+    public nc_p1!: number;
     public nc_f1() {
     }
     public get nc_prop() {
@@ -208,10 +208,10 @@ i2_i.nc_l1();
 
 /**c5 class*/
 class c5 {
-    public b: number;
+    public b!: number;
 }
 class c6 extends c5 {
-    public d;
+    public d!: any;
     constructor() {
         super();
         this.d = super.b;

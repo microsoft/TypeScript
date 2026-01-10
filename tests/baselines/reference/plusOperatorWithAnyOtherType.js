@@ -3,25 +3,25 @@
 //// [plusOperatorWithAnyOtherType.ts]
 // + operator on any type
 
-var ANY: any;
-var ANY1;
+declare var ANY: any;
+declare var ANY1: any;
 var ANY2: any[] = ["", ""];
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: (s: string) => { }, y: (s1) => { }};
 
 function foo(): any {
-    var a;
+    var a = undefined;
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo() {
-        var a;
+        var a: any = undefined;
         return a;
     }
 }
 namespace M {
-    export var n: any;
+    export var n: any = undefined;
 }
 var objA = new A();
 
@@ -60,26 +60,24 @@ var ResultIsNumber19 = +(undefined + undefined);
 
 //// [plusOperatorWithAnyOtherType.js]
 // + operator on any type
-var ANY;
-var ANY1;
 var ANY2 = ["", ""];
-var obj;
 var obj1 = { x: function (s) { }, y: function (s1) { } };
 function foo() {
-    var a;
+    var a = undefined;
     return a;
 }
 var A = /** @class */ (function () {
     function A() {
     }
     A.foo = function () {
-        var a;
+        var a = undefined;
         return a;
     };
     return A;
 }());
 var M;
 (function (M) {
+    M.n = undefined;
 })(M || (M = {}));
 var objA = new A();
 // any other type var

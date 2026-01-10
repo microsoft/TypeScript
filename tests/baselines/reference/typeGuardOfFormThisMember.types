@@ -251,7 +251,7 @@ namespace Test {
 >           : ^^^^^^^
 	}
 
-	let guard: GenericGuard<File>;
+	declare var guard: GenericGuard<File>;
 >guard : GenericGuard<File>
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -304,7 +304,7 @@ namespace Test {
 >   : ^^^^^^    
 	}
 
-	let general: SpecificGuard;
+	declare var general: SpecificGuard;
 >general : SpecificGuard
 >        : ^^^^^^^^^^^^^
 

@@ -32,7 +32,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
              error: { error?: number } = {}) {
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
     changes.push(options);
     changes.push(error);
 }

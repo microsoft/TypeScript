@@ -15,15 +15,15 @@ declare namespace Foo {
 }
 
 === foo2.ts ===
-let x: { a: string; c: string; } | { b: number; c: number; };
->x : Symbol(x, Decl(foo2.ts, 0, 3))
->a : Symbol(a, Decl(foo2.ts, 0, 8))
->c : Symbol(c, Decl(foo2.ts, 0, 19))
->b : Symbol(b, Decl(foo2.ts, 0, 36))
->c : Symbol(c, Decl(foo2.ts, 0, 47))
+declare let x: { a: string; c: string; } | { b: number; c: number; };
+>x : Symbol(x, Decl(foo2.ts, 0, 11))
+>a : Symbol(a, Decl(foo2.ts, 0, 16))
+>c : Symbol(c, Decl(foo2.ts, 0, 27))
+>b : Symbol(b, Decl(foo2.ts, 0, 44))
+>c : Symbol(c, Decl(foo2.ts, 0, 55))
 
 export = x
->x : Symbol(x, Decl(foo2.ts, 0, 3))
+>x : Symbol(x, Decl(foo2.ts, 0, 11))
 
 === bar.ts ===
 import { Bar, toString, foo } from './foo';

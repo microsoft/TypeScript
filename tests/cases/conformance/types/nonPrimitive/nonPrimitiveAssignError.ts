@@ -1,6 +1,6 @@
 var x = {};
 var y = {foo: "bar"};
-var a: object;
+var a: object = {};
 x = a;
 y = a; // expect error
 a = x;

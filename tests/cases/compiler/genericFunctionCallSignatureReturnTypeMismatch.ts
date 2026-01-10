@@ -1,8 +1,8 @@
 interface Array<T> {}
 
-var f : { <T>(x:T): T; }
+declare var f : { <T>(x:T): T; }
 
-var g : { <S>() : S[]; };
+declare var g : { <S>() : S[]; };
 f = g;
 
 var s = f("str").toUpperCase();

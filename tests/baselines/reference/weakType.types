@@ -141,9 +141,11 @@ function del(options: ConfigurableStartEnd = {},
 >{} : {}
 >   : ^^
 
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
 >changes : ChangeOptions[]
 >        : ^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
 
     changes.push(options);
 >changes.push(options) : number

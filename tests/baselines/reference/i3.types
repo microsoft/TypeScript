@@ -5,13 +5,13 @@ interface I3 { one?: number; };
 >one : number
 >    : ^^^^^^
 
-var x: {one: number};
+declare var x: {one: number};
 >x : { one: number; }
 >  : ^^^^^^^      ^^^
 >one : number
 >    : ^^^^^^
 
-var i: I3;
+declare var i: I3;
 >i : I3
 >  : ^^
 

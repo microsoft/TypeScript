@@ -1812,9 +1812,11 @@ initialize();
 >initialize : () => void
 >           : ^^^^^^^^^^
 
-var notes: any[];
+var notes: any[] = [];
 >notes : any[]
 >      : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
 
 var render = () => alert("rendering...");
 >render : () => void

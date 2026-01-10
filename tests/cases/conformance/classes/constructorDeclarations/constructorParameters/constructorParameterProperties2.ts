@@ -3,7 +3,7 @@ class C {
     constructor(y: number) { } // ok
 }
 
-var c: C;
+declare var c: C;
 var r = c.y;
 
 class D {
@@ -11,7 +11,7 @@ class D {
     constructor(public y: number) { } // error
 }
 
-var d: D;
+declare var d: D;
 var r2 = d.y;
 
 class E {
@@ -19,7 +19,7 @@ class E {
     constructor(private y: number) { } // error
 }
 
-var e: E;
+declare var e: E;
 var r3 = e.y; // error
 
 class F {
@@ -27,5 +27,5 @@ class F {
     constructor(protected y: number) { } // error
 }
 
-var f: F;
+declare var f: F;
 var r4 = f.y; // error

@@ -2,7 +2,7 @@
 
 //// [decrementOperatorWithUnsupportedStringType.ts]
 // -- operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", ""];
 
 function foo(): string { return ""; }
@@ -68,8 +68,6 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedStringType.js]
-// -- operator on string type
-var STRING;
 var STRING1 = ["", ""];
 function foo() { return ""; }
 var A = /** @class */ (function () {

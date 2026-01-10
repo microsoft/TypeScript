@@ -3,7 +3,8 @@
 } 
 
 var i1: I<string, number>;
-var i2: I<{}, {}>;
+declare var i1: I<string, number>;
+declare var i2: I<{}, {}>;
 
 // no error
 i1.tuple1 = ["foo", 5];

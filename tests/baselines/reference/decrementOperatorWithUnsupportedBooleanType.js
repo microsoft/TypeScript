@@ -2,7 +2,7 @@
 
 //// [decrementOperatorWithUnsupportedBooleanType.ts]
 // -- operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -57,8 +57,6 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedBooleanType.js]
-// -- operator on boolean type
-var BOOLEAN;
 function foo() { return true; }
 var A = /** @class */ (function () {
     function A() {

@@ -23,12 +23,12 @@ interface B<T> {
 >U : Symbol(U, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 5, 5))
 }
 
-var a: A<string>
->a : Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 3))
+declare var a: A<string>;
+>a : Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 11))
 >A : Symbol(A, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
 
 var b: B<string> = a; // assignment should be legal (both U's get instantiated to any for comparison)
 >b : Symbol(b, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 9, 3))
 >B : Symbol(B, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 2, 1))
->a : Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 3))
+>a : Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 11))
 

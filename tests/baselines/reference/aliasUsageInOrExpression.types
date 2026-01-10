@@ -20,7 +20,7 @@ interface IHasVisualizationModel {
 >Model : typeof Backbone.Model
 >      : ^^^^^^^^^^^^^^^^^^^^^
 }
-var i: IHasVisualizationModel;
+declare var i: IHasVisualizationModel;
 >i : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 

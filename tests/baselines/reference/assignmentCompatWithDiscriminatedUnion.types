@@ -384,7 +384,7 @@ namespace GH14865 {
 >"whatevs" : "whatevs"
 >          : ^^^^^^^^^
 
-    let b: Style1;
+    declare let b: Style1;
 >b : Style1
 >  : ^^^^^^
 

@@ -19,7 +19,7 @@ class C { foo() { } }
 class D { foo2() { } }
 class E extends C { foo3() { } }
 class F extends C { foo4() { } }
-var c: C, d: D, e: E, f: F;
+declare var c: C, d: D, e: E, f: F;
 var arr6 = [c, d];  // (C | D)[]
 var arr7 = [c, d, e]; // (C | D)[]
 var arr8 = [c, e]; // C[]
@@ -79,7 +79,6 @@ var F = /** @class */ (function (_super) {
     F.prototype.foo4 = function () { };
     return F;
 }(C));
-var c, d, e, f;
 var arr6 = [c, d]; // (C | D)[]
 var arr7 = [c, d, e]; // (C | D)[]
 var arr8 = [c, e]; // C[]

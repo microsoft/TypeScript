@@ -36,9 +36,9 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
         length: 2;
     }
     
-    var x: [string, number];
-    var y: StrNum
-    var z: {
+    declare var x: [string, number];
+    declare var y: StrNum
+    declare var z: {
         0: string;
         1: number;
         length: 2;

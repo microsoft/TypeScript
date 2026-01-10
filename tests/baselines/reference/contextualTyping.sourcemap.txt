@@ -110,7 +110,7 @@ sourceFile:contextualTyping.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -124,15 +124,15 @@ sourceFile:contextualTyping.ts
 3 >Emitted(9, 2) Source(14, 1) + SourceIndex(0)
 4 >Emitted(9, 6) Source(18, 2) + SourceIndex(0)
 ---
->>>// CONTEXT: Module property declaration
+>>>// CONTEXT: Namespace property declaration
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
   >
-2 >// CONTEXT: Module property declaration
+2 >// CONTEXT: Namespace property declaration
 1->Emitted(10, 1) Source(20, 1) + SourceIndex(0)
-2 >Emitted(10, 40) Source(20, 40) + SourceIndex(0)
+2 >Emitted(10, 43) Source(20, 43) + SourceIndex(0)
 ---
 >>>var C2T5;
 1 >
@@ -1011,7 +1011,7 @@ sourceFile:contextualTyping.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -1028,15 +1028,15 @@ sourceFile:contextualTyping.ts
 3 >Emitted(48, 2) Source(56, 1) + SourceIndex(0)
 4 >Emitted(48, 6) Source(63, 2) + SourceIndex(0)
 ---
->>>// CONTEXT: Module property assignment
+>>>// CONTEXT: Namespace property assignment
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
   >
-2 >// CONTEXT: Module property assignment
+2 >// CONTEXT: Namespace property assignment
 1->Emitted(49, 1) Source(65, 1) + SourceIndex(0)
-2 >Emitted(49, 39) Source(65, 39) + SourceIndex(0)
+2 >Emitted(49, 42) Source(65, 42) + SourceIndex(0)
 ---
 >>>var C5T5;
 1 >
@@ -1238,21 +1238,27 @@ sourceFile:contextualTyping.ts
 1 >Emitted(59, 1) Source(77, 1) + SourceIndex(0)
 2 >Emitted(59, 35) Source(77, 35) + SourceIndex(0)
 ---
->>>var c7t2;
+>>>var c7t2 = [];
 1 >
 2 >^^^^
 3 >    ^^^^
-4 >        ^
-5 >         ^^^^^^^^^^^^^->
+4 >        ^^^
+5 >           ^^
+6 >             ^
+7 >              ^^^^^^^^->
 1 >
   >
 2 >var 
-3 >    c7t2: IFoo[]
-4 >        ;
+3 >    c7t2
+4 >        : IFoo[] = 
+5 >           []
+6 >             ;
 1 >Emitted(60, 1) Source(78, 1) + SourceIndex(0)
 2 >Emitted(60, 5) Source(78, 5) + SourceIndex(0)
-3 >Emitted(60, 9) Source(78, 17) + SourceIndex(0)
-4 >Emitted(60, 10) Source(78, 18) + SourceIndex(0)
+3 >Emitted(60, 9) Source(78, 9) + SourceIndex(0)
+4 >Emitted(60, 12) Source(78, 20) + SourceIndex(0)
+5 >Emitted(60, 14) Source(78, 22) + SourceIndex(0)
+6 >Emitted(60, 15) Source(78, 23) + SourceIndex(0)
 ---
 >>>c7t2[0] = ({ n: 1 });
 1->

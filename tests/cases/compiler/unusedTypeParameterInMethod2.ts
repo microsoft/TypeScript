@@ -3,8 +3,8 @@
 
 class A {
     public f1<X, Y, Z>() {
-        var a: X;
-        var b: Z;
+        var a!: X;
+        var b!: Z;
         a;
         b;
     }

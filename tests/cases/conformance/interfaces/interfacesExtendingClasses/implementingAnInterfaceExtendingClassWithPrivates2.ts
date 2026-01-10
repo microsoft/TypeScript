@@ -1,5 +1,5 @@
 class Foo {
-    private x: string;
+    private x!: string;
 }
 
 interface I extends Foo {
@@ -7,27 +7,27 @@ interface I extends Foo {
 }
 
 class Bar extends Foo implements I { // ok
-    y: number;
+    y!: number;
 }
 
 class Bar2 extends Foo implements I { // error
-    x: string;
-    y: number;
+    x!: string;
+    y!: number;
 }
 
 class Bar3 extends Foo implements I { // error
-    private x: string;
-    y: number;
+    private x!: string;
+    y!: number;
 }
 
 // another level of indirection
 namespace M {
     class Foo {
-        private x: string;
+        private x!: string;
     }
 
     class Baz extends Foo {
-        z: number;
+        z!: number;
     }
 
     interface I extends Baz {
@@ -35,29 +35,29 @@ namespace M {
     }
 
     class Bar extends Foo implements I { // ok
-        y: number;
-        z: number;
+        y!: number;
+        z!: number;
     }
 
     class Bar2 extends Foo implements I { // error
-        x: string;
-        y: number;
+        x!: string;
+        y!: number;
     }
 
     class Bar3 extends Foo implements I { // error
-        private x: string;
-        y: number;
+        private x!: string;
+        y!: number;
     }
 }
 
 // two levels of privates
 namespace M2 {
     class Foo {
-        private x: string;
+        private x!: string;
     }
 
     class Baz extends Foo {
-        private y: number;
+        private y!: number;
     }
 
     interface I extends Baz {
@@ -65,21 +65,21 @@ namespace M2 {
     }
 
     class Bar extends Foo implements I { // error
-        z: number;
+        z!: number;
     }
 
-    var b: Bar;
+    declare var b: Bar;
     var r1 = b.z;
     var r2 = b.x; // error
     var r3 = b.y; // error
 
     class Bar2 extends Foo implements I { // error
-        x: string;
-        z: number;
+        x!: string;
+        z!: number;
     }
 
     class Bar3 extends Foo implements I { // error
-        private x: string;
-        z: number;
+        private x!: string;
+        z!: number;
     }
 }

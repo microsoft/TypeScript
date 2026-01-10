@@ -22,11 +22,11 @@ interface Obj1type {
 	new(n: string): {};
 >n : Symbol(n, Decl(file.tsx, 7, 5))
 }
-var Obj1: Obj1type;
->Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 3))
+declare var Obj1: Obj1type;
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 11))
 >Obj1type : Symbol(Obj1type, Decl(file.tsx, 4, 1))
 
 <Obj1 x={10} />; // Error
->Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 11))
 >x : Symbol(x, Decl(file.tsx, 10, 5))
 

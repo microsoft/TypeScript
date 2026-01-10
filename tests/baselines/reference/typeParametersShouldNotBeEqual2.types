@@ -11,7 +11,7 @@ function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >z : V
 >  : ^
 
-    var zz: Object;
+    var zz!: Object;
 >zz : Object
 >   : ^^^^^^
 

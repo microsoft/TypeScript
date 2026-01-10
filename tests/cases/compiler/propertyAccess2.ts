@@ -1,2 +1,2 @@
-var foo: number;
+declare var foo: number;
 foo.toBAZ();

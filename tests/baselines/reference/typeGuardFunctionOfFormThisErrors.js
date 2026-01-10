@@ -33,7 +33,7 @@ function invalidGuard(c: any): this is number {
     return false;
 }
 
-let c: number | number[];
+declare var c: number | number[];
 if (invalidGuard(c)) {
     c;
 }
@@ -116,7 +116,6 @@ a.isLeader = a.isFollower;
 function invalidGuard(c) {
     return false;
 }
-var c;
 if (invalidGuard(c)) {
     c;
 }
@@ -157,7 +156,7 @@ interface GuardInterface extends RoyalGuard {
 declare let a: RoyalGuard;
 declare let b: GuardInterface;
 declare function invalidGuard(c: any): this is number;
-declare let c: number | number[];
+declare var c: number | number[];
 declare let holder: {
     invalidGuard: typeof invalidGuard;
 };
