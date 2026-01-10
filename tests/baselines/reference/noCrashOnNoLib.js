@@ -2,7 +2,7 @@
 
 //// [noCrashOnNoLib.ts]
 export function f() {
-    let e: {}[];
+    let e: {}[] = [];
     while (true) {
       e = [...(e || [])];
     }
@@ -22,7 +22,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = f;
 function f() {
-    var e;
+    var e = [];
     while (true) {
         e = __spreadArray([], (e || []), true);
     }

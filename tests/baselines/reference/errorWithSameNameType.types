@@ -23,13 +23,13 @@ import * as B from './b'
 >B : typeof B
 >  : ^^^^^^^^
 
-let a: A.F
+declare let a: A.F
 >a : A.F
 >  : ^^^
 >A : any
 >  : ^^^
 
-let b: B.F
+declare let b: B.F
 >b : B.F
 >  : ^^^
 >B : any

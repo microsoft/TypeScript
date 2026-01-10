@@ -12,7 +12,7 @@ class C {
     foo(x = 1) { }
 }
 
-var c: C;
+declare var c: C;
 c.foo();
 c.foo(1);
 

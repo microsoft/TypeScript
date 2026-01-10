@@ -1,6 +1,6 @@
 // @noErrorTruncation: false
 
-var x: {
+declare var x: {
     propertyWithAnExceedinglyLongName1: string;
     propertyWithAnExceedinglyLongName2: string;
     propertyWithAnExceedinglyLongName3: string;

@@ -773,7 +773,7 @@ var initialize = _.once(createApplication);
 initialize();
 initialize();
 
-var notes: any[];
+var notes: any[] = [];
 var render = () => alert("rendering...");
 var renderNotes = _.after(notes.length, render);
 _.each(notes, (note) => note.asyncSave({ success: renderNotes }));

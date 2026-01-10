@@ -2,11 +2,11 @@
 
 //// [mergedInterfacesWithInheritedPrivates2.ts]
 class C {
-    private x: number;
+    private x!: number;
 }
 
 class C2 {
-    private w: number;
+    private w!: number;
 }
 
 interface A extends C {
@@ -18,18 +18,18 @@ interface A extends C2 {
 }
 
 class D extends C implements A { // error
-    private w: number;
-    y: string;
-    z: string;
+    private w!: number;
+    y!: string;
+    z!: string;
 }
 
 class E extends C2 implements A { // error
-    w: number;
-    y: string;
-    z: string;
+    w!: number;
+    y!: string;
+    z!: string;
 }
 
-var a: A;
+declare var a: A;
 var r = a.x; // error
 var r2 = a.w; // error
 
@@ -73,6 +73,5 @@ var E = /** @class */ (function (_super) {
     }
     return E;
 }(C2));
-var a;
 var r = a.x; // error
 var r2 = a.w; // error

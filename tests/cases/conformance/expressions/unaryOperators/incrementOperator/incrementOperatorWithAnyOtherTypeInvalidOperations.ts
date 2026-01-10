@@ -2,7 +2,7 @@
 var ANY1: any;
 var ANY2: any[] = [1, 2];
 
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { } };
 function foo(): any {
     var a;

@@ -19,7 +19,7 @@ genericSpecializations3.ts(29,1): error TS2322: Type 'IntFoo' is not assignable 
         foo(x: T): T;
     }
     
-    var iFoo: IFoo<number>;
+    declare var iFoo: IFoo<number>;
     iFoo.foo(1);
     
     class IntFooBad implements IFoo<number> { // error
@@ -31,19 +31,19 @@ genericSpecializations3.ts(29,1): error TS2322: Type 'IntFoo' is not assignable 
 !!! error TS2416:       Type 'number' is not assignable to type 'string'.
     }
     
-    var intFooBad: IntFooBad;
+    declare var intFooBad: IntFooBad;
     
     class IntFoo implements IFoo<number> {
         foo(x: number): number { return null; }
     }
     
-    var intFoo: IntFoo;
+    declare var intFoo: IntFoo;
     
     class StringFoo2 implements IFoo<string> {
         foo(x: string): string { return null; }
     }
     
-    var stringFoo2: StringFoo2;
+    declare var stringFoo2: StringFoo2;
     stringFoo2.foo("hm");
     
     

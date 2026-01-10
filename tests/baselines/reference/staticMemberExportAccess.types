@@ -37,7 +37,7 @@ interface JQueryStatic {
 >sammy : Sammy
 >      : ^^^^^
 }
-var $: JQueryStatic;
+declare var $: JQueryStatic;
 >$ : JQueryStatic
 >  : ^^^^^^^^^^^^
 

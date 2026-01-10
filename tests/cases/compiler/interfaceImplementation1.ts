@@ -13,8 +13,8 @@ class C1 implements I1,I2 {
     private iFn();
 	private iFn(n?:number, s?:string) { }
     private iAny:any;
-    private iNum:number;
-    private iObj:{ };
+    private iNum!:number;
+    private iObj!:{ };
 }
 
 interface I3 {
@@ -40,6 +40,6 @@ new a();
 new b();
 */
 
-var c:I4;
+declare var c:I4;
 c[5];
 c["foo"];

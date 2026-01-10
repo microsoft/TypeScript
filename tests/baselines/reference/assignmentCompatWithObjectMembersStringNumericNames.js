@@ -7,16 +7,16 @@
 namespace JustStrings {
     class S { '1': string; }
     class T { '1.': string; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { '1': string; bar?: string }
     interface T2 { '1.0': string; baz?: string }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { '1.': string; bar?: string }
-    var b: { '1.0': string; baz?: string }
+    declare var a: { '1.': string; bar?: string };
+    declare var b: { '1.0': string; baz?: string };
 
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
@@ -48,16 +48,16 @@ namespace JustStrings {
 namespace NumbersAndStrings {
     class S { '1': string; }
     class T { 1: string; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { '1': string; bar?: string }
     interface T2 { 1.0: string; baz?: string }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { '1.': string; bar?: string }
-    var b: { 1.0: string; baz?: string }
+    declare var a: { '1.': string; bar?: string };
+    declare var b: { 1.0: string; baz?: string };
 
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };
@@ -102,12 +102,6 @@ var JustStrings;
         }
         return T;
     }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
     s = t;
@@ -142,12 +136,6 @@ var NumbersAndStrings;
         }
         return T;
     }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };
     s = t; // ok

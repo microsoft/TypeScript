@@ -34,14 +34,14 @@ interface myInt {
     voidFn(): void;
 >voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
 }
-var myVar: myInt;
->myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+declare var myVar: myInt;
+>myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 11))
 >myInt : Symbol(myInt, Decl(arraySigChecking.ts, 11, 1))
 
 var strArray: string[] = [myVar.voidFn()];
 >strArray : Symbol(strArray, Decl(arraySigChecking.ts, 17, 3))
 >myVar.voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
->myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+>myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 11))
 >voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
 
 

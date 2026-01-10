@@ -17,11 +17,11 @@ enum E {
 >  : ^^^
 }
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
-var b: number;
+declare var b: number;
 >b : number
 >  : ^^^^^^
 

@@ -18,8 +18,8 @@ interface C {
 type AB = A | B;
 type ABC = C | AB;
 
-var ab: AB;
-var abc: ABC;
+declare var ab: AB;
+declare var abc: ABC;
 
 declare const x: "foo" | "bar";
 declare const bFoo: B | "foo";

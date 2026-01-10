@@ -388,11 +388,11 @@ namespace GenericSignaturesInvalid {
 >foo : <T>() => void
 >    : ^ ^^^^^^^^^^^
 
-        var b: Base2;
+        var b!: Base2;
 >b : Base2
 >  : ^^^^^
 
-        var t: Target<T>;
+        var t!: Target<T>;
 >t : Target<T>
 >  : ^^^^^^^^^
 

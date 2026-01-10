@@ -94,7 +94,7 @@ class C {
 >  : ^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -139,7 +139,7 @@ interface I {
 >  : ^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -184,7 +184,7 @@ i.foo(1, 2);
 >  : ^
 
 // these are errors
-var a: {
+declare var a: {
 >a : { (x?: number): any; foo(x?: number): any; }
 >  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 

@@ -28,31 +28,31 @@ class E extends D {
 >x : Symbol(x, Decl(derivedClassTransitivity.ts, 11, 8))
 }
 
-var c: C;
->c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
+declare var c: C;
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 11))
 >C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
 
-var d: D;
->d : Symbol(d, Decl(derivedClassTransitivity.ts, 15, 3))
+declare var d: D;
+>d : Symbol(d, Decl(derivedClassTransitivity.ts, 15, 11))
 >D : Symbol(D, Decl(derivedClassTransitivity.ts, 4, 1))
 
-var e: E;
->e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+declare var e: E;
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 11))
 >E : Symbol(E, Decl(derivedClassTransitivity.ts, 8, 1))
 
 c = e;
->c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
->e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 11))
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 11))
 
 var r = c.foo(1);
 >r : Symbol(r, Decl(derivedClassTransitivity.ts, 18, 3))
 >c.foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
->c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 11))
 >foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
 
 var r2 = e.foo('');
 >r2 : Symbol(r2, Decl(derivedClassTransitivity.ts, 19, 3))
 >e.foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
->e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 11))
 >foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
 

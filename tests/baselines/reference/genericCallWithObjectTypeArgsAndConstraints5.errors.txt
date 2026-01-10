@@ -22,8 +22,8 @@ genericCallWithObjectTypeArgsAndConstraints5.ts(22,24): error TS2345: Argument o
         return (x: T) => t2;
     }
     
-    var c: C;
-    var d: D;
+    declare var c: C;
+    declare var d: D;
     var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
                     ~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.

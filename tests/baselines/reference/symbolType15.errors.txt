@@ -3,7 +3,7 @@ symbolType15.ts(5,1): error TS2322: Type 'Symbol' is not assignable to type 'sym
 
 
 ==== symbolType15.ts (1 errors) ====
-    var sym: symbol;
+    declare var sym: symbol;
     var symObj: Symbol;
     
     symObj = sym;

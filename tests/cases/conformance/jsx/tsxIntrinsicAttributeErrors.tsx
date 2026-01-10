@@ -27,5 +27,5 @@ interface I {
         render(): void
     }
 }
-var E: I;
+declare var E: I;
 <E x={10} />

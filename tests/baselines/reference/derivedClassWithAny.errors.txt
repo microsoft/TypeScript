@@ -55,9 +55,9 @@ derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type '
         }
     }
     
-    var c: C;
-    var d: D;
-    var e: E;
+    declare var c: C;
+    declare var d: D;
+    declare var e: E;
     
     c = d;
     c = e;

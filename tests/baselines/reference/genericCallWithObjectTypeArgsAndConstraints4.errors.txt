@@ -20,8 +20,8 @@ genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument o
         return (x: T) => t2;
     }
     
-    var c: C;
-    var d: D;
+    declare var c: C;
+    declare var d: D;
     var r = foo(c, d);
     var r2 = foo(d, c); // error because C does not extend D
                     ~

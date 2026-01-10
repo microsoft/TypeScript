@@ -14,7 +14,7 @@ class Property {
     public parent: Module | Class;
 }
 
-var c: Class;
-var p: Property;
+declare var c: Class;
+declare var p: Property;
 c = p;
 p = c;

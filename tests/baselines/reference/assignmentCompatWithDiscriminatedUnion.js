@@ -101,7 +101,7 @@ namespace GH14865 {
     }
 
     const a: Style2 = { type: "A", data: "whatevs" };
-    let b: Style1;
+    declare let b: Style1;
     a.type; // "A" | "B"
     b.type; // "A" | "B"
     b = a; // should be assignable
@@ -270,7 +270,6 @@ var Example5;
 var GH14865;
 (function (GH14865) {
     var a = { type: "A", data: "whatevs" };
-    var b;
     a.type; // "A" | "B"
     b.type; // "A" | "B"
     b = a; // should be assignable

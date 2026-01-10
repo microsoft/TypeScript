@@ -63,10 +63,10 @@ N.a = 1;  // Error
 N.b = 1;
 N.c = 1;
 
-let xx: { readonly [x: string]: string };
+declare let xx: { readonly [x: string]: string };
 let s = xx["foo"];
 xx["foo"] = "abc";  // Error
 
-let yy: { readonly [x: number]: string, [x: string]: string };
+declare let yy: { readonly [x: number]: string, [x: string]: string };
 yy[1] = "abc";  // Error
 yy["foo"] = "abc";

@@ -9,8 +9,8 @@ enum E {
     b
 }
 
-var a: any;
-var b: number;
+declare var a: any;
+declare var b: number;
 
 // operator *
 var ra1 = null * a;
@@ -120,8 +120,6 @@ var E;
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
-var a;
-var b;
 // operator *
 var ra1 = null * a;
 var ra2 = null * b;

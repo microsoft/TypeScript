@@ -46,12 +46,12 @@ memberFunctionsWithPrivateOverloads.ts(49,12): error TS2341: Property 'bar' is p
     
     }
     
-    var c: C;
+    declare var c: C;
     var r = c.foo(1); // error
               ~~~
 !!! error TS2341: Property 'foo' is private and only accessible within class 'C'.
     
-    var d: D<number>;
+    declare var d: D<number>;
     var r2 = d.foo(2); // error
                ~~~
 !!! error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.

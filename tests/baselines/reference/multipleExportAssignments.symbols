@@ -22,8 +22,8 @@ interface connectExport {
 >listen : Symbol(connectExport.listen, Decl(multipleExportAssignments.ts, 4, 47))
 >port : Symbol(port, Decl(multipleExportAssignments.ts, 5, 13))
 }
-var server: {
->server : Symbol(server, Decl(multipleExportAssignments.ts, 7, 3))
+declare const server: {
+>server : Symbol(server, Decl(multipleExportAssignments.ts, 7, 13))
 
     (): connectExport;
 >connectExport : Symbol(connectExport, Decl(multipleExportAssignments.ts, 2, 1))
@@ -38,7 +38,7 @@ var server: {
 
 };
 export = server;
->server : Symbol(server, Decl(multipleExportAssignments.ts, 7, 3))
+>server : Symbol(server, Decl(multipleExportAssignments.ts, 7, 13))
 
 export = connectExport;
 >connectExport : Symbol(connectExport, Decl(multipleExportAssignments.ts, 2, 1))

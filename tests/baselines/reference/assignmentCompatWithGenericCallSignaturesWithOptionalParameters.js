@@ -59,8 +59,8 @@ namespace GenericSignaturesInvalid {
 
 
     function foo<T>() {
-        var b: Base2;
-        var t: Target<T>;
+        var b!: Base2;
+        var t!: Target<T>;
 
         // all errors
         b.a = t.a;

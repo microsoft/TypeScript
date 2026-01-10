@@ -14,8 +14,8 @@ objectTypeHidingMembersOfObjectAssignmentCompat.ts(20,1): error TS2322: Type '{ 
         toString(): void;
     }
     
-    var i: I;
-    var o: Object;
+    declare var i: I;
+    declare var o: Object;
     o = i; // error
     ~
 !!! error TS2322: Type 'I' is not assignable to type 'Object'.
@@ -26,7 +26,7 @@ objectTypeHidingMembersOfObjectAssignmentCompat.ts(20,1): error TS2322: Type '{ 
     class C {
         toString(): void { }
     }
-    var c: C;
+    declare var c: C;
     o = c; // error
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'Object'.

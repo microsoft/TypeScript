@@ -36,7 +36,7 @@ interface myInt {
 >voidFn : () => void
 >       : ^^^^^^    
 }
-var myVar: myInt;
+declare var myVar: myInt;
 >myVar : myInt
 >      : ^^^^^
 

@@ -2,7 +2,7 @@
 
 === propertySignatures.ts ===
 // Should be error - duplicate identifiers
-var foo1: { a:string; a: string; };
+declare var foo1: { a:string; a: string; };
 >foo1 : { a: string; }
 >     : ^^^^^      ^^^
 >a : string
@@ -11,7 +11,7 @@ var foo1: { a:string; a: string; };
 >  : ^^^^^^
 
 // Should be OK
-var foo2: { a; };
+declare var foo2: { a; };
 >foo2 : { a: any; }
 >     : ^^^^^^^^^^^
 >a : any
@@ -42,12 +42,12 @@ foo2.a = "0";
 >    : ^^^
 
 // Should be error
-var foo3: { (): string; (): string; };
+declare var foo3: { (): string; (): string; };
 >foo3 : { (): string; (): string; }
 >     : ^^^^^^      ^^^^^^      ^^^
 
 // Should be OK
-var foo4: { (): void; };
+declare var foo4: { (): void; };
 >foo4 : () => void
 >     : ^^^^^^    
 
@@ -60,7 +60,7 @@ var test = foo();
 >    : ^^^
 
 // Should be OK
-var foo5: {();};
+declare var foo5: {();};
 >foo5 : () => any
 >     : ^^^^^^^^^
 

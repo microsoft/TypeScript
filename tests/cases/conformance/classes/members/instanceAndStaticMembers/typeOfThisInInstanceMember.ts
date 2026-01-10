@@ -16,7 +16,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 // all ok
 var r = c.x;
 var ra = c.x.x.x;

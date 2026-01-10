@@ -24,11 +24,11 @@ class A {
 >  : ^^^^^^
 }
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 
-var b: { [x: number]: Base; };
+declare var b: { [x: number]: Base; };
 >b : { [x: number]: Base; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -61,7 +61,7 @@ class B2 extends A {
 >  : ^^^^^^
 }
 
-var b2: { [x: number]: Derived2; };
+declare var b2: { [x: number]: Derived2; };
 >b2 : { [x: number]: Derived2; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -100,11 +100,11 @@ namespace Generics {
 >foo : <T extends Derived>() => void
 >    : ^ ^^^^^^^^^       ^^^^^^^^^^^
 
-        var a: A<T>;
+        var a!: A<T>;
 >a : A<T>
 >  : ^^^^
 
-        var b: { [x: number]: Derived; };
+        var b!: { [x: number]: Derived; };
 >b : { [x: number]: Derived; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -126,7 +126,7 @@ namespace Generics {
 >a : A<T>
 >  : ^^^^
 
-        var b2: { [x: number]: T; };
+        var b2!: { [x: number]: T; };
 >b2 : { [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >x : number

@@ -6,7 +6,7 @@ import * as ff from './foo';
 >ff : typeof ff
 >   : ^^^^^^^^^
 
-let y: Foo; // OK in type position
+declare let y: Foo; // OK in type position
 >y : import("foo")
 >  : ^^^^^^^^^^^^^
 
@@ -20,7 +20,7 @@ y.foo();
 >foo : () => number
 >    : ^^^^^^      
 
-let z: Foo.SubThing; // OK in ns position
+declare let z: Foo.SubThing; // OK in ns position
 >z : ff.SubThing
 >  : ^^^^^^^^^^^
 >Foo : any

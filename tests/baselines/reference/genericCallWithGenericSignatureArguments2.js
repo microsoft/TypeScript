@@ -6,7 +6,7 @@
 
 namespace onlyT {
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -20,7 +20,7 @@ namespace onlyT {
     }
 
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -33,7 +33,7 @@ namespace onlyT {
     enum F { A }
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -42,7 +42,7 @@ namespace onlyT {
 
 namespace TU {
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -55,7 +55,7 @@ namespace TU {
     }
 
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -68,7 +68,7 @@ namespace TU {
     enum F { A }
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 

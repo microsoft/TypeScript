@@ -2,7 +2,7 @@
 
 === plusOperatorWithNumberType.ts ===
 // + operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 >       : ^^^^^^
 
@@ -26,7 +26,7 @@ class A {
 >A : A
 >  : ^
 
-    public a: number;
+    public a!: number;
 >a : number
 >  : ^^^^^^
 
@@ -40,9 +40,11 @@ namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export var n: number;
+    export var n: number = 0;
 >n : number
 >  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 var objA = new A();

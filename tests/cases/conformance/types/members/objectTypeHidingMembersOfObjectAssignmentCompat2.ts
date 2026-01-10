@@ -2,15 +2,15 @@ interface I {
     toString(): number;
 }
 
-var i: I;
-var o: Object;
+declare var i: I;
+declare var o: Object;
 o = i; // error
 i = o; // error
 
 class C {
     toString(): number { return 1; }
 }
-var c: C;
+declare var c: C;
 o = c; // error
 c = o; // error
 

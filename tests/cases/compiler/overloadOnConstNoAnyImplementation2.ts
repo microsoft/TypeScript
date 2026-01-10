@@ -13,7 +13,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 c.x1(1, (x: 'hi') => { return 1; } );
 c.x1(1, (x: 'bye') => { return 1; } );
 c.x1(1, (x) => { return 1; } );

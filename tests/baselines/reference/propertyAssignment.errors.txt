@@ -1,4 +1,4 @@
-propertyAssignment.ts(4,14): error TS2304: Cannot find name 'index'.
+propertyAssignment.ts(4,22): error TS2304: Cannot find name 'index'.
 propertyAssignment.ts(12,1): error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
   Type '{ x: number; }' provides no match for the signature 'new (): any'.
 propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
@@ -6,16 +6,16 @@ propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignab
 
 
 ==== propertyAssignment.ts (3 errors) ====
-    var foo1: { new ():any; }   
-    var bar1: { x : number; }
+    declare var foo1: { new ():any; }   
+    declare var bar1: { x : number; }
     
-    var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
-                 ~~~~~
+    declare var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
+                         ~~~~~
 !!! error TS2304: Cannot find name 'index'.
-    var bar2: { x : number; }
+    declare var bar2: { x : number; }
     
-    var foo3: { ():void; }
-    var bar3: { x : number; }
+    declare var foo3: { ():void; }
+    declare var bar3: { x : number; }
     
     
     

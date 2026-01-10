@@ -143,36 +143,36 @@ interface NotString {
 var x = '';
 >x : Symbol(x, Decl(assignFromStringInterface2.ts, 36, 3))
 
-var a: String;
->a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
+declare var a: String;
+>a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 11))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 2 more)
 
-var b: NotString;
->b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
+declare var b: NotString;
+>b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 11))
 >NotString : Symbol(NotString, Decl(assignFromStringInterface2.ts, 2, 1))
 
 a = x;
->a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
+>a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 11))
 >x : Symbol(x, Decl(assignFromStringInterface2.ts, 36, 3))
 
 a = b;
->a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
->b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
+>a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 11))
+>b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 11))
 
 b = a;
->b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
->a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
+>b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 11))
+>a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 11))
 
 b = x;
->b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
+>b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 11))
 >x : Symbol(x, Decl(assignFromStringInterface2.ts, 36, 3))
 
 x = a; // expected error
 >x : Symbol(x, Decl(assignFromStringInterface2.ts, 36, 3))
->a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
+>a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 11))
 
 x = b; // expected error
 >x : Symbol(x, Decl(assignFromStringInterface2.ts, 36, 3))
->b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
+>b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 11))
 
 

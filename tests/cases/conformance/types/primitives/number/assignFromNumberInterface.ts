@@ -1,4 +1,4 @@
 var x = 1;
-var a: Number;
+declare var a: Number;
 x = a;
 a = x;

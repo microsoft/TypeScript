@@ -14,7 +14,7 @@ namespace test {
 >Object : Object
 >       : ^^^^^^
 
-    var obj: Object;
+    declare var obj: Object;
 >obj : Object
 >    : ^^^^^^
 

@@ -60,7 +60,7 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
     
     function del(options: ConfigurableStartEnd = {},
                  error: { error?: number } = {}) {
-        let changes: ChangeOptions[];
+        let changes: ChangeOptions[] = [];
         changes.push(options);
         changes.push(error);
                      ~~~~~

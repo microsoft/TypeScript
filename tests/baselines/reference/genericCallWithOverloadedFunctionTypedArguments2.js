@@ -5,7 +5,7 @@
 // Inferences are made quadratic-pairwise to and from these overload sets
 
 namespace NonGenericParameter {
-    var a: {
+    declare var a: {
         (x: boolean): boolean;
         (x: string): string;
     }
@@ -14,7 +14,7 @@ namespace NonGenericParameter {
         return cb;
     }
 
-    var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
+    var r3 = foo4(<T, U>(x: T) => { var r!: U; return r }); // ok
 }
 
 namespace GenericParameter {
@@ -35,7 +35,7 @@ namespace GenericParameter {
     }
 
     var r13 = foo7(1, <T>(x: T) => x); // ok
-    var a: { <T>(x: T): number; <T>(x: number): T; }
+    declare var a: { <T>(x: T): number; <T>(x: number): T; }
     var r14 = foo7(1, a); // ok
 }
 
@@ -44,7 +44,6 @@ namespace GenericParameter {
 // Inferences are made quadratic-pairwise to and from these overload sets
 var NonGenericParameter;
 (function (NonGenericParameter) {
-    var a;
     function foo4(cb) {
         return cb;
     }
@@ -64,6 +63,5 @@ var GenericParameter;
         return cb;
     }
     var r13 = foo7(1, function (x) { return x; }); // ok
-    var a;
     var r14 = foo7(1, a); // ok
 })(GenericParameter || (GenericParameter = {}));
