@@ -23,17 +23,17 @@ namespace TargetIsPublic {
 >    : ^^^^^^
     }
 
-    var a: { foo: string; }
+    declare var a: { foo: string; };
 >a : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
 
-    var b: Base;
+    declare var b: Base;
 >b : Base
 >  : ^^^^
 
-    var i: I;
+    declare var i: I;
 >i : I
 >  : ^
 
@@ -55,11 +55,11 @@ namespace TargetIsPublic {
 >foo : string
 >    : ^^^^^^
     }
-    var d: D;
+    declare var d: D;
 >d : D
 >  : ^
 
-    var e: E;
+    declare var e: E;
 >e : E
 >  : ^
 
@@ -250,17 +250,17 @@ namespace TargetIsPublic {
     interface I extends Base {
     }
 
-    var a: { foo: string; }
+    declare var a: { foo: string; };
 >a : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
 
-    var b: Base;
+    declare var b: Base;
 >b : Base
 >  : ^^^^
 
-    var i: I;
+    declare var i: I;
 >i : I
 >  : ^
 
@@ -283,11 +283,11 @@ namespace TargetIsPublic {
 >    : ^^^^^^
     }
 
-    var d: D;
+    declare var d: D;
 >d : D
 >  : ^
 
-    var e: E;
+    declare var e: E;
 >e : E
 >  : ^
 

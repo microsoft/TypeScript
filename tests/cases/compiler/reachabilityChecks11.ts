@@ -4,33 +4,33 @@
 // while (true);
 var x = 1;
 
-module A {
+namespace A {
     while (true);
     let x;
 }
 
-module A1 {
+namespace A1 {
     do {} while(true);
-    module A {
+    namespace A {
         interface F {}
     }
 }
 
-module A2 {
+namespace A2 {
     while (true);
-    module A {
+    namespace A {
         var x = 1;
     }
 }
 
-module A3 {
+namespace A3 {
     while (true);
     type T = string;
 }
 
-module A4 {
+namespace A4 {
     while (true);
-    module A {
+    namespace A {
         const enum E { X }
     }
 }
@@ -51,9 +51,9 @@ function f2() {
     }
 }
 
-module B {
+namespace B {
     for (; ;);
-    module C {
+    namespace C {
     }
 }
 

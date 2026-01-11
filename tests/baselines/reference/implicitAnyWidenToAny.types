@@ -113,7 +113,7 @@ var array5 = <any[]>[null, undefined];
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var objLit: { new (n: number): any; };
+declare var objLit: { new (n: number): any; };
 >objLit : new (n: number) => any
 >       : ^^^^^ ^^      ^^^^^   
 >n : number

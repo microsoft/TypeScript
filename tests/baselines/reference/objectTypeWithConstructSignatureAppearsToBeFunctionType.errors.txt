@@ -9,14 +9,14 @@ objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(16,18): error TS2348:
         new(): number;
     }
     
-    var i: I;
+    declare var i: I;
     var r2: number = i();
                      ~~~
 !!! error TS2348: Value of type 'I' is not callable. Did you mean to include 'new'?
     var r2b: number = new i();
     var r2c: (x: any, y?: any) => any = i.apply;
     
-    var b: {
+    declare var b: {
         new(): number;
     }
     

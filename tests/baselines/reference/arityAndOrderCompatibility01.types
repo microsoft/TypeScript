@@ -15,15 +15,15 @@ interface StrNum extends Array<string|number> {
 >       : ^
 }
 
-var x: [string, number];
+declare var x: [string, number];
 >x : [string, number]
 >  : ^^^^^^^^^^^^^^^^
 
-var y: StrNum
+declare var y: StrNum
 >y : StrNum
 >  : ^^^^^^
 
-var z: {
+declare var z: {
 >z : { 0: string; 1: number; length: 2; }
 >  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
 

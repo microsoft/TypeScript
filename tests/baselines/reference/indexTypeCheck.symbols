@@ -81,25 +81,25 @@ interface Magenta {
 >Purple : Symbol(Purple, Decl(indexTypeCheck.ts, 28, 1))
 }
 
-var yellow: Yellow;
->yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+declare var yellow: Yellow;
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 11))
 >Yellow : Symbol(Yellow, Decl(indexTypeCheck.ts, 8, 1))
 
-var blue: Blue;
->blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 3))
+declare var blue: Blue;
+>blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 11))
 >Blue : Symbol(Blue, Decl(indexTypeCheck.ts, 3, 1))
 
 var s = "some string";
 >s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
 
 yellow[5]; // ok
->yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 11))
 
 yellow["hue"]; // ok
->yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 11))
 
 yellow[<any>{}]; // ok
->yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 11))
 
 s[0]; // error
 >s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
@@ -111,14 +111,14 @@ s[<any>{}]; // ok
 >s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
 
 yellow[blue]; // error
->yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
->blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 3))
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 11))
+>blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 11))
 
-var x:number[];
->x : Symbol(x, Decl(indexTypeCheck.ts, 52, 3))
+declare var x:number[];
+>x : Symbol(x, Decl(indexTypeCheck.ts, 52, 11))
 
 x[0];
->x : Symbol(x, Decl(indexTypeCheck.ts, 52, 3))
+>x : Symbol(x, Decl(indexTypeCheck.ts, 52, 11))
 
 class Benchmark {
 >Benchmark : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))

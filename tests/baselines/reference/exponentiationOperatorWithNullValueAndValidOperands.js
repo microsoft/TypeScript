@@ -9,8 +9,8 @@ enum E {
     b
 }
 
-var a: any;
-var b: number;
+declare var a: any;
+declare var b: number;
 
 // operator **
 var r1 = null ** a;
@@ -30,8 +30,6 @@ var E;
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
-var a;
-var b;
 // operator **
 var r1 = Math.pow(null, a);
 var r2 = Math.pow(null, b);

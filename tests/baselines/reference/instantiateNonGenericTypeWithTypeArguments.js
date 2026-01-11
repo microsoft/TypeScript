@@ -5,7 +5,7 @@
 // all of these are errors
 
 class C {
-    x: string;
+    x!: string;
 }
 
 var c = new C<number>();
@@ -13,7 +13,7 @@ var c = new C<number>();
 function Foo(): void { }
 var r = new Foo<number>();
 
-var f: { (): void };
+declare var f: { (): void };
 var r2 = new f<number>();
 
 var a: any;
@@ -31,7 +31,6 @@ var C = /** @class */ (function () {
 var c = new C();
 function Foo() { }
 var r = new Foo();
-var f;
 var r2 = new f();
 var a;
 // BUG 790977

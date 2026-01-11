@@ -17,7 +17,7 @@ interface fn1 {
     new (s: string): string;
     new (s: number): number;
 }
-var fn1: fn1;
+declare var fn1: fn1;
 
 // Ambiguous call picks the first overload in declaration order
 var s = new fn1(undefined);
@@ -31,7 +31,7 @@ interface fn2 {
     new (s: string, n: number): number;
     new <T>(n: number, t: T): T;
 }
-var fn2: fn2;
+declare var fn2: fn2;
 
 var d = new fn2<Date>(0, undefined);
 var d: Date;
@@ -51,7 +51,7 @@ interface fn3 {
     new<T, U>(s: string, t: T, u: U): U;
     new<T, U, V>(v: V, u: U, t: T): number;
 }
-var fn3: fn3;
+declare var fn3: fn3;
 
 var s = new fn3(3);
 var s = new fn3('', 3, '');
@@ -71,7 +71,7 @@ interface fn4 {
     new<T extends string, U extends number>(n: T, m: U);
     new<T extends number, U extends string>(n: T, m: U);
 }
-var fn4: fn4;
+declare var fn4: fn4;
 
 new fn4<string, number>('', 3);
 new fn4<string, number>(3, ''); // Error
@@ -96,6 +96,6 @@ interface fn5 {
     new(f: (n: string) => void): string;
     new(f: (n: number) => void): number;
 }
-var fn5: fn5;
+declare var fn5: fn5;
 var n = new fn5((n) => n.toFixed());
 var s = new fn5((n) => n.substr(0));

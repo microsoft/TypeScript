@@ -162,7 +162,7 @@ function TodoListNoError({ todos }: TodoListProps) {
 >div : any
 >    : ^^^
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
 >x : TodoListProps
 >  : ^^^^^^^^^^^^^
 

@@ -10,7 +10,7 @@ export as namespace Foo;
 // @filename: a.ts
 import * as Bar from './foo';
 Bar.fn();
-let x: Bar.Thing;
+declare let x: Bar.Thing;
 let y: number = x.n;
 // should error
 let z = Foo;

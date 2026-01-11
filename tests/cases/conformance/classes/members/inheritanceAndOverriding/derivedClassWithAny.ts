@@ -49,9 +49,9 @@ class E extends D {
     }
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 
 c = d;
 c = e;

@@ -1,4 +1,4 @@
-let cond: boolean;
+declare let cond: boolean;
 function a() {
     let x: string | number | boolean;
     for (x = ""; cond; x = 5) {

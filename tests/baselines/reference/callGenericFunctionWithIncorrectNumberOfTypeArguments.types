@@ -70,7 +70,7 @@ var r2b = f2<number, string, number>(1, '');
 >'' : ""
 >   : ^^
 
-var f3: { <T, U>(x: T, y: U): T; }
+declare var f3: { <T, U>(x: T, y: U): T; };
 >f3 : <T, U>(x: T, y: U) => T
 >   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
@@ -166,7 +166,7 @@ interface I {
 >y : U
 >  : ^
 }
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -266,7 +266,7 @@ interface I2<T, U> {
 >y : U
 >  : ^
 }
-var i2: I2<number, string>;
+declare var i2: I2<number, string>;
 >i2 : I2<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 

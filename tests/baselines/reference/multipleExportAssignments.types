@@ -23,7 +23,7 @@ interface connectExport {
 >port : number
 >     : ^^^^^^
 }
-var server: {
+declare const server: {
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
 >       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 

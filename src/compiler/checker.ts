@@ -347,7 +347,6 @@ import {
     getNamespaceDeclarationNode,
     getNewTargetContainer,
     getNonAugmentationDeclaration,
-    getNonModifierTokenPosOfNode,
     getNormalizedAbsolutePath,
     getObjectFlags,
     getOriginalNode,
@@ -384,6 +383,7 @@ import {
     getTextOfPropertyName,
     getThisContainer,
     getThisParameter,
+    getTokenPosOfNode,
     getTrailingSemicolonDeferringWriter,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
@@ -13214,6 +13214,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseTypes(type: InterfaceType): BaseType[] {
+        if (!(getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference))) {
+            return emptyArray;
+        }
         if (!type.baseTypesResolved) {
             if (pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseTypes)) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
@@ -21147,9 +21150,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const { initializer } = node as JsxAttribute;
                 return !!initializer && isContextSensitive(initializer);
             }
-            case SyntaxKind.JsxExpression: {
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.YieldExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
-                const { expression } = node as JsxExpression;
+                const { expression } = node as JsxExpression | YieldExpression;
                 return !!expression && isContextSensitive(expression);
             }
         }
@@ -21158,7 +21162,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node);
+        return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node) || hasContextSensitiveYieldExpression(node);
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -21169,6 +21173,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isContextSensitive(node.body);
         }
         return !!forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression));
+    }
+
+    function hasContextSensitiveYieldExpression(node: FunctionLikeDeclaration): boolean {
+        // yield expressions can be context sensitive in situations like:
+        //
+        // declare function test(gen: () => Generator<(arg: number) => string, void, void>): void;
+        //
+        // test(function* () {
+        //   yield (arg) => String(arg);
+        // });
+        return !!(getFunctionFlags(node) & FunctionFlags.Generator && node.body && forEachYieldExpression(node.body as Block, isContextSensitive));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -31162,7 +31177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
+        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !isForInOrOfStatement(immediateDeclaration.parent.parent) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
         const assumeInitialized = isParameter || isAlias ||
             (isOuterVariable && !isNeverInitialized) ||
             isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
@@ -32693,7 +32708,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
-                return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                const type = instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type;
+                }
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
@@ -32701,9 +32719,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the 'boolean' type from the contextual type such that contextually typed boolean
                 // literals actually end up widening to 'boolean' (see #48363).
                 const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
-                return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
-                    filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                    type;
+                if (!(type.flags & TypeFlags.AnyOrUnknown)) {
+                    return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                        filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                        type;
+                }
             }
         }
         return contextualType;
@@ -34506,10 +34526,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop) &&
             (isThisProperty(location) || isThisInitializedObjectBindingExpression(location) || isObjectBindingPattern(location.parent) && isThisInitializedDeclaration(location.parent.parent))
         ) {
-            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-            if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(location)) {
+            const parentSymbol = getParentOfSymbol(prop);
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Class && isNodeUsedDuringClassInitialization(location)) {
                 if (errorNode) {
-                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!));
+                    error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), symbolToString(parentSymbol));
                 }
                 return false;
             }
@@ -35110,28 +35130,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
      */
     function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
-        if (!(prop.parent!.flags & SymbolFlags.Class)) {
-            return false;
-        }
-        let classType: InterfaceType | undefined = getTypeOfSymbol(prop.parent!) as InterfaceType;
-        while (true) {
-            classType = classType.symbol && getSuperClass(classType) as InterfaceType | undefined;
-            if (!classType) {
-                return false;
-            }
-            const superProperty = getPropertyOfType(classType, prop.escapedName);
-            if (superProperty && superProperty.valueDeclaration) {
-                return true;
+        if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
+            const baseTypes = getBaseTypes(getDeclaredTypeOfSymbol(prop.parent) as InterfaceType);
+            if (baseTypes.length) {
+                const superProperty = getPropertyOfType(baseTypes[0], prop.escapedName);
+                return !!(superProperty && superProperty.valueDeclaration);
             }
         }
-    }
-
-    function getSuperClass(classType: InterfaceType): Type | undefined {
-        const x = getBaseTypes(classType);
-        if (x.length === 0) {
-            return undefined;
-        }
-        return getIntersectionType(x);
+        return false;
     }
 
     function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
@@ -40616,12 +40622,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         checkNullishCoalesceOperandLeft(node);
-        checkNullishCoalesceOperandRight(node);
     }
 
     function checkNullishCoalesceOperandLeft(node: BinaryExpression) {
         const leftTarget = skipOuterExpressions(node.left, OuterExpressionKinds.All);
-
         const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
         if (nullishSemantics !== PredicateSemantics.Sometimes) {
             if (nullishSemantics === PredicateSemantics.Always) {
@@ -40631,25 +40635,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
             }
         }
-    }
-
-    function checkNullishCoalesceOperandRight(node: BinaryExpression) {
-        const rightTarget = skipOuterExpressions(node.right, OuterExpressionKinds.All);
-        const nullishSemantics = getSyntacticNullishnessSemantics(rightTarget);
-        if (isNotWithinNullishCoalesceExpression(node)) {
-            return;
-        }
-
-        if (nullishSemantics === PredicateSemantics.Always) {
-            error(rightTarget, Diagnostics.This_expression_is_always_nullish);
-        }
-        else if (nullishSemantics === PredicateSemantics.Never) {
-            error(rightTarget, Diagnostics.This_expression_is_never_nullish);
-        }
-    }
-
-    function isNotWithinNullishCoalesceExpression(node: BinaryExpression) {
-        return !isBinaryExpression(node.parent) || node.parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
     }
 
     function getSyntacticNullishnessSemantics(node: Node): PredicateSemantics {
@@ -40669,15 +40654,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // List of operators that can produce null/undefined:
                 // = ??= ?? || ||= && &&=
                 switch ((node as BinaryExpression).operatorToken.kind) {
-                    case SyntaxKind.EqualsToken:
-                    case SyntaxKind.QuestionQuestionToken:
-                    case SyntaxKind.QuestionQuestionEqualsToken:
                     case SyntaxKind.BarBarToken:
                     case SyntaxKind.BarBarEqualsToken:
                     case SyntaxKind.AmpersandAmpersandToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
                         return PredicateSemantics.Sometimes;
+                    // For these operator kinds, the right operand is effectively controlling
                     case SyntaxKind.CommaToken:
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.QuestionQuestionToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return getSyntacticNullishnessSemantics((node as BinaryExpression).right);
                 }
                 return PredicateSemantics.Never;
@@ -48178,12 +48164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isIdentifier(node.name)) {
                 checkCollisionsForDeclarationName(node, node.name);
                 if (!(node.flags & (NodeFlags.Namespace | NodeFlags.GlobalAugmentation))) {
-                    const sourceFile = getSourceFileOfNode(node);
-                    const pos = getNonModifierTokenPosOfNode(node);
-                    const span = getSpanOfTokenAtPosition(sourceFile, pos);
-                    suggestionDiagnostics.add(
-                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead),
-                    );
+                    error(node.name, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead);
                 }
             }
 
@@ -49295,8 +49276,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const sourceFile = getSourceFileOfNode(node);
 
-        let start = node.pos;
-        let end = node.end;
+        let startNode = node;
+        let endNode = node;
 
         const parent = node.parent;
         if (canHaveStatements(parent)) {
@@ -49326,13 +49307,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     reportedUnreachableNodes.add(nextNode);
                 }
 
-                start = statements[first].pos;
-                end = statements[last].end;
+                startNode = statements[first];
+                endNode = statements[last];
             }
         }
 
-        start = skipTrivia(sourceFile.text, start);
-        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, end - start, Diagnostics.Unreachable_code_detected));
+        const start = getTokenPosOfNode(startNode, sourceFile);
+        addErrorOrSuggestion(compilerOptions.allowUnreachableCode === false, createFileDiagnostic(sourceFile, start, endNode.end - start, Diagnostics.Unreachable_code_detected));
 
         return true;
     }

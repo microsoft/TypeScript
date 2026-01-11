@@ -9,5 +9,5 @@ declare namespace JSX {
 interface Obj1type {
 	new(n: string): {};
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 <Obj1 x={10} />; // Error

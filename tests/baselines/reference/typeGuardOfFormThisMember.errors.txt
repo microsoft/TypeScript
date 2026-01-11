@@ -98,7 +98,7 @@ typeGuardOfFormThisMember.ts(79,11): error TS2339: Property 'do' does not exist 
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     	}
     
-    	let guard: GenericGuard<File>;
+    	declare var guard: GenericGuard<File>;
     	if (guard.isLeader) {
     		guard.lead();
     		      ~~~~
@@ -120,7 +120,7 @@ typeGuardOfFormThisMember.ts(79,11): error TS2339: Property 'do' does not exist 
     		do(): void;
     	}
     
-    	let general: SpecificGuard;
+    	declare var general: SpecificGuard;
     	if (general.isMoreSpecific) {
     		general.do();
     		        ~~

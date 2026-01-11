@@ -1,13 +1,13 @@
 
 
-var foo1: { new ():any; }   
-var bar1: { x : number; }
+declare var foo1: { new ():any; }   
+declare var bar1: { x : number; }
 
-var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
-var bar2: { x : number; }
+declare var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
+declare var bar2: { x : number; }
 
-var foo3: { ():void; }
-var bar3: { x : number; }
+declare var foo3: { ():void; }
+declare var bar3: { x : number; }
 
 
 

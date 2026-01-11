@@ -1,4 +1,4 @@
-
+// @strict: false
 
 
 
@@ -113,7 +113,7 @@ var propAcc1 = {
 };
 var propAcc1: { m: any; }
 
-// Property access of module member
+// Property access of namespace member
 namespace M2 {
     export var x = M2.x;
     var y = x;

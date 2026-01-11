@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/assigningFromObjectToAnythingElse.ts] ////
 
 === assigningFromObjectToAnythingElse.ts ===
-var x: Object;
->x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 3))
+declare var x: Object;
+>x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 11))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var y: RegExp;
@@ -11,7 +11,7 @@ var y: RegExp;
 
 y = x;
 >y : Symbol(y, Decl(assigningFromObjectToAnythingElse.ts, 1, 3))
->x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 3))
+>x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 11))
 
 var a: String = Object.create<Object>("");
 >a : Symbol(a, Decl(assigningFromObjectToAnythingElse.ts, 4, 3))

@@ -16,8 +16,8 @@ class WorkerFS implements FileSystem {
 
 interface Alpha { x: string; }
 interface Beta { y: number; }
-var x: Alpha;
-var y: Beta;
+declare var x: Alpha;
+declare var y: Beta;
 
 // Only one of these errors should be large
 x = y;
@@ -36,8 +36,6 @@ var WorkerFS = /** @class */ (function () {
     }
     return WorkerFS;
 }());
-var x;
-var y;
 // Only one of these errors should be large
 x = y;
 x = y;

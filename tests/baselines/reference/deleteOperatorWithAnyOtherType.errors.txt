@@ -28,10 +28,10 @@ deleteOperatorWithAnyOtherType.ts(57,8): error TS2703: The operand of a 'delete'
 ==== deleteOperatorWithAnyOtherType.ts (25 errors) ====
     // delete  operator on any type
     
-    var ANY: any;
-    var ANY1;
+    declare var ANY: any;
+    declare var ANY1;
     var ANY2: any[] = ["", ""];
-    var obj: () => {};
+    declare var obj: () => {};
     var obj1 = { x: "", y: () => { }};
     function foo(): any {
         var a;

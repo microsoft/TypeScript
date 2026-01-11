@@ -10,7 +10,7 @@ interface Document2 {
     createElement(tagName: string): Base;
 }
 
-var d2: Document2;
+declare var d2: Document2;
 
 // these are ok
 var htmlElement: Base = d2.createElement("yo")

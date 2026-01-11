@@ -172,26 +172,26 @@ namespace Test {
 >T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 54, 24))
 	}
 
-	let guard: GenericGuard<File>;
->guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 4))
+	declare var guard: GenericGuard<File>;
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 12))
 >GenericGuard : Symbol(GenericGuard, Decl(typeGuardOfFormThisMember.ts, 52, 2))
 >File : Symbol(File, Decl(typeGuardOfFormThisMember.ts, 15, 2))
 
 	if (guard.isLeader) {
 >guard.isLeader : Symbol(GenericGuard.isLeader, Decl(typeGuardOfFormThisMember.ts, 55, 12))
->guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 4))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 12))
 >isLeader : Symbol(GenericGuard.isLeader, Decl(typeGuardOfFormThisMember.ts, 55, 12))
 
 		guard.lead();
->guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 4))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 12))
 	}
 	else if (guard.isFollower) {
 >guard.isFollower : Symbol(GenericGuard.isFollower, Decl(typeGuardOfFormThisMember.ts, 56, 42))
->guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 4))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 12))
 >isFollower : Symbol(GenericGuard.isFollower, Decl(typeGuardOfFormThisMember.ts, 56, 42))
 
 		guard.follow();
->guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 4))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 60, 12))
 	}
 
 	interface SpecificGuard {
@@ -210,17 +210,17 @@ namespace Test {
 >do : Symbol(MoreSpecificGuard.do, Decl(typeGuardOfFormThisMember.ts, 72, 52))
 	}
 
-	let general: SpecificGuard;
->general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 4))
+	declare var general: SpecificGuard;
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 12))
 >SpecificGuard : Symbol(SpecificGuard, Decl(typeGuardOfFormThisMember.ts, 66, 2))
 
 	if (general.isMoreSpecific) {
 >general.isMoreSpecific : Symbol(SpecificGuard.isMoreSpecific, Decl(typeGuardOfFormThisMember.ts, 68, 26))
->general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 4))
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 12))
 >isMoreSpecific : Symbol(SpecificGuard.isMoreSpecific, Decl(typeGuardOfFormThisMember.ts, 68, 26))
 
 		general.do();
->general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 4))
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 76, 12))
 	}
 }
 

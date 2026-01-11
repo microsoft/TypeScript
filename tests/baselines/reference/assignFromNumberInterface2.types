@@ -47,11 +47,11 @@ var x = 1;
 >1 : 1
 >  : ^
 
-var a: Number;
+declare var a: Number;
 >a : Number
 >  : ^^^^^^
 
-var b: NotNumber;
+declare var b: NotNumber;
 >b : NotNumber
 >  : ^^^^^^^^^
 

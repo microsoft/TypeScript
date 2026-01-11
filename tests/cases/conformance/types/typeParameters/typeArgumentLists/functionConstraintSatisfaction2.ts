@@ -12,13 +12,13 @@ class C {
     foo: string;
 }
 
-var b: { new (x: string): string };
+declare var b: { new (x: string): string };
 
 class C2<T> {
     foo: T;
 }
 
-var b2: { new <T>(x: T): T };
+declare var b2: { new <T>(x: T): T };
 
 var r = foo2(new Function());
 var r2 = foo2((x: string[]) => x);
@@ -30,7 +30,7 @@ var r13 = foo2(C2);
 var r14 = foo2(b2);
 
 interface F2 extends Function { foo: string; }
-var f2: F2;
+declare var f2: F2;
 var r16 = foo2(f2);
 
 function fff<T extends { (): void }, U extends T>(x: T, y: U) {

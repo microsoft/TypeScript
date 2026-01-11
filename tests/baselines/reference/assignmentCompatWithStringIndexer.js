@@ -11,13 +11,13 @@ class A {
     [x: string]: Base;
 }
 
-var a: A;
+declare var a: A;
 
-var b: { [x: string]: Derived; }
+declare var b: { [x: string]: Derived; };
 a = b; // ok
 b = a; // error
 
-var b2: { [x: string]: Derived2; }
+declare var b2: { [x: string]: Derived2; };
 a = b2; // ok
 b2 = a; // error
 
@@ -30,8 +30,8 @@ namespace Generics {
         [x: string]: Derived; // ok
     }
 
-    var b1: { [x: string]: Derived; };
-    var a1: A<Base>;
+    declare var b1: { [x: string]: Derived; };
+    declare var a1: A<Base>;
     a1 = b1; // ok
     b1 = a1; // error
 
@@ -39,7 +39,7 @@ namespace Generics {
         [x: string]: Derived2; // ok
     }
 
-    var b2: { [x: string]: Derived2; };
+    declare var b2: { [x: string]: Derived2; };
     a1 = b2; // ok
     b2 = a1; // error
 
@@ -54,6 +54,7 @@ namespace Generics {
         b4 = a3; // error
     }
 }
+
 
 //// [assignmentCompatWithStringIndexer.js]
 // index signatures must be compatible in assignments
@@ -77,11 +78,8 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-var a;
-var b;
 a = b; // ok
 b = a; // error
-var b2;
 a = b2; // ok
 b2 = a; // error
 var Generics;
@@ -98,8 +96,6 @@ var Generics;
         }
         return B;
     }(A));
-    var b1;
-    var a1;
     a1 = b1; // ok
     b1 = a1; // error
     var B2 = /** @class */ (function (_super) {
@@ -109,7 +105,6 @@ var Generics;
         }
         return B2;
     }(A));
-    var b2;
     a1 = b2; // ok
     b2 = a1; // error
     function foo() {

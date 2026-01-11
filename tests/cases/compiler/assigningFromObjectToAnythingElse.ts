@@ -1,4 +1,4 @@
-var x: Object;
+declare var x: Object;
 var y: RegExp;
 y = x;
 

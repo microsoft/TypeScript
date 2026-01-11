@@ -1,8 +1,8 @@
 class Narrow {
-    narrowed: boolean
+    narrowed!: boolean
 }
 
-var a: object
+declare var a: object;
 
 if (a instanceof Narrow) {
     a.narrowed; // ok
@@ -13,7 +13,7 @@ if (typeof a === 'number') {
     a.toFixed(); // error, never
 }
 
-var b: object | null
+declare var b: object | null;
 
 if (typeof b === 'object') {
    b.toString(); // ok, object | null

@@ -19,7 +19,7 @@ interface I2 {
 >p1 : string
 >   : ^^^^^^
 }
-var i2: I2;
+declare var i2: I2;
 >i2 : I2
 >   : ^^
 

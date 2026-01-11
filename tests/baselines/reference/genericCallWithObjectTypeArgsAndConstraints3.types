@@ -42,7 +42,7 @@ function f<T extends Base>(a: { x: T; y: T }) {
 >y : T
 >  : ^
 
-    var r: T;
+    var r!: T;
 >r : T
 >  : ^
 
@@ -83,7 +83,7 @@ function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
 >a : U
 >  : ^
 
-    var r: T;
+    var r!: T;
 >r : T
 >  : ^
 

@@ -6,9 +6,9 @@ class X { propertyX: any; propertyX1: number; propertyX2: string };
 class A extends X { propertyA: number };
 class B extends X { propertyB: string };
 
-var x: X;
-var a: A;
-var b: B;
+declare var x: X;
+declare var a: A;
+declare var b: B;
 
 // No errors anymore, uses union types
 true ? a : b;
@@ -64,9 +64,6 @@ var B = /** @class */ (function (_super) {
     return B;
 }(X));
 ;
-var x;
-var a;
-var b;
 // No errors anymore, uses union types
 true ? a : b;
 var result1 = true ? a : b;

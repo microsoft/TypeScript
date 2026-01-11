@@ -13,26 +13,26 @@ class C {
     public c: string;
 }
 
-var a1: { fn(): Base };
-var b1: { new (): Base };
+declare var a1: { fn(): Base };
+declare var b1: { new (): Base };
 
-var a2: { fn(a: number, b: string): void };
-var b2: { fn(a: string): void };
+declare var a2: { fn(a: number, b: string): void };
+declare var b2: { fn(a: string): void };
 
-var a3: { fn(a: Base, b: string): void };
-var b3: { fn(a: Derived, b: Base): void };
+declare var a3: { fn(a: Base, b: string): void };
+declare var b3: { fn(a: Derived, b: Base): void };
 
-var a4: { fn(): Base };
-var b4: { fn(): C };
+declare var a4: { fn(): Base };
+declare var b4: { fn(): C };
 
-var a5: { fn(a?: Base): void };
-var b5: { fn(a?: C): void };
+declare var a5: { fn(a?: Base): void };
+declare var b5: { fn(a?: C): void };
 
-var a6: { fn(...a: Base[]): void };
-var b6: { fn(...a: C[]): void };
+declare var a6: { fn(...a: Base[]): void };
+declare var b6: { fn(...a: C[]): void };
 
-var a7: { fn<T>(t: T): T };
-var b7: { fn<T>(t: T[]): T };
+declare var a7: { fn<T>(t: T): T };
+declare var b7: { fn<T>(t: T[]): T };
 
 // operator <
 var r1a1 = a1 < b1;
@@ -203,20 +203,6 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var a1;
-var b1;
-var a2;
-var b2;
-var a3;
-var b3;
-var a4;
-var b4;
-var a5;
-var b5;
-var a6;
-var b6;
-var a7;
-var b7;
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

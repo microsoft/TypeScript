@@ -52,9 +52,9 @@ class E extends D {
     }
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 
 c = d;
 c = e;
@@ -153,9 +153,6 @@ var E = /** @class */ (function (_super) {
     };
     return E;
 }(D));
-var c;
-var d;
-var e;
 c = d;
 c = e;
 var r = c.foo(); // e.foo would return string

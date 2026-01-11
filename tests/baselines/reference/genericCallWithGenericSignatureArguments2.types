@@ -20,7 +20,7 @@ namespace onlyT {
 >x : T
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -115,7 +115,7 @@ namespace onlyT {
 >x : T
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -199,7 +199,7 @@ namespace onlyT {
 >x : T
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -261,7 +261,7 @@ namespace TU {
 >x : U
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -355,7 +355,7 @@ namespace TU {
 >x : U
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -439,7 +439,7 @@ namespace TU {
 >x : U
 >  : ^
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T

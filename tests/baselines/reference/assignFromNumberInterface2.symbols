@@ -37,36 +37,36 @@ interface NotNumber {
 var x = 1;
 >x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
 
-var a: Number;
->a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+declare var a: Number;
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 11))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromNumberInterface2.ts, 0, 0))
 
-var b: NotNumber;
->b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+declare var b: NotNumber;
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 11))
 >NotNumber : Symbol(NotNumber, Decl(assignFromNumberInterface2.ts, 2, 1))
 
 a = x; 
->a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 11))
 >x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
 
 a = b; 
->a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
->b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 11))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 11))
 
 b = a; 
->b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
->a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 11))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 11))
 
 b = x; 
->b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 11))
 >x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
 
 x = a; // expected error
 >x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
->a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 11))
 
 x = b; // expected error
 >x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
->b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 11))
 
 

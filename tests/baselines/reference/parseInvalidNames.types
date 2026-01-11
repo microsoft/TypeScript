@@ -13,12 +13,6 @@ interface 100 {}
 >100 : 100
 >    : ^^^
 
-namespace 100 {}
->namespace : any
->          : ^^^
->100 : 100
->    : ^^^
-
 type 100 {}
 >type : any
 >     : ^^^
@@ -33,12 +27,6 @@ export namespace 100 {}
 
 export interface 100 {}
 >interface : any
->          : ^^^
->100 : 100
->    : ^^^
-
-export namespace 100 {}
->namespace : any
 >          : ^^^
 >100 : 100
 >    : ^^^

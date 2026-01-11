@@ -41,7 +41,7 @@ decrementOperatorWithUnsupportedStringType.ts(65,11): error TS2356: An arithmeti
 
 ==== decrementOperatorWithUnsupportedStringType.ts (39 errors) ====
     // -- operator on string type
-    var STRING: string;
+    declare var STRING: string;
     var STRING1: string[] = ["", ""];
     
     function foo(): string { return ""; }

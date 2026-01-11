@@ -3,7 +3,7 @@ typeofOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator
 
 ==== typeofOperatorWithNumberType.ts (1 errors) ====
     // typeof  operator on number type
-    var NUMBER: number;
+    declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
     
     function foo(): number { return 1; }
@@ -13,7 +13,7 @@ typeofOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator
         static foo() { return 1; }
     }
     namespace M {
-        export var n: number;
+        export var n!: number;
     }
     
     var objA = new A();
@@ -51,8 +51,9 @@ typeofOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // use typeof in type query
-    var z: number;
-    var x: number[];
+    declare var z: number;
+    declare var x: number[];
+    declare var r: () => number;
     z: typeof NUMBER;
     x: typeof NUMBER1;
     r: typeof foo;

@@ -11,7 +11,7 @@ class X<T> {
 }
 
 function foo<T>(t: X<T>, t2: X<T>) {
-    var x: T;
+    var x!: T;
     return x;
 }
 

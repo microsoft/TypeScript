@@ -21,9 +21,9 @@ derivedClassTransitivity4.ts(19,11): error TS2445: Property 'foo' is protected a
         public foo(x?: string) { } // ok to add optional parameters
     }
     
-    var c: C;
-    var d: D;
-    var e: E;
+    declare var c: C;
+    declare var d: D;
+    declare var e: E;
     c = e;
     ~
 !!! error TS2322: Type 'E' is not assignable to type 'C'.

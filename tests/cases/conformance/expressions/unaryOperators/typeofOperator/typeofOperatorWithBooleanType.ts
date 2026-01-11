@@ -1,7 +1,8 @@
+// @noImplicitAny: false
 // @allowUnusedLabels: true
 
 // typeof  operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -10,7 +11,7 @@ class A {
     static foo() { return false; }
 }
 namespace M {
-    export var n: boolean;
+    export var n!: boolean;
 }
 
 var objA = new A();
@@ -40,9 +41,9 @@ typeof objA.a;
 typeof M.n;
 
 // use typeof in type query
-var z: boolean;
-var x: boolean[];
-var r: () => boolean;
+declare var z: boolean;
+declare var x: boolean[];
+declare var r: () => boolean;
 z: typeof BOOLEAN;
 r: typeof foo;
 var y = { a: true, b: false};

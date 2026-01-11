@@ -2,7 +2,7 @@
 
 === deleteOperatorWithStringType.ts ===
 // delete  operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 >       : ^^^^^^
 

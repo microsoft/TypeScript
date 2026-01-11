@@ -2,7 +2,7 @@
 
 === typeofOperatorWithBooleanType.ts ===
 // typeof  operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 >        : ^^^^^^^
 
@@ -30,7 +30,7 @@ namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export var n: boolean;
+    export var n!: boolean;
 >n : boolean
 >  : ^^^^^^^
 }
@@ -189,15 +189,15 @@ typeof M.n;
 >  : ^^^^^^^
 
 // use typeof in type query
-var z: boolean;
+declare var z: boolean;
 >z : boolean
 >  : ^^^^^^^
 
-var x: boolean[];
+declare var x: boolean[];
 >x : boolean[]
 >  : ^^^^^^^^^
 
-var r: () => boolean;
+declare var r: () => boolean;
 >r : () => boolean
 >  : ^^^^^^       
 

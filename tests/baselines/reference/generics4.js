@@ -4,8 +4,8 @@
 class C<T> { private x: T; }
 interface X { f(): string; }
 interface Y { f(): boolean; }
-var a: C<X>;
-var b: C<Y>;
+declare var a: C<X>;
+declare var b: C<Y>;
 
 a = b; // Not ok - return types of "f" are different
 
@@ -15,6 +15,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var a;
-var b;
 a = b; // Not ok - return types of "f" are different

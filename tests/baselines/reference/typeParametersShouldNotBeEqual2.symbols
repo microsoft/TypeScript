@@ -15,7 +15,7 @@ function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
 >V : Symbol(V, Decl(typeParametersShouldNotBeEqual2.ts, 0, 43))
 
-    var zz: Object;
+    var zz!: Object;
 >zz : Symbol(zz, Decl(typeParametersShouldNotBeEqual2.ts, 1, 7))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

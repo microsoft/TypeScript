@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements01.ts] ////
 
 //// [stringLiteralsWithSwitchStatements01.ts]
-let x: "foo";
-let y: "foo" | "bar"; 
+declare let x: "foo";
+declare let y: "foo" | "bar";
 
 switch (x) {
     case "foo":
@@ -16,8 +16,6 @@ switch (x) {
 
 
 //// [stringLiteralsWithSwitchStatements01.js]
-var x;
-var y;
 switch (x) {
     case "foo":
         break;

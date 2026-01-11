@@ -27,24 +27,24 @@ interface baz {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
-var barbaz: baz;
->barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
+declare var barbaz: baz;
+>barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 11))
 >baz : Symbol(baz, Decl(functionAssignment.ts, 5, 1))
 
-var test: foo;
->test : Symbol(test, Decl(functionAssignment.ts, 12, 3))
+declare var test: foo;
+>test : Symbol(test, Decl(functionAssignment.ts, 12, 11))
 >foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
 
 test.get(function (param) {
 >test.get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
->test : Symbol(test, Decl(functionAssignment.ts, 12, 3))
+>test : Symbol(test, Decl(functionAssignment.ts, 12, 11))
 >get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
 >param : Symbol(param, Decl(functionAssignment.ts, 14, 19))
 
     var x = barbaz.get(function () { });
 >x : Symbol(x, Decl(functionAssignment.ts, 15, 7))
 >barbaz.get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
->barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
+>barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 11))
 >get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
 
 });
