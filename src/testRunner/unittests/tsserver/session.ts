@@ -193,7 +193,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                     newLine: ts.NewLineKind.LineFeed,
                     moduleResolution: ts.ModuleResolutionKind.Node10,
                     allowNonTsExtensions: true, // injected by tsserver
-                } as ts.CompilerOptions,
+                },
             );
         });
 

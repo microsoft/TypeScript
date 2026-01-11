@@ -927,20 +927,20 @@ describe("unittests:: tsserver:: projects::", () => {
             arguments: {
                 file: f1.path,
             },
-        } as ts.server.protocol.OpenRequest);
+        });
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.Close,
             arguments: {
                 file: f1.path,
             },
-        } as ts.server.protocol.CloseRequest);
+        });
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
                 delay: 0,
                 files: [f1.path],
             },
-        } as ts.server.protocol.GeterrRequest);
+        });
         baselineTsserverLogs("projects", "getting errors from closed script info does not throw exception because of getting project from orphan script info", session);
     });
 
