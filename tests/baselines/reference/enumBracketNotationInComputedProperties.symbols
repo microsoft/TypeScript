@@ -1,0 +1,195 @@
+//// [tests/cases/compiler/enumBracketNotationInComputedProperties.ts] ////
+
+=== enumBracketNotationInComputedProperties.ts ===
+// Test for issue #25083: Enum keys should be accepted as computed properties
+// when using bracket notation
+
+enum Type {
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+
+    Foo = 'foo',
+>Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    Bar = 'bar',
+>Bar : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+
+    '3x14' = '3x14', // Non-identifier name
+>'3x14' : Symbol(Type['3x14'], Decl(enumBracketNotationInComputedProperties.ts, 5, 16))
+
+    '0digit' = '0digit' // Starts with digit
+>'0digit' : Symbol(Type['0digit'], Decl(enumBracketNotationInComputedProperties.ts, 6, 20))
+}
+
+// These should all work - dot notation (already works)
+type TypeMapDot = {
+>TypeMapDot : Symbol(TypeMapDot, Decl(enumBracketNotationInComputedProperties.ts, 8, 1))
+
+    [Type.Foo]: string;
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumBracketNotationInComputedProperties.ts, 11, 19))
+>Type.Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type.Bar]: number;
+>[Type.Bar] : Symbol([Type.Bar], Decl(enumBracketNotationInComputedProperties.ts, 12, 23))
+>Type.Bar : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Bar : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+}
+
+// These should also work - bracket notation with identifier names
+type TypeMapBracketIdentifier = {
+>TypeMapBracketIdentifier : Symbol(TypeMapBracketIdentifier, Decl(enumBracketNotationInComputedProperties.ts, 14, 1))
+
+    [Type['Foo']]: string;
+>[Type['Foo']] : Symbol([Type['Foo']], Decl(enumBracketNotationInComputedProperties.ts, 17, 33))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Foo' : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type['Bar']]: number;
+>[Type['Bar']] : Symbol([Type['Bar']], Decl(enumBracketNotationInComputedProperties.ts, 18, 26))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Bar' : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+}
+
+// These should work - bracket notation with non-identifier names
+// This is the main fix for #25083
+type TypeMapBracketNonIdentifier = {
+>TypeMapBracketNonIdentifier : Symbol(TypeMapBracketNonIdentifier, Decl(enumBracketNotationInComputedProperties.ts, 20, 1))
+
+    [Type['3x14']]: boolean;
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumBracketNotationInComputedProperties.ts, 24, 36))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumBracketNotationInComputedProperties.ts, 5, 16))
+
+    [Type['0digit']]: object;
+>[Type['0digit']] : Symbol([Type['0digit']], Decl(enumBracketNotationInComputedProperties.ts, 25, 28))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'0digit' : Symbol(Type['0digit'], Decl(enumBracketNotationInComputedProperties.ts, 6, 20))
+}
+
+// Mixed usage should also work
+type TypeMapMixed = {
+>TypeMapMixed : Symbol(TypeMapMixed, Decl(enumBracketNotationInComputedProperties.ts, 27, 1))
+
+    [Type.Foo]: string;
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumBracketNotationInComputedProperties.ts, 30, 21))
+>Type.Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type['Bar']]: number;
+>[Type['Bar']] : Symbol([Type['Bar']], Decl(enumBracketNotationInComputedProperties.ts, 31, 23))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Bar' : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+
+    [Type['3x14']]: boolean;
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumBracketNotationInComputedProperties.ts, 32, 26))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumBracketNotationInComputedProperties.ts, 5, 16))
+}
+
+// Should work with const enums too
+const enum ConstType {
+>ConstType : Symbol(ConstType, Decl(enumBracketNotationInComputedProperties.ts, 34, 1))
+
+    Alpha = 'alpha',
+>Alpha : Symbol(ConstType.Alpha, Decl(enumBracketNotationInComputedProperties.ts, 37, 22))
+
+    '2beta' = '2beta'
+>'2beta' : Symbol(ConstType['2beta'], Decl(enumBracketNotationInComputedProperties.ts, 38, 20))
+}
+
+type ConstTypeMap = {
+>ConstTypeMap : Symbol(ConstTypeMap, Decl(enumBracketNotationInComputedProperties.ts, 40, 1))
+
+    [ConstType.Alpha]: string;
+>[ConstType.Alpha] : Symbol([ConstType.Alpha], Decl(enumBracketNotationInComputedProperties.ts, 42, 21), Decl(enumBracketNotationInComputedProperties.ts, 43, 30))
+>ConstType.Alpha : Symbol(ConstType.Alpha, Decl(enumBracketNotationInComputedProperties.ts, 37, 22))
+>ConstType : Symbol(ConstType, Decl(enumBracketNotationInComputedProperties.ts, 34, 1))
+>Alpha : Symbol(ConstType.Alpha, Decl(enumBracketNotationInComputedProperties.ts, 37, 22))
+
+    [ConstType['Alpha']]: string;
+>[ConstType['Alpha']] : Symbol([ConstType.Alpha], Decl(enumBracketNotationInComputedProperties.ts, 42, 21), Decl(enumBracketNotationInComputedProperties.ts, 43, 30))
+>ConstType : Symbol(ConstType, Decl(enumBracketNotationInComputedProperties.ts, 34, 1))
+>'Alpha' : Symbol(ConstType.Alpha, Decl(enumBracketNotationInComputedProperties.ts, 37, 22))
+
+    [ConstType['2beta']]: number;
+>[ConstType['2beta']] : Symbol([ConstType['2beta']], Decl(enumBracketNotationInComputedProperties.ts, 44, 33))
+>ConstType : Symbol(ConstType, Decl(enumBracketNotationInComputedProperties.ts, 34, 1))
+>'2beta' : Symbol(ConstType['2beta'], Decl(enumBracketNotationInComputedProperties.ts, 38, 20))
+}
+
+// Verify that the types work correctly at runtime level
+const dotNotation: TypeMapDot = {
+>dotNotation : Symbol(dotNotation, Decl(enumBracketNotationInComputedProperties.ts, 49, 5))
+>TypeMapDot : Symbol(TypeMapDot, Decl(enumBracketNotationInComputedProperties.ts, 8, 1))
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumBracketNotationInComputedProperties.ts, 49, 33))
+>Type.Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type.Bar]: 123
+>[Type.Bar] : Symbol([Type.Bar], Decl(enumBracketNotationInComputedProperties.ts, 50, 23))
+>Type.Bar : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Bar : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+
+};
+
+const bracketNotation: TypeMapBracketIdentifier = {
+>bracketNotation : Symbol(bracketNotation, Decl(enumBracketNotationInComputedProperties.ts, 54, 5))
+>TypeMapBracketIdentifier : Symbol(TypeMapBracketIdentifier, Decl(enumBracketNotationInComputedProperties.ts, 14, 1))
+
+    [Type['Foo']]: 'test',
+>[Type['Foo']] : Symbol([Type['Foo']], Decl(enumBracketNotationInComputedProperties.ts, 54, 51))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Foo' : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type['Bar']]: 456
+>[Type['Bar']] : Symbol([Type['Bar']], Decl(enumBracketNotationInComputedProperties.ts, 55, 26))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Bar' : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+
+};
+
+const nonIdentifierBracket: TypeMapBracketNonIdentifier = {
+>nonIdentifierBracket : Symbol(nonIdentifierBracket, Decl(enumBracketNotationInComputedProperties.ts, 59, 5))
+>TypeMapBracketNonIdentifier : Symbol(TypeMapBracketNonIdentifier, Decl(enumBracketNotationInComputedProperties.ts, 20, 1))
+
+    [Type['3x14']]: true,
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumBracketNotationInComputedProperties.ts, 59, 59))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumBracketNotationInComputedProperties.ts, 5, 16))
+
+    [Type['0digit']]: {}
+>[Type['0digit']] : Symbol([Type['0digit']], Decl(enumBracketNotationInComputedProperties.ts, 60, 25))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'0digit' : Symbol(Type['0digit'], Decl(enumBracketNotationInComputedProperties.ts, 6, 20))
+
+};
+
+const mixed: TypeMapMixed = {
+>mixed : Symbol(mixed, Decl(enumBracketNotationInComputedProperties.ts, 64, 5))
+>TypeMapMixed : Symbol(TypeMapMixed, Decl(enumBracketNotationInComputedProperties.ts, 27, 1))
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumBracketNotationInComputedProperties.ts, 64, 29))
+>Type.Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumBracketNotationInComputedProperties.ts, 3, 11))
+
+    [Type['Bar']]: 789,
+>[Type['Bar']] : Symbol([Type['Bar']], Decl(enumBracketNotationInComputedProperties.ts, 65, 23))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'Bar' : Symbol(Type.Bar, Decl(enumBracketNotationInComputedProperties.ts, 4, 16))
+
+    [Type['3x14']]: false
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumBracketNotationInComputedProperties.ts, 66, 23))
+>Type : Symbol(Type, Decl(enumBracketNotationInComputedProperties.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumBracketNotationInComputedProperties.ts, 5, 16))
+
+};
+

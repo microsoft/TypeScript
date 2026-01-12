@@ -1,0 +1,344 @@
+//// [tests/cases/compiler/enumBracketNotationInComputedProperties.ts] ////
+
+=== enumBracketNotationInComputedProperties.ts ===
+// Test for issue #25083: Enum keys should be accepted as computed properties
+// when using bracket notation
+
+enum Type {
+>Type : Type
+>     : ^^^^
+
+    Foo = 'foo',
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    Bar = 'bar',
+>Bar : Type.Bar
+>    : ^^^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+    '3x14' = '3x14', // Non-identifier name
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+
+    '0digit' = '0digit' // Starts with digit
+>'0digit' : (typeof Type)["0digit"]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+>'0digit' : "0digit"
+>         : ^^^^^^^^
+}
+
+// These should all work - dot notation (already works)
+type TypeMapDot = {
+>TypeMapDot : TypeMapDot
+>           : ^^^^^^^^^^
+
+    [Type.Foo]: string;
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+    [Type.Bar]: number;
+>[Type.Bar] : number
+>           : ^^^^^^
+>Type.Bar : Type.Bar
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Bar : Type.Bar
+>    : ^^^^^^^^
+}
+
+// These should also work - bracket notation with identifier names
+type TypeMapBracketIdentifier = {
+>TypeMapBracketIdentifier : TypeMapBracketIdentifier
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type['Foo']]: string;
+>[Type['Foo']] : string
+>              : ^^^^^^
+>Type['Foo'] : Type.Foo
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Foo' : "Foo"
+>      : ^^^^^
+
+    [Type['Bar']]: number;
+>[Type['Bar']] : number
+>              : ^^^^^^
+>Type['Bar'] : Type.Bar
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Bar' : "Bar"
+>      : ^^^^^
+}
+
+// These should work - bracket notation with non-identifier names
+// This is the main fix for #25083
+type TypeMapBracketNonIdentifier = {
+>TypeMapBracketNonIdentifier : TypeMapBracketNonIdentifier
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type['3x14']]: boolean;
+>[Type['3x14']] : boolean
+>               : ^^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+
+    [Type['0digit']]: object;
+>[Type['0digit']] : object
+>                 : ^^^^^^
+>Type['0digit'] : (typeof Type)["0digit"]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'0digit' : "0digit"
+>         : ^^^^^^^^
+}
+
+// Mixed usage should also work
+type TypeMapMixed = {
+>TypeMapMixed : TypeMapMixed
+>             : ^^^^^^^^^^^^
+
+    [Type.Foo]: string;
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+    [Type['Bar']]: number;
+>[Type['Bar']] : number
+>              : ^^^^^^
+>Type['Bar'] : Type.Bar
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Bar' : "Bar"
+>      : ^^^^^
+
+    [Type['3x14']]: boolean;
+>[Type['3x14']] : boolean
+>               : ^^^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+// Should work with const enums too
+const enum ConstType {
+>ConstType : ConstType
+>          : ^^^^^^^^^
+
+    Alpha = 'alpha',
+>Alpha : ConstType.Alpha
+>      : ^^^^^^^^^^^^^^^
+>'alpha' : "alpha"
+>        : ^^^^^^^
+
+    '2beta' = '2beta'
+>'2beta' : (typeof ConstType)["2beta"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'2beta' : "2beta"
+>        : ^^^^^^^
+}
+
+type ConstTypeMap = {
+>ConstTypeMap : ConstTypeMap
+>             : ^^^^^^^^^^^^
+
+    [ConstType.Alpha]: string;
+>[ConstType.Alpha] : string
+>                  : ^^^^^^
+>ConstType.Alpha : ConstType.Alpha
+>                : ^^^^^^^^^^^^^^^
+>ConstType : typeof ConstType
+>          : ^^^^^^^^^^^^^^^^
+>Alpha : ConstType.Alpha
+>      : ^^^^^^^^^^^^^^^
+
+    [ConstType['Alpha']]: string;
+>[ConstType['Alpha']] : string
+>                     : ^^^^^^
+>ConstType['Alpha'] : ConstType.Alpha
+>                   : ^^^^^^^^^^^^^^^
+>ConstType : typeof ConstType
+>          : ^^^^^^^^^^^^^^^^
+>'Alpha' : "Alpha"
+>        : ^^^^^^^
+
+    [ConstType['2beta']]: number;
+>[ConstType['2beta']] : number
+>                     : ^^^^^^
+>ConstType['2beta'] : (typeof ConstType)["2beta"]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ConstType : typeof ConstType
+>          : ^^^^^^^^^^^^^^^^
+>'2beta' : "2beta"
+>        : ^^^^^^^
+}
+
+// Verify that the types work correctly at runtime level
+const dotNotation: TypeMapDot = {
+>dotNotation : TypeMapDot
+>            : ^^^^^^^^^^
+>{    [Type.Foo]: 'test',    [Type.Bar]: 123} : { foo: string; bar: number; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+    [Type.Bar]: 123
+>[Type.Bar] : number
+>           : ^^^^^^
+>Type.Bar : Type.Bar
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Bar : Type.Bar
+>    : ^^^^^^^^
+>123 : 123
+>    : ^^^
+
+};
+
+const bracketNotation: TypeMapBracketIdentifier = {
+>bracketNotation : TypeMapBracketIdentifier
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [Type['Foo']]: 'test',    [Type['Bar']]: 456} : { foo: string; bar: number; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type['Foo']]: 'test',
+>[Type['Foo']] : string
+>              : ^^^^^^
+>Type['Foo'] : Type.Foo
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Foo' : "Foo"
+>      : ^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+    [Type['Bar']]: 456
+>[Type['Bar']] : number
+>              : ^^^^^^
+>Type['Bar'] : Type.Bar
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Bar' : "Bar"
+>      : ^^^^^
+>456 : 456
+>    : ^^^
+
+};
+
+const nonIdentifierBracket: TypeMapBracketNonIdentifier = {
+>nonIdentifierBracket : TypeMapBracketNonIdentifier
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [Type['3x14']]: true,    [Type['0digit']]: {}} : { "3x14": true; "0digit": {}; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type['3x14']]: true,
+>[Type['3x14']] : true
+>               : ^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+>true : true
+>     : ^^^^
+
+    [Type['0digit']]: {}
+>[Type['0digit']] : {}
+>                 : ^^
+>Type['0digit'] : (typeof Type)["0digit"]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'0digit' : "0digit"
+>         : ^^^^^^^^
+>{} : {}
+>   : ^^
+
+};
+
+const mixed: TypeMapMixed = {
+>mixed : TypeMapMixed
+>      : ^^^^^^^^^^^^
+>{    [Type.Foo]: 'test',    [Type['Bar']]: 789,    [Type['3x14']]: false} : { foo: string; bar: number; "3x14": false; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Type.Foo]: 'test',
+>[Type.Foo] : string
+>           : ^^^^^^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+
+    [Type['Bar']]: 789,
+>[Type['Bar']] : number
+>              : ^^^^^^
+>Type['Bar'] : Type.Bar
+>            : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'Bar' : "Bar"
+>      : ^^^^^
+>789 : 789
+>    : ^^^
+
+    [Type['3x14']]: false
+>[Type['3x14']] : false
+>               : ^^^^^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+>false : false
+>      : ^^^^^
+
+};
+
