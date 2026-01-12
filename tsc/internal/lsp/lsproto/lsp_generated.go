@@ -10853,14 +10853,14 @@ func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jso
 
 // The parameters of a RenameRequest.
 type RenameParams struct {
-	// An optional token that a server can use to report work done progress.
-	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
-
-	// The document to rename.
+	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 
-	// The position at which this request was sent.
+	// The position inside the text document.
 	Position Position `json:"position"`
+
+	// An optional token that a server can use to report work done progress.
+	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
 
 	// The new name of the symbol. If the given name is not valid the
 	// request must return a ResponseError with an
@@ -10900,10 +10900,6 @@ func (s *RenameParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 			return err
 		}
 		switch string(name) {
-		case `"workDoneToken"`:
-			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
-				return err
-			}
 		case `"textDocument"`:
 			missing &^= missingTextDocument
 			if err := json.UnmarshalDecode(dec, &s.TextDocument); err != nil {
@@ -10912,6 +10908,10 @@ func (s *RenameParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		case `"position"`:
 			missing &^= missingPosition
 			if err := json.UnmarshalDecode(dec, &s.Position); err != nil {
+				return err
+			}
+		case `"workDoneToken"`:
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"newName"`:
