@@ -21,7 +21,7 @@ namespace m1 {
 >n : number
 >  : ^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 
@@ -68,7 +68,7 @@ namespace m2 {
 >s : string
 >  : ^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 
@@ -121,7 +121,7 @@ namespace m3 {
 >n : number
 >  : ^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 
@@ -180,7 +180,7 @@ namespace m4 {
 >s : string
 >  : ^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 
@@ -255,7 +255,7 @@ namespace m5 {
 >s : string
 >  : ^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 
@@ -320,7 +320,7 @@ namespace m6 {
 >b : boolean
 >  : ^^^^^^^
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 

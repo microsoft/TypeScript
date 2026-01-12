@@ -38,7 +38,7 @@ test.tsx(13,5): error TS2874: This JSX tag requires 'React' to be in scope, but 
 ==== test.tsx (2 errors) ====
     import { Element} from './Element';
     
-    let c: {
+    declare let c: {
     	a?: {
     		b: string
     	}

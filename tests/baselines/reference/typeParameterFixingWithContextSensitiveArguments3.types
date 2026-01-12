@@ -35,7 +35,7 @@ interface B extends A { b: B; }
 >b : B
 >  : ^
 
-var a: A, b: B;
+declare var a: A, b: B;
 >a : A
 >  : ^
 >b : B

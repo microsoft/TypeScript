@@ -82,7 +82,7 @@ function f5(): number {
 >   : ^^^^^^      
 }
 
-var m;
+declare var m: any;
 >m : any
 >  : ^^^
 

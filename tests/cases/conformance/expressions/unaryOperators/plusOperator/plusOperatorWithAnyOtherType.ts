@@ -1,24 +1,24 @@
 // + operator on any type
 
-var ANY: any;
-var ANY1;
+declare var ANY: any;
+declare var ANY1: any;
 var ANY2: any[] = ["", ""];
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: (s: string) => { }, y: (s1) => { }};
 
 function foo(): any {
-    var a;
+    var a = undefined;
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo() {
-        var a;
+        var a: any = undefined;
         return a;
     }
 }
 namespace M {
-    export var n: any;
+    export var n: any = undefined;
 }
 var objA = new A();
 

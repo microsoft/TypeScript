@@ -1202,19 +1202,19 @@ interface Foo {
 >b : string
 >  : ^^^^^^
 }
-var x: any;
+declare var x: any;
 >x : any
 >  : ^^^
 
-var arr: any[];
+declare var arr: any[];
 >arr : any[]
 >    : ^^^^^
 
-var foo: Foo;
+declare var foo: Foo;
 >foo : Foo
 >    : ^^^
 
-var fooProm: Promise<Foo>;
+declare var fooProm: Promise<Foo>;
 >fooProm : Promise<Foo>
 >        : ^^^^^^^^^^^^
 

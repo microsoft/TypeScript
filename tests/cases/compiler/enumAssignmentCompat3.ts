@@ -54,16 +54,16 @@ namespace Merged2 {
     }
 }
 
-var abc: First.E;
-var secondAbc: Abc.E;
-var secondAbcd: Abcd.E;
-var secondAb: Ab.E;
-var secondCd: Cd.E;
-var nope: Abc.Nope;
-var k: Const.E;
-var decl: Decl.E;
-var merged: Merged.E;
-var merged2: Merged2.E;
+declare var abc: First.E;
+declare var secondAbc: Abc.E;
+declare var secondAbcd: Abcd.E;
+declare var secondAb: Ab.E;
+declare var secondCd: Cd.E;
+declare var nope: Abc.Nope;
+declare var k: Const.E;
+declare var decl: Decl.E;
+declare var merged: Merged.E;
+declare var merged2: Merged2.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok

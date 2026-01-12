@@ -4,7 +4,7 @@ interface I {
 class C extends I { } // error
 
 class C2 extends { foo: string; } { } // error
-var x: { foo: string; }
+declare var x: { foo: string; }
 class C3 extends x { } // error
 
 namespace M { export var x = 1; }

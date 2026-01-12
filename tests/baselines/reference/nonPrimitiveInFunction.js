@@ -6,7 +6,7 @@ function returnObject(): object {
     return {};
 }
 
-var nonPrimitive: object;
+var nonPrimitive: object = {};
 var primitive: boolean;
 
 takeObject(nonPrimitive);
@@ -26,7 +26,7 @@ function takeObject(o) { }
 function returnObject() {
     return {};
 }
-var nonPrimitive;
+var nonPrimitive = {};
 var primitive;
 takeObject(nonPrimitive);
 nonPrimitive = returnObject();

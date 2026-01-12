@@ -9,8 +9,8 @@ interface baz {
     get(callback: Function): number;
 }
 
-var barbaz: baz;
-var test: foo;
+declare var barbaz: baz;
+declare var test: foo;
 
 test.get(function (param) {
     var x = barbaz.get(function () { });

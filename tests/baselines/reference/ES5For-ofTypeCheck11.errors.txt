@@ -3,7 +3,7 @@ ES5For-ofTypeCheck11.ts(3,6): error TS2322: Type 'string | number' is not assign
 
 
 ==== ES5For-ofTypeCheck11.ts (1 errors) ====
-    var union: string | number[];
+    declare var union: string | number[];
     var v: string;
     for (v of union) { }
          ~

@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/neverNullishThroughParentheses.ts] ////
+
+=== neverNullishThroughParentheses.ts ===
+// Repro for issue where "never nullish" checks miss "never nullish" through parentheses
+
+const x: { y: string | undefined } | undefined = undefined as any;
+>x : { y: string | undefined; } | undefined
+>  : ^^^^^                  ^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+// Both should error - both expressions are guaranteed to be "oops"
+const foo = x?.y ?? `oops` ?? "";
+>foo : string
+>    : ^^^^^^
+>x?.y ?? `oops` ?? "" : string
+>                     : ^^^^^^
+>x?.y ?? `oops` : string
+>               : ^^^^^^
+>x?.y : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>x : { y: string | undefined; } | undefined
+>  : ^^^^^                  ^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>`oops` : "oops"
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+const bar = (x?.y ?? `oops`) ?? "";
+>bar : string
+>    : ^^^^^^
+>(x?.y ?? `oops`) ?? "" : string
+>                       : ^^^^^^
+>(x?.y ?? `oops`) : string
+>                 : ^^^^^^
+>x?.y ?? `oops` : string
+>               : ^^^^^^
+>x?.y : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>x : { y: string | undefined; } | undefined
+>  : ^^^^^                  ^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>`oops` : "oops"
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+// Additional test cases with various levels of nesting
+const baz = ((x?.y ?? `oops`)) ?? "";
+>baz : string
+>    : ^^^^^^
+>((x?.y ?? `oops`)) ?? "" : string
+>                         : ^^^^^^
+>((x?.y ?? `oops`)) : string
+>                   : ^^^^^^
+>(x?.y ?? `oops`) : string
+>                 : ^^^^^^
+>x?.y ?? `oops` : string
+>               : ^^^^^^
+>x?.y : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>x : { y: string | undefined; } | undefined
+>  : ^^^^^                  ^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>`oops` : "oops"
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+const qux = (((x?.y ?? `oops`))) ?? "";
+>qux : string
+>    : ^^^^^^
+>(((x?.y ?? `oops`))) ?? "" : string
+>                           : ^^^^^^
+>(((x?.y ?? `oops`))) : string
+>                     : ^^^^^^
+>((x?.y ?? `oops`)) : string
+>                   : ^^^^^^
+>(x?.y ?? `oops`) : string
+>                 : ^^^^^^
+>x?.y ?? `oops` : string
+>               : ^^^^^^
+>x?.y : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>x : { y: string | undefined; } | undefined
+>  : ^^^^^                  ^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>`oops` : "oops"
+>       : ^^^^^^
+>"" : ""
+>   : ^^
+
+// Test with different types
+const str1 = ("literal") ?? "fallback";
+>str1 : "literal"
+>     : ^^^^^^^^^
+>("literal") ?? "fallback" : "literal"
+>                          : ^^^^^^^^^
+>("literal") : "literal"
+>            : ^^^^^^^^^
+>"literal" : "literal"
+>          : ^^^^^^^^^
+>"fallback" : "fallback"
+>           : ^^^^^^^^^^
+
+const str2 = (("nested")) ?? "fallback";
+>str2 : "nested"
+>     : ^^^^^^^^
+>(("nested")) ?? "fallback" : "nested"
+>                           : ^^^^^^^^
+>(("nested")) : "nested"
+>             : ^^^^^^^^
+>("nested") : "nested"
+>           : ^^^^^^^^
+>"nested" : "nested"
+>         : ^^^^^^^^
+>"fallback" : "fallback"
+>           : ^^^^^^^^^^
+
+const nested = ("a" ?? "b") ?? "c";
+>nested : "a"
+>       : ^^^
+>("a" ?? "b") ?? "c" : "a"
+>                    : ^^^
+>("a" ?? "b") : "a"
+>             : ^^^
+>"a" ?? "b" : "a"
+>           : ^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
+

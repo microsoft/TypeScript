@@ -4,9 +4,9 @@ interface StrNum extends Array<string|number> {
     length: 2;
 }
 
-var x: [string, number];
-var y: StrNum
-var z: {
+declare var x: [string, number];
+declare var y: StrNum
+declare var z: {
     0: string;
     1: number;
     length: 2;

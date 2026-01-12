@@ -19,9 +19,9 @@ namespace onlyT {
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 17))
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 5, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 5, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 5, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 4, 17))
 
@@ -77,9 +77,9 @@ namespace onlyT {
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 19, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 19, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 19, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 18, 18))
 
@@ -135,9 +135,9 @@ namespace onlyT {
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 31, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 31, 18))
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 32, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 32, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 32, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 31, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 31, 18))
 
@@ -177,9 +177,9 @@ namespace TU {
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 19))
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 19))
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 41, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 41, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 41, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 40, 17))
 
@@ -236,9 +236,9 @@ namespace TU {
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 33))
 >U : Symbol(U, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 33))
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 54, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 54, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 54, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 53, 18))
 
@@ -294,9 +294,9 @@ namespace TU {
 >U : Symbol(U)
 >U : Symbol(U)
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 67, 11))
->x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 67, 16))
+>x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 67, 17))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 66, 18))
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 66, 18))
 

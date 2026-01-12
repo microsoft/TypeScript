@@ -22,7 +22,7 @@ decrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The ope
 
 ==== decrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
     // -- operator on number type
-    var NUMBER: number;
+    declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
     
     function foo(): number { return 1; }

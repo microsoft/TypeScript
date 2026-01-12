@@ -9,7 +9,7 @@ namespace server {
         use: (mod: connectModule) => connectExport;
     }
 }
-var server: {
+declare var server: {
     (): server.connectExport;
     foo: Date;
 };
@@ -23,7 +23,6 @@ connect().use(connect.static('foo')); // Error	1	The property 'static' does not 
 
 //// [exportEqualMemberMissing_0.js]
 "use strict";
-var server;
 module.exports = server;
 //// [exportEqualMemberMissing_1.js]
 "use strict";

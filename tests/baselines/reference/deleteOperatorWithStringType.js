@@ -2,7 +2,7 @@
 
 //// [deleteOperatorWithStringType.ts]
 // delete  operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
@@ -47,8 +47,6 @@ delete foo();
 delete objA.a,M.n;
 
 //// [deleteOperatorWithStringType.js]
-// delete  operator on string type
-var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 var A = /** @class */ (function () {

@@ -40,7 +40,7 @@ namespace MemberWithConstructSignature {
         a3: new <T>(x: T) => void;
     }
 
-    var b: Base;
+    declare var b: Base;
     var r = new b.a(1);
 
     // S's

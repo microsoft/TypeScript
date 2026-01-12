@@ -73,9 +73,11 @@ Ns.Two.prototype = {
 /**
  * @type {Ns.One}
  */
-var one;
+var one = undefined;
 >one : One
 >    : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 one.wat;
 >one.wat : any
@@ -88,9 +90,11 @@ one.wat;
 /**
  * @type {Ns.Two}
  */
-var two;
+var two = undefined;
 >two : Two
 >    : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 two.wat;
 >two.wat : any

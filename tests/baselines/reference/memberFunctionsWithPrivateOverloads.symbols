@@ -143,24 +143,24 @@ class D<T> {
 
 }
 
-var c: C;
->c : Symbol(c, Decl(memberFunctionsWithPrivateOverloads.ts, 41, 3))
+declare var c: C;
+>c : Symbol(c, Decl(memberFunctionsWithPrivateOverloads.ts, 41, 11))
 >C : Symbol(C, Decl(memberFunctionsWithPrivateOverloads.ts, 0, 0))
 
 var r = c.foo(1); // error
 >r : Symbol(r, Decl(memberFunctionsWithPrivateOverloads.ts, 42, 3))
 >c.foo : Symbol(C.foo, Decl(memberFunctionsWithPrivateOverloads.ts, 0, 9), Decl(memberFunctionsWithPrivateOverloads.ts, 1, 27), Decl(memberFunctionsWithPrivateOverloads.ts, 2, 38))
->c : Symbol(c, Decl(memberFunctionsWithPrivateOverloads.ts, 41, 3))
+>c : Symbol(c, Decl(memberFunctionsWithPrivateOverloads.ts, 41, 11))
 >foo : Symbol(C.foo, Decl(memberFunctionsWithPrivateOverloads.ts, 0, 9), Decl(memberFunctionsWithPrivateOverloads.ts, 1, 27), Decl(memberFunctionsWithPrivateOverloads.ts, 2, 38))
 
-var d: D<number>;
->d : Symbol(d, Decl(memberFunctionsWithPrivateOverloads.ts, 44, 3))
+declare var d: D<number>;
+>d : Symbol(d, Decl(memberFunctionsWithPrivateOverloads.ts, 44, 11))
 >D : Symbol(D, Decl(memberFunctionsWithPrivateOverloads.ts, 18, 1))
 
 var r2 = d.foo(2); // error
 >r2 : Symbol(r2, Decl(memberFunctionsWithPrivateOverloads.ts, 45, 3))
 >d.foo : Symbol(D.foo, Decl(memberFunctionsWithPrivateOverloads.ts, 20, 12), Decl(memberFunctionsWithPrivateOverloads.ts, 21, 27), Decl(memberFunctionsWithPrivateOverloads.ts, 22, 28))
->d : Symbol(d, Decl(memberFunctionsWithPrivateOverloads.ts, 44, 3))
+>d : Symbol(d, Decl(memberFunctionsWithPrivateOverloads.ts, 44, 11))
 >foo : Symbol(D.foo, Decl(memberFunctionsWithPrivateOverloads.ts, 20, 12), Decl(memberFunctionsWithPrivateOverloads.ts, 21, 27), Decl(memberFunctionsWithPrivateOverloads.ts, 22, 28))
 
 var r3 = C.foo(1); // error

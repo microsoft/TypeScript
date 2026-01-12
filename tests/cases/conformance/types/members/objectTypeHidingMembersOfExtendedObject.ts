@@ -1,10 +1,10 @@
 // @skipDefaultLibCheck: false
 class A {
-    foo: string;
+    foo!: string;
 }
 
 class B extends A {
-    bar: string;
+    bar!: string;
 }
 
 interface Object {
@@ -14,11 +14,11 @@ interface Object {
 
 class C {
     valueOf() { }
-    data: B;
+    data!: B;
     [x: string]: any;
 }
 
-var c: C;
+declare var c: C;
 var r1: void = c.valueOf();
 var r1b: B = c.data;
 var r1c = r1b['hm']; // should be 'Object'
@@ -30,7 +30,7 @@ interface I {
     [x: string]: any;
 }
 
-var i: I;
+declare var i: I;
 var r2: void = i.valueOf();
 var r2b: B = i.data;
 var r2c = r2b['hm']; // should be 'Object'
@@ -46,7 +46,7 @@ var r3b: B = a.data;
 var r3c = r3b['hm']; // should be 'Object'
 var r3d = i['hm'];
 
-var b: {
+declare var b: {
     valueOf(): void;
     data: B;
     [x: string]: any;

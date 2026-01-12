@@ -8,7 +8,7 @@ interface Derived extends Base {
     toBase(): Base;
 }
 
-var derived: Derived;
+declare var derived: Derived;
 
 declare function foo<T>(x: T, func: (p: T) => T): T;
 var result = foo(derived, d => d.toBase());
@@ -20,6 +20,5 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 var result = bar(derived, d => d.toBase());
 
 //// [fixingTypeParametersRepeatedly2.js]
-var derived;
 var result = foo(derived, function (d) { return d.toBase(); });
 var result = bar(derived, function (d) { return d.toBase(); });

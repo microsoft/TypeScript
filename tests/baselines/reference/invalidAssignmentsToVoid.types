@@ -37,13 +37,13 @@ x = {}
 >{} : {}
 >   : ^^
 
-class C { foo: string; }
+class C { foo!: string; }
 >C : C
 >  : ^
 >foo : string
 >    : ^^^^^^
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -67,7 +67,7 @@ interface I { foo: string; }
 >foo : string
 >    : ^^^^^^
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 

@@ -10,16 +10,16 @@ namespace OnlyDerived {
 
     class S { foo: Derived; }
     class T { foo: Derived2; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { foo: Derived; }
     interface T2 { foo: Derived2; }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { foo: Derived; }
-    var b: { foo: Derived2; }
+    declare var a: { foo: Derived; }
+    declare var b: { foo: Derived2; }
 
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
@@ -55,16 +55,16 @@ namespace WithBase {
 
     class S { foo: Base; }
     class T { foo: Derived2; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { foo: Base; }
     interface T2 { foo: Derived2; }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { foo: Base; }
-    var b: { foo: Derived2; }
+    declare var a: { foo: Base; }
+    declare var b: { foo: Derived2; }
 
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
@@ -141,12 +141,6 @@ var OnlyDerived;
         }
         return T;
     }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
     s = t; // error
@@ -200,12 +194,6 @@ var WithBase;
         }
         return T;
     }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
     s = t; // ok

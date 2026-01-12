@@ -15,7 +15,7 @@ export as namespace Foo;
 /// <reference path="foo.d.ts" />
 import * as ff from './foo';
 
-let y: Foo; // OK in type position
+declare let y: Foo; // OK in type position
 y.foo();
-let z: Foo.SubThing; // OK in ns position
+declare let z: Foo.SubThing; // OK in ns position
 let x: any = Foo; // Not OK in value position

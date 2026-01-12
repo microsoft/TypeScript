@@ -64,18 +64,18 @@ interface S3 extends T3 {
 }
 
 // object literal case
-var a: { Foo: Base; }
->a : Symbol(a, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 3))
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 8))
+declare var a: { Foo: Base; }
+>a : Symbol(a, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 11))
+>Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 16))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality2.ts, 0, 0))
 
-var b: { Foo?: Derived; }
->b : Symbol(b, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 3))
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 8))
+declare var b: { Foo?: Derived; }
+>b : Symbol(b, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 11))
+>Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 16))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality2.ts, 2, 31))
 
 var r = true ? a : b; // ok
 >r : Symbol(r, Decl(subtypingWithObjectMembersOptionality2.ts, 32, 3))
->a : Symbol(a, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 3))
->b : Symbol(b, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 3))
+>a : Symbol(a, Decl(subtypingWithObjectMembersOptionality2.ts, 30, 11))
+>b : Symbol(b, Decl(subtypingWithObjectMembersOptionality2.ts, 31, 11))
 

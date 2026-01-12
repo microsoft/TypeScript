@@ -10,7 +10,7 @@ class C {
 >    : ^^^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -20,7 +20,7 @@ interface I {
 >     : ^^^^^^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 

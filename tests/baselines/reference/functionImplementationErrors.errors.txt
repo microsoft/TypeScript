@@ -34,7 +34,7 @@ functionImplementationErrors.ts(40,1): error TS2839: This condition will always 
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     }
     
-    var m;
+    declare var m: any;
     // Function signature with parameter initializer referencing in scope local variable
     function f6(n = m) {
                     ~

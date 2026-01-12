@@ -292,7 +292,7 @@ var propAcc1: { m: any; }
 >propAcc1 : Symbol(propAcc1, Decl(witness.ts, 106, 3), Decl(witness.ts, 109, 3))
 >m : Symbol(m, Decl(witness.ts, 109, 15))
 
-// Property access of module member
+// Property access of namespace member
 namespace M2 {
 >M2 : Symbol(M2, Decl(witness.ts, 109, 25))
 

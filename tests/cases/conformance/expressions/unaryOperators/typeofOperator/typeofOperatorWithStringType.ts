@@ -1,5 +1,5 @@
 // typeof  operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
@@ -9,7 +9,7 @@ class A {
     static foo() { return ""; }
 }
 namespace M {
-    export var n: string;
+    export var n!: string;
 }
 
 var objA = new A();
@@ -44,9 +44,9 @@ typeof foo();
 typeof objA.a, M.n;
 
 // use typeof in type query
-var z: string;
-var x: string[];
-var r: () => string;
+declare var z: string;
+declare var x: string[];
+declare var r: () => string;
 z: typeof STRING;
 x: typeof STRING1;
 r: typeof foo;

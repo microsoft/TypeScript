@@ -21,16 +21,16 @@ interface Obj1 {
 	new(): {};
 	(): number;
 }
-var Obj1: Obj1;
+declare var Obj1: Obj1;
 <Obj1 />; // OK, prefer construct signatures
 
 interface Obj2 {
 	(): number;
 }
-var Obj2: Obj2;
+declare var Obj2: Obj2;
 <Obj2 />; // Error
 
 interface Obj3 {
 }
-var Obj3: Obj3;
+declare var Obj3: Obj3;
 <Obj3 />; // Error

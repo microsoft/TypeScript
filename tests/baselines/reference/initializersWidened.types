@@ -23,11 +23,11 @@ var z1 = void 0;
 
 // these are not widened
 
-var x2: null;
+declare var x2: null;
 >x2 : null
 >   : ^^^^
 
-var y2: undefined;
+declare var y2: undefined;
 >y2 : undefined
 >   : ^^^^^^^^^
 

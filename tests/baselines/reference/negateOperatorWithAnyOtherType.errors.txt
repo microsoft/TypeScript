@@ -17,7 +17,7 @@ negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operat
         return a;
     }
     class A {
-        public a: any;
+        public a!: any;
         static foo(): any {
             var a;
             return a;

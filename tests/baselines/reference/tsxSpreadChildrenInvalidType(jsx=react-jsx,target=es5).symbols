@@ -88,11 +88,11 @@ function TodoListNoError({ todos }: TodoListProps) {
 
     </div>;
 }
-let x: TodoListProps;
->x : Symbol(x, Decl(tsxSpreadChildrenInvalidType.tsx, 29, 3))
+declare let x: TodoListProps;
+>x : Symbol(x, Decl(tsxSpreadChildrenInvalidType.tsx, 29, 11))
 >TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildrenInvalidType.tsx, 11, 1))
 
     <TodoList {...x}/>
 >TodoList : Symbol(TodoList, Decl(tsxSpreadChildrenInvalidType.tsx, 17, 1))
->x : Symbol(x, Decl(tsxSpreadChildrenInvalidType.tsx, 29, 3))
+>x : Symbol(x, Decl(tsxSpreadChildrenInvalidType.tsx, 29, 11))
 

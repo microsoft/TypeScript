@@ -89,96 +89,96 @@ interface I2<T> {
 
 // a union type U has those members that are present in every one of its constituent types, 
 // with types that are unions of the respective members in the constituent types
-var x : I1<number> | I2<number>;
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+declare var x : I1<number> | I2<number>;
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >I1 : Symbol(I1, Decl(unionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(unionTypeMembers.ts, 13, 1))
 
-var str: string;
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+declare var str: string;
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 
-var num: number;
->num : Symbol(num, Decl(unionTypeMembers.ts, 34, 3))
+declare var num: number;
+>num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 
-var strOrNum: string | number;
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+declare var strOrNum: string | number;
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 
 // If each type in U has a property P, U has a property P of a union type of the types of P from each type in U.
 str = x.commonPropertyType; // string
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 >x.commonPropertyType : Symbol(commonPropertyType, Decl(unionTypeMembers.ts, 1, 40), Decl(unionTypeMembers.ts, 16, 40))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonPropertyType : Symbol(commonPropertyType, Decl(unionTypeMembers.ts, 1, 40), Decl(unionTypeMembers.ts, 16, 40))
 
 str = x.commonMethodType(str); // (a: string) => string so result should be string
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 >x.commonMethodType : Symbol(commonMethodType, Decl(unionTypeMembers.ts, 0, 17), Decl(unionTypeMembers.ts, 15, 17))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodType : Symbol(commonMethodType, Decl(unionTypeMembers.ts, 0, 17), Decl(unionTypeMembers.ts, 15, 17))
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 
 strOrNum = x.commonPropertyDifferenType;
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 >x.commonPropertyDifferenType : Symbol(commonPropertyDifferenType, Decl(unionTypeMembers.ts, 5, 55), Decl(unionTypeMembers.ts, 20, 55))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonPropertyDifferenType : Symbol(commonPropertyDifferenType, Decl(unionTypeMembers.ts, 5, 55), Decl(unionTypeMembers.ts, 20, 55))
 
 strOrNum = x.commonMethodDifferentReturnType(str); // string | union
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 >x.commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 4, 58), Decl(unionTypeMembers.ts, 19, 58))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 4, 58), Decl(unionTypeMembers.ts, 19, 58))
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 
 x.commonMethodDifferentParameterType; // No error - property exists
 >x.commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31), Decl(unionTypeMembers.ts, 17, 31))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31), Decl(unionTypeMembers.ts, 17, 31))
 
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
 >x.commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31), Decl(unionTypeMembers.ts, 17, 31))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31), Decl(unionTypeMembers.ts, 17, 31))
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 
                                                 // and the call signatures arent identical
 num = x.commonMethodWithTypeParameter(num);
->num : Symbol(num, Decl(unionTypeMembers.ts, 34, 3))
+>num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 >x.commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 6, 39), Decl(unionTypeMembers.ts, 21, 39))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 6, 39), Decl(unionTypeMembers.ts, 21, 39))
->num : Symbol(num, Decl(unionTypeMembers.ts, 34, 3))
+>num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 
 num = x.commonMethodWithOwnTypeParameter(num);
->num : Symbol(num, Decl(unionTypeMembers.ts, 34, 3))
+>num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 >x.commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->num : Symbol(num, Decl(unionTypeMembers.ts, 34, 3))
+>num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 
 str = x.commonMethodWithOwnTypeParameter(str);
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 >x.commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->str : Symbol(str, Decl(unionTypeMembers.ts, 33, 3))
+>str : Symbol(str, Decl(unionTypeMembers.ts, 33, 11))
 
 strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum);
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 >x.commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 >commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43), Decl(unionTypeMembers.ts, 23, 43))
->strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 3))
+>strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 
 x.propertyOnlyInI1; // error
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 
 x.propertyOnlyInI2; // error
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 
 x.methodOnlyInI1("hello"); // error
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 
 x.methodOnlyInI2(10); // error
->x : Symbol(x, Decl(unionTypeMembers.ts, 32, 3))
+>x : Symbol(x, Decl(unionTypeMembers.ts, 32, 11))
 

@@ -13,7 +13,7 @@ class C {
     private static foo() { }
 }
 
-var c: C;
+declare var c: C;
 // all errors
 c.x;
 c.y;
@@ -45,7 +45,6 @@ var C = /** @class */ (function () {
     C.foo = function () { };
     return C;
 }());
-var c;
 // all errors
 c.x;
 c.y;

@@ -8,8 +8,8 @@ interface Combinators {
     forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
 }
 
-var c2: Collection<number>;
-var _: Combinators;
+declare var c2: Collection<number>;
+declare var _: Combinators;
 
 // errors on all 3 lines, bug was that r5 was the only line with errors
 var f = (x: number) => { return x.toFixed() };

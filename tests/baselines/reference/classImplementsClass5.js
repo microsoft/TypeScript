@@ -14,8 +14,8 @@ class C implements A {
 
 class C2 extends A {}
 
-var c: C;
-var c2: C2;
+declare var c: C;
+declare var c2: C2;
 c = c2;
 c2 = c;
 
@@ -58,7 +58,5 @@ var C2 = /** @class */ (function (_super) {
     }
     return C2;
 }(A));
-var c;
-var c2;
 c = c2;
 c2 = c;

@@ -33,9 +33,9 @@ class E<T extends string> extends D {
     }
 }
 
-var c: C<number>;
-var d: D;
-var e: E<string>;
+declare var c: C<number>;
+declare var d: D;
+declare var e: E<string>;
 
 c = d;
 c = e;

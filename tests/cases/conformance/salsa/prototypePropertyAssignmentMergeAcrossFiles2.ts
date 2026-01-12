@@ -16,10 +16,10 @@ Ns.Two.prototype = {
 /**
  * @type {Ns.One}
  */
-var one;
+var one = undefined;
 one.wat;
 /**
  * @type {Ns.Two}
  */
-var two;
+var two = undefined;
 two.wat;

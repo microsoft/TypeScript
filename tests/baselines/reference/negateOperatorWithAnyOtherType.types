@@ -55,7 +55,7 @@ class A {
 >A : A
 >  : ^
 
-    public a: any;
+    public a!: any;
 >a : any
 >  : ^^^
 

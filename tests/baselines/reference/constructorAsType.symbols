@@ -6,11 +6,11 @@ var Person:new () => {name: string;} = function () {return {name:"joe"};};
 >name : Symbol(name, Decl(constructorAsType.ts, 0, 22))
 >name : Symbol(name, Decl(constructorAsType.ts, 0, 60))
 
-var Person2:{new() : {name:string;};};
->Person2 : Symbol(Person2, Decl(constructorAsType.ts, 2, 3))
->name : Symbol(name, Decl(constructorAsType.ts, 2, 22))
+declare var Person2:{new() : {name:string;};};
+>Person2 : Symbol(Person2, Decl(constructorAsType.ts, 2, 11))
+>name : Symbol(name, Decl(constructorAsType.ts, 2, 30))
 
 Person = Person2;
 >Person : Symbol(Person, Decl(constructorAsType.ts, 0, 3))
->Person2 : Symbol(Person2, Decl(constructorAsType.ts, 2, 3))
+>Person2 : Symbol(Person2, Decl(constructorAsType.ts, 2, 11))
 

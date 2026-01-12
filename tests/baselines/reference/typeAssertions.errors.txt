@@ -32,8 +32,8 @@ typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
             ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
-    var a: any;
-    var s: string;
+    declare var a: any;
+    declare var s: string;
     
     // Type assertion of non - unary expression
     var a = <any>"" + 4;
@@ -82,8 +82,8 @@ typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
     someOther = <SomeOther>someOther;
     
     // Type assertion cannot be a type-predicate type
-    var numOrStr: number | string;
-    var str: string;
+    declare var numOrStr: number | string;
+    declare var str: string;
     if(<numOrStr is string>(numOrStr === undefined)) { // Error
         ~~~~~~~~
 !!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?

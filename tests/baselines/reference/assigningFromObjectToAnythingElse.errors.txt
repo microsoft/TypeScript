@@ -7,7 +7,7 @@ assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is as
 
 
 ==== assigningFromObjectToAnythingElse.ts (4 errors) ====
-    var x: Object;
+    declare var x: Object;
     var y: RegExp;
     y = x;
     ~

@@ -8,12 +8,12 @@ typeofClass.ts(10,4): error TS2339: Property 'foo' does not exist on type 'typeo
         static bar: string;
     }
     
-    var k1: K;
+    declare var k1: K;
     k1.foo;
     k1.bar;
        ~~~
 !!! error TS2576: Property 'bar' does not exist on type 'K'. Did you mean to access the static member 'K.bar' instead?
-    var k2: typeof K;
+    declare var k2: typeof K;
     k2.foo;
        ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'typeof K'.

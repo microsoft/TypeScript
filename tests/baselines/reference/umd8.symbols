@@ -5,17 +5,17 @@
 import * as ff from './foo';
 >ff : Symbol(ff, Decl(a.ts, 1, 6))
 
-let y: Foo; // OK in type position
->y : Symbol(y, Decl(a.ts, 3, 3))
+declare let y: Foo; // OK in type position
+>y : Symbol(y, Decl(a.ts, 3, 11))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 6, 15))
 
 y.foo();
 >y.foo : Symbol(Thing.foo, Decl(foo.d.ts, 0, 21))
->y : Symbol(y, Decl(a.ts, 3, 3))
+>y : Symbol(y, Decl(a.ts, 3, 11))
 >foo : Symbol(Thing.foo, Decl(foo.d.ts, 0, 21))
 
-let z: Foo.SubThing; // OK in ns position
->z : Symbol(z, Decl(a.ts, 5, 3))
+declare let z: Foo.SubThing; // OK in ns position
+>z : Symbol(z, Decl(a.ts, 5, 11))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 6, 15))
 >SubThing : Symbol(ff.SubThing, Decl(foo.d.ts, 3, 25))
 
