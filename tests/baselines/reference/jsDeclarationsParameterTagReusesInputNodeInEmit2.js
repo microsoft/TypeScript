@@ -56,7 +56,6 @@ declare namespace BaseFactory {
 declare class Base {
 }
 //// [file.d.ts]
-/** @typedef {typeof import('./base')} BaseFactory */
 /**
  *
  * @param {InstanceType<BaseFactory["Base"]>} base

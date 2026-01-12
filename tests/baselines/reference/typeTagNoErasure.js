@@ -19,7 +19,6 @@ test('hi'); // error, T=number
 
 
 //// [typeTagNoErasure.d.ts]
-/** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
 /** @type {Test<number>} */
 declare const test: Test<number>;
 type Test<T> = <T1 extends T>(data: T1) => T1;

@@ -123,9 +123,6 @@ export type SomeType = {
     x: string;
 } | number | LocalThing | ExportedThing;
 /**
- * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
- */
-/**
  * @param {number} x
  * @returns {SomeType}
  */

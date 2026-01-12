@@ -110,13 +110,6 @@ export type TaskGroup = {
     label: string;
     traceEventNames: string[];
 };
-/** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
-/**
- * @typedef TaskGroup
- * @property {TaskGroupIds} id
- * @property {string} label
- * @property {string[]} traceEventNames
- */
 /**
  * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
  */
@@ -130,14 +123,6 @@ export const taskNameToGroup: {
 };
 //// [index.d.ts]
 export = MainThreadTasks;
-/** @typedef {import('./module.js').TaskGroup} TaskGroup */
-/**
- * @typedef TaskNode
- * @prop {TaskNode[]} children
- * @prop {TaskNode|undefined} parent
- * @prop {TaskGroup} group
- */
-/** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
 declare class MainThreadTasks {
     /**
      * @param {TaskGroup} x

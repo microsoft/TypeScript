@@ -32,9 +32,6 @@ module.exports = items;
 declare module "folder/mod1" {
     export = x;
     /**
-     * @typedef {{x: number}} Item
-     */
-    /**
      * @type {Item};
      */
     const x: Item;

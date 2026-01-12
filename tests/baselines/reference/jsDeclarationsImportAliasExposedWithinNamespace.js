@@ -80,7 +80,6 @@ export const myTypes: {
 export namespace testFnTypes {
     type input = boolean | myTypes.typeC;
 }
-/** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
  * @function testFn
  * @description A test function.

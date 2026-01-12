@@ -5992,15 +5992,25 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function shouldWriteComment(text: string, pos: number) {
+    function shouldWriteComment(text: string, pos: number, end?: number) {
         if (printerOptions.onlyPrintJsDocStyle) {
-            return (isJSDocLikeText(text, pos) || isPinnedComment(text, pos));
+            if (!isJSDocLikeText(text, pos) && !isPinnedComment(text, pos)) {
+                return false;
+            }
+            // Skip @typedef and @callback comments - they're converted to type declarations
+            if (end !== undefined) {
+                const commentText = text.slice(pos, end);
+                if (commentText.includes("@typedef") || commentText.includes("@callback")) {
+                    return false;
+                }
+            }
+            return true;
         }
         return true;
     }
 
     function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
-        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
+        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos, commentEnd)) return;
         if (!hasWrittenComment) {
             emitNewLineBeforeLeadingCommentOfPosition(getCurrentLineMap(), writer, rangePos, commentPos);
             hasWrittenComment = true;
@@ -6032,7 +6042,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
-        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
+        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos, commentEnd)) return;
         // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
         if (!writer.isAtStartOfLine()) {
             writer.writeSpace(" ");
@@ -6135,7 +6145,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitComment(text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
-        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
+        if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos, commentEnd)) return;
         emitPos(commentPos);
         writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
         emitPos(commentEnd);

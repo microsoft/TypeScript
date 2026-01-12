@@ -96,7 +96,6 @@ function fn7(uuid) { }
 /** @satisfies {(uuid: string) => void} */
 export function fn7(uuid: any): void;
 export function fn1(uuid: string): void;
-/** @typedef {Parameters<typeof fn1>} Foo */
 /** @type Foo */
 export const v1: Foo;
 /** @type Foo */

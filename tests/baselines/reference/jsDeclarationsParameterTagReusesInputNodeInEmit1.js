@@ -74,11 +74,6 @@ type couldntThinkOfAny = {
         new (): {};
     };
 };
-/** @typedef {import('./base')} BaseFactory */
-/**
- * @callback BaseFactoryFactory
- * @param {import('./base')} factory
- */
 /** @enum {import('./base')} */
 declare const couldntThinkOfAny: {};
 /**
