@@ -13725,7 +13725,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        // Allow entity name expressions (e.g., Type.Foo)
+        if (isEntityNameExpression(expr)) {
+            return true;
+        }
+        // Allow element access expressions where the object is an entity name (e.g., Type['key'])
+        // This enables bracket notation for accessing enum members with non-identifier names
+        if (isElementAccessExpression(expr) && isEntityNameExpression(expr.expression)) {
+            return true;
+        }
+        return false;
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
