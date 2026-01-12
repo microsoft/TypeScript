@@ -40,6 +40,6 @@ export const a = getA();
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;
->a : import("/p2/node_modules/typescript-fsa/index").A
+>a : import("/p1/node_modules/typescript-fsa/index").A
 
 

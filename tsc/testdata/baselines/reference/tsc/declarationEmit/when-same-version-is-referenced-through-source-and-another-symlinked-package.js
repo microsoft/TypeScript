@@ -105,7 +105,7 @@ File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/i
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts'.
-======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa@3.0.0-beta-2'. ========
+======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -150,15 +150,13 @@ File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/i
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
-======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa@3.0.0-beta-2'. ========
+======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 plugin-one/node_modules/typescript-fsa/index.d.ts
-   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa@3.0.0-beta-2'
+   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
 plugin-one/action.ts
    Matched by default include pattern '**/*'
-plugin-two/node_modules/typescript-fsa/index.d.ts
-   Imported via "typescript-fsa" from file 'plugin-two/index.d.ts' with packageId 'typescript-fsa@3.0.0-beta-2'
 plugin-two/index.d.ts
    Imported via "plugin-two" from file 'plugin-one/index.ts'
 plugin-one/index.ts

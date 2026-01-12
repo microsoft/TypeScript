@@ -23,6 +23,8 @@ export var y = 2
 
 === /tests/node_modules/@types/react/index.d.ts ===
 
+>global : Symbol(global, Decl(index.d.ts, 0, 0))
+
 === /node_modules/@types/react/index.d.ts ===
 declare global { }
 >global : Symbol(global, Decl(index.d.ts, 0, 0))

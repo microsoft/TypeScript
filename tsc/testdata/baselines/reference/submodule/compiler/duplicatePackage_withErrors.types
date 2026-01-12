@@ -6,8 +6,8 @@ import { x as xa } from "a";
 >xa : number
 
 import { x as xb } from "b";
->x : any
->xb : any
+>x : number
+>xb : number
 
 === /node_modules/a/index.d.ts ===
 export { x } from "x";
@@ -22,11 +22,12 @@ export const x = 1 + 1;
 
 === /node_modules/b/index.d.ts ===
 export { x } from "x";
->x : any
+>x : number
 
 === /node_modules/b/node_modules/x/index.d.ts ===
 content not parsed
->content : any
->not : any
->parsed : any
+>x : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
 

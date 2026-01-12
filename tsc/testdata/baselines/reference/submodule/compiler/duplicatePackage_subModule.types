@@ -9,9 +9,9 @@ import * as a from "a";
 
 const o: Foo = a.o;
 >o : Foo
->a.o : import("/node_modules/a/node_modules/foo/Foo").default
+>a.o : Foo
 >a : typeof a
->o : import("/node_modules/a/node_modules/foo/Foo").default
+>o : Foo
 
 === /node_modules/a/index.d.ts ===
 import Foo from "foo/Foo";

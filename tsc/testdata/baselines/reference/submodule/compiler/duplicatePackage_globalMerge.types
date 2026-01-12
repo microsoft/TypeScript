@@ -25,6 +25,8 @@ export var y = 2
 
 === /tests/node_modules/@types/react/index.d.ts ===
 
+>global : typeof global
+
 === /node_modules/@types/react/index.d.ts ===
 declare global { }
 >global : typeof global

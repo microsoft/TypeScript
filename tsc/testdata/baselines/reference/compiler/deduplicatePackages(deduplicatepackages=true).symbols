@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/duplicatePackage.ts] ////
+//// [tests/cases/compiler/deduplicatePackages.ts] ////
 
 === /src/a.ts ===
 import { a } from "a";

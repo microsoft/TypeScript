@@ -68,7 +68,11 @@ type processedFiles struct {
 	// if file was included using source file and its output is actually part of program
 	// this contains mapping from output to source file
 	outputFileToProjectReferenceSource map[tspath.Path]string
-	finishedProcessing                 bool
+	// Key is a file path. Value is the list of files that redirect to it (same package, different install location)
+	redirectTargetsMap map[tspath.Path][]string
+	// Any paths involved in deduplication, including canonical paths and redirected paths
+	deduplicatedPaths  collections.Set[tspath.Path]
+	finishedProcessing bool
 }
 
 type jsxRuntimeImportSpecifier struct {
@@ -189,6 +193,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 						kind: fileIncludeKindAutomaticTypeDirectiveFile,
 						data: &automaticTypeDirectiveFileData{name, resolved.PackageId},
 					},
+					packageId: resolved.PackageId,
 				})
 			}
 		}
@@ -359,6 +364,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 				increaseDepth: resolved.IsExternalLibraryImport,
 				elideOnDepth:  false,
 				includeReason: includeReason,
+				packageId:     resolved.PackageId,
 			}, nil)
 		} else {
 			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
@@ -465,6 +471,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 							synthetic: core.IfElse(importIndex < 0, entry, nil),
 						},
 					},
+					packageId: resolvedModule.PackageId,
 				}, nil)
 			}
 		}

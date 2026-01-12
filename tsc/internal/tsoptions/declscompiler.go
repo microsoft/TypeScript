@@ -186,6 +186,14 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		// Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
 	},
 	{
+		Name:                    "deduplicatePackages",
+		Kind:                    CommandLineOptionTypeBoolean,
+		Category:                diagnostics.Type_Checking,
+		Description:             diagnostics.Deduplicate_packages_with_the_same_name_and_version,
+		DefaultValueDescription: true,
+		AffectsProgramStructure: true,
+	},
+	{
 		Name:                     "noEmit",
 		Kind:                     CommandLineOptionTypeBoolean,
 		ShowInSimplifiedHelpView: true,

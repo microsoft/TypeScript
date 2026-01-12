@@ -36,6 +36,7 @@ type CompilerOptions struct {
 	Declaration                               Tristate                                  `json:"declaration,omitzero"`
 	DeclarationDir                            string                                    `json:"declarationDir,omitzero"`
 	DeclarationMap                            Tristate                                  `json:"declarationMap,omitzero"`
+	DeduplicatePackages                       Tristate                                  `json:"deduplicatePackages,omitzero"`
 	DisableSizeLimit                          Tristate                                  `json:"disableSizeLimit,omitzero"`
 	DisableSourceOfProjectReferenceRedirect   Tristate                                  `json:"disableSourceOfProjectReferenceRedirect,omitzero"`
 	DisableSolutionSearching                  Tristate                                  `json:"disableSolutionSearching,omitzero"`

@@ -1,11 +1,11 @@
-//// [tests/cases/compiler/duplicatePackage.ts] ////
+//// [tests/cases/compiler/deduplicatePackages.ts] ////
 
 === /src/a.ts ===
 import { a } from "a";
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
 
 import { b } from "b";
->b : import("/node_modules/a/node_modules/x/index").default
+>b : X
 
 import { c } from "c";
 >c : import("/node_modules/c/node_modules/x/index").default
@@ -13,7 +13,7 @@ import { c } from "c";
 a(b); // Works
 >a(b) : void
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->b : import("/node_modules/a/node_modules/x/index").default
+>b : X
 
 a(c); // Error, these are from different versions of the library.
 >a(c) : void
@@ -38,16 +38,16 @@ export default class X {
 
 === /node_modules/b/index.d.ts ===
 import X from "x";
->X : typeof X
+>X : any
 
 export const b: X;
 >b : X
 
 === /node_modules/b/node_modules/x/index.d.ts ===
 content not parsed
->X : X
-
->x : number
+>content : any
+>not : any
+>parsed : any
 
 === /node_modules/c/index.d.ts ===
 import X from "x";

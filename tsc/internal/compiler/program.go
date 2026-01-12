@@ -116,9 +116,10 @@ func (p *Program) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheE
 	return nil
 }
 
-// GetRedirectTargets implements checker.Program.
+// GetRedirectTargets returns the list of file paths that redirect to the given path.
+// These are files from the same package (same name@version) installed in different locations.
 func (p *Program) GetRedirectTargets(path tspath.Path) []string {
-	return nil // !!! TODO: project references support
+	return p.redirectTargetsMap[path]
 }
 
 // gets the original file that was included in program
@@ -245,6 +246,13 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 	newOpts.Host = newHost
 	newFile := newHost.GetSourceFile(oldFile.ParseOptions())
 	if !canReplaceFileInProgram(oldFile, newFile) {
+		return NewProgram(newOpts), false
+	}
+	// If this file is part of a package redirect group (same package installed in multiple
+	// node_modules locations), we need to rebuild the program because the redirect targets
+	// might need recalculation.
+	if p.deduplicatedPaths.Has(changedFilePath) {
+		// File is either a canonical file or a redirect target; either way, need full rebuild
 		return NewProgram(newOpts), false
 	}
 	// TODO: reverify compiler options when config has changed?

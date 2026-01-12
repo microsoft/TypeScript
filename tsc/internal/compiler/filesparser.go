@@ -25,6 +25,7 @@ type parseTask struct {
 	startedSubTasks             bool
 	isForAutomaticTypeDirective bool
 	includeReason               *FileIncludeReason
+	packageId                   module.PackageId
 
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
@@ -164,6 +165,7 @@ type resolvedRef struct {
 	increaseDepth bool
 	elideOnDepth  bool
 	includeReason *FileIncludeReason
+	packageId     module.PackageId
 }
 
 func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
@@ -174,6 +176,7 @@ func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
 		increaseDepth:      ref.increaseDepth,
 		elideOnDepth:       ref.elideOnDepth,
 		includeReason:      ref.includeReason,
+		packageId:          ref.packageId,
 	}
 	t.subTasks = append(t.subTasks, subTask)
 }
@@ -190,6 +193,7 @@ type parseTaskData struct {
 	mu              sync.Mutex
 	lowestDepth     int
 	startedSubTasks bool
+	packageId       module.PackageId
 }
 
 func (w *filesParser) parse(loader *fileLoader, tasks []*parseTask) {
@@ -218,6 +222,11 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 					// This is new task for file name - so load subtasks if there was loading for any other casing
 					startSubtasks = data.startedSubTasks
 				}
+			}
+
+			// Propagate packageId to data if we have one and data doesn't yet
+			if data.packageId.Name == "" && task.packageId.Name != "" {
+				data.packageId = task.packageId
 			}
 
 			currentDepth := core.IfElse(task.increaseDepth, depth+1, depth)
@@ -283,6 +292,14 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
 	libFilesMap := make(map[tspath.Path]*LibFile, libFileCount)
 
+	var redirectTargetsMap map[tspath.Path][]string
+	var deduplicatedPaths collections.Set[tspath.Path]
+	var packageIdToCanonicalPath map[module.PackageId]tspath.Path
+	if !loader.opts.Config.CompilerOptions().DeduplicatePackages.IsFalse() {
+		redirectTargetsMap = make(map[tspath.Path][]string)
+		packageIdToCanonicalPath = make(map[module.PackageId]tspath.Path)
+	}
+
 	var collectFiles func(tasks []*parseTask, seen map[*parseTaskData]string)
 	collectFiles = func(tasks []*parseTask, seen map[*parseTaskData]string) {
 		for _, task := range tasks {
@@ -331,8 +348,23 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			for _, trace := range task.resolutionsTrace {
 				loader.opts.Host.Trace(trace.Message, trace.Args...)
 			}
-			if subTasks := task.subTasks; len(subTasks) > 0 {
-				collectFiles(subTasks, seen)
+
+			var existingCanonicalPath tspath.Path
+			if packageIdToCanonicalPath != nil && data.packageId.Name != "" {
+				if canonical, exists := packageIdToCanonicalPath[data.packageId]; exists {
+					redirectTargetsMap[canonical] = append(redirectTargetsMap[canonical], task.normalizedFilePath)
+					existingCanonicalPath = canonical
+					deduplicatedPaths.Add(task.path)
+					deduplicatedPaths.Add(canonical)
+				} else {
+					packageIdToCanonicalPath[data.packageId] = task.path
+				}
+			}
+
+			if existingCanonicalPath == "" {
+				if subTasks := task.subTasks; len(subTasks) > 0 {
+					collectFiles(subTasks, seen)
+				}
 			}
 
 			// Exclude automatic type directive tasks from include reason processing,
@@ -350,6 +382,10 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 				continue
 			}
 			file := task.file
+			if existingCanonicalPath != "" {
+				file = filesByPath[existingCanonicalPath]
+			}
+
 			path := task.path
 
 			if len(task.processingDiagnostics) > 0 {
@@ -365,7 +401,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if task.libFile != nil {
 				libFiles = append(libFiles, file)
 				libFilesMap[path] = task.libFile
-			} else {
+			} else if existingCanonicalPath == "" {
 				files = append(files, file)
 			}
 			filesByPath[path] = file
@@ -424,6 +460,8 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		missingFiles:                         missingFiles,
 		includeProcessor:                     includeProcessor,
 		outputFileToProjectReferenceSource:   outputFileToProjectReferenceSource,
+		redirectTargetsMap:                   redirectTargetsMap,
+		deduplicatedPaths:                    deduplicatedPaths,
 	}
 }
 

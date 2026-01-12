@@ -22,6 +22,6 @@ export { x } from "x";
 >x : Symbol(x, Decl(index.d.ts, 0, 8))
 
 === /node_modules/b/node_modules/x/index.d.ts ===
-
 content not parsed
+>x : Symbol(x, Decl(index.d.ts, 0, 12))
 

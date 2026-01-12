@@ -9,9 +9,9 @@ import { Foo } from "foo";
 
 let foo: Foo = a.foo;
 >foo : Foo
->a.foo : import("/node_modules/a/node_modules/foo/index").Foo
+>a.foo : Foo
 >a : typeof a
->foo : import("/node_modules/a/node_modules/foo/index").Foo
+>foo : Foo
 
 === /node_modules/a/index.d.ts ===
 /// <reference types="foo" />

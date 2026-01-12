@@ -986,7 +986,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			}
 
 			if fromDirectory := r.loadNodeModuleFromDirectoryWorker(ext, candidate, !nodeModulesDirectoryExists, packageInfo); !fromDirectory.shouldContinueSearching() {
-				fromDirectory.packageId = r.getPackageId(packageDirectory, packageInfo)
+				fromDirectory.packageId = r.getPackageId(fromDirectory.path, packageInfo)
 				return fromDirectory
 			}
 		}
@@ -995,12 +995,12 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	loader := func(extensions extensions, candidate string, onlyRecordFailures bool) *resolved {
 		if rest != "" || !r.esmMode {
 			if fromFile := r.loadModuleFromFile(extensions, candidate, onlyRecordFailures); !fromFile.shouldContinueSearching() {
-				fromFile.packageId = r.getPackageId(packageDirectory, packageInfo)
+				fromFile.packageId = r.getPackageId(fromFile.path, packageInfo)
 				return fromFile
 			}
 		}
 		if fromDirectory := r.loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, packageInfo); !fromDirectory.shouldContinueSearching() {
-			fromDirectory.packageId = r.getPackageId(packageDirectory, packageInfo)
+			fromDirectory.packageId = r.getPackageId(fromDirectory.path, packageInfo)
 			return fromDirectory
 		}
 		// !!! this is ported exactly, but checking for null seems wrong?
@@ -1010,7 +1010,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			// EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume
 			// a default `index.js` entrypoint if no `main` or `exports` are present
 			if indexResult := r.loadModuleFromFile(extensions, tspath.CombinePaths(candidate, "index.js"), onlyRecordFailures); !indexResult.shouldContinueSearching() {
-				indexResult.packageId = r.getPackageId(packageDirectory, packageInfo)
+				indexResult.packageId = r.getPackageId(indexResult.path, packageInfo)
 				return indexResult
 			}
 		}

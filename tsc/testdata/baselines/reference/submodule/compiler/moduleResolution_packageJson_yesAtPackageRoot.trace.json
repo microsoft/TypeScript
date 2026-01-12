@@ -25,4 +25,4 @@ File '/node_modules/foo/bar.jsx' does not exist.
 File '/node_modules/foo/bar/index.js' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/node_modules/foo/bar/index.js', result '/node_modules/foo/bar/index.js'.
-======== Module name 'foo/bar' was successfully resolved to '/node_modules/foo/bar/index.js' with Package ID 'foo@1.2.3'. ========
+======== Module name 'foo/bar' was successfully resolved to '/node_modules/foo/bar/index.js' with Package ID 'foo/bar/index.js@1.2.3'. ========

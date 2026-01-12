@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/packageDeduplicationDuplicateGlobals.ts] ////
+
+=== /src/index.ts ===
+import { useBar } from "bar";
+>useBar : Symbol(useBar, Decl(index.ts, 0, 8))
+
+import { useBaz } from "baz";
+>useBaz : Symbol(useBaz, Decl(index.ts, 1, 8))
+
+const barResult = useBar();
+>barResult : Symbol(barResult, Decl(index.ts, 3, 5))
+>useBar : Symbol(useBar, Decl(index.ts, 0, 8))
+
+const bazResult = useBaz();
+>bazResult : Symbol(bazResult, Decl(index.ts, 4, 5))
+>useBaz : Symbol(useBaz, Decl(index.ts, 1, 8))
+
+const x: string = myGlobal;
+>x : Symbol(x, Decl(index.ts, 6, 5))
+>myGlobal : Symbol(myGlobal, Decl(index.d.ts, 0, 11))
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo/index.d.ts ===
+import "globals";
+export declare function useFoo(): typeof myGlobal;
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 17))
+>myGlobal : Symbol(myGlobal, Decl(index.d.ts, 0, 11))
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/globals/index.d.ts ===
+declare var myGlobal: string;
+>myGlobal : Symbol(myGlobal, Decl(index.d.ts, 0, 11))
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@2.0.0/node_modules/foo/index.d.ts ===
+import "globals";
+export declare function useFoo(): typeof myGlobal;
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 17))
+>myGlobal : Symbol(myGlobal, Decl(index.d.ts, 0, 11))
+
+=== /node_modules/.pnpm/bar@1.0.0/node_modules/bar/index.d.ts ===
+import { useFoo } from "foo";
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 8))
+
+export declare function useBar(): ReturnType<typeof useFoo>;
+>useBar : Symbol(useBar, Decl(index.d.ts, 0, 29))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/.pnpm/baz@1.0.0/node_modules/baz/index.d.ts ===
+import { useFoo } from "foo";
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 8))
+
+export declare function useBaz(): ReturnType<typeof useFoo>;
+>useBaz : Symbol(useBaz, Decl(index.d.ts, 0, 29))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>useFoo : Symbol(useFoo, Decl(index.d.ts, 0, 8))
+
+
+
+
