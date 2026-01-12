@@ -1082,6 +1082,153 @@ func TestBuildInferredTypeFromTransitiveModule(t *testing.T) {
 	}
 }
 
+func TestBuildInferredTypeFromMonorepoReference(t *testing.T) {
+	t.Parallel()
+	testCases := []*tscInput{
+		{
+			subScenario: "inferred type from referenced project that references another project in monorepo",
+			files: FileMap{
+				// Root package.json and tsconfig.json
+				"/home/src/workspaces/solution/package.json": stringtestutil.Dedent(`
+					{
+						"name": "tsgo-monorepo-issue",
+						"private": true,
+						"workspaces": ["packages/*"]
+					}`),
+				"/home/src/workspaces/solution/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"files": [],
+						"include": [],
+						"references": [
+							{ "path": "packages/package-a" },
+							{ "path": "packages/package-b" },
+							{ "path": "packages/package-c" }
+						]
+					}`),
+				// package-c: exports MyType interface
+				"/home/src/workspaces/solution/packages/package-c/package.json": stringtestutil.Dedent(`
+					{
+						"name": "package-c",
+						"version": "1.0.0",
+						"private": true,
+						"type": "module",
+						"main": "./src/index.ts",
+						"types": "./src/index.ts",
+						"exports": {
+							".": "./src/index.ts"
+						}
+					}`),
+				"/home/src/workspaces/solution/packages/package-c/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"emitDeclarationOnly": true,
+							"module": "ESNext",
+							"moduleResolution": "Bundler",
+							"target": "ES2022",
+							"outDir": "./out",
+							"rootDir": "./src"
+						},
+						"include": ["src/**/*"]
+					}`),
+				"/home/src/workspaces/solution/packages/package-c/src/index.ts": stringtestutil.Dedent(`
+					export interface MyType {
+						id: string;
+						name: string;
+						enabled: boolean;
+					}`),
+				// package-b: project reference to package-c, exports createThing() returning MyType
+				"/home/src/workspaces/solution/packages/package-b/package.json": stringtestutil.Dedent(`
+					{
+						"name": "package-b",
+						"version": "1.0.0",
+						"private": true,
+						"type": "module",
+						"main": "./src/index.ts",
+						"types": "./src/index.ts",
+						"exports": {
+							".": "./src/index.ts"
+						},
+						"dependencies": {
+							"package-c": "workspace:*"
+						}
+					}`),
+				"/home/src/workspaces/solution/packages/package-b/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"emitDeclarationOnly": true,
+							"module": "ESNext",
+							"moduleResolution": "Bundler",
+							"target": "ES2022",
+							"outDir": "./out",
+							"rootDir": "./src"
+						},
+						"include": ["src/**/*"],
+						"references": [{ "path": "../package-c" }]
+					}`),
+				"/home/src/workspaces/solution/packages/package-b/src/index.ts": stringtestutil.Dedent(`
+					import type { MyType } from "package-c";
+
+					export function createThing(input: MyType): MyType {
+						return { ...input };
+					}`),
+				// package-a: project reference to package-b only (not package-c), uses createThing() without type annotation
+				"/home/src/workspaces/solution/packages/package-a/package.json": stringtestutil.Dedent(`
+					{
+						"name": "package-a",
+						"version": "1.0.0",
+						"private": true,
+						"type": "module",
+						"main": "./src/index.ts",
+						"types": "./src/index.ts",
+						"exports": {
+							".": "./src/index.ts"
+						},
+						"dependencies": {
+							"package-b": "workspace:*"
+						}
+					}`),
+				"/home/src/workspaces/solution/packages/package-a/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"emitDeclarationOnly": true,
+							"module": "ESNext",
+							"moduleResolution": "Bundler",
+							"target": "ES2022",
+							"outDir": "./out",
+							"rootDir": "./src"
+						},
+						"include": ["src/**/*"],
+						"references": [{ "path": "../package-b" }]
+					}`),
+				"/home/src/workspaces/solution/packages/package-a/src/index.ts": stringtestutil.Dedent(`
+					import { createThing } from "package-b";
+
+					class MyClass {
+						public thing = createThing({ id: "1", name: "test", enabled: true });
+					}
+
+					export { MyClass };`),
+				// Symlinks for node_modules to simulate pnpm/yarn workspace hoisting
+				"/home/src/workspaces/solution/node_modules/package-a": vfstest.Symlink("/home/src/workspaces/solution/packages/package-a"),
+				"/home/src/workspaces/solution/node_modules/package-b": vfstest.Symlink("/home/src/workspaces/solution/packages/package-b"),
+				"/home/src/workspaces/solution/node_modules/package-c": vfstest.Symlink("/home/src/workspaces/solution/packages/package-c"),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "--verbose"},
+		},
+	}
+
+	for _, test := range testCases {
+		test.run(t, "inferredTypeFromMonorepoReference")
+	}
+}
+
 func TestBuildJavascriptProjectEmit(t *testing.T) {
 	t.Parallel()
 	testCases := []*tscInput{

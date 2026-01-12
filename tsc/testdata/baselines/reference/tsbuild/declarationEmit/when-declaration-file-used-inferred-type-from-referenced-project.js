@@ -135,7 +135,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 1262
 }
 //// [/home/src/workspaces/project/packages/pkg2/lib/src/index.d.ts] *new* 
-export declare function fn4(): import("@fluentui/pkg1/lib").IThing;
+export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 //// [/home/src/workspaces/project/packages/pkg2/lib/src/index.js] *new* 
 "use strict";
@@ -147,7 +147,7 @@ function fn4() {
 }
 
 //// [/home/src/workspaces/project/packages/pkg2/lib/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"a9c3ba42ffd025bdbe473878c71e06db-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",{"version":"4d4febb98ed4514d6d06322111030719-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n    const a: IThings = { thing1: { a: 'b' } };\n    return a.thing1;\n}","signature":"f536bf864c731ec3cb58961dede15c18-export declare function fn4(): import(\"@fluentui/pkg1/lib\").IThing;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"a9c3ba42ffd025bdbe473878c71e06db-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",{"version":"4d4febb98ed4514d6d06322111030719-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n    const a: IThings = { thing1: { a: 'b' } };\n    return a.thing1;\n}","signature":"0a46e4305c5892e3fe0d5e79c8c48762-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [/home/src/workspaces/project/packages/pkg2/lib/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -186,11 +186,11 @@ function fn4() {
     {
       "fileName": "../src/index.ts",
       "version": "4d4febb98ed4514d6d06322111030719-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n    const a: IThings = { thing1: { a: 'b' } };\n    return a.thing1;\n}",
-      "signature": "f536bf864c731ec3cb58961dede15c18-export declare function fn4(): import(\"@fluentui/pkg1/lib\").IThing;\n",
+      "signature": "0a46e4305c5892e3fe0d5e79c8c48762-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "4d4febb98ed4514d6d06322111030719-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n    const a: IThings = { thing1: { a: 'b' } };\n    return a.thing1;\n}",
-        "signature": "f536bf864c731ec3cb58961dede15c18-export declare function fn4(): import(\"@fluentui/pkg1/lib\").IThing;\n",
+        "signature": "0a46e4305c5892e3fe0d5e79c8c48762-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n",
         "impliedNodeFormat": 1
       }
     }
@@ -210,7 +210,7 @@ function fn4() {
     ]
   },
   "latestChangedDtsFile": "./src/index.d.ts",
-  "size": 1488
+  "size": 1484
 }
 
 packages/pkg1/tsconfig.json::

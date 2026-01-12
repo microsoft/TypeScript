@@ -62,9 +62,12 @@ func GetModuleSpecifiersWithInfo(
 		return nil, ResultKindNone
 	}
 
+	// Use original source file name when file is from project reference output
+	moduleFileName := host.GetSourceOfProjectReferenceIfOutputIncluded(moduleSourceFile)
+
 	return GetModuleSpecifiersForFileWithInfo(
 		importingSourceFile,
-		moduleSourceFile.FileName(),
+		moduleFileName,
 		compilerOptions,
 		host,
 		userPreferences,
