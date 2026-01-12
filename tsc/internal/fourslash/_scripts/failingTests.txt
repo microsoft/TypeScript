@@ -580,7 +580,6 @@ TestRenameFromNodeModulesDep1
 TestRenameFromNodeModulesDep2
 TestRenameFromNodeModulesDep3
 TestRenameFromNodeModulesDep4
-TestRenamePrivateFields
 TestReverseMappedTypeQuickInfo
 TestSelfReferencedExternalModule
 TestSemicolonFormatting

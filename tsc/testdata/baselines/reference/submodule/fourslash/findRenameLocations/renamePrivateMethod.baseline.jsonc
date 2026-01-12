@@ -1,9 +1,9 @@
 // === findRenameLocations ===
 // === /renamePrivateMethod.ts ===
 // class Foo {
-//    /*RENAME*/#foo() { }
+//    /*RENAME*/[|#fooRENAME|]() { }
 //    callFoo() {
-//        return this.#foo();
+//        return this.[|#fooRENAME|]();
 //    }
 // }
 
@@ -12,8 +12,8 @@
 // === findRenameLocations ===
 // === /renamePrivateMethod.ts ===
 // class Foo {
-//    #foo() { }
+//    [|#fooRENAME|]() { }
 //    callFoo() {
-//        return this./*RENAME*/#foo();
+//        return this./*RENAME*/[|#fooRENAME|]();
 //    }
 // }

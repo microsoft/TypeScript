@@ -595,7 +595,7 @@ func (l *LanguageService) provideSymbolsAndEntries(ctx context.Context, uri lspr
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, documentPosition))
 
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
-	if isRename && node.Kind != ast.KindIdentifier {
+	if isRename && !isNodeEligibleForRename(node) {
 		return SymbolAndEntriesData{OriginalNode: node, Position: position}, false
 	}
 
@@ -725,7 +725,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 }
 
 func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *lsproto.RenameParams, data SymbolAndEntriesData, options symbolEntryTransformOptions) (lsproto.WorkspaceEditOrNull, error) {
-	if data.OriginalNode.Kind != ast.KindIdentifier {
+	if !isNodeEligibleForRename(data.OriginalNode) {
 		return lsproto.WorkspaceEditOrNull{}, nil
 	}
 
@@ -734,6 +734,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	changes := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
 	checker, done := program.GetTypeChecker(ctx)
 	defer done()
+
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
 		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
@@ -2425,4 +2426,13 @@ func (state *refState) explicitlyInheritsFrom(symbol *ast.Symbol, parent *ast.Sy
 	// Update cache with the actual result
 	state.inheritsFromCache[key] = inherits
 	return inherits
+}
+
+func isNodeEligibleForRename(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindIdentifier, ast.KindPrivateIdentifier:
+		return true
+	default:
+		return false
+	}
 }
