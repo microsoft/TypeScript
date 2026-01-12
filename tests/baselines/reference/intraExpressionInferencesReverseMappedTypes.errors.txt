@@ -1,9 +1,9 @@
 intraExpressionInferencesReverseMappedTypes.ts(67,21): error TS18046: 'x' is of type 'unknown'.
 intraExpressionInferencesReverseMappedTypes.ts(71,21): error TS18046: 'x' is of type 'unknown'.
-intraExpressionInferencesReverseMappedTypes.ts(80,21): error TS18046: 'x' is of type 'unknown'.
-intraExpressionInferencesReverseMappedTypes.ts(86,21): error TS18046: 'x' is of type 'unknown'.
-intraExpressionInferencesReverseMappedTypes.ts(95,21): error TS18046: 'x' is of type 'unknown'.
-intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(80,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
+intraExpressionInferencesReverseMappedTypes.ts(86,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
+intraExpressionInferencesReverseMappedTypes.ts(95,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
+intraExpressionInferencesReverseMappedTypes.ts(101,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
 
 ==== intraExpressionInferencesReverseMappedTypes.ts (6 errors) ====
@@ -91,16 +91,16 @@ intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of
           return "hello";
         },
         consume: (x) => x.toLowerCase(),
-                        ~
-!!! error TS18046: 'x' is of type 'unknown'.
+                  ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
       },
       {
         produce: function () {
           return { v: "hello" };
         },
         consume: (x) => x.v.toLowerCase(),
-                        ~
-!!! error TS18046: 'x' is of type 'unknown'.
+                  ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
       },
     ]);
     
@@ -110,16 +110,16 @@ intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of
           return "hello";
         },
         consume: (x) => x.toLowerCase(),
-                        ~
-!!! error TS18046: 'x' is of type 'unknown'.
+                  ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
       },
       {
         produce() {
           return { v: "hello" };
         },
         consume: (x) => x.v.toLowerCase(),
-                        ~
-!!! error TS18046: 'x' is of type 'unknown'.
+                  ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
       },
     ]);
     

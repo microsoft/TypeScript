@@ -408,11 +408,11 @@ const res5 = f2([
 >                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
 >   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
->[  {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce: () => string; consume: (x: unknown) => any; }, { produce: () => { v: string; }; consume: (x: unknown) => any; }]
->                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>[  {    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce: () => string; consume: (x: any) => any; }, { produce: () => { v: string; }; consume: (x: any) => any; }]
+>                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
   {
->{    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce: () => string; consume: (x: unknown) => any; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{    produce: function () {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce: () => string; consume: (x: any) => any; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => string
@@ -426,25 +426,25 @@ const res5 = f2([
 
     },
     consume: (x) => x.toLowerCase(),
->consume : (x: unknown) => any
->        : ^ ^^^^^^^^^^^^^^^^^
->(x) => x.toLowerCase() : (x: unknown) => any
->                       : ^ ^^^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>consume : (x: any) => any
+>        : ^ ^^^^^^^^^^^^^
+>(x) => x.toLowerCase() : (x: any) => any
+>                       : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
 >x.toLowerCase() : any
 >                : ^^^
 >x.toLowerCase : any
 >              : ^^^
->x : unknown
->  : ^^^^^^^
+>x : any
+>  : ^^^
 >toLowerCase : any
 >            : ^^^
 
   },
   {
->{    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce: () => { v: string; }; consume: (x: unknown) => any; }
->                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{    produce: function () {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce: () => { v: string; }; consume: (x: any) => any; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     produce: function () {
 >produce : () => { v: string; }
@@ -462,20 +462,20 @@ const res5 = f2([
 
     },
     consume: (x) => x.v.toLowerCase(),
->consume : (x: unknown) => any
->        : ^ ^^^^^^^^^^^^^^^^^
->(x) => x.v.toLowerCase() : (x: unknown) => any
->                         : ^ ^^^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>consume : (x: any) => any
+>        : ^ ^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: any) => any
+>                         : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
 >x.v.toLowerCase() : any
 >                  : ^^^
 >x.v.toLowerCase : any
 >                : ^^^
 >x.v : any
 >    : ^^^
->x : unknown
->  : ^^^^^^^
+>x : any
+>  : ^^^
 >v : any
 >  : ^^^
 >toLowerCase : any
@@ -491,11 +491,11 @@ const res6 = f2([
 >                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(arg: [...{ [K in keyof T]: { produce: (n: string) => T[K]; consume: (x: T[K]) => void; }; }]) => T
 >   : ^ ^^^^^^^^^         ^^   ^^                                                                                       ^^^^^ 
->[  {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce(): string; consume: (x: unknown) => any; }, { produce(): { v: string; }; consume: (x: unknown) => any; }]
->                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>[  {    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  },  {    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  },] : [{ produce(): string; consume: (x: any) => any; }, { produce(): { v: string; }; consume: (x: any) => any; }]
+>                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
   {
->{    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce(): string; consume: (x: unknown) => any; }
->                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{    produce() {      return "hello";    },    consume: (x) => x.toLowerCase(),  } : { produce(): string; consume: (x: any) => any; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => string
@@ -507,25 +507,25 @@ const res6 = f2([
 
     },
     consume: (x) => x.toLowerCase(),
->consume : (x: unknown) => any
->        : ^ ^^^^^^^^^^^^^^^^^
->(x) => x.toLowerCase() : (x: unknown) => any
->                       : ^ ^^^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>consume : (x: any) => any
+>        : ^ ^^^^^^^^^^^^^
+>(x) => x.toLowerCase() : (x: any) => any
+>                       : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
 >x.toLowerCase() : any
 >                : ^^^
 >x.toLowerCase : any
 >              : ^^^
->x : unknown
->  : ^^^^^^^
+>x : any
+>  : ^^^
 >toLowerCase : any
 >            : ^^^
 
   },
   {
->{    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce(): { v: string; }; consume: (x: unknown) => any; }
->                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>{    produce() {      return { v: "hello" };    },    consume: (x) => x.v.toLowerCase(),  } : { produce(): { v: string; }; consume: (x: any) => any; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => { v: string; }
@@ -541,20 +541,20 @@ const res6 = f2([
 
     },
     consume: (x) => x.v.toLowerCase(),
->consume : (x: unknown) => any
->        : ^ ^^^^^^^^^^^^^^^^^
->(x) => x.v.toLowerCase() : (x: unknown) => any
->                         : ^ ^^^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>consume : (x: any) => any
+>        : ^ ^^^^^^^^^^^^^
+>(x) => x.v.toLowerCase() : (x: any) => any
+>                         : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
 >x.v.toLowerCase() : any
 >                  : ^^^
 >x.v.toLowerCase : any
 >                : ^^^
 >x.v : any
 >    : ^^^
->x : unknown
->  : ^^^^^^^
+>x : any
+>  : ^^^
 >v : any
 >  : ^^^
 >toLowerCase : any
