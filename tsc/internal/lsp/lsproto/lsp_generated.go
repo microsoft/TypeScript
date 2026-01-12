@@ -21822,6 +21822,112 @@ func (s *CodeLensData) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
+// Parameters for profiling requests.
+type ProfileParams struct {
+	// The directory path where the profile should be saved.
+	Dir string `json:"dir"`
+}
+
+var _ json.UnmarshalerFrom = (*ProfileParams)(nil)
+
+func (s *ProfileParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	const (
+		missingDir uint = 1 << iota
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dir"`:
+			missing &^= missingDir
+			if err := json.UnmarshalDecode(dec, &s.Dir); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingDir != 0 {
+			missingProps = append(missingProps, "dir")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
+// Result of a profiling request.
+type ProfileResult struct {
+	// The file path where the profile was saved.
+	File string `json:"file"`
+}
+
+var _ json.UnmarshalerFrom = (*ProfileResult)(nil)
+
+func (s *ProfileResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	const (
+		missingFile uint = 1 << iota
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"file"`:
+			missing &^= missingFile
+			if err := json.UnmarshalDecode(dec, &s.File); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingFile != 0 {
+			missingProps = append(missingProps, "file")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -23214,6 +23320,16 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalPtrTo[ExecuteCommandParams](data)
 	case MethodWorkspaceApplyEdit:
 		return unmarshalPtrTo[ApplyWorkspaceEditParams](data)
+	case MethodCustomRunGC:
+		return unmarshalEmpty(data)
+	case MethodCustomSaveHeapProfile:
+		return unmarshalPtrTo[ProfileParams](data)
+	case MethodCustomSaveAllocProfile:
+		return unmarshalPtrTo[ProfileParams](data)
+	case MethodCustomStartCPUProfile:
+		return unmarshalPtrTo[ProfileParams](data)
+	case MethodCustomStopCPUProfile:
+		return unmarshalEmpty(data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -23411,6 +23527,16 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[ExecuteCommandResponse](data)
 	case MethodWorkspaceApplyEdit:
 		return unmarshalValue[ApplyWorkspaceEditResponse](data)
+	case MethodCustomRunGC:
+		return unmarshalValue[RunGCResponse](data)
+	case MethodCustomSaveHeapProfile:
+		return unmarshalValue[SaveHeapProfileResponse](data)
+	case MethodCustomSaveAllocProfile:
+		return unmarshalValue[SaveAllocProfileResponse](data)
+	case MethodCustomStartCPUProfile:
+		return unmarshalValue[StartCPUProfileResponse](data)
+	case MethodCustomStopCPUProfile:
+		return unmarshalValue[StopCPUProfileResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -23715,6 +23841,16 @@ const (
 	MethodWorkspaceExecuteCommand Method = "workspace/executeCommand"
 	// A request sent from the server to the client to modified certain resources.
 	MethodWorkspaceApplyEdit Method = "workspace/applyEdit"
+	// Triggers garbage collection in the language server.
+	MethodCustomRunGC Method = "custom/runGC"
+	// Saves a heap profile to the specified directory.
+	MethodCustomSaveHeapProfile Method = "custom/saveHeapProfile"
+	// Saves an allocation profile to the specified directory.
+	MethodCustomSaveAllocProfile Method = "custom/saveAllocProfile"
+	// Starts CPU profiling, writing to the specified directory when stopped.
+	MethodCustomStartCPUProfile Method = "custom/startCPUProfile"
+	// Stops CPU profiling and saves the profile.
+	MethodCustomStopCPUProfile Method = "custom/stopCPUProfile"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -24222,6 +24358,36 @@ type ApplyWorkspaceEditResponse = *ApplyWorkspaceEditResult
 
 // Type mapping info for `workspace/applyEdit`
 var WorkspaceApplyEditInfo = RequestInfo[*ApplyWorkspaceEditParams, ApplyWorkspaceEditResponse]{Method: MethodWorkspaceApplyEdit}
+
+// Response type for `custom/runGC`
+type RunGCResponse = Null
+
+// Type mapping info for `custom/runGC`
+var CustomRunGCInfo = RequestInfo[any, RunGCResponse]{Method: MethodCustomRunGC}
+
+// Response type for `custom/saveHeapProfile`
+type SaveHeapProfileResponse = *ProfileResult
+
+// Type mapping info for `custom/saveHeapProfile`
+var CustomSaveHeapProfileInfo = RequestInfo[*ProfileParams, SaveHeapProfileResponse]{Method: MethodCustomSaveHeapProfile}
+
+// Response type for `custom/saveAllocProfile`
+type SaveAllocProfileResponse = *ProfileResult
+
+// Type mapping info for `custom/saveAllocProfile`
+var CustomSaveAllocProfileInfo = RequestInfo[*ProfileParams, SaveAllocProfileResponse]{Method: MethodCustomSaveAllocProfile}
+
+// Response type for `custom/startCPUProfile`
+type StartCPUProfileResponse = Null
+
+// Type mapping info for `custom/startCPUProfile`
+var CustomStartCPUProfileInfo = RequestInfo[*ProfileParams, StartCPUProfileResponse]{Method: MethodCustomStartCPUProfile}
+
+// Response type for `custom/stopCPUProfile`
+type StopCPUProfileResponse = *ProfileResult
+
+// Type mapping info for `custom/stopCPUProfile`
+var CustomStopCPUProfileInfo = RequestInfo[any, StopCPUProfileResponse]{Method: MethodCustomStopCPUProfile}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}

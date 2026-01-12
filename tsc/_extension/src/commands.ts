@@ -40,7 +40,82 @@ export function registerLanguageCommands(context: vscode.ExtensionContext, clien
         });
     }));
 
+    // Developer/debugging commands
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.runGC", async () => {
+        try {
+            await client.runGC();
+            vscode.window.showInformationMessage("Garbage collection triggered");
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Failed to run GC: ${error}`);
+        }
+    }));
+
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.saveHeapProfile", async () => {
+        const dir = await promptForProfileDirectory();
+        if (!dir) return;
+        try {
+            const file = await client.saveHeapProfile(dir);
+            vscode.window.showInformationMessage(`Heap profile saved to: ${file}`);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Failed to save heap profile: ${error}`);
+        }
+    }));
+
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.saveAllocProfile", async () => {
+        const dir = await promptForProfileDirectory();
+        if (!dir) return;
+        try {
+            const file = await client.saveAllocProfile(dir);
+            vscode.window.showInformationMessage(`Allocation profile saved to: ${file}`);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Failed to save allocation profile: ${error}`);
+        }
+    }));
+
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.startCPUProfile", async () => {
+        const dir = await promptForProfileDirectory();
+        if (!dir) return;
+        try {
+            await client.startCPUProfile(dir);
+            vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", true);
+            vscode.window.showInformationMessage(`CPU profiling started. Profile will be saved to: ${dir}`);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Failed to start CPU profile: ${error}`);
+            vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
+        }
+    }));
+
+    disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.stopCPUProfile", async () => {
+        try {
+            const file = await client.stopCPUProfile();
+            vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
+            vscode.window.showInformationMessage(`CPU profile saved to: ${file}`);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Failed to stop CPU profile: ${error}`);
+        }
+    }));
+
     return disposables;
+}
+
+async function promptForProfileDirectory(): Promise<string | undefined> {
+    const defaultDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? "";
+    const dir = await vscode.window.showInputBox({
+        prompt: "Enter directory path for profile output",
+        value: defaultDir,
+        validateInput: value => {
+            if (!value.trim()) {
+                return "Directory path is required";
+            }
+            return undefined;
+        },
+    });
+    return dir?.trim();
 }
 
 /**

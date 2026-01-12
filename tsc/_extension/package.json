@@ -111,6 +111,36 @@
                 "title": "Show References of CodeLens",
                 "command": "typescript.native-preview.codeLens.showLocations",
                 "enablement": "false"
+            },
+            {
+                "command": "typescript.native-preview.dev.runGC",
+                "title": "TypeScript Native Preview: Run Garbage Collection",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "Developer"
+            },
+            {
+                "command": "typescript.native-preview.dev.saveHeapProfile",
+                "title": "TypeScript Native Preview: Save Heap Profile",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "Developer"
+            },
+            {
+                "command": "typescript.native-preview.dev.saveAllocProfile",
+                "title": "TypeScript Native Preview: Save Allocation Profile",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "Developer"
+            },
+            {
+                "command": "typescript.native-preview.dev.startCPUProfile",
+                "title": "TypeScript Native Preview: Start CPU Profile",
+                "enablement": "typescript.native-preview.serverRunning && !typescript.native-preview.cpuProfileRunning",
+                "category": "Developer"
+            },
+            {
+                "command": "typescript.native-preview.dev.stopCPUProfile",
+                "title": "TypeScript Native Preview: Stop CPU Profile",
+                "enablement": "typescript.native-preview.cpuProfileRunning",
+                "category": "Developer"
             }
         ]
     },

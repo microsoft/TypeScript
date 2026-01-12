@@ -175,6 +175,7 @@ export class Client {
             this.client?.stop();
             codeLensLocationsCommand.dispose();
             vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
+            vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
         });
     }
 
@@ -208,5 +209,45 @@ export class Client {
         this.outputChannel.appendLine(`Restarting language server...`);
         this.client.restart();
         return new vscode.Disposable(() => {});
+    }
+
+    // Developer/debugging methods
+
+    async runGC(): Promise<void> {
+        if (!this.client) {
+            throw new Error("Language client is not initialized");
+        }
+        await this.client.sendRequest("custom/runGC");
+    }
+
+    async saveHeapProfile(dir: string): Promise<string> {
+        if (!this.client) {
+            throw new Error("Language client is not initialized");
+        }
+        const result = await this.client.sendRequest<{ file: string; }>("custom/saveHeapProfile", { dir });
+        return result.file;
+    }
+
+    async saveAllocProfile(dir: string): Promise<string> {
+        if (!this.client) {
+            throw new Error("Language client is not initialized");
+        }
+        const result = await this.client.sendRequest<{ file: string; }>("custom/saveAllocProfile", { dir });
+        return result.file;
+    }
+
+    async startCPUProfile(dir: string): Promise<void> {
+        if (!this.client) {
+            throw new Error("Language client is not initialized");
+        }
+        await this.client.sendRequest("custom/startCPUProfile", { dir });
+    }
+
+    async stopCPUProfile(): Promise<string> {
+        if (!this.client) {
+            throw new Error("Language client is not initialized");
+        }
+        const result = await this.client.sendRequest<{ file: string; }>("custom/stopCPUProfile");
+        return result.file;
     }
 }

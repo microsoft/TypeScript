@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/project/ata"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -173,6 +174,8 @@ type Server struct {
 	parseCache *project.ParseCache
 
 	npmInstall func(cwd string, args []string) ([]byte, error)
+
+	cpuProfiler pprof.CPUProfiler
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -558,6 +561,13 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
 	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
 	registerRequestHandler(handlers, lsproto.CodeLensResolveInfo, (*Server).handleCodeLensResolve)
+
+	// Developer/debugging commands
+	registerRequestHandler(handlers, lsproto.CustomRunGCInfo, (*Server).handleRunGC)
+	registerRequestHandler(handlers, lsproto.CustomSaveHeapProfileInfo, (*Server).handleSaveHeapProfile)
+	registerRequestHandler(handlers, lsproto.CustomSaveAllocProfileInfo, (*Server).handleSaveAllocProfile)
+	registerRequestHandler(handlers, lsproto.CustomStartCPUProfileInfo, (*Server).handleStartCPUProfile)
+	registerRequestHandler(handlers, lsproto.CustomStopCPUProfileInfo, (*Server).handleStopCPUProfile)
 
 	return handlers
 })
@@ -1227,4 +1237,48 @@ func isBlockingMethod(method lsproto.Method) bool {
 
 func ptrTo[T any](v T) *T {
 	return &v
+}
+
+// Developer/debugging command handlers
+
+func (s *Server) handleRunGC(_ context.Context, _ any, _ *lsproto.RequestMessage) (lsproto.RunGCResponse, error) {
+	pprof.RunGC()
+	s.logger.Info("GC triggered")
+	return lsproto.Null{}, nil
+}
+
+func (s *Server) handleSaveHeapProfile(_ context.Context, params *lsproto.ProfileParams, _ *lsproto.RequestMessage) (*lsproto.ProfileResult, error) {
+	filePath, err := pprof.SaveHeapProfile(params.Dir)
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Info("Heap profile saved to: ", filePath)
+	return &lsproto.ProfileResult{File: filePath}, nil
+}
+
+func (s *Server) handleSaveAllocProfile(_ context.Context, params *lsproto.ProfileParams, _ *lsproto.RequestMessage) (*lsproto.ProfileResult, error) {
+	filePath, err := pprof.SaveAllocProfile(params.Dir)
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Info("Allocation profile saved to: ", filePath)
+	return &lsproto.ProfileResult{File: filePath}, nil
+}
+
+func (s *Server) handleStartCPUProfile(_ context.Context, params *lsproto.ProfileParams, _ *lsproto.RequestMessage) (lsproto.StartCPUProfileResponse, error) {
+	err := s.cpuProfiler.StartCPUProfile(params.Dir)
+	if err != nil {
+		return lsproto.Null{}, err
+	}
+	s.logger.Info("CPU profiling started, will save to: ", params.Dir)
+	return lsproto.Null{}, nil
+}
+
+func (s *Server) handleStopCPUProfile(_ context.Context, _ any, _ *lsproto.RequestMessage) (*lsproto.ProfileResult, error) {
+	filePath, err := s.cpuProfiler.StopCPUProfile()
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Info("CPU profile saved to: ", filePath)
+	return &lsproto.ProfileResult{File: filePath}, nil
 }
