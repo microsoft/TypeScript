@@ -15,7 +15,7 @@ variadicTuples4.ts(91,49): error TS2344: Type '[...T]' does not satisfy the cons
 variadicTuples4.ts(108,52): error TS2344: Type '[...A]' does not satisfy the constraint '[...A, ...A]'.
   Source has 1 element(s) but target requires 2.
 variadicTuples4.ts(114,19): error TS2344: Type '[...A, ...B, ...C]' does not satisfy the constraint '[...A, ...B]'.
-  Type at positions 0 through 2 in source is not compatible with type at position 1 in target.
+  Type at position 2 in source is not compatible with type at position 1 in target.
     Type 'C' is not assignable to type 'B'.
       'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
 variadicTuples4.ts(133,5): error TS2344: Type '[...A, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
@@ -173,7 +173,7 @@ variadicTuples4.ts(180,5): error TS2344: Type '[boolean, ...A, ...B, (number | u
       > = Inner<A, B, [...A, ...B, ...C]>;
                       ~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[...A, ...B, ...C]' does not satisfy the constraint '[...A, ...B]'.
-!!! error TS2344:   Type at positions 0 through 2 in source is not compatible with type at position 1 in target.
+!!! error TS2344:   Type at position 2 in source is not compatible with type at position 1 in target.
 !!! error TS2344:     Type 'C' is not assignable to type 'B'.
 !!! error TS2344:       'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
     }

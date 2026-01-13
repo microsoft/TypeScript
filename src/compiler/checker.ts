@@ -24467,7 +24467,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const related = isRelatedTo(sourceType, targetCheckType, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                         if (!related) {
                             if (reportErrors && (targetArity > 1 || sourceArity > 1)) {
-                                if (targetHasVariableElement && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
+                                // use range message only when target has exactly one variadic position (so all middle source positions map to it)
+                                const targetMiddleLength = targetArity - targetEndCount - targetStartCount;
+                                if (targetHasVariableElement && targetMiddleLength === 1 && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
                                     reportIncompatibleError(Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, targetStartCount, sourceArity - targetEndCount - 1, targetPosition);
                                 }
                                 else {
