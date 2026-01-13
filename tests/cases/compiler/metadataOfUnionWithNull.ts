@@ -1,6 +1,7 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
-// @strict: true, false
+// @strictNullChecks: true, false
+// @strictPropertyInitialization: false
 function PropDeco(target: Object, propKey: string | symbol) { }
 
 class A {

@@ -2,7 +2,8 @@
 // @emitDecoratorMetadata: true
 // @target: es5
 // @filename: Class1.ts
-// @strict: true, false
+// @strictNullChecks: true, false
+// @strictPropertyInitialization: false
 
 export class Class1 {
 }
