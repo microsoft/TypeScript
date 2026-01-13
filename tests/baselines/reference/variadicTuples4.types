@@ -1,0 +1,121 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples4.ts] ////
+
+=== variadicTuples4.ts ===
+{
+  type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+>Inner : A2
+>      : ^^
+
+  type Wrapper<A extends any[]> = Inner<
+>Wrapper : [...A, boolean, boolean, boolean, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    [...A, boolean, boolean, boolean, boolean]
+  >;
+}
+
+{
+  type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+>Inner : A2
+>      : ^^
+
+  type Wrapper<A extends any[]> = Inner<A, [...A, boolean, boolean, boolean]>;
+>Wrapper : [...A, boolean, boolean, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+{
+  type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+>Inner : A2
+>      : ^^
+
+  type Wrapper<A extends any[], B extends any[]> = Inner<
+>Wrapper : [...A, boolean, ...B, boolean, boolean, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    [...A, boolean, ...B, boolean, boolean, boolean]
+  >;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, boolean, ...B, boolean],
+  > = C;
+
+  type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper : [...A, boolean, ...B, boolean, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, ...B, boolean, boolean]
+  >;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, boolean, ...B, boolean],
+  > = C;
+
+  type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper : [...A, boolean, ...B, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, ...B, boolean] // ok
+  >;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, boolean, ...B, boolean],
+  > = C;
+
+  type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper : [...A, boolean, boolean, ...B, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, boolean, ...B, boolean]
+  >;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, boolean, boolean, ...B, boolean],
+  > = C;
+
+  type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper : [...A, boolean, ...B, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, ...B, boolean]
+  >;
+}
+

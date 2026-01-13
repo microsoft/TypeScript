@@ -24383,7 +24383,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceArity = getTypeReferenceArity(source);
                     const targetArity = getTypeReferenceArity(target);
                     const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
-                    const targetHasRestElement = !!(target.target.combinedFlags & ElementFlags.Variable);
+                    const targetHasVariableElement = !!(target.target.combinedFlags & ElementFlags.Variable);
                     const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
                     const targetMinLength = target.target.minLength;
                     if (!sourceRestFlag && sourceArity < targetMinLength) {
@@ -24392,13 +24392,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return Ternary.False;
                     }
-                    if (!targetHasRestElement && targetArity < sourceMinLength) {
+                    if (!targetHasVariableElement && targetArity < sourceMinLength) {
                         if (reportErrors) {
                             reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
                         }
                         return Ternary.False;
                     }
-                    if (!targetHasRestElement && (sourceRestFlag || targetArity < sourceArity)) {
+                    if (!targetHasVariableElement && (sourceRestFlag || targetArity < sourceArity)) {
                         if (reportErrors) {
                             if (sourceMinLength < targetMinLength) {
                                 reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
@@ -24411,22 +24411,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     const sourceTypeArguments = getTypeArguments(source);
                     const targetTypeArguments = getTypeArguments(target);
-                    const targetStartCount = getStartElementCount(target.target, ElementFlags.NonRest);
-                    const targetEndCount = getEndElementCount(target.target, ElementFlags.NonRest);
+                    const targetStartCount = getStartElementCount(target.target, ElementFlags.Fixed);
+                    const targetEndCount = getEndElementCount(target.target, ElementFlags.Fixed);
                     let canExcludeDiscriminants = !!excludedProperties;
                     for (let sourcePosition = 0; sourcePosition < sourceArity; sourcePosition++) {
                         const sourceFlags = isTupleType(source) ? source.target.elementFlags[sourcePosition] : ElementFlags.Rest;
                         const sourcePositionFromEnd = sourceArity - 1 - sourcePosition;
 
-                        const targetPosition = targetHasRestElement && sourcePosition >= targetStartCount
-                            ? targetArity - 1 - Math.min(sourcePositionFromEnd, targetEndCount)
+                        const targetPosition = targetHasVariableElement && sourcePosition >= targetStartCount
+                            ? sourcePositionFromEnd < targetEndCount
+                                ? targetArity - 1 - sourcePositionFromEnd
+                                : Math.min(sourcePosition, targetArity - 1 - targetEndCount)
                             : sourcePosition;
 
                         const targetFlags = target.target.elementFlags[targetPosition];
 
                         if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic)) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Source_provides_no_match_for_variadic_element_at_position_0_in_target, targetPosition);
+                                if (sourcePosition > targetStartCount) {
+                                    reportError(Diagnostics.Target_allows_only_0_element_s_but_source_may_have_more, targetArity);
+                                }
+                                else {
+                                    reportError(Diagnostics.Source_provides_no_match_for_variadic_element_at_position_0_in_target, targetPosition);
+                                }
                             }
                             return Ternary.False;
                         }
@@ -24460,7 +24467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const related = isRelatedTo(sourceType, targetCheckType, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                         if (!related) {
                             if (reportErrors && (targetArity > 1 || sourceArity > 1)) {
-                                if (targetHasRestElement && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
+                                if (targetHasVariableElement && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
                                     reportIncompatibleError(Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, targetStartCount, sourceArity - targetEndCount - 1, targetPosition);
                                 }
                                 else {

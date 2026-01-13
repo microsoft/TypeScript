@@ -1,0 +1,112 @@
+variadicTuples4.ts(5,5): error TS2344: Type '[...A, boolean, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+  Target allows only 2 element(s) but source may have more.
+variadicTuples4.ts(12,44): error TS2344: Type '[...A, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+  Target allows only 2 element(s) but source may have more.
+variadicTuples4.ts(20,5): error TS2344: Type '[...A, boolean, ...B, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+  Target allows only 2 element(s) but source may have more.
+variadicTuples4.ts(34,5): error TS2344: Type '[...A, boolean, ...B, boolean, boolean]' does not satisfy the constraint '[...A, boolean, ...B, boolean]'.
+  Target allows only 4 element(s) but source may have more.
+variadicTuples4.ts(62,5): error TS2344: Type '[...A, boolean, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, ...B, boolean]'.
+  Target allows only 4 element(s) but source may have more.
+variadicTuples4.ts(76,5): error TS2344: Type '[...A, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, boolean, ...B, boolean]'.
+  Source has 4 element(s) but target requires 5.
+
+
+==== variadicTuples4.ts (6 errors) ====
+    {
+      type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+      type Wrapper<A extends any[]> = Inner<
+        A,
+        [...A, boolean, boolean, boolean, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+!!! error TS2344:   Target allows only 2 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+    
+      type Wrapper<A extends any[]> = Inner<A, [...A, boolean, boolean, boolean]>;
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+!!! error TS2344:   Target allows only 2 element(s) but source may have more.
+    }
+    
+    {
+      type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
+    
+      type Wrapper<A extends any[], B extends any[]> = Inner<
+        A,
+        [...A, boolean, ...B, boolean, boolean, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, ...B, boolean, boolean, boolean]' does not satisfy the constraint '[...A, boolean]'.
+!!! error TS2344:   Target allows only 2 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, boolean, ...B, boolean],
+      > = C;
+    
+      type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, ...B, boolean, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, ...B, boolean, boolean]' does not satisfy the constraint '[...A, boolean, ...B, boolean]'.
+!!! error TS2344:   Target allows only 4 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, boolean, ...B, boolean],
+      > = C;
+    
+      type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, ...B, boolean] // ok
+      >;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, boolean, ...B, boolean],
+      > = C;
+    
+      type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, boolean, ...B, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, ...B, boolean]'.
+!!! error TS2344:   Target allows only 4 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, boolean, boolean, ...B, boolean],
+      > = C;
+    
+      type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, ...B, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, boolean, ...B, boolean]'.
+!!! error TS2344:   Source has 4 element(s) but target requires 5.
+      >;
+    }
+    
