@@ -2,7 +2,7 @@
 
 //// [optionalParameterProperty.ts]
 class C {
-    p: number;
+    p: number = 0;
 }
 
 class D extends C { 
@@ -30,6 +30,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var C = /** @class */ (function () {
     function C() {
+        this.p = 0;
     }
     return C;
 }());
