@@ -90,16 +90,19 @@ func (e *symbolExtractor) getModuleID(file *ast.SourceFile) ModuleID {
 
 // getModuleIDForSymbol returns the ModuleID for a module symbol, using realpath
 // normalization when available for source files.
-func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) ModuleID {
-	moduleID, fileName := getModuleIDAndFileNameOfModuleSymbol(symbol)
+func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bool) {
+	moduleID, fileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol)
+	if !ok {
+		return "", false
+	}
 	// If fileName is set, this is a source file that may need realpath normalization
 	if fileName != "" && e.realpath != nil {
 		decl := ast.GetNonAugmentationDeclaration(symbol)
 		if decl != nil && decl.Kind == ast.KindSourceFile {
-			return e.getModuleID(decl.AsSourceFile())
+			return e.getModuleID(decl.AsSourceFile()), true
 		}
 	}
-	return moduleID
+	return moduleID, true
 }
 
 func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
@@ -186,12 +189,13 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 		for _, reexportedSymbol := range allExports {
 			export, _ := e.createExport(reexportedSymbol, moduleID, moduleFileName, ExportSyntaxStar, file, checkerLease)
 			if export != nil {
-				parent := reexportedSymbol.Parent
+				parent := checkerLease.GetChecker().GetMergedSymbol(reexportedSymbol.Parent)
 				if parent != nil && parent.IsExternalModule() {
-					targetModuleID := e.getModuleIDForSymbol(parent)
-					export.Target = ExportID{
-						ExportName: reexportedSymbol.Name,
-						ModuleID:   targetModuleID,
+					if targetModuleID, ok := e.getModuleIDForSymbol(parent); ok {
+						export.Target = ExportID{
+							ExportName: reexportedSymbol.Name,
+							ModuleID:   targetModuleID,
+						}
 					}
 				}
 				export.through = ast.InternalSymbolNameExportStar
@@ -310,9 +314,11 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 				panic("no declaration for aliased symbol")
 			}
 
+			parent := targetSymbol.Parent
 			if checker := checkerLease.TryChecker(); checker != nil {
 				export.Flags = checker.GetSymbolFlags(targetSymbol)
 				export.IsTypeOnly = checker.GetTypeOnlyAliasDeclaration(symbol) != nil
+				parent = checker.GetMergedSymbol(parent)
 			} else {
 				export.Flags = targetSymbol.Flags
 				export.IsTypeOnly = core.Some(symbol.Declarations, ast.IsPartOfTypeOnlyImportOrExportDeclaration)
@@ -320,9 +326,10 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 			export.ScriptElementKind = lsutil.GetSymbolKind(checkerLease.TryChecker(), targetSymbol, decl)
 			export.ScriptElementKindModifiers = lsutil.GetSymbolModifiers(checkerLease.TryChecker(), targetSymbol)
 			moduleID := ModuleID(ast.GetSourceFileOfNode(decl).Path())
-			parent := targetSymbol.Parent
 			if parent != nil && parent.IsExternalModule() {
-				moduleID = e.getModuleIDForSymbol(parent)
+				if targetModuleID, ok := e.getModuleIDForSymbol(parent); ok {
+					moduleID = targetModuleID
+				}
 			}
 			export.Target = ExportID{
 				ExportName: targetSymbol.Name,

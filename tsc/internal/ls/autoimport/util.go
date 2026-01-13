@@ -20,6 +20,23 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
+func tryGetModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string, bool) {
+	if !symbol.IsExternalModule() {
+		return "", "", false
+	}
+	decl := ast.GetNonAugmentationDeclaration(symbol)
+	if decl == nil {
+		return "", "", false
+	}
+	if decl.Kind == ast.KindSourceFile {
+		return ModuleID(decl.AsSourceFile().Path()), decl.AsSourceFile().FileName(), true
+	}
+	if ast.IsModuleWithStringLiteralName(decl) {
+		return ModuleID(decl.Name().Text()), "", true
+	}
+	return "", "", false
+}
+
 func getModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string) {
 	if !symbol.IsExternalModule() {
 		panic("symbol is not an external module")
