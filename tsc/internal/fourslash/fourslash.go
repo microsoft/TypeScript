@@ -2820,6 +2820,61 @@ func (f *FourslashTest) VerifyQuickInfoIs(t *testing.T, expectedText string, exp
 	f.verifyHoverContent(t, hover.Contents, expectedText, expectedDocumentation, f.getCurrentPositionPrefix())
 }
 
+func (f *FourslashTest) VerifyJsxClosingTag(t *testing.T, markersToNewText map[string]*string) {
+	for marker, expectedText := range markersToNewText {
+		f.GoToMarker(t, marker)
+		params := &lsproto.TextDocumentPositionParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
+		}
+
+		requestResult := sendRequest(t, f, lsproto.CustomTextDocumentClosingTagCompletionInfo, params)
+
+		var actualText *string
+		if closingTag := requestResult.CustomClosingTagCompletion; closingTag != nil {
+			actualText = &closingTag.NewText
+		}
+		assertDeepEqual(t, actualText, expectedText, f.getCurrentPositionPrefix()+"JSX closing tag text mismatch")
+	}
+}
+
+// VerifyBaselineClosingTags generates a baseline for JSX closing tag completions at all markers.
+func (f *FourslashTest) VerifyBaselineClosingTags(t *testing.T) {
+	t.Helper()
+
+	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.CustomClosingTagCompletion], bool) {
+		if marker.Name == nil {
+			return markerAndItem[*lsproto.CustomClosingTagCompletion]{}, false
+		}
+
+		params := &lsproto.TextDocumentPositionParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: lsconv.FileNameToDocumentURI(marker.FileName()),
+			},
+			Position: marker.LSPosition,
+		}
+
+		result := sendRequest(t, f, lsproto.CustomTextDocumentClosingTagCompletionInfo, params)
+		return markerAndItem[*lsproto.CustomClosingTagCompletion]{Marker: marker, Item: result.CustomClosingTagCompletion}, true
+	})
+
+	getRange := func(item *lsproto.CustomClosingTagCompletion) *lsproto.Range {
+		return nil
+	}
+
+	getTooltipLines := func(item, _prev *lsproto.CustomClosingTagCompletion) []string {
+		if item == nil {
+			return []string{"No closing tag"}
+		}
+		return []string{fmt.Sprintf("newText: %q", item.NewText)}
+	}
+
+	result := annotateContentWithTooltips(t, f, markersAndItems, "closing tag", getRange, getTooltipLines)
+	f.addResultToBaseline(t, closingTagCmd, result)
+}
+
 // VerifySignatureHelpOptions contains options for verifying signature help.
 // All fields are optional - only specified fields will be verified.
 type VerifySignatureHelpOptions struct {

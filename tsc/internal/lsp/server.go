@@ -506,7 +506,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		s.logger.Info("handled method '", req.Method, "' in ", time.Since(start))
 		return err
 	}
-	s.logger.Warn("unknown method", req.Method)
+	s.logger.Warn("unknown method '", req.Method, "'")
 	if req.ID != nil {
 		s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
 	}
@@ -550,6 +550,8 @@ var handlers = sync.OnceValue(func() handlerMap {
 
 	registerLanguageServiceWithAutoImportsRequestHandler(handlers, lsproto.TextDocumentCompletionInfo, (*Server).handleCompletion)
 	registerLanguageServiceWithAutoImportsRequestHandler(handlers, lsproto.TextDocumentCodeActionInfo, (*Server).handleCodeAction)
+
+	registerLanguageServiceDocumentRequestHandler(handlers, lsproto.CustomTextDocumentClosingTagCompletionInfo, (*Server).handleClosingTagCompletion)
 
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentReferencesInfo, (*ls.LanguageService).ProvideReferences)
 	registerMultiProjectReferenceRequestHandler(handlers, lsproto.TextDocumentRenameInfo, (*ls.LanguageService).ProvideRename)
@@ -1049,6 +1051,10 @@ func (s *Server) handleSignatureHelp(ctx context.Context, languageService *ls.La
 
 func (s *Server) handleFoldingRange(ctx context.Context, ls *ls.LanguageService, params *lsproto.FoldingRangeParams) (lsproto.FoldingRangeResponse, error) {
 	return ls.ProvideFoldingRange(ctx, params.TextDocument.Uri)
+}
+
+func (s *Server) handleClosingTagCompletion(ctx context.Context, ls *ls.LanguageService, params *lsproto.TextDocumentPositionParams) (lsproto.CustomClosingTagCompletionResponse, error) {
+	return ls.ProvideClosingTagCompletion(ctx, params)
 }
 
 func (s *Server) handleDefinition(ctx context.Context, ls *ls.LanguageService, params *lsproto.DefinitionParams) (lsproto.DefinitionResponse, error) {

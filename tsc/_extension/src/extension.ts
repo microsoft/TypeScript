@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import { Client } from "./client";
 import {
+    registerCodeLensShowLocationsCommand,
     registerEnablementCommands,
     registerLanguageCommands,
 } from "./commands";
@@ -85,5 +86,6 @@ async function activateLanguageFeatures(context: vscode.ExtensionContext, output
     disposables.push(await client.initialize(context));
     disposables.push(setupStatusBar());
     disposables.push(...setupVersionStatusItem(client));
+    disposables.push(registerCodeLensShowLocationsCommand());
     return vscode.Disposable.from(...disposables);
 }

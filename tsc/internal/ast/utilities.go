@@ -2011,6 +2011,25 @@ func IsQuestionToken(node *Node) bool {
 	return node != nil && node.Kind == KindQuestionToken
 }
 
+func EntityNameToString(name *Node, getTextOfNode func(*Node) string) string {
+	switch name.Kind {
+	case KindThisKeyword:
+		return "this"
+	case KindIdentifier, KindPrivateIdentifier:
+		if NodeIsSynthesized(name) || getTextOfNode == nil {
+			return name.Text()
+		}
+		return getTextOfNode(name)
+	case KindQualifiedName:
+		return EntityNameToString(name.AsQualifiedName().Left, getTextOfNode) + "." + EntityNameToString(name.AsQualifiedName().Right, getTextOfNode)
+	case KindPropertyAccessExpression:
+		return EntityNameToString(name.Expression(), getTextOfNode) + "." + EntityNameToString(name.AsPropertyAccessExpression().Name(), getTextOfNode)
+	case KindJsxNamespacedName:
+		return EntityNameToString(name.AsJsxNamespacedName().Namespace, getTextOfNode) + ":" + EntityNameToString(name.AsJsxNamespacedName().Name(), getTextOfNode)
+	}
+	panic("Unhandled case in EntityNameToString")
+}
+
 func GetTextOfPropertyName(name *Node) string {
 	text, _ := TryGetTextOfPropertyName(name)
 	return text
@@ -4180,6 +4199,25 @@ func GetRestParameterElementType(node *ParameterDeclarationNode) *Node {
 		return core.FirstOrNil(node.AsTypeReferenceNode().TypeArguments.Nodes)
 	}
 	return nil
+}
+
+func TagNamesAreEquivalent(lhs *Expression, rhs *Expression) bool {
+	if lhs.Kind != rhs.Kind {
+		return false
+	}
+	switch lhs.Kind {
+	case KindIdentifier:
+		return lhs.Text() == rhs.Text()
+	case KindThisKeyword:
+		return true
+	case KindJsxNamespacedName:
+		return lhs.AsJsxNamespacedName().Namespace.Text() == rhs.AsJsxNamespacedName().Namespace.Text() &&
+			lhs.AsJsxNamespacedName().Name().Text() == rhs.AsJsxNamespacedName().Name().Text()
+	case KindPropertyAccessExpression:
+		return lhs.AsPropertyAccessExpression().Name().Text() == rhs.AsPropertyAccessExpression().Name().Text() &&
+			TagNamesAreEquivalent(lhs.Expression(), rhs.Expression())
+	}
+	panic("Unhandled case in TagNamesAreEquivalent")
 }
 
 func isTagName(node *Node) bool {

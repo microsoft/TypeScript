@@ -4598,8 +4598,8 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 		var closingElement *ast.Node
 		lastChild := core.LastOrNil(children.Nodes)
 		if lastChild != nil && lastChild.Kind == ast.KindJsxElement &&
-			!tagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) &&
-			tagNamesAreEquivalent(opening.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) {
+			!ast.TagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) &&
+			ast.TagNamesAreEquivalent(opening.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) {
 			// when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
 			// restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
 			// (no need to error; the parent will error)
@@ -4625,8 +4625,8 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			closingElement = lastChild.AsJsxElement().ClosingElement
 		} else {
 			closingElement = p.parseJsxClosingElement(opening, inExpressionContext)
-			if !tagNamesAreEquivalent(opening.TagName(), closingElement.TagName()) {
-				if openingTag != nil && ast.IsJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.TagName(), openingTag.TagName()) {
+			if !ast.TagNamesAreEquivalent(opening.TagName(), closingElement.TagName()) {
+				if openingTag != nil && ast.IsJsxOpeningElement(openingTag) && ast.TagNamesAreEquivalent(closingElement.TagName(), openingTag.TagName()) {
 					// opening incorrectly matched with its parent's closing -- put error on opening
 					p.parseErrorAtRange(opening.TagName().Loc, diagnostics.JSX_element_0_has_no_corresponding_closing_tag, scanner.GetTextOfNodeFromSourceText(p.sourceText, opening.TagName(), false /*includeTrivia*/))
 				} else {
@@ -4681,8 +4681,8 @@ func (p *Parser) parseJsxChildren(openingTag *ast.Expression) *ast.NodeList {
 		}
 		list = append(list, child)
 		if ast.IsJsxOpeningElement(openingTag) && child.Kind == ast.KindJsxElement &&
-			!tagNamesAreEquivalent(child.AsJsxElement().OpeningElement.TagName(), child.AsJsxElement().ClosingElement.TagName()) &&
-			tagNamesAreEquivalent(openingTag.TagName(), child.AsJsxElement().ClosingElement.TagName()) {
+			!ast.TagNamesAreEquivalent(child.AsJsxElement().OpeningElement.TagName(), child.AsJsxElement().ClosingElement.TagName()) &&
+			ast.TagNamesAreEquivalent(openingTag.TagName(), child.AsJsxElement().ClosingElement.TagName()) {
 			// stop after parsing a mismatched child like <div>...(<span></div>) in order to reattach the </div> higher
 			break
 		}
@@ -4771,7 +4771,7 @@ func (p *Parser) parseJsxClosingElement(open *ast.Node, inExpressionContext bool
 	tagName := p.parseJsxElementName()
 	if p.parseExpectedWithDiagnostic(ast.KindGreaterThanToken, nil /*diagnosticMessage*/, false /*shouldAdvance*/) {
 		// manually advance the scanner in order to look for jsx text inside jsx
-		if inExpressionContext || !tagNamesAreEquivalent(open.TagName(), tagName) {
+		if inExpressionContext || !ast.TagNamesAreEquivalent(open.TagName(), tagName) {
 			p.nextToken()
 		} else {
 			p.scanJsxText()
@@ -6244,25 +6244,6 @@ func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
 
 func isReservedWord(token ast.Kind) bool {
 	return ast.KindFirstReservedWord <= token && token <= ast.KindLastReservedWord
-}
-
-func tagNamesAreEquivalent(lhs *ast.Expression, rhs *ast.Expression) bool {
-	if lhs.Kind != rhs.Kind {
-		return false
-	}
-	switch lhs.Kind {
-	case ast.KindIdentifier:
-		return lhs.Text() == rhs.Text()
-	case ast.KindThisKeyword:
-		return true
-	case ast.KindJsxNamespacedName:
-		return lhs.AsJsxNamespacedName().Namespace.Text() == rhs.AsJsxNamespacedName().Namespace.Text() &&
-			lhs.AsJsxNamespacedName().Name().Text() == rhs.AsJsxNamespacedName().Name().Text()
-	case ast.KindPropertyAccessExpression:
-		return lhs.AsPropertyAccessExpression().Name().Text() == rhs.AsPropertyAccessExpression().Name().Text() &&
-			tagNamesAreEquivalent(lhs.Expression(), rhs.Expression())
-	}
-	panic("Unhandled case in tagNamesAreEquivalent")
 }
 
 func attachFileToDiagnostics(diagnostics []*ast.Diagnostic, file *ast.SourceFile) []*ast.Diagnostic {

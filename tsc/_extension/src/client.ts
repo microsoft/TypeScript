@@ -1,15 +1,14 @@
 import * as vscode from "vscode";
 import {
-    DocumentUri,
     LanguageClient,
     LanguageClientOptions,
-    Location,
     NotebookDocumentFilter,
-    Position,
     ServerOptions,
     TextDocumentFilter,
     TransportKind,
 } from "vscode-languageclient/node";
+import { codeLensShowLocationsCommandName } from "./commands";
+import { registerTagClosingFeature } from "./languageFeatures/tagClosing";
 import {
     ExeInfo,
     getExe,
@@ -17,24 +16,28 @@ import {
 } from "./util";
 import { getLanguageForUri } from "./util";
 
-const codeLensShowLocationsCommandName = "typescript.native-preview.codeLens.showLocations";
-
 export class Client {
     private outputChannel: vscode.LogOutputChannel;
     private traceOutputChannel: vscode.LogOutputChannel;
+    private documentSelector: Array<{ scheme: string; language: string; }>;
     private clientOptions: LanguageClientOptions;
     private client?: LanguageClient;
+
+    private isDisposed = false;
+    private disposables: vscode.Disposable[] = [];
+
     private exe: ExeInfo | undefined;
     private onStartedCallbacks: Set<() => void> = new Set();
 
     constructor(outputChannel: vscode.LogOutputChannel, traceOutputChannel: vscode.LogOutputChannel) {
         this.outputChannel = outputChannel;
         this.traceOutputChannel = traceOutputChannel;
+        this.documentSelector = [
+            ...jsTsLanguageModes.map(language => ({ scheme: "file", language })),
+            ...jsTsLanguageModes.map(language => ({ scheme: "untitled", language })),
+        ];
         this.clientOptions = {
-            documentSelector: [
-                ...jsTsLanguageModes.map(language => ({ scheme: "file", language })),
-                ...jsTsLanguageModes.map(language => ({ scheme: "untitled", language })),
-            ],
+            documentSelector: this.documentSelector,
             outputChannel: this.outputChannel,
             traceOutputChannel: this.traceOutputChannel,
             initializationOptions: {
@@ -147,36 +150,29 @@ export class Client {
             this.traceOutputChannel.appendLine(`To see LSP trace output, set this output's log level to "Trace" (gear icon next to the dropdown).`);
         }
 
-        const codeLensLocationsCommand = vscode.commands.registerCommand(codeLensShowLocationsCommandName, (...args: unknown[]) => {
-            if (args.length !== 3) {
-                throw new Error("Unexpected number of arguments.");
-            }
-
-            const lspUri = args[0] as DocumentUri;
-            const lspPosition = args[1] as Position;
-            const lspLocations = args[2] as Location[];
-
-            const editorUri = vscode.Uri.parse(lspUri);
-            const editorPosition = new vscode.Position(lspPosition.line, lspPosition.character);
-            const editorLocations = lspLocations.map(loc =>
-                new vscode.Location(
-                    vscode.Uri.parse(loc.uri),
-                    new vscode.Range(
-                        new vscode.Position(loc.range.start.line, loc.range.start.character),
-                        new vscode.Position(loc.range.end.line, loc.range.end.character),
-                    ),
-                )
-            );
-
-            vscode.commands.executeCommand("editor.action.showReferences", editorUri, editorPosition, editorLocations);
-        });
+        this.disposables.push(
+            registerTagClosingFeature("typescript", this.documentSelector, this.client),
+            registerTagClosingFeature("javascript", this.documentSelector, this.client),
+        );
 
         return new vscode.Disposable(() => {
-            this.client?.stop();
-            codeLensLocationsCommand.dispose();
+            this.dispose();
             vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
             vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
         });
+    }
+
+    dispose() {
+        if (this.isDisposed) {
+            return;
+        }
+        this.isDisposed = true;
+
+        this.client?.dispose();
+        while (this.disposables.length > 0) {
+            const d = this.disposables.pop()!;
+            d.dispose();
+        }
     }
 
     getCurrentExe(): { path: string; version: string; } | undefined {

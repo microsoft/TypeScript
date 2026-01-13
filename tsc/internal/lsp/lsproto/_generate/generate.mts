@@ -151,6 +151,18 @@ const customStructures: Structure[] = [
             },
         ],
     },
+    {
+        // Longer-term, we may just want to use TextEdit.
+        name: "CustomClosingTagCompletion",
+        properties: [
+            {
+                name: "newText",
+                type: { kind: "base", name: "string" },
+                documentation: "The text to insert at the closing tag position.",
+            },
+        ],
+        documentation: "CustomClosingTagCompletion is the response for the custom/textDocument/closingTagCompletion request.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -205,6 +217,20 @@ const customEnumerations: Enumeration[] = [
 
 // Custom requests to add to the model (tsgo-specific)
 const customRequests: Request[] = [
+    {
+        method: "custom/textDocument/closingTagCompletion",
+        typeName: "CustomClosingTagCompletionRequest",
+        params: { kind: "reference", name: "TextDocumentPositionParams" },
+        result: {
+            kind: "or",
+            items: [
+                { kind: "reference", name: "CustomClosingTagCompletion" },
+                { kind: "base", name: "null" },
+            ],
+        },
+        messageDirection: "clientToServer",
+        documentation: "Request to get the closing tag completion at a given position.",
+    },
     {
         method: "custom/runGC",
         typeName: "RunGCRequest",
@@ -369,7 +395,7 @@ function patchAndPreprocessModel() {
         });
     }
 
-    // Add custom enumerations, custom structures, and synthetic structures to the model
+    // Add custom enumerations, custom structures, custom requests, and synthetic structures to the model
     model.enumerations.push(...customEnumerations);
     model.structures.push(...customStructures, ...syntheticStructures);
     model.requests.push(...customRequests);

@@ -23,6 +23,7 @@ import (
 const (
 	autoImportsCmd              baselineCommand = "Auto Imports"
 	callHierarchyCmd            baselineCommand = "Call Hierarchy"
+	closingTagCmd               baselineCommand = "Closing Tag"
 	documentHighlightsCmd       baselineCommand = "documentHighlights"
 	findAllReferencesCmd        baselineCommand = "findAllReferences"
 	goToDefinitionCmd           baselineCommand = "goToDefinition"
@@ -72,7 +73,7 @@ func getBaselineFileName(t *testing.T, command baselineCommand) string {
 
 func getBaselineExtension(command baselineCommand) string {
 	switch command {
-	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd, documentSymbolsCmd:
+	case quickInfoCmd, signatureHelpCmd, smartSelectionCmd, inlayHintsCmd, nonSuggestionDiagnosticsCmd, documentSymbolsCmd, closingTagCmd:
 		return "baseline"
 	case callHierarchyCmd:
 		return "callHierarchy.txt"

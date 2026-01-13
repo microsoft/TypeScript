@@ -30,6 +30,8 @@ outliningHintSpansForFunction
 getOutliningSpans
 outliningForNonCompleteInterfaceDeclaration
 incrementalParsingWithJsDoc
+autoCloseFragment
+autoCloseTag
 autoImportPackageRootPathTypeModule
 completionListWithLabel
 completionsImport_defaultAndNamedConflict
