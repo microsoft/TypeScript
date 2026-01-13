@@ -1,7 +1,23 @@
 // === goToDefinition ===
+// === /home/src/workspaces/project/scriptThing.ts ===
+// [||]console.log("woooo side effects")
+
 // === /home/src/workspaces/project/moduleThing.ts ===
-// import /*GOTO DEF*/"./scriptThing";
+// import /*GOTO DEF*/[|"./scriptThing"|];
 // import "./stylez.css";
+// import "./foo.txt";
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/stylez.css ===
+// [||]div {
+//   color: magenta;
+// }
+
+// === /home/src/workspaces/project/moduleThing.ts ===
+// import "./scriptThing";
+// import /*GOTO DEF*/[|"./stylez.css"|];
 // import "./foo.txt";
 
 
@@ -9,13 +25,5 @@
 // === goToDefinition ===
 // === /home/src/workspaces/project/moduleThing.ts ===
 // import "./scriptThing";
-// import /*GOTO DEF*/"./stylez.css";
-// import "./foo.txt";
-
-
-
-// === goToDefinition ===
-// === /home/src/workspaces/project/moduleThing.ts ===
-// import "./scriptThing";
 // import "./stylez.css";
-// import /*GOTO DEF*/"./foo.txt";
+// import /*GOTO DEF*/[|"./foo.txt"|];

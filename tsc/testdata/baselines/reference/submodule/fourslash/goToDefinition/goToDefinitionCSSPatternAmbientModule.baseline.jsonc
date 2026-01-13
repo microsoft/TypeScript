@@ -1,4 +1,7 @@
 // === goToDefinition ===
+// === /index.css ===
+// [||]html { font-size: 16px; }
+
 // === /types.ts ===
 // <|declare module [|"*.css"|] {
 //   const styles: any;

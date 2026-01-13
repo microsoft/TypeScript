@@ -215,6 +215,7 @@ const (
 
 func parseFileContent(fileName string, content string, fileOptions map[string]string) (*testFileWithMarkers, error) {
 	fileName = tspath.GetNormalizedAbsolutePath(fileName, "/")
+	content = chompLeadingSpace(content)
 
 	// The file content (minus metacharacters) so far
 	var output strings.Builder
@@ -464,6 +465,23 @@ func getObjectMarker(fileName string, location *locationInformation, text string
 
 func reportError(fileName string, line int, col int, message string) error {
 	return &fourslashError{fmt.Sprintf("%v (%v,%v): %v", fileName, line, col, message)}
+}
+
+func chompLeadingSpace(content string) string {
+	lines := strings.Split(content, "\n")
+	for _, line := range lines {
+		if len(line) > 0 && line[0] != ' ' {
+			return content
+		}
+	}
+
+	result := make([]string, len(lines))
+	for i, line := range lines {
+		if len(line) > 0 {
+			result[i] = line[1:]
+		}
+	}
+	return strings.Join(result, "\n")
 }
 
 type fourslashError struct {

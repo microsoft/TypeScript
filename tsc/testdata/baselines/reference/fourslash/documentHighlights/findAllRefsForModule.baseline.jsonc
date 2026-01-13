@@ -12,4 +12,4 @@
 
 // === documentHighlights ===
 // === /d.ts ===
-//  /// <reference path="/*HIGHLIGHTS*/[|./a.ts|]" />
+// /// <reference path="/*HIGHLIGHTS*/[|./a.ts|]" />

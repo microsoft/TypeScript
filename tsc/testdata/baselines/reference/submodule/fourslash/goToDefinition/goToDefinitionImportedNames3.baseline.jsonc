@@ -10,8 +10,8 @@
 // }
 
 // === /e.ts ===
-//  import {M, C, I} from "./d";
-//  var c = new /*GOTO DEF*/[|C|]();
+// import {M, C, I} from "./d";
+// var c = new /*GOTO DEF*/[|C|]();
 
 
 
@@ -27,5 +27,5 @@
 // }
 
 // === /e.ts ===
-//  import {M, /*GOTO DEF*/[|C|], I} from "./d";
-//  var c = new C();
+// import {M, /*GOTO DEF*/[|C|], I} from "./d";
+// var c = new C();

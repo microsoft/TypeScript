@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /a.ts ===
-// [|class Foo {}
-// export var x = 0;|]
+// [||]class Foo {}
+// export var x = 0;
 
 // === /b.ts ===
 // import n = require([|'./a/*GOTO DEF*/'|]);

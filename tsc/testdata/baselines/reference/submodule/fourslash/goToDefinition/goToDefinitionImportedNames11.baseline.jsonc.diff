@@ -4,13 +4,12 @@
  // === goToDefinition ===
  // === /a.js ===
 -// <|class [|Class|] {
--//     f;
++// class Class {
+ //     f;
 -// }|>
 -// module.exports = { Class };
-+//  class Class {
-+//      f;
-+//  }
-+//  module.exports = { [|Class|] };
++// }
++// module.exports = { [|Class|] };
 
  // === /b.js ===
  // const { Class } = require("./a");

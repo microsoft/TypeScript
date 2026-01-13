@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /a.ts ===
-//  [|export class Foo {}|]
+// [||]export class Foo {}
 
 // === /b.ts ===
 // import n = require([|'./a/*GOTO DEF*/'|]);

@@ -1,11 +1,19 @@
 // === goToDefinition ===
+// === /scriptThing.ts ===
+// [||]console.log("woooo side effects")
+
 // === /moduleThing.ts ===
-// import /*GOTO DEF*/"./scriptThing";
+// import /*GOTO DEF*/[|"./scriptThing"|];
 // import "./stylez.css";
 
 
 
 // === goToDefinition ===
+// === /stylez.css ===
+// [||]div {
+//   color: magenta;
+// }
+
 // === /moduleThing.ts ===
 // import "./scriptThing";
-// import /*GOTO DEF*/"./stylez.css";
+// import /*GOTO DEF*/[|"./stylez.css"|];
