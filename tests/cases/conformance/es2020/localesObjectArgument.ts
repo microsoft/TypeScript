@@ -50,6 +50,8 @@ new Intl.Collator([deDE, jaJP]);
 new Intl.Collator(readonlyLocales);
 Intl.Collator.supportedLocalesOf(enUS);
 Intl.Collator.supportedLocalesOf([deDE, jaJP]);
+new Intl.Collator(enUS, { collation: "default" });
+
 
 new Intl.DateTimeFormat(enUS);
 new Intl.DateTimeFormat([deDE, jaJP]);
