@@ -297,6 +297,20 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/home/src/projects/project/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 7,
               "offset": 5
             },
@@ -360,7 +374,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 20,
               "offset": 10
             },
-            "text": "Option 'out' has been removed. Please remove it from your configuration.\n  Use 'outFile' instead.",
+            "text": "Option 'out' has been removed. Please remove it from your configuration.",
             "code": 5102,
             "category": "error",
             "fileName": "/home/src/projects/project/tsconfig.json"
