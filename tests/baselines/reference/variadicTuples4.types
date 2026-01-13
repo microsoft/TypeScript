@@ -119,3 +119,170 @@
   >;
 }
 
+{
+  type Inner<T extends unknown[], U extends [...T, boolean?]> = U;
+>Inner : U
+>      : ^
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+>Wrapper1 : [...T]
+>         : ^^^^^^
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [...T, boolean]>;
+>Wrapper2 : [...T, boolean]
+>         : ^^^^^^^^^^^^^^^
+
+  type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean?]>;
+>Wrapper3 : [...T, (boolean | undefined)?]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+{
+  type Inner<T extends unknown[], U extends [boolean, ...T]> = U;
+>Inner : U
+>      : ^
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+>Wrapper1 : [...T]
+>         : ^^^^^^
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+>Wrapper2 : [boolean, ...T]
+>         : ^^^^^^^^^^^^^^^
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, ...B],
+  > = C;
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : [...A, ...B]
+>         : ^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, ...B]
+  >;
+
+  type Wrapper2<A extends unknown[]> = Inner<A, A, [...A]>;
+>Wrapper2 : [...A]
+>         : ^^^^^^
+
+  type Wrapper3<
+>Wrapper3 : [...A, ...B, ...C]
+>         : ^^^^^^^^^^^^^^^^^^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends unknown[],
+  > = Inner<A, B, [...A, ...B, ...C]>;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [...A, boolean, ...B],
+  > = C;
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : [...A, boolean, ...B]
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, ...B]
+  >;
+
+  type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper2 : [...A, ...B]
+>         : ^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, ...B]
+  >;
+
+  type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper3 : [...A, boolean, boolean, ...B]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [...A, boolean, boolean, ...B]
+  >;
+}
+
+{
+  type Inner<T extends unknown[], U extends [boolean, ...T, boolean]> = U;
+>Inner : U
+>      : ^
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [boolean, ...T, boolean]>;
+>Wrapper1 : [boolean, ...T, boolean]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+>Wrapper2 : [boolean, ...T]
+>         : ^^^^^^^^^^^^^^^
+
+  type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean]>;
+>Wrapper3 : [...T, boolean]
+>         : ^^^^^^^^^^^^^^^
+
+  type Wrapper4<T extends unknown[]> = Inner<
+>Wrapper4 : [boolean, ...T, boolean, boolean]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    T,
+    [boolean, ...T, boolean, boolean]
+  >;
+}
+
+{
+  type Inner<
+>Inner : C
+>      : ^
+
+    A extends unknown[],
+    B extends unknown[],
+    C extends [boolean, ...A, string, ...B, number?],
+  > = C;
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : [boolean, ...A, string, ...B, (number | undefined)?]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [boolean, ...A, string, ...B, number?]
+  >;
+
+  type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper2 : [boolean, ...A, string, ...B]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [boolean, ...A, string, ...B]
+  >;
+
+  type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper3 : [boolean, ...A, ...B, (number | undefined)?]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A,
+    B,
+    [boolean, ...A, ...B, number?]
+  >;
+}
+

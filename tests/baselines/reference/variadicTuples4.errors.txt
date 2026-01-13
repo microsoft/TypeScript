@@ -10,9 +10,29 @@ variadicTuples4.ts(62,5): error TS2344: Type '[...A, boolean, boolean, ...B, boo
   Target allows only 4 element(s) but source may have more.
 variadicTuples4.ts(76,5): error TS2344: Type '[...A, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, boolean, ...B, boolean]'.
   Source has 4 element(s) but target requires 5.
+variadicTuples4.ts(91,49): error TS2344: Type '[...T]' does not satisfy the constraint '[boolean, ...T]'.
+  Source has 1 element(s) but target requires 2.
+variadicTuples4.ts(108,52): error TS2344: Type '[...A]' does not satisfy the constraint '[...A, ...A]'.
+  Source has 1 element(s) but target requires 2.
+variadicTuples4.ts(114,19): error TS2344: Type '[...A, ...B, ...C]' does not satisfy the constraint '[...A, ...B]'.
+  Type at positions 0 through 2 in source is not compatible with type at position 1 in target.
+    Type 'C' is not assignable to type 'B'.
+      'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
+variadicTuples4.ts(133,5): error TS2344: Type '[...A, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+  Source has 2 element(s) but target requires 3.
+variadicTuples4.ts(139,5): error TS2344: Type '[...A, boolean, boolean, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+  Target allows only 3 element(s) but source may have more.
+variadicTuples4.ts(148,49): error TS2344: Type '[boolean, ...T]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+  Source has 2 element(s) but target requires 3.
+variadicTuples4.ts(150,49): error TS2344: Type '[...T, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+  Source has 2 element(s) but target requires 3.
+variadicTuples4.ts(154,5): error TS2344: Type '[boolean, ...T, boolean, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+  Target allows only 3 element(s) but source may have more.
+variadicTuples4.ts(180,5): error TS2344: Type '[boolean, ...A, ...B, (number | undefined)?]' does not satisfy the constraint '[boolean, ...A, string, ...B, (number | undefined)?]'.
+  Variadic element at position 2 in source does not match element at position 2 in target.
 
 
-==== variadicTuples4.ts (6 errors) ====
+==== variadicTuples4.ts (15 errors) ====
     {
       type Inner<A extends any[], A2 extends [...A, boolean]> = A2;
       type Wrapper<A extends any[]> = Inner<
@@ -107,6 +127,139 @@ variadicTuples4.ts(76,5): error TS2344: Type '[...A, boolean, ...B, boolean]' do
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[...A, boolean, ...B, boolean]' does not satisfy the constraint '[...A, boolean, boolean, ...B, boolean]'.
 !!! error TS2344:   Source has 4 element(s) but target requires 5.
+      >;
+    }
+    
+    {
+      type Inner<T extends unknown[], U extends [...T, boolean?]> = U;
+    
+      type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+      type Wrapper2<T extends unknown[]> = Inner<T, [...T, boolean]>;
+      type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean?]>;
+    }
+    
+    {
+      type Inner<T extends unknown[], U extends [boolean, ...T]> = U;
+    
+      type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+                                                    ~~~~~~
+!!! error TS2344: Type '[...T]' does not satisfy the constraint '[boolean, ...T]'.
+!!! error TS2344:   Source has 1 element(s) but target requires 2.
+      type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, ...B],
+      > = C;
+    
+      type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, ...B]
+      >;
+    
+      type Wrapper2<A extends unknown[]> = Inner<A, A, [...A]>;
+                                                       ~~~~~~
+!!! error TS2344: Type '[...A]' does not satisfy the constraint '[...A, ...A]'.
+!!! error TS2344:   Source has 1 element(s) but target requires 2.
+    
+      type Wrapper3<
+        A extends unknown[],
+        B extends unknown[],
+        C extends unknown[],
+      > = Inner<A, B, [...A, ...B, ...C]>;
+                      ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, ...B, ...C]' does not satisfy the constraint '[...A, ...B]'.
+!!! error TS2344:   Type at positions 0 through 2 in source is not compatible with type at position 1 in target.
+!!! error TS2344:     Type 'C' is not assignable to type 'B'.
+!!! error TS2344:       'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [...A, boolean, ...B],
+      > = C;
+    
+      type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, ...B]
+      >;
+    
+      type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, ...B]
+        ~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+!!! error TS2344:   Source has 2 element(s) but target requires 3.
+      >;
+    
+      type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [...A, boolean, boolean, ...B]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...A, boolean, boolean, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+!!! error TS2344:   Target allows only 3 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<T extends unknown[], U extends [boolean, ...T, boolean]> = U;
+    
+      type Wrapper1<T extends unknown[]> = Inner<T, [boolean, ...T, boolean]>;
+    
+      type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+                                                    ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[boolean, ...T]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+!!! error TS2344:   Source has 2 element(s) but target requires 3.
+    
+      type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean]>;
+                                                    ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[...T, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+!!! error TS2344:   Source has 2 element(s) but target requires 3.
+    
+      type Wrapper4<T extends unknown[]> = Inner<
+        T,
+        [boolean, ...T, boolean, boolean]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[boolean, ...T, boolean, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+!!! error TS2344:   Target allows only 3 element(s) but source may have more.
+      >;
+    }
+    
+    {
+      type Inner<
+        A extends unknown[],
+        B extends unknown[],
+        C extends [boolean, ...A, string, ...B, number?],
+      > = C;
+    
+      type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [boolean, ...A, string, ...B, number?]
+      >;
+    
+      type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [boolean, ...A, string, ...B]
+      >;
+    
+      type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+        A,
+        B,
+        [boolean, ...A, ...B, number?]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[boolean, ...A, ...B, (number | undefined)?]' does not satisfy the constraint '[boolean, ...A, string, ...B, (number | undefined)?]'.
+!!! error TS2344:   Variadic element at position 2 in source does not match element at position 2 in target.
       >;
     }
     

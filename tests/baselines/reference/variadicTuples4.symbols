@@ -211,3 +211,310 @@
   >;
 }
 
+{
+  type Inner<T extends unknown[], U extends [...T, boolean?]> = U;
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 79, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 80, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 80, 33))
+>T : Symbol(T, Decl(variadicTuples4.ts, 80, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 80, 33))
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 80, 66))
+>T : Symbol(T, Decl(variadicTuples4.ts, 82, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 79, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 82, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 82, 16))
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [...T, boolean]>;
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 82, 56))
+>T : Symbol(T, Decl(variadicTuples4.ts, 83, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 79, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 83, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 83, 16))
+
+  type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean?]>;
+>Wrapper3 : Symbol(Wrapper3, Decl(variadicTuples4.ts, 83, 65))
+>T : Symbol(T, Decl(variadicTuples4.ts, 84, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 79, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 84, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 84, 16))
+}
+
+{
+  type Inner<T extends unknown[], U extends [boolean, ...T]> = U;
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 87, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 88, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 88, 33))
+>T : Symbol(T, Decl(variadicTuples4.ts, 88, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 88, 33))
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [...T]>;
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 88, 65))
+>T : Symbol(T, Decl(variadicTuples4.ts, 90, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 87, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 90, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 90, 16))
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 90, 56))
+>T : Symbol(T, Decl(variadicTuples4.ts, 91, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 87, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 91, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 91, 16))
+}
+
+{
+  type Inner<
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 94, 1))
+
+    A extends unknown[],
+>A : Symbol(A, Decl(variadicTuples4.ts, 95, 13))
+
+    B extends unknown[],
+>B : Symbol(B, Decl(variadicTuples4.ts, 96, 24))
+
+    C extends [...A, ...B],
+>C : Symbol(C, Decl(variadicTuples4.ts, 97, 24))
+>A : Symbol(A, Decl(variadicTuples4.ts, 95, 13))
+>B : Symbol(B, Decl(variadicTuples4.ts, 96, 24))
+
+  > = C;
+>C : Symbol(C, Decl(variadicTuples4.ts, 97, 24))
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 99, 8))
+>A : Symbol(A, Decl(variadicTuples4.ts, 101, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 101, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 94, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 101, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 101, 36))
+
+    [...A, ...B]
+>A : Symbol(A, Decl(variadicTuples4.ts, 101, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 101, 36))
+
+  >;
+
+  type Wrapper2<A extends unknown[]> = Inner<A, A, [...A]>;
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 105, 4))
+>A : Symbol(A, Decl(variadicTuples4.ts, 107, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 94, 1))
+>A : Symbol(A, Decl(variadicTuples4.ts, 107, 16))
+>A : Symbol(A, Decl(variadicTuples4.ts, 107, 16))
+>A : Symbol(A, Decl(variadicTuples4.ts, 107, 16))
+
+  type Wrapper3<
+>Wrapper3 : Symbol(Wrapper3, Decl(variadicTuples4.ts, 107, 59))
+
+    A extends unknown[],
+>A : Symbol(A, Decl(variadicTuples4.ts, 109, 16))
+
+    B extends unknown[],
+>B : Symbol(B, Decl(variadicTuples4.ts, 110, 24))
+
+    C extends unknown[],
+>C : Symbol(C, Decl(variadicTuples4.ts, 111, 24))
+
+  > = Inner<A, B, [...A, ...B, ...C]>;
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 94, 1))
+>A : Symbol(A, Decl(variadicTuples4.ts, 109, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 110, 24))
+>A : Symbol(A, Decl(variadicTuples4.ts, 109, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 110, 24))
+>C : Symbol(C, Decl(variadicTuples4.ts, 111, 24))
+}
+
+{
+  type Inner<
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 116, 1))
+
+    A extends unknown[],
+>A : Symbol(A, Decl(variadicTuples4.ts, 117, 13))
+
+    B extends unknown[],
+>B : Symbol(B, Decl(variadicTuples4.ts, 118, 24))
+
+    C extends [...A, boolean, ...B],
+>C : Symbol(C, Decl(variadicTuples4.ts, 119, 24))
+>A : Symbol(A, Decl(variadicTuples4.ts, 117, 13))
+>B : Symbol(B, Decl(variadicTuples4.ts, 118, 24))
+
+  > = C;
+>C : Symbol(C, Decl(variadicTuples4.ts, 119, 24))
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 121, 8))
+>A : Symbol(A, Decl(variadicTuples4.ts, 123, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 123, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 116, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 123, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 123, 36))
+
+    [...A, boolean, ...B]
+>A : Symbol(A, Decl(variadicTuples4.ts, 123, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 123, 36))
+
+  >;
+
+  type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 127, 4))
+>A : Symbol(A, Decl(variadicTuples4.ts, 129, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 129, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 116, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 129, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 129, 36))
+
+    [...A, ...B]
+>A : Symbol(A, Decl(variadicTuples4.ts, 129, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 129, 36))
+
+  >;
+
+  type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper3 : Symbol(Wrapper3, Decl(variadicTuples4.ts, 133, 4))
+>A : Symbol(A, Decl(variadicTuples4.ts, 135, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 135, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 116, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 135, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 135, 36))
+
+    [...A, boolean, boolean, ...B]
+>A : Symbol(A, Decl(variadicTuples4.ts, 135, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 135, 36))
+
+  >;
+}
+
+{
+  type Inner<T extends unknown[], U extends [boolean, ...T, boolean]> = U;
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 142, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 143, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 143, 33))
+>T : Symbol(T, Decl(variadicTuples4.ts, 143, 13))
+>U : Symbol(U, Decl(variadicTuples4.ts, 143, 33))
+
+  type Wrapper1<T extends unknown[]> = Inner<T, [boolean, ...T, boolean]>;
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 143, 74))
+>T : Symbol(T, Decl(variadicTuples4.ts, 145, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 142, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 145, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 145, 16))
+
+  type Wrapper2<T extends unknown[]> = Inner<T, [boolean, ...T]>;
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 145, 74))
+>T : Symbol(T, Decl(variadicTuples4.ts, 147, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 142, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 147, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 147, 16))
+
+  type Wrapper3<T extends unknown[]> = Inner<T, [...T, boolean]>;
+>Wrapper3 : Symbol(Wrapper3, Decl(variadicTuples4.ts, 147, 65))
+>T : Symbol(T, Decl(variadicTuples4.ts, 149, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 142, 1))
+>T : Symbol(T, Decl(variadicTuples4.ts, 149, 16))
+>T : Symbol(T, Decl(variadicTuples4.ts, 149, 16))
+
+  type Wrapper4<T extends unknown[]> = Inner<
+>Wrapper4 : Symbol(Wrapper4, Decl(variadicTuples4.ts, 149, 65))
+>T : Symbol(T, Decl(variadicTuples4.ts, 151, 16))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 142, 1))
+
+    T,
+>T : Symbol(T, Decl(variadicTuples4.ts, 151, 16))
+
+    [boolean, ...T, boolean, boolean]
+>T : Symbol(T, Decl(variadicTuples4.ts, 151, 16))
+
+  >;
+}
+
+{
+  type Inner<
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 157, 1))
+
+    A extends unknown[],
+>A : Symbol(A, Decl(variadicTuples4.ts, 158, 13))
+
+    B extends unknown[],
+>B : Symbol(B, Decl(variadicTuples4.ts, 159, 24))
+
+    C extends [boolean, ...A, string, ...B, number?],
+>C : Symbol(C, Decl(variadicTuples4.ts, 160, 24))
+>A : Symbol(A, Decl(variadicTuples4.ts, 158, 13))
+>B : Symbol(B, Decl(variadicTuples4.ts, 159, 24))
+
+  > = C;
+>C : Symbol(C, Decl(variadicTuples4.ts, 160, 24))
+
+  type Wrapper1<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper1 : Symbol(Wrapper1, Decl(variadicTuples4.ts, 162, 8))
+>A : Symbol(A, Decl(variadicTuples4.ts, 164, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 164, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 157, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 164, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 164, 36))
+
+    [boolean, ...A, string, ...B, number?]
+>A : Symbol(A, Decl(variadicTuples4.ts, 164, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 164, 36))
+
+  >;
+
+  type Wrapper2<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper2 : Symbol(Wrapper2, Decl(variadicTuples4.ts, 168, 4))
+>A : Symbol(A, Decl(variadicTuples4.ts, 170, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 170, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 157, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 170, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 170, 36))
+
+    [boolean, ...A, string, ...B]
+>A : Symbol(A, Decl(variadicTuples4.ts, 170, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 170, 36))
+
+  >;
+
+  type Wrapper3<A extends unknown[], B extends unknown[]> = Inner<
+>Wrapper3 : Symbol(Wrapper3, Decl(variadicTuples4.ts, 174, 4))
+>A : Symbol(A, Decl(variadicTuples4.ts, 176, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 176, 36))
+>Inner : Symbol(Inner, Decl(variadicTuples4.ts, 157, 1))
+
+    A,
+>A : Symbol(A, Decl(variadicTuples4.ts, 176, 16))
+
+    B,
+>B : Symbol(B, Decl(variadicTuples4.ts, 176, 36))
+
+    [boolean, ...A, ...B, number?]
+>A : Symbol(A, Decl(variadicTuples4.ts, 176, 16))
+>B : Symbol(B, Decl(variadicTuples4.ts, 176, 36))
+
+  >;
+}
+
