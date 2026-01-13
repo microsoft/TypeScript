@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @strictPropertyInitialization: false
 // @declaration: true
 
 class Shape {
