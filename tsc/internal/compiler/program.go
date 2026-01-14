@@ -441,17 +441,22 @@ func (p *Program) collectDiagnostics(ctx context.Context, sourceFile *ast.Source
 	if sourceFile != nil {
 		result = collect(ctx, sourceFile)
 	} else {
-		diagnostics := make([][]*ast.Diagnostic, len(p.files))
-		wg := core.NewWorkGroup(!concurrent || p.SingleThreaded())
-		for i, file := range p.files {
-			wg.Queue(func() {
-				diagnostics[i] = collect(ctx, file)
-			})
-		}
-		wg.RunAndWait()
+		diagnostics := p.collectDiagnosticsFromFiles(ctx, p.files, concurrent, collect)
 		result = slices.Concat(diagnostics...)
 	}
 	return SortAndDeduplicateDiagnostics(result)
+}
+
+func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, concurrent bool, collect func(context.Context, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
+	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
+	wg := core.NewWorkGroup(!concurrent || p.SingleThreaded())
+	for i, file := range sourceFiles {
+		wg.Queue(func() {
+			diagnostics[i] = collect(ctx, file)
+		})
+	}
+	wg.RunAndWait()
+	return diagnostics
 }
 
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -476,9 +481,10 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 }
 
 func (p *Program) GetSemanticDiagnosticsWithoutNoEmitFiltering(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
+	diagnostics := p.collectDiagnosticsFromFiles(ctx, sourceFiles, true /*concurrent*/, p.getBindAndCheckDiagnosticsForFile)
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
-	for _, file := range sourceFiles {
-		result[file] = SortAndDeduplicateDiagnostics(p.getBindAndCheckDiagnosticsForFile(ctx, file))
+	for i, diags := range diagnostics {
+		result[sourceFiles[i]] = SortAndDeduplicateDiagnostics(diags)
 	}
 	return result
 }
