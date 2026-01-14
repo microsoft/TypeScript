@@ -17,7 +17,7 @@ export function evalFile(fileContents: string, fileName: string, nodeContext?: a
 
 const newlineRegex = /\r\n?|\n/;
 
-/** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
+/** Splits the given string on any line terminator (\r\n, \r, or \n). */
 export function splitContentByNewlines(content: string): string[] {
     // Split up the input file by line
     const lines = content.split(newlineRegex);
