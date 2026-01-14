@@ -1,3 +1,4 @@
+// @strict: false
 //@module: commonjs
 export namespace a {
     export namespace b {

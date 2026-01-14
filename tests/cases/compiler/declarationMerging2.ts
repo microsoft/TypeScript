@@ -1,3 +1,4 @@
+// @strict: false
 // @module: amd
 
 // @filename: a.ts

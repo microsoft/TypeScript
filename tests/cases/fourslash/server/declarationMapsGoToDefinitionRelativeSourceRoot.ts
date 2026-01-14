@@ -1,3 +1,4 @@
+// @strict: false
 /// <reference path="../fourslash.ts" />
 // @Filename: index.ts
 ////export class Foo {

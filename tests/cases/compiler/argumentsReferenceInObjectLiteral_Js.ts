@@ -1,3 +1,4 @@
+// @strict: false
 // @checkJs: true
 // @allowJs: true
 // @target: es6

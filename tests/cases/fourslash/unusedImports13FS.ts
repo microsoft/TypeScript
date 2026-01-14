@@ -1,3 +1,4 @@
+// @strict: false
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true

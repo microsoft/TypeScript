@@ -1,3 +1,4 @@
+// @strict: false
 class Base {
     x: string;
     constructor(a) { }

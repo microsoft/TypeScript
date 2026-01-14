@@ -1,3 +1,4 @@
+// @strict: false
 // module export
 var x = "Foo";
 namespace m {

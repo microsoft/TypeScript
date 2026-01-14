@@ -1,3 +1,4 @@
+// @strict: false
 //Function overload signature with initializer
 function fn1(x = 3);
 function fn1() { }

@@ -1,3 +1,4 @@
+// @strict: false
 // basic uses of function literals with constructor overloads
 
 class C {

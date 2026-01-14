@@ -1,3 +1,4 @@
+// @strict: false
 // satisfaction of a constraint to Function, no errors expected
 
 function foo<T extends Function>(x: T): T { return x; }

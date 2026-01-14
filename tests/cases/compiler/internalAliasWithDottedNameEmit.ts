@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 namespace a.b.c {
       export var d;

@@ -1,3 +1,4 @@
+// @strict: false
 function x2(a: number, cb: (x: 'hi') => number);
 function x2(a: number, cb: (x: 'bye') => number);
 function x2(a: number, cb: (x: any) => number) {

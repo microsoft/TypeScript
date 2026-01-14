@@ -1,3 +1,4 @@
+// @strict: false
 class A {
     private myMethod() { }
 }

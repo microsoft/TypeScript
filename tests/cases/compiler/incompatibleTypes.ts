@@ -1,3 +1,4 @@
+// @strict: false
 interface IFoo1 {
     p1(): number;
 }

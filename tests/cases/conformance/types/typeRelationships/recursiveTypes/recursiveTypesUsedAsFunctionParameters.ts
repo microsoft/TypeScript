@@ -1,3 +1,4 @@
+// @strict: false
 class List<T> {
     data: T;
     next: List<List<T>>;

@@ -1,3 +1,4 @@
+// @strict: false
 /// <reference path="../fourslash.ts" />
 // @Filename: BaseClass/Source.d.ts
 ////declare class Control {

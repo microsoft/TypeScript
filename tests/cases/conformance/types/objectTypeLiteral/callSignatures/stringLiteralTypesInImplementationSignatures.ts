@@ -1,3 +1,4 @@
+// @strict: false
 // String literal types are only valid in overload signatures
 
 function foo(x: 'hi') { }

@@ -1,3 +1,4 @@
+// @strict: false
 namespace my.data {
     export function buz() { }
 }

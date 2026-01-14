@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 
 function f(n: typeof f): string;

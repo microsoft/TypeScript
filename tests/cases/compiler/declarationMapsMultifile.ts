@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 // @declarationMap: true
 // @filename: a.ts

@@ -1,3 +1,4 @@
+// @strict: false
 var func: {
     (s: string): number;
     (s: any): string;

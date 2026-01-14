@@ -1,3 +1,4 @@
+// @strict: false
 namespace Variables{
     var x = function bar(a, b, c) {
     }

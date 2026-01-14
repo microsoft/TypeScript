@@ -1,3 +1,4 @@
+// @strict: false
 
 function foo(x:any) {
 	return x();

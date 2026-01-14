@@ -1,3 +1,4 @@
+// @strict: false
 class BaseErrClass {
     constructor(t: any) { }
 }

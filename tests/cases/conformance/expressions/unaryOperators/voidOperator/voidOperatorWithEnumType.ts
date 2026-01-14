@@ -1,3 +1,4 @@
+// @strict: false
 // void  operator on enum type
 
 enum ENUM { };

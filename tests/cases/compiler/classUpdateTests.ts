@@ -1,3 +1,4 @@
+// @strict: false
 //
 // test codegen for instance properties
 //

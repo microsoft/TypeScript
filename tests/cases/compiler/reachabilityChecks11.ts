@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnreachableCode: false
 // @preserveConstEnums: true
 

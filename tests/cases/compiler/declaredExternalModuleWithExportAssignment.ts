@@ -1,3 +1,4 @@
+// @strict: false
 declare module 'connect' {
     interface connectModule {
         (res, req, next): void;

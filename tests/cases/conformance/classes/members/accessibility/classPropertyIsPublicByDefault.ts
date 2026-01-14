@@ -1,3 +1,4 @@
+// @strict: false
 class C {
     x: string;
     get y() { return null; }

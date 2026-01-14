@@ -1,3 +1,4 @@
+// @strict: false
 // Case 1
 class Base1 {
     public foo() {

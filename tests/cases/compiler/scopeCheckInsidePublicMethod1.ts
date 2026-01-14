@@ -1,3 +1,4 @@
+// @strict: false
 class C {
    static s;
    public a() {

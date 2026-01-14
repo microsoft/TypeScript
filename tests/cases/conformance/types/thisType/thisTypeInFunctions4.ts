@@ -1,3 +1,4 @@
+// @strict: false
 type WrongObject = {value: number};
 type CorrectObject = {name: string};
 

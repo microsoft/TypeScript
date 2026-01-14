@@ -1,3 +1,4 @@
+// @strict: false
 return this.edit(role)
     .then((role: Role) =>
         this.roleService.add(role)

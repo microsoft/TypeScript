@@ -1,3 +1,4 @@
+// @strict: false
 function f0() {
     var [] = [1, "hello"];
     var [x] = [1, "hello"];

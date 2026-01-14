@@ -1,3 +1,4 @@
+// @strict: false
 function takesCallback(callback: (n) =>any) {
 
 }

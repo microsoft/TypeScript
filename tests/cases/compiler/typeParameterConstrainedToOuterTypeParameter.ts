@@ -1,3 +1,4 @@
+// @strict: false
 interface A<T> {
     <U extends T>(x: U[])
 }

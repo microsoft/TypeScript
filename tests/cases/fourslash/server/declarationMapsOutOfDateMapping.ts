@@ -1,3 +1,4 @@
+// @strict: false
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/node_modules/a/dist/index.d.ts

@@ -1,3 +1,4 @@
+// @strict: false
 namespace A {
 
     interface Point {

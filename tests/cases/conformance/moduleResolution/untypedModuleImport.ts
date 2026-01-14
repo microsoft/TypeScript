@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReferences: true
 // @currentDirectory: /
 // This tests that importing from a JS file globally works in an untyped way.

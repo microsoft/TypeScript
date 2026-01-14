@@ -1,3 +1,4 @@
+// @strict: false
 // Should all be allowed
 
 namespace M {

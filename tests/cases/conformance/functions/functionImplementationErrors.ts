@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnreachableCode: true
 
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types

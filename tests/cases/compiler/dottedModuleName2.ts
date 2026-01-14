@@ -1,3 +1,4 @@
+// @strict: false
 namespace A.B {
  
   export var x = 1;

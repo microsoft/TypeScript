@@ -1,3 +1,4 @@
+// @strict: false
 class C {
     x1(a: number, callback: (x: 'hi') => number); // error
     x1(a: number, callback: (x: any) => number) {

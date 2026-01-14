@@ -1,3 +1,4 @@
+// @strict: false
 // @Filename: jsxParserRecovery.tsx
 // @jsx: preserve
 

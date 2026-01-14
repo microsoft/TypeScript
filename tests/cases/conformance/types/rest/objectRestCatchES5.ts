@@ -1,3 +1,4 @@
+// @strict: false
 // @useUnknownInCatchVariables: false
 
 let a = 1, b = 2;
