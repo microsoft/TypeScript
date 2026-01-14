@@ -91,7 +91,7 @@ export class TestRunner {
 >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
 >test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
             }
-            catch (e) {
+            catch (e: any) {
 >e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
 
                 exception = true;

@@ -1,3 +1,4 @@
+// @useUnknownInCatchVariables: false
 function f() {
     try {
     } catch (e) {

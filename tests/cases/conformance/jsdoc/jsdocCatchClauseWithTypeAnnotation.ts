@@ -2,6 +2,7 @@
 // @checkJs: true
 // @target: esnext
 // @noImplicitAny: true
+// @useUnknownInCatchVariables: false
 // @outDir: out
 // @Filename: foo.js
 

@@ -23,22 +23,3 @@ declare module "src/index" {
 declare module "index" {
     export * from "src/index";
 }
-
-
-//// [DtsFileErrors]
-
-
-/a/dist/index.d.ts(2,23): error TS2307: Cannot find module 'b' or its corresponding type declarations.
-
-
-==== /a/dist/index.d.ts (1 errors) ====
-    declare module "src/index" {
-        import { B } from "b";
-                          ~~~
-!!! error TS2307: Cannot find module 'b' or its corresponding type declarations.
-        export default function (): B;
-    }
-    declare module "index" {
-        export * from "src/index";
-    }
-    

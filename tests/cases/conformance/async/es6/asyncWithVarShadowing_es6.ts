@@ -1,3 +1,4 @@
+// @useUnknownInCatchVariables: false
 // @target: es2015
 // @noEmitHelpers: true
 // https://github.com/Microsoft/TypeScript/issues/20461

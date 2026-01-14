@@ -19,7 +19,7 @@ function test1(x: Foo) {
 }
 
 class Bar {
-    a: number;
+    a: number = 0;
     b?: number;
     c? = 2;
     constructor(public d?: number, public e = 10) {}
@@ -88,6 +88,7 @@ var Bar = /** @class */ (function () {
         if (e === void 0) { e = 10; }
         this.d = d;
         this.e = e;
+        this.a = 0;
         this.c = 2;
     }
     Bar.prototype.f = function () {
