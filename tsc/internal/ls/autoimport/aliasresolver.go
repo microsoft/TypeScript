@@ -43,6 +43,7 @@ func newAliasResolver(
 		host:                        host,
 		moduleResolver:              moduleResolver,
 		rootFiles:                   rootFiles,
+		symlinks:                    symlinks,
 		onFailedAmbientModuleLookup: onFailedAmbientModuleLookup,
 	}
 	return r

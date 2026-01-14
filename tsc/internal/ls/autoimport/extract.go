@@ -72,10 +72,10 @@ func newSymbolExtractor(nodeModulesDirectory tspath.Path, packageName string, ch
 	}
 }
 
-func (b *registryBuilder) newExportExtractor(nodeModulesDirectory tspath.Path, packageName string, checker *checker.Checker, realpath func(string) string) *exportExtractor {
+func (b *registryBuilder) newExportExtractor(nodeModulesDirectory tspath.Path, packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(string) string) *exportExtractor {
 	return &exportExtractor{
 		symbolExtractor: newSymbolExtractor(nodeModulesDirectory, packageName, checker, b.base.toPath, realpath),
-		moduleResolver:  b.resolver,
+		moduleResolver:  moduleResolver,
 	}
 }
 

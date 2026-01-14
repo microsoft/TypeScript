@@ -2026,17 +2026,36 @@ type ResolvedEntrypoints struct {
 type Ending int
 
 const (
+	// EndingFixed indicates that the module specifier cannot be changed without changing its resolution.
 	EndingFixed Ending = iota
+	// EndingExtensionChangeable indicates that the module specifier's extension portion was inferred from a
+	// file on disk, so an interchangeable one could be used instead (e.g. replacing .d.ts with .js).
 	EndingExtensionChangeable
+	// EndingChangeable indicates that the module specifier's file name and extension portion were inferred
+	// from a file on disk without being matched as part of an 'exports' pattern, so can be changed according
+	// to the importer's module resolution rules (e.g. an /index.d.ts may be dropped entirely in CommonJS settings).
 	EndingChangeable
 )
 
 type ResolvedEntrypoint struct {
-	ResolvedFileName  string
-	ModuleSpecifier   string
-	Ending            Ending
+	// OriginalFileName is the symlink path if the entrypoint was discovered at a symlink. Empty otherwise.
+	OriginalFileName string
+	// ResolvedFileName is the real path to the entrypoint file.
+	ResolvedFileName string
+	ModuleSpecifier  string
+	// Ending indicates whether the file name and extension portion of ModuleSpecifier is fixed or can be changed.
+	Ending Ending
+	// IncludeConditions are the conditions that a resolver must have to reach this entrypoint.
 	IncludeConditions *collections.Set[string]
+	// ExcludeConditions are the conditions that a resolver must not have to reach this entrypoint.
 	ExcludeConditions *collections.Set[string]
+}
+
+func (e *ResolvedEntrypoint) SymlinkOrRealpath() string {
+	if e.OriginalFileName != "" {
+		return e.OriginalFileName
+	}
+	return e.ResolvedFileName
 }
 
 func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string) *ResolvedEntrypoints {
@@ -2070,10 +2089,13 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 	)
 
 	if mainResolution.isResolved() {
-		result.Entrypoints = append(result.Entrypoints, &ResolvedEntrypoint{
-			ResolvedFileName: mainResolution.path,
-			ModuleSpecifier:  packageName,
-		})
+		result.Entrypoints = append(result.Entrypoints, r.createResolvedEntrypointHandlingSymlink(
+			mainResolution.path,
+			packageName,
+			nil,
+			nil,
+			EndingFixed,
+		))
 	}
 
 	comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.host.FS().UseCaseSensitiveFileNames()}
@@ -2081,11 +2103,14 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 		if mainResolution.isResolved() && tspath.ComparePaths(file, mainResolution.path, comparePathsOptions) == 0 {
 			continue
 		}
-		result.Entrypoints = append(result.Entrypoints, &ResolvedEntrypoint{
-			ResolvedFileName: file,
-			ModuleSpecifier:  tspath.ResolvePath(packageName, tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)),
-			Ending:           EndingChangeable,
-		})
+
+		result.Entrypoints = append(result.Entrypoints, r.createResolvedEntrypointHandlingSymlink(
+			file,
+			tspath.ResolvePath(packageName, tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)),
+			nil,
+			nil,
+			EndingChangeable,
+		))
 	}
 
 	if len(result.Entrypoints) > 0 {
@@ -2093,6 +2118,23 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 		return result
 	}
 	return nil
+}
+
+func (r *Resolver) createResolvedEntrypointHandlingSymlink(fileName string, moduleSpecifier string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], ending Ending) *ResolvedEntrypoint {
+	var originalFileName string
+	resolvedFileName := fileName
+	if realPath := r.host.FS().Realpath(fileName); realPath != fileName {
+		originalFileName = fileName
+		resolvedFileName = realPath
+	}
+	return &ResolvedEntrypoint{
+		OriginalFileName:  originalFileName,
+		ResolvedFileName:  resolvedFileName,
+		ModuleSpecifier:   moduleSpecifier,
+		IncludeConditions: includeConditions,
+		ExcludeConditions: excludeConditions,
+		Ending:            ending,
+	}
 }
 
 func (r *resolutionState) loadEntrypointsFromExportMap(
@@ -2129,13 +2171,13 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 						continue
 					}
 					moduleSpecifier := tspath.ResolvePath(packageName, strings.Replace(subpath, "*", matchedStar, 1))
-					entrypoints = append(entrypoints, &ResolvedEntrypoint{
-						ResolvedFileName:  file,
-						ModuleSpecifier:   moduleSpecifier,
-						IncludeConditions: includeConditions,
-						ExcludeConditions: excludeConditions,
-						Ending:            core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
-					})
+					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
+						file,
+						moduleSpecifier,
+						includeConditions,
+						excludeConditions,
+						core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
+					))
 				}
 			} else {
 				partsAfterFirst := tspath.GetPathComponents(exports.AsString(), "")[2:]
@@ -2144,12 +2186,13 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 				}
 				resolvedTarget := tspath.ResolvePath(packageJson.PackageDirectory, exports.AsString())
 				if result := r.loadFileNameFromPackageJSONField(r.extensions, resolvedTarget, exports.AsString(), false /*onlyRecordFailures*/); result.isResolved() {
-					entrypoints = append(entrypoints, &ResolvedEntrypoint{
-						ResolvedFileName:  result.path,
-						ModuleSpecifier:   tspath.ResolvePath(packageName, subpath),
-						IncludeConditions: includeConditions,
-						ExcludeConditions: excludeConditions,
-					})
+					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
+						result.path,
+						tspath.ResolvePath(packageName, subpath),
+						includeConditions,
+						excludeConditions,
+						core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
+					))
 				}
 			}
 		} else if exports.Type == packagejson.JSONValueTypeArray {

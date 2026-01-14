@@ -370,9 +370,8 @@ type RegistryCloneHost interface {
 }
 
 type registryBuilder struct {
-	host     RegistryCloneHost
-	resolver *module.Resolver
-	base     *Registry
+	host RegistryCloneHost
+	base *Registry
 
 	userPreferences *lsutil.UserPreferences
 	directories     *dirty.Map[tspath.Path, *directory]
@@ -383,9 +382,8 @@ type registryBuilder struct {
 
 func newRegistryBuilder(registry *Registry, host RegistryCloneHost) *registryBuilder {
 	return &registryBuilder{
-		host:     host,
-		resolver: module.NewResolver(host, core.EmptyCompilerOptions, "", ""),
-		base:     registry,
+		host: host,
+		base: registry,
 
 		userPreferences: registry.userPreferences.OrDefault(),
 		directories:     dirty.NewMap(registry.directories),
@@ -768,13 +766,21 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			}
 		}
 		if len(rootFiles) > 0 {
-			aliasResolver := newAliasResolver(slices.Collect(maps.Values(rootFiles)), nil, b.host, b.resolver, b.base.toPath, func(_ ast.HasFileName, _ string) {
-				// no-op
-			})
+			moduleResolver := module.NewResolver(b.host, core.EmptyCompilerOptions, "", "")
+			aliasResolver := newAliasResolver(
+				slices.Collect(maps.Values(rootFiles)),
+				nil,
+				b.host,
+				moduleResolver,
+				b.base.toPath,
+				func(_ ast.HasFileName, _ string) {
+					// no-op
+				},
+			)
 			ch, _ := checker.NewChecker(aliasResolver)
 			t.result.possibleFailedAmbientModuleLookupSources.Range(func(path tspath.Path, source *failedAmbientModuleLookupSource) bool {
 				sourceFile := aliasResolver.GetSourceFile(source.fileName)
-				extractor := b.newExportExtractor(t.entry.Key(), source.packageName, ch, b.host.FS().Realpath)
+				extractor := b.newExportExtractor(t.entry.Key(), source.packageName, ch, moduleResolver, b.host.FS().Realpath)
 				fileExports := extractor.extractFromFile(sourceFile)
 				for _, exp := range fileExports {
 					t.result.bucket.Index.insertAsWords(exp)
@@ -888,6 +894,7 @@ func (b *registryBuilder) buildProjectBucket(
 	var mu sync.Mutex
 	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().UseCaseSensitiveFileNames())
 	result := &bucketBuildResult{bucket: &RegistryBucket{}}
+	moduleResolver := module.NewResolver(b.host, core.EmptyCompilerOptions, "", "")
 	program := b.host.GetProgramForProject(projectPath)
 	symlinkCache := program.GetSymlinkCache()
 	getChecker, closePool, checkerCount := createCheckerPool(program)
@@ -922,7 +929,7 @@ outer:
 			if ctx.Err() == nil {
 				checker, done := getChecker()
 				defer done()
-				extractor := b.newExportExtractor("", "", checker, nil)
+				extractor := b.newExportExtractor("", "", checker, moduleResolver, nil)
 				fileExports := extractor.extractFromFile(file)
 				mu.Lock()
 				exports[file.Path()] = fileExports
@@ -1028,16 +1035,16 @@ func (b *registryBuilder) extractPackages(
 	var entrypointsMu sync.Mutex
 	var projectRefMu sync.Mutex
 
-	createAliasResolver := func(packageName string, entrypoints []*module.ResolvedEntrypoint, toRealpath, toSymlink func(string) string) *aliasResolver {
+	createAliasResolver := func(packageName string, entrypoints []*module.ResolvedEntrypoint, toSymlink func(string) string, moduleResolver *module.Resolver) *aliasResolver {
 		seenFiles := collections.NewSetWithSizeHint[tspath.Path](len(entrypoints))
 		rootFiles := make([]*ast.SourceFile, len(entrypoints))
 		symlinks := make(map[tspath.Path]pathAndFileName)
 		var wg sync.WaitGroup
 		for i, entrypoint := range entrypoints {
-			fileName := entrypoint.ResolvedFileName
+			fileName := entrypoint.SymlinkOrRealpath()
 
 			// Compute realpath for deduplication and project reference output lookup.
-			realpathFileName := toRealpath(fileName)
+			realpathFileName := entrypoint.ResolvedFileName
 			realpathPath := b.base.toPath(realpathFileName)
 
 			// Check if this is a project reference output file that should be redirected to source.
@@ -1070,7 +1077,7 @@ func (b *registryBuilder) extractPackages(
 			return f == nil
 		})
 
-		return newAliasResolver(rootFiles, symlinks, b.host, b.resolver, b.base.toPath, func(source ast.HasFileName, moduleName string) {
+		return newAliasResolver(rootFiles, symlinks, b.host, moduleResolver, b.base.toPath, func(source ast.HasFileName, moduleName string) {
 			result.possibleFailedAmbientModuleLookupTargets.Add(moduleName)
 			result.possibleFailedAmbientModuleLookupSources.LoadOrStore(source.Path(), &failedAmbientModuleLookupSource{
 				fileName: source.FileName(),
@@ -1091,7 +1098,10 @@ func (b *registryBuilder) extractPackages(
 			if !packageJson.DirectoryExists {
 				packageJson = b.host.GetPackageJson(tspath.CombinePaths(dirName, "node_modules", typesPackageName, "package.json"))
 			}
-			packageEntrypoints := b.resolver.GetEntrypointsFromPackageJsonInfo(packageJson, packageName)
+
+			toRealpath, toSymlink := getPackageRealpathFuncs(b.host.FS(), packageJson.PackageDirectory)
+			resolver := getModuleResolver(b.host, toRealpath)
+			packageEntrypoints := resolver.GetEntrypointsFromPackageJsonInfo(packageJson, packageName)
 			if packageEntrypoints == nil {
 				return
 			}
@@ -1115,10 +1125,9 @@ func (b *registryBuilder) extractPackages(
 			result.entrypoints = append(result.entrypoints, packageEntrypoints)
 			entrypointsMu.Unlock()
 
-			toRealpath, toSymlink := getPackageRealpathFuncs(b.host.FS(), packageJson.PackageDirectory)
-			aliasResolver := createAliasResolver(packageName, packageEntrypoints.Entrypoints, toRealpath, toSymlink)
+			aliasResolver := createAliasResolver(packageName, packageEntrypoints.Entrypoints, toSymlink, resolver)
 			ch, _ := checker.NewChecker(aliasResolver)
-			extractor := b.newExportExtractor(dirPath, packageName, ch, toRealpath)
+			extractor := b.newExportExtractor(dirPath, packageName, ch, resolver, toRealpath)
 			for _, entrypoint := range aliasResolver.rootFiles {
 				if ctx.Err() != nil {
 					return

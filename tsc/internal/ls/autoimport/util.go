@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/wrapvfs"
 )
 
 func tryGetModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string, bool) {
@@ -246,4 +247,27 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 		return fileName
 	}
 	return toRealpath, toSymlink
+}
+
+type resolutionHost struct {
+	fs               vfs.FS
+	currentDirectory string
+}
+
+var _ module.ResolutionHost = (*resolutionHost)(nil)
+
+func (rh *resolutionHost) GetCurrentDirectory() string {
+	return rh.currentDirectory
+}
+
+func (rh *resolutionHost) FS() vfs.FS {
+	return rh.fs
+}
+
+func getModuleResolver(host RegistryCloneHost, realpath func(string) string) *module.Resolver {
+	rh := &resolutionHost{
+		fs:               wrapvfs.Wrap(host.FS(), wrapvfs.Replacements{Realpath: realpath}),
+		currentDirectory: host.GetCurrentDirectory(),
+	}
+	return module.NewResolver(rh, core.EmptyCompilerOptions, "", "")
 }
