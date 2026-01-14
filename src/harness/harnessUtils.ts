@@ -15,19 +15,12 @@ export function evalFile(fileContents: string, fileName: string, nodeContext?: a
     }
 }
 
+const newlineRegex = /\r\n?|\n/;
+
 /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
 export function splitContentByNewlines(content: string): string[] {
     // Split up the input file by line
-    // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
-    // we have to use string-based splitting instead and try to figure out the delimiting chars
-    let lines = content.split("\r\n");
-    if (lines.length === 1) {
-        lines = content.split("\n");
-
-        if (lines.length === 1) {
-            lines = content.split("\r");
-        }
-    }
+    const lines = content.split(newlineRegex);
     return lines;
 }
 
