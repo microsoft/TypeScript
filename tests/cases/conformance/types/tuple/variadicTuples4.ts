@@ -48,7 +48,7 @@
   type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
     A,
     B,
-    [...A, boolean, ...B, boolean] // ok
+    [...A, boolean, ...B, boolean]
   >;
 }
 
@@ -114,6 +114,12 @@
     A extends unknown[],
     B extends unknown[],
     C extends unknown[],
+  > = Inner<A, B, [...A, ...B, ...C]>;
+
+  type Wrapper4<
+    A extends unknown[],
+    B extends unknown[],
+    C extends B,
   > = Inner<A, B, [...A, ...B, ...C]>;
 }
 

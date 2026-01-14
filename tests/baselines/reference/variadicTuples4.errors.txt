@@ -18,17 +18,17 @@ variadicTuples4.ts(114,19): error TS2344: Type '[...A, ...B, ...C]' does not sat
   Type at position 2 in source is not compatible with type at position 1 in target.
     Type 'C' is not assignable to type 'B'.
       'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
-variadicTuples4.ts(133,5): error TS2344: Type '[...A, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+variadicTuples4.ts(139,5): error TS2344: Type '[...A, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
   Source has 2 element(s) but target requires 3.
-variadicTuples4.ts(139,5): error TS2344: Type '[...A, boolean, boolean, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
+variadicTuples4.ts(145,5): error TS2344: Type '[...A, boolean, boolean, ...B]' does not satisfy the constraint '[...A, boolean, ...B]'.
   Target allows only 3 element(s) but source may have more.
-variadicTuples4.ts(148,49): error TS2344: Type '[boolean, ...T]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+variadicTuples4.ts(154,49): error TS2344: Type '[boolean, ...T]' does not satisfy the constraint '[boolean, ...T, boolean]'.
   Source has 2 element(s) but target requires 3.
-variadicTuples4.ts(150,49): error TS2344: Type '[...T, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+variadicTuples4.ts(156,49): error TS2344: Type '[...T, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
   Source has 2 element(s) but target requires 3.
-variadicTuples4.ts(154,5): error TS2344: Type '[boolean, ...T, boolean, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
+variadicTuples4.ts(160,5): error TS2344: Type '[boolean, ...T, boolean, boolean]' does not satisfy the constraint '[boolean, ...T, boolean]'.
   Target allows only 3 element(s) but source may have more.
-variadicTuples4.ts(180,5): error TS2344: Type '[boolean, ...A, ...B, (number | undefined)?]' does not satisfy the constraint '[boolean, ...A, string, ...B, (number | undefined)?]'.
+variadicTuples4.ts(186,5): error TS2344: Type '[boolean, ...A, ...B, (number | undefined)?]' does not satisfy the constraint '[boolean, ...A, string, ...B, (number | undefined)?]'.
   Variadic element at position 2 in source does not match element at position 2 in target.
 
 
@@ -92,7 +92,7 @@ variadicTuples4.ts(180,5): error TS2344: Type '[boolean, ...A, ...B, (number | u
       type Wrapper<A extends unknown[], B extends unknown[]> = Inner<
         A,
         B,
-        [...A, boolean, ...B, boolean] // ok
+        [...A, boolean, ...B, boolean]
       >;
     }
     
@@ -176,6 +176,12 @@ variadicTuples4.ts(180,5): error TS2344: Type '[boolean, ...A, ...B, (number | u
 !!! error TS2344:   Type at position 2 in source is not compatible with type at position 1 in target.
 !!! error TS2344:     Type 'C' is not assignable to type 'B'.
 !!! error TS2344:       'C' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'unknown[]'.
+    
+      type Wrapper4<
+        A extends unknown[],
+        B extends unknown[],
+        C extends B,
+      > = Inner<A, B, [...A, ...B, ...C]>;
     }
     
     {
