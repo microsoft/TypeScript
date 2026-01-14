@@ -109,11 +109,11 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences *UserPreferences
 	return QuotePreferenceDouble
 }
 
-func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, target core.ScriptTarget, forceCapitalize bool) string {
-	return ModuleSpecifierToValidIdentifier(stringutil.StripQuotes(moduleSymbol.Name), target, forceCapitalize)
+func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize bool) string {
+	return ModuleSpecifierToValidIdentifier(stringutil.StripQuotes(moduleSymbol.Name), forceCapitalize)
 }
 
-func ModuleSpecifierToValidIdentifier(moduleSpecifier string, target core.ScriptTarget, forceCapitalize bool) string {
+func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bool) string {
 	baseName := tspath.GetBaseFileName(strings.TrimSuffix(tspath.RemoveFileExtension(moduleSpecifier), "/index"))
 	res := []rune{}
 	lastCharWasValid := true

@@ -72,3 +72,11 @@ func (t TextRange) Intersects(t2 TextRange) bool {
 	end := min(t.end, t2.end)
 	return start <= end
 }
+
+func CompareTextRanges(r1 TextRange, r2 TextRange) int {
+	c := int(r1.pos) - int(r2.pos)
+	if c != 0 {
+		return c
+	}
+	return int(r1.end) - int(r2.end)
+}

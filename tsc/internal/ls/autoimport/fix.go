@@ -45,6 +45,13 @@ type Fix struct {
 	TypeOnlyAliasDeclaration *ast.Declaration
 }
 
+type addToExistingImportFix struct {
+	importClauseOrBindingPattern *ast.ImportClauseOrBindingPattern
+	// One of `defaultImport` or `namedImports` will be present
+	defaultImport *newImportBinding
+	namedImport   *newImportBinding
+}
+
 func (f *Fix) Edits(
 	ctx context.Context,
 	file *ast.SourceFile,
@@ -57,43 +64,14 @@ func (f *Fix) Edits(
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
 	switch f.Kind {
 	case lsproto.AutoImportFixKindUseNamespace:
-		if f.UsagePosition == nil || f.NamespacePrefix == "" {
-			panic("namespace fix requires usage position and prefix")
-		}
-		qualified := fmt.Sprintf("%s.%s", f.NamespacePrefix, f.Name)
-		tracker.InsertText(file, *f.UsagePosition, f.NamespacePrefix+".")
-		return tracker.GetChanges()[file.FileName()], diagnostics.Change_0_to_1.Localize(locale, f.Name, qualified)
+		description := addNamespaceQualifier(f, tracker, file, locale)
+		return tracker.GetChanges()[file.FileName()], description
 	case lsproto.AutoImportFixKindAddToExisting:
 		if len(file.Imports()) <= int(f.ImportIndex) {
 			panic("import index out of range")
 		}
-		moduleSpecifier := file.Imports()[f.ImportIndex]
-		importNode := ast.TryGetImportFromModuleSpecifier(moduleSpecifier)
-		if importNode == nil {
-			panic("expected import declaration")
-		}
-		var importClauseOrBindingPattern *ast.Node
-		switch importNode.Kind {
-		case ast.KindImportDeclaration:
-			importClauseOrBindingPattern = importNode.ImportClause()
-			if importClauseOrBindingPattern == nil {
-				panic("expected import clause")
-			}
-		case ast.KindCallExpression:
-			if !ast.IsVariableDeclarationInitializedToRequire(importNode.Parent) {
-				panic("expected require call expression to be in variable declaration")
-			}
-			importClauseOrBindingPattern = importNode.Parent.Name()
-			if importClauseOrBindingPattern == nil || !ast.IsObjectBindingPattern(importClauseOrBindingPattern) {
-				panic("expected object binding pattern in variable declaration")
-			}
-		default:
-			panic("expected import declaration or require call expression")
-		}
-
-		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{kind: lsproto.ImportKindDefault, name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
-		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{kind: lsproto.ImportKindNamed, name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
-		addToExistingImport(tracker, file, importClauseOrBindingPattern, defaultImport, namedImports, preferences)
+		existingFix := getAddToExistingImportFix(file, f)
+		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
 		return tracker.GetChanges()[file.FileName()], diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier)
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
@@ -135,19 +113,70 @@ func (f *Fix) Edits(
 		moduleSpec := getModuleSpecifierText(promotedDeclaration)
 		return tracker.GetChanges()[file.FileName()], diagnostics.Remove_type_from_import_declaration_from_0.Localize(locale, moduleSpec)
 	case lsproto.AutoImportFixKindJsdocTypeImport:
-		if f.UsagePosition == nil {
-			panic("UsagePosition must be set for JSDoc type import fix")
-		}
-		quotePreference := lsutil.GetQuotePreference(file, preferences)
-		quoteChar := "\""
-		if quotePreference == lsutil.QuotePreferenceSingle {
-			quoteChar = "'"
-		}
-		importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, f.ModuleSpecifier, quoteChar)
-		tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
-		return tracker.GetChanges()[file.FileName()], diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
+		description := addImportType(f, file, preferences, tracker, locale)
+		return tracker.GetChanges()[file.FileName()], description
 	default:
 		panic("unimplemented fix edit")
+	}
+}
+
+func addImportType(f *Fix, file *ast.SourceFile, preferences *lsutil.UserPreferences, tracker *change.Tracker, locale locale.Locale) string {
+	if f.UsagePosition == nil {
+		panic("UsagePosition must be set for JSDoc type import fix")
+	}
+	quotePreference := lsutil.GetQuotePreference(file, preferences)
+	quoteChar := "\""
+	if quotePreference == lsutil.QuotePreferenceSingle {
+		quoteChar = "'"
+	}
+	importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, f.ModuleSpecifier, quoteChar)
+	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
+	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
+}
+
+func addNamespaceQualifier(f *Fix, tracker *change.Tracker, file *ast.SourceFile, locale locale.Locale) string {
+	if f.UsagePosition == nil || f.NamespacePrefix == "" {
+		panic("namespace fix requires usage position and prefix")
+	}
+	qualified := fmt.Sprintf("%s.%s", f.NamespacePrefix, f.Name)
+	tracker.InsertText(file, *f.UsagePosition, f.NamespacePrefix+".")
+	return diagnostics.Change_0_to_1.Localize(locale, f.Name, qualified)
+}
+
+func getAddToExistingImportFix(file *ast.SourceFile, fix *Fix) *addToExistingImportFix {
+	if fix.Kind != lsproto.AutoImportFixKindAddToExisting {
+		panic("expected add to existing import fix")
+	}
+	moduleSpecifier := file.Imports()[fix.ImportIndex]
+	importNode := ast.TryGetImportFromModuleSpecifier(moduleSpecifier)
+	if importNode == nil {
+		panic("expected import declaration")
+	}
+	var importClauseOrBindingPattern *ast.Node
+	switch importNode.Kind {
+	case ast.KindImportDeclaration:
+		importClauseOrBindingPattern = importNode.ImportClause()
+		if importClauseOrBindingPattern == nil {
+			panic("expected import clause")
+		}
+	case ast.KindCallExpression:
+		if !ast.IsVariableDeclarationInitializedToRequire(importNode.Parent) {
+			panic("expected require call expression to be in variable declaration")
+		}
+		importClauseOrBindingPattern = importNode.Parent.Name()
+		if importClauseOrBindingPattern == nil || !ast.IsObjectBindingPattern(importClauseOrBindingPattern) {
+			panic("expected object binding pattern in variable declaration")
+		}
+	default:
+		panic("expected import declaration or require call expression")
+	}
+
+	defaultImport := core.IfElse(fix.ImportKind == lsproto.ImportKindDefault, &newImportBinding{kind: lsproto.ImportKindDefault, name: fix.Name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
+	namedImports := core.IfElse(fix.ImportKind == lsproto.ImportKindNamed, &newImportBinding{kind: lsproto.ImportKindNamed, name: fix.Name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
+	return &addToExistingImportFix{
+		importClauseOrBindingPattern: importClauseOrBindingPattern,
+		defaultImport:                defaultImport,
+		namedImport:                  namedImports,
 	}
 }
 
@@ -321,10 +350,10 @@ func getNewImports(
 	namespaceLikeImport *newImportBinding, // { lsproto.importKind: lsproto.ImportKind.CommonJS | lsproto.ImportKind.Namespace; }
 	compilerOptions *core.CompilerOptions,
 	preferences *lsutil.UserPreferences,
-) []*ast.Statement {
+) []*ast.AnyImportSyntax {
 	tokenFlags := core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone)
 	moduleSpecifierStringLiteral := ct.NodeFactory.NewStringLiteral(moduleSpecifier, tokenFlags)
-	var statements []*ast.Statement // []AnyImportSyntax
+	var statements []*ast.AnyImportSyntax
 	if defaultImport != nil || len(namedImports) > 0 {
 		// `verbatimModuleSyntax` should prefer top-level `import type` -
 		// even though it's not an error, it would add unnecessary runtime emit.
@@ -469,7 +498,7 @@ func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name *as
 	)
 }
 
-func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*ast.Statement, blankLineBetween bool, preferences *lsutil.UserPreferences) {
+func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*ast.AnyImportOrRequireStatement, blankLineBetween bool, preferences *lsutil.UserPreferences) {
 	var existingImportStatements []*ast.Statement
 
 	if imports[0].Kind == ast.KindVariableStatement {

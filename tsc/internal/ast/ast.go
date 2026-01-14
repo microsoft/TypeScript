@@ -2133,6 +2133,9 @@ type (
 	VariableOrParameterDeclaration = Node // VariableDeclaration | ParameterDeclaration
 	VariableOrPropertyDeclaration  = Node // VariableDeclaration | PropertyDeclaration
 	CallOrNewExpression            = Node // CallExpression | NewExpression
+	ImportClauseOrBindingPattern   = Node // ImportClause | BindingPattern
+	AnyImportSyntax                = Node // ImportDeclaration | ImportEqualsDeclaration
+	AnyImportOrRequireStatement    = Node // AnyImportSyntax | RequireVariableStatement
 )
 
 // Aliases for node singletons

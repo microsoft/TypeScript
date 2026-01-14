@@ -41,6 +41,7 @@ func (l *LanguageService) ProvideCompletion(
 	if context != nil {
 		triggerCharacter = context.TriggerCharacter
 	}
+	ctx = format.WithFormatCodeSettings(ctx, l.FormatOptions(), l.FormatOptions().NewLineCharacter)
 	position := int(l.converters.LineAndCharacterToPosition(file, LSPPosition))
 	completionList, err := l.getCompletionsAtPosition(
 		ctx,
@@ -353,7 +354,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 	switch data := data.(type) {
 	case *completionDataData:
 		optionalReplacementSpan := l.getOptionalReplacementSpan(data.location, file)
-		response := l.completionInfoFromData(
+		response, err := l.completionInfoFromData(
 			ctx,
 			checker,
 			file,
@@ -362,7 +363,9 @@ func (l *LanguageService) getCompletionsAtPosition(
 			position,
 			optionalReplacementSpan,
 		)
-		// !!! check if response is incomplete
+		if err != nil {
+			return nil, err
+		}
 		return response, nil
 	case *completionDataKeyword:
 		optionalReplacementSpan := l.getOptionalReplacementSpan(previousToken, file)
@@ -1668,7 +1671,7 @@ func (l *LanguageService) completionInfoFromData(
 	data *completionDataData,
 	position int,
 	optionalReplacementSpan *lsproto.Range,
-) *lsproto.CompletionList {
+) (*lsproto.CompletionList, error) {
 	keywordFilters := data.keywordFilters
 	isNewIdentifierLocation := data.isNewIdentifierLocation
 	contextToken := data.contextToken
@@ -1679,7 +1682,7 @@ func (l *LanguageService) completionInfoFromData(
 	if file.LanguageVariant == core.LanguageVariantJSX {
 		list := l.getJsxClosingTagCompletion(ctx, data.location, file, position)
 		if list != nil {
-			return list
+			return list, nil
 		}
 	}
 
@@ -1706,7 +1709,7 @@ func (l *LanguageService) completionInfoFromData(
 
 	isChecked := isCheckedFile(file, compilerOptions)
 	if isChecked && !isNewIdentifierLocation && len(data.symbols) == 0 && keywordFilters == KeywordCompletionFiltersNone {
-		return nil
+		return nil, nil
 	}
 
 	uniqueNames, sortedEntries := l.getCompletionEntriesFromSymbols(
@@ -1754,7 +1757,25 @@ func (l *LanguageService) completionInfoFromData(
 		)
 	}
 
-	// !!! exhaustive case completions
+	if contextToken != nil && !data.isRightOfOpenTag && !data.isRightOfDotOrQuestionDot {
+		if caseBlock := ast.FindAncestorKind(contextToken, ast.KindCaseBlock); caseBlock != nil {
+			casesItem, err := l.getExhaustiveCaseSnippets(
+				ctx,
+				caseBlock.AsCaseBlock(),
+				file,
+				position,
+				compilerOptions,
+				l.program,
+				typeChecker,
+			)
+			if err != nil {
+				return nil, err
+			}
+			if casesItem != nil {
+				sortedEntries = append(sortedEntries, casesItem)
+			}
+		}
+	}
 
 	itemDefaults := l.setItemDefaults(
 		ctx,
@@ -1769,7 +1790,7 @@ func (l *LanguageService) completionInfoFromData(
 		IsIncomplete: data.hasUnresolvedAutoImports,
 		ItemDefaults: itemDefaults,
 		Items:        sortedEntries,
-	}
+	}, nil
 }
 
 func (l *LanguageService) getCompletionEntriesFromSymbols(
@@ -2896,6 +2917,7 @@ func isEqualityOperatorKind(kind ast.Kind) bool {
 	}
 }
 
+// We disregard boolean literals for completion purposes.
 func isLiteral(t *checker.Type) bool {
 	return t.IsStringLiteral() || t.IsNumberLiteral() || t.IsBigIntLiteral()
 }
@@ -4859,7 +4881,6 @@ func (l *LanguageService) getCompletionItemDetails(
 		literal := symbolCompletion.literal
 		return createSimpleDetails(item, completionNameForLiteral(file, preferences, *literal), docFormat)
 	case symbolCompletion.cases != nil:
-		// !!! exhaustive case completions
 		return item
 	default:
 		// Didn't find a symbol with this name.  See if we can find a keyword instead.
@@ -5820,4 +5841,339 @@ func getJSDocParameterNameCompletions(tag *ast.JSDocParameterTag) []*lsproto.Com
 			SortText: ptrTo(string(SortTextLocationPriority)),
 		}
 	})
+}
+
+func (l *LanguageService) getExhaustiveCaseSnippets(
+	ctx context.Context,
+	caseBlock *ast.CaseBlock,
+	file *ast.SourceFile,
+	position int,
+	options *core.CompilerOptions,
+	program *compiler.Program,
+	c *checker.Checker,
+) (*lsproto.CompletionItem, error) {
+	clauses := caseBlock.Clauses.Nodes
+	switchType := c.GetTypeAtLocation(caseBlock.AsNode().Parent.Expression())
+	if switchType != nil && switchType.IsUnion() && core.Every(switchType.Types(), isLiteral) {
+		// Collect constant values in existing clauses.
+		tracker := newCaseClauseTracker(c, clauses)
+		target := options.GetEmitScriptTarget()
+		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
+		view, err := l.getPreparedAutoImportView(file)
+		if err != nil {
+			return nil, err
+		}
+		importAdder := autoimport.NewImportAdder(
+			ctx,
+			program,
+			c,
+			file,
+			view,
+			l.FormatOptions(),
+			l.converters,
+			l.UserPreferences(),
+		)
+		var elements []*ast.Expression
+		factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+		for _, t := range switchType.Types() {
+			// Enums
+			if t.IsEnumLiteral() {
+				debug.Assert(t.Symbol() != nil, "An enum member type should have a symbol")
+				debug.Assert(t.Symbol().Parent != nil, "An enum member type should have a parent symbol (the enum symbol)")
+				// Filter existing enums by their values
+				var enumValue any
+				if t.Symbol().ValueDeclaration != nil {
+					enumValue = c.GetConstantValue(t.Symbol().ValueDeclaration)
+				}
+				if enumValue != nil {
+					if tracker.hasValue(enumValue) {
+						continue
+					}
+					tracker.addValue(enumValue)
+				}
+				typeNode := autoimport.TypeToAutoImportableTypeNode(c, importAdder, t, caseBlock.AsNode())
+				if typeNode == nil {
+					return nil, nil
+				}
+				expr := typeNodeToExpression(typeNode, target, quotePreference, factory)
+				if expr == nil {
+					return nil, nil
+				}
+				elements = append(elements, expr)
+			} else if value := t.AsLiteralType().Value(); !tracker.hasValue(value) { // Literals
+				switch v := value.(type) {
+				case jsnum.PseudoBigInt:
+					var bigInt *ast.Node
+					if v.Negative {
+						v.Negative = false
+						bigInt = factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewBigIntLiteral(v.String()+"n", ast.TokenFlagsNone))
+					} else {
+						bigInt = factory.NewBigIntLiteral(v.String()+"n", ast.TokenFlagsNone)
+					}
+					elements = append(elements, bigInt)
+				case jsnum.Number:
+					var number *ast.Node
+					if v < 0 {
+						number = factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewNumericLiteral(v.Abs().String(), ast.TokenFlagsNone))
+					} else {
+						number = factory.NewNumericLiteral(v.String(), ast.TokenFlagsNone)
+					}
+					elements = append(elements, number)
+				case string:
+					literal := factory.NewStringLiteral(v, core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
+					elements = append(elements, literal)
+				}
+			}
+		}
+		if len(elements) == 0 {
+			return nil, nil
+		}
+
+		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseClauseNode {
+			return factory.NewCaseOrDefaultClause(ast.KindCaseClause, element, factory.NewNodeList(nil))
+		})
+		newLineChar := l.FormatOptions().NewLineCharacter
+		printer := createSnippetPrinter(printer.PrinterOptions{
+			RemoveComments: true,
+			NewLine:        core.GetNewLineKind(newLineChar),
+		})
+		printNode := func(node *ast.Node) string { return printer.printAndFormatNode(ctx, node, file) }
+		insertText := strings.Join(core.MapIndex(newClauses, func(clause *ast.Node, i int) string {
+			if clientSupportsItemSnippet(ctx) {
+				return fmt.Sprintf("%s$%d", printNode(clause), i+1)
+			}
+			return printer.printUnescapedNode(clause)
+		}), newLineChar)
+
+		firstClause := printer.printUnescapedNode(newClauses[0])
+		name := firstClause + " ..."
+		return &lsproto.CompletionItem{
+			Label:               name,
+			Kind:                ptrTo(lsproto.CompletionItemKindSnippet),
+			SortText:            ptrTo(string(SortTextGlobalsOrKeywords)),
+			InsertText:          strPtrTo(insertText),
+			AdditionalTextEdits: ptrTo(importAdder.Edits()),
+			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), ptrTo(lsproto.InsertTextFormatSnippet), nil),
+			Data: &lsproto.CompletionItemData{
+				FileName: file.FileName(),
+				Position: int32(position),
+				Name:     name,
+				Source:   string(completionSourceSwitchCases),
+			},
+		}, nil
+	}
+	return nil, nil
+}
+
+func typeNodeToExpression(
+	typeNode *ast.TypeNode,
+	target core.ScriptTarget,
+	quotePreference lsutil.QuotePreference,
+	factory *ast.NodeFactory,
+) *ast.Expression {
+	switch typeNode.Kind {
+	case ast.KindTypeReference:
+		typeName := typeNode.AsTypeReference().TypeName
+		return entityNameToExpression(typeName, target, quotePreference, factory)
+	case ast.KindIndexedAccessType:
+		objectExpression := typeNodeToExpression(
+			typeNode.AsIndexedAccessTypeNode().ObjectType,
+			target,
+			quotePreference,
+			factory,
+		)
+		indexExpression := typeNodeToExpression(
+			typeNode.AsIndexedAccessTypeNode().IndexType,
+			target,
+			quotePreference,
+			factory,
+		)
+		if objectExpression != nil && indexExpression != nil {
+			return factory.NewElementAccessExpression(objectExpression, nil /*questionDotToken*/, indexExpression, ast.NodeFlagsNone)
+		}
+		return nil
+	case ast.KindLiteralType:
+		literal := typeNode.AsLiteralTypeNode().Literal
+		switch literal.Kind {
+		case ast.KindStringLiteral:
+			expr := factory.NewStringLiteral(literal.Text(), core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
+			return expr
+		case ast.KindNumericLiteral:
+			expr := factory.NewNumericLiteral(literal.Text(), literal.AsNumericLiteral().TokenFlags)
+			return expr
+		default:
+			return nil
+		}
+	case ast.KindParenthesizedType:
+		expr := typeNodeToExpression(
+			typeNode.AsParenthesizedTypeNode().Type,
+			target,
+			quotePreference,
+			factory,
+		)
+		if expr == nil {
+			return nil
+		}
+		if ast.IsIdentifier(expr) {
+			return expr
+		}
+		return factory.NewParenthesizedExpression(expr)
+	case ast.KindTypeQuery:
+		return entityNameToExpression(typeNode.AsTypeQueryNode().ExprName, target, quotePreference, factory)
+	case ast.KindImportType:
+		debug.Fail(`We should not get an import type after calling 'typeToAutoImportableTypeNode'.`)
+		return nil
+	}
+	return nil
+}
+
+func entityNameToExpression(
+	entityName *ast.EntityName,
+	target core.ScriptTarget,
+	quotePreference lsutil.QuotePreference,
+	factory *ast.NodeFactory,
+) *ast.Expression {
+	if ast.IsIdentifier(entityName) {
+		return entityName
+	}
+	return factory.NewPropertyAccessExpression(
+		entityNameToExpression(entityName.AsQualifiedName().Left, target, quotePreference, factory),
+		nil, /*questionDotToken*/
+		entityName.AsQualifiedName().Right,
+		ast.NodeFlagsNone,
+	)
+}
+
+type snippetPrinter struct {
+	baseWriter *printer.ChangeTrackerWriter
+	printer    *printer.Printer
+	writer     *snippetEmitTextWriter
+	factory    *ast.NodeFactory
+}
+
+/** Snippet-escaping version of `printer.printNode`. */
+func (p *snippetPrinter) printNode(node *ast.Node) string {
+	unescaped := p.printUnescapedNode(node)
+	if len(p.writer.escapes) > 0 {
+		return core.ApplyBulkEdits(unescaped, p.writer.escapes)
+	}
+	return unescaped
+}
+
+func (p *snippetPrinter) printUnescapedNode(node *ast.Node) string {
+	p.writer.escapes = nil
+	p.writer.Clear()
+	p.printer.Write(node, nil /*sourceFile*/, p.writer, nil /*sourceMapGenerator*/)
+	return p.writer.String()
+}
+
+func (p *snippetPrinter) printAndFormatNode(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile) string {
+	text := p.printUnescapedNode(node)
+	nodeWithPos := p.baseWriter.AssignPositionsToNode(node, p.factory)
+	syntheticFile := p.createSyntheticFile(nodeWithPos, text, sourceFile)
+	changes := format.FormatNodeGivenIndentation(
+		ctx,
+		nodeWithPos,
+		syntheticFile,
+		sourceFile.LanguageVariant,
+		0, /*initialIndentation*/
+		0, /*delta*/
+	)
+
+	allChanges := changes
+	if len(p.writer.escapes) > 0 {
+		allChanges = append(changes, p.writer.escapes...)
+		slices.SortFunc(allChanges, func(a, b core.TextChange) int { return core.CompareTextRanges(a.TextRange, b.TextRange) })
+	}
+
+	return core.ApplyBulkEdits(syntheticFile.Text(), allChanges)
+}
+
+// Creates a source file containing `node` for formatting purposes.
+// `node` and descendants need to be synthetic nodes with positions assigned.
+// This function also assigns parent pointers.
+func (p *snippetPrinter) createSyntheticFile(node *ast.Node, text string, targetFile *ast.SourceFile) *ast.SourceFile {
+	eof := p.factory.NewToken(ast.KindEndOfFile)
+	eof.Loc = core.NewTextRange(len(text), len(text))
+	statements := p.factory.NewNodeList([]*ast.Node{node})
+	statements.Loc = core.NewTextRange(node.Pos(), node.End())
+	syntheticFile := p.factory.NewSourceFile(
+		targetFile.ParseOptions(),
+		text,
+		statements,
+		eof,
+	)
+	syntheticFile.Loc = core.NewTextRange(0, len(text))
+	ast.SetParentInChildren(syntheticFile)
+	return syntheticFile.AsSourceFile()
+}
+
+func createSnippetPrinter(options printer.PrinterOptions) *snippetPrinter {
+	baseWriter := printer.NewChangeTrackerWriter(options.NewLine.GetNewLineCharacter())
+	printer := printer.NewPrinter(options, baseWriter.GetPrintHandlers(), nil /*emitContext*/)
+	writer := &snippetEmitTextWriter{
+		ChangeTrackerWriter: baseWriter,
+	}
+	return &snippetPrinter{
+		baseWriter: baseWriter,
+		printer:    printer,
+		writer:     writer,
+		factory:    ast.NewNodeFactory(ast.NodeFactoryHooks{}),
+	}
+}
+
+// Override base writer methods to perform snippet escaping.
+type snippetEmitTextWriter struct {
+	*printer.ChangeTrackerWriter
+	escapes []core.TextChange
+}
+
+func (w *snippetEmitTextWriter) nonEscapingWrite(s string) {
+	w.ChangeTrackerWriter.Write(s)
+}
+
+func (w *snippetEmitTextWriter) Write(s string) {
+	w.escapingWrite(s, func() { w.ChangeTrackerWriter.Write(s) })
+}
+
+func (w *snippetEmitTextWriter) WriteComment(text string) {
+	w.escapingWrite(text, func() { w.ChangeTrackerWriter.WriteComment(text) })
+}
+
+func (w *snippetEmitTextWriter) WriteStringLiteral(text string) {
+	w.escapingWrite(text, func() { w.ChangeTrackerWriter.WriteStringLiteral(text) })
+}
+
+func (w *snippetEmitTextWriter) WriteParameter(text string) {
+	w.escapingWrite(text, func() { w.ChangeTrackerWriter.WriteParameter(text) })
+}
+
+func (w *snippetEmitTextWriter) WriteProperty(text string) {
+	w.escapingWrite(text, func() { w.ChangeTrackerWriter.WriteProperty(text) })
+}
+
+func (w *snippetEmitTextWriter) WriteSymbol(text string, symbol *ast.Symbol) {
+	w.escapingWrite(text, func() { w.ChangeTrackerWriter.WriteSymbol(text, symbol) })
+}
+
+// The formatter/scanner will have issues with snippet-escaped text,
+// so instead of writing the escaped text directly to the writer,
+// generate a set of changes that can be applied to the unescaped text
+// to escape it post-formatting.
+func (w *snippetEmitTextWriter) escapingWrite(s string, write func()) {
+	escaped := escapeSnippetText(s)
+	if escaped != s {
+		start := w.GetTextPos()
+		write()
+		end := w.GetTextPos()
+		w.escapes = append(
+			w.escapes,
+			core.TextChange{
+				NewText:   escaped,
+				TextRange: core.NewTextRange(start, end),
+			},
+		)
+	} else {
+		write()
+	}
 }

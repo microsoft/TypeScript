@@ -109,7 +109,7 @@ func MapFiltered[T any, U any](slice []T, f func(T) (U, bool)) []U {
 	return result
 }
 
-func FlatMap[T any, U comparable](slice []T, f func(T) []U) []U {
+func FlatMap[T any, U any](slice []T, f func(T) []U) []U {
 	var result []U
 	for _, value := range slice {
 		mapped := f(value)

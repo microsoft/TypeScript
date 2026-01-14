@@ -335,10 +335,10 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 				}
 				export.localName = getDefaultLikeExportNameFromDeclaration(namedSymbol)
 				if isUnusableName(export.localName) {
-					export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(export.Target.ModuleID), core.ScriptTargetESNext, false)
+					export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(export.Target.ModuleID), false)
 				}
 			} else {
-				export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(moduleID), core.ScriptTargetESNext, false)
+				export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(moduleID), false)
 			}
 		}
 	}

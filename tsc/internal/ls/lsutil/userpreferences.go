@@ -18,7 +18,6 @@ func NewDefaultUserPreferences() *UserPreferences {
 
 		AllowRenameOfImportPath:            core.TSTrue,
 		ProvideRefactorNotApplicableReason: true,
-		IncludeCompletionsWithSnippetText:  core.TSTrue,
 		DisplayPartsForJSDoc:               true,
 		DisableLineTextInReferences:        true,
 		ReportStyleChecksAsWarnings:        true,
@@ -48,8 +47,6 @@ type UserPreferences struct {
 	// on potentially-null and potentially-undefined values, with insertion text to replace
 	// preceding `.` tokens with `?.`.
 	IncludeAutomaticOptionalChainCompletions core.Tristate
-	// Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
-	IncludeCompletionsWithSnippetText core.Tristate // !!!
 	// If enabled, completions for class members (e.g. methods and properties) will include
 	// a whole declaration for the member.
 	// E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
@@ -648,8 +645,6 @@ func (p *UserPreferences) set(name string, value any) {
 		p.IncludeCompletionsForImportStatements = tsoptions.ParseTristate(value)
 	case "includeautomaticoptionalchaincompletions":
 		p.IncludeAutomaticOptionalChainCompletions = tsoptions.ParseTristate(value)
-	case "includecompletionswithsnippettext":
-		p.IncludeCompletionsWithSnippetText = tsoptions.ParseTristate(value)
 	case "includecompletionswithclassmembersnippets":
 		p.IncludeCompletionsWithClassMemberSnippets = tsoptions.ParseTristate(value)
 	case "includecompletionswithobjectliteralmethodsnippets":
