@@ -12542,7 +12542,6 @@ func (c *Checker) checkNullishCoalesceOperands(left *ast.Node, right *ast.Node) 
 		}
 	}
 	c.checkNullishCoalesceOperandLeft(left)
-	c.checkNullishCoalesceOperandRight(right)
 }
 
 func (c *Checker) checkNullishCoalesceOperandLeft(left *ast.Node) {
@@ -12553,20 +12552,6 @@ func (c *Checker) checkNullishCoalesceOperandLeft(left *ast.Node) {
 			c.error(leftTarget, diagnostics.This_expression_is_always_nullish)
 		} else {
 			c.error(leftTarget, diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish)
-		}
-	}
-}
-
-func (c *Checker) checkNullishCoalesceOperandRight(right *ast.Node) {
-	binaryExpression := right.Parent
-	if binaryExpression.Parent != nil && ast.IsBinaryExpression(binaryExpression.Parent) && binaryExpression.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionToken {
-		rightTarget := ast.SkipOuterExpressions(right, ast.OEKAll)
-		nullishSemantics := c.getSyntacticNullishnessSemantics(rightTarget)
-		switch nullishSemantics {
-		case PredicateSemanticsAlways:
-			c.error(rightTarget, diagnostics.This_expression_is_always_nullish)
-		case PredicateSemanticsNever:
-			c.error(rightTarget, diagnostics.This_expression_is_never_nullish)
 		}
 	}
 }
@@ -12586,17 +12571,18 @@ func (c *Checker) getSyntacticNullishnessSemantics(node *ast.Node) PredicateSema
 		return PredicateSemanticsSometimes
 	case ast.KindBinaryExpression:
 		// List of operators that can produce null/undefined:
-		// = ??= ?? || ||= && &&=
+		// || ||= && &&=
 		switch node.AsBinaryExpression().OperatorToken.Kind {
-		case ast.KindEqualsToken,
-			ast.KindQuestionQuestionToken,
-			ast.KindQuestionQuestionEqualsToken,
-			ast.KindBarBarToken,
+		case ast.KindBarBarToken,
 			ast.KindBarBarEqualsToken,
 			ast.KindAmpersandAmpersandToken,
 			ast.KindAmpersandAmpersandEqualsToken:
 			return PredicateSemanticsSometimes
-		case ast.KindCommaToken:
+		// For these operator kinds, the right operand is effectively controlling
+		case ast.KindCommaToken,
+			ast.KindEqualsToken,
+			ast.KindQuestionQuestionToken,
+			ast.KindQuestionQuestionEqualsToken:
 			return c.getSyntacticNullishnessSemantics(node.AsBinaryExpression().Right)
 		}
 		return PredicateSemanticsNever
