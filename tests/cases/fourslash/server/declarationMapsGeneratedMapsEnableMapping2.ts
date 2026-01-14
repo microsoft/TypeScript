@@ -1,9 +1,9 @@
-// @strict: false
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "strict": false,
 ////        "outDir": "./dist",
 ////        "sourceMap": true,
 ////        "sourceRoot": "/home/src/workspaces/project/",

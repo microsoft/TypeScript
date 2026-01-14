@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path="../fourslash.ts" />
 // @Filename: BaseClass/Source.d.ts
 ////declare class Control {
@@ -22,6 +21,7 @@
 ////    "$schema": "http://json.schemastore.org/tsconfig",
 ////    "compileOnSave": true,
 ////    "compilerOptions": {
+////      "strict": false,
 ////      "sourceMap": true,
 ////      "declaration": true,
 ////      "declarationMap": true
