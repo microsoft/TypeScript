@@ -1,0 +1,493 @@
+// === SignatureHelp ===
+=== /signatureHelpBindingPattern.ts ===
+// /**
+//  * @param options An empty object binding pattern.
+//  */
+// function emptyObj({}) {}
+// emptyObj()
+//          ^
+// | ----------------------------------------------------------------------
+// | emptyObj(**{}: {}**): void
+// | - `{}: {}`: An empty object binding pattern.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param items An empty array binding pattern.
+//  */
+// function emptyArr([]) {}
+// emptyArr()
+//          ^
+// | ----------------------------------------------------------------------
+// | emptyArr(**[]: any[]**): void
+// | - `[]: any[]`: An empty array binding pattern.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param param An object with a and b properties.
+//  */
+// function nonEmptyObj({a, b}: {a: number, b: string}) {}
+// nonEmptyObj()
+//             ^
+// | ----------------------------------------------------------------------
+// | nonEmptyObj(**{ a, b, }: {
+    a: number;
+    b: string;
+}**): void
+// | - `{ a, b, }: {
+    a: number;
+    b: string;
+}`: An object with a and b properties.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param tuple A tuple with two elements.
+//  */
+// function nonEmptyArr([x, y]: [number, string]) {}
+// nonEmptyArr()
+//             ^
+// | ----------------------------------------------------------------------
+// | nonEmptyArr(**[x, y,]: [
+    number,
+    string
+]**): void
+// | - `[x, y,]: [
+    number,
+    string
+]`: A tuple with two elements.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param first The first number parameter.
+//  * @param second An object with a and b properties.
+//  */
+// function idLeading(first: number, {a, b}: {a: number, b: string}) {}
+// idLeading(123, { a: 1, b: 2 })
+//              ^
+// | ----------------------------------------------------------------------
+// | idLeading(**first: number**, { a, b, }: {
+    a: number;
+    b: string;
+}): void
+// | - `first: number`: The first number parameter.
+
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | idLeading(first: number, **{ a, b, }: {
+    a: number;
+    b: string;
+}**): void
+// | - `{ a, b, }: {
+    a: number;
+    b: string;
+}`: An object with a and b properties.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param first An object with a and b properties.
+//  * @param last The last number parameter.
+//  */
+// function bindingLeading({a, b}: {a: number, b: string}, last: number) {}
+// bindingLeading({ a: 1, b: 2 }, 123 )
+//                ^
+// | ----------------------------------------------------------------------
+// | bindingLeading(**{ a, b, }: {
+    a: number;
+    b: string;
+}**, last: number): void
+// | - `{ a, b, }: {
+    a: number;
+    b: string;
+}`: An object with a and b properties.
+
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | bindingLeading({ a, b, }: {
+    a: number;
+    b: string;
+}, **last: number**): void
+// | - `last: number`: The last number parameter.
+
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @param param1 {Object} The first parameter
+//  * @param param1.a {number} Comment a
+//  * @param param1.b {string} Comment b
+//  * @param param2 {Object} The second parameter
+//  * @param param2.c {boolean} Comment c
+//  * @param param2.d {unknown} Comment d
+//  */
+// function multipleBindings({ a, b }, { c, d }) {}
+// multipleBindings({ a: 0, b: "" }, { c: true, d: "" })
+//                                 ^
+// | ----------------------------------------------------------------------
+// | multipleBindings(**{ a, b, }: {
+    a: any;
+    b: any;
+}**, { c, d, }: {
+    c: any;
+    d: any;
+}): void
+// | - `{ a, b, }: {
+    a: any;
+    b: any;
+}`: The first parameter
+
+// | ----------------------------------------------------------------------
+//                                                     ^
+// | ----------------------------------------------------------------------
+// | multipleBindings({ a, b, }: {
+    a: any;
+    b: any;
+}, **{ c, d, }: {
+    c: any;
+    d: any;
+}**): void
+// | - `{ c, d, }: {
+    c: any;
+    d: any;
+}`: The second parameter
+
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 93,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "emptyObj",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "emptyObj({}: {}): void",
+          "parameters": [
+            {
+              "label": "{}: {}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An empty object binding pattern.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 186,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "emptyArr",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "emptyArr([]: any[]): void",
+          "parameters": [
+            {
+              "label": "[]: any[]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An empty array binding pattern.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 316,
+      "LSPosition": {
+        "line": 16,
+        "character": 12
+      },
+      "Name": "nonEmptyObj",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nonEmptyObj({ a, b, }: {\n    a: number;\n    b: string;\n}): void",
+          "parameters": [
+            {
+              "label": "{ a, b, }: {\n    a: number;\n    b: string;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An object with a and b properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 432,
+      "LSPosition": {
+        "line": 22,
+        "character": 12
+      },
+      "Name": "nonEmptyArr",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "nonEmptyArr([x, y,]: [\n    number,\n    string\n]): void",
+          "parameters": [
+            {
+              "label": "[x, y,]: [\n    number,\n    string\n]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A tuple with two elements.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 621,
+      "LSPosition": {
+        "line": 29,
+        "character": 13
+      },
+      "Name": "idLeading",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "idLeading(first: number, { a, b, }: {\n    a: number;\n    b: string;\n}): void",
+          "parameters": [
+            {
+              "label": "first: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first number parameter.\n"
+              }
+            },
+            {
+              "label": "{ a, b, }: {\n    a: number;\n    b: string;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An object with a and b properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 637,
+      "LSPosition": {
+        "line": 29,
+        "character": 29
+      },
+      "Name": "bindingTrailing",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "idLeading(first: number, { a, b, }: {\n    a: number;\n    b: string;\n}): void",
+          "parameters": [
+            {
+              "label": "first: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first number parameter.\n"
+              }
+            },
+            {
+              "label": "{ a, b, }: {\n    a: number;\n    b: string;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An object with a and b properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 829,
+      "LSPosition": {
+        "line": 36,
+        "character": 15
+      },
+      "Name": "bindingLeading",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "bindingLeading({ a, b, }: {\n    a: number;\n    b: string;\n}, last: number): void",
+          "parameters": [
+            {
+              "label": "{ a, b, }: {\n    a: number;\n    b: string;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An object with a and b properties.\n"
+              }
+            },
+            {
+              "label": "last: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The last number parameter.\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 849,
+      "LSPosition": {
+        "line": 36,
+        "character": 35
+      },
+      "Name": "idTrailing",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "bindingLeading({ a, b, }: {\n    a: number;\n    b: string;\n}, last: number): void",
+          "parameters": [
+            {
+              "label": "{ a, b, }: {\n    a: number;\n    b: string;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "An object with a and b properties.\n"
+              }
+            },
+            {
+              "label": "last: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The last number parameter.\n"
+              }
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1188,
+      "LSPosition": {
+        "line": 47,
+        "character": 32
+      },
+      "Name": "firstObjParam",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multipleBindings({ a, b, }: {\n    a: any;\n    b: any;\n}, { c, d, }: {\n    c: any;\n    d: any;\n}): void",
+          "parameters": [
+            {
+              "label": "{ a, b, }: {\n    a: any;\n    b: any;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first parameter\n"
+              }
+            },
+            {
+              "label": "{ c, d, }: {\n    c: any;\n    d: any;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The second parameter\n"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1208,
+      "LSPosition": {
+        "line": 47,
+        "character": 52
+      },
+      "Name": "secondObjParam",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "multipleBindings({ a, b, }: {\n    a: any;\n    b: any;\n}, { c, d, }: {\n    c: any;\n    d: any;\n}): void",
+          "parameters": [
+            {
+              "label": "{ a, b, }: {\n    a: any;\n    b: any;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first parameter\n"
+              }
+            },
+            {
+              "label": "{ c, d, }: {\n    c: any;\n    d: any;\n}",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The second parameter\n"
+              }
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]
