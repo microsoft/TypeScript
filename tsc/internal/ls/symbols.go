@@ -398,7 +398,7 @@ func mergeChildren(target *lsproto.DocumentSymbol, source *lsproto.DocumentSymbo
 // See `getUnnamedNodeLabel`.
 func isAnonymousName(name string) bool {
 	return name == "<function>" || name == "<class>" || name == "export=" || name == "default" ||
-		name == "constructor" || name == "()" || name == "new()" || name == "[]" || strings.HasSuffix(name, "() callback")
+		name == "constructor" || name == "()" || name == "new()" || name == "[]" || strings.HasSuffix(name, ") callback")
 }
 
 func getTextOfName(node *ast.Node) string {
@@ -432,7 +432,12 @@ func getUnnamedNodeLabel(node *ast.Node) string {
 		if ast.IsCallExpression(node.Parent) {
 			name := getCallExpressionName(node.Parent.Expression())
 			if name != "" {
-				return name + "() callback"
+				name = cleanCallbackText(name)
+				if len(name) > maxLength {
+					return name + " callback"
+				}
+				args := cleanCallbackText(getCallExpressionLiteralArgs(node.Parent))
+				return name + "(" + args + ") callback"
 			}
 		}
 		return "<function>"
@@ -466,6 +471,29 @@ func getCallExpressionName(node *ast.Node) string {
 		return right
 	}
 	return ""
+}
+
+func getCallExpressionLiteralArgs(callExpr *ast.Node) string {
+	var parts []string
+	for _, arg := range callExpr.Arguments() {
+		if ast.IsStringLiteralLike(arg) || ast.IsTemplateExpression(arg) {
+			parts = append(parts, scanner.GetTextOfNode(arg))
+		}
+	}
+	return strings.Join(parts, ", ")
+}
+
+func cleanCallbackText(text string) string {
+	truncated := stringutil.TruncateByRunes(text, maxLength)
+	if len(truncated) < len(text) {
+		text = truncated + "..."
+	}
+	return strings.Map(func(r rune) rune {
+		if stringutil.IsLineBreak(r) {
+			return -1
+		}
+		return r
+	}, text)
 }
 
 func getInteriorModule(node *ast.Node) *ast.Node {

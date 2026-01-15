@@ -18,7 +18,7 @@
 //     // These will only show up as childItems.
 //     <|function [|{| name: z, kind: Function |}z|]() {}|>
 //     console.log(<|[|{| name: console.log() callback, kind: Function |}|]function() {}|>)
-//     describe("this", 'function', `is a function`, `with template literal ${"a"}`, <|[|{| name: describe() callback, kind: Function |}|]() => {}|>);
+//     describe("this", 'function', `is a function`, `with template literal ${"a"}`, <|[|{| name: describe("this", 'function', `is a function`, `with template literal ${"a"}`) callback, kind: Function |}|]() => {}|>);
 //     [].map(<|[|{| name: map() callback, kind: Function |}|]() => {}|>);
 // }|>)
 // (<|function [|{| name: classes, kind: Function |}classes|]() {
@@ -40,7 +40,7 @@
 (Function) <function>
   (Function) z
   (Function) console.log() callback
-  (Function) describe() callback
+  (Function) describe("this", 'function', `is a function`, `with template literal ${"a"}`) callback
   (Function) map() callback
 (Function) classes
   (Variable) cls2

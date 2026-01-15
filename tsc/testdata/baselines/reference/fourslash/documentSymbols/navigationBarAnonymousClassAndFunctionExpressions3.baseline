@@ -1,19 +1,19 @@
 // === Document Symbols ===
 // === /navigationBarAnonymousClassAndFunctionExpressions3.ts ===
-// describe('foo', <|[|{| name: describe() callback, kind: Function |}|]() => {
-//     test(`a ${1} b ${2}`, <|[|{| name: test() callback, kind: Function |}|]() => {}|>)
+// describe('foo', <|[|{| name: describe('foo') callback, kind: Function |}|]() => {
+//     test(`a ${1} b ${2}`, <|[|{| name: test(`a ${1} b ${2}`) callback, kind: Function |}|]() => {}|>)
 // }|>)
 // 
 // const <|[|{| name: a, kind: Variable |}a|] = 1|>;
 // const <|[|{| name: b, kind: Variable |}b|] = 2|>;
-// describe('foo', <|[|{| name: describe() callback, kind: Function |}|]() => {
-//     test(`a ${a} b {b}`, <|[|{| name: test() callback, kind: Function |}|]() => {}|>)
+// describe('foo', <|[|{| name: describe('foo') callback, kind: Function |}|]() => {
+//     test(`a ${a} b {b}`, <|[|{| name: test(`a ${a} b {b}`) callback, kind: Function |}|]() => {}|>)
 // }|>)
 
 // === Details ===
-(Function) describe() callback
-  (Function) test() callback
+(Function) describe('foo') callback
+  (Function) test(`a ${1} b ${2}`) callback
 (Variable) a
 (Variable) b
-(Function) describe() callback
-  (Function) test() callback
+(Function) describe('foo') callback
+  (Function) test(`a ${a} b {b}`) callback
