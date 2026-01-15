@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path='fourslash.ts'/>
 
 // should not contextually type the RHS because it introduces type parameters

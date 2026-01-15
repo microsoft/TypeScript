@@ -1,4 +1,3 @@
-// @strict: false
 class class1 {
     constructor() {
         var x2 = {

@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es5
 namespace m1 {
     export namespace m2 {

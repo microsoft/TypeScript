@@ -1,4 +1,3 @@
-// @strict: false
 enum E { e1, e2 }
 interface I8 { [x: string]: number[]; }
 class A { foo: number; }

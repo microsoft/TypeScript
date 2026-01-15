@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: declarations.d.ts
 declare module "foo*baz" {
     export function foo(s: string): void;

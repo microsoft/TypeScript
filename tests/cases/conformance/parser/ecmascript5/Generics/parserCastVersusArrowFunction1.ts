@@ -1,4 +1,3 @@
-// @strict: false
 var v = <T>() => 1;
 var v = <T>a;
 

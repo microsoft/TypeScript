@@ -1,4 +1,3 @@
-// @strict: false
 function getFunc():any{return 0;}
 function setFunc(v){}          
 

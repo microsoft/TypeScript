@@ -1,4 +1,3 @@
-// @strict: false
 interface A {
     <T>(x: T): void;
     <T>(x: T): void;

@@ -1,4 +1,3 @@
-// @strict: false
 for (let v of []) {
     v;
     function foo() {

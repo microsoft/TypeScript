@@ -1,4 +1,3 @@
-// @strict: false
 // Repro from #10869
 
 /**

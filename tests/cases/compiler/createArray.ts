@@ -1,4 +1,3 @@
-// @strict: false
 var na=new number[];
 
 class C {

@@ -1,4 +1,3 @@
-// @strict: false
 var a: string;
 var a: (string);
 var a: ((string) | string | (((string))));

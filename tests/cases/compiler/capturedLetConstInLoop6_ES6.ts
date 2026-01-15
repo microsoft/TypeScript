@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES6
 // ====let
 for (let x of []) {

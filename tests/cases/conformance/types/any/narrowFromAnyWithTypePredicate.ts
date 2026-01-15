@@ -1,4 +1,3 @@
-// @strict: false
 declare var x: any;
 declare function isFunction(x): x is Function;
 declare function isObject(x): x is Object;

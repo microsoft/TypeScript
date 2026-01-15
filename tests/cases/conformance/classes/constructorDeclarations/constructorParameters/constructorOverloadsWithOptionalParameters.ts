@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     foo: string;
     constructor(x?, y?: any[]); 

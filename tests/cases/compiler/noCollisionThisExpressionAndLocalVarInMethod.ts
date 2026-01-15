@@ -1,4 +1,3 @@
-// @strict: false
 var _this = 2;
 class a {
     method1() {

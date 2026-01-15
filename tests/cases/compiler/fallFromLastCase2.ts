@@ -1,4 +1,3 @@
-// @strict: false
 // @noFallthroughCasesInSwitch: true
 
 declare function use(a: string);

@@ -1,4 +1,3 @@
-// @strict: false
 var value;
 
 // identifiers: variable and parameter

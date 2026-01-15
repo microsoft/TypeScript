@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     public foo(x: number);
     public foo(x: number, y: string);

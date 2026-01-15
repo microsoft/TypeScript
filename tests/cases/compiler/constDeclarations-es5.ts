@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES5
 
 const z7 = false;

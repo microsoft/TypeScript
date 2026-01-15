@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: file1.d.ts
 
 // Errors: Initializers & statements in declaration file

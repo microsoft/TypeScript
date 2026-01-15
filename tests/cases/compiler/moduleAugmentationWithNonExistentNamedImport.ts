@@ -1,4 +1,3 @@
-// @strict: false
 // @filename: foo.d.ts
 export = Foo;
 export as namespace Foo;

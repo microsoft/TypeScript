@@ -1,4 +1,3 @@
-// @strict: false
 // @noUnusedLocals: true
 // @lib: es6
 

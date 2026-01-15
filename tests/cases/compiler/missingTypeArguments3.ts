@@ -1,4 +1,3 @@
-// @strict: false
 declare namespace linq {
 
     interface Enumerable<T> {

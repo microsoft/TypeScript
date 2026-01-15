@@ -1,4 +1,3 @@
-// @strict: false
 class C {
    private v;
    public p;

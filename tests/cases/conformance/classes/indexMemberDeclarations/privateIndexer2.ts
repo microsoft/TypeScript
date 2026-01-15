@@ -1,4 +1,3 @@
-// @strict: false
 // private indexers not allowed
 
 var x = {

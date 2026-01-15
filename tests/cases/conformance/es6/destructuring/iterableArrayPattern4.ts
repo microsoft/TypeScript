@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 class Bar { x }
 class Foo extends Bar { y }

@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES5
 
 const float32Array = new Float32Array(1);

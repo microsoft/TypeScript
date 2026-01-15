@@ -1,4 +1,3 @@
-// @strict: false
 // @allowUnreachableCode: true
 // @module: system
 

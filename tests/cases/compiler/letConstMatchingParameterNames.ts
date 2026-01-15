@@ -1,4 +1,3 @@
-// @strict: false
 // @lib: es5
 // @target: es5
 let parent = true;

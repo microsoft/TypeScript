@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2015
 
 function test() {

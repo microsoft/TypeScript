@@ -1,4 +1,3 @@
-// @strict: false
 interface Dog {
     barkable: true
 }

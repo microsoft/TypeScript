@@ -1,4 +1,3 @@
-// @strict: false
 // @module: commonjs
 // @moduleResolution: bundler
 // @filename: node_modules/ref.ts

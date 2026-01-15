@@ -1,4 +1,3 @@
-// @strict: false
 class Z {
  public x = "";
 }

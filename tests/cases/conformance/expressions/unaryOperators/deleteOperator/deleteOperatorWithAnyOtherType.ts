@@ -1,4 +1,3 @@
-// @strict: false
 // delete  operator on any type
 
 declare var ANY: any;

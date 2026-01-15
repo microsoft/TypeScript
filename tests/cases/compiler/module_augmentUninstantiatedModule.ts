@@ -1,4 +1,3 @@
-// @strict: false
 declare module "foo" {
    namespace M {}
    var M;

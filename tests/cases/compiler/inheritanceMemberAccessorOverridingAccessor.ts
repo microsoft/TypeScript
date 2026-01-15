@@ -1,4 +1,3 @@
-// @strict: false
 class a {
     get x() {
         return "20";

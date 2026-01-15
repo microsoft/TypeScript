@@ -1,4 +1,3 @@
-// @strict: false
 namespace M1 {
     export interface I {
         foo();

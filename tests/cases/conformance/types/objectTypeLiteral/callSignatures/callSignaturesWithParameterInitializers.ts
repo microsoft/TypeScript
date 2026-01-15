@@ -1,4 +1,3 @@
-// @strict: false
 // Optional parameters allow initializers only in implementation signatures
 
 function foo(x = 1) { }

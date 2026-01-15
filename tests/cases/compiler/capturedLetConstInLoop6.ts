@@ -1,4 +1,3 @@
-// @strict: false
 // ====let
 for (let x of []) {
     (function() { return x});

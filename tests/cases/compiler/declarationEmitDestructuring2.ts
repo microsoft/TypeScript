@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
 function g([a, b, c, d] = [1, 2, 3, 4]) { }

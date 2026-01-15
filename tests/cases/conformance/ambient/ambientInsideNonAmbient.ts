@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
     export declare var x;
     export declare function f();

@@ -1,4 +1,3 @@
-// @strict: false
 // @filename: b.ts
 export const b = null;
 

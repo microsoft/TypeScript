@@ -1,4 +1,3 @@
-// @strict: false
 interface i1 {
     //Property Signatures
     p;

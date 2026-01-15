@@ -1,4 +1,3 @@
-// @strict: false
 // @esModuleInterop: true
 // @filename: b.ts
 const b = null;

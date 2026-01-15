@@ -1,4 +1,3 @@
-// @strict: false
 function f1(x:any) {return x;}
 
 class C {

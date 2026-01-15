@@ -1,4 +1,3 @@
-// @strict: false
 /** trailing @link tag {@link */
 var x;
 /** @returns trailing @link tag {@link */

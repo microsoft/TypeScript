@@ -1,4 +1,3 @@
-// @strict: false
 class a {
     static get x() {
         return "20";

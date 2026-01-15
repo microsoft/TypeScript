@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ESNEXT
 const identity = (a) => a;
 

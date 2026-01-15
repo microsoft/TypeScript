@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext, es2022
 
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);

@@ -1,4 +1,3 @@
-// @strict: false
 public
 class NonPublicClass {
     public s() {

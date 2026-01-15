@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path='fourslash.ts'/>
 
 ////var f3 = <(x: string) => string> function (/**/x) { return x.toLowerCase(); };

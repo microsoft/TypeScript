@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 declare var p: Promise<boolean>;
 declare var x: any;

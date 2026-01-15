@@ -1,4 +1,3 @@
-// @strict: false
 enum MyEnumType {
     foo, bar
 }

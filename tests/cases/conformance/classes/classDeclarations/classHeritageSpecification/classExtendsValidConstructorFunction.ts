@@ -1,4 +1,3 @@
-// @strict: false
 function foo() { }
 
 var x = new foo(); // can be used as a constructor function

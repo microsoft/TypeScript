@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
     function f() {
         var x;

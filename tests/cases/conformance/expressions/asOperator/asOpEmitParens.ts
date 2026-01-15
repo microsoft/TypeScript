@@ -1,4 +1,3 @@
-// @strict: false
 declare var x;
 // Must emit as (x + 1) * 3
 (x + 1 as number) * 3;

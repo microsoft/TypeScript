@@ -1,4 +1,3 @@
-// @strict: false
 // Test that extending an untyped module is an error, unlike extending unknownSymbol.
 // @noImplicitReferences: true
 // @noUnusedLocals: true

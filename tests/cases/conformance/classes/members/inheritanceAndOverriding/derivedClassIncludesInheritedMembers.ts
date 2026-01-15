@@ -1,4 +1,3 @@
-// @strict: false
 class Base {
     a: string;
     b() { }

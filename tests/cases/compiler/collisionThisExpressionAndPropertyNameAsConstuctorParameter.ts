@@ -1,4 +1,3 @@
-// @strict: false
 class Foo2 {
     constructor(_this: number) { //Error
         var lambda = () => {

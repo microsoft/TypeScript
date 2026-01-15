@@ -1,4 +1,3 @@
-// @strict: false
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 const dec = (obj: {}, prop: string) => undefined

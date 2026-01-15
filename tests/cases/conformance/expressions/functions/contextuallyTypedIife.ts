@@ -1,4 +1,3 @@
-// @strict: false
 // arrow
 (jake => { })("build");
 // function expression

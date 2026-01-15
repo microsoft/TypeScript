@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2018
 // @lib: esnext
 // @filename: F1.ts

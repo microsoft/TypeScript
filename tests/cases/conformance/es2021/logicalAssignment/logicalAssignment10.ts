@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext, es2021, es2020, es2015
 
 var count = 0;

@@ -1,4 +1,3 @@
-// @strict: false
 interface KnockoutObservableBase<T> {
     peek(): T;
     (): T;

@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
 type Before = {

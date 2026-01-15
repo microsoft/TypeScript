@@ -1,4 +1,3 @@
-// @strict: false
 interface I1 {
     method();
 }

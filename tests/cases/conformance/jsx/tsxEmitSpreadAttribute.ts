@@ -1,4 +1,3 @@
-// @strict: false
 // @jsx: react
 // @target: es2015,es2018,esnext
 // @filename: test.tsx

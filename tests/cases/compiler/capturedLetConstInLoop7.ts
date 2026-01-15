@@ -1,4 +1,3 @@
-// @strict: false
 //===let
 l0:
 for (let x of []) {

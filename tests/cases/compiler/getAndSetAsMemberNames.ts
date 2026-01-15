@@ -1,4 +1,3 @@
-// @strict: false
 class C1 {
     set: boolean;
     get = 1;

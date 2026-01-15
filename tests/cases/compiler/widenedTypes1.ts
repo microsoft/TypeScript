@@ -1,4 +1,3 @@
-// @strict: false
 var a = null;
 var b = undefined;
 

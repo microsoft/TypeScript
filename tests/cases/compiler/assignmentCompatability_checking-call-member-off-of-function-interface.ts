@@ -1,4 +1,3 @@
-// @strict: false
 // 3.8.4 Assignment Compatibility 
 
 interface Callable {

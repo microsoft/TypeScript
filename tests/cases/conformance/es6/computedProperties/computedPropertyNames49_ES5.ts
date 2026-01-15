@@ -1,4 +1,3 @@
-// @strict: false
 
 var x = {
     p1: 10,

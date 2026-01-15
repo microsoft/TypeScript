@@ -1,4 +1,3 @@
-// @strict: false
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 

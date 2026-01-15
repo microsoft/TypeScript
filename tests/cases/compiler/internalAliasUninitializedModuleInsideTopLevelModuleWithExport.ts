@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 // @declaration: true
 export namespace a {

@@ -1,4 +1,3 @@
-// @strict: false
 // @module: amd
 // @target: ES5
 

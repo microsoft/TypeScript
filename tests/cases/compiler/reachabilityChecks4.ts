@@ -1,4 +1,3 @@
-// @strict: false
 // @noFallthroughCasesInSwitch: true
 
 function foo(x, y) {

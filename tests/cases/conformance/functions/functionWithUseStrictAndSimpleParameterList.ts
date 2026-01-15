@@ -1,4 +1,3 @@
-// @strict: false
 function a(a = 10) {
     "use strict";
 }

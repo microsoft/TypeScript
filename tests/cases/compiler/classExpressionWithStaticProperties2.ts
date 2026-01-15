@@ -1,4 +1,3 @@
-// @strict: false
 //@target: es5
 var v = class C {
     static a = 1;

@@ -1,4 +1,3 @@
-// @strict: false
 // @useUnknownInCatchVariables: false
 // @target: es6
 

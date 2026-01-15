@@ -1,4 +1,3 @@
-// @strict: false
 interface I2 {
     value: string;
     doStuff: (t: string) => string;

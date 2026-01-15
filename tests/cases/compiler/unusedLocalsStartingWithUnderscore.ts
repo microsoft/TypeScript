@@ -1,4 +1,3 @@
-// @strict: false
 // @noUnusedLocals:true
 
 // @Filename: /a.ts

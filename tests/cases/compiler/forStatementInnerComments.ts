@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 declare var a;
 /*0*/ for /*1*/ ( /*2*/ var /*3*/ x /*4*/ in /*5*/ a /*6*/) /*7*/ {}

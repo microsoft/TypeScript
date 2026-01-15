@@ -1,4 +1,3 @@
-// @strict: false
 // @allowSyntheticDefaultImports: true
 // @module: commonjs
 // @Filename: b.d.ts

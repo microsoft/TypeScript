@@ -1,4 +1,3 @@
-// @strict: false
 function f6<T>(x: (a: T) => T) {
     return null;
 } 

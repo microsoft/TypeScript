@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 var i = {
     [Symbol.iterator]: { p: null },

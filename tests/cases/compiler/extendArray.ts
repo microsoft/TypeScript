@@ -1,4 +1,3 @@
-// @strict: false
 var a = [1,2];
 a.forEach(function (v,i,a) {});
 

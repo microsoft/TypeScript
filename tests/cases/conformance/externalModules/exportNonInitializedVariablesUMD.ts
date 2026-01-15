@@ -1,4 +1,3 @@
-// @strict: false
 //@module: umd
 
 var;

@@ -1,4 +1,3 @@
-// @strict: false
 if (1)
     const enum A {}
 else

@@ -1,4 +1,3 @@
-// @strict: false
 // -- operator on enum type
 
 enum ENUM { };

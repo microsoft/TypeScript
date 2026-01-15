@@ -1,4 +1,3 @@
-// @strict: false
 // @module: commonjs
 // @Filename: externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts
 export function foo() { };

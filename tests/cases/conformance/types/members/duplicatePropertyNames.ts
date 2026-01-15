@@ -1,4 +1,3 @@
-// @strict: false
 // duplicate property names are an error in all types
 
 interface Number {

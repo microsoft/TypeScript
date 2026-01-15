@@ -1,4 +1,3 @@
-// @strict: false
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }
 function fn2(t: any) { }

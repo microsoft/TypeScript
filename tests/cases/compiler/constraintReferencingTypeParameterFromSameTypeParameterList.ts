@@ -1,4 +1,3 @@
-// @strict: false
 // used to be valid, now an error to do this
 
 interface IComparable<T> {

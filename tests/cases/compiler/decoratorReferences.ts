@@ -1,4 +1,3 @@
-// @strict: false
 // @experimentalDecorators: true
 
 declare function y(...args: any[]): any;

@@ -1,4 +1,3 @@
-// @strict: false
 // @jsx: react
 // @filename: index.tsx
 

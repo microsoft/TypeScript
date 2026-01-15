@@ -1,4 +1,3 @@
-// @strict: false
 // Unary operator typeof
 
 // opreand before typeof

@@ -1,4 +1,3 @@
-// @strict: false
 function foo(x: any);
 function foo(x: any);
 function foo(x: any, y: number) { }

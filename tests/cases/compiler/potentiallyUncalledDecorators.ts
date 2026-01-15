@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext
 // @module: esnext
 // @experimentalDecorators: true

@@ -1,4 +1,3 @@
-// @strict: false
 
 interface Series  {
     data: string[];

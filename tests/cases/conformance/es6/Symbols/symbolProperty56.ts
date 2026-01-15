@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 var obj = {
     [Symbol.iterator]: 0

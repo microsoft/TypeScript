@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2020
 
 // @filename: a.ts

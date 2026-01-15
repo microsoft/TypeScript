@@ -1,4 +1,3 @@
-// @strict: false
 // object types are identical structurally
 
 class A {

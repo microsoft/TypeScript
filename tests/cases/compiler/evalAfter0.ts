@@ -1,4 +1,3 @@
-// @strict: false
 // @allowUnreachableCode: false
 (0,eval)("10"); // fine: special case for eval
 

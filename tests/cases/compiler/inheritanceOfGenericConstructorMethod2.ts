@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
    export class C1 { }
    export class C2<T> { }

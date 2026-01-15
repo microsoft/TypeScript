@@ -1,4 +1,3 @@
-// @strict: false
 namespace m2 {
 
     export var a, b2: number = 10, b;

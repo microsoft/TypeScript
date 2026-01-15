@@ -1,4 +1,3 @@
-// @strict: false
 // @noImplicitOverride: true
 // @allowJs: true
 // @checkJs: true

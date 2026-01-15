@@ -1,4 +1,3 @@
-// @strict: false
 var x: any;
 
 // valid left operands

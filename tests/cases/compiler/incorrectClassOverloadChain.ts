@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     foo(): string;
     foo(x): number;

@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 // 'null' not converted to 'any' in d.ts
 // function types not piped through correctly

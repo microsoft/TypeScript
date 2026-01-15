@@ -1,4 +1,3 @@
-// @strict: false
 class C1T5 {
     foo: (i: number, s: string) => number = 
 	   	(i) => {

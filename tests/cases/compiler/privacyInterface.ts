@@ -1,4 +1,3 @@
-// @strict: false
 //@module: commonjs
 export namespace m1 {
     export class C1_public {

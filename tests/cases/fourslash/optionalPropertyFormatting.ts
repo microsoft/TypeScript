@@ -1,4 +1,3 @@
-// @strict: false
 ///<reference path="fourslash.ts"/>
 
 ////export class C extends Error {

@@ -1,4 +1,3 @@
-// @strict: false
 0xffffffff.toString();
 0o01234.toString();
 0b01101101.toString();

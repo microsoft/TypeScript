@@ -1,4 +1,3 @@
-// @strict: false
 var x = 0;
 
 // errors

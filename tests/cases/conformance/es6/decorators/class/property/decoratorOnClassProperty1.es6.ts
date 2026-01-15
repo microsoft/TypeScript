@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES2015
 // @module: ES2015
 // @experimentaldecorators: true

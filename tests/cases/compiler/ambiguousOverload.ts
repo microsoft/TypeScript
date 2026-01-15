@@ -1,4 +1,3 @@
-// @strict: false
 function foof(bar: string, y): number;
 function foof(bar: string, x): string;
 function foof(bar: any): any { return bar };

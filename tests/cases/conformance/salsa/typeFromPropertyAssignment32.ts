@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: expando.ts
 function ExpandoMerge(n: number) {
     return n;

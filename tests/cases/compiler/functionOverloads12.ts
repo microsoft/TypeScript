@@ -1,4 +1,3 @@
-// @strict: false
 // @allowUnreachableCode: true
 
 function foo():string;

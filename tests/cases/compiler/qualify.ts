@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
     export var m=0;
     export namespace N {

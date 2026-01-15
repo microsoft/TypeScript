@@ -1,4 +1,3 @@
-// @strict: false
 interface Int<T, U> {
     method(x: T): U;
 }

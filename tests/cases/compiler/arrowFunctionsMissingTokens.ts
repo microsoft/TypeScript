@@ -1,4 +1,3 @@
-// @strict: false
 
 namespace missingArrowsWithCurly {
     var a = () { };

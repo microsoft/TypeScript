@@ -1,4 +1,3 @@
-// @strict: false
 namespace m1 {
     export class C1_public {
         private f1() {

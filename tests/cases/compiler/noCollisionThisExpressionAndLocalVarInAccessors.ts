@@ -1,4 +1,3 @@
-// @strict: false
 class class1 {
     get a(): number {
         var x2 = {

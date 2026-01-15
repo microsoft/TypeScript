@@ -1,4 +1,3 @@
-// @strict: false
 interface I {
    [x: number]: Date;
 }

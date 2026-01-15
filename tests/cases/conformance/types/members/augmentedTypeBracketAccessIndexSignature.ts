@@ -1,4 +1,3 @@
-// @strict: false
 interface Foo { a }
 interface Bar { b }
 

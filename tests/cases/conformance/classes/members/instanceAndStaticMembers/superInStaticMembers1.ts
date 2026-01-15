@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es5, es2015, es2021, es2022, esnext
 // @noTypesAndSymbols: true
 

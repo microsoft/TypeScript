@@ -1,4 +1,3 @@
-// @strict: false
 // In this file:
 //  Assign to a module
 //  Assign to a class

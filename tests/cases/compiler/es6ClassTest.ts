@@ -1,4 +1,3 @@
-// @strict: false
 class Bar {
     public goo: number;
     public prop1(x) {

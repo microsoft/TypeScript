@@ -1,4 +1,3 @@
-// @strict: false
 enum E {
 	A = 1,
 	B,

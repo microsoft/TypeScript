@@ -1,4 +1,3 @@
-// @strict: false
 interface N {
     (): boolean
     num: 123;

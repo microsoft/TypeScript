@@ -1,4 +1,3 @@
-// @strict: false
 // Illegal attempts to define optional methods
 
 var a: {

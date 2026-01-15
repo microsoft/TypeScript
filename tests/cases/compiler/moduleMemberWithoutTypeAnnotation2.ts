@@ -1,4 +1,3 @@
-// @strict: false
 namespace TypeScript {
     export namespace CompilerDiagnostics {
 

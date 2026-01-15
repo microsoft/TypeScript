@@ -1,4 +1,3 @@
-// @strict: false
 function f(a: () => number) { }
 
 // oneliner

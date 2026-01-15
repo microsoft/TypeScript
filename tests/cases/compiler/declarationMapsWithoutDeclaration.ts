@@ -1,4 +1,3 @@
-// @strict: false
 // @declarationMap: true
 namespace m2 {
     export interface connectModule {

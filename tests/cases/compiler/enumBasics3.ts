@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
   export namespace N {
     export enum E1 {

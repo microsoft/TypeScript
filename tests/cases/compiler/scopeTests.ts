@@ -1,4 +1,3 @@
-// @strict: false
 class C { private v; public p; static s; }
 class D extends C {
   public v: number;

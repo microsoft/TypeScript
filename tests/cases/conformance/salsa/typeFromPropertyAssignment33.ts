@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: ns.ts
 namespace ExpandoMerge {
     export var p3 = 333;

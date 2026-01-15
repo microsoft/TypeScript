@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: ambientClassDeclarationExtends_singleFile.ts
 declare class A { }
 declare class B extends A { }

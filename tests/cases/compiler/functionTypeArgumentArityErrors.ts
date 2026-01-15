@@ -1,4 +1,3 @@
-// @strict: false
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;
 declare function f1<A, B, C, D = any>(): void;

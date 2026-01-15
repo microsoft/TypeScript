@@ -1,4 +1,3 @@
-// @strict: false
 // @module: preserve
 // @verbatimModuleSyntax: true
 // @jsx: react

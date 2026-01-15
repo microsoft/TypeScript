@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 namespace M {
     var Symbol;

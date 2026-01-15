@@ -1,4 +1,3 @@
-// @strict: false
 type Guid = string & { $Guid };          // Tagged string type
 type SerialNo = number & { $SerialNo };  // Tagged number type
 

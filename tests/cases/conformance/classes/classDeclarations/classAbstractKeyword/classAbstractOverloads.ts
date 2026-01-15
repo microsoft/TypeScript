@@ -1,4 +1,3 @@
-// @strict: false
 abstract class A {
     abstract foo();
     abstract foo() : number;

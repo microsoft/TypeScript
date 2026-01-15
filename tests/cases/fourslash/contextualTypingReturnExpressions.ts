@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path='fourslash.ts'/>
 
 ////interface A { }

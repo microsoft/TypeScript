@@ -1,4 +1,3 @@
-// @strict: false
 //@module: commonjs
 // @sourcemap: true
 class a {

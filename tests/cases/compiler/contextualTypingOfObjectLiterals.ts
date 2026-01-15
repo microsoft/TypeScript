@@ -1,4 +1,3 @@
-// @strict: false
 var obj1: { [x: string]: string; };
 var obj2 = {x: ""};
 obj1 = {}; // Ok

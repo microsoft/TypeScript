@@ -1,4 +1,3 @@
-// @strict: false
 interface I { z; }
 interface I2 { z; }
 

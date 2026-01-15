@@ -1,4 +1,3 @@
-// @strict: false
 // @allowUnreachableCode: false
 // @noImplicitReturns: true
 

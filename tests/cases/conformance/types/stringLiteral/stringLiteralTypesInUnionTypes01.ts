@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 
 type T = "foo" | "bar" | "baz";

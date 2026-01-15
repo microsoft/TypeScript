@@ -1,4 +1,3 @@
-// @strict: false
 interface A {
       <T extends {
             <S extends A>(x: T, y: S): void

@@ -1,4 +1,3 @@
-// @strict: false
 // @noImplicitReferences: true
 // @traceResolution: true
 

@@ -1,4 +1,3 @@
-// @strict: false
 // every type is a subtype of any, no errors expected
 
 interface I {

@@ -1,4 +1,3 @@
-// @strict: false
 interface Animal { animal }
 interface Dog extends Animal { dog }
 interface Cat extends Animal { cat }

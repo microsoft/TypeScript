@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 // @sourcemap: true
 export namespace TopLevelModule1 {

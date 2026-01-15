@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 // @declarationMap: true
 // @outFile: bundle.js

@@ -1,4 +1,3 @@
-// @strict: false
 // @filename: extension.d.ts
 declare global {
     namespace globalThis  {

@@ -1,4 +1,3 @@
-// @strict: false
 interface I1 {
     p1: number
 }

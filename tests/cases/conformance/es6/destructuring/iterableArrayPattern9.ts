@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 function fun([a, b] = new FooIterator) { }
 class Bar { x }

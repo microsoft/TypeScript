@@ -1,4 +1,3 @@
-// @strict: false
 foo((...Far:any[])=>{return 0;})
 foo((1)=>{return 0;}); 
 foo((x?)=>{return x;})

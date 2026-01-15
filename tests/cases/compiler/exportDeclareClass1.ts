@@ -1,4 +1,3 @@
-// @strict: false
 //@module: commonjs
     export declare class eaC {
         static tF() { };

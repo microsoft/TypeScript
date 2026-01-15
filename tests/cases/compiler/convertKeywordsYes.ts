@@ -1,4 +1,3 @@
-// @strict: false
 // reserved ES5 future in strict mode
 
 var constructor = 0;

@@ -1,2 +1,1 @@
-// @strict: false
 function sum (...) {} 

@@ -1,4 +1,3 @@
-// @strict: false
 // @allowUnreachableCode: true
 
 var ANY: any;

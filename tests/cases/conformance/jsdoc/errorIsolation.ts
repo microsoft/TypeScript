@@ -1,4 +1,3 @@
-// @strict: false
 // @noEmit: true
 // @checkJs: true
 // @filename: errorIsolation.js

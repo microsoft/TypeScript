@@ -1,4 +1,3 @@
-// @strict: false
 interface Combo {
     (): number;
     p?: { [s: string]: number };

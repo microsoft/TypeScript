@@ -1,4 +1,3 @@
-// @strict: false
 declare var a;
 
 // parentheses should be omitted

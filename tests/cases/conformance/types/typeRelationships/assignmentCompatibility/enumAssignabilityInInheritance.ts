@@ -1,4 +1,3 @@
-// @strict: false
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 
 

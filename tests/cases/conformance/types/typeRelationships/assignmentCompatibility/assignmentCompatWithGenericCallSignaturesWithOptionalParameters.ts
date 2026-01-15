@@ -1,4 +1,3 @@
-// @strict: false
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 
 namespace ClassTypeParam {

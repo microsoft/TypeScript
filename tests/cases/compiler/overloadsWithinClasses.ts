@@ -1,4 +1,3 @@
-// @strict: false
 class foo {
  
     static fnOverload( ) {}

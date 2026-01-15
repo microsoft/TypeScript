@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 // @noImplicitReturns: true
 

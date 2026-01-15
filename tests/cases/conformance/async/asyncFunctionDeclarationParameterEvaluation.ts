@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2015,es2017
 // @lib: esnext
 // @noEmitHelpers: true

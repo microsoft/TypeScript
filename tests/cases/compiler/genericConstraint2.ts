@@ -1,4 +1,3 @@
-// @strict: false
 interface Comparable<T> {
     comparer(other: T): number;
 }

@@ -1,4 +1,3 @@
-// @strict: false
 declare module 'connect' {
 
     interface connectModule {

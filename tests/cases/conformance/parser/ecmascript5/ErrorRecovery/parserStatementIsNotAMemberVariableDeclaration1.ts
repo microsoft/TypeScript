@@ -1,4 +1,3 @@
-// @strict: false
 return {
 
   "set": function (key, value) {

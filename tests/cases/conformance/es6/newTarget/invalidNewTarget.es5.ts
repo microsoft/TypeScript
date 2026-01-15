@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es5
 const a = new.target;
 const b = () => new.target;

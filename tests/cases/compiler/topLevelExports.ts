@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 export var foo = 3;
 

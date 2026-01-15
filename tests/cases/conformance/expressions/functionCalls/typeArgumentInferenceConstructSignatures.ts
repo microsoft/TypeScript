@@ -1,4 +1,3 @@
-// @strict: false
 // Generic call with no parameters
 interface NoParams {
     new <T>();

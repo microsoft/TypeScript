@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es5
 
 function f1(x,) {}

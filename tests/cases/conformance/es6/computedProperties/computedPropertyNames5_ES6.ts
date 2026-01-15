@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 declare var b: boolean;
 var v = {

@@ -1,4 +1,3 @@
-// @strict: false
 // @filename: types.ts
 declare module "*.foo" {
   let everywhere: string;

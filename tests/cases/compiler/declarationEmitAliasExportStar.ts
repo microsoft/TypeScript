@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 // @filename: thingB.ts
 export interface ThingB { }

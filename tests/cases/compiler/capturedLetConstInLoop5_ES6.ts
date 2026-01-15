@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES6
 
 declare function use(a: any);

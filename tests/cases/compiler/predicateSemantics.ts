@@ -1,4 +1,3 @@
-// @strict: false
 declare let opt: number | undefined;
 
 // OK: One or other operand is possibly nullish

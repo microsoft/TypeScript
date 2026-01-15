@@ -1,4 +1,3 @@
-// @strict: false
 abstract
 class NonAbstractClass {
   abstract s();

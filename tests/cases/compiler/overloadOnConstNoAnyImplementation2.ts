@@ -1,4 +1,3 @@
-// @strict: false
 interface I {
     x1(a: number, callback: (x: 'hi') => number);
 }

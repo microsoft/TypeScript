@@ -1,4 +1,3 @@
-// @strict: false
 interface I {
     [s: string]: (s: string) => number;
 }

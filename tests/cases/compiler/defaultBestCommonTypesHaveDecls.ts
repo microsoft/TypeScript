@@ -1,4 +1,3 @@
-// @strict: false
 var obj1: {};
 obj1.length;
 

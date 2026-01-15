@@ -1,4 +1,3 @@
-// @strict: false
 // body checking
 class B {
     n: number;

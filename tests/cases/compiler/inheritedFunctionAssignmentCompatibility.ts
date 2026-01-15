@@ -1,4 +1,3 @@
-// @strict: false
 interface IResultCallback extends Function { }
 
 function fn(cb: IResultCallback) { }

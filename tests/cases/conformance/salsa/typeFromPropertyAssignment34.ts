@@ -1,4 +1,3 @@
-// @strict: false
 // @noEmit: true
 // @allowjs: true
 // @checkjs: true

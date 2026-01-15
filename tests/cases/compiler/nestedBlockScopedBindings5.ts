@@ -1,4 +1,3 @@
-// @strict: false
 function a0() {
     for (let x in []) {
         x = x + 1;

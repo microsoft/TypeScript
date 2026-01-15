@@ -1,4 +1,3 @@
-// @strict: false
 // @allowJs: true
 // @noImplicitReferences: true
 // @maxNodeModuleJsDepth: 0

@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext
 // @module: es2022,esnext
 

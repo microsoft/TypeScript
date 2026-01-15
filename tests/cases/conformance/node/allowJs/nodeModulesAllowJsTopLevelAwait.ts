@@ -1,4 +1,3 @@
-// @strict: false
 // @module: node16,node18,node20,nodenext
 // @declaration: true
 // @allowJs: true

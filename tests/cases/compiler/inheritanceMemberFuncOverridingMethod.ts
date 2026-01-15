@@ -1,4 +1,3 @@
-// @strict: false
 class a {
     x() {
         return "10";

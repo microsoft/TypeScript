@@ -1,4 +1,3 @@
-// @strict: false
 function log(a) { }
 
 class Vector {

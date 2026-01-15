@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     "   ": number;
     "a   b": string;

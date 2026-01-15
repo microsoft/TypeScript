@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES5
 // @module: commonjs
 // @declaration: true

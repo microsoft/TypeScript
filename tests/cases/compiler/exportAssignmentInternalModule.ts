@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 // @Filename: exportAssignmentInternalModule_A.ts
 namespace M {

@@ -1,4 +1,3 @@
-// @strict: false
 // @checkJs: true
 // @allowJs: true
 // @Filename: main.js

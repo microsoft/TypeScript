@@ -1,4 +1,3 @@
-// @strict: false
 // @module: commonjs
 
 // @filename: x0.ts

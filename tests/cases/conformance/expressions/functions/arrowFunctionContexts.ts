@@ -1,4 +1,3 @@
-// @strict: false
 
 // Arrow function used in with statement
 with (window) {

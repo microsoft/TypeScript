@@ -1,4 +1,3 @@
-// @strict: false
 interface Red {
 	[n:number]; // ok
 	[s:string]; // ok

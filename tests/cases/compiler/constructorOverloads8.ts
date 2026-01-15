@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     constructor(x) { }
     constructor(y, x) { } // illegal, 2 constructor implementations

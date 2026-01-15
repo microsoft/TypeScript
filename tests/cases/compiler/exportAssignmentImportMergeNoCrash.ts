@@ -1,4 +1,3 @@
-// @strict: false
 // @filename: assignment.ts
 export default {
     foo: 12

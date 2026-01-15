@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 function f(s: string): string;
 function f(n: number): number;

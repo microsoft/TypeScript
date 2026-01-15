@@ -1,4 +1,3 @@
-// @strict: false
 // @importHelpers: true
 // @target: es6
 // @experimentalDecorators: true

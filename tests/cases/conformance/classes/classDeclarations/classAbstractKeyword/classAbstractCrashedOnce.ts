@@ -1,4 +1,3 @@
-// @strict: false
 abstract class foo {
     protected abstract test();
 }

@@ -1,4 +1,3 @@
-// @strict: false
 namespace Bugs {
   class A {
   }

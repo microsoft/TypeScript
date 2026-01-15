@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext
 // @module: esnext
 // @filename: global.ts

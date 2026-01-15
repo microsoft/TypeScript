@@ -1,4 +1,3 @@
-// @strict: false
 //@target: ES6
 declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
 

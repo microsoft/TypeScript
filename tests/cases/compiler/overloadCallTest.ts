@@ -1,4 +1,3 @@
-// @strict: false
 class foo {
     constructor() {
         function bar(): string;

@@ -1,4 +1,3 @@
-// @strict: false
 var x = asdf;
 var y: asdf;
 

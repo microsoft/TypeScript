@@ -1,4 +1,3 @@
-// @strict: false
 namespace M {
     var x: asdf;
     var y = x + asdf;

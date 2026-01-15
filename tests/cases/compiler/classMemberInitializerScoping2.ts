@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2017,esnext
 // @useDefineForClassFields: true,false
 

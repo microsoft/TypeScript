@@ -1,4 +1,3 @@
-// @strict: false
 function foo1<T extends Date>(test: T);
 function foo1<T extends Number>(test: string);
 function foo1<T extends String>(test: any) { }

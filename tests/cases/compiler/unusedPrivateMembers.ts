@@ -1,4 +1,3 @@
-// @strict: false
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 //@target:ES5

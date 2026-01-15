@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 
 var hasOwnProperty: hasOwnProperty; // Error

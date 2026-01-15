@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2016
 
 function a(a = 10) {

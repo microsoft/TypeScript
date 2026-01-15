@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     private x: string;
     private get y() { return null; }

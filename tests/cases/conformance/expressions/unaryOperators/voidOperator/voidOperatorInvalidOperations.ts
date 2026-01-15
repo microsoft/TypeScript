@@ -1,4 +1,3 @@
-// @strict: false
 // Unary operator void
 
 // operand before void

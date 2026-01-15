@@ -1,4 +1,3 @@
-// @strict: false
 
 var a: object = {};
 

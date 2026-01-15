@@ -1,4 +1,3 @@
-// @strict: false
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyNumber extends Number {

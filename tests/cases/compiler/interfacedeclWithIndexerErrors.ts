@@ -1,4 +1,3 @@
-// @strict: false
 interface a0 {
     (): string;
     (a, b, c?: string): number;

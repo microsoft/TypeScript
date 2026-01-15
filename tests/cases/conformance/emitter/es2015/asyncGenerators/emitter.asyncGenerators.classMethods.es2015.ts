@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2015
 // @lib: esnext
 // @filename: C1.ts

@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 // @declarationDir: definitions
 // @emitDeclarationOnly: true

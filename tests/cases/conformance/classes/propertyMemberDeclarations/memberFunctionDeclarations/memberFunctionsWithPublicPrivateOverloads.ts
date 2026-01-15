@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     private foo(x: number);
     public foo(x: number, y: string); // error

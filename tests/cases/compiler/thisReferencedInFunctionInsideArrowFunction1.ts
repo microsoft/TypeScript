@@ -1,4 +1,3 @@
-// @strict: false
 var foo = (dummy) => { };
 function test()
 {

@@ -1,4 +1,3 @@
-// @strict: false
 // @module: commonjs
 // @Filename: foo_0.ts
 declare module "foo" {

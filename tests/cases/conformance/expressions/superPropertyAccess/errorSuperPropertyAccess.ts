@@ -1,4 +1,3 @@
-// @strict: false
 //super property access in constructor of class with no base type
 //super property access in instance member function of class with no base type
 //super property access in instance member accessor(get and set) of class with no base type

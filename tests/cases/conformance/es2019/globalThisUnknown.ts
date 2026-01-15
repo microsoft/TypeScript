@@ -1,4 +1,3 @@
-// @strict: false
 declare let win: Window & typeof globalThis;
 
 // this access should be an error

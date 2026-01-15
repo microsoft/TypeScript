@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 function ExpandoDecl(n: number) {
     return n.toString();

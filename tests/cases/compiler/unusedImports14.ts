@@ -1,4 +1,3 @@
-// @strict: false
 //@noUnusedLocals:true
 //@module: commonjs
 //@jsx: react

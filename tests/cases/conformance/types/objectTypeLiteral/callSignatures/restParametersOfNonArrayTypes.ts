@@ -1,4 +1,3 @@
-// @strict: false
 // Rest parameters must be an array type if they have a type annotation, so all these are errors
 
 function foo(...x: string) { }

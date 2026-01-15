@@ -1,4 +1,3 @@
-// @strict: false
 // @filename:circularMultipleAssignmentDeclaration.js
 // @allowJs: true
 // @checkJs: true

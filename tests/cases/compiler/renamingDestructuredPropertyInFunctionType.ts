@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2015
 // @declaration: true
 // GH#37454, GH#41044

@@ -1,4 +1,3 @@
-// @strict: false
 interface Foo<T> {
    x: T;
 }

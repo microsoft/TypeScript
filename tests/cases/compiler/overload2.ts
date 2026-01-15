@@ -1,4 +1,3 @@
-// @strict: false
 enum A { }
 enum B { }
     

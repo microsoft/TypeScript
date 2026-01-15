@@ -1,4 +1,3 @@
-// @strict: false
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors
 

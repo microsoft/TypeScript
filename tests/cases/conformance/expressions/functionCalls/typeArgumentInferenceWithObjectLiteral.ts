@@ -1,4 +1,3 @@
-// @strict: false
 interface Computed<T> {
     read(): T;
     write(value: T);

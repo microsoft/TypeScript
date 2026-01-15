@@ -1,4 +1,3 @@
-// @strict: false
 
 
 declare var foo1: { new ():any; }   

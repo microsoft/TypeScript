@@ -1,4 +1,3 @@
-// @strict: false
 // @module: commonjs
 // @Filename: exportEqualMemberMissing_0.ts
 namespace server {

@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2015
 let array: { x: number, y: string }[];
 for (let { x, ...restOf } of array) {

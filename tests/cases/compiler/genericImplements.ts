@@ -1,4 +1,3 @@
-// @strict: false
 class A { a; };
 class B { b; };
 interface I {

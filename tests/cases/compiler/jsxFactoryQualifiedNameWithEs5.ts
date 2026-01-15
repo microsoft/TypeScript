@@ -1,4 +1,3 @@
-// @strict: false
 //@module: commonjs
 //@target: es5
 //@jsx: react

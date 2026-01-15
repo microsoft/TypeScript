@@ -1,4 +1,3 @@
-// @strict: false
 class B1 {
     public x;
 }

@@ -1,4 +1,3 @@
-// @strict: false
 ///=========let
 declare function use(a: any);
 function foo0(x) {

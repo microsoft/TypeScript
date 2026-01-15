@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 export class A {
     constructor(ctor) { }

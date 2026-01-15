@@ -1,4 +1,3 @@
-// @strict: false
 function f(a:any) {
 void (r =>(r => r));
 }

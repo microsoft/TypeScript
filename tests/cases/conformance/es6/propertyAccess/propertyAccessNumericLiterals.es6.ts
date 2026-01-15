@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es6
 0xffffffff.toString();
 0o01234.toString();

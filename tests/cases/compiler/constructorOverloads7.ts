@@ -1,4 +1,3 @@
-// @strict: false
 declare class Point
 {
     x: number;

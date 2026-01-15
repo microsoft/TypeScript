@@ -1,4 +1,3 @@
-// @strict: false
 // @declaration: true
 
 export type Segment = [length: number, count: number];

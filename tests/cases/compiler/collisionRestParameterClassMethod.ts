@@ -1,4 +1,3 @@
-// @strict: false
 class c1 {
     public foo(_i: number, ...restParameters) { //_i is error
         var _i = 10; // no error

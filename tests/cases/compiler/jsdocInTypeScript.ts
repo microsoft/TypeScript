@@ -1,4 +1,3 @@
-// @strict: false
 // @lib: es2015
 // @traceResolution: true
 

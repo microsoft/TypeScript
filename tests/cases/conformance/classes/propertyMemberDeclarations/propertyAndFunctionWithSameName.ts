@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     x: number;
     x() { // error

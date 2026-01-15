@@ -1,4 +1,3 @@
-// @strict: false
 // basic uses of function literals with overloads
 
 var f: {

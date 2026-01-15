@@ -1,4 +1,3 @@
-// @strict: false
 var x: 'hi';
 
 function f(x: 'hi');

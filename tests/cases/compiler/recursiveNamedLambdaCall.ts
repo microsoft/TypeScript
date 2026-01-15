@@ -1,4 +1,3 @@
-// @strict: false
 // @lib: es5
 var promise = function( obj ) {
 	

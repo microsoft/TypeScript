@@ -1,4 +1,3 @@
-// @strict: false
 // https://github.com/microsoft/TypeScript/issues/31972
 
 // @allowJs: true

@@ -1,4 +1,3 @@
-// @strict: false
 class Chain<T> {
     constructor(public value: T) { }
     then<S extends T>(cb: (x: T) => S): Chain<S> {

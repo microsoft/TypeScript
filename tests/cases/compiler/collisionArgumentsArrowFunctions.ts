@@ -1,4 +1,3 @@
-// @strict: false
 var f1 = (i: number, ...arguments) => { //arguments is error
     var arguments: any[]; // no error
 }

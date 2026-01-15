@@ -1,4 +1,3 @@
-// @strict: false
 // + operator on any type
 
 declare var ANY: any;

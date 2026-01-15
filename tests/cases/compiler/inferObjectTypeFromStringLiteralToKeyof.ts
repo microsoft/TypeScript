@@ -1,4 +1,3 @@
-// @strict: false
 declare function inference1<T>(name: keyof T): T;
 declare function inference2<T>(target: T, name: keyof T): T;
 declare var two: "a" | "d";

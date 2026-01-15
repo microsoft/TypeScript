@@ -1,4 +1,3 @@
-// @strict: false
 class C1 {
     // ERROR
     foo1(n: number);

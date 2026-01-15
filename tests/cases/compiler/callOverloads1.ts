@@ -1,4 +1,3 @@
-// @strict: false
 class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
 

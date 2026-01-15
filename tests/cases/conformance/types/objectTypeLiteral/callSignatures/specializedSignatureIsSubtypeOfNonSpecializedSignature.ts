@@ -1,4 +1,3 @@
-// @strict: false
 // Specialized signatures must be a subtype of a non-specialized signature
 // All the below should not be errors
 

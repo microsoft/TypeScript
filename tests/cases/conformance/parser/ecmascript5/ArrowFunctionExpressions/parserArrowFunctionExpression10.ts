@@ -1,4 +1,3 @@
-// @strict: false
 // @allowjs: true
 // @checkjs: true
 // @outdir: out

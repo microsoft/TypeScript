@@ -1,4 +1,3 @@
-// @strict: false
 //@module: amd
 // @Filename: exportImportMultipleFiles_math.ts
 export function add(a, b) { return a + b; }

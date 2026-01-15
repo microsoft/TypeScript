@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path='fourslash.ts' />
 
 /////** this is signature 1*/

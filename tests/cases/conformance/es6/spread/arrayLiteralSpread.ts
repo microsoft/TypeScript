@@ -1,4 +1,3 @@
-// @strict: false
 function f0() {
     var a = [1, 2, 3];
     var a1 = [...a];

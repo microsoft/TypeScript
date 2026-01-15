@@ -1,4 +1,3 @@
-// @strict: false
 function x3(a: number, cb: (x: number) => number);
 function x3(a: string, cb: (x: number) => number);
 function x3(a: any, cb: (x: number) => number) {

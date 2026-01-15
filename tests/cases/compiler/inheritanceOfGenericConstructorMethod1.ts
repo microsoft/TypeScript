@@ -1,4 +1,3 @@
-// @strict: false
 class A<T> { }
 class B<T> extends A<T> {}
 var a = new A<Date>();

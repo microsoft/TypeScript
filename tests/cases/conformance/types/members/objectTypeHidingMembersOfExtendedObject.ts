@@ -1,4 +1,3 @@
-// @strict: false
 // @skipDefaultLibCheck: false
 class A {
     foo!: string;

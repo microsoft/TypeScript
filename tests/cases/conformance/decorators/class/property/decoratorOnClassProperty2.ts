@@ -1,4 +1,3 @@
-// @strict: false
 // @target: ES5
 // @experimentaldecorators: true
 declare function dec(target: any, propertyKey: string): void;

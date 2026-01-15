@@ -1,4 +1,3 @@
-// @strict: false
 // @lib: es2015
 // @target: es2015
 // test for #12203

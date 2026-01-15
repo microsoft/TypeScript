@@ -1,4 +1,3 @@
-// @strict: false
 class arrTest {
     test(arg1: number[]);
     test(arg1: string[]);

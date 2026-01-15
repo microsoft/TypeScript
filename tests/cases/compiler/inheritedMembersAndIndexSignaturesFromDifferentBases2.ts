@@ -1,4 +1,3 @@
-// @strict: false
 interface A<T> {
     [n: number]: T;
 }

@@ -1,4 +1,3 @@
-// @strict: false
 
 //@Filename: decls.ts
 // Ambient external module with export assignment

@@ -1,4 +1,3 @@
-// @strict: false
 namespace my.data.foo {
     export function buz() { }
 }

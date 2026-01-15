@@ -1,4 +1,3 @@
-// @strict: false
 // @Filename: expString.ts
 var x = "test";
 export = x;

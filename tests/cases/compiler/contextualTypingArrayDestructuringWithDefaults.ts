@@ -1,4 +1,3 @@
-// @strict: false
 type I = { a: "a" };
 let [ c0 = {a: "a"} ]: [I?] = [];
 let [ x1, c1 = {a: "a"} ]: [number, I?] = [1];

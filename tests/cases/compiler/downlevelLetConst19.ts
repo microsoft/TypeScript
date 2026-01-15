@@ -1,4 +1,3 @@
-// @strict: false
 'use strict'
 declare function use(a: any);
 var x;

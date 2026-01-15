@@ -1,4 +1,3 @@
-// @strict: false
 // module export
 
 namespace m {

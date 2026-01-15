@@ -1,4 +1,3 @@
-// @strict: false
 interface MyInterface {
     myMethod(...myList: any[]);
 }

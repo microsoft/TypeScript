@@ -1,4 +1,3 @@
-// @strict: false
 // @target: esnext
 // @noTypesAndSymbols: true
 // @noEmit: true

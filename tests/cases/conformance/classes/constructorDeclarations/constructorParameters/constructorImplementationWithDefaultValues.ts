@@ -1,4 +1,3 @@
-// @strict: false
 class C {
     constructor(x);
     constructor(x = 1) {

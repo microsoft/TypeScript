@@ -1,4 +1,3 @@
-// @strict: false
 // @allowJS: true
 // @suppressOutputPathCheck: true
 

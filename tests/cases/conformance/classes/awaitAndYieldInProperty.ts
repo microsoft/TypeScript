@@ -1,4 +1,3 @@
-// @strict: false
 // @target: es2019
 // @noTypesAndSymbols: true
 async function* test(x: Promise<string>) {

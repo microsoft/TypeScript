@@ -1,4 +1,3 @@
-// @strict: false
 //@declaration: true
 namespace m1 {
     export namespace m1_M1_public {

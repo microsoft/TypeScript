@@ -1,4 +1,3 @@
-// @strict: false
 //super call in class constructor with no base type
 class NoBase {
     constructor() {

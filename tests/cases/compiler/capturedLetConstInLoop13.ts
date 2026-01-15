@@ -1,4 +1,3 @@
-// @strict: false
 class Main {
 
     constructor() {

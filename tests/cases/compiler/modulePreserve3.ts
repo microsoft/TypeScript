@@ -1,4 +1,3 @@
-// @strict: false
 // @module: preserve
 // @target: esnext
 // @jsx: react-jsx

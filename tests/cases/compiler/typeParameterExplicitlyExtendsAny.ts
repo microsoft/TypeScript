@@ -1,4 +1,3 @@
-// @strict: false
 function fee<T>() {
     var t!: T;
     t.blah; // Error

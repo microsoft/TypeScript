@@ -1,4 +1,3 @@
-// @strict: false
 // @lib: es5,es2015.promise
 // @target: ES5
 

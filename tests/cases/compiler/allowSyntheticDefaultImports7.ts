@@ -1,4 +1,3 @@
-// @strict: false
 // @module: system
 // @Filename: b.d.ts
 export function foo();

@@ -1,4 +1,3 @@
-// @strict: false
 /// <reference path="fourslash.ts"/>
 
 ////var x = [1, 2, 3];
