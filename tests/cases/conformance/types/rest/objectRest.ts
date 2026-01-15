@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2015
 var o = { a: 1, b: 'no' }
 var { ...clone } = o;

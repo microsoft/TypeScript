@@ -1,3 +1,4 @@
+// @strict: false
 interface EventTarget { x } 
 class BaseEvent {
     target: EventTarget;

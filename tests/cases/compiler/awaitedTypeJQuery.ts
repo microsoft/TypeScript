@@ -1,3 +1,4 @@
+// @strict: false
 /// <reference lib="dom" />
 
 interface Thenable<T> extends PromiseLike<T> { }

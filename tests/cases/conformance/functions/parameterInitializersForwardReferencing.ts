@@ -1,3 +1,4 @@
+// @strict: false
 function left(a, b = a, c = b) {
     a;
     b;

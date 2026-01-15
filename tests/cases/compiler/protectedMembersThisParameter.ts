@@ -1,3 +1,4 @@
+// @strict: false
 class Message {
   protected secret(): void {}
 }

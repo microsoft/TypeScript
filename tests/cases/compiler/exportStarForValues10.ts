@@ -1,3 +1,4 @@
+// @strict: false
 // @module: system
 
 // @filename: file0.ts

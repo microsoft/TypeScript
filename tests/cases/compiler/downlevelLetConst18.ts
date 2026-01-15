@@ -1,3 +1,4 @@
+// @strict: false
 // @target:es5
 // @allowUnreachableCode: true
 

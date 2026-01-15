@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: gridview.ts
 export type Sizing = any;
 export const Sizing = null;

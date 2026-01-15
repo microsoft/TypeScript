@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 var b: boolean;
 class C {

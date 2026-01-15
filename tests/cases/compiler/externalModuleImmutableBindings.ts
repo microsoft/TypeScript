@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @Filename: f1.ts
 export var x = 1;

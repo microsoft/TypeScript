@@ -1,3 +1,4 @@
+// @strict: false
 function C(x: number) { }
 
 namespace C {

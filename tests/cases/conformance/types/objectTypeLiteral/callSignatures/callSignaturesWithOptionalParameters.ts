@@ -1,3 +1,4 @@
+// @strict: false
 // Optional parameters should be valid in all the below casts
 
 function foo(x?: number) { }

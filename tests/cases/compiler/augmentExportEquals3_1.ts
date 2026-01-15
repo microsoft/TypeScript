@@ -1,3 +1,4 @@
+// @strict: false
 // @module: amd
 // @filename: file1.d.ts
 declare module "file1" {

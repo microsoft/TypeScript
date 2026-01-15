@@ -1,3 +1,4 @@
+// @strict: false
 interface Object {
     data: number;
 }

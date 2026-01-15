@@ -1,3 +1,4 @@
+// @strict: false
 // @noTypesAndSymbols: true
 
 // GH#32358

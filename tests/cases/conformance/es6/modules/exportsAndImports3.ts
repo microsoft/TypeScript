@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 
 // @filename: t1.ts

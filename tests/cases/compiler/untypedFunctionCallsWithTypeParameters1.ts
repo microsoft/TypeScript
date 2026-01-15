@@ -1,3 +1,4 @@
+// @strict: false
 // none of these function calls should be allowed
 var x = function () { return; };
 var r1 = x<number>();

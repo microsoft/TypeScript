@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReferences: true
 // @currentDirectory: /
 // This tests that an ambient module declaration overrides an untyped import.

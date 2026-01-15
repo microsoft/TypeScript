@@ -1,3 +1,4 @@
+// @strict: false
 declare function Callbacks(flags?: string): void;
 declare function Callbacks<T>(flags?: string): void;
 declare function Callbacks<T1, T2>(flags?: string): void;

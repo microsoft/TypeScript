@@ -1,3 +1,4 @@
+// @strict: false
 function f(n: Function) { }
 f(function () { });
 

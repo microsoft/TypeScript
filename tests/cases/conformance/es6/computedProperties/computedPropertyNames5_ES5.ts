@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 declare var b: boolean;
 var v = {

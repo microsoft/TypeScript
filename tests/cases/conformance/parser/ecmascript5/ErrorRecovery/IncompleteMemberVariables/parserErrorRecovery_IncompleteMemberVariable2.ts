@@ -1,3 +1,4 @@
+// @strict: false
 // Interface
 interface IPoint {
     getDist(): number;

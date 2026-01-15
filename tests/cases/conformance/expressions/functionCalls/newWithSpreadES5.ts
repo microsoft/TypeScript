@@ -1,3 +1,4 @@
+// @strict: false
 //@target: ES5
 
 function f(x: number, y: number, ...z: string[]) {

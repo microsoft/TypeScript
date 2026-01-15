@@ -1,3 +1,4 @@
+// @strict: false
 var aNumber: number;
 for (aNumber in {}) { }
 

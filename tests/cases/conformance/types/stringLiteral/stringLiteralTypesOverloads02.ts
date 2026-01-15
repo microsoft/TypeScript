@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 
 function getFalsyPrimitive(x: "string"): string;

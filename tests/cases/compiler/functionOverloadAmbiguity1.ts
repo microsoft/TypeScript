@@ -1,3 +1,4 @@
+// @strict: false
 function callb(lam: (l: number) => void );
 function callb(lam: (n: string) => void );
 function callb(a) { }

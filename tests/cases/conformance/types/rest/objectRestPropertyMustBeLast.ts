@@ -1,3 +1,4 @@
+// @strict: false
 var {...a, x } = { x: 1 };    // Error, rest must be last property
 ({...a, x } = { x: 1 });      // Error, rest must be last property
 

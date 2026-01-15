@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5
 var console: {
     log(val: any);

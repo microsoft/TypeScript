@@ -1,3 +1,4 @@
+// @strict: false
 // Repro for #5712
 
 interface Ref<T> {

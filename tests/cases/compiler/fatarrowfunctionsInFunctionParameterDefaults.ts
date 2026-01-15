@@ -1,3 +1,4 @@
+// @strict: false
 function fn(x = () => this, y = x()) {
 
     // should be 4

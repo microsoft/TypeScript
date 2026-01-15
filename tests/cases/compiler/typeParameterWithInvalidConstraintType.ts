@@ -1,3 +1,4 @@
+// @strict: false
 class A<T extends T> {
     foo() {
         var x!: T;

@@ -1,3 +1,4 @@
+// @strict: false
 namespace M {	
 	class Visibility {
 	    public foo() { };

@@ -1,3 +1,4 @@
+// @strict: false
 var x = 5;
 var r = /yo/;
 r.source;

@@ -1,3 +1,4 @@
+// @strict: false
 class Foo {
   private privProp = 0;
 }

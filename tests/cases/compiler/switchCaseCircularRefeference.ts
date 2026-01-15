@@ -1,3 +1,4 @@
+// @strict: false
 // Repro from #9507
 
 function f(x: {a: "A", b} | {a: "C", e}) {

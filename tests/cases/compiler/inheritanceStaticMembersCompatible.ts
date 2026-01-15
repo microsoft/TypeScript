@@ -1,3 +1,4 @@
+// @strict: false
 class a {
     static x: a;
 }

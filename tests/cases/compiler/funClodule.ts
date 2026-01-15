@@ -1,3 +1,4 @@
+// @strict: false
 declare function foo();
 declare namespace foo {
     export function x(): any;
