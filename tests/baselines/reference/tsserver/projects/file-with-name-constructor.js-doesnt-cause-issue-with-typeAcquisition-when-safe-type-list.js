@@ -322,35 +322,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-<<<<<<< HEAD
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/constructor.js:
-  {}
-/user/username/projects/project/f1.js:
-  {}
-
-=======
->>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 Projects::
 project (External) *changed*
     projectStateVersion: 1

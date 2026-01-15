@@ -314,57 +314,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-<<<<<<< HEAD
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project1/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project1/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/glob/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/minimatch/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/node_modules/path/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project1/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project1/src/node_modules:
-  {}
-
-=======
->>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1

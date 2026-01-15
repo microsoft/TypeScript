@@ -177,17 +177,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-<<<<<<< HEAD
   {"inode":118}
-/home/src/Vscode: *new*
-  {"inode":12}
-/home/src/Vscode/Projects: *new*
-  {"inode":13}
-/home/src/Vscode/Projects/bin: *new*
-  {"inode":14}
-=======
-  {"inode":119}
->>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":24}
 
@@ -345,51 +335,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-<<<<<<< HEAD
-PolledWatches::
-/home/src/Library/Caches/typescript/node_modules/@types/node/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/undici-types/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/package.json:
-  {"pollingInterval":2000}
-/home/src/Vscode/Projects/bin/^:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/Library/Caches/typescript/package.json:
-  {"inode":118}
-/home/src/Vscode:
-  {"inode":12}
-/home/src/Vscode/Projects:
-  {"inode":13}
-/home/src/Vscode/Projects/bin:
-  {"inode":14}
-/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
-  {"inode":24}
-
-FsWatchesRecursive::
-/home/src/Library/Caches/typescript/node_modules:
-  {"inode":6}
-
-=======
->>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
