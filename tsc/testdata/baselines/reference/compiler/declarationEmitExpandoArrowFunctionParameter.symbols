@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/declarationEmitExpandoArrowFunctionParameter.ts] ////
+
+=== component.ts ===
+interface Props<T extends string = string> {
+>Props : Symbol(Props, Decl(component.ts, 0, 0))
+>T : Symbol(T, Decl(component.ts, 0, 16))
+
+    colors: Array<T>;
+>colors : Symbol(Props.colors, Decl(component.ts, 0, 44))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(component.ts, 0, 16))
+
+    value: T;
+>value : Symbol(Props.value, Decl(component.ts, 1, 21))
+>T : Symbol(T, Decl(component.ts, 0, 16))
+
+    onValueChange: (value: T) => void;
+>onValueChange : Symbol(Props.onValueChange, Decl(component.ts, 2, 13))
+>value : Symbol(value, Decl(component.ts, 3, 20))
+>T : Symbol(T, Decl(component.ts, 0, 16))
+
+    disabled?: boolean;
+>disabled : Symbol(Props.disabled, Decl(component.ts, 3, 38))
+}
+
+declare function forwardRef<T, P>(
+>forwardRef : Symbol(forwardRef, Decl(component.ts, 5, 1))
+>T : Symbol(T, Decl(component.ts, 7, 28))
+>P : Symbol(P, Decl(component.ts, 7, 30))
+
+    render: (props: P, ref: { current: T | null }) => string
+>render : Symbol(render, Decl(component.ts, 7, 34))
+>props : Symbol(props, Decl(component.ts, 8, 13))
+>P : Symbol(P, Decl(component.ts, 7, 30))
+>ref : Symbol(ref, Decl(component.ts, 8, 22))
+>current : Symbol(current, Decl(component.ts, 8, 29))
+>T : Symbol(T, Decl(component.ts, 7, 28))
+
+): (props: P & { ref?: { current: T | null } }) => string;
+>props : Symbol(props, Decl(component.ts, 9, 4))
+>P : Symbol(P, Decl(component.ts, 7, 30))
+>ref : Symbol(ref, Decl(component.ts, 9, 16))
+>current : Symbol(current, Decl(component.ts, 9, 24))
+>T : Symbol(T, Decl(component.ts, 7, 28))
+
+type FixedForwardRef = <T, P = {}>(
+>FixedForwardRef : Symbol(FixedForwardRef, Decl(component.ts, 9, 58))
+>T : Symbol(T, Decl(component.ts, 11, 24))
+>P : Symbol(P, Decl(component.ts, 11, 26))
+
+    render: (props: P, ref: { current: T | null }) => string
+>render : Symbol(render, Decl(component.ts, 11, 35))
+>props : Symbol(props, Decl(component.ts, 12, 13))
+>P : Symbol(P, Decl(component.ts, 11, 26))
+>ref : Symbol(ref, Decl(component.ts, 12, 22))
+>current : Symbol(current, Decl(component.ts, 12, 29))
+>T : Symbol(T, Decl(component.ts, 11, 24))
+
+) => (props: P & { ref?: { current: T | null } }) => string;
+>props : Symbol(props, Decl(component.ts, 13, 6))
+>P : Symbol(P, Decl(component.ts, 11, 26))
+>ref : Symbol(ref, Decl(component.ts, 13, 18))
+>current : Symbol(current, Decl(component.ts, 13, 26))
+>T : Symbol(T, Decl(component.ts, 11, 24))
+
+const GenericForwardRef = forwardRef as FixedForwardRef;
+>GenericForwardRef : Symbol(GenericForwardRef, Decl(component.ts, 15, 5))
+>forwardRef : Symbol(forwardRef, Decl(component.ts, 5, 1))
+>FixedForwardRef : Symbol(FixedForwardRef, Decl(component.ts, 9, 58))
+
+function Inner<T extends string>(
+>Inner : Symbol(Inner, Decl(component.ts, 15, 56))
+>T : Symbol(T, Decl(component.ts, 17, 15))
+
+    { disabled, value, onValueChange, colors }: Props<T>,
+>disabled : Symbol(disabled, Decl(component.ts, 18, 5))
+>value : Symbol(value, Decl(component.ts, 18, 15))
+>onValueChange : Symbol(onValueChange, Decl(component.ts, 18, 22))
+>colors : Symbol(colors, Decl(component.ts, 18, 37))
+>Props : Symbol(Props, Decl(component.ts, 0, 0))
+>T : Symbol(T, Decl(component.ts, 17, 15))
+
+    ref: { current: HTMLButtonElement | null }
+>ref : Symbol(ref, Decl(component.ts, 18, 57))
+>current : Symbol(current, Decl(component.ts, 19, 10))
+>HTMLButtonElement : Symbol(HTMLButtonElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+) {
+    return "rendered";
+}
+
+export const ColorPicker = GenericForwardRef(Inner);
+>ColorPicker : Symbol(ColorPicker, Decl(component.ts, 24, 12))
+>GenericForwardRef : Symbol(GenericForwardRef, Decl(component.ts, 15, 5))
+>Inner : Symbol(Inner, Decl(component.ts, 15, 56))
+
+=== story.ts ===
+import { ColorPicker } from "./component";
+>ColorPicker : Symbol(ColorPicker, Decl(story.ts, 0, 8))
+
+type StoryFn<T> = ((args: T extends (props: infer P) => any ? P : never) => string) & {
+>StoryFn : Symbol(StoryFn, Decl(story.ts, 0, 42))
+>T : Symbol(T, Decl(story.ts, 2, 13))
+>args : Symbol(args, Decl(story.ts, 2, 20))
+>T : Symbol(T, Decl(story.ts, 2, 13))
+>props : Symbol(props, Decl(story.ts, 2, 37))
+>P : Symbol(P, Decl(story.ts, 2, 49))
+>P : Symbol(P, Decl(story.ts, 2, 49))
+
+    args?: Partial<T extends (props: infer P) => any ? P : never>;
+>args : Symbol(args, Decl(story.ts, 2, 87))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(story.ts, 2, 13))
+>props : Symbol(props, Decl(story.ts, 3, 30))
+>P : Symbol(P, Decl(story.ts, 3, 42))
+>P : Symbol(P, Decl(story.ts, 3, 42))
+
+};
+
+// Story with StoryFn<typeof ImportedGenericComponent>
+export const Default: StoryFn<typeof ColorPicker> = (args) => {
+>Default : Symbol(Default, Decl(story.ts, 7, 12))
+>StoryFn : Symbol(StoryFn, Decl(story.ts, 0, 42))
+>ColorPicker : Symbol(ColorPicker, Decl(story.ts, 0, 8))
+>args : Symbol(args, Decl(story.ts, 7, 53))
+
+    return "story";
+};
+
+// Property assignment on arrow function - TRIGGERS PANIC
+Default.args = {
+>Default.args : Symbol(args, Decl(story.ts, 2, 87))
+>Default : Symbol(Default, Decl(story.ts, 7, 12))
+>args : Symbol(args, Decl(story.ts, 2, 87))
+
+    disabled: false,
+>disabled : Symbol(disabled, Decl(story.ts, 12, 16))
+
+};
+

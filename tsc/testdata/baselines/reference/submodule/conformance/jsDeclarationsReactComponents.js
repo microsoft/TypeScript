@@ -200,18 +200,22 @@ declare namespace TabbedShowLayout {
 export default TabbedShowLayout;
 //// [jsDeclarationsReactComponents2.d.ts]
 import React from "react";
-declare function TabbedShowLayout(): JSX.Element;
-declare namespace TabbedShowLayout {
-    var defaultProps: Partial<{}> | undefined;
-}
+/**
+ * @type {React.SFC}
+ */
+declare const TabbedShowLayout: React.SFC;
 export default TabbedShowLayout;
 //// [jsDeclarationsReactComponents3.d.ts]
-declare function TabbedShowLayout(): JSX.Element;
-declare namespace TabbedShowLayout {
-    var defaultProps: {
+/**
+ * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
+ */
+declare const TabbedShowLayout: {
+    defaultProps: {
         tabs: string;
     };
-}
+} & ((props?: {
+    elem: string;
+}) => JSX.Element);
 export default TabbedShowLayout;
 //// [jsDeclarationsReactComponents4.d.ts]
 declare function TabbedShowLayout(/** @type {{className: string}}*/ prop: {

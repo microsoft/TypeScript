@@ -29,32 +29,22 @@
 +export default TabbedShowLayout;
  //// [jsDeclarationsReactComponents2.d.ts]
 -export default TabbedShowLayout;
--/**
-- * @type {React.SFC}
-- */
--declare const TabbedShowLayout: React.SFC;
- import React from "react";
-+declare function TabbedShowLayout(): JSX.Element;
-+declare namespace TabbedShowLayout {
-+    var defaultProps: Partial<{}> | undefined;
-+}
++import React from "react";
+ /**
+  * @type {React.SFC}
+  */
+ declare const TabbedShowLayout: React.SFC;
+-import React from "react";
 +export default TabbedShowLayout;
  //// [jsDeclarationsReactComponents3.d.ts]
 -export default TabbedShowLayout;
--/**
-- * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
-- */
--declare const TabbedShowLayout: {
--    defaultProps: {
-+declare function TabbedShowLayout(): JSX.Element;
-+declare namespace TabbedShowLayout {
-+    var defaultProps: {
-         tabs: string;
-     };
--} & ((props?: {
--    elem: string;
--}) => JSX.Element);
-+}
+ /**
+  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
+  */
+@@= skipped -30, +31 lines =@@
+ } & ((props?: {
+     elem: string;
+ }) => JSX.Element);
 +export default TabbedShowLayout;
  //// [jsDeclarationsReactComponents4.d.ts]
 -export default TabbedShowLayout;

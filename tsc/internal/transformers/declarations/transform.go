@@ -1981,6 +1981,10 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return nil
 	}
 
+	if ast.IsVariableDeclaration(declaration) && declaration.Type() != nil {
+		return nil
+	}
+
 	host := declaration.Symbol()
 	if host == nil {
 		return nil
