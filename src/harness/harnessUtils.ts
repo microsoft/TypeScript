@@ -15,9 +15,12 @@ export function evalFile(fileContents: string, fileName: string, nodeContext?: a
     }
 }
 
-const newlineRegex = /\r\n?|\n/;
+const newlineRegex = /\r?\n/;
 
-/** Splits the given string on any line terminator (\r\n, \r, or \n). */
+/**
+ * Splits the given string on the two reasonable line terminators (\r\n or \n).
+ * Does NOT split on `\r` alone, \u2028, or \u2029.
+ */
 export function splitContentByNewlines(content: string): string[] {
     // Split up the input file by line
     const lines = content.split(newlineRegex);
