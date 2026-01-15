@@ -28,9 +28,11 @@ class PublicX {
 >PublicX : PublicX
 >        : ^^^^^^^
 
-    public x: number;
+    public x: number = 42;
 >x : number
 >  : ^^^^^^
+>42 : 42
+>   : ^^
 }
 declare let publicX: PublicX;
 >publicX : PublicX

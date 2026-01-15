@@ -11,7 +11,11 @@ function decorate(target: any, propertyKey: string) {
 
 export class Class2 {
     @decorate
-    get prop(): Class1 | undefined {
+    get maybeProp(): Class1 | undefined {
+        return undefined;
+    }
+    @decorate
+    get prop(): Class1 {
         return undefined;
     }
 }
@@ -45,6 +49,13 @@ function decorate(target, propertyKey) {
 var Class2 = /** @class */ (function () {
     function Class2() {
     }
+    Object.defineProperty(Class2.prototype, "maybeProp", {
+        get: function () {
+            return undefined;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(Class2.prototype, "prop", {
         get: function () {
             return undefined;
@@ -52,6 +63,11 @@ var Class2 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    __decorate([
+        decorate,
+        __metadata("design:type", Class1_1.Class1),
+        __metadata("design:paramtypes", [])
+    ], Class2.prototype, "maybeProp", null);
     __decorate([
         decorate,
         __metadata("design:type", Class1_1.Class1),

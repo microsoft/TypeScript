@@ -199,9 +199,11 @@ class A {
 >A : A
 >  : ^
 
-    a: string;
+    a: string = "";
 >a : string
 >  : ^^^^^^
+>"" : ""
+>   : ^^
 
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 >[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends (abstract new (...args: any) => infer U) ? U : never)
@@ -248,21 +250,25 @@ class A {
 >      : ^^^^^^^
     }
 }
-class B extends A { b: string }
+class B extends A { b: string = ""; }
 >B : B
 >  : ^
 >A : A
 >  : ^
 >b : string
 >  : ^^^^^^
+>"" : ""
+>   : ^^
 
-class C extends A { c: string }
+class C extends A { c: string = ""; }
 >C : C
 >  : ^
 >A : A
 >  : ^
 >c : string
 >  : ^^^^^^
+>"" : ""
+>   : ^^
 
 function foo(x: A | undefined) {
 >foo : (x: A | undefined) => void
@@ -390,9 +396,11 @@ class Y {
 >Y : Y
 >  : ^
 
-    y: string;
+    y: string = "";
 >y : string
 >  : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 function goo(x: X) {

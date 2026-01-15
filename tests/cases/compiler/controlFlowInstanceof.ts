@@ -50,9 +50,9 @@ function f4(s: Set<string> | Set<number>) {
 
 // More tests
 
-class A { a: string }
-class B extends A { b: string }
-class C extends A { c: string }
+class A { a: string = "" }
+class B extends A { b: string = "" }
+class C extends A { c: string = "" }
 
 function foo(x: A | undefined) {
     x;  // A | undefined
@@ -88,11 +88,11 @@ function foo(x: A | undefined) {
 // Y is assignable to X, but not a subtype of X
 
 interface X {
-    x?: string;
+    x?: string
 }
 
 class Y {
-    y: string;
+    y: string = "";
 }
 
 function goo(x: X) {
@@ -114,7 +114,10 @@ if (x instanceof ctor) {
 
 // Repro from #27550 (based on uglify code)
 // @Filename: uglify.js
-/** @constructor */
+/**
+ * @constructor
+ * @param {any} val
+ */
 function AtTop(val) { this.val = val }
 /** @type {*} */
 var v = 1;

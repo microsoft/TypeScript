@@ -110,6 +110,9 @@ setState(foo, { c: true });  // Error
 
 class C<T> {
     state: T;
+    constructor(initialState: T) {
+        this.state = initialState;
+    }
     setState<K extends keyof T>(props: Pick<T, K>) {
         for (let k in props) {
             this.state[k] = props[k];
@@ -117,7 +120,7 @@ class C<T> {
     }
 }
 
-let c = new C<Foo>();
+let c = new C<Foo>({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -209,7 +212,8 @@ setState(foo, foo);
 setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
 var C = /** @class */ (function () {
-    function C() {
+    function C(initialState) {
+        this.state = initialState;
     }
     C.prototype.setState = function (props) {
         for (var k in props) {
@@ -218,7 +222,7 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var c = new C();
+var c = new C({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -293,6 +297,7 @@ declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void
 declare let foo: Foo;
 declare class C<T> {
     state: T;
+    constructor(initialState: T);
     setState<K extends keyof T>(props: Pick<T, K>): void;
 }
 declare let c: C<Foo>;

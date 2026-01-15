@@ -15,9 +15,11 @@ class C {
     /** @readonly */
     constructor(n) {
 >n : any
+>  : ^^^
 
         this.x = n
 >this.x = n : any
+>           : ^^^
 >this.x : 6
 >       : ^
 >this : this
@@ -25,6 +27,7 @@ class C {
 >x : 6
 >  : ^
 >n : any
+>  : ^^^
 
         /**
          * @readonly
@@ -32,6 +35,7 @@ class C {
          */
         this.y = n
 >this.y = n : any
+>           : ^^^
 >this.y : number
 >       : ^^^^^^
 >this : this
@@ -39,6 +43,7 @@ class C {
 >y : number
 >  : ^^^^^^
 >n : any
+>  : ^^^
     }
 }
 new C().x
@@ -60,6 +65,7 @@ function F() {
 >this.z = 1 : 1
 >           : ^
 >this.z : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >z : any
@@ -75,5 +81,6 @@ class D {
 
     constructor(/** @readonly */ x) {}
 >x : any
+>  : ^^^
 }
 

@@ -16,7 +16,7 @@ class PrivateOptionalX {
 class PublicX {
 >PublicX : Symbol(PublicX, Decl(objectSpreadNegative.ts, 5, 1))
 
-    public x: number;
+    public x: number = 42;
 >x : Symbol(PublicX.x, Decl(objectSpreadNegative.ts, 6, 15))
 }
 declare let publicX: PublicX;
