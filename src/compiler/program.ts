@@ -4484,7 +4484,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 createDeprecatedDiagnostic("charset");
             }
             if (options.out) {
-                createDeprecatedDiagnostic("out", /*value*/ undefined, "outFile");
+                createDeprecatedDiagnostic("out");
             }
             if (options.importsNotUsedAsValues) {
                 createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
@@ -4509,6 +4509,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             if (options.allowSyntheticDefaultImports === false) {
                 createDeprecatedDiagnostic("allowSyntheticDefaultImports", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
+            if (options.outFile) {
+                createDeprecatedDiagnostic("outFile");
             }
             if (options.module === ModuleKind.None || options.module === ModuleKind.AMD || options.module === ModuleKind.UMD || options.module === ModuleKind.System) {
                 createDeprecatedDiagnostic("module", ModuleKind[options.module], /*useInstead*/ undefined, /*related*/ undefined);

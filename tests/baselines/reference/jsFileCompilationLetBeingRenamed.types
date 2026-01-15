@@ -5,6 +5,7 @@ function foo(a) {
 >foo : (a: any) => void
 >    : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
     for (let a = 0; a < 10; a++) {
 >a : number

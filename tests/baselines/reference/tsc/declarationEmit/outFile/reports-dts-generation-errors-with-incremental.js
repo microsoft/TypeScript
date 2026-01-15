@@ -55,6 +55,11 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
@@ -64,11 +69,11 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 2 errors in 2 files.
+Found 3 errors in 2 files.
 
 Errors  Files
      1  src/index.ts[90m:2[0m
-     1  tsconfig.json[90m:3[0m
+     2  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/project/outFile.js]
@@ -163,6 +168,11 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
@@ -170,11 +180,11 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 2 errors in 2 files.
+Found 3 errors in 2 files.
 
 Errors  Files
      1  src/index.ts[90m:2[0m
-     1  tsconfig.json[90m:3[0m
+     2  tsconfig.json[90m:3[0m
 
 
 
@@ -203,6 +213,11 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
@@ -210,7 +225,7 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 2 errors.
+Found 3 errors.
 
 
 

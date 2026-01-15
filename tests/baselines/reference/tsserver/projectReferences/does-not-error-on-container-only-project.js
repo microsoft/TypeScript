@@ -115,7 +115,7 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
@@ -138,10 +138,20 @@ declare namespace container {
     "declarationMap": true,
     "outFile": "./lib.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../lib/index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
   "latestChangedDtsFile": "./lib.d.ts",
   "version": "FakeTSVersion",
-  "size": 810
+  "size": 845
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -155,15 +165,16 @@ var container;
 
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo]
-{"root":["../../exec/index.ts"],"version":"FakeTSVersion"}
+{"root":["../../exec/index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../../exec/index.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 58
+  "size": 72
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.js]
@@ -186,7 +197,7 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
@@ -211,10 +222,24 @@ declare namespace container {
     "declarationMap": true,
     "outFile": "./compositeExec.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../../compositeexec/index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
   "latestChangedDtsFile": "./compositeExec.d.ts",
   "version": "FakeTSVersion",
-  "size": 972
+  "size": 1009
 }
 
 
@@ -362,7 +387,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
         "configFile": "/user/username/projects/container/lib/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/container/lib/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/exec/tsconfig.json, currentDirectory: /user/username/projects/container/exec
@@ -476,7 +516,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/container/exec/tsconfig.json",
         "configFile": "/user/username/projects/container/exec/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/container/exec/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/compositeExec/tsconfig.json, currentDirectory: /user/username/projects/container/compositeExec
@@ -594,7 +649,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/container/compositeExec/tsconfig.json",
         "configFile": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/tsconfig.json, currentDirectory: /user/username/projects/container
@@ -822,7 +892,21 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "start": {
+            "line": 3,
+            "offset": 5
+          },
+          "end": {
+            "line": 3,
+            "offset": 14
+          },
+          "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+          "code": 5101,
+          "category": "error"
+        }
+      ],
       "responseRequired": true
     }
 After request
@@ -896,7 +980,21 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "start": {
+            "line": 3,
+            "offset": 5
+          },
+          "end": {
+            "line": 3,
+            "offset": 14
+          },
+          "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+          "code": 5101,
+          "category": "error"
+        }
+      ],
       "responseRequired": true
     }
 After request
@@ -970,7 +1068,21 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "start": {
+            "line": 3,
+            "offset": 5
+          },
+          "end": {
+            "line": 3,
+            "offset": 14
+          },
+          "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+          "code": 5101,
+          "category": "error"
+        }
+      ],
       "responseRequired": true
     }
 After request
