@@ -227,9 +227,11 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 func (c *ProjectCollection) clone() *ProjectCollection {
 	return &ProjectCollection{
 		toPath:              c.toPath,
+		configFileRegistry:  c.configFileRegistry,
 		configuredProjects:  c.configuredProjects,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,
+		apiOpenedProjects:   c.apiOpenedProjects,
 	}
 }
 

@@ -100,7 +100,16 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	}
 
 	configFileRegistry := b.configFileRegistryBuilder.Finalize()
-	newProjectCollection.configFileRegistry = configFileRegistry
+	if configFileRegistry != b.base.configFileRegistry {
+		ensureCloned()
+		newProjectCollection.configFileRegistry = configFileRegistry
+	}
+
+	if !maps.Equal(b.apiOpenedProjects, b.base.apiOpenedProjects) {
+		ensureCloned()
+		newProjectCollection.apiOpenedProjects = b.apiOpenedProjects
+	}
+
 	return newProjectCollection, configFileRegistry
 }
 
