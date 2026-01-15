@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/enumKeysInTypeLiteral.ts] ////
+
+=== enumKeysInTypeLiteral.ts ===
+enum Type {
+>Type : Type
+>     : ^^^^
+
+  Foo = 'foo',
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+  '3x14' = '3x14'
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+type TypeMap = {
+>TypeMap : TypeMap
+>        : ^^^^^^^
+
+  [Type.Foo]: 1;
+>[Type.Foo] : 1
+>           : ^
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+
+  [Type['3x14']]: 2;
+>[Type['3x14']] : 2
+>               : ^
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+}
+
+const t: TypeMap = {
+>t : TypeMap
+>  : ^^^^^^^
+>{    'foo': 1,    '3x14': 2} : { foo: 1; '3x14': 2; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
+
+    'foo': 1,
+>'foo' : 1
+>      : ^
+>1 : 1
+>  : ^
+
+    '3x14': 2
+>'3x14' : 2
+>       : ^
+>2 : 2
+>  : ^
+
+};
+
+enum Numeric {
+>Numeric : Numeric
+>        : ^^^^^^^
+
+    Negative = -1,
+>Negative : Numeric.Negative
+>         : ^^^^^^^^^^^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+    Zero = 0
+>Zero : Numeric.Zero
+>     : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+}
+
+type NumericMap = {
+>NumericMap : NumericMap
+>           : ^^^^^^^^^^
+
+    // Valid: Accessing enum member via string literal for the name
+    [Numeric['Negative']]: number; 
+>[Numeric['Negative']] : number
+>                      : ^^^^^^
+>Numeric['Negative'] : Numeric.Negative
+>                    : ^^^^^^^^^^^^^^^^
+>Numeric : typeof Numeric
+>        : ^^^^^^^^^^^^^^
+>'Negative' : "Negative"
+>           : ^^^^^^^^^^
+
+    [Numeric['Zero']]: number;
+>[Numeric['Zero']] : number
+>                  : ^^^^^^
+>Numeric['Zero'] : Numeric.Zero
+>                : ^^^^^^^^^^^^
+>Numeric : typeof Numeric
+>        : ^^^^^^^^^^^^^^
+>'Zero' : "Zero"
+>       : ^^^^^^
+
+    // Valid: Parenthesized access
+    [Numeric[('Negative')]]: number;
+>[Numeric[('Negative')]] : number
+>                        : ^^^^^^
+>Numeric[('Negative')] : Numeric.Negative
+>                      : ^^^^^^^^^^^^^^^^
+>Numeric : typeof Numeric
+>        : ^^^^^^^^^^^^^^
+>('Negative') : "Negative"
+>             : ^^^^^^^^^^
+>'Negative' : "Negative"
+>           : ^^^^^^^^^^
+}
+
+

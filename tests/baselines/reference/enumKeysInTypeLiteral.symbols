@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/enumKeysInTypeLiteral.ts] ////
+
+=== enumKeysInTypeLiteral.ts ===
+enum Type {
+>Type : Symbol(Type, Decl(enumKeysInTypeLiteral.ts, 0, 0))
+
+  Foo = 'foo',
+>Foo : Symbol(Type.Foo, Decl(enumKeysInTypeLiteral.ts, 0, 11))
+
+  '3x14' = '3x14'
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysInTypeLiteral.ts, 1, 14))
+}
+
+type TypeMap = {
+>TypeMap : Symbol(TypeMap, Decl(enumKeysInTypeLiteral.ts, 3, 1))
+
+  [Type.Foo]: 1;
+>[Type.Foo] : Symbol([Type.Foo], Decl(enumKeysInTypeLiteral.ts, 5, 16))
+>Type.Foo : Symbol(Type.Foo, Decl(enumKeysInTypeLiteral.ts, 0, 11))
+>Type : Symbol(Type, Decl(enumKeysInTypeLiteral.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(enumKeysInTypeLiteral.ts, 0, 11))
+
+  [Type['3x14']]: 2;
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(enumKeysInTypeLiteral.ts, 6, 16))
+>Type : Symbol(Type, Decl(enumKeysInTypeLiteral.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(enumKeysInTypeLiteral.ts, 1, 14))
+}
+
+const t: TypeMap = {
+>t : Symbol(t, Decl(enumKeysInTypeLiteral.ts, 10, 5))
+>TypeMap : Symbol(TypeMap, Decl(enumKeysInTypeLiteral.ts, 3, 1))
+
+    'foo': 1,
+>'foo' : Symbol('foo', Decl(enumKeysInTypeLiteral.ts, 10, 20))
+
+    '3x14': 2
+>'3x14' : Symbol('3x14', Decl(enumKeysInTypeLiteral.ts, 11, 13))
+
+};
+
+enum Numeric {
+>Numeric : Symbol(Numeric, Decl(enumKeysInTypeLiteral.ts, 13, 2))
+
+    Negative = -1,
+>Negative : Symbol(Numeric.Negative, Decl(enumKeysInTypeLiteral.ts, 15, 14))
+
+    Zero = 0
+>Zero : Symbol(Numeric.Zero, Decl(enumKeysInTypeLiteral.ts, 16, 18))
+}
+
+type NumericMap = {
+>NumericMap : Symbol(NumericMap, Decl(enumKeysInTypeLiteral.ts, 18, 1))
+
+    // Valid: Accessing enum member via string literal for the name
+    [Numeric['Negative']]: number; 
+>[Numeric['Negative']] : Symbol([Numeric['Negative']], Decl(enumKeysInTypeLiteral.ts, 20, 19), Decl(enumKeysInTypeLiteral.ts, 23, 30))
+>Numeric : Symbol(Numeric, Decl(enumKeysInTypeLiteral.ts, 13, 2))
+>'Negative' : Symbol(Numeric.Negative, Decl(enumKeysInTypeLiteral.ts, 15, 14))
+
+    [Numeric['Zero']]: number;
+>[Numeric['Zero']] : Symbol([Numeric['Zero']], Decl(enumKeysInTypeLiteral.ts, 22, 34))
+>Numeric : Symbol(Numeric, Decl(enumKeysInTypeLiteral.ts, 13, 2))
+>'Zero' : Symbol(Numeric.Zero, Decl(enumKeysInTypeLiteral.ts, 16, 18))
+
+    // Valid: Parenthesized access
+    [Numeric[('Negative')]]: number;
+>[Numeric[('Negative')]] : Symbol([Numeric['Negative']], Decl(enumKeysInTypeLiteral.ts, 20, 19), Decl(enumKeysInTypeLiteral.ts, 23, 30))
+>Numeric : Symbol(Numeric, Decl(enumKeysInTypeLiteral.ts, 13, 2))
+}
+
+
