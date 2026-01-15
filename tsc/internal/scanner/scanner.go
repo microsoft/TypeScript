@@ -1363,7 +1363,8 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 			s.tokenValue = string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
 			s.token = GetIdentifierToken(s.tokenValue)
 		} else {
-			s.scanInvalidCharacter()
+			s.pos++
+			s.token = ast.KindUnknown
 		}
 		return s.token
 	}
