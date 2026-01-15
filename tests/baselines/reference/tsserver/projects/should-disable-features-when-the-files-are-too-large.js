@@ -173,14 +173,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: proj1 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: proj1 WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "proj1",
@@ -270,28 +262,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/f1.js:
-  {}
 
 Projects::
 proj1 (External) *changed*
@@ -393,14 +363,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: proj2 WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: proj2 WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "proj2",
@@ -496,19 +458,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules/@types:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/node_modules/@types:
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -653,19 +607,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules:
-  {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules/@types:
   {"pollingInterval":500}
 /home/src/Vscode/Projects/node_modules/@types:
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::

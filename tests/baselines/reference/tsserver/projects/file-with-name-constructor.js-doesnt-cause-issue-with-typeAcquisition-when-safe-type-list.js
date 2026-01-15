@@ -221,14 +221,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["blissfuljs","s"]
 TI:: [hh:mm:ss:mss] 'blissfuljs':: Entry for package 'blissfuljs' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 's':: Entry for package 's' does not exist in local types registry - skipping...
@@ -330,6 +322,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+<<<<<<< HEAD
 PolledWatches::
 /home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
@@ -356,6 +349,8 @@ FsWatches::
 /user/username/projects/project/f1.js:
   {}
 
+=======
+>>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 Projects::
 project (External) *changed*
     projectStateVersion: 1

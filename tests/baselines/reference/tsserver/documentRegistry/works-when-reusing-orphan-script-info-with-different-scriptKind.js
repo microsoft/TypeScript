@@ -35,12 +35,15 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^/inmemory/model/6 Pro
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /users/user/projects/san
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+<<<<<<< HEAD
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+=======
+>>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -79,6 +82,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+<<<<<<< HEAD
 /users/user/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/user/projects/node_modules/@types: *new*
@@ -87,6 +91,10 @@ PolledWatches::
   {"pollingInterval":500}
 /users/user/projects/san/node_modules: *new*
   {"pollingInterval":500}
+=======
+/users/user/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+>>>>>>> 4d94ccb06b (Handle resolution watching when its dynamic scriptInfo (#62894))
 /users/user/projects/san/node_modules/@types: *new*
   {"pollingInterval":500}
 
