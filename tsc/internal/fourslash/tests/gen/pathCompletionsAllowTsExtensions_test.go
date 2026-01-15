@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -44,6 +45,7 @@ import {} from ".//**/"`
 				"foo.ts",
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{ImportModuleSpecifierEnding: "js"},
 	})
 	f.Insert(t, "foo.ts\"\nimport {} from \"./")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{

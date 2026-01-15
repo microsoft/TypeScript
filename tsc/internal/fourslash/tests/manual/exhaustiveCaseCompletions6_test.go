@@ -6,12 +6,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
 func TestExhaustiveCaseCompletions6(t *testing.T) {
-	t.Skip("missing completion user preferences")
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @newline: LF
@@ -38,5 +38,6 @@ switch (p) {
 				},
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{QuotePreference: lsutil.QuotePreference("single")},
 	})
 }

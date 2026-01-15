@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -34,6 +35,7 @@ import { f } from ".//**/"`
 				},
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{ImportModuleSpecifierEnding: "js"},
 	})
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
@@ -48,5 +50,6 @@ import { f } from ".//**/"`
 				},
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{ImportModuleSpecifierEnding: "index"},
 	})
 }

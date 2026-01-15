@@ -79,5 +79,6 @@ x/**/`
 				"ambient/utils",
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{AutoImportSpecifierExcludeRegexes: []string{"utils"}},
 	})
 }

@@ -985,7 +985,7 @@ type CompletionsExpectedList struct {
 	IsIncomplete    bool
 	ItemDefaults    *CompletionsExpectedItemDefaults
 	Items           *CompletionsExpectedItems
-	UserPreferences *lsutil.UserPreferences // !!! allow user preferences in fourslash
+	UserPreferences *lsutil.UserPreferences
 }
 
 type Ignored = struct{}
