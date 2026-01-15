@@ -359,6 +359,15 @@ func TestSession(t *testing.T) {
 				assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil)
 				assert.Equal(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts").Text(), "")
 			})
+
+			t.Run("close untitled file", func(t *testing.T) {
+				t.Parallel()
+				session, _ := projecttestutil.Setup(defaultFiles)
+
+				session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "let x = 1;", lsproto.LanguageKindTypeScript)
+				session.DidCloseFile(context.Background(), "untitled:Untitled-1")
+				session.DidOpenFile(context.Background(), "untitled:Untitled-2", 1, "", lsproto.LanguageKindTypeScript)
+			})
 		})
 	})
 

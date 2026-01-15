@@ -296,6 +296,9 @@ func (c *configFileRegistryBuilder) releaseConfigForProject(configFilePath tspat
 // didCloseFile removes the open file from the config entry. Once no projects
 // or files are associated with the config entry, it will be removed on the next call to `cleanup`.
 func (c *configFileRegistryBuilder) didCloseFile(path tspath.Path) {
+	if isDynamicFileName(string(path)) {
+		return
+	}
 	c.configFileNames.Delete(path)
 	c.configs.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *configFileEntry]) bool {
 		entry.ChangeIf(
