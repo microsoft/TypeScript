@@ -142,8 +142,7 @@ sourceFile:sourceMap-LineBreaks.ts
 5 >                                     ^
 6 >                                      ^
 7 >                                       ^^^^^^^^^->
-1->
-  >
+1->  >
 2 >var 
 3 >    endsWithLineFeedCarriageReturn
 4 >                                   = 
@@ -164,8 +163,7 @@ sourceFile:sourceMap-LineBreaks.ts
 5 >                                             ^
 6 >                                              ^
 1->
-  >
-  >
+  >  >
 2 >var 
 3 >    endsWithLineFeedCarriageReturnLineFeed
 4 >                                           = 
@@ -229,8 +227,7 @@ sourceFile:sourceMap-LineBreaks.ts
 1 >Emitted(12, 8) Source(13, 8) + SourceIndex(0)
 2 >Emitted(12, 9) Source(13, 9) + SourceIndex(0)
 ---
->>>var stringLiteralWithCarriageReturn = "line 1\
-1->
+>>>var stringLiteralWithCarriageReturn = "line 1\1->
 2 >^^^^
 3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                   ^^^
@@ -248,8 +245,7 @@ sourceFile:sourceMap-LineBreaks.ts
 1 >^^^^^^^
 2 >       ^
 3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >"line 1\
-  >line 2"
+1 >"line 1\  >line 2"
 2 >       ;
 1 >Emitted(14, 8) Source(15, 8) + SourceIndex(0)
 2 >Emitted(14, 9) Source(15, 9) + SourceIndex(0)

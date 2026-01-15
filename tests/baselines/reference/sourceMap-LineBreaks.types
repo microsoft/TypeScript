@@ -64,8 +64,8 @@ line 2";
 var stringLiteralWithCarriageReturn = "line 1\
 >stringLiteralWithCarriageReturn : string
 >                                : ^^^^^^
->"line 1\line 2" : "line 1line 2"
->                : ^^^^^^^^^^^^^^
+>"line 1\line 2" : "line 1line 2"
+>                 : ^^^^^^^^^^^^^^
 
 line 2";
 
