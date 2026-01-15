@@ -34,7 +34,7 @@ callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,16): error TS2558: E
                  ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2558: Expected 2 type arguments, but got 3.
     
-    var f3: { <T, U>(x: T, y: U): T; }
+    declare var f3: { <T, U>(x: T, y: U): T; };
     var r3 = f3<number>(1, '');
                 ~~~~~~
 !!! error TS2558: Expected 2 type arguments, but got 1.
@@ -57,7 +57,7 @@ callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,16): error TS2558: E
     interface I {
         f<T, U>(x: T, y: U): T;
     }
-    var i: I;
+    declare var i: I;
     var r5 = i.f<number>(1, '');
                  ~~~~~~
 !!! error TS2558: Expected 2 type arguments, but got 1.
@@ -80,7 +80,7 @@ callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,16): error TS2558: E
     interface I2<T, U> {
         f(x: T, y: U): T;
     }
-    var i2: I2<number, string>;
+    declare var i2: I2<number, string>;
     var r7 = i2.f<number>(1, '');
                   ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

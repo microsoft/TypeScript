@@ -19,7 +19,7 @@ namespace A {
     }
 }
 
-module A{
+namespace A{
 >A : typeof A
 >  : ^^^^^^^^
 

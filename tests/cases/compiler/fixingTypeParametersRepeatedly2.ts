@@ -5,7 +5,7 @@ interface Derived extends Base {
     toBase(): Base;
 }
 
-var derived: Derived;
+declare var derived: Derived;
 
 declare function foo<T>(x: T, func: (p: T) => T): T;
 var result = foo(derived, d => d.toBase());

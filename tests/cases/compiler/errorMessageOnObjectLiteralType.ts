@@ -1,4 +1,4 @@
-var x: {
+declare var x: {
     a: string;
     b: number;
 };

@@ -1,4 +1,4 @@
-module M
+namespace M
 {
   export class C {  }
   export namespace C {

@@ -17,8 +17,8 @@ classImplementsClass2.ts(13,1): error TS2741: Property 'foo' is missing in type 
         }
     }
     
-    var c: C;
-    var c2: C2;
+    declare var c: C;
+    declare var c2: C2;
     c = c2;
     c2 = c;
     ~~

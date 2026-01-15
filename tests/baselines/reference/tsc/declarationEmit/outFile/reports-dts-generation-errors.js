@@ -60,6 +60,11 @@ Output::
 [7m7[0m     "outFile": "./outFile.js"
 [7m [0m [91m    ~~~~~~~~~[0m
 
+[96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m7[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/outFile.js
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -68,11 +73,11 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors in 2 files.
+Found 4 errors in 2 files.
 
 Errors  Files
      1  src/index.ts[90m:2[0m
-     2  tsconfig.json[90m:3[0m
+     3  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/project/outFile.js]
@@ -113,6 +118,11 @@ Output::
 [7m7[0m     "outFile": "./outFile.js"
 [7m [0m [91m    ~~~~~~~~~[0m
 
+[96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m7[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/outFile.js
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -121,11 +131,11 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors in 2 files.
+Found 4 errors in 2 files.
 
 Errors  Files
      1  src/index.ts[90m:2[0m
-     2  tsconfig.json[90m:3[0m
+     3  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/project/outFile.js] file written with same contents
@@ -161,6 +171,11 @@ Output::
 [7m7[0m     "outFile": "./outFile.js"
 [7m [0m [91m    ~~~~~~~~~[0m
 
+[96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m7[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
@@ -172,7 +187,7 @@ src/index.ts
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 3 errors.
+Found 4 errors.
 
 
 

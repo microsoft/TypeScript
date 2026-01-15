@@ -7,7 +7,7 @@ for-inStatementsArrayErrors.ts(16,10): error TS2403: Subsequent variable declara
 
 
 ==== for-inStatementsArrayErrors.ts (6 errors) ====
-    let a: Date[];
+    declare let a: Date[];
     
     for (let x in a) {
         let a1 = a[x + 1];

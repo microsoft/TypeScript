@@ -5,7 +5,7 @@
 interface NoParams {
     new <T>();
 }
-var noParams: NoParams;
+declare var noParams: NoParams;
 >noParams : NoParams
 >         : ^^^^^^^^
 
@@ -33,7 +33,7 @@ interface noGenericParams {
 >n : string
 >  : ^^^^^^
 }
-var noGenericParams: noGenericParams;
+declare var noGenericParams: noGenericParams;
 >noGenericParams : noGenericParams
 >                : ^^^^^^^^^^^^^^^
 
@@ -69,7 +69,7 @@ interface someGenerics1 {
 >m : number
 >  : ^^^^^^
 }
-var someGenerics1: someGenerics1;
+declare var someGenerics1: someGenerics1;
 >someGenerics1 : someGenerics1
 >              : ^^^^^^^^^^^^^
 
@@ -111,7 +111,7 @@ interface someGenerics2a {
 >x : T
 >  : ^
 }
-var someGenerics2a: someGenerics2a;
+declare var someGenerics2a: someGenerics2a;
 >someGenerics2a : someGenerics2a
 >               : ^^^^^^^^^^^^^^
 
@@ -168,7 +168,7 @@ interface someGenerics2b {
 >y : U
 >  : ^
 }
-var someGenerics2b: someGenerics2b;
+declare var someGenerics2b: someGenerics2b;
 >someGenerics2b : someGenerics2b
 >               : ^^^^^^^^^^^^^^
 
@@ -232,7 +232,7 @@ interface someGenerics3 {
 >producer : () => T
 >         : ^^^^^^ 
 }
-var someGenerics3: someGenerics3;
+declare var someGenerics3: someGenerics3;
 >someGenerics3 : someGenerics3
 >              : ^^^^^^^^^^^^^
 
@@ -276,7 +276,7 @@ interface someGenerics4 {
 >x : U
 >  : ^
 }
-var someGenerics4: someGenerics4;
+declare var someGenerics4: someGenerics4;
 >someGenerics4 : someGenerics4
 >              : ^^^^^^^^^^^^^
 
@@ -332,7 +332,7 @@ interface someGenerics5 {
 >x : U
 >  : ^
 }
-var someGenerics5: someGenerics5;
+declare var someGenerics5: someGenerics5;
 >someGenerics5 : someGenerics5
 >              : ^^^^^^^^^^^^^
 
@@ -394,7 +394,7 @@ interface someGenerics6 {
 >c : A
 >  : ^
 }
-var someGenerics6: someGenerics6;
+declare var someGenerics6: someGenerics6;
 >someGenerics6 : someGenerics6
 >              : ^^^^^^^^^^^^^
 
@@ -510,7 +510,7 @@ interface someGenerics7 {
 >c : C
 >  : ^
 }
-var someGenerics7: someGenerics7;
+declare var someGenerics7: someGenerics7;
 >someGenerics7 : someGenerics7
 >              : ^^^^^^^^^^^^^
 
@@ -592,7 +592,7 @@ interface someGenerics8 {
 >n : T
 >  : ^
 }
-var someGenerics8: someGenerics8;
+declare var someGenerics8: someGenerics8;
 >someGenerics8 : someGenerics8
 >              : ^^^^^^^^^^^^^
 
@@ -622,7 +622,7 @@ interface someGenerics9 {
 >c : T
 >  : ^
 }
-var someGenerics9: someGenerics9;
+declare var someGenerics9: someGenerics9;
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 
@@ -640,7 +640,7 @@ var a9a = new someGenerics9('', 0, []);
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
-var a9a: {};
+declare var a9a: {};
 >a9a : string
 >    : ^^^^^^
 
@@ -668,7 +668,7 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >'' : ""
 >   : ^^
 
-var a9b: { a?: number; b?: string; };
+declare var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
 >a : number
@@ -725,7 +725,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 >   : ^^
 
-var a9e: {};
+declare var a9e: {};
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -759,7 +759,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >'' : ""
 >   : ^^
 
-var a9f: A92;
+declare var a9f: A92;
 >a9f : A92
 >    : ^^^
 
@@ -790,14 +790,14 @@ var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >6 : 6
 >  : ^
 
-var a9d: { x: number; };
+declare var a9d: { x: number; };
 >a9d : { x: number; }
 >    : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
 // Generic call with multiple parameters of generic type where one argument is of type 'any'
-var anyVar: any;
+declare var anyVar: any;
 >anyVar : any
 >       : ^^^
 
@@ -815,7 +815,7 @@ var a = new someGenerics9(7, anyVar, 4);
 >4 : 4
 >  : ^
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
@@ -832,7 +832,7 @@ var arr = new someGenerics9([], null, undefined);
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var arr: any[];
+declare var arr: any[];
 >arr : any[]
 >    : ^^^^^
 

@@ -31,11 +31,11 @@ interface Combinators {
 >  : ^
 }
 
-var c2: Collection<number>;
+declare var c2: Collection<number>;
 >c2 : Collection<number>
 >   : ^^^^^^^^^^^^^^^^^^
 
-var _: Combinators;
+declare var _: Combinators;
 >_ : Combinators
 >  : ^^^^^^^^^^^
 

@@ -35,8 +35,8 @@ interface NotString {
 }
 
 var x = '';
-var a: String;
-var b: NotString;
+declare var a: String;
+declare var b: NotString;
 
 a = x;
 a = b;

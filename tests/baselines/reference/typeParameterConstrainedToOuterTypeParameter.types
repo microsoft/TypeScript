@@ -13,7 +13,7 @@ interface B<T> {
 >  : ^
 }
 
-var a: A<string>
+declare var a: A<string>;
 >a : A<string>
 >  : ^^^^^^^^^
 

@@ -19,80 +19,88 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 >   : ^^^
 
-    var t: T;
+    var t!: T;
 >t : T
 >  : ^
 
-    var i: T["b"];
+    var i!: T["b"];
 >i : T["b"]
 >  : ^^^^^^
 
-    var k: keyof T;
+    var k!: keyof T;
 >k : keyof T
 >  : ^^^^^^^
 
-    var mapped_generic: {[P in keyof T]: T[P]};
+    var mapped_generic!: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P]; }
 >               : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
-    var mapped: {[P in "b"]: T[P]};
+    var mapped!: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
 >       : ^^^^^^^^^^^^^^
 
-    var union_generic: T | { a: number };
+    var union_generic!: T | { a: number };
 >union_generic : T | { a: number; }
 >              : ^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
-    var union_primitive: { a: number } | number;
+    var union_primitive!: { a: number } | number;
 >union_primitive : number | { a: number; }
 >                : ^^^^^^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
-    var intersection_generic: T & { a: number };
+    var intersection_generic!: T & { a: number };
 >intersection_generic : T & { a: number; }
 >                     : ^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
-    var intersection_primitive: { a: number } | string;
+    var intersection_primitive!: { a: number } | string;
 >intersection_primitive : string | { a: number; }
 >                       : ^^^^^^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
-    var num: number;
+    var num!: number;
 >num : number
 >    : ^^^^^^
 
-    var str: number;
+    var str!: number;
 >str : number
 >    : ^^^^^^
 
-    var literal_string: "string";
+    var literal_string: "string" = "string";
 >literal_string : "string"
 >               : ^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
-    var literal_number: 42;
+    var literal_number: 42 = 42;
 >literal_number : 42
 >               : ^^
+>42 : 42
+>   : ^^
 
-    var u: undefined;
+    var u: undefined = undefined;
 >u : undefined
 >  : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
-    var n: null;
+    var n: null = null;
 >n : null
 >  : ^^^^
 
-    var a: any;
+    var a: any = 0;
 >a : any
 >  : ^^^
+>0 : 0
+>  : ^
 
 
-    var e: E;
+    var e!: E;
 >e : E
 >  : ^
 

@@ -13,7 +13,7 @@ interface Strings1 {
 }
  
  
-var x: Numbers1;
+declare var x: Numbers1;
 >x : Numbers1
 >  : ^^^^^^^^
 
@@ -41,7 +41,7 @@ x['1'] = 4; // error
 >4 : 4
 >  : ^
 
-var y: Strings1;
+declare var y: Strings1;
 >y : Strings1
 >  : ^^^^^^^^
 

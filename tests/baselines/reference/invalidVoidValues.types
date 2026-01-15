@@ -55,13 +55,13 @@ x = E.A;
 >A : E
 >  : ^
 
-class C { foo: string }
+class C { foo!: string }
 >C : C
 >  : ^
 >foo : string
 >    : ^^^^^^
 
-var a: C;
+declare var a: C;
 >a : C
 >  : ^
 
@@ -77,7 +77,7 @@ interface I { foo: string }
 >foo : string
 >    : ^^^^^^
 
-var b: I;
+declare var b: I;
 >b : I
 >  : ^
 

@@ -1,3 +1,5 @@
+// @noImplicitAny: false
+
 // these are widened to any at the point of assignment
 
 var x1 = null;
@@ -6,8 +8,8 @@ var z1 = void 0;
 
 // these are not widened
 
-var x2: null;
-var y2: undefined;
+declare var x2: null;
+declare var y2: undefined;
 
 var x3: null = null;
 var y3: undefined = undefined;

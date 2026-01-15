@@ -424,7 +424,7 @@ declare module "fs" {
                 ],
             });
         }
-        verifyIgnore("watch without configFile", ["--w", `/user/username/projects/myproject/test.ts`]);
+        verifyIgnore("watch without configFile", ["--w", "--ignoreConfig", `/user/username/projects/myproject/test.ts`]);
         verifyIgnore("watch with configFile", ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`]);
     });
 

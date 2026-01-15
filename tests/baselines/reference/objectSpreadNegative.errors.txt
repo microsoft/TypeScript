@@ -34,7 +34,7 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
         private x?: number;
     }
     class PublicX {
-        public x: number;
+        public x: number = 42;
     }
     declare let publicX: PublicX;
     declare let privateOptionalX: PrivateOptionalX;

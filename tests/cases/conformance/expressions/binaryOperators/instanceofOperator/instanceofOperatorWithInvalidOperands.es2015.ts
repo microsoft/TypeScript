@@ -8,9 +8,9 @@ var x: any;
 
 // invalid left operand
 // the left operand is required to be of type Any, an object type, or a type parameter type
-var a1: number;
-var a2: boolean;
-var a3: string;
+declare var a1: number;
+declare var a2: boolean;
+declare var a3: string;
 var a4: void;
 
 var ra1 = a1 instanceof x;
@@ -25,13 +25,13 @@ var ra9 = undefined instanceof x;
 
 // invalid right operand
 // the right operand to be of type Any or a subtype of the 'Function' interface type
-var b1: number;
-var b2: boolean;
-var b3: string;
+declare var b1: number;
+declare var b2: boolean;
+declare var b3: string;
 var b4: void;
-var o1: {};
-var o2: Object;
-var o3: C;
+declare var o1: {};
+declare var o2: Object;
+declare var o3: C;
 
 var rb1 = x instanceof b1;
 var rb2 = x instanceof b2;
@@ -48,10 +48,10 @@ var rb10 = x instanceof o3;
 var rc1 = '' instanceof {};
 
 // @@hasInstance restricts LHS
-var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
-var o5: { y: string };
+declare var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
+declare var o5: { y: string };
 var ra10 = o5 instanceof o4;
 
 // invalid @@hasInstance method return type on RHS
-var o6: {[Symbol.hasInstance](value: unknown): number;};
+declare var o6: {[Symbol.hasInstance](value: unknown): number;};
 var rb11 = x instanceof o6;

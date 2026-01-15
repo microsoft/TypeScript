@@ -7,7 +7,7 @@ declare namespace Foo {
 }
 
 // @filename: foo2.ts
-let x: { a: string; c: string; } | { b: number; c: number; };
+declare let x: { a: string; c: string; } | { b: number; c: number; };
 export = x
 
 // @filename: bar.ts

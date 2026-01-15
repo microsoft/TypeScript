@@ -42,7 +42,7 @@ callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Paramet
 !!! error TS1015: Parameter cannot have question mark and initializer.
     }
     
-    var c: C;
+    declare var c: C;
     c.foo();
     c.foo(1);
     
@@ -59,13 +59,13 @@ callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Paramet
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
-    var i: I;
+    declare var i: I;
     i();
     i(1);
     i.foo(1);
     i.foo(1, 2);
     
-    var a: {
+    declare var a: {
         (x?: number = 1);
          ~
 !!! error TS1015: Parameter cannot have question mark and initializer.

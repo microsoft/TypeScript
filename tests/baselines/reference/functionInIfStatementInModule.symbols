@@ -2,7 +2,7 @@
 
 === functionInIfStatementInModule.ts ===
  
-module Midori
+namespace Midori
 >Midori : Symbol(Midori, Decl(functionInIfStatementInModule.ts, 0, 0))
 {
     if (false) {

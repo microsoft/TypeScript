@@ -2,7 +2,7 @@
 
 === decrementOperatorWithUnsupportedBooleanType.ts ===
 // -- operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 >        : ^^^^^^^
 

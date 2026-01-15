@@ -19,9 +19,9 @@ interface D {
 }
 
 var a: A;
-var b: B;
+declare var b: B;
 var c: C;
-var d: D;
+declare var d: D;
 
 a = b;
 c = d; // Should not be allowed

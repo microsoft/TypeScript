@@ -30,7 +30,7 @@ var r2 = y<string>();
 >y : any
 >  : ^^^
 
-var c: Function;
+declare var c: Function;
 >c : Function
 >  : ^^^^^^^^
 
@@ -67,7 +67,7 @@ class C implements Function {
 >          : ^^^^^^^^^^
 }
 
-var c2: C;
+declare var c2: C;
 >c2 : C
 >   : ^
 
@@ -85,7 +85,7 @@ class C2 extends Function { } // error
 >Function : Function
 >         : ^^^^^^^^
 
-var c3: C2;
+declare var c3: C2;
 >c3 : C2
 >   : ^^
 
@@ -102,7 +102,7 @@ interface I {
 >number : any
 >       : ^^^
 }
-var z: I;
+declare var z: I;
 >z : I
 >  : ^
 
@@ -122,7 +122,7 @@ interface callable2<T> {
 >  : ^
 }
 
-var c4: callable2<number>;
+declare var c4: callable2<number>;
 >c4 : callable2<number>
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -140,7 +140,7 @@ interface callable3<T> {
 >  : ^
 }
 
-var c5: callable3<number>;
+declare var c5: callable3<number>;
 >c5 : callable3<number>
 >   : ^^^^^^^^^^^^^^^^^
 

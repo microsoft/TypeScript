@@ -12,27 +12,24 @@ interface IConstructor {
     prototype: I;
 }
 
-var I: IConstructor;
+declare var I: IConstructor;
 
 abstract class A {
     x: number;
     static y: number;
 }
 
-var AA: typeof A;
+declare var AA: typeof A;
 AA = I;
 
-var AAA: typeof I;
+declare var AAA: typeof I;
 AAA = A;
 
 //// [classAbstractClinterfaceAssignability.js]
-var I;
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var AA;
 AA = I;
-var AAA;
 AAA = A;

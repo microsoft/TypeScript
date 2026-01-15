@@ -10,7 +10,7 @@ namespace Sammy {
 interface JQueryStatic {
     sammy: Sammy; // class instance
 }
-var $: JQueryStatic;
+declare var $: JQueryStatic;
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
 var r1 = instanceOfClassSammy.foo(); // r1 is string
 var r2 = $.sammy.foo();

@@ -11,12 +11,12 @@ class A {
     [x: number]: Base;
 }
 
-var a: A;
-var b: { [x: number]: Derived; }
+declare var a: A;
+declare var b: { [x: number]: Derived; }
 a = b;
 b = a; // error
 
-var b2: { [x: number]: Derived2; }
+declare var b2: { [x: number]: Derived2; }
 a = b2;
 b2 = a; // error
 
@@ -30,16 +30,16 @@ namespace Generics {
     }
 
     function foo<T extends Base>() {
-        var a: A<T>;
-        var b: { [x: number]: Derived; }
+        var a!: A<T>;
+        var b!: { [x: number]: Derived; }
         a = b; // error
         b = a; // error
 
-        var b2: { [x: number]: Derived2; }
+        var b2!: { [x: number]: Derived2; }
         a = b2; // error
         b2 = a; // error
 
-        var b3: { [x: number]: T; }
+        var b3!: { [x: number]: T; }
         a = b3; // ok
         b3 = a; // ok
     }
@@ -67,11 +67,8 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-var a;
-var b;
 a = b;
 b = a; // error
-var b2;
 a = b2;
 b2 = a; // error
 var Generics;

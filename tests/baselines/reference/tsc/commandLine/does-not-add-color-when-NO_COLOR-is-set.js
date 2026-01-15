@@ -67,6 +67,9 @@ Compile the project given the path to its configuration file, or to a folder wit
 --showConfig
 Print the final configuration instead of building.
 
+--ignoreConfig
+Ignore the tsconfig found and build with commandline options and files.
+
 --build, -b
 Build one or more projects and their dependencies, if out of date
 

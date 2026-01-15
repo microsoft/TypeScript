@@ -9,7 +9,7 @@ b.ts(1,9): error TS2661: Cannot export 'X'. Only local declarations can be expor
             ~
 !!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
     export function f() {
-        var x: X;
+        var x!: X;
         return x;
     } 
     

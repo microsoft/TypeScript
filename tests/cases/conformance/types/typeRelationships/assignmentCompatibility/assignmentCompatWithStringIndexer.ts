@@ -8,13 +8,13 @@ class A {
     [x: string]: Base;
 }
 
-var a: A;
+declare var a: A;
 
-var b: { [x: string]: Derived; }
+declare var b: { [x: string]: Derived; };
 a = b; // ok
 b = a; // error
 
-var b2: { [x: string]: Derived2; }
+declare var b2: { [x: string]: Derived2; };
 a = b2; // ok
 b2 = a; // error
 
@@ -27,8 +27,8 @@ namespace Generics {
         [x: string]: Derived; // ok
     }
 
-    var b1: { [x: string]: Derived; };
-    var a1: A<Base>;
+    declare var b1: { [x: string]: Derived; };
+    declare var a1: A<Base>;
     a1 = b1; // ok
     b1 = a1; // error
 
@@ -36,7 +36,7 @@ namespace Generics {
         [x: string]: Derived2; // ok
     }
 
-    var b2: { [x: string]: Derived2; };
+    declare var b2: { [x: string]: Derived2; };
     a1 = b2; // ok
     b2 = a1; // error
 

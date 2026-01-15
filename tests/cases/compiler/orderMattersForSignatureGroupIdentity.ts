@@ -13,12 +13,12 @@ interface C {
     (x: { s: string }): string
 }
 
-var v: A;
-var v: B;
+declare var v: A;
+declare var v: B;
 
 v({ s: "", n: 0 }).toLowerCase();
 
-var w: A;
-var w: C;
+declare var w: A;
+declare var w: C;
 
 w({ s: "", n: 0 }).toLowerCase();

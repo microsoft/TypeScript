@@ -1,4 +1,5 @@
 // @noImplicitAny: true
+// @useUnknownInCatchVariables: false
 
 try {
     throw [0, 1];

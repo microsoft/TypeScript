@@ -25,7 +25,7 @@ b ++;
 namespace moduleType1 { 
     export var baz1: number;
 }
-module moduleType\u0032 { 
+declare module moduleType\u0032 { 
     export var baz2: number;
 }
 
@@ -143,9 +143,6 @@ b++;
 var moduleType1;
 (function (moduleType1) {
 })(moduleType1 || (moduleType1 = {}));
-var moduleType\u0032;
-(function (moduleType\u0032) {
-})(moduleType\u0032 || (moduleType\u0032 = {}));
 moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;

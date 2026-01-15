@@ -17,10 +17,10 @@ class B2 {
     private a: string;
 }
 
-var a1: A1;
-var b1: B1;
-var a2: A2;
-var b2: B2;
+declare var a1: A1;
+declare var b1: B1;
+declare var a2: A2;
+declare var b2: B2;
 
 // operator <
 var r1a1 = a1 < b1;
@@ -99,10 +99,6 @@ var B2 = /** @class */ (function () {
     }
     return B2;
 }());
-var a1;
-var b1;
-var a2;
-var b2;
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

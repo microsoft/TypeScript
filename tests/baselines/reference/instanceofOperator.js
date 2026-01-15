@@ -8,7 +8,7 @@
 
 namespace test {
     class Object { }
-    var obj: Object;
+    declare var obj: Object;
 
 
 
@@ -38,7 +38,6 @@ var test;
         }
         return Object;
     }());
-    var obj;
     4 instanceof null;
     // Error and should be error
     obj instanceof 4;

@@ -24,11 +24,11 @@ class A {
 >  : ^^^^^^
 }
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 
-var b: { [x: string]: Derived; }
+declare var b: { [x: string]: Derived; };
 >b : { [x: string]: Derived; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -50,7 +50,7 @@ b = a; // error
 >a : A
 >  : ^
 
-var b2: { [x: string]: Derived2; }
+declare var b2: { [x: string]: Derived2; };
 >b2 : { [x: string]: Derived2; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -96,13 +96,13 @@ namespace Generics {
 >  : ^^^^^^
     }
 
-    var b1: { [x: string]: Derived; };
+    declare var b1: { [x: string]: Derived; };
 >b1 : { [x: string]: Derived; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
-    var a1: A<Base>;
+    declare var a1: A<Base>;
 >a1 : A<Base>
 >   : ^^^^^^^
 
@@ -133,7 +133,7 @@ namespace Generics {
 >  : ^^^^^^
     }
 
-    var b2: { [x: string]: Derived2; };
+    declare var b2: { [x: string]: Derived2; };
 >b2 : { [x: string]: Derived2; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -208,3 +208,4 @@ namespace Generics {
 >   : ^^^^
     }
 }
+

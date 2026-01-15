@@ -21,7 +21,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >   : ^^
 
-var obj: () => {}
+declare var obj: () => {}
 >obj : () => {}
 >    : ^^^^^^  
 

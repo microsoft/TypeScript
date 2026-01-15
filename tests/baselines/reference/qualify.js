@@ -44,7 +44,7 @@ namespace Everest {
         export interface I4 {
             z;
         }
-        var v1:I4;
+        var v1:I4 = undefined as any;
         var v2:K1.I3=v1;
         var v3:K1.I3[]=v1;
         var v4:()=>K1.I3=v1;
@@ -57,7 +57,7 @@ interface I {
     k;
 }
 
-var y:I;
+var y:I = undefined as any;
 var x:T.I=y;
 
 
@@ -96,7 +96,7 @@ var Everest;
 (function (Everest) {
     var K2;
     (function (K2) {
-        var v1;
+        var v1 = undefined;
         var v2 = v1;
         var v3 = v1;
         var v4 = v1;
@@ -104,5 +104,5 @@ var Everest;
         var v6 = v1;
     })(K2 = Everest.K2 || (Everest.K2 = {}));
 })(Everest || (Everest = {}));
-var y;
+var y = undefined;
 var x = y;

@@ -8,8 +8,8 @@ generics4.ts(7,1): error TS2322: Type 'C<Y>' is not assignable to type 'C<X>'.
     class C<T> { private x: T; }
     interface X { f(): string; }
     interface Y { f(): boolean; }
-    var a: C<X>;
-    var b: C<Y>;
+    declare var a: C<X>;
+    declare var b: C<Y>;
     
     a = b; // Not ok - return types of "f" are different
     ~

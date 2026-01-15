@@ -9,7 +9,7 @@ nonPrimitiveInFunction.ts(17,5): error TS2322: Type 'number' is not assignable t
         return {};
     }
     
-    var nonPrimitive: object;
+    var nonPrimitive: object = {};
     var primitive: boolean;
     
     takeObject(nonPrimitive);

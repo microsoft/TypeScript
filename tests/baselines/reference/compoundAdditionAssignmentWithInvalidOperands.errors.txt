@@ -30,9 +30,9 @@ compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '
 ==== compoundAdditionAssignmentWithInvalidOperands.ts (27 errors) ====
     enum E { a, b }
     
-    var a: void;
+    declare var a: void;
     
-    var x1: boolean;
+    declare var x1: boolean;
     x1 += a;
     ~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'void'.
@@ -55,7 +55,7 @@ compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '
     ~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'undefined'.
     
-    var x2: {};
+    declare var x2: {};
     x2 += a;
     ~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'void'.
@@ -78,7 +78,7 @@ compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '
     ~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types '{}' and 'undefined'.
     
-    var x3: void;
+    declare var x3: void;
     x3 += a;
     ~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'void'.
@@ -101,7 +101,7 @@ compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '
     ~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'void' and 'undefined'.
     
-    var x4: number;
+    declare var x4: number;
     x4 += a;
     ~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
@@ -112,7 +112,7 @@ compoundAdditionAssignmentWithInvalidOperands.ts(40,1): error TS2365: Operator '
     ~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'number' and '{}'.
     
-    var x5: E;
+    declare var x5: E;
     x5 += a;
     ~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'void'.

@@ -19,7 +19,7 @@ propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 
     
     class C<U extends T, T extends A> {
         f() {
-            var x: U;
+            var x: U = {} as any;
             var a = x['foo'](); // should be string
             return a + x.foo() + x.notHere();
                                    ~~~~~~~
@@ -32,13 +32,13 @@ propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 
     interface I<U extends T, T extends A> {
         foo: U;
     }
-    var i: I<B, A>;
+    declare var i: I<B, A>;
     var r2 = i.foo.notHere();
                    ~~~~~~~
 !!! error TS2339: Property 'notHere' does not exist on type 'B'.
     var r2b = i.foo['foo']();
     
-    var a: {
+    declare var a: {
         <U extends T, T extends A>(): U;
     }
     // BUG 794164

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck14.ts] ////
 
 === ES5For-ofTypeCheck14.ts ===
-var union: string | Set<number>
+declare var union: string | Set<number>
 >union : string | Set<number>
 >      : ^^^^^^^^^^^^^^^^^^^^
 

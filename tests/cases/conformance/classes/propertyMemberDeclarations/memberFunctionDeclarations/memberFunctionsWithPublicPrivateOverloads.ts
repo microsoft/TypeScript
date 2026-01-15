@@ -55,8 +55,8 @@ class D<T> {
     protected static baz(x: any, y?: any) { }
 }
 
-var c: C;
+declare var c: C;
 var r = c.foo(1); // error
 
-var d: D<number>;
+declare var d: D<number>;
 var r2 = d.foo(2); // error

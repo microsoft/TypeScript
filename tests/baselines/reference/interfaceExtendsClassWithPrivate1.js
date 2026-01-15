@@ -17,8 +17,8 @@ class D extends C implements I {
 } 
 
 var c: C;
-var i: I;
-var d: D;
+declare var i: I;
+declare var d: D;
 
 c = i;
 i = c; // error
@@ -63,8 +63,6 @@ var D = /** @class */ (function (_super) {
     return D;
 }(C));
 var c;
-var i;
-var d;
 c = i;
 i = c; // error
 i = d;

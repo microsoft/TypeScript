@@ -6,7 +6,7 @@ import foo = require("foo")
 >foo : any
 >    : ^^^
 
-var z: foo;
+declare var z: foo;
 >z : foo
 >  : ^^^
 

@@ -6,7 +6,7 @@ enum Computed {
     B = 1 << 2,
     C = 1 << 3,
 }
-let n: number;
+declare let n: number;
 let e: E = n; // ok because it's too inconvenient otherwise
 e = 0; // ok, in range
 e = 4; // ok, out of range, but allowed computed enums don't have all members

@@ -1,3 +1,4 @@
+// @useUnknownInCatchVariables: false
 // @target: es6
 
 try {

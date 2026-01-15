@@ -48,46 +48,46 @@ class c1 implements i1 {
 >c1 : Symbol(c1, Decl(parserAstSpans1.ts, 17, 1))
 >i1 : Symbol(i1, Decl(parserAstSpans1.ts, 0, 0))
 
-    public i1_p1: number;
+    public i1_p1!: number;
 >i1_p1 : Symbol(c1.i1_p1, Decl(parserAstSpans1.ts, 18, 24))
 
     public i1_f1() {
->i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 25))
+>i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 26))
     }
-    public i1_l1: () => void;
+    public i1_l1!: () => void;
 >i1_l1 : Symbol(c1.i1_l1, Decl(parserAstSpans1.ts, 21, 5))
 
-    public i1_nc_p1: number;
->i1_nc_p1 : Symbol(c1.i1_nc_p1, Decl(parserAstSpans1.ts, 22, 29))
+    public i1_nc_p1!: number;
+>i1_nc_p1 : Symbol(c1.i1_nc_p1, Decl(parserAstSpans1.ts, 22, 30))
 
     public i1_nc_f1() {
->i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 28))
+>i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 29))
     }
-    public i1_nc_l1: () => void;
+    public i1_nc_l1!: () => void;
 >i1_nc_l1 : Symbol(c1.i1_nc_l1, Decl(parserAstSpans1.ts, 25, 5))
 
     /** c1_p1*/
-    public p1: number;
->p1 : Symbol(c1.p1, Decl(parserAstSpans1.ts, 26, 32))
+    public p1!: number;
+>p1 : Symbol(c1.p1, Decl(parserAstSpans1.ts, 26, 33))
 
     /** c1_f1*/
     public f1() {
->f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 22))
+>f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 23))
     }
     /** c1_l1*/
-    public l1: () => void;
+    public l1!: () => void;
 >l1 : Symbol(c1.l1, Decl(parserAstSpans1.ts, 31, 5))
 
     /** c1_nc_p1*/
-    public nc_p1: number;
->nc_p1 : Symbol(c1.nc_p1, Decl(parserAstSpans1.ts, 33, 26))
+    public nc_p1!: number;
+>nc_p1 : Symbol(c1.nc_p1, Decl(parserAstSpans1.ts, 33, 27))
 
     /** c1_nc_f1*/
     public nc_f1() {
->nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 25))
+>nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 26))
     }
     /** c1_nc_l1*/
-    public nc_l1: () => void;
+    public nc_l1!: () => void;
 >nc_l1 : Symbol(c1.nc_l1, Decl(parserAstSpans1.ts, 38, 5))
 }
 var i1_i: i1;
@@ -139,24 +139,24 @@ var c1_i = new c1();
 >c1 : Symbol(c1, Decl(parserAstSpans1.ts, 17, 1))
 
 c1_i.i1_f1();
->c1_i.i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 25))
+>c1_i.i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 26))
 >c1_i : Symbol(c1_i, Decl(parserAstSpans1.ts, 51, 3))
->i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 25))
+>i1_f1 : Symbol(c1.i1_f1, Decl(parserAstSpans1.ts, 19, 26))
 
 c1_i.i1_nc_f1();
->c1_i.i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 28))
+>c1_i.i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 29))
 >c1_i : Symbol(c1_i, Decl(parserAstSpans1.ts, 51, 3))
->i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 28))
+>i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(parserAstSpans1.ts, 23, 29))
 
 c1_i.f1();
->c1_i.f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 22))
+>c1_i.f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 23))
 >c1_i : Symbol(c1_i, Decl(parserAstSpans1.ts, 51, 3))
->f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 22))
+>f1 : Symbol(c1.f1, Decl(parserAstSpans1.ts, 28, 23))
 
 c1_i.nc_f1();
->c1_i.nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 25))
+>c1_i.nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 26))
 >c1_i : Symbol(c1_i, Decl(parserAstSpans1.ts, 51, 3))
->nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 25))
+>nc_f1 : Symbol(c1.nc_f1, Decl(parserAstSpans1.ts, 35, 26))
 
 c1_i.i1_l1();
 >c1_i.i1_l1 : Symbol(c1.i1_l1, Decl(parserAstSpans1.ts, 21, 5))
@@ -240,11 +240,11 @@ class c2 {
 
         return 10;
     }
-    public c2_nc_p1: number;
+    public c2_nc_p1!: number;
 >c2_nc_p1 : Symbol(c2.c2_nc_p1, Decl(parserAstSpans1.ts, 80, 5))
 
     public c2_nc_f1() {
->c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
     }
     public get c2_nc_prop() {
 >c2_nc_prop : Symbol(c2.c2_nc_prop, Decl(parserAstSpans1.ts, 83, 5))
@@ -252,12 +252,12 @@ class c2 {
         return 10;
     }
     /** c2 p1*/
-    public p1: number;
+    public p1!: number;
 >p1 : Symbol(c2.p1, Decl(parserAstSpans1.ts, 86, 5))
 
     /** c2 f1*/
     public f1() {
->f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 22))
+>f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 23))
     }
     /** c2 prop*/
     public get prop() {
@@ -265,11 +265,11 @@ class c2 {
 
         return 10;
     }
-    public nc_p1: number;
+    public nc_p1!: number;
 >nc_p1 : Symbol(c2.nc_p1, Decl(parserAstSpans1.ts, 95, 5))
 
     public nc_f1() {
->nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 25))
+>nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 26))
     }
     public get nc_prop() {
 >nc_prop : Symbol(c2.nc_prop, Decl(parserAstSpans1.ts, 98, 5))
@@ -304,12 +304,12 @@ class c3 extends c2 {
 >c2_p1 : Symbol(c2.c2_p1, Decl(parserAstSpans1.ts, 71, 10))
     }
     /** c3 p1*/
-    public p1: number;
+    public p1!: number;
 >p1 : Symbol(c3.p1, Decl(parserAstSpans1.ts, 111, 5))
 
     /** c3 f1*/
     public f1() {
->f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 22))
+>f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 23))
     }
     /** c3 prop*/
     public get prop() {
@@ -317,11 +317,11 @@ class c3 extends c2 {
 
         return 10;
     }
-    public nc_p1: number;
+    public nc_p1!: number;
 >nc_p1 : Symbol(c3.nc_p1, Decl(parserAstSpans1.ts, 120, 5))
 
     public nc_f1() {
->nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 25))
+>nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 26))
     }
     public get nc_prop() {
 >nc_prop : Symbol(c3.nc_prop, Decl(parserAstSpans1.ts, 123, 5))
@@ -343,19 +343,19 @@ c2_i.c2_f1();
 >c2_f1 : Symbol(c2.c2_f1, Decl(parserAstSpans1.ts, 73, 25))
 
 c2_i.c2_nc_f1();
->c2_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 
 c2_i.f1();
->c2_i.f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 22))
+>c2_i.f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 23))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 22))
+>f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 23))
 
 c2_i.nc_f1();
->c2_i.nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 25))
+>c2_i.nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 26))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 25))
+>nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 26))
 
 c3_i.c2_f1();
 >c3_i.c2_f1 : Symbol(c2.c2_f1, Decl(parserAstSpans1.ts, 73, 25))
@@ -363,19 +363,19 @@ c3_i.c2_f1();
 >c2_f1 : Symbol(c2.c2_f1, Decl(parserAstSpans1.ts, 73, 25))
 
 c3_i.c2_nc_f1();
->c3_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c3_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 >c3_i : Symbol(c3_i, Decl(parserAstSpans1.ts, 129, 3))
->c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 
 c3_i.f1();
->c3_i.f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 22))
+>c3_i.f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 23))
 >c3_i : Symbol(c3_i, Decl(parserAstSpans1.ts, 129, 3))
->f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 22))
+>f1 : Symbol(c3.f1, Decl(parserAstSpans1.ts, 113, 23))
 
 c3_i.nc_f1();
->c3_i.nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 25))
+>c3_i.nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 26))
 >c3_i : Symbol(c3_i, Decl(parserAstSpans1.ts, 129, 3))
->nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 25))
+>nc_f1 : Symbol(c3.nc_f1, Decl(parserAstSpans1.ts, 121, 26))
 
 // assign
 c2_i = c3_i;
@@ -388,19 +388,19 @@ c2_i.c2_f1();
 >c2_f1 : Symbol(c2.c2_f1, Decl(parserAstSpans1.ts, 73, 25))
 
 c2_i.c2_nc_f1();
->c2_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_i.c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 28))
+>c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(parserAstSpans1.ts, 81, 29))
 
 c2_i.f1();
->c2_i.f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 22))
+>c2_i.f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 23))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 22))
+>f1 : Symbol(c2.f1, Decl(parserAstSpans1.ts, 88, 23))
 
 c2_i.nc_f1();
->c2_i.nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 25))
+>c2_i.nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 26))
 >c2_i : Symbol(c2_i, Decl(parserAstSpans1.ts, 128, 3))
->nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 25))
+>nc_f1 : Symbol(c2.nc_f1, Decl(parserAstSpans1.ts, 96, 26))
 
 class c4 extends c2 {
 >c4 : Symbol(c4, Decl(parserAstSpans1.ts, 143, 13))
@@ -617,14 +617,14 @@ i2_i.nc_l1();
 class c5 {
 >c5 : Symbol(c5, Decl(parserAstSpans1.ts, 206, 13))
 
-    public b: number;
+    public b!: number;
 >b : Symbol(c5.b, Decl(parserAstSpans1.ts, 209, 10))
 }
 class c6 extends c5 {
 >c6 : Symbol(c6, Decl(parserAstSpans1.ts, 211, 1))
 >c5 : Symbol(c5, Decl(parserAstSpans1.ts, 206, 13))
 
-    public d;
+    public d!: any;
 >d : Symbol(c6.d, Decl(parserAstSpans1.ts, 212, 21))
 
     constructor() {

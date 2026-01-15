@@ -2,7 +2,7 @@
 
 //// [deleteOperatorWithBooleanType.ts]
 // delete  operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -41,8 +41,6 @@ delete objA.a;
 delete M.n;
 
 //// [deleteOperatorWithBooleanType.js]
-// delete  operator on boolean type
-var BOOLEAN;
 function foo() { return true; }
 var A = /** @class */ (function () {
     function A() {

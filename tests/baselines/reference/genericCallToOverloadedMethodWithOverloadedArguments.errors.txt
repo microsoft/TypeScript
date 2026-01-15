@@ -42,7 +42,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
         declare function testFunction(n: number): Promise<number>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
     }
     
@@ -56,7 +56,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
@@ -74,7 +74,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
         declare function testFunction(n: number): Promise<number>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
     }
     
@@ -89,7 +89,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -115,7 +115,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -145,7 +145,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(s: string): Promise<string>;
         declare function testFunction(b: boolean): Promise<boolean>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.

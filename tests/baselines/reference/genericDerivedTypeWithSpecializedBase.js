@@ -9,8 +9,8 @@ class B<U> extends A<string> {
     y: U;
 }
 
-var x: A<number>;
-var y: B<number>;
+declare var x: A<number>;
+declare var y: B<number>;
 x = y;  // error
 
 
@@ -42,6 +42,4 @@ var B = /** @class */ (function (_super) {
     }
     return B;
 }(A));
-var x;
-var y;
 x = y; // error

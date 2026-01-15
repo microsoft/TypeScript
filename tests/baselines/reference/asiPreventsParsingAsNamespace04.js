@@ -2,8 +2,8 @@
 
 //// [asiPreventsParsingAsNamespace04.ts]
 let module = 10;
-namespace in {}
+module in {}
 
 //// [asiPreventsParsingAsNamespace04.js]
 var module = 10;
-namespace in {};
+module in {};

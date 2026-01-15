@@ -8,10 +8,10 @@ propertyAccess.ts(149,5): error TS2403: Subsequent variable declarations must ha
 
 ==== propertyAccess.ts (6 errors) ====
     class A {
-        a: number;
+        a!: number;
     }
     class B extends A {
-        b: number;
+        b!: number;
     }
     enum Compass {
         North, South, East, West
@@ -21,7 +21,7 @@ propertyAccess.ts(149,5): error TS2403: Subsequent variable declarations must ha
                                                           ~~~~~~~
 !!! error TS2353: Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
-    var bothIndex:
+    declare var bothIndex:
         {
             [n: string]: A;
             [m: number]: B;
@@ -37,8 +37,8 @@ propertyAccess.ts(149,5): error TS2403: Subsequent variable declarations must ha
         'literal property': 100
     };
     var anyVar: any = {};
-    var stringOrNumber: string | number;
-    var someObject: { name: string };
+    declare var stringOrNumber: string | number;
+    declare var someObject: { name: string };
     
     // Assign to a property access
     obj.y = 4;

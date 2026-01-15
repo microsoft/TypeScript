@@ -3,7 +3,7 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
 
 ==== typeofOperatorWithStringType.ts (1 errors) ====
     // typeof  operator on string type
-    var STRING: string;
+    declare var STRING: string;
     var STRING1: string[] = ["", "abc"];
     
     function foo(): string { return "abc"; }
@@ -13,7 +13,7 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
         static foo() { return ""; }
     }
     namespace M {
-        export var n: string;
+        export var n!: string;
     }
     
     var objA = new A();
@@ -50,9 +50,9 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // use typeof in type query
-    var z: string;
-    var x: string[];
-    var r: () => string;
+    declare var z: string;
+    declare var x: string[];
+    declare var r: () => string;
     z: typeof STRING;
     x: typeof STRING1;
     r: typeof foo;

@@ -439,7 +439,7 @@ N.c = 1;
 >1 : 1
 >  : ^
 
-let xx: { readonly [x: string]: string };
+declare let xx: { readonly [x: string]: string };
 >xx : { readonly [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -467,7 +467,7 @@ xx["foo"] = "abc";  // Error
 >"abc" : "abc"
 >      : ^^^^^
 
-let yy: { readonly [x: number]: string, [x: string]: string };
+declare let yy: { readonly [x: number]: string, [x: string]: string };
 >yy : { readonly [x: number]: string; [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

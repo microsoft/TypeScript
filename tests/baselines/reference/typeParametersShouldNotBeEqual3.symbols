@@ -12,7 +12,7 @@ function ff<T extends Object, U extends Object>(x: T, y: U) {
 >y : Symbol(y, Decl(typeParametersShouldNotBeEqual3.ts, 0, 53))
 >U : Symbol(U, Decl(typeParametersShouldNotBeEqual3.ts, 0, 29))
 
-    var z: Object;
+    var z!: Object;
 >z : Symbol(z, Decl(typeParametersShouldNotBeEqual3.ts, 1, 7))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

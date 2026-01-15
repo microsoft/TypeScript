@@ -14,7 +14,7 @@ function foo(): any {
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo(): any {
         var a;
         return a;

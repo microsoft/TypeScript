@@ -1,8 +1,8 @@
 // -- operator on any type
-var ANY1: any;
+declare var ANY1: any;
 var ANY2: any[] = ["", ""];
 
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { } };
 function foo(): any {
     var a;

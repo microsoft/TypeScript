@@ -1,7 +1,7 @@
 // @strictNullChecks: true
 
 class Foo {
-    x: string;
+    x: string = "";
 }
 
 declare function getFooOrNull(): Foo | null;
