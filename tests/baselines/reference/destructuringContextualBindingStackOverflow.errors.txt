@@ -2,9 +2,18 @@ destructuringContextualBindingStackOverflow.ts(1,7): error TS2322: Type '{ c: nu
 destructuringContextualBindingStackOverflow.ts(1,9): error TS2339: Property 'c' does not exist on type 'string | number | symbol'.
 destructuringContextualBindingStackOverflow.ts(1,12): error TS2339: Property 'f' does not exist on type 'string | number | symbol'.
 destructuringContextualBindingStackOverflow.ts(1,52): error TS2448: Block-scoped variable 'f' used before its declaration.
+destructuringContextualBindingStackOverflow.ts(2,7): error TS2322: Type '{ a: number; f: any; }' is not assignable to type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(2,9): error TS2339: Property 'a' does not exist on type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(2,12): error TS2339: Property 'f' does not exist on type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(2,55): error TS2448: Block-scoped variable 'f1' used before its declaration.
+destructuringContextualBindingStackOverflow.ts(3,7): error TS2322: Type '{ a: any; f: any; }' is not assignable to type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(3,9): error TS2339: Property 'a' does not exist on type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(3,16): error TS2339: Property 'f' does not exist on type 'string | number'.
+destructuringContextualBindingStackOverflow.ts(3,48): error TS2448: Block-scoped variable 'f2' used before its declaration.
+destructuringContextualBindingStackOverflow.ts(3,55): error TS2448: Block-scoped variable 'a1' used before its declaration.
 
 
-==== destructuringContextualBindingStackOverflow.ts (4 errors) ====
+==== destructuringContextualBindingStackOverflow.ts (13 errors) ====
     const { c, f }: string | number | symbol = { c: 0, f };
           ~~~~~~~~
 !!! error TS2322: Type '{ c: number; f: any; }' is not assignable to type 'string | number | symbol'.
@@ -15,4 +24,27 @@ destructuringContextualBindingStackOverflow.ts(1,52): error TS2448: Block-scoped
                                                        ~
 !!! error TS2448: Block-scoped variable 'f' used before its declaration.
 !!! related TS2728 destructuringContextualBindingStackOverflow.ts:1:12: 'f' is declared here.
+    const { a, f: f1 }: string | number = { a: 0, f: (1 + f1) };
+          ~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; f: any; }' is not assignable to type 'string | number'.
+            ~
+!!! error TS2339: Property 'a' does not exist on type 'string | number'.
+               ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+                                                          ~~
+!!! error TS2448: Block-scoped variable 'f1' used before its declaration.
+!!! related TS2728 destructuringContextualBindingStackOverflow.ts:2:15: 'f1' is declared here.
+    const { a: a1, f: f2 }: string | number = { a: f2, f: a1 };
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: any; f: any; }' is not assignable to type 'string | number'.
+            ~
+!!! error TS2339: Property 'a' does not exist on type 'string | number'.
+                   ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+                                                   ~~
+!!! error TS2448: Block-scoped variable 'f2' used before its declaration.
+!!! related TS2728 destructuringContextualBindingStackOverflow.ts:3:19: 'f2' is declared here.
+                                                          ~~
+!!! error TS2448: Block-scoped variable 'a1' used before its declaration.
+!!! related TS2728 destructuringContextualBindingStackOverflow.ts:3:12: 'a1' is declared here.
     

@@ -15,3 +15,47 @@ const { c, f }: string | number | symbol = { c: 0, f };
 >f : any
 >  : ^^^
 
+const { a, f: f1 }: string | number = { a: 0, f: (1 + f1) };
+>a : any
+>  : ^^^
+>f : any
+>  : ^^^
+>f1 : any
+>   : ^^^
+>{ a: 0, f: (1 + f1) } : { a: number; f: any; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : any
+>  : ^^^
+>(1 + f1) : any
+>         : ^^^
+>1 + f1 : any
+>       : ^^^
+>1 : 1
+>  : ^
+>f1 : any
+>   : ^^^
+
+const { a: a1, f: f2 }: string | number = { a: f2, f: a1 };
+>a : any
+>  : ^^^
+>a1 : any
+>   : ^^^
+>f : any
+>  : ^^^
+>f2 : any
+>   : ^^^
+>{ a: f2, f: a1 } : { a: any; f: any; }
+>                 : ^^^^^^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>f2 : any
+>   : ^^^
+>f : any
+>  : ^^^
+>a1 : any
+>   : ^^^
+

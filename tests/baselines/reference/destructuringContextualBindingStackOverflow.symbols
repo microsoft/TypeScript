@@ -7,3 +7,18 @@ const { c, f }: string | number | symbol = { c: 0, f };
 >c : Symbol(c, Decl(destructuringContextualBindingStackOverflow.ts, 0, 44))
 >f : Symbol(f, Decl(destructuringContextualBindingStackOverflow.ts, 0, 50))
 
+const { a, f: f1 }: string | number = { a: 0, f: (1 + f1) };
+>a : Symbol(a, Decl(destructuringContextualBindingStackOverflow.ts, 1, 7))
+>f1 : Symbol(f1, Decl(destructuringContextualBindingStackOverflow.ts, 1, 10))
+>a : Symbol(a, Decl(destructuringContextualBindingStackOverflow.ts, 1, 39))
+>f : Symbol(f, Decl(destructuringContextualBindingStackOverflow.ts, 1, 45))
+>f1 : Symbol(f1, Decl(destructuringContextualBindingStackOverflow.ts, 1, 10))
+
+const { a: a1, f: f2 }: string | number = { a: f2, f: a1 };
+>a1 : Symbol(a1, Decl(destructuringContextualBindingStackOverflow.ts, 2, 7))
+>f2 : Symbol(f2, Decl(destructuringContextualBindingStackOverflow.ts, 2, 14))
+>a : Symbol(a, Decl(destructuringContextualBindingStackOverflow.ts, 2, 43))
+>f2 : Symbol(f2, Decl(destructuringContextualBindingStackOverflow.ts, 2, 14))
+>f : Symbol(f, Decl(destructuringContextualBindingStackOverflow.ts, 2, 50))
+>a1 : Symbol(a1, Decl(destructuringContextualBindingStackOverflow.ts, 2, 7))
+
