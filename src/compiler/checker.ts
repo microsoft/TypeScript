@@ -11689,8 +11689,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             parentType = getNonNullableType(parentType);
         }
         // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
-        else if (strictNullChecks && pattern.parent.initializer && !(hasTypeFacts(getTypeOfInitializer(pattern.parent.initializer), TypeFacts.EQUndefined))) {
-            parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+        // Use a non-recursive type check to avoid stack overflow when the initializer references binding elements
+        else if (strictNullChecks && pattern.parent.initializer) {
+            const initializerType = getQuickTypeOfExpression(pattern.parent.initializer) || getNodeLinks(pattern.parent.initializer).resolvedType;
+            if (initializerType && !(hasTypeFacts(initializerType, TypeFacts.EQUndefined))) {
+                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+            }
         }
 
         const accessFlags = AccessFlags.ExpressionPosition | (noTupleBoundsCheck || hasDefaultValue(declaration) ? AccessFlags.AllowMissing : 0);

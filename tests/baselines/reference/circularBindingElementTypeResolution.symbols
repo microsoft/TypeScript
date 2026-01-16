@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/circularBindingElementTypeResolution.ts] ////
+
+=== circularBindingElementTypeResolution.ts ===
+// Test case 1: Simple self-reference with shorthand property
+const { c, f }: string | number = { c: 0, f };
+>c : Symbol(c, Decl(circularBindingElementTypeResolution.ts, 1, 7))
+>f : Symbol(f, Decl(circularBindingElementTypeResolution.ts, 1, 10))
+>c : Symbol(c, Decl(circularBindingElementTypeResolution.ts, 1, 35))
+>f : Symbol(f, Decl(circularBindingElementTypeResolution.ts, 1, 41))
+
+// Test case 2: Self-reference with expression
+const { a, f2 }: string | number = { a: 0, f2: (1 + f2) };
+>a : Symbol(a, Decl(circularBindingElementTypeResolution.ts, 4, 7))
+>f2 : Symbol(f2, Decl(circularBindingElementTypeResolution.ts, 4, 10))
+>a : Symbol(a, Decl(circularBindingElementTypeResolution.ts, 4, 36))
+>f2 : Symbol(f2, Decl(circularBindingElementTypeResolution.ts, 4, 42))
+>f2 : Symbol(f2, Decl(circularBindingElementTypeResolution.ts, 4, 10))
+
+// Test case 3: Circular reference between two binding elements
+const { a2, f3 }: string | number = { a2: f3, f3: a2 };
+>a2 : Symbol(a2, Decl(circularBindingElementTypeResolution.ts, 7, 7))
+>f3 : Symbol(f3, Decl(circularBindingElementTypeResolution.ts, 7, 11))
+>a2 : Symbol(a2, Decl(circularBindingElementTypeResolution.ts, 7, 37))
+>f3 : Symbol(f3, Decl(circularBindingElementTypeResolution.ts, 7, 11))
+>f3 : Symbol(f3, Decl(circularBindingElementTypeResolution.ts, 7, 45))
+>a2 : Symbol(a2, Decl(circularBindingElementTypeResolution.ts, 7, 7))
+
+// Test case 4: Nested destructuring with self-reference
+const { nested: { x, y } }: { nested: { x: number, y: string } } = { nested: { x: y, y: x } };
+>nested : Symbol(nested, Decl(circularBindingElementTypeResolution.ts, 10, 29))
+>x : Symbol(x, Decl(circularBindingElementTypeResolution.ts, 10, 17))
+>y : Symbol(y, Decl(circularBindingElementTypeResolution.ts, 10, 20))
+>nested : Symbol(nested, Decl(circularBindingElementTypeResolution.ts, 10, 29))
+>x : Symbol(x, Decl(circularBindingElementTypeResolution.ts, 10, 39))
+>y : Symbol(y, Decl(circularBindingElementTypeResolution.ts, 10, 50))
+>nested : Symbol(nested, Decl(circularBindingElementTypeResolution.ts, 10, 68))
+>x : Symbol(x, Decl(circularBindingElementTypeResolution.ts, 10, 78))
+>y : Symbol(y, Decl(circularBindingElementTypeResolution.ts, 10, 20))
+>y : Symbol(y, Decl(circularBindingElementTypeResolution.ts, 10, 84))
+>x : Symbol(x, Decl(circularBindingElementTypeResolution.ts, 10, 17))
+

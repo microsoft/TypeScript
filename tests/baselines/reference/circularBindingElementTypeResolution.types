@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/circularBindingElementTypeResolution.ts] ////
+
+=== circularBindingElementTypeResolution.ts ===
+// Test case 1: Simple self-reference with shorthand property
+const { c, f }: string | number = { c: 0, f };
+>c : any
+>  : ^^^
+>f : any
+>  : ^^^
+>{ c: 0, f } : { c: number; f: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : any
+>  : ^^^
+
+// Test case 2: Self-reference with expression
+const { a, f2 }: string | number = { a: 0, f2: (1 + f2) };
+>a : any
+>  : ^^^
+>f2 : any
+>   : ^^^
+>{ a: 0, f2: (1 + f2) } : { a: number; f2: any; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f2 : any
+>   : ^^^
+>(1 + f2) : any
+>         : ^^^
+>1 + f2 : any
+>       : ^^^
+>1 : 1
+>  : ^
+>f2 : any
+>   : ^^^
+
+// Test case 3: Circular reference between two binding elements
+const { a2, f3 }: string | number = { a2: f3, f3: a2 };
+>a2 : any
+>   : ^^^
+>f3 : any
+>   : ^^^
+>{ a2: f3, f3: a2 } : { a2: any; f3: any; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+>a2 : any
+>   : ^^^
+>f3 : any
+>   : ^^^
+>f3 : any
+>   : ^^^
+>a2 : any
+>   : ^^^
+
+// Test case 4: Nested destructuring with self-reference
+const { nested: { x, y } }: { nested: { x: number, y: string } } = { nested: { x: y, y: x } };
+>nested : any
+>       : ^^^
+>x : number
+>  : ^^^^^^
+>y : string
+>  : ^^^^^^
+>nested : { x: number; y: string; }
+>       : ^^^^^      ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+>y : string
+>  : ^^^^^^
+>{ nested: { x: y, y: x } } : { nested: { x: string; y: number; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : { x: string; y: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: y, y: x } : { x: string; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>y : string
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+
