@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/destructuringContextualBindingStackOverflow.ts] ////
+
+=== destructuringContextualBindingStackOverflow.ts ===
+const { c, f }: string | number | symbol = { c: 0, f };
+>c : any
+>  : ^^^
+>f : any
+>  : ^^^
+>{ c: 0, f } : { c: number; f: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : any
+>  : ^^^
+

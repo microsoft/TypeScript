@@ -28312,7 +28312,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // from its initializer, we'll already have cached the type. Otherwise we compute it now
         // without caching such that transient types are reflected.
         const links = getNodeLinks(node);
-        return links.resolvedType || getTypeOfExpression(node);
+        if (links.resolvedType) {
+            return links.resolvedType;
+        }
+        const pattern = isVariableDeclaration(node.parent) && node.parent.initializer === node && isBindingPattern(node.parent.name)
+            ? node.parent.name
+            : undefined;
+        if (pattern) {
+            contextualBindingPatterns.push(pattern);
+            const type = getTypeOfExpression(node);
+            contextualBindingPatterns.pop();
+            return type;
+        }
+        return getTypeOfExpression(node);
     }
 
     function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
@@ -31023,7 +31035,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the identifier is declared in a binding pattern for which we're currently computing the implied type and the
         // reference occurs with the same binding pattern, return the non-inferrable any type. This for example occurs in
         // 'const [a, b = a + 1] = [2]' when we're computing the contextual type for the array literal '[2]'.
-        if (declaration && declaration.kind === SyntaxKind.BindingElement && contains(contextualBindingPatterns, declaration.parent) && findAncestor(node, parent => parent === declaration!.parent)) {
+        if (declaration && declaration.kind === SyntaxKind.BindingElement && contains(contextualBindingPatterns, declaration.parent)) {
             return nonInferrableAnyType;
         }
 
