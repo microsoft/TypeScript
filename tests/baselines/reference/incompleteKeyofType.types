@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/incompleteKeyofType.ts] ////
+
+=== incompleteKeyofType.ts ===
+// Incomplete keyof operator should report syntax error
+const x: keyof = { a: 1 };
+>x : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+// Incomplete readonly operator should report syntax error  
+const y: readonly = [1, 2, 3];
+>y : any
+>  : ^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+// Incomplete unique operator should report syntax error
+const z: unique = Symbol();
+>z : any
+>  : ^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+

@@ -1,0 +1,24 @@
+incompleteKeyofType.ts(2,7): error TS2322: Type '{ a: number; }' is not assignable to type 'string | number | symbol'.
+incompleteKeyofType.ts(2,16): error TS1110: Type expected.
+incompleteKeyofType.ts(5,19): error TS1110: Type expected.
+incompleteKeyofType.ts(8,17): error TS1110: Type expected.
+
+
+==== incompleteKeyofType.ts (4 errors) ====
+    // Incomplete keyof operator should report syntax error
+    const x: keyof = { a: 1 };
+          ~
+!!! error TS2322: Type '{ a: number; }' is not assignable to type 'string | number | symbol'.
+                   ~
+!!! error TS1110: Type expected.
+    
+    // Incomplete readonly operator should report syntax error  
+    const y: readonly = [1, 2, 3];
+                      ~
+!!! error TS1110: Type expected.
+    
+    // Incomplete unique operator should report syntax error
+    const z: unique = Symbol();
+                    ~
+!!! error TS1110: Type expected.
+    
