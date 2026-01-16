@@ -11,7 +11,7 @@
 //// declare var j: J
 //// class C {
 ////     ic: IC
-////     m() { this.ic/**/ = j }
+////     constructor() { this.ic/**/ = j }
 //// }
 verify.codeFixAvailable([
     { description: ts.Diagnostics.Add_undefined_to_optional_property_type.message }
@@ -30,7 +30,7 @@ interface J {
 declare var j: J
 class C {
     ic: IC
-    m() { this.ic = j }
+    constructor() { this.ic = j }
 }`,
 });
 
