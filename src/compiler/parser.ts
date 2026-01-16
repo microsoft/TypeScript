@@ -4752,7 +4752,16 @@ namespace Parser {
     function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword) {
         const pos = getNodePos();
         parseExpected(operator);
-        return finishNode(factory.createTypeOperatorNode(operator, parseTypeOperatorOrHigher()), pos);
+        // Check if the next token is a valid type start. If not, report an error and use 'any' as a placeholder.
+        let type: TypeNode;
+        if (isStartOfType()) {
+            type = parseTypeOperatorOrHigher();
+        }
+        else {
+            parseErrorAtCurrentToken(Diagnostics.Type_expected);
+            type = finishNode(factory.createToken(SyntaxKind.AnyKeyword), getNodePos());
+        }
+        return finishNode(factory.createTypeOperatorNode(operator, type), pos);
     }
 
     function tryParseConstraintOfInferType() {
