@@ -65,14 +65,14 @@ src/main.ts
 
 Found 1 error in src/utils/index.ts[90m:8[0m
 
-//// [D:/Work/pkg1/dist/main.d.ts] *new* 
+//// [D:/Work/pkg1/dist/src/main.d.ts] *new* 
 declare const Sub_base: import("./utils/type-helpers").MyReturnType;
 export declare class Sub extends Sub_base {
     id: string;
 }
 export {};
 
-//// [D:/Work/pkg1/dist/main.js] *new* 
+//// [D:/Work/pkg1/dist/src/main.js] *new* 
 import { PartialType } from './utils';
 class Common {
 }
@@ -80,11 +80,11 @@ export class Sub extends PartialType(Common) {
     id;
 }
 
-//// [D:/Work/pkg1/dist/utils/index.d.ts] *new* 
+//// [D:/Work/pkg1/dist/src/utils/index.d.ts] *new* 
 import { MyType, MyReturnType } from './type-helpers';
 export declare function PartialType<T>(classRef: MyType<T>): MyReturnType;
 
-//// [D:/Work/pkg1/dist/utils/index.js] *new* 
+//// [D:/Work/pkg1/dist/src/utils/index.js] *new* 
 export function PartialType(classRef) {
     class PartialClassType {
         constructor() { }
@@ -92,7 +92,7 @@ export function PartialType(classRef) {
     return PartialClassType;
 }
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.d.ts] *new* 
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.d.ts] *new* 
 export type MyReturnType = {
     new (...args: any[]): any;
 };
@@ -100,7 +100,7 @@ export interface MyType<T = any> extends Function {
     new (...args: any[]): T;
 }
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.js] *new* 
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.js] *new* 
 export {};
 
 //// [D:/home/src/tslibs/TS/Lib/lib.es2017.full.d.ts] *Lib*

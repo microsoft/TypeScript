@@ -721,6 +721,7 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 			finalPath = tspath.GetNormalizedAbsolutePath(resolvedTarget+subpath, r.resolver.host.GetCurrentDirectory())
 		}
 		if inputLink := r.tryLoadInputFileForPath(finalPath, subpath, tspath.CombinePaths(scope.PackageDirectory, "package.json"), isImports); !inputLink.shouldContinueSearching() {
+			inputLink.packageId = r.getPackageId(inputLink.path, scope)
 			return inputLink
 		}
 		if result := r.loadFileNameFromPackageJSONField(extensions, finalPath, targetString, false /*onlyRecordFailures*/); !result.shouldContinueSearching() {
@@ -807,9 +808,9 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 		if r.compilerOptions.RootDir != "" {
 			// A `rootDir` compiler option strongly indicates the root location
 			rootDir = r.compilerOptions.RootDir
-		} else if r.compilerOptions.Composite.IsTrue() && r.compilerOptions.ConfigFilePath != "" {
-			// A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
-			rootDir = r.compilerOptions.ConfigFilePath
+		} else if r.compilerOptions.ConfigFilePath != "" {
+			// When no explicit rootDir is set, treat the config file's directory as the project root, which establishes the common source directory, so no other locations need to be checked.
+			rootDir = tspath.GetDirectoryPath(r.compilerOptions.ConfigFilePath)
 		} else {
 			diagnostic := ast.NewDiagnostic(
 				nil,

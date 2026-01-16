@@ -34,9 +34,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
-TSFILE:  /home/src/workspaces/solution/project/dist/hello.json
-TSFILE:  /home/src/workspaces/solution/project/dist/index.js.map
-TSFILE:  /home/src/workspaces/solution/project/dist/index.js
+TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
 TSFILE:  /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
@@ -68,12 +68,12 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/solution/project/dist/hello.json] *new* 
+//// [/home/src/workspaces/solution/project/dist/src/hello.json] *new* 
 {
     "hello": "world"
 }
 
-//// [/home/src/workspaces/solution/project/dist/index.js] *new* 
+//// [/home/src/workspaces/solution/project/dist/src/index.js] *new* 
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -82,8 +82,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
-//// [/home/src/workspaces/solution/project/dist/index.js.map] *new* 
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map] *new* 
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["../src/index.ts","../src/hello.json"]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
@@ -122,6 +122,6 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/hello.json'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/src/hello.json'
 
 

@@ -14,13 +14,13 @@ export {srcthing as thing} from "./src/thing.js";
 // real command-line we'll crawl the imports for that set - a limitation
 // of the harness, I suppose)
 import * as me from "@this/package";
->me : any
+>me : typeof me
 
 me.thing();
->me.thing() : any
->me.thing : any
->me : any
->thing : any
+>me.thing() : void
+>me.thing : () => void
+>me : typeof me
+>thing : () => void
 
 export function srcthing(): void {}
 >srcthing : () => void

@@ -1710,7 +1710,7 @@ func TestBuildOutputPaths(t *testing.T) {
                 }`),
 			},
 			expectedDtsNames: []string{
-				"/home/src/workspaces/project/dist/index.js",
+				"/home/src/workspaces/project/dist/src/index.js",
 			},
 		},
 		{

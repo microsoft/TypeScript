@@ -53,9 +53,8 @@ func GetCommonSourceDirectory(options *core.CompilerOptions, files func() []stri
 	if options.RootDir != "" {
 		// If a rootDir is specified use it as the commonSourceDirectory
 		commonSourceDirectory = options.RootDir
-	} else if options.Composite.IsTrue() && options.ConfigFilePath != "" {
-		// If the rootDir is not specified, but the project is composite, then the common source directory
-		// is the directory of the config file.
+	} else if options.ConfigFilePath != "" {
+		// If the rootDir is not specified, then the common source directory is the directory of the config file.
 		commonSourceDirectory = tspath.GetDirectoryPath(options.ConfigFilePath)
 	} else {
 		commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(files(), currentDirectory, useCaseSensitiveFileNames)

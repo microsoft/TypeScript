@@ -66,17 +66,13 @@ Found 'package.json' at '/home/src/workspaces/project/packages/a/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './types/index.d.ts'.
-File '/home/src/workspaces/project/packages/a/types/index.d.ts' does not exist.
-Failed to resolve under condition 'types'.
-Matched 'exports' condition 'default'.
-Using 'exports' subpath '.' with target './index.js'.
 File name '/home/src/workspaces/project/packages/a/index.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/project/packages/a/index.ts' does not exist.
 File '/home/src/workspaces/project/packages/a/index.tsx' does not exist.
 File '/home/src/workspaces/project/packages/a/index.d.ts' does not exist.
 File '/home/src/workspaces/project/packages/a/index.js' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
-Resolved under condition 'default'.
+Resolved under condition 'types'.
 Exiting conditional exports.
 ======== Module name 'a' was successfully resolved to '/home/src/workspaces/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
 ../../tslibs/TS/Lib/lib.esnext.full.d.ts

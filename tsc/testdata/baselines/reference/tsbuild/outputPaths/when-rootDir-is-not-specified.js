@@ -43,7 +43,7 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/dist/index.js] *new* 
+//// [/home/src/workspaces/project/dist/src/index.js] *new* 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -80,7 +80,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/index.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/src/index.js'
 
 
 
@@ -90,5 +90,5 @@ Edit [1]:: Normal build without change, that does not block emit on error to sho
 tsgo -p /home/src/workspaces/project/tsconfig.json
 ExitStatus:: Success
 Output::
-//// [/home/src/workspaces/project/dist/index.js] *rewrite with same content*
+//// [/home/src/workspaces/project/dist/src/index.js] *rewrite with same content*
 
