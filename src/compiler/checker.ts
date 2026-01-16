@@ -45047,7 +45047,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Don't validate for-in initializer as it is already an error
                 const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (needCheckInitializer) {
+                    contextualBindingPatterns.push(node.name);
                     const initializerType = checkExpressionCached(node.initializer);
+                    contextualBindingPatterns.pop();
                     if (strictNullChecks && needCheckWidenedType) {
                         checkNonNullNonVoidType(initializerType, node);
                     }
