@@ -71,7 +71,8 @@ jobs:
             skip: ${{ github.event_name == 'merge_group' }}
           - os: macos-latest
             coverage: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            # There aren't enough macOS runners; skip in PRs and rely on main branch runs.
+            skip: ${{ github.event_name == 'merge_group' || github.event_name == 'pull_request' }}
           - os: ubuntu-latest
             name: 'no submodules'
             no-submodules: true
