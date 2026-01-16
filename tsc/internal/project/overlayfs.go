@@ -222,6 +222,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		saved        bool
 		created      bool
 		deleted      bool
+		reopened     bool
 	}
 
 	fileEventMap := make(map[lsproto.DocumentUri]*fileEvents)
@@ -244,8 +245,11 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 		switch change.Kind {
 		case FileChangeKindOpen:
+			if events.closeChange != nil {
+				events.reopened = true
+				events.closeChange = nil
+			}
 			events.openChange = &change
-			events.closeChange = nil
 			events.watchChanged = false
 			events.changes = nil
 			events.saved = false
@@ -299,7 +303,11 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			if result.Opened != "" {
 				panic("can only process one file open event at a time")
 			}
-			result.Opened = uri
+			if o != nil && o.Content() != events.openChange.Content {
+				result.Changed.Add(uri)
+			} else {
+				result.Opened = uri
+			}
 			newOverlays[path] = newOverlay(
 				uri.FileName(),
 				events.openChange.Content,

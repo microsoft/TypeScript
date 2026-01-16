@@ -196,4 +196,43 @@ func TestProcessChanges(t *testing.T) {
 		})
 		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
 	})
+
+	t.Run("close then open in same batch marks as changed", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		// First create an overlay
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      1,
+				Content:      "const x = 1;",
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+
+		// Now close and reopen in the same batch (like Neovim does for file reload)
+		result, _ := fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindClose,
+				URI:  testURI1,
+			},
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      0,
+				Content:      "const x = 2;",
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+
+		// Should not be marked as opened since it was already open
+		assert.Assert(t, result.Opened == "", "close then open should not mark as opened")
+		// Should also be marked as changed since it was closed and reopened
+		assert.Assert(t, result.Changed.Has(testURI1), "close then open should mark as changed")
+		// Should have the new content
+		fh := fs.getFile(testURI1.FileName())
+		assert.Equal(t, fh.Content(), "const x = 2;")
+	})
 }
