@@ -215,10 +215,11 @@ func SetupWithRealFS() (*project.Session, *SessionUtils) {
 	}
 
 	return project.NewSession(&project.SessionInit{
-		FS:          fs,
-		Client:      clientMock,
-		NpmExecutor: npmExecutorMock,
-		Logger:      sessionUtils.logger,
+		BackgroundCtx: context.Background(),
+		FS:            fs,
+		Client:        clientMock,
+		NpmExecutor:   npmExecutorMock,
+		Logger:        sessionUtils.logger,
 		Options: &project.SessionOptions{
 			CurrentDirectory:       wd,
 			DefaultLibraryPath:     bundled.LibPath(),
@@ -281,10 +282,11 @@ func GetSessionInitOptions(files map[string]any, options *project.SessionOptions
 	}
 
 	return &project.SessionInit{
-		Options:     options,
-		FS:          fs,
-		Client:      clientMock,
-		NpmExecutor: npmExecutorMock,
-		Logger:      sessionUtils.logger,
+		BackgroundCtx: context.Background(),
+		Options:       options,
+		FS:            fs,
+		Client:        clientMock,
+		NpmExecutor:   npmExecutorMock,
+		Logger:        sessionUtils.logger,
 	}, sessionUtils
 }

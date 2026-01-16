@@ -25,7 +25,16 @@ func (q *Queue) Enqueue(ctx context.Context, fn func(context.Context)) {
 	}
 	q.mu.RUnlock()
 
+	// Don't start new tasks if context is already cancelled
+	if ctx.Err() != nil {
+		return
+	}
+
 	q.wg.Go(func() {
+		// Check context again before executing
+		if ctx.Err() != nil {
+			return
+		}
 		fn(ctx)
 	})
 }

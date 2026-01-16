@@ -36,7 +36,13 @@ func (l *logger) sendLogMessage(msgType lsproto.MessageType, message string) {
 		Type:    msgType,
 		Message: message,
 	})
-	l.server.outgoingQueue <- notification.Message()
+
+	select {
+	case l.server.outgoingQueue <- notification.Message():
+		// sent
+	case <-l.server.backgroundCtx.Done():
+		fmt.Fprintln(l.server.stderr, message)
+	}
 }
 
 func (l *logger) Log(msg ...any) {

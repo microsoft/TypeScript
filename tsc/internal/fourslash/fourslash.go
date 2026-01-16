@@ -206,11 +206,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	fsFromMap := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)
 	fs := bundled.WrapFS(fsFromMap)
 
-	var err strings.Builder
 	server := lsp.NewServer(&lsp.ServerOptions{
 		In:  inputReader,
 		Out: outputWriter,
-		Err: &err,
+		Err: io.Discard,
 
 		Cwd:                "/",
 		FS:                 fs,
