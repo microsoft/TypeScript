@@ -1,109 +1,107 @@
 --- old.checkOtherObjectAssignProperty.symbols
 +++ new.checkOtherObjectAssignProperty.symbols
-@@= skipped -3, +3 lines =@@
- const mod = require("./mod1");
- >mod : Symbol(mod, Decl(importer.js, 0, 5))
- >require : Symbol(require)
-->"./mod1" : Symbol(mod, Decl(mod1.js, 0, 0))
+@@= skipped -6, +6 lines =@@
+ >"./mod1" : Symbol(mod, Decl(mod1.js, 0, 0))
 
  mod.thing;
 ->mod.thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
++>mod.thing : Symbol(mod["thing"], Decl(mod1.js, 0, 42))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
++>thing : Symbol(mod["thing"], Decl(mod1.js, 0, 42))
 
  mod.other;
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
-@@= skipped -14, +11 lines =@@
+@@= skipped -11, +11 lines =@@
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 
  mod.bad1;
 ->mod.bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
++>mod.bad1 : Symbol(mod["bad1"], Decl(mod1.js, 10, 72))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
++>bad1 : Symbol(mod["bad1"], Decl(mod1.js, 10, 72))
 
  mod.bad2;
 ->mod.bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
++>mod.bad2 : Symbol(mod["bad2"], Decl(mod1.js, 13, 44))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
++>bad2 : Symbol(mod["bad2"], Decl(mod1.js, 13, 44))
 
  mod.bad3;
 ->mod.bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
++>mod.bad3 : Symbol(mod["bad3"], Decl(mod1.js, 14, 77))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
++>bad3 : Symbol(mod["bad3"], Decl(mod1.js, 14, 77))
 
 
  mod.thing = 0;
 ->mod.thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
++>mod.thing : Symbol(mod["thing"], Decl(mod1.js, 0, 42))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
++>thing : Symbol(mod["thing"], Decl(mod1.js, 0, 42))
 
  mod.other = 0;
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
-@@= skipped -27, +19 lines =@@
+@@= skipped -27, +27 lines =@@
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 
  mod.bad1 = 0;
 ->mod.bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
++>mod.bad1 : Symbol(mod["bad1"], Decl(mod1.js, 10, 72))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
++>bad1 : Symbol(mod["bad1"], Decl(mod1.js, 10, 72))
 
  mod.bad2 = 0;
 ->mod.bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
++>mod.bad2 : Symbol(mod["bad2"], Decl(mod1.js, 13, 44))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
++>bad2 : Symbol(mod["bad2"], Decl(mod1.js, 13, 44))
 
  mod.bad3 = 0;
 ->mod.bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
++>mod.bad3 : Symbol(mod["bad3"], Decl(mod1.js, 14, 77))
  >mod : Symbol(mod, Decl(importer.js, 0, 5))
 ->bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
++>bad3 : Symbol(mod["bad3"], Decl(mod1.js, 14, 77))
 
  === mod1.js ===
  const obj = { value: 42, writable: true };
-@@= skipped -24, +18 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -25, +25 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"thing" : Symbol(thing, Decl(mod1.js, 0, 42))
++>"thing" : Symbol("thing", Decl(mod1.js, 0, 42))
  >obj : Symbol(obj, Decl(mod1.js, 0, 5))
 
  /**
-@@= skipped -14, +12 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -36, +36 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- >str : Symbol(str, Decl(mod1.js, 6, 3))
- >value : Symbol(value, Decl(mod1.js, 7, 37))
- >writable : Symbol(writable, Decl(mod1.js, 7, 48))
-@@= skipped -12, +11 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- >propName : Symbol(propName, Decl(mod1.js, 9, 5))
- >value : Symbol(value, Decl(mod1.js, 10, 42))
- >writable : Symbol(writable, Decl(mod1.js, 10, 53))
-@@= skipped -10, +9 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad1" : Symbol(bad1, Decl(mod1.js, 10, 72))
++>"bad1" : Symbol("bad1", Decl(mod1.js, 10, 72))
 
  Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
  >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad2" : Symbol(bad2, Decl(mod1.js, 13, 44))
++>"bad2" : Symbol("bad2", Decl(mod1.js, 13, 44))
  >get : Symbol(get, Decl(mod1.js, 14, 40))
  >value : Symbol(value, Decl(mod1.js, 14, 61))
 
-@@= skipped -16, +12 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -16, +16 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"bad3" : Symbol(bad3, Decl(mod1.js, 14, 77))
++>"bad3" : Symbol("bad3", Decl(mod1.js, 14, 77))
  >writable : Symbol(writable, Decl(mod1.js, 15, 40))

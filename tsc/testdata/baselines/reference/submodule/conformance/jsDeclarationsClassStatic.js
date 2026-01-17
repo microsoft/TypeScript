@@ -39,7 +39,6 @@ const Strings = {
     b: "B"
 };
 module.exports = Handler;
-export var Strings = Strings;
 module.exports.Strings = Strings;
 /**
  * @typedef {Object} HandlerOptions

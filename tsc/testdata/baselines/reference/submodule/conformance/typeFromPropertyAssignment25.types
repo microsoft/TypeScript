@@ -2,14 +2,14 @@
 
 === bug24703.js ===
 var Common = {};
->Common : any
->{} : { I: typeof I; O: any; }
+>Common : { I: typeof I; O: typeof O; }
+>{} : { I: typeof I; O: typeof O; }
 
 Common.I = class {
 >Common.I = class {    constructor() {        this.i = 1    }} : typeof I
->Common.I : any
->Common : any
->I : any
+>Common.I : typeof I
+>Common : { I: typeof I; O: typeof O; }
+>I : typeof I
 >class {    constructor() {        this.i = 1    }} : typeof I
 
     constructor() {
@@ -23,18 +23,18 @@ Common.I = class {
 }
 Common.O = class extends Common.I {
 >Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
->Common.O : any
->Common : any
->O : any
+>Common.O : typeof O
+>Common : { I: typeof I; O: typeof O; }
+>O : typeof O
 >class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
->Common.I : any
->Common : any
->I : any
+>Common.I : I
+>Common : { I: typeof I; O: typeof O; }
+>I : typeof I
 
     constructor() {
         super()
 >super() : void
->super : any
+>super : typeof I
 
         this.o = 2
 >this.o = 2 : 2
@@ -45,32 +45,32 @@ Common.O = class extends Common.I {
     }
 }
 var o = new Common.O()
->o : any
->new Common.O() : any
->Common.O : any
->Common : any
->O : any
+>o : O
+>new Common.O() : O
+>Common.O : typeof O
+>Common : { I: typeof I; O: typeof O; }
+>O : typeof O
 
 var i = new Common.I()
->i : any
->new Common.I() : any
->Common.I : any
->Common : any
->I : any
+>i : I
+>new Common.I() : I
+>Common.I : typeof I
+>Common : { I: typeof I; O: typeof O; }
+>I : typeof I
 
 o.i
->o.i : any
->o : any
->i : any
+>o.i : number
+>o : O
+>i : number
 
 o.o
->o.o : any
->o : any
->o : any
+>o.o : number
+>o : O
+>o : number
 
 i.i
->i.i : any
->i : any
->i : any
+>i.i : number
+>i : I
+>i : number
 
 

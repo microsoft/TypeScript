@@ -376,7 +376,8 @@ func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, descri
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
 	container := b.container
-	if ast.IsCommonJSExport(node) {
+	isCommonJSExport := ast.IsCommonJSExport(node) || ast.IsCallExpression(node)
+	if isCommonJSExport {
 		container = b.file.AsNode()
 	}
 	hasExportModifier := ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0 || ast.IsImplicitlyExportedJSTypeAlias(node)
@@ -401,8 +402,8 @@ func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags
 	//       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
 	//       and this case is specially handled. Module augmentations should only be merged with original module definition
 	//       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-	if !ast.IsAmbientModule(node) && (hasExportModifier || ast.IsCommonJSExport(node) || container.Flags&ast.NodeFlagsExportContext != 0) {
-		if !ast.IsLocalsContainer(container) || (ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) && b.getDeclarationName(node) == ast.InternalSymbolNameMissing) || ast.IsCommonJSExport(node) {
+	if !ast.IsAmbientModule(node) && (hasExportModifier || isCommonJSExport || container.Flags&ast.NodeFlagsExportContext != 0) {
+		if !ast.IsLocalsContainer(container) || (ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) && b.getDeclarationName(node) == ast.InternalSymbolNameMissing) || isCommonJSExport {
 			return b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, symbolFlags, symbolExcludes)
 			// No local symbol for an unnamed default!
 		}
@@ -620,7 +621,7 @@ func (b *Binder) bind(node *ast.Node) bool {
 			setFlowNode(node, b.currentFlow)
 		}
 	case ast.KindBinaryExpression:
-		switch ast.GetAssignmentDeclarationKind(node.AsBinaryExpression()) {
+		switch ast.GetAssignmentDeclarationKind(node) {
 		case ast.JSDeclarationKindProperty:
 			b.bindExpandoPropertyAssignment(node)
 		case ast.JSDeclarationKindThisProperty:
@@ -684,6 +685,12 @@ func (b *Binder) bind(node *ast.Node) bool {
 	case ast.KindInterfaceDeclaration:
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsInterface, ast.SymbolFlagsInterfaceExcludes)
 	case ast.KindCallExpression:
+		switch ast.GetAssignmentDeclarationKind(node) {
+		case ast.JSDeclarationKindObjectDefinePropertyValue:
+			b.bindExpandoPropertyAssignment(node)
+		case ast.JSDeclarationKindObjectDefinePropertyExports:
+			b.bindObjectDefinePropertyExport(node)
+		}
 		if ast.IsInJSFile(node) {
 			b.bindCallExpression(node)
 		}
@@ -1004,8 +1011,7 @@ func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbo
 }
 
 func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
-	expr := node.AsBinaryExpression()
-	parent := expr.Left.Expression()
+	parent := getParentOfPropertyAssignment(node)
 	symbol := b.lookupEntity(parent, b.blockScopeContainer)
 	if symbol == nil {
 		symbol = b.lookupEntity(parent, b.container)
@@ -1017,6 +1023,22 @@ func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
 		} else {
 			b.declareSymbol(ast.GetExports(symbol), symbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
 		}
+	}
+}
+
+func getParentOfPropertyAssignment(node *ast.Node) *ast.Node {
+	switch node.Kind {
+	case ast.KindBinaryExpression:
+		return node.AsBinaryExpression().Left.Expression()
+	case ast.KindCallExpression:
+		return node.Arguments()[0]
+	}
+	panic("Unhandled case in getParentOfPropertyAssignment")
+}
+
+func (b *Binder) bindObjectDefinePropertyExport(node *ast.Node) {
+	if b.setCommonJSModuleIndicator(node) {
+		b.declareModuleMember(node, ast.SymbolFlagsFunctionScopedVariable, ast.SymbolFlagsFunctionScopedVariableExcludes)
 	}
 }
 
@@ -1205,7 +1227,7 @@ func (b *Binder) lookupEntity(node *ast.Node, container *ast.Node) *ast.Symbol {
 	if ast.IsIdentifier(node) {
 		return b.lookupName(node.Text(), container)
 	}
-	if (ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node)) && node.Expression().Kind == ast.KindThisKeyword {
+	if node.Expression().Kind == ast.KindThisKeyword {
 		if _, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
 			if name := ast.GetElementOrPropertyAccessName(node); name != nil {
 				return symbolTable[name.Text()]
@@ -1227,7 +1249,6 @@ func (b *Binder) lookupName(name string, container *ast.Node) *ast.Symbol {
 			return core.OrElse(local.ExportSymbol, local)
 		}
 	}
-
 	if declaration := container.DeclarationData(); declaration != nil && declaration.Symbol != nil {
 		return declaration.Symbol.Exports[name]
 	}

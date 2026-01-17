@@ -17,7 +17,6 @@ module.exports.A.B = {
 //// [index.js]
 /// <reference types="node" />
 const Something = require("fs").Something;
-export var A = {};
 module.exports.A = {};
 module.exports.A.B = {
     thing: new Something()

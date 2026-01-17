@@ -25,11 +25,6 @@ module.exports = class {
         this.t = 12 + p;
     }
 };
-export var Sub = class {
-    constructor() {
-        this.instance = new module.exports(10);
-    }
-};
 module.exports.Sub = class {
     constructor() {
         this.instance = new module.exports(10);

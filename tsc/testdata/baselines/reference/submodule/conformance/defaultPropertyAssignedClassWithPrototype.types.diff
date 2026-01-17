@@ -6,7 +6,7 @@
  var test = {};
 ->test : typeof test
 ->{} : {}
-+>test : any
++>test : { K: any; }
 +>{} : { K: any; }
 
  test.K = test.K ||
@@ -20,11 +20,11 @@
 ->K : typeof K
 +>test.K = test.K ||    function () {} : any
 +>test.K : any
-+>test : any
++>test : { K: any; }
 +>K : any
 +>test.K ||    function () {} : any
 +>test.K : any
-+>test : any
++>test : { K: any; }
 +>K : any
 
      function () {}
@@ -40,7 +40,7 @@
 ->prototype : { add(): void; }
 +>test.K.prototype : any
 +>test.K : any
-+>test : any
++>test : { K: any; }
 +>K : any
 +>prototype : any
  >{    add() {}} : { add(): void; }
@@ -59,6 +59,6 @@
 +>new test.K().add : any
 +>new test.K() : any
 +>test.K : any
-+>test : any
++>test : { K: any; }
 +>K : any
 +>add : any

@@ -11,7 +11,7 @@ function bar () { return require('./a').a; }
       "value": ": "
     },
     {
-      "value": "number"
+      "value": "1"
     }
   ],
   "kind": 1,
@@ -30,7 +30,7 @@ const d = bar()
       "value": ": "
     },
     {
-      "value": "number"
+      "value": "1"
     }
   ],
   "kind": 1,

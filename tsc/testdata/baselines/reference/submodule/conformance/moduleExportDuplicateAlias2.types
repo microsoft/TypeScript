@@ -2,23 +2,23 @@
 
 === test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
->apply : undefined
+>apply : () => void
 >require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
 apply()
->apply() : any
->apply : undefined
+>apply() : void
+>apply : () => void
 
 === moduleExportAliasDuplicateAlias.js ===
 module.exports.apply = undefined;
 >module.exports.apply = undefined : undefined
->module.exports.apply : undefined
+>module.exports.apply : () => void
 >module.exports : typeof import("moduleExportAliasDuplicateAlias")
 >module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("moduleExportAliasDuplicateAlias"); }
 >exports : typeof import("moduleExportAliasDuplicateAlias")
->apply : undefined
+>apply : () => void
 >undefined : undefined
 
 function a() { }
@@ -26,27 +26,27 @@ function a() { }
 
 module.exports.apply = a;
 >module.exports.apply = a : () => void
->module.exports.apply : undefined
+>module.exports.apply : () => void
 >module.exports : typeof import("moduleExportAliasDuplicateAlias")
 >module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("moduleExportAliasDuplicateAlias"); }
 >exports : typeof import("moduleExportAliasDuplicateAlias")
->apply : undefined
+>apply : () => void
 >a : () => void
 
 module.exports.apply = a;
 >module.exports.apply = a : () => void
->module.exports.apply : undefined
+>module.exports.apply : () => void
 >module.exports : typeof import("moduleExportAliasDuplicateAlias")
 >module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("moduleExportAliasDuplicateAlias"); }
 >exports : typeof import("moduleExportAliasDuplicateAlias")
->apply : undefined
+>apply : () => void
 >a : () => void
 
 module.exports.apply()
->module.exports.apply() : any
->module.exports.apply : undefined
+>module.exports.apply() : void
+>module.exports.apply : () => void
 >module.exports : typeof import("moduleExportAliasDuplicateAlias")
 >module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("moduleExportAliasDuplicateAlias"); }
 >exports : typeof import("moduleExportAliasDuplicateAlias")
->apply : undefined
+>apply : () => void
 

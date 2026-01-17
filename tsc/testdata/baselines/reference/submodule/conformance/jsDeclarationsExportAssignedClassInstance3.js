@@ -16,7 +16,6 @@ class Foo {
     member = 10;
 }
 module.exports = new Foo();
-export var additional = 20;
 module.exports.additional = 20;
 
 
@@ -27,4 +26,4 @@ declare class Foo {
 }
 declare const _default: Foo;
 export = _default;
-export declare var additional: number;
+export declare var additional: 20;

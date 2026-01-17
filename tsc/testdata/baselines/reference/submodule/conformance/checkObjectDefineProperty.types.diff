@@ -5,91 +5,73 @@
  // Validate in TS as simple validations would usually be interpreted as more special assignments
  import x = require("./");
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 
  x.name;
-->x.name : string
+ >x.name : string
 ->x : typeof x
-->name : string
-+>x.name : any
-+>x : {}
-+>name : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >name : string
 
  x.middleInit;
-->x.middleInit : string
+ >x.middleInit : string
 ->x : typeof x
-->middleInit : string
-+>x.middleInit : any
-+>x : {}
-+>middleInit : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >middleInit : string
 
  x.lastName;
-->x.lastName : string
+ >x.lastName : string
 ->x : typeof x
-->lastName : string
-+>x.lastName : any
-+>x : {}
-+>lastName : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >lastName : string
 
  x.zip;
-->x.zip : number
+ >x.zip : number
 ->x : typeof x
-->zip : number
-+>x.zip : any
-+>x : {}
-+>zip : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zip : number
 
  x.houseNumber;
-->x.houseNumber : number
+ >x.houseNumber : number
 ->x : typeof x
-->houseNumber : number
-+>x.houseNumber : any
-+>x : {}
-+>houseNumber : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >houseNumber : number
 
  x.zipStr;
-->x.zipStr : string
+ >x.zipStr : string
 ->x : typeof x
-->zipStr : string
-+>x.zipStr : any
-+>x : {}
-+>zipStr : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zipStr : string
 
  x.name = "Another";
  >x.name = "Another" : "Another"
-->x.name : string
+ >x.name : string
 ->x : typeof x
-->name : string
-+>x.name : any
-+>x : {}
-+>name : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >name : string
  >"Another" : "Another"
 
  x.zip = 98123;
  >x.zip = 98123 : 98123
-->x.zip : number
+ >x.zip : number
 ->x : typeof x
-->zip : number
-+>x.zip : any
-+>x : {}
-+>zip : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zip : number
  >98123 : 98123
 
  x.zipStr = "OK";
  >x.zipStr = "OK" : "OK"
-->x.zipStr : string
+ >x.zipStr : string
 ->x : typeof x
-->zipStr : string
-+>x.zipStr : any
-+>x : {}
-+>zipStr : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zipStr : string
  >"OK" : "OK"
 
  x.lastName = "should fail";
  >x.lastName = "should fail" : "should fail"
  >x.lastName : any
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >lastName : any
  >"should fail" : "should fail"
 
@@ -97,42 +79,41 @@
  >x.houseNumber = 12 : 12
  >x.houseNumber : any
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >houseNumber : any
  >12 : 12
 
  x.zipStr = 12; // should fail
  >x.zipStr = 12 : 12
-->x.zipStr : string
+ >x.zipStr : string
 ->x : typeof x
-->zipStr : string
-+>x.zipStr : any
-+>x : {}
-+>zipStr : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zipStr : string
  >12 : 12
 
  x.middleInit = "R"; // should also fail
  >x.middleInit = "R" : "R"
  >x.middleInit : any
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >middleInit : any
  >"R" : "R"
 
  === index.js ===
  const x = {};
 ->x : typeof x
-+>x : {}
- >{} : {}
+->{} : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>{} : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 
  Object.defineProperty(x, "name", { value: "Charles", writable: true });
 ->Object.defineProperty(x, "name", { value: "Charles", writable: true }) : typeof x
-+>Object.defineProperty(x, "name", { value: "Charles", writable: true }) : {}
++>Object.defineProperty(x, "name", { value: "Charles", writable: true }) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"name" : "name"
  >{ value: "Charles", writable: true } : { value: string; writable: true; }
  >value : string
@@ -141,12 +122,12 @@
 
  Object.defineProperty(x, "middleInit", { value: "H" });
 ->Object.defineProperty(x, "middleInit", { value: "H" }) : typeof x
-+>Object.defineProperty(x, "middleInit", { value: "H" }) : {}
++>Object.defineProperty(x, "middleInit", { value: "H" }) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"middleInit" : "middleInit"
  >{ value: "H" } : { value: string; }
  >value : string
@@ -154,12 +135,12 @@
 
  Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 ->Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : typeof x
-+>Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : {}
++>Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"lastName" : "lastName"
  >{ value: "Smith", writable: false } : { value: string; writable: false; }
  >value : string
@@ -168,12 +149,12 @@
 
  Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
 ->Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof x
-+>Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : {}
++>Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"zip" : "zip"
  >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
  >get : () => number
@@ -182,12 +163,12 @@
 
  Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 ->Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : typeof x
-+>Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : {}
++>Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"houseNumber" : "houseNumber"
  >{ get() { return 21.75 } } : { get(): number; }
  >get : () => number
@@ -195,12 +176,12 @@
 
  Object.defineProperty(x, "zipStr", {
 ->Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : typeof x
-+>Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : {}
++>Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >"zipStr" : "zipStr"
  >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
 
@@ -209,73 +190,68 @@
  >takeName(x) : string
  >takeName : (named: { name: string; }) => string
 ->x : typeof x
-+>x : {}
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 
  /**
   * @type {number}
-  */
+@@= skipped -8, +8 lines =@@
  var a = x.zip;
  >a : number
-->x.zip : number
+ >x.zip : number
 ->x : typeof x
-->zip : number
-+>x.zip : any
-+>x : {}
-+>zip : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >zip : number
 
  /**
-  * @type {number}
-  */
+@@= skipped -9, +9 lines =@@
  var b = x.houseNumber;
  >b : number
-->x.houseNumber : number
+ >x.houseNumber : number
 ->x : typeof x
-->houseNumber : number
-+>x.houseNumber : any
-+>x : {}
-+>houseNumber : any
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+ >houseNumber : number
 
  const returnExemplar = () => x;
 ->returnExemplar : () => typeof x
 ->() => x : () => typeof x
 ->x : typeof x
-+>returnExemplar : () => {}
-+>() => x : () => {}
-+>x : {}
++>returnExemplar : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>() => x : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 
  const needsExemplar = (_ = x) => void 0;
 ->needsExemplar : (_?: typeof x) => undefined
 ->(_ = x) => void 0 : (_?: typeof x) => undefined
 ->_ : typeof x
 ->x : typeof x
-+>needsExemplar : (_?: {}) => undefined
-+>(_ = x) => void 0 : (_?: {}) => undefined
-+>_ : {}
-+>x : {}
++>needsExemplar : (_?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }) => undefined
++>(_ = x) => void 0 : (_?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }) => undefined
++>_ : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >void 0 : undefined
  >0 : 0
 
-@@= skipped -44, +44 lines =@@
+@@= skipped -27, +27 lines =@@
   * @param {typeof needsExemplar} b 
   */
  function match(a, b) {}
 ->match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
 ->a : () => typeof x
 ->b : (_?: typeof x) => undefined
-+>match : (a: () => {}, b: (_?: {}) => undefined) => void
-+>a : () => {}
-+>b : (_?: {}) => undefined
++>match : (a: () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }, b: (_?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }) => undefined) => void
++>a : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>b : (_?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }) => undefined
 
  match(() => expected, (x = expected) => void 0);
  >match(() => expected, (x = expected) => void 0) : void
 ->match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
-+>match : (a: () => {}, b: (_?: {}) => undefined) => void
++>match : (a: () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }, b: (_?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }) => undefined) => void
  >() => expected : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 ->(x = expected) => void 0 : (x?: typeof x | undefined) => undefined
 ->x : typeof x | undefined
-+>(x = expected) => void 0 : (x?: {} | undefined) => undefined
-+>x : {} | undefined
++>(x = expected) => void 0 : (x?: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; } | undefined) => undefined
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; } | undefined
  >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
  >void 0 : undefined
  >0 : 0
@@ -286,8 +262,8 @@
 ->module : { exports: typeof x; }
 ->exports : typeof x
 ->x : typeof x
-+>module.exports = x : {}
-+>module.exports : {}
-+>module : { readonly x: {}; }
-+>exports : {}
-+>x : {}
++>module.exports = x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>module.exports : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>module : { readonly x: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }; }
++>exports : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
++>x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }

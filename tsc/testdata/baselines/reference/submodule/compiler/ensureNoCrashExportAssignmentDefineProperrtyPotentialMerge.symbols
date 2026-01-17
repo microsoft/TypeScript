@@ -38,9 +38,9 @@ const B = {}
 >B : Symbol(B, Decl(namespacer.js, 0, 5))
 
 B.NS = require("./namespacey");
->B.NS : Symbol(NS, Decl(namespacer.js, 0, 12))
+>B.NS : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 >B : Symbol(B, Decl(namespacer.js, 0, 5))
->NS : Symbol(NS, Decl(namespacer.js, 0, 12))
+>NS : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 >require : Symbol(require)
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
@@ -48,6 +48,7 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(namespacer.js, 0, 5))
+>"NS" : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 >value : Symbol(value, Decl(namespacer.js, 2, 32))
 >writable : Symbol(writable, Decl(namespacer.js, 2, 53))
 

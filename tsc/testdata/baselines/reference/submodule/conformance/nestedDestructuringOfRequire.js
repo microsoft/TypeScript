@@ -18,7 +18,6 @@ chalk
 const chalk = {
     grey: {}
 };
-export var chalk = chalk;
 module.exports.chalk = chalk;
 //// [main.js]
 const { chalk: { grey } } = require('./mod1');

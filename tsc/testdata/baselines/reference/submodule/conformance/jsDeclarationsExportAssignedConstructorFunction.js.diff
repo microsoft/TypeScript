@@ -1,17 +1,6 @@
 --- old.jsDeclarationsExportAssignedConstructorFunction.js
 +++ new.jsDeclarationsExportAssignedConstructorFunction.js
-@@= skipped -12, +12 lines =@@
-
- //// [jsDeclarationsExportAssignedConstructorFunction.js]
- /** @constructor */
-+export var MyClass = function () {
-+    this.x = 1;
-+};
-+/** @constructor */
- module.exports.MyClass = function () {
-     this.x = 1;
- };
-@@= skipped -10, +14 lines =@@
+@@= skipped -22, +22 lines =@@
 
 
  //// [jsDeclarationsExportAssignedConstructorFunction.d.ts]

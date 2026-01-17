@@ -13,10 +13,6 @@ module.exports.MyClass.prototype = {
 
 //// [jsDeclarationsExportAssignedConstructorFunction.js]
 /** @constructor */
-export var MyClass = function () {
-    this.x = 1;
-};
-/** @constructor */
 module.exports.MyClass = function () {
     this.x = 1;
 };

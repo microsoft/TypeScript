@@ -194,7 +194,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			}
 		case ast.KindBinaryExpression:
 			binaryExpr := node.AsBinaryExpression()
-			assignmentKind := ast.GetAssignmentDeclarationKind(binaryExpr)
+			assignmentKind := ast.GetAssignmentDeclarationKind(node)
 			switch assignmentKind {
 			// `module.exports = ...`` should be reparsed into a JSExportAssignment,
 			// and `exports.a = ...`` into a CommonJSExport.
@@ -674,7 +674,7 @@ func getSymbolKindFromNode(node *ast.Node) lsproto.SymbolKind {
 		}
 		return lsproto.SymbolKindVariable
 	case ast.KindBinaryExpression:
-		kind := ast.GetAssignmentDeclarationKind(node.AsBinaryExpression())
+		kind := ast.GetAssignmentDeclarationKind(node)
 		switch kind {
 		case ast.JSDeclarationKindThisProperty, ast.JSDeclarationKindProperty:
 			return lsproto.SymbolKindProperty

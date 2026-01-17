@@ -44,9 +44,11 @@ exports.apply = 'ok'
 
 var OK = exports.apply.toUpperCase()
 >OK : Symbol(OK, Decl(moduleExportAliasDuplicateAlias.js, 6, 3))
+>exports.apply.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 >exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 exports.apply = 1
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))

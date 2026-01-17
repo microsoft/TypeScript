@@ -7,9 +7,6 @@ exports.default = () => {
 
 
 //// [index.js]
-export var default = () => {
-    return 1234;
-};
 exports.default = () => {
     return 1234;
 };

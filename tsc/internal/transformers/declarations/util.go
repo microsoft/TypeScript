@@ -58,6 +58,7 @@ func hasInferredType(node *ast.Node) bool {
 		ast.KindPropertyAccessExpression,
 		ast.KindElementAccessExpression,
 		ast.KindBinaryExpression,
+		ast.KindCallExpression,
 		ast.KindVariableDeclaration,
 		ast.KindExportAssignment,
 		ast.KindJSExportAssignment,

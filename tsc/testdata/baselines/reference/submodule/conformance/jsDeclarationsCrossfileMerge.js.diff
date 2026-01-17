@@ -1,10 +1,6 @@
 --- old.jsDeclarationsCrossfileMerge.js
 +++ new.jsDeclarationsCrossfileMerge.js
-@@= skipped -19, +19 lines =@@
- //// [index.js]
- const m = require("./exporter");
- module.exports = m.default;
-+export var memberName = "thing";
+@@= skipped -22, +22 lines =@@
  module.exports.memberName = "thing";
 
 
@@ -23,4 +19,4 @@
 +declare const m: typeof m;
 +declare const _default: typeof m.default;
 +export = _default;
-+export declare var memberName: string;
++export declare var memberName: "thing";

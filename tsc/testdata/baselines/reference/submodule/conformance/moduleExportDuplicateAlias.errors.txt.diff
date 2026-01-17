@@ -1,38 +1,20 @@
 --- old.moduleExportDuplicateAlias.errors.txt
 +++ new.moduleExportDuplicateAlias.errors.txt
 @@= skipped -0, +0 lines =@@
-+moduleExportAliasDuplicateAlias.js(1,1): error TS2323: Cannot redeclare exported variable 'apply'.
- moduleExportAliasDuplicateAlias.js(3,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+-moduleExportAliasDuplicateAlias.js(3,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 -
 -
 -==== test.js (0 errors) ====
-+moduleExportAliasDuplicateAlias.js(4,1): error TS2322: Type '() => void' is not assignable to type 'undefined'.
-+moduleExportAliasDuplicateAlias.js(4,1): error TS2323: Cannot redeclare exported variable 'apply'.
-+moduleExportAliasDuplicateAlias.js(5,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-+test.js(2,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-+
-+
-+==== test.js (1 errors) ====
-     const { apply } = require('./moduleExportAliasDuplicateAlias')
-     apply()
-+    ~~~~~
-+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
-     
+-    const { apply } = require('./moduleExportAliasDuplicateAlias')
+-    apply()
+-    
 -==== moduleExportAliasDuplicateAlias.js (1 errors) ====
-+==== moduleExportAliasDuplicateAlias.js (5 errors) ====
-     exports.apply = undefined;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
-     function a() { }
-     exports.apply()
-     ~~~~~~~~~~~~~
- !!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
-     exports.apply = a;
-+    ~~~~~~~~~~~~~
-+!!! error TS2322: Type '() => void' is not assignable to type 'undefined'.
-+    ~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
-     exports.apply()
-+    ~~~~~~~~~~~~~
-+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
-     
+-    exports.apply = undefined;
+-    function a() { }
+-    exports.apply()
+-    ~~~~~~~~~~~~~
+-!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+-    exports.apply = a;
+-    exports.apply()
+-    
++<no content>

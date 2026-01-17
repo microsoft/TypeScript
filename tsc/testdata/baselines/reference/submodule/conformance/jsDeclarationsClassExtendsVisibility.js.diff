@@ -1,12 +1,6 @@
 --- old.jsDeclarationsClassExtendsVisibility.js
 +++ new.jsDeclarationsClassExtendsVisibility.js
-@@= skipped -25, +25 lines =@@
- class Foo extends Bar {
- }
- module.exports = Foo;
-+export var Strings = Strings;
- module.exports.Strings = Strings;
-
+@@= skipped -30, +30 lines =@@
 
  //// [bar.d.ts]
  export = Bar;

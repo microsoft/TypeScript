@@ -23,7 +23,6 @@ function funky(declaration) {
     return false;
 }
 module.exports = donkey;
-export var funky = funky;
 module.exports.funky = funky;
 //// [bug43713.js]
 const { funky } = require('./commonJSAliasedExport');

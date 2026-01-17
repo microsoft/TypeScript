@@ -1,14 +1,6 @@
 --- old.commonJSImportClassTypeReference.js
 +++ new.commonJSImportClassTypeReference.js
-@@= skipped -22, +22 lines =@@
-         return new K();
-     }
- }
-+export var K = K;
- exports.K = K;
- //// [main.js]
- "use strict";
-@@= skipped -11, +12 lines =@@
+@@= skipped -33, +33 lines =@@
 
 
  //// [mod1.d.ts]

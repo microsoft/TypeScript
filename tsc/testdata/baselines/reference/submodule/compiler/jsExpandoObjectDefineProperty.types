@@ -2,15 +2,15 @@
 
 === index.js ===
 var chrome = {}
->chrome : {}
->{} : {}
+>chrome : { readonly devtools: {}; }
+>{} : { readonly devtools: {}; }
 
 Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
->Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : {}
+>Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : { readonly devtools: {}; }
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->chrome : {}
+>chrome : { readonly devtools: {}; }
 >'devtools' : "devtools"
 >{ value: {}, enumerable: true } : { value: {}; enumerable: true; }
 >value : {}
@@ -21,9 +21,9 @@ Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 chrome.devtools.inspectedWindow = {}
 >chrome.devtools.inspectedWindow = {} : {}
 >chrome.devtools.inspectedWindow : any
->chrome.devtools : any
->chrome : {}
->devtools : any
+>chrome.devtools : {}
+>chrome : { readonly devtools: {}; }
+>devtools : {}
 >inspectedWindow : any
 >{} : {}
 

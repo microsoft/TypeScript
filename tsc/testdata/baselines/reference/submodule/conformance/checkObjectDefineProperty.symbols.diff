@@ -5,68 +5,94 @@
 
  x.name;
 ->x.name : Symbol(x.name, Decl(index.js, 0, 13))
++>x.name : Symbol("name", Decl(index.js, 0, 13))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->name : Symbol(x.name, Decl(index.js, 0, 13))
++>name : Symbol("name", Decl(index.js, 0, 13))
 
  x.middleInit;
 ->x.middleInit : Symbol(x.middleInit, Decl(index.js, 1, 71))
++>x.middleInit : Symbol("middleInit", Decl(index.js, 1, 71))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->middleInit : Symbol(x.middleInit, Decl(index.js, 1, 71))
++>middleInit : Symbol("middleInit", Decl(index.js, 1, 71))
 
  x.lastName;
 ->x.lastName : Symbol(x.lastName, Decl(index.js, 2, 55))
++>x.lastName : Symbol("lastName", Decl(index.js, 2, 55))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->lastName : Symbol(x.lastName, Decl(index.js, 2, 55))
++>lastName : Symbol("lastName", Decl(index.js, 2, 55))
 
  x.zip;
 ->x.zip : Symbol(x.zip, Decl(index.js, 3, 74))
++>x.zip : Symbol("zip", Decl(index.js, 3, 74))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->zip : Symbol(x.zip, Decl(index.js, 3, 74))
++>zip : Symbol("zip", Decl(index.js, 3, 74))
 
  x.houseNumber;
 ->x.houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
++>x.houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
++>houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
 
  x.zipStr;
 ->x.zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>x.zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
 
  x.name = "Another";
 ->x.name : Symbol(x.name, Decl(index.js, 0, 13))
++>x.name : Symbol("name", Decl(index.js, 0, 13))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->name : Symbol(x.name, Decl(index.js, 0, 13))
++>name : Symbol("name", Decl(index.js, 0, 13))
 
  x.zip = 98123;
 ->x.zip : Symbol(x.zip, Decl(index.js, 3, 74))
++>x.zip : Symbol("zip", Decl(index.js, 3, 74))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->zip : Symbol(x.zip, Decl(index.js, 3, 74))
++>zip : Symbol("zip", Decl(index.js, 3, 74))
 
  x.zipStr = "OK";
 ->x.zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>x.zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
 
  x.lastName = "should fail";
 ->x.lastName : Symbol(x.lastName, Decl(index.js, 2, 55))
++>x.lastName : Symbol("lastName", Decl(index.js, 2, 55))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->lastName : Symbol(x.lastName, Decl(index.js, 2, 55))
++>lastName : Symbol("lastName", Decl(index.js, 2, 55))
 
  x.houseNumber = 12; // should also fail
 ->x.houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
++>x.houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
++>houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
 
  x.zipStr = 12; // should fail
 ->x.zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>x.zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->zipStr : Symbol(x.zipStr, Decl(index.js, 5, 68))
++>zipStr : Symbol("zipStr", Decl(index.js, 5, 68))
 
  x.middleInit = "R"; // should also fail
 ->x.middleInit : Symbol(x.middleInit, Decl(index.js, 1, 71))
++>x.middleInit : Symbol("middleInit", Decl(index.js, 1, 71))
  >x : Symbol(x, Decl(validate.ts, 0, 0))
 ->middleInit : Symbol(x.middleInit, Decl(index.js, 1, 71))
++>middleInit : Symbol("middleInit", Decl(index.js, 1, 71))
 
  === index.js ===
  const x = {};
@@ -80,16 +106,18 @@
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"name" : Symbol(x.name, Decl(index.js, 0, 13))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"name" : Symbol("name", Decl(index.js, 0, 13))
  >value : Symbol(value, Decl(index.js, 1, 34))
  >writable : Symbol(writable, Decl(index.js, 1, 52))
 
-@@= skipped -81, +54 lines =@@
+@@= skipped -81, +81 lines =@@
  >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"middleInit" : Symbol(x.middleInit, Decl(index.js, 1, 71))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"middleInit" : Symbol("middleInit", Decl(index.js, 1, 71))
  >value : Symbol(value, Decl(index.js, 2, 40))
 
  Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
@@ -99,26 +127,29 @@
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"lastName" : Symbol(x.lastName, Decl(index.js, 2, 55))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"lastName" : Symbol("lastName", Decl(index.js, 2, 55))
  >value : Symbol(value, Decl(index.js, 3, 38))
  >writable : Symbol(writable, Decl(index.js, 3, 54))
 
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"zip" : Symbol(x.zip, Decl(index.js, 3, 74))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"zip" : Symbol("zip", Decl(index.js, 3, 74))
  >get : Symbol(get, Decl(index.js, 4, 33))
  >set : Symbol(set, Decl(index.js, 4, 57))
  >_ : Symbol(_, Decl(index.js, 4, 62))
-@@= skipped -10, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"houseNumber" : Symbol(x.houseNumber, Decl(index.js, 4, 83))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"houseNumber" : Symbol("houseNumber", Decl(index.js, 4, 83))
  >get : Symbol(get, Decl(index.js, 5, 41))
 
  Object.defineProperty(x, "zipStr", {
@@ -128,10 +159,11 @@
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->"zipStr" : Symbol(x.zipStr, Decl(index.js, 5, 68))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>"zipStr" : Symbol("zipStr", Decl(index.js, 5, 68))
 
      /** @param {string} str */
      set(str) {
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  >str : Symbol(str, Decl(index.js, 8, 8))
 
          this.zip = Number(str) 
@@ -154,7 +186,9 @@
 ->x.zip : Symbol(x.zip, Decl(index.js, 3, 74))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->zip : Symbol(x.zip, Decl(index.js, 3, 74))
++>x.zip : Symbol("zip", Decl(index.js, 3, 74))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>zip : Symbol("zip", Decl(index.js, 3, 74))
 
  /**
   * @type {number}
@@ -164,7 +198,9 @@
 ->x.houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
 ->x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 ->houseNumber : Symbol(x.houseNumber, Decl(index.js, 4, 83))
++>x.houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
 +>x : Symbol(x, Decl(index.js, 0, 5))
++>houseNumber : Symbol("houseNumber", Decl(index.js, 4, 83))
 
  const returnExemplar = () => x;
  >returnExemplar : Symbol(returnExemplar, Decl(index.js, 29, 5))
@@ -179,7 +215,7 @@
 
  const expected = /** @type {{name: string, readonly middleInit: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
  >expected : Symbol(expected, Decl(index.js, 32, 5))
-@@= skipped -49, +45 lines =@@
+@@= skipped -49, +49 lines =@@
  >expected : Symbol(expected, Decl(index.js, 32, 5))
 
  module.exports = x;

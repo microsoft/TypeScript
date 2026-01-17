@@ -2,8 +2,8 @@
 
 === index.js ===
 const _item = require("./namespacer");
->_item : { NS: { bar: typeof Q; }; }
->require("./namespacer") : { NS: { bar: typeof Q; }; }
+>_item : { NS: string | { bar: typeof Q; }; }
+>require("./namespacer") : { NS: string | { bar: typeof Q; }; }
 >require : any
 >"./namespacer" : "./namespacer"
 
@@ -47,24 +47,24 @@ module.exports = A;
 
 === namespacer.js ===
 const B = {}
->B : { NS: { bar: typeof Q; }; }
->{} : { NS: { bar: typeof Q; }; }
+>B : { NS: string | { bar: typeof Q; }; }
+>{} : { NS: string | { bar: typeof Q; }; }
 
 B.NS = require("./namespacey");
 >B.NS = require("./namespacey") : { bar: typeof Q; }
->B.NS : { bar: typeof Q; }
->B : { NS: { bar: typeof Q; }; }
->NS : { bar: typeof Q; }
+>B.NS : string | { bar: typeof Q; }
+>B : { NS: string | { bar: typeof Q; }; }
+>NS : string | { bar: typeof Q; }
 >require("./namespacey") : { bar: typeof Q; }
 >require : any
 >"./namespacey" : "./namespacey"
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
->Object.defineProperty(B, "NS", { value: "why though", writable: true }) : { NS: { bar: typeof Q; }; }
+>Object.defineProperty(B, "NS", { value: "why though", writable: true }) : { NS: string | { bar: typeof Q; }; }
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->B : { NS: { bar: typeof Q; }; }
+>B : { NS: string | { bar: typeof Q; }; }
 >"NS" : "NS"
 >{ value: "why though", writable: true } : { value: string; writable: true; }
 >value : string
@@ -73,9 +73,9 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >true : true
 
 module.exports = B;
->module.exports = B : { NS: { bar: typeof Q; }; }
->module.exports : { NS: { bar: typeof Q; }; }
->module : { readonly B: { NS: { bar: typeof Q; }; }; }
->exports : { NS: { bar: typeof Q; }; }
->B : { NS: { bar: typeof Q; }; }
+>module.exports = B : { NS: string | { bar: typeof Q; }; }
+>module.exports : { NS: string | { bar: typeof Q; }; }
+>module : { readonly B: { NS: string | { bar: typeof Q; }; }; }
+>exports : { NS: string | { bar: typeof Q; }; }
+>B : { NS: string | { bar: typeof Q; }; }
 

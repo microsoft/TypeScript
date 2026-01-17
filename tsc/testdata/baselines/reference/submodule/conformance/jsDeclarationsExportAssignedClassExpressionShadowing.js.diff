@@ -17,11 +17,7 @@
  }
  module.exports = class Q {
      constructor() {
-         this.x = new A();
-     }
- };
-+export var Another = Q;
- module.exports.Another = Q;
+@@= skipped -18, +14 lines =@@
 
 
  //// [index.d.ts]

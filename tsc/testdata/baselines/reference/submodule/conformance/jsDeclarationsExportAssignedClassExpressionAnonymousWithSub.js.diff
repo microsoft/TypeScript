@@ -1,18 +1,6 @@
 --- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
 +++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.js
-@@= skipped -24, +24 lines =@@
-         this.t = 12 + p;
-     }
- };
-+export var Sub = class {
-+    constructor() {
-+        this.instance = new module.exports(10);
-+    }
-+};
- module.exports.Sub = class {
-     constructor() {
-         this.instance = new module.exports(10);
-@@= skipped -8, +13 lines =@@
+@@= skipped -32, +32 lines =@@
 
 
  //// [index.d.ts]

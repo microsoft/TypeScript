@@ -26,7 +26,6 @@ const Strings = {
 class Foo extends Bar {
 }
 module.exports = Foo;
-export var Strings = Strings;
 module.exports.Strings = Strings;
 
 

@@ -8,73 +8,73 @@ var mod = require('./mod');
 >'./mod' : "./mod"
 
 mod.f('no')
->mod.f('no') : any
->mod.f : (n: any) => any
+>mod.f('no') : number
+>mod.f : (n: number) => number
 >mod : typeof mod
->f : (n: any) => any
+>f : (n: number) => number
 >'no' : "no"
 
 mod.g('also no')
->mod.g('also no') : any
->mod.g : any
+>mod.g('also no') : number
+>mod.g : (n: number) => number
 >mod : typeof mod
->g : any
+>g : (n: number) => number
 >'also no' : "also no"
 
 mod.h(0)
 >mod.h(0) : string
->mod.h : (mom: any) => string
+>mod.h : (mom: string) => string
 >mod : typeof mod
->h : (mom: any) => string
+>h : (mom: string) => string
 >0 : 0
 
 mod.i(1)
->mod.i(1) : any
->mod.i : any
+>mod.i(1) : string
+>mod.i : (mom: string) => string
 >mod : typeof mod
->i : any
+>i : (mom: string) => string
 >1 : 1
 
 === mod.js ===
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
->exports.f = exports.g = function fg(n) {    return n + 1} : (n: any) => any
->exports.f : (n: any) => any
+>exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
+>exports.f : (n: number) => number
 >exports : typeof import("mod")
->f : (n: any) => any
->exports.g = function fg(n) {    return n + 1} : (n: any) => any
->exports.g : any
+>f : (n: number) => number
+>exports.g = function fg(n) {    return n + 1} : (n: number) => number
+>exports.g : (n: number) => number
 >exports : typeof import("mod")
->g : any
->function fg(n) {    return n + 1} : (n: any) => any
->fg : (n: any) => any
->n : any
+>g : (n: number) => number
+>function fg(n) {    return n + 1} : (n: number) => number
+>fg : (n: number) => number
+>n : number
 
     return n + 1
->n + 1 : any
->n : any
+>n + 1 : number
+>n : number
 >1 : 1
 }
 /** @param {string} mom */
 module.exports.h = module.exports.i = function hi(mom) {
->module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
->module.exports.h : (mom: any) => string
+>module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>module.exports.h : (mom: string) => string
 >module.exports : typeof import("mod")
 >module : { "\"mod\"": typeof import("mod"); }
 >exports : typeof import("mod")
->h : (mom: any) => string
->module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
->module.exports.i : any
+>h : (mom: string) => string
+>module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>module.exports.i : (mom: string) => string
 >module.exports : typeof import("mod")
 >module : { "\"mod\"": typeof import("mod"); }
 >exports : typeof import("mod")
->i : any
->function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
->hi : (mom: any) => string
->mom : any
+>i : (mom: string) => string
+>function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>hi : (mom: string) => string
+>mom : string
 
     return `hi, ${mom}!`;
 >`hi, ${mom}!` : string
->mom : any
+>mom : string
 }
 

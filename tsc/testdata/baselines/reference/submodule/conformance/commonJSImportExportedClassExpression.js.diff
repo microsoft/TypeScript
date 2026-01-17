@@ -1,17 +1,6 @@
 --- old.commonJSImportExportedClassExpression.js
 +++ new.commonJSImportExportedClassExpression.js
-@@= skipped -15, +15 lines =@@
-
- //// [mod1.js]
- "use strict";
-+export var K = class K {
-+    values() {
-+    }
-+};
- exports.K = class K {
-     values() {
-     }
-@@= skipped -14, +18 lines =@@
+@@= skipped -29, +29 lines =@@
 
 
  //// [mod1.d.ts]

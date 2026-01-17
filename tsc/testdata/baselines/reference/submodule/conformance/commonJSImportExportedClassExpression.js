@@ -16,10 +16,6 @@ exports.K = class K {
 
 //// [mod1.js]
 "use strict";
-export var K = class K {
-    values() {
-    }
-};
 exports.K = class K {
     values() {
     }

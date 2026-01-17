@@ -14,6 +14,7 @@ export function test(fn) {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >composed : Symbol(composed, Decl(index.js, 1, 7))
+>'name' : Symbol(composed['name'], Decl(index.js, 1, 41))
 
     value: composed.fn + '_test'
 >value : Symbol(value, Decl(index.js, 3, 43))

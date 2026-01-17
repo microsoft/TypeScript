@@ -22,7 +22,6 @@ function foo() {
     const m = function () {
         // I have no idea what to put here
     };
-    export var methods = m;
     exports.methods = m;
 }
 

@@ -14,8 +14,12 @@
 ->test.K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
 ->test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
 ->K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
++>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 +>test : Symbol(test, Decl(bug39167.js, 0, 3))
++>K : Symbol(K, Decl(bug39167.js, 0, 14))
++>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 +>test : Symbol(test, Decl(bug39167.js, 0, 3))
++>K : Symbol(K, Decl(bug39167.js, 0, 14))
 
      function () {}
 
@@ -25,11 +29,13 @@
 ->test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
 ->K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
 ->prototype : Symbol(test.K.prototype, Decl(bug39167.js, 2, 18))
++>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 +>test : Symbol(test, Decl(bug39167.js, 0, 3))
++>K : Symbol(K, Decl(bug39167.js, 0, 14))
 
      add() {}
  >add : Symbol(add, Decl(bug39167.js, 4, 20))
-@@= skipped -25, +17 lines =@@
+@@= skipped -25, +23 lines =@@
  };
 
  new test.K().add;
@@ -38,4 +44,6 @@
 ->test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
 ->K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
 ->add : Symbol(add, Decl(bug39167.js, 4, 20))
++>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 +>test : Symbol(test, Decl(bug39167.js, 0, 3))
++>K : Symbol(K, Decl(bug39167.js, 0, 14))

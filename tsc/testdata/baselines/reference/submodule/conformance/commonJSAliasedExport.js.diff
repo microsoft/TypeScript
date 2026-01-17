@@ -1,14 +1,6 @@
 --- old.commonJSAliasedExport.js
 +++ new.commonJSAliasedExport.js
-@@= skipped -22, +22 lines =@@
-     return false;
- }
- module.exports = donkey;
-+export var funky = funky;
- module.exports.funky = funky;
- //// [bug43713.js]
- const { funky } = require('./commonJSAliasedExport');
-@@= skipped -9, +10 lines =@@
+@@= skipped -31, +31 lines =@@
 
 
  //// [commonJSAliasedExport.d.ts]

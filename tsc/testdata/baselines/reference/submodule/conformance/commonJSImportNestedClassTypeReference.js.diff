@@ -1,14 +1,6 @@
 --- old.commonJSImportNestedClassTypeReference.js
 +++ new.commonJSImportNestedClassTypeReference.js
-@@= skipped -24, +24 lines =@@
-         return new NS.K();
-     }
- };
-+export var K = NS.K;
- exports.K = NS.K;
- //// [main.js]
- "use strict";
-@@= skipped -11, +12 lines =@@
+@@= skipped -35, +35 lines =@@
 
 
  //// [mod1.d.ts]

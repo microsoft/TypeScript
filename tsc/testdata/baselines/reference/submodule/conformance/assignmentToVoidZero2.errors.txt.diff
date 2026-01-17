@@ -11,7 +11,6 @@
 -
 -==== assignmentToVoidZero2.js (5 errors) ====
 +assignmentToVoidZero2.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
-+importer.js(2,1): error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
 +
 +
 +==== assignmentToVoidZero2.js (1 errors) ====
@@ -41,11 +40,10 @@
 -            ~
 -!!! error TS2339: Property 'q' does not exist on type 'C'.
      
- ==== importer.js (1 errors) ====
+-==== importer.js (1 errors) ====
++==== importer.js (0 errors) ====
      import { j, k } from './assignmentToVoidZero2'
 -                ~
 -!!! error TS2305: Module '"./assignmentToVoidZero2"' has no exported member 'k'.
      j + k
-+    ~~~~~
-+!!! error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
      

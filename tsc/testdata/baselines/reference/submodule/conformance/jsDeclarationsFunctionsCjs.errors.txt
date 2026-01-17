@@ -1,11 +1,9 @@
 index.js(4,18): error TS2339: Property 'cat' does not exist on type '() => void'.
 index.js(7,18): error TS2339: Property 'Cls' does not exist on type '() => void'.
 index.js(31,18): error TS2339: Property 'self' does not exist on type '<T>(a: T) => T'.
-index.js(35,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-index.js(45,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== index.js (5 errors) ====
+==== index.js (3 errors) ====
     module.exports.a = function a() {}
     
     module.exports.b = function b() {}
@@ -47,8 +45,6 @@ index.js(45,23): error TS2580: Cannot find name 'module'. Do you need to install
     /**
      * @param {{x: string}} a
      * @param {{y: typeof module.exports.b}} b
-                          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
      */
     function g(a, b) {
         return a.x && b.y();
@@ -59,8 +55,6 @@ index.js(45,23): error TS2580: Cannot find name 'module'. Do you need to install
     /**
      * @param {{x: string}} a
      * @param {{y: typeof module.exports.b}} b
-                          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
      */
     function hh(a, b) {
         return a.x && b.y();

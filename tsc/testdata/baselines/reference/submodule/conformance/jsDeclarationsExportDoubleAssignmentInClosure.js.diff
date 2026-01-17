@@ -1,12 +1,6 @@
 --- old.jsDeclarationsExportDoubleAssignmentInClosure.js
 +++ new.jsDeclarationsExportDoubleAssignmentInClosure.js
-@@= skipped -21, +21 lines =@@
-     const m = function () {
-         // I have no idea what to put here
-     };
-+    export var methods = m;
-     exports.methods = m;
- }
+@@= skipped -26, +26 lines =@@
 
 
  //// [index.d.ts]

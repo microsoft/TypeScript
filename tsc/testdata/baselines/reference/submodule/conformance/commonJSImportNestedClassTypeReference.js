@@ -25,7 +25,6 @@ NS.K = class {
         return new NS.K();
     }
 };
-export var K = NS.K;
 exports.K = NS.K;
 //// [main.js]
 "use strict";

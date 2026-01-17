@@ -1,14 +1,6 @@
 --- old.jsDeclarationsClassStatic.js
 +++ new.jsDeclarationsClassStatic.js
-@@= skipped -38, +38 lines =@@
-     b: "B"
- };
- module.exports = Handler;
-+export var Strings = Strings;
- module.exports.Strings = Strings;
- /**
-  * @typedef {Object} HandlerOptions
-@@= skipped -9, +10 lines =@@
+@@= skipped -47, +47 lines =@@
 
 
  //// [source.d.ts]

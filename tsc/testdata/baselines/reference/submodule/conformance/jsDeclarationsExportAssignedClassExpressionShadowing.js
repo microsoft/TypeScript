@@ -27,7 +27,6 @@ module.exports = class Q {
         this.x = new A();
     }
 };
-export var Another = Q;
 module.exports.Another = Q;
 
 

@@ -62,21 +62,12 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
-export var a = function a() { };
 module.exports.a = function a() { };
-export var b = function b() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";
-export var c = function c() { };
 module.exports.c = function c() { };
 module.exports.c.Cls = class {
 };
-/**
- * @param {number} a
- * @param {number} b
- * @return {string}
- */
-export var d = function d(a: number, b: number): string { return /** @type {*} */ (null as ); };
 /**
  * @param {number} a
  * @param {number} b
@@ -89,21 +80,7 @@ module.exports.d = function d(a, b) { return /** @type {*} */ null; };
  * @param {U} b
  * @return {T & U}
  */
-export var e = function e<T, U>(a: T, b: U): T & U { return /** @type {*} */ (null as ); };
-/**
- * @template T,U
- * @param {T} a
- * @param {U} b
- * @return {T & U}
- */
 module.exports.e = function e(a, b) { return /** @type {*} */ null; };
-/**
- * @template T
- * @param {T} a
- */
-export var f = function f<T>(a: T) {
-    return a;
-};
 /**
  * @template T
  * @param {T} a
@@ -119,7 +96,6 @@ module.exports.f.self = module.exports.f;
 function g(a, b) {
     return a.x && b.y();
 }
-export var g = g;
 module.exports.g = g;
 /**
  * @param {{x: string}} a
@@ -128,17 +104,11 @@ module.exports.g = g;
 function hh(a, b) {
     return a.x && b.y();
 }
-export var h = hh;
 module.exports.h = hh;
-export var i = function i() { };
 module.exports.i = function i() { };
-export var ii = module.exports.i;
 module.exports.ii = module.exports.i;
 // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
-export var jj = module.exports.j;
-// note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
 module.exports.jj = module.exports.j;
-export var j = function j() { };
 module.exports.j = function j() { };
 
 
@@ -157,7 +127,7 @@ declare function g(a: {
     x: string;
 }, b: {
     y: typeof module.exports.b;
-}): any;
+}): void;
 export declare var g: typeof g;
 /**
  * @param {{x: string}} a
@@ -167,7 +137,7 @@ declare function hh(a: {
     x: string;
 }, b: {
     y: typeof module.exports.b;
-}): any;
+}): void;
 export declare var h: typeof hh;
 export declare var i: () => void;
 export declare var ii: () => void;

@@ -17,7 +17,6 @@ const Strings = {
 class Foo {
 }
 module.exports = Foo;
-export var Strings = Strings;
 module.exports.Strings = Strings;
 
 

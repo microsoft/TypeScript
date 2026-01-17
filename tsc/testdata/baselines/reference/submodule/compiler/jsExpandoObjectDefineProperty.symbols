@@ -9,9 +9,12 @@ Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >chrome : Symbol(chrome, Decl(index.js, 0, 3))
+>'devtools' : Symbol('devtools', Decl(index.js, 0, 15))
 >value : Symbol(value, Decl(index.js, 1, 43))
 >enumerable : Symbol(enumerable, Decl(index.js, 1, 54))
 
 chrome.devtools.inspectedWindow = {}
+>chrome.devtools : Symbol('devtools', Decl(index.js, 0, 15))
 >chrome : Symbol(chrome, Decl(index.js, 0, 3))
+>devtools : Symbol('devtools', Decl(index.js, 0, 15))
 

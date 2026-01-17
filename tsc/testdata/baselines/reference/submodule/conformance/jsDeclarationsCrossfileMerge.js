@@ -20,7 +20,6 @@ exports.default = validate;
 //// [index.js]
 const m = require("./exporter");
 module.exports = m.default;
-export var memberName = "thing";
 module.exports.memberName = "thing";
 
 
@@ -31,4 +30,4 @@ export default validate;
 declare const m: typeof m;
 declare const _default: typeof m.default;
 export = _default;
-export declare var memberName: string;
+export declare var memberName: "thing";

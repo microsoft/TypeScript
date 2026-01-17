@@ -20,9 +20,6 @@ module.exports.Sub.prototype = { }
 module.exports = function (p) {
     this.t = 12 + p;
 };
-export var Sub = function () {
-    this.instance = new module.exports(10);
-};
 module.exports.Sub = function () {
     this.instance = new module.exports(10);
 };

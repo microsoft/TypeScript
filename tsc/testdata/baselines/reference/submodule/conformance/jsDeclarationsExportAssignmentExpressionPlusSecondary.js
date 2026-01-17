@@ -27,7 +27,6 @@ module.exports = {
         item: "ok"
     }
 };
-export var Strings = Strings;
 module.exports.Strings = Strings;
 
 

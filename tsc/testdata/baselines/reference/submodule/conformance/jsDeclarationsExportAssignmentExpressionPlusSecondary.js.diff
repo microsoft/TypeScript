@@ -1,11 +1,6 @@
 --- old.jsDeclarationsExportAssignmentExpressionPlusSecondary.js
 +++ new.jsDeclarationsExportAssignmentExpressionPlusSecondary.js
-@@= skipped -26, +26 lines =@@
-         item: "ok"
-     }
- };
-+export var Strings = Strings;
- module.exports.Strings = Strings;
+@@= skipped -30, +30 lines =@@
 
 
  //// [index.d.ts]

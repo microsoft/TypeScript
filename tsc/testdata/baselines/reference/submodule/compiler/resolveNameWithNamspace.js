@@ -22,6 +22,5 @@ exports.equal()
 /// <reference path="node.d.ts"/>
 var myAssert = require('assert');
 //// [app.js]
-export var equal = myAssert.equal;
 exports.equal = myAssert.equal;
 exports.equal();

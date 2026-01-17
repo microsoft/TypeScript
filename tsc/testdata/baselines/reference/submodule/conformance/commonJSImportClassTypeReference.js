@@ -23,7 +23,6 @@ class K {
         return new K();
     }
 }
-export var K = K;
 exports.K = K;
 //// [main.js]
 "use strict";

@@ -27,14 +27,18 @@
 
 // === findRenameLocations ===
 // === /a.js ===
-// --- (line: 5) skipped ---
-//     [`prop`]: 1
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     [`[|propRENAME|]`]: 1
 // };
 // 
-// obj./*RENAME*/prop;
-// obj['prop'];
-// obj["prop"];
-// obj[`prop`];
+// obj./*RENAME*/[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
 
 
 

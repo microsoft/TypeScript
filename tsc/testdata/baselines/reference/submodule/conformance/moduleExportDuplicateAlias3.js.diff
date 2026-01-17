@@ -1,35 +1,16 @@
 --- old.moduleExportDuplicateAlias3.js
 +++ new.moduleExportDuplicateAlias3.js
-@@= skipped -16, +16 lines =@@
-
- //// [moduleExportAliasDuplicateAlias.js]
- "use strict";
-+export var apply = undefined;
- exports.apply = undefined;
-+export var apply = undefined;
- exports.apply = undefined;
- function a() { }
-+export var apply = a;
- exports.apply = a;
- exports.apply();
-+export var apply = 'ok';
- exports.apply = 'ok';
- var OK = exports.apply.toUpperCase();
-+export var apply = 1;
- exports.apply = 1;
- //// [test.js]
- "use strict";
-@@= skipped -15, +20 lines =@@
+@@= skipped -31, +31 lines =@@
 
 
  //// [moduleExportAliasDuplicateAlias.d.ts]
 -export const apply: "ok" | 1 | typeof a | undefined;
 -export { a as apply };
--declare function a(): void;
-+export declare var apply: undefined;
-+export declare var apply: undefined;
-+export declare var apply: undefined;
-+export declare var apply: undefined;
-+export declare var apply: undefined;
++export declare var apply: "ok" | 1 | typeof a | undefined;
++export declare var apply: "ok" | 1 | typeof a | undefined;
+ declare function a(): void;
++export declare var apply: "ok" | 1 | typeof a | undefined;
++export declare var apply: "ok" | 1 | typeof a | undefined;
++export declare var apply: "ok" | 1 | typeof a | undefined;
  //// [test.d.ts]
  export {};

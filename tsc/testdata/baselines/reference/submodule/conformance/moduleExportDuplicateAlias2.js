@@ -14,12 +14,9 @@ apply()
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-export var apply = undefined;
 module.exports.apply = undefined;
 function a() { }
-export var apply = a;
 module.exports.apply = a;
-export var apply = a;
 module.exports.apply = a;
 module.exports.apply();
 //// [test.js]
@@ -29,8 +26,9 @@ apply();
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]
-export declare var apply: undefined;
-export declare var apply: undefined;
-export declare var apply: undefined;
+export declare var apply: typeof a;
+declare function a(): void;
+export declare var apply: typeof a;
+export declare var apply: typeof a;
 //// [test.d.ts]
 export {};

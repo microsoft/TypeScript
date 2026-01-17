@@ -2,52 +2,27 @@
 +++ new.moduleExportDuplicateAlias3.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+moduleExportAliasDuplicateAlias.js(1,1): error TS2323: Cannot redeclare exported variable 'apply'.
-+moduleExportAliasDuplicateAlias.js(2,1): error TS2323: Cannot redeclare exported variable 'apply'.
-+moduleExportAliasDuplicateAlias.js(4,1): error TS2322: Type '() => void' is not assignable to type 'undefined'.
-+moduleExportAliasDuplicateAlias.js(4,1): error TS2323: Cannot redeclare exported variable 'apply'.
-+moduleExportAliasDuplicateAlias.js(5,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-+moduleExportAliasDuplicateAlias.js(6,1): error TS2322: Type '"ok"' is not assignable to type 'undefined'.
-+moduleExportAliasDuplicateAlias.js(6,1): error TS2323: Cannot redeclare exported variable 'apply'.
-+moduleExportAliasDuplicateAlias.js(7,10): error TS18048: 'exports.apply' is possibly 'undefined'.
-+moduleExportAliasDuplicateAlias.js(8,1): error TS2322: Type '1' is not assignable to type 'undefined'.
-+moduleExportAliasDuplicateAlias.js(8,1): error TS2323: Cannot redeclare exported variable 'apply'.
 +test.js(2,16): error TS18048: 'apply' is possibly 'undefined'.
++test.js(2,22): error TS2339: Property 'toFixed' does not exist on type '"ok" | 1 | (() => void)'.
++  Property 'toFixed' does not exist on type '"ok"'.
 +
 +
-+==== test.js (1 errors) ====
++==== test.js (2 errors) ====
 +    const { apply } = require('./moduleExportAliasDuplicateAlias')
 +    const result = apply.toFixed()
 +                   ~~~~~
 +!!! error TS18048: 'apply' is possibly 'undefined'.
++                         ~~~~~~~
++!!! error TS2339: Property 'toFixed' does not exist on type '"ok" | 1 | (() => void)'.
++!!! error TS2339:   Property 'toFixed' does not exist on type '"ok"'.
 +    
-+==== moduleExportAliasDuplicateAlias.js (10 errors) ====
++==== moduleExportAliasDuplicateAlias.js (0 errors) ====
 +    exports.apply = undefined;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
 +    exports.apply = undefined;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
 +    function a() { }
 +    exports.apply = a;
-+    ~~~~~~~~~~~~~
-+!!! error TS2322: Type '() => void' is not assignable to type 'undefined'.
-+    ~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
 +    exports.apply()
-+    ~~~~~~~~~~~~~
-+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
 +    exports.apply = 'ok'
-+    ~~~~~~~~~~~~~
-+!!! error TS2322: Type '"ok"' is not assignable to type 'undefined'.
-+    ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
 +    var OK = exports.apply.toUpperCase()
-+             ~~~~~~~~~~~~~
-+!!! error TS18048: 'exports.apply' is possibly 'undefined'.
 +    exports.apply = 1
-+    ~~~~~~~~~~~~~
-+!!! error TS2322: Type '1' is not assignable to type 'undefined'.
-+    ~~~~~~~~~~~~~~~~~
-+!!! error TS2323: Cannot redeclare exported variable 'apply'.
 +    

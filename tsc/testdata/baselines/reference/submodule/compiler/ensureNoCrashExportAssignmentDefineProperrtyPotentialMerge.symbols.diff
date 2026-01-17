@@ -51,9 +51,9 @@
 ->B.NS : Symbol(B.NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 ->B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12), Decl(namespacer.js, 2, 22))
 ->NS : Symbol(B.NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
-+>B.NS : Symbol(NS, Decl(namespacer.js, 0, 12))
++>B.NS : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 +>B : Symbol(B, Decl(namespacer.js, 0, 5))
-+>NS : Symbol(NS, Decl(namespacer.js, 0, 12))
++>NS : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
  >require : Symbol(require)
 ->"./namespacey" : Symbol("namespacey", Decl(namespacey.js, 0, 0))
 
@@ -64,6 +64,7 @@
 ->B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12), Decl(namespacer.js, 2, 22))
 ->"NS" : Symbol(B.NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 +>B : Symbol(B, Decl(namespacer.js, 0, 5))
++>"NS" : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
  >value : Symbol(value, Decl(namespacer.js, 2, 32))
  >writable : Symbol(writable, Decl(namespacer.js, 2, 53))
 

@@ -17,18 +17,13 @@ const result = apply.toFixed()
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-export var apply = undefined;
 exports.apply = undefined;
-export var apply = undefined;
 exports.apply = undefined;
 function a() { }
-export var apply = a;
 exports.apply = a;
 exports.apply();
-export var apply = 'ok';
 exports.apply = 'ok';
 var OK = exports.apply.toUpperCase();
-export var apply = 1;
 exports.apply = 1;
 //// [test.js]
 "use strict";
@@ -37,10 +32,11 @@ const result = apply.toFixed();
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]
-export declare var apply: undefined;
-export declare var apply: undefined;
-export declare var apply: undefined;
-export declare var apply: undefined;
-export declare var apply: undefined;
+export declare var apply: "ok" | 1 | typeof a | undefined;
+export declare var apply: "ok" | 1 | typeof a | undefined;
+declare function a(): void;
+export declare var apply: "ok" | 1 | typeof a | undefined;
+export declare var apply: "ok" | 1 | typeof a | undefined;
+export declare var apply: "ok" | 1 | typeof a | undefined;
 //// [test.d.ts]
 export {};

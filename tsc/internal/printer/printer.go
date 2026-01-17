@@ -3744,24 +3744,6 @@ func (p *Printer) emitExportAssignment(node *ast.ExportAssignment) {
 	p.exitNode(node.AsNode(), state)
 }
 
-// export declare var <name> = <initialiser>;
-func (p *Printer) emitCommonJSExport(node *ast.CommonJSExport) {
-	state := p.enterNode(node.AsNode())
-	p.emitToken(ast.KindExportKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
-	p.writeSpace()
-	p.writeKeyword("var")
-	p.writeSpace()
-	if node.Name().Kind == ast.KindStringLiteral {
-		// TODO: This doesn't work for illegal names.
-		p.write(node.Name().Text())
-	} else {
-		p.emitBindingName(node.Name())
-	}
-	p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode())
-	p.writeTrailingSemicolon()
-	p.exitNode(node.AsNode(), state)
-}
-
 func (p *Printer) emitExportDeclaration(node *ast.ExportDeclaration) {
 	state := p.enterNode(node.AsNode())
 	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
@@ -3968,7 +3950,7 @@ func (p *Printer) emitStatement(node *ast.Statement) {
 	case ast.KindExportDeclaration:
 		p.emitExportDeclaration(node.AsExportDeclaration())
 	case ast.KindCommonJSExport:
-		p.emitCommonJSExport(node.AsCommonJSExport())
+		break
 
 	default:
 		panic(fmt.Sprintf("unhandled statement: %v", node.Kind))

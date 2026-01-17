@@ -172,25 +172,23 @@
   */
  function g(a, b) {
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>g : (a: { x: string; }, b: { y: any; }) => any
++>g : (a: { x: string; }, b: { y: () => void; }) => void
  >a : { x: string; }
 ->b : { y: { (): void; cat: string; }; }
-+>b : { y: any; }
++>b : { y: () => void; }
 
      return a.x && b.y();
-->a.x && b.y() : void
-+>a.x && b.y() : any
- >a.x : string
+ >a.x && b.y() : void
+@@= skipped -43, +43 lines =@@
  >a : { x: string; }
  >x : string
-->b.y() : void
+ >b.y() : void
 ->b.y : { (): void; cat: string; }
 ->b : { y: { (): void; cat: string; }; }
 ->y : { (): void; cat: string; }
-+>b.y() : any
-+>b.y : any
-+>b : { y: any; }
-+>y : any
++>b.y : () => void
++>b : { y: () => void; }
++>y : () => void
  }
 
  module.exports.g = g;
@@ -201,13 +199,13 @@
 ->exports : typeof module.exports
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 ->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>module.exports.g = g : (a: { x: string; }, b: { y: any; }) => any
-+>module.exports.g : (a: { x: string; }, b: { y: any; }) => any
++>module.exports.g = g : (a: { x: string; }, b: { y: () => void; }) => void
++>module.exports.g : (a: { x: string; }, b: { y: () => void; }) => void
 +>module.exports : typeof import("index")
 +>module : { "\"index\"": typeof import("index"); }
 +>exports : typeof import("index")
-+>g : (a: { x: string; }, b: { y: any; }) => any
-+>g : (a: { x: string; }, b: { y: any; }) => any
++>g : (a: { x: string; }, b: { y: () => void; }) => void
++>g : (a: { x: string; }, b: { y: () => void; }) => void
 
  /**
   * @param {{x: string}} a
@@ -215,25 +213,23 @@
   */
  function hh(a, b) {
 ->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>hh : (a: { x: string; }, b: { y: any; }) => any
++>hh : (a: { x: string; }, b: { y: () => void; }) => void
  >a : { x: string; }
 ->b : { y: { (): void; cat: string; }; }
-+>b : { y: any; }
++>b : { y: () => void; }
 
      return a.x && b.y();
-->a.x && b.y() : void
-+>a.x && b.y() : any
- >a.x : string
+ >a.x && b.y() : void
+@@= skipped -29, +29 lines =@@
  >a : { x: string; }
  >x : string
-->b.y() : void
+ >b.y() : void
 ->b.y : { (): void; cat: string; }
 ->b : { y: { (): void; cat: string; }; }
 ->y : { (): void; cat: string; }
-+>b.y() : any
-+>b.y : any
-+>b : { y: any; }
-+>y : any
++>b.y : () => void
++>b : { y: () => void; }
++>y : () => void
  }
 
  module.exports.h = hh;
@@ -244,13 +240,13 @@
 ->exports : typeof module.exports
 ->h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 ->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
-+>module.exports.h = hh : (a: { x: string; }, b: { y: any; }) => any
-+>module.exports.h : (a: { x: string; }, b: { y: any; }) => any
++>module.exports.h = hh : (a: { x: string; }, b: { y: () => void; }) => void
++>module.exports.h : (a: { x: string; }, b: { y: () => void; }) => void
 +>module.exports : typeof import("index")
 +>module : { "\"index\"": typeof import("index"); }
 +>exports : typeof import("index")
-+>h : (a: { x: string; }, b: { y: any; }) => any
-+>hh : (a: { x: string; }, b: { y: any; }) => any
++>h : (a: { x: string; }, b: { y: () => void; }) => void
++>hh : (a: { x: string; }, b: { y: () => void; }) => void
 
  module.exports.i = function i() {}
  >module.exports.i = function i() {} : () => void
@@ -264,7 +260,7 @@
  >i : () => void
  >function i() {} : () => void
  >i : () => void
-@@= skipped -99, +99 lines =@@
+@@= skipped -27, +27 lines =@@
  module.exports.ii = module.exports.i;
  >module.exports.ii = module.exports.i : () => void
  >module.exports.ii : () => void

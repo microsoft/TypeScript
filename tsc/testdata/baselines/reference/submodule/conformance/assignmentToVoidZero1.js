@@ -9,16 +9,38 @@ exports.y = 2;
 
 //// [assignmentToVoidZero1.js]
 // #38552
-export var y = exports.x = void 0;
-// #38552
 exports.y = exports.x = void 0;
-export var x = 1;
 exports.x = 1;
-export var y = 2;
 exports.y = 2;
 
 
 //// [assignmentToVoidZero1.d.ts]
-export declare var y: undefined;
-export declare var x: number;
-export declare var y: undefined;
+export declare var y: 2;
+export declare var x: 1;
+export declare var x: 1;
+export declare var y: 2;
+
+
+//// [DtsFileErrors]
+
+
+auss/assignmentToVoidZero1.d.ts(1,20): error TS2323: Cannot redeclare exported variable 'y'.
+auss/assignmentToVoidZero1.d.ts(2,20): error TS2323: Cannot redeclare exported variable 'x'.
+auss/assignmentToVoidZero1.d.ts(3,20): error TS2323: Cannot redeclare exported variable 'x'.
+auss/assignmentToVoidZero1.d.ts(4,20): error TS2323: Cannot redeclare exported variable 'y'.
+
+
+==== auss/assignmentToVoidZero1.d.ts (4 errors) ====
+    export declare var y: 2;
+                       ~
+!!! error TS2323: Cannot redeclare exported variable 'y'.
+    export declare var x: 1;
+                       ~
+!!! error TS2323: Cannot redeclare exported variable 'x'.
+    export declare var x: 1;
+                       ~
+!!! error TS2323: Cannot redeclare exported variable 'x'.
+    export declare var y: 2;
+                       ~
+!!! error TS2323: Cannot redeclare exported variable 'y'.
+    

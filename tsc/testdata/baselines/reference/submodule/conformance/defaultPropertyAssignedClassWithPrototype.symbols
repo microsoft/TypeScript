@@ -5,13 +5,19 @@ var test = {};
 >test : Symbol(test, Decl(bug39167.js, 0, 3))
 
 test.K = test.K ||
+>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 >test : Symbol(test, Decl(bug39167.js, 0, 3))
+>K : Symbol(K, Decl(bug39167.js, 0, 14))
+>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 >test : Symbol(test, Decl(bug39167.js, 0, 3))
+>K : Symbol(K, Decl(bug39167.js, 0, 14))
 
     function () {}
 
 test.K.prototype = {
+>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 >test : Symbol(test, Decl(bug39167.js, 0, 3))
+>K : Symbol(K, Decl(bug39167.js, 0, 14))
 
     add() {}
 >add : Symbol(add, Decl(bug39167.js, 4, 20))
@@ -19,5 +25,7 @@ test.K.prototype = {
 };
 
 new test.K().add;
+>test.K : Symbol(K, Decl(bug39167.js, 0, 14))
 >test : Symbol(test, Decl(bug39167.js, 0, 3))
+>K : Symbol(K, Decl(bug39167.js, 0, 14))
 
