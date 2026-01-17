@@ -577,7 +577,7 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 }
 
 func getYieldOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	parentFunc := ast.FindAncestor(node.Parent, ast.IsFunctionLike).AsFunctionDeclaration()
+	parentFunc := ast.FindAncestor(node.Parent, ast.IsFunctionLike)
 	if parentFunc == nil {
 		return nil
 	}
