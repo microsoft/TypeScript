@@ -1,0 +1,205 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesRefereinceInDeclaration1.ts] ////
+
+=== dependentDestructuredVariablesRefereinceInDeclaration1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62993
+
+{
+  const { c, f }: string | number = { c: 0, f };
+>c : any
+>  : ^^^
+>f : any
+>  : ^^^
+>{ c: 0, f } : { c: number; f: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : any
+>  : ^^^
+
+  f;
+>f : any
+>  : ^^^
+}
+
+{
+  const { c, f }: string | number = { c: 0, f: () => f };
+>c : any
+>  : ^^^
+>f : any
+>  : ^^^
+>{ c: 0, f: () => f } : { c: number; f: () => any; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : () => any
+>  : ^^^^^^^^^
+>() => f : () => any
+>        : ^^^^^^^^^
+>f : any
+>  : ^^^
+
+  f;
+>f : any
+>  : ^^^
+}
+
+{
+  const { c, f, g = f }: string | number = { c: 0, f: 0, g: 0 };
+>c : any
+>  : ^^^
+>f : any
+>  : ^^^
+>g : any
+>  : ^^^
+>f : any
+>  : ^^^
+>{ c: 0, f: 0, g: 0 } : { c: number; f: number; g: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>f : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>g : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  f;
+>f : any
+>  : ^^^
+
+  g;
+>g : any
+>  : ^^^
+}
+
+{
+  const { c, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f };
+>c : 0 | 1
+>  : ^^^^^
+>f : any
+>  : ^^^
+>c : 0
+>  : ^
+>f : number
+>  : ^^^^^^
+>c : 1
+>  : ^
+>f : string
+>  : ^^^^^^
+>{ c: 0, f } : { c: 0; f: any; }
+>            : ^^^^^^^^^^^^^^^^^
+>c : 0
+>  : ^
+>0 : 0
+>  : ^
+>f : any
+>  : ^^^
+
+  f;
+>f : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+{
+  const { c, f }: { c: 0; f: () => unknown } | { c: 1; f: string } = {
+>c : 0 | 1
+>  : ^^^^^
+>f : string | (() => unknown)
+>  : ^^^^^^^^^^^^^^^^       ^
+>c : 0
+>  : ^
+>f : () => unknown
+>  : ^^^^^^       
+>c : 1
+>  : ^
+>f : string
+>  : ^^^^^^
+>{    c: 0,    f: () => f,  } : { c: 0; f: () => string | (() => unknown); }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^
+
+    c: 0,
+>c : 0
+>  : ^
+>0 : 0
+>  : ^
+
+    f: () => f,
+>f : () => string | (() => unknown)
+>  : ^^^^^^^^^^^^^^^^^^^^^^       ^
+>() => f : () => string | (() => unknown)
+>        : ^^^^^^^^^^^^^^^^^^^^^^       ^
+>f : string | (() => unknown)
+>  : ^^^^^^^^^^^^^^^^       ^
+
+  };
+  f;
+>f : () => unknown
+>  : ^^^^^^       
+}
+
+{
+  const {
+    c,
+>c : 0 | 1
+>  : ^^^^^
+
+    f,
+>f : number | bigint
+>  : ^^^^^^^^^^^^^^^
+
+    g = f,
+>g : string | number | bigint
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>f : number | bigint
+>  : ^^^^^^^^^^^^^^^
+
+  }:
+    | { c: 0; f: bigint; g?: bigint | number }
+>c : 0
+>  : ^
+>f : bigint
+>  : ^^^^^^
+>g : number | bigint | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    | { c: 1; f: number; g: string } = {
+>c : 1
+>  : ^
+>f : number
+>  : ^^^^^^
+>g : string
+>  : ^^^^^^
+>{    c: 0,    f: 10n,  } : { c: 0; f: bigint; }
+>                         : ^^^^^^^^^^^^^^^^^^^^
+
+    c: 0,
+>c : 0
+>  : ^
+>0 : 0
+>  : ^
+
+    f: 10n,
+>f : bigint
+>  : ^^^^^^
+>10n : 10n
+>    : ^^^
+
+  };
+  f;
+>f : bigint
+>  : ^^^^^^
+
+  g;
+>g : string | number | bigint
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

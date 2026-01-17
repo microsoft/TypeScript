@@ -30838,7 +30838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
         const type = getTypeOfSymbol(symbol);
         const declaration = symbol.valueDeclaration;
-        if (declaration) {
+        if (declaration && !textRangeContainsPositionInclusive(getRootDeclaration(declaration), location.pos)) {
             // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
             // parameter (a parameter for which there are no assignments in the function body), and if the parent type
             // for the destructuring is a union type, one or more of the binding elements may represent discriminant
