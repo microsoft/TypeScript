@@ -111,3 +111,41 @@ const d = (v: number) => {
   }
 };
 
+// https://github.com/microsoft/TypeScript/issues/63004
+const report: (e: any) => never = (e): never => {
+>report : Symbol(report, Decl(reachabilityChecks12.ts, 59, 5))
+>e : Symbol(e, Decl(reachabilityChecks12.ts, 59, 15))
+>e : Symbol(e, Decl(reachabilityChecks12.ts, 59, 35))
+
+  throw e;
+>e : Symbol(e, Decl(reachabilityChecks12.ts, 59, 35))
+
+};
+
+const foo = async (): Promise<number> => {
+>foo : Symbol(foo, Decl(reachabilityChecks12.ts, 63, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+  try {
+    return 3;
+  } catch (e) {
+>e : Symbol(e, Decl(reachabilityChecks12.ts, 66, 11))
+
+    report(e);
+>report : Symbol(report, Decl(reachabilityChecks12.ts, 59, 5))
+>e : Symbol(e, Decl(reachabilityChecks12.ts, 66, 11))
+
+  } finally {
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      console.log("heh");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+  }
+};
+

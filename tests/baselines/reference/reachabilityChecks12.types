@@ -195,3 +195,66 @@ const d = (v: number) => {
   }
 };
 
+// https://github.com/microsoft/TypeScript/issues/63004
+const report: (e: any) => never = (e): never => {
+>report : (e: any) => never
+>       : ^ ^^   ^^^^^     
+>e : any
+>(e): never => {  throw e;} : (e: any) => never
+>                           : ^ ^^^^^^^^^^     
+>e : any
+
+  throw e;
+>e : any
+
+};
+
+const foo = async (): Promise<number> => {
+>foo : () => Promise<number>
+>    : ^^^^^^               
+>async (): Promise<number> => {  try {    return 3;  } catch (e) {    report(e);  } finally {    if (Math.random()) {      console.log("heh");    }  }} : () => Promise<number>
+>                                                                                                                                                       : ^^^^^^               
+
+  try {
+    return 3;
+>3 : 3
+>  : ^
+
+  } catch (e) {
+>e : unknown
+>  : ^^^^^^^
+
+    report(e);
+>report(e) : never
+>          : ^^^^^
+>report : (e: any) => never
+>       : ^ ^^   ^^^^^     
+>e : unknown
+>  : ^^^^^^^
+
+  } finally {
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+      console.log("heh");
+>console.log("heh") : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"heh" : "heh"
+>      : ^^^^^
+    }
+  }
+};
+

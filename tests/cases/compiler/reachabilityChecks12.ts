@@ -59,3 +59,20 @@ const d = (v: number) => {
     }
   }
 };
+
+// https://github.com/microsoft/TypeScript/issues/63004
+const report: (e: any) => never = (e): never => {
+  throw e;
+};
+
+const foo = async (): Promise<number> => {
+  try {
+    return 3;
+  } catch (e) {
+    report(e);
+  } finally {
+    if (Math.random()) {
+      console.log("heh");
+    }
+  }
+};
