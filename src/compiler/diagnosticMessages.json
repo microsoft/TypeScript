@@ -6719,6 +6719,10 @@
         "category": "Message",
         "code": 6932
     },
+    "Import JSON files as const assertions.": {
+        "category": "Message",
+        "code": 6933
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

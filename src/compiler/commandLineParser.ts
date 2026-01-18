@@ -1344,6 +1344,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "importJsonAsConst",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Language_and_Environment,
+        description: Diagnostics.Import_JSON_files_as_const_assertions,
+        defaultValueDescription: false,
+    },
+    {
         name: "allowArbitraryExtensions",
         type: "boolean",
         affectsProgramStructure: true,

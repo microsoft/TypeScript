@@ -12515,6 +12515,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!declaration.statements.length) {
                 return emptyObjectType;
             }
+            if (compilerOptions.importJsonAsConst) {
+                return checkExpression(declaration.statements[0].expression);
+            }
             return getWidenedType(getWidenedLiteralType(checkExpression(declaration.statements[0].expression)));
         }
         if (isAccessor(declaration)) {
@@ -41395,6 +41398,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstContext(node: Expression): boolean {
         const parent = node.parent;
+        if (compilerOptions.importJsonAsConst && parent.kind === SyntaxKind.ExpressionStatement && isSourceFile(parent.parent) && isJsonSourceFile(parent.parent)) {
+            return true;
+        }
         return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
             isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
             isValidConstAssertionArgument(node) && isConstTypeVariable(getContextualType(node, ContextFlags.None)) ||

@@ -7442,6 +7442,7 @@ export interface CompilerOptions {
     /** @internal */ help?: boolean;
     ignoreDeprecations?: string;
     importHelpers?: boolean;
+    importJsonAsConst?: boolean;
     /** @deprecated */
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */ init?: boolean;
