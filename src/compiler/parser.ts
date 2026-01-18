@@ -2880,7 +2880,7 @@ namespace Parser {
             case ParsingContext.ImportAttributes:
                 return isImportAttributeName();
             case ParsingContext.HeritageClauseElement:
-                // If we see `{ ... }` then only consume it as an expression if it is followed by `,` or `{`
+                // If we see `{ ... }` then only consume it as an expression if it is followed by `,`, `.`, `!`, `{`, `extends` or `implements`.
                 // That way we won't consume the body of a class in its heritage clause.
                 if (token() === SyntaxKind.OpenBraceToken) {
                     return lookAhead(isValidHeritageClauseObjectLiteral);
@@ -2946,15 +2946,17 @@ namespace Parser {
         Debug.assert(token() === SyntaxKind.OpenBraceToken);
         if (nextToken() === SyntaxKind.CloseBraceToken) {
             // if we see "extends {}" then only treat the {} as what we're extending (and not
-            // the class body) if we have:
-            //
-            //      extends {} {
-            //      extends {},
-            //      extends {} extends
-            //      extends {} implements
-
-            const next = nextToken();
-            return next === SyntaxKind.CommaToken || next === SyntaxKind.OpenBraceToken || next === SyntaxKind.ExtendsKeyword || next === SyntaxKind.ImplementsKeyword;
+            // the class body) if we have one of those next tokens.
+            switch (nextToken()) {
+                case SyntaxKind.CommaToken:
+                case SyntaxKind.DotToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.ExtendsKeyword:
+                case SyntaxKind.ImplementsKeyword:
+                case SyntaxKind.OpenBraceToken:
+                    return true;
+            }
+            return false;
         }
 
         return true;

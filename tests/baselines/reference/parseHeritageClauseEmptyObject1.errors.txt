@@ -1,0 +1,50 @@
+parseHeritageClauseEmptyObject1_1.ts(1,18): error TS2507: Type '{}' is not a constructor function type.
+parseHeritageClauseEmptyObject1_1.ts(1,32): error TS2304: Cannot find name 'X'.
+parseHeritageClauseEmptyObject1_2.ts(1,18): error TS2507: Type '{}' is not a constructor function type.
+parseHeritageClauseEmptyObject1_2.ts(1,21): error TS1172: 'extends' clause already seen.
+parseHeritageClauseEmptyObject1_3.ts(1,18): error TS2507: Type '{}' is not a constructor function type.
+parseHeritageClauseEmptyObject1_3.ts(1,20): error TS1009: Trailing comma not allowed.
+parseHeritageClauseEmptyObject1_4.ts(1,18): error TS2507: Type '{}' is not a constructor function type.
+parseHeritageClauseEmptyObject1_5.ts(1,21): error TS2339: Property 'Foo' does not exist on type '{}'.
+parseHeritageClauseEmptyObject1_6.ts(1,21): error TS2339: Property 'Foo' does not exist on type '{}'.
+parseHeritageClauseEmptyObject1_6.ts(1,24): error TS1005: '{' expected.
+parseHeritageClauseEmptyObject1_7.ts(1,17): error TS1097: 'extends' list cannot be empty.
+
+
+==== parseHeritageClauseEmptyObject1_1.ts (2 errors) ====
+    class C1 extends {} implements X {}
+                     ~~
+!!! error TS2507: Type '{}' is not a constructor function type.
+                                   ~
+!!! error TS2304: Cannot find name 'X'.
+==== parseHeritageClauseEmptyObject1_2.ts (2 errors) ====
+    class C2 extends {} extends X {}
+                     ~~
+!!! error TS2507: Type '{}' is not a constructor function type.
+                        ~~~~~~~
+!!! error TS1172: 'extends' clause already seen.
+==== parseHeritageClauseEmptyObject1_3.ts (2 errors) ====
+    class C3 extends {}, {}
+                     ~~
+!!! error TS2507: Type '{}' is not a constructor function type.
+                       ~
+!!! error TS1009: Trailing comma not allowed.
+==== parseHeritageClauseEmptyObject1_4.ts (1 errors) ====
+    class C4 extends {}! {}
+                     ~~~
+!!! error TS2507: Type '{}' is not a constructor function type.
+==== parseHeritageClauseEmptyObject1_5.ts (1 errors) ====
+    class C5 extends {}.Foo {}
+                        ~~~
+!!! error TS2339: Property 'Foo' does not exist on type '{}'.
+==== parseHeritageClauseEmptyObject1_6.ts (2 errors) ====
+    class C6 extends {}.Foo
+                        ~~~
+!!! error TS2339: Property 'Foo' does not exist on type '{}'.
+                           
+!!! error TS1005: '{' expected.
+==== parseHeritageClauseEmptyObject1_7.ts (1 errors) ====
+    class C7 extends {}
+                    
+!!! error TS1097: 'extends' list cannot be empty.
+    

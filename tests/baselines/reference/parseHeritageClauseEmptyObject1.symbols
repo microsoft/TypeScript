@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/parseHeritageClauseEmptyObject1.ts] ////
+
+=== parseHeritageClauseEmptyObject1_1.ts ===
+class C1 extends {} implements X {}
+>C1 : Symbol(C1, Decl(parseHeritageClauseEmptyObject1_1.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_2.ts ===
+class C2 extends {} extends X {}
+>C2 : Symbol(C2, Decl(parseHeritageClauseEmptyObject1_2.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_3.ts ===
+class C3 extends {}, {}
+>C3 : Symbol(C3, Decl(parseHeritageClauseEmptyObject1_3.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_4.ts ===
+class C4 extends {}! {}
+>C4 : Symbol(C4, Decl(parseHeritageClauseEmptyObject1_4.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_5.ts ===
+class C5 extends {}.Foo {}
+>C5 : Symbol(C5, Decl(parseHeritageClauseEmptyObject1_5.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_6.ts ===
+class C6 extends {}.Foo
+>C6 : Symbol(C6, Decl(parseHeritageClauseEmptyObject1_6.ts, 0, 0))
+
+=== parseHeritageClauseEmptyObject1_7.ts ===
+class C7 extends {}
+>C7 : Symbol(C7, Decl(parseHeritageClauseEmptyObject1_7.ts, 0, 0))
+
