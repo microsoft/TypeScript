@@ -1,4 +1,5 @@
 // @noimplicitany: true
+// @useUnknownInCatchVariables: false
 // this should not be an error
 try { } catch (error) {
     if (error.number === -2147024809) { }

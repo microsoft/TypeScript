@@ -11,7 +11,7 @@ exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
 
 
 ==== exportAlreadySeen.ts (10 errors) ====
-    module M {
+    namespace M {
         export export var x = 1;
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
@@ -19,7 +19,7 @@ exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
     
-        export export module N {
+        export export namespace N {
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
             export export class C { }
@@ -31,7 +31,7 @@ exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
         }  
     }
     
-    declare module A {
+    declare namespace A {
         export export var x;
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
@@ -39,7 +39,7 @@ exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
     
-        export export module N {
+        export export namespace N {
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
             export export class C { }

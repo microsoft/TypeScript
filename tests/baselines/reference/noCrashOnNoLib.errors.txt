@@ -18,7 +18,7 @@ error TS2318: Cannot find global type 'String'.
 !!! error TS2318: Cannot find global type 'String'.
 ==== noCrashOnNoLib.ts (0 errors) ====
     export function f() {
-        let e: {}[];
+        let e: {}[] = [];
         while (true) {
           e = [...(e || [])];
         }

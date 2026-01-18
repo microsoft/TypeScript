@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: a.ts
 /*!=================
     Keep this pinned

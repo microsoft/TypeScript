@@ -1,61 +1,29 @@
 // @strict: true
-// @allowUnreachableCode: false
 // @noEmit: true
+// @allowUnreachableCode: false
 
-// https://github.com/microsoft/TypeScript/issues/61259
+// https://github.com/microsoft/TypeScript/issues/55562
 
-const a = (v: 1 | 2) => {
-  try {
-    switch (v) {
-      case 1:
-        return v;
-      case 2:
-        return v;
-    }
-  } finally {
-    console.log("exit");
+function g(str: string) {
+  switch (str) {
+    case "a":
+      return;
+      console.log("1");
+      console.log("2");
+    case "b":
+      console.log("3");
   }
-};
+}
 
-const b = (v: number) => {
-  try {
-    switch (v) {
-      case 1:
-        return v;
-      default:
-        return v;
-    }
-  } finally {
-    console.log("exit");
+function h(str: string) {
+  switch (str) {
+    case "a":
+      console.log("1");
+    default:
+      return;
+      console.log("2");
+      console.log("3");
+    case "b":
+      console.log("4");
   }
-};
-
-const c = (v: 1 | 2) => {
-  try {
-    switch (v) {
-      case 1:
-        return v;
-      case 2:
-        return v;
-    }
-  } finally {
-    if (Math.random()) {
-      console.log("exit");
-    }
-  }
-};
-
-const d = (v: number) => {
-  try {
-    switch (v) {
-      case 1:
-        return v;
-      default:
-        return v;
-    }
-  } finally {
-    if (Math.random()) {
-      console.log("exit");
-    }
-  }
-};
+}

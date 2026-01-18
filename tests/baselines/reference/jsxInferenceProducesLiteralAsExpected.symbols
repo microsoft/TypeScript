@@ -11,7 +11,7 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 >T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
 >T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
 >K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
 >T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
 

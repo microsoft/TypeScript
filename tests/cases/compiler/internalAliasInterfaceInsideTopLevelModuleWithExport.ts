@@ -1,6 +1,6 @@
 //@module: commonjs
 // @declaration: true
-export module a {
+export namespace a {
     export interface I {
     }
 }

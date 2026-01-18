@@ -23,4 +23,5 @@ declare module "tslib" {
 >__importStar : (m: any) => void
 >             : ^ ^^   ^^^^^    
 >m : any
+>  : ^^^
 }

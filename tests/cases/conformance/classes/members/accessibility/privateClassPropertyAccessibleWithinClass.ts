@@ -1,3 +1,4 @@
+// @strict: false
 // no errors
 
 class C {

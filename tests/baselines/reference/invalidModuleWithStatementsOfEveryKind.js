@@ -3,7 +3,7 @@
 //// [invalidModuleWithStatementsOfEveryKind.ts]
 // All of these should be an error
 
-module Y {
+namespace Y {
     public class A { s: string }
 
     public class BB<T> extends A {
@@ -11,24 +11,24 @@ module Y {
     }
 }
 
-module Y2 {
+namespace Y2 {
     public class AA<T> { s: T }
     public interface I { id: number }
 
     public class B extends AA<string> implements I { id: number }
 }
 
-module Y3 {
-    public module Module {
+namespace Y3 {
+    public namespace Module {
         class A { s: string }
     }
 }
 
-module Y4 {
+namespace Y4 {
     public enum Color { Blue, Red }
 }
 
-module YY {
+namespace YY {
     private class A { s: string }
 
     private class BB<T> extends A {
@@ -36,25 +36,25 @@ module YY {
     }
 }
 
-module YY2 {
+namespace YY2 {
     private class AA<T> { s: T }
     private interface I { id: number }
 
     private class B extends AA<string> implements I { id: number }
 }
 
-module YY3 {
-    private module Module {
+namespace YY3 {
+    private namespace Module {
         class A { s: string }
     }
 }
 
-module YY4 {
+namespace YY4 {
     private enum Color { Blue, Red }
 }
 
 
-module YYY {
+namespace YYY {
     static class A { s: string }
 
     static class BB<T> extends A {
@@ -62,20 +62,20 @@ module YYY {
     }
 }
 
-module YYY2 {
+namespace YYY2 {
     static class AA<T> { s: T }
     static interface I { id: number }
 
     static class B extends AA<string> implements I { id: number }
 }
 
-module YYY3 {
-    static module Module {
+namespace YYY3 {
+    static namespace Module {
         class A { s: string }
     }
 }
 
-module YYY4 {
+namespace YYY4 {
     static enum Color { Blue, Red }
 }
 

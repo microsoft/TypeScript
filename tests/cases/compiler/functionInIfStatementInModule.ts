@@ -1,5 +1,6 @@
+// @strict: false
  
-module Midori
+namespace Midori
 {
     if (false) {
         function Foo(src)

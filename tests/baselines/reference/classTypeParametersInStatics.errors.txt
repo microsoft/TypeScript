@@ -4,7 +4,7 @@ classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot refe
 
 
 ==== classTypeParametersInStatics.ts (3 errors) ====
-    module Editor {
+    namespace Editor {
     
     
         export class List<T> {

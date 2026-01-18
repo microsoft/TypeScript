@@ -1,10 +1,11 @@
+// @strict: false
 function foo() { }
 class C {
     public a: string;
     static foo() { }
 }
 enum E { a, b, c }
-module M { export var a }
+namespace M { export var a }
 
 var a: any;
 var b: boolean;

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 }

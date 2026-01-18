@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5
 // @removeComments: true
 

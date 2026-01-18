@@ -9,7 +9,7 @@ class C {
     constructor(x: number, y: string);
     constructor(x: number) { }
 }
-module C {
+namespace C {
     export var x = 1;
 }
 
@@ -20,7 +20,7 @@ class C2<T> {
     constructor(x: T, y: string);
     constructor(x: T) { }
 }
-module C2 {
+namespace C2 {
     export var x = 1;
 }
 
@@ -37,7 +37,7 @@ interface I<T> {
     new (x: T, y: number): C2<T>;
 }
 
-var i2: I<number>;
+declare var i2: I<number>;
 var r4 = new i2(1, '');
 var r5 = new i2(1, 1);
 
@@ -62,6 +62,5 @@ var C2 = /** @class */ (function () {
     C2.x = 1;
 })(C2 || (C2 = {}));
 var r2 = new C2(1, '');
-var i2;
 var r4 = new i2(1, '');
 var r5 = new i2(1, 1);

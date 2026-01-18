@@ -1,4 +1,4 @@
-module test {
+namespace test {
     export class A {
         foo() {
         }

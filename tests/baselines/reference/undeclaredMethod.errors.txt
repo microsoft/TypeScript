@@ -2,7 +2,7 @@ undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar' does not exist on ty
 
 
 ==== undeclaredMethod.ts (1 errors) ====
-    module M {
+    namespace M {
         export class C {
             public salt() {}
         }

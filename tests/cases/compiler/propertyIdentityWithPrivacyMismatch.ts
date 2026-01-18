@@ -1,4 +1,5 @@
-//@module: amd
+// @strict: false
+//@module: commonjs
 // @Filename: propertyIdentityWithPrivacyMismatch_0.ts
 declare module 'mod1' {
     class Foo {

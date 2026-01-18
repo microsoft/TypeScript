@@ -1,197 +1,132 @@
 //// [tests/cases/compiler/reachabilityChecks9.ts] ////
 
 === reachabilityChecks9.ts ===
-// https://github.com/microsoft/TypeScript/issues/61259
+// https://github.com/microsoft/TypeScript/issues/55562
 
-const a = (v: 1 | 2) => {
->a : (v: 1 | 2) => 1 | 2
->  : ^ ^^     ^^^^^^^^^^
->(v: 1 | 2) => {  try {    switch (v) {      case 1:        return v;      case 2:        return v;    }  } finally {    console.log("exit");  }} : (v: 1 | 2) => 1 | 2
->                                                                                                                                                 : ^ ^^     ^^^^^^^^^^
->v : 1 | 2
->  : ^^^^^
+function g(str: string) {
+>g : (str: string) => void
+>  : ^   ^^      ^^^^^^^^^
+>str : string
+>    : ^^^^^^
 
-  try {
-    switch (v) {
->v : 1 | 2
->  : ^^^^^
+  switch (str) {
+>str : string
+>    : ^^^^^^
 
-      case 1:
->1 : 1
->  : ^
+    case "a":
+>"a" : "a"
+>    : ^^^
 
-        return v;
->v : 1
->  : ^
-
-      case 2:
->2 : 2
->  : ^
-
-        return v;
->v : 2
->  : ^
-    }
-  } finally {
-    console.log("exit");
->console.log("exit") : void
->                    : ^^^^
+      return;
+      console.log("1");
+>console.log("1") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
 >            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->"exit" : "exit"
->       : ^^^^^^
-  }
-};
+>"1" : "1"
+>    : ^^^
 
-const b = (v: number) => {
->b : (v: number) => number
->  : ^ ^^      ^^^^^^^^^^^
->(v: number) => {  try {    switch (v) {      case 1:        return v;      default:        return v;    }  } finally {    console.log("exit");  }} : (v: number) => number
->                                                                                                                                                   : ^ ^^      ^^^^^^^^^^^
->v : number
->  : ^^^^^^
-
-  try {
-    switch (v) {
->v : number
->  : ^^^^^^
-
-      case 1:
->1 : 1
->  : ^
-
-        return v;
->v : 1
->  : ^
-
-      default:
-        return v;
->v : number
->  : ^^^^^^
-    }
-  } finally {
-    console.log("exit");
->console.log("exit") : void
->                    : ^^^^
+      console.log("2");
+>console.log("2") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
 >            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->"exit" : "exit"
->       : ^^^^^^
-  }
-};
+>"2" : "2"
+>    : ^^^
 
-const c = (v: 1 | 2) => {
->c : (v: 1 | 2) => 1 | 2
->  : ^ ^^     ^^^^^^^^^^
->(v: 1 | 2) => {  try {    switch (v) {      case 1:        return v;      case 2:        return v;    }  } finally {    if (Math.random()) {      console.log("exit");    }  }} : (v: 1 | 2) => 1 | 2
->                                                                                                                                                                                : ^ ^^     ^^^^^^^^^^
->v : 1 | 2
->  : ^^^^^
+    case "b":
+>"b" : "b"
+>    : ^^^
 
-  try {
-    switch (v) {
->v : 1 | 2
->  : ^^^^^
-
-      case 1:
->1 : 1
->  : ^
-
-        return v;
->v : 1
->  : ^
-
-      case 2:
->2 : 2
->  : ^
-
-        return v;
->v : 2
->  : ^
-    }
-  } finally {
-    if (Math.random()) {
->Math.random() : number
->              : ^^^^^^
->Math.random : () => number
->            : ^^^^^^      
->Math : Math
->     : ^^^^
->random : () => number
->       : ^^^^^^      
-
-      console.log("exit");
->console.log("exit") : void
->                    : ^^^^
+      console.log("3");
+>console.log("3") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
 >            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->"exit" : "exit"
->       : ^^^^^^
-    }
+>"3" : "3"
+>    : ^^^
   }
-};
+}
 
-const d = (v: number) => {
->d : (v: number) => number
->  : ^ ^^      ^^^^^^^^^^^
->(v: number) => {  try {    switch (v) {      case 1:        return v;      default:        return v;    }  } finally {    if (Math.random()) {      console.log("exit");    }  }} : (v: number) => number
->                                                                                                                                                                                  : ^ ^^      ^^^^^^^^^^^
->v : number
->  : ^^^^^^
+function h(str: string) {
+>h : (str: string) => void
+>  : ^   ^^      ^^^^^^^^^
+>str : string
+>    : ^^^^^^
 
-  try {
-    switch (v) {
->v : number
->  : ^^^^^^
+  switch (str) {
+>str : string
+>    : ^^^^^^
 
-      case 1:
->1 : 1
->  : ^
+    case "a":
+>"a" : "a"
+>    : ^^^
 
-        return v;
->v : 1
->  : ^
-
-      default:
-        return v;
->v : number
->  : ^^^^^^
-    }
-  } finally {
-    if (Math.random()) {
->Math.random() : number
->              : ^^^^^^
->Math.random : () => number
->            : ^^^^^^      
->Math : Math
->     : ^^^^
->random : () => number
->       : ^^^^^^      
-
-      console.log("exit");
->console.log("exit") : void
->                    : ^^^^
+      console.log("1");
+>console.log("1") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
 >            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->"exit" : "exit"
->       : ^^^^^^
-    }
+>"1" : "1"
+>    : ^^^
+
+    default:
+      return;
+      console.log("2");
+>console.log("2") : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"2" : "2"
+>    : ^^^
+
+      console.log("3");
+>console.log("3") : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"3" : "3"
+>    : ^^^
+
+    case "b":
+>"b" : "b"
+>    : ^^^
+
+      console.log("4");
+>console.log("4") : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"4" : "4"
+>    : ^^^
   }
-};
+}
 

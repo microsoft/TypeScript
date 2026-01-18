@@ -1,4 +1,4 @@
-module E {
+namespace E {
 }
 
 enum E {

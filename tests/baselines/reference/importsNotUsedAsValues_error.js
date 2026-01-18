@@ -8,20 +8,20 @@ export const enum C { One, Two }
 
 //// [b.ts]
 import { A, B } from './a'; // Error
-let a: A;
-let b: B;
+declare let a: A;
+declare let b: B;
 console.log(a, b);
 
 //// [c.ts]
 import Default, * as named from './a'; // Error
-let a: Default;
-let b: named.B;
+declare let a: Default;
+declare let b: named.B;
 console.log(a, b);
 
 //// [d.ts]
 import Default, { A } from './a';
 const a = A;
-let b: Default;
+declare let b: Default;
 console.log(a, b);
 
 //// [e.ts]
@@ -37,8 +37,8 @@ console.log(c, d);
 
 //// [g.ts]
 import { C } from './a';
-let c: C;
-let d: C.Two;
+declare let c: C;
+declare let d: C.Two;
 console.log(c, d);
 
 //// [h.ts]
@@ -83,21 +83,16 @@ exports.A = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
 console.log(a, b);
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
 console.log(a, b);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var a = a_1.A;
-var b;
 console.log(a, b);
 //// [e.js]
 "use strict";
@@ -112,8 +107,6 @@ console.log(c, d);
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c;
-var d;
 console.log(c, d);
 //// [h.js]
 "use strict";

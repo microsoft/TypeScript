@@ -1,4 +1,5 @@
-// @module: node16,node18,nodenext
+// @strict: false
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json

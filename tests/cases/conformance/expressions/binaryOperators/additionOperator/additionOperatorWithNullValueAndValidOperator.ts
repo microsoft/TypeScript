@@ -2,10 +2,10 @@
 
 enum E { a, b, c }
 
-var a: any;
-var b: number;
-var c: E;
-var d: string;
+declare var a: any;
+declare var b: number;
+declare var c: E;
+declare var d: string;
 
 // null + any
 var r1: any = null + a;

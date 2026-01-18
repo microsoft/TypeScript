@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module M {
+////namespace M {
 ////    enum E {
 ////        A, B
 ////    }

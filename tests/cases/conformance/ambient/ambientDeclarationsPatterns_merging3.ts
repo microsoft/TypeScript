@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: types.ts
 declare module "*.foo" {
   export interface OhNo { star: string }

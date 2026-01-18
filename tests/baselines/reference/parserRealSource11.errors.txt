@@ -519,7 +519,7 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
         export class ASTSpan {
             public minChar: number = -1;  // -1 = "undefined" or "compiler generated"
             public limChar: number = -1;  // -1 = "undefined" or "compiler generated"   

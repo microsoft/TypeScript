@@ -1,6 +1,5 @@
 // @traceResolution: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /a.ts
 export default { a: 0 };
 

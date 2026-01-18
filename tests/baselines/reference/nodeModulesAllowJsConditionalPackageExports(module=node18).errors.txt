@@ -1,11 +1,7 @@
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
 index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
-node_modules/inner/index.d.mts(2,13): error TS2303: Circular definition of import alias 'cjs'.
-node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 ==== index.js (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
@@ -58,11 +54,12 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
     mjsi.cjsSource;
     typei.implicitCjsSource;
     ts.cjsSource;
-==== node_modules/inner/index.d.ts (1 errors) ====
+==== node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const implicitCjsSource = true;
+==== node_modules/inner/test.d.ts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/a";
-                ~~~
-!!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/b";
     import * as type from "inner";
     import * as ts from "inner/types";
@@ -70,12 +67,12 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
     export { mjs };
     export { type };
     export { ts };
-    export const implicitCjsSource = true;
-==== node_modules/inner/index.d.mts (1 errors) ====
+==== node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const mjsSource = true;
+==== node_modules/inner/test.d.mts (0 errors) ====
     // esm format file
     import * as cjs from "inner/a";
-                ~~~
-!!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/b";
     import * as type from "inner";
     import * as ts from "inner/types";
@@ -83,8 +80,10 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
     export { mjs };
     export { type };
     export { ts };
-    export const mjsSource = true;
 ==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsSource = true;
+==== node_modules/inner/test.d.cts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/a";
     import * as mjs from "inner/b";
@@ -94,7 +93,6 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
     export { mjs };
     export { type };
     export { ts };
-    export const cjsSource = true;
 ==== package.json (0 errors) ====
     {
         "name": "package",
@@ -126,7 +124,7 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
             "./types": {
                 "types": {
                     "import": "./index.d.mts",
-                    "require": "./index.d.cts",
+                    "require": "./index.d.cts"
                 },
                 "node": {
                     "import": "./index.mjs",
@@ -135,3 +133,4 @@ node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import
             }
         }
     }
+    

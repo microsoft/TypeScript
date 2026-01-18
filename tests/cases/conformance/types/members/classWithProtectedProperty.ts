@@ -1,3 +1,4 @@
+// @strict: false
 // accessing any protected outside the class is an error
 
 class C {

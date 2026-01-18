@@ -144,8 +144,8 @@ function sanitizeHarnessLSException(s: string) {
 
 export function sanitizeLibFileText(s: string): string {
     Compiler.libFileNameSourceFileMap?.forEach((lib, fileName) => {
-        s = replaceAll(s, JSON.stringify(lib.text), `${fileName}-Text`);
-        s = replaceAll(s, lib.text, `${fileName}-Text`);
+        s = replaceAll(s, lib.stringified, `${fileName}-Text`);
+        s = replaceAll(s, lib.file.text, `${fileName}-Text`);
     });
     return s;
 }

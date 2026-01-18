@@ -7,7 +7,7 @@ x = 3; // OK
 x = ''; // Error
 (x) = ''; // Error
 
-module M {
+namespace M {
     export var y: number;
 }
 M.y = 3; // OK
@@ -20,8 +20,8 @@ M.y = ''; // Error
 M = { y: 3 }; // Error
 (M) = { y: 3 }; // Error
 
-module M2 {
-    export module M3 {
+namespace M2 {
+    export namespace M3 {
         export var x: number;
     }
 

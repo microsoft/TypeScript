@@ -53,7 +53,7 @@ if(foo.M2.x){
 }
 
 === test/foo.d.ts ===
-export declare module M2 {
+export declare namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
@@ -63,7 +63,7 @@ export declare module M2 {
 }
 
 === test/other.d.ts ===
-export declare module M2 {
+export declare namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

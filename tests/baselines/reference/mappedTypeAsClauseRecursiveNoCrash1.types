@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRecursiveNoCrash1.ts] ////
+
+=== mappedTypeAsClauseRecursiveNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60476
+
+export type FlattenType<Source extends object, Target> = {
+>FlattenType : FlattenType<Source, Target>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Key in keyof Source as Key extends string
+    ? Source[Key] extends object
+      ? `${Key}.${keyof FlattenType<Source[Key], Target> & string}`
+      : Key
+    : never]-?: Target;
+};
+
+type FieldSelect = {
+>FieldSelect : FieldSelect
+>            : ^^^^^^^^^^^
+
+  table: string;
+>table : string
+>      : ^^^^^^
+
+  field: string;
+>field : string
+>      : ^^^^^^
+
+};
+
+type Address = {
+>Address : Address
+>        : ^^^^^^^
+
+  postCode: string;
+>postCode : string
+>         : ^^^^^^
+
+  description: string;
+>description : string
+>            : ^^^^^^
+
+  address: string;
+>address : string
+>        : ^^^^^^
+
+};
+
+type User = {
+>User : User
+>     : ^^^^
+
+  id: number;
+>id : number
+>   : ^^^^^^
+
+  name: string;
+>name : string
+>     : ^^^^^^
+
+  address: Address;
+>address : Address
+>        : ^^^^^^^
+
+};
+
+type FlattenedUser = FlattenType<User, FieldSelect>;
+>FlattenedUser : FlattenType<User, FieldSelect>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type FlattenedUserKeys = keyof FlattenType<User, FieldSelect>;
+>FlattenedUserKeys : "id" | "name" | "address.address" | "address.postCode" | "address.description"
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type FlattenTypeKeys<Source extends object, Target> = keyof {
+>FlattenTypeKeys : keyof { [Key in keyof Source as Key extends string ? Source[Key] extends object ? `${Key}.${keyof FlattenType<Source[Key], Target> & string}` : Key : never]-?: Target; }
+>                : ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Key in keyof Source as Key extends string
+    ? Source[Key] extends object
+      ? `${Key}.${keyof FlattenType<Source[Key], Target> & string}`
+      : Key
+    : never]-?: Target;
+};
+
+type FlattenedUserKeys2 = FlattenTypeKeys<User, FieldSelect>;
+>FlattenedUserKeys2 : "id" | "name" | "address.address" | "address.postCode" | "address.description"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

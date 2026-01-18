@@ -1,11 +1,12 @@
-var declare: string, type: number;
+declare var declare: string;
+declare var type: number;
 
 // The following is invalid but should declare a type alias named 'T1':
 declare type /*unexpected newline*/
 T1 = null;
 const t1: T1 = null; // Assert that T1 is the null type.
 
-let T: null;
+let T: null = null;
 // The following should use a variable named 'declare', use a variable named
 // 'type', and assign to a variable named 'T'.
 declare /*ASI*/

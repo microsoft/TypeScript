@@ -9,8 +9,8 @@ var z1 = void 0;
 
 // these are not widened
 
-var x2: null;
-var y2: undefined;
+declare var x2: null;
+declare var y2: undefined;
 
 var x3: null = null;
 var y3: undefined = undefined;
@@ -31,9 +31,6 @@ var z5 = void 0 || y2;
 var x1 = null;
 var y1 = undefined;
 var z1 = void 0;
-// these are not widened
-var x2;
-var y2;
 var x3 = null;
 var y3 = undefined;
 var z3 = void 0;

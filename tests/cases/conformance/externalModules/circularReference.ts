@@ -1,6 +1,6 @@
 // @Filename: foo1.ts
 import foo2 = require('./foo2');
-export module M1 {
+export namespace M1 {
 	export class C1 {
 		m1: foo2.M1.C1;
 		x: number;
@@ -14,7 +14,7 @@ export module M1 {
 
 // @Filename: foo2.ts
 import foo1 = require('./foo1');
-export module M1 {
+export namespace M1 {
 	export class C1 {
 		m1: foo1.M1.C1;
 		y: number

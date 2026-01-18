@@ -1,4 +1,4 @@
 // @declaration: true
-module M {
+namespace M {
     export var [a, b] = [1, 2];
 }

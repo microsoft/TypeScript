@@ -5,7 +5,7 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }

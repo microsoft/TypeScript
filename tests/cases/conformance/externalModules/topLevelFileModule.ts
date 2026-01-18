@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @Filename: vs/foo_0.ts
 export var x: number;

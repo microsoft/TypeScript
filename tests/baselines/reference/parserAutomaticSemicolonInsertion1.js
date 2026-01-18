@@ -5,12 +5,12 @@ interface I {
     (): void;
 }
  
-var i: I;
+declare var i: I;
 var o: Object;
 o = i;
 i = o;
  
-var a: {
+declare var a: {
     (): void
 }
 o = a;
@@ -18,10 +18,8 @@ a = o;
 
 
 //// [parserAutomaticSemicolonInsertion1.js]
-var i;
 var o;
 o = i;
 i = o;
-var a;
 o = a;
 a = o;

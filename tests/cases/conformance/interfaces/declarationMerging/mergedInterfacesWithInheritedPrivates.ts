@@ -1,5 +1,5 @@
 class C {
-    private x: number;
+    private x!: number;
 }
 
 interface A extends C {
@@ -11,16 +11,16 @@ interface A {
 }
 
 class D implements A { // error
-    private x: number;
-    y: string;
-    z: string;
+    private x!: number;
+    y!: string;
+    z!: string;
 }
 
 class E implements A { // error
-    x: number;
-    y: string;
-    z: string;
+    x!: number;
+    y!: string;
+    z!: string;
 }
 
-var a: A;
+declare var a: A;
 var r = a.x; // error

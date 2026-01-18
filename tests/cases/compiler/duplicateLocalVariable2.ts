@@ -1,4 +1,4 @@
-//@module: amd
+//@module: esnext
 export class TestCase {
     constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
     }

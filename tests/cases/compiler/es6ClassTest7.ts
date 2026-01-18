@@ -1,4 +1,5 @@
-declare module M {
+// @strict: false
+declare namespace M {
     export class Foo {
     }
 }

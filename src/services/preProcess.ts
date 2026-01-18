@@ -22,7 +22,6 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         typeReferenceDirectives: [],
         libReferenceDirectives: [],
         amdDependencies: [],
-        hasNoDefaultLib: undefined,
         moduleName: undefined,
     };
     const importedFiles: FileReference[] = [];
@@ -429,7 +428,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                 importedFiles.push(decl.ref);
             }
         }
-        return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
+        return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: false, ambientExternalModules: undefined };
     }
     else {
         // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
@@ -447,6 +446,6 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                 }
             }
         }
-        return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
+        return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: false, ambientExternalModules: ambientModuleNames };
     }
 }

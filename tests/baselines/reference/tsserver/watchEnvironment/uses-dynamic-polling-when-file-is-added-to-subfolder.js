@@ -17,7 +17,6 @@ import {} from "./"
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 17
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -82,7 +81,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/username/workspace/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/a/username/workspace/project/src/file1.ts Text-1 ""
 	/a/username/workspace/project/src/index.ts SVC-1-0 "import {} from \"./\""
 
@@ -124,7 +123,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -243,7 +242,7 @@ After request
 
 Before running Timeout callback:: count: 1
 1: pollPollingIntervalQueue
-//// [/a/username/workspace/project/src/file2.ts] Inode:: 115
+//// [/a/username/workspace/project/src/file2.ts] Inode:: 118
 
 
 
@@ -307,7 +306,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/worksp
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/username/workspace/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/a/username/workspace/project/src/file1.ts Text-1 ""
 	/a/username/workspace/project/src/index.ts SVC-1-0 "import {} from \"./\""
 	/a/username/workspace/project/src/file2.ts Text-1 ""
@@ -357,7 +356,7 @@ FsWatches::
 /a/username/workspace/project/src/file1.ts:
   {"inode":7}
 /a/username/workspace/project/src/file2.ts: *new*
-  {"inode":115}
+  {"inode":118}
 /a/username/workspace/project/tsconfig.json:
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts:

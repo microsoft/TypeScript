@@ -8,7 +8,7 @@ callOverload.ts(11,10): error TS2556: A spread argument must either have a tuple
     declare function fn(x: any): void;
     declare function takeTwo(x: any, y: any): void;
     declare function withRest(a: any, ...args: Array<any>): void;
-    var n: number[];
+    declare var n: number[];
     
     fn(1) // no error
     fn(1, 2, 3, 4)

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
 
 //// [core-js.d.ts]
-declare module core {
+declare namespace core {
     var String: {
         repeat(text: string, count: number): string;
     };

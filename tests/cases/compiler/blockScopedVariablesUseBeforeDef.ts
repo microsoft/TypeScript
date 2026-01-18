@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES5
 // @lib: esnext, dom
 function foo0() {
@@ -149,4 +150,12 @@ function wrapI2() {
         iter;
         yield 1;
     })();
+}
+
+function foo18() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
 }

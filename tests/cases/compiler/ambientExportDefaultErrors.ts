@@ -1,4 +1,6 @@
 // @filename: foo.d.ts
+// @noUncheckedSideEffectImports: false
+
 export default 2 + 2;
 export as namespace Foo;
 

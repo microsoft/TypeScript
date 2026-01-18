@@ -5,7 +5,7 @@ interfaceExtendingClassWithProtecteds.ts(15,12): error TS2445: Property 'x' is p
 
 ==== interfaceExtendingClassWithProtecteds.ts (2 errors) ====
     class Foo {
-        protected x: string;
+        protected x!: string;
     }
     
     interface I extends Foo { // error
@@ -19,7 +19,7 @@ interfaceExtendingClassWithProtecteds.ts(15,12): error TS2445: Property 'x' is p
         y: string;
     }
     
-    var i: I2;
+    declare var i: I2;
     var r = i.y;
     var r2 = i.x; // error
                ~

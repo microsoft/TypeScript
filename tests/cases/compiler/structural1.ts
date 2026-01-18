@@ -1,4 +1,4 @@
-module M {
+namespace M {
     export interface I {
         salt:number;
         pepper:number;

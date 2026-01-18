@@ -9,7 +9,7 @@ class c {
 >p : string
 >  : ^^^^^^
 }
-module m {
+namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

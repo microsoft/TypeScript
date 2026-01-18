@@ -1,4 +1,5 @@
-module M {
+// @strict: false
+namespace M {
     export interface I {
 	z;
     }

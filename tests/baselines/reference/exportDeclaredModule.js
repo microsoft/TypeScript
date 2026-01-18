@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/externalModules/exportDeclaredModule.ts] ////
 
 //// [foo1.ts]
-declare module M1 {
+declare namespace M1 {
 	export var a: string; 
 	export function b(): number;
 }

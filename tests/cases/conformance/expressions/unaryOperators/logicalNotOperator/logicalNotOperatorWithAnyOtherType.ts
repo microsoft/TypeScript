@@ -3,7 +3,7 @@
 var ANY: any;
 var ANY1;
 var ANY2: any[] = ["", ""];
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { }};
 function foo(): any {
     var a;
@@ -16,7 +16,7 @@ class A {
         return a;
     }
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();

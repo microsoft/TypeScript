@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts] ////
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.ts]
-export module x {
+export namespace x {
     export class c {
         foo(a: number) {
             return a;

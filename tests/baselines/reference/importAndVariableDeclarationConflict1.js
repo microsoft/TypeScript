@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importAndVariableDeclarationConflict1.ts] ////
 
 //// [importAndVariableDeclarationConflict1.ts]
-module m {
+namespace m {
   export var m = '';
 }
 

@@ -1,4 +1,4 @@
-module _modes {
+namespace _modes {
  export interface IMode {
   
  }
@@ -10,7 +10,7 @@ module _modes {
 
 // _modes. // produces an internal error - please implement in derived class
 
-module editor {
+namespace editor {
  import modes = _modes;
  
  var i : modes.IMode;
@@ -25,7 +25,7 @@ module editor {
 }
 
 import modesOuter = _modes;
-module editor2 {
+namespace editor2 {
  
  var i : modesOuter.IMode;
  
@@ -34,19 +34,19 @@ module editor2 {
   
  }
  
-  module Foo { export class Bar{} }
+  namespace Foo { export class Bar{} }
  
   class Bug2 {
       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
   }
 }
 
-module A1 {
+namespace A1 {
     export interface A1I1 {}
     export class A1C1 {}
 }
 
-module B1 {
+namespace B1 {
     import A1Alias1 = A1;
     
     var i : A1Alias1.A1I1;   

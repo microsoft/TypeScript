@@ -1,26 +1,26 @@
 // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
 
 var s: string;
-module M1 {
-    export var s: number;
+namespace M1 {
+    export var s: number = 0;
     var n = s;
     var n: number;
 }
 
-module M2 {
-    var s: number;
+namespace M2 {
+    var s: number = 0;
     var n = s;
     var n: number;
 }
 
 function fn() {
-    var s: boolean;
+    var s: boolean = false;
     var n = s;
     var n: boolean;
 }
 
 class C {
-    s: Date;
+    s!: Date;
     n = this.s;
     x() {
         var p = this.n;
@@ -28,9 +28,9 @@ class C {
     }
 }
 
-module M3 {
+namespace M3 {
     var s: any;
-    module M4 {
+    namespace M4 {
         var n = s;
         var n: any;
     }

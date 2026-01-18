@@ -74,10 +74,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/third_party/marked/src/defaults.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
@@ -136,10 +132,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -203,16 +195,10 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
   {}
 /home/src/workspaces/project: *new*
-  {}
-/home/src/workspaces/project/node_modules: *new*
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types: *new*
   {}
@@ -350,16 +336,10 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {}
 /home/src/workspaces/project:
-  {}
-/home/src/workspaces/project/node_modules:
-  {}
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
@@ -450,8 +430,8 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -463,7 +443,7 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 4,
       "success": true,
       "body": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1115,11 +1095,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -1128,11 +1115,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -1141,11 +1135,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -1154,11 +1155,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -1373,7 +1381,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -2050,11 +2058,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -2063,11 +2078,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -2076,11 +2098,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -2089,11 +2118,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./third_party/marked/src/defaults",
+                "kind": "text"
+              }
+            ],
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
+              "moduleSpecifier": "./third_party/marked/src/defaults",
               "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
             }
           },
@@ -2139,10 +2175,11 @@ Info seq  [hh:mm:ss:mss] request:
         "entryNames": [
           {
             "name": "defaults",
-            "source": "/home/src/workspaces/project/third_party/marked/src/defaults",
+            "source": "./third_party/marked/src/defaults",
             "data": {
               "exportName": "defaults",
-              "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js"
+              "fileName": "/home/src/workspaces/project/third_party/marked/src/defaults.js",
+              "moduleSpecifier": "./third_party/marked/src/defaults"
             }
           }
         ]

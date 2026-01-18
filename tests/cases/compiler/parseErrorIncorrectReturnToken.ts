@@ -1,3 +1,4 @@
+// @strict: false
 
 type F1 = {
     (n: number) => string; // should be : not =>

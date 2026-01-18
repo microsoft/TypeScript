@@ -199,6 +199,9 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     fileIsOpen(filePath: Path): boolean;
     onDiscoveredSymlink?(): void;
 
+    skipWatchingFailedLookups?(path: Path): boolean | undefined;
+    skipWatchingTypeRoots?(): boolean | undefined;
+
     // For incremental testing
     beforeResolveSingleModuleNameWithoutWatching?(
         moduleResolutionCache: ModuleResolutionCache,
@@ -324,7 +327,7 @@ export function canWatchAtTypes(atTypes: Path): boolean {
 }
 
 function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDirComponents: Readonly<PathPathComponents>) {
-    if (fileOrDirComponents.length < fileOrDirComponents.length) return false;
+    if (fileOrDirComponents.length < dirComponents.length) return false;
     for (let i = 0; i < dirComponents.length; i++) {
         if (fileOrDirComponents[i] !== dirComponents[i]) return false;
     }
@@ -872,7 +875,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
         const program = resolutionHost.getCurrentProgram();
-        const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
+        const oldRedirect = program && program.getRedirectFromSourceFile(containingFile)?.resolvedRef;
         const unmatchedRedirects = oldRedirect ?
             !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
             !!redirectedReference;
@@ -895,7 +898,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     resolutionHost.onDiscoveredSymlink();
                 }
                 resolutionsInFile.set(name, mode, resolution);
-                if (resolution !== existingResolution) {
+                if (resolution !== existingResolution && !resolutionHost.skipWatchingFailedLookups?.(path)) {
                     watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
                     if (existingResolution) {
                         stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
@@ -947,7 +950,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             // Stop watching and remove the unused name
             resolutionsInFile.forEach((resolution, name, mode) => {
                 if (!seenNamesInFile.has(name, mode)) {
-                    stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
+                    if (!resolutionHost.skipWatchingFailedLookups?.(path)) {
+                        stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
+                    }
                     resolutionsInFile.delete(name, mode);
                 }
             });
@@ -1434,13 +1439,15 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         // Deleted file, stop watching failed lookups for all the resolutions in the file
         const resolutions = cache.get(filePath);
         if (resolutions) {
-            resolutions.forEach(resolution =>
-                stopWatchFailedLookupLocationOfResolution(
-                    resolution,
-                    filePath,
-                    getResolutionWithResolvedFileName,
-                )
-            );
+            if (!resolutionHost.skipWatchingFailedLookups?.(filePath)) {
+                resolutions.forEach(resolution =>
+                    stopWatchFailedLookupLocationOfResolution(
+                        resolution,
+                        filePath,
+                        getResolutionWithResolvedFileName,
+                    )
+                );
+            }
             cache.delete(filePath);
         }
     }
@@ -1663,6 +1670,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (options.types) {
             // No need to do any watch since resolution cache is going to handle the failed lookups
             // for the types added by this
+            closeTypeRootsWatch();
+            return;
+        }
+
+        // if this is inferred project with non watchable root or current directory that is lib location, skip watching type roots
+        if (!isRootWatchable || resolutionHost.skipWatchingTypeRoots?.()) {
             closeTypeRootsWatch();
             return;
         }

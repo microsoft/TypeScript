@@ -1,5 +1,5 @@
 ﻿// @jsx: react
-declare module JSX {
+declare namespace JSX {
     interface Element {
         div: string;
     }

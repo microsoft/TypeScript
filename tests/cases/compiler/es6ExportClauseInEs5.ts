@@ -7,11 +7,11 @@ class c {
 }
 interface i {
 }
-module m {
+namespace m {
     export var x = 10;
 }
 var x = 10;
-module uninstantiated {
+namespace uninstantiated {
 }
 export { c };
 export { c as c2 };

@@ -5,6 +5,6 @@ enum Foo {
     a = b
 }
 
-module Foo {
+namespace Foo {
     export var x = b
 }

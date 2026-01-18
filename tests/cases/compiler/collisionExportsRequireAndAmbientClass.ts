@@ -1,16 +1,16 @@
-//@module: amd
+//@module: commonjs
 //@filename: collisionExportsRequireAndAmbientClass_externalmodule.ts
 export declare class require {
 }
 export declare class exports {
 }
-declare module m1 {
+declare namespace m1 {
     class require {
     }
     class exports {
     }
 }
-module m2 {
+namespace m2 {
     export declare class require {
     }
     export declare class exports {
@@ -22,13 +22,13 @@ declare class require {
 }
 declare class exports {
 }
-declare module m3 {
+declare namespace m3 {
     class require {
     }
     class exports {
     }
 }
-module m4 {
+namespace m4 {
     export declare class require {
     }
     export declare class exports {

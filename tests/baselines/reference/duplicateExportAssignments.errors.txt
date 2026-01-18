@@ -32,7 +32,7 @@ foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
 !!! error TS2300: Duplicate identifier 'export='.
     
 ==== foo3.ts (2 errors) ====
-    module x {
+    namespace x {
     	export var x = 10;
     }
     class y {

@@ -2,15 +2,15 @@
 
 //// [incrementOperatorWithUnsupportedBooleanType.ts]
 // ++ operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
 class A {
-    public a: boolean;
+    public a!: boolean;
     static foo() { return true; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 
@@ -57,8 +57,6 @@ M.n++;
 objA.a++, M.n++;
 
 //// [incrementOperatorWithUnsupportedBooleanType.js]
-// ++ operator on boolean type
-var BOOLEAN;
 function foo() { return true; }
 var A = /** @class */ (function () {
     function A() {

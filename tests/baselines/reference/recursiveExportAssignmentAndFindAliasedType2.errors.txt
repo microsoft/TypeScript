@@ -4,7 +4,7 @@ recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts(2,5): error TS2303: 
 ==== recursiveExportAssignmentAndFindAliasedType2_moduleA.ts (0 errors) ====
     /// <reference path="recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts"/>
     import moduleC = require("moduleC");
-    import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+    import ClassB = require("./recursiveExportAssignmentAndFindAliasedType2_moduleB");
     export var b: ClassB; // This should result in type ClassB
 ==== recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts (1 errors) ====
     declare module "moduleC" {

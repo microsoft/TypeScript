@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/disallowedBlockScopedInPresenceOfParseErrors1.ts] ////
+
+=== disallowedBlockScopedInPresenceOfParseErrors1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61734
+
+function f1() {
+>f1 : Symbol(f1, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 0, 0))
+
+  if (1 > 0)
+    const e = 3;
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 4, 9))
+
+    console.log(e);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 4, 9))
+  }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 7, 1))
+
+  if (1 > 0)
+    let e = 3;
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 11, 7))
+
+    console.log(e);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 11, 7))
+  }
+}
+
+declare const resource: Disposable
+>resource : Symbol(resource, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 16, 13))
+>Disposable : Symbol(Disposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+function f3() {
+>f3 : Symbol(f3, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 16, 34))
+
+  if (1 > 0)
+    using e = resource;
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 20, 9))
+>resource : Symbol(resource, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 16, 13))
+
+    console.log(e);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 20, 9))
+  }
+}
+
+declare const asyncResource: AsyncDisposable
+>asyncResource : Symbol(asyncResource, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 25, 13))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+async function f4() {
+>f4 : Symbol(f4, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 25, 44))
+
+  if (1 > 0)
+    await using e = asyncResource;
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 29, 15))
+>asyncResource : Symbol(asyncResource, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 25, 13))
+
+    console.log(e);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(disallowedBlockScopedInPresenceOfParseErrors1.ts, 29, 15))
+  }
+}
+

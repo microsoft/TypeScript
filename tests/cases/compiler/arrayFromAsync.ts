@@ -1,3 +1,4 @@
+// @strict: false
 // @module: esnext
 // @target: esnext
 

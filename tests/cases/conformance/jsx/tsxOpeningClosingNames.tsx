@@ -1,10 +1,10 @@
 //@filename: file.tsx
 //@jsx: preserve
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 
-declare module A.B.C {
+declare namespace A.B.C {
   var D: any;
 }
 

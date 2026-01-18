@@ -1,5 +1,5 @@
-module Foo1 {
-    export module Bar {
+namespace Foo1 {
+    export namespace Bar {
         export var x = 42;
     }
 
@@ -8,8 +8,8 @@ module Foo1 {
     }
 }
 
-module Foo2 {
-    module Bar {
+namespace Foo2 {
+    namespace Bar {
         export var x = 42;
     }
 
@@ -20,8 +20,8 @@ module Foo2 {
 
 var z2 = Foo2.Bar.y; // Error for using interface name as a value.
 
-module Foo3 {
-    export module Bar {
+namespace Foo3 {
+    export namespace Bar {
         export var x = 42;
     }
 

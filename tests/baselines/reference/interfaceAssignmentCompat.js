@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
 
 //// [interfaceAssignmentCompat.ts]
-module M {
+namespace M {
     export enum Color {
         Green,
         Blue,

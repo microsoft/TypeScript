@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
 
 === moduleMemberWithoutTypeAnnotation2.ts ===
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
 >CompilerDiagnostics : typeof CompilerDiagnostics
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,6 +1,7 @@
+// @strict: false
 // Should all be allowed
 
-module M {
+namespace M {
 }
 M = null;
 

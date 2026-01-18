@@ -29,7 +29,6 @@ import { module1 } from "module1";import { module2 } from "module2";
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -85,8 +84,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/file1.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/module1/package.json' does not exist.
@@ -97,8 +104,16 @@ Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_mo
 Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/product/node_modules/module1/index.ts', result '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/module2.ts' does not exist.
@@ -114,12 +129,12 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproj
 Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/module1/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/package.json' does not exist according to earlier cached lookups.
@@ -132,43 +147,95 @@ Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlie
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/feature/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/src/feature/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product/src'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/feature/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/src/feature/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product/src'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/file4.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/test/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/test/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/test/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product/test'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/test/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product/test'.
@@ -176,6 +243,10 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolve
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules/module1/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
@@ -192,7 +263,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
@@ -251,7 +322,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -328,6 +399,10 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
@@ -496,7 +571,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/user
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"

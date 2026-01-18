@@ -7,10 +7,10 @@ interface I {
 class C extends I { } // error
 
 class C2 extends { foo: string; } { } // error
-var x: { foo: string; }
+declare var x: { foo: string; }
 class C3 extends x { } // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 class C4 extends M { } // error
 
 function foo() { }
@@ -48,7 +48,6 @@ var C2 = /** @class */ (function (_super) {
     }
     return C2;
 }({ foo: string })); // error
-var x;
 var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);
     function C3() {

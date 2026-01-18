@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @declaration: true
 
@@ -6,7 +7,7 @@ export class A {}
 
 // @filename: f2.ts
 export class B {
-    n: number;
+    n!: number;
 }
 
 // @filename: f3.ts
@@ -34,5 +35,5 @@ declare module "./f1" {
 import {A} from "./f1";
 import "./f3";
 
-let a: A;
+declare let a: A;
 let b = a.foo().n;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/typeValueConflict1.ts] ////
 
 === typeValueConflict1.ts ===
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
@@ -10,7 +10,7 @@ module M1 {
 >  : ^
  }
 }
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts] ////
 
 === declFileTypeAnnotationTypeAlias.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -22,7 +22,7 @@ module M {
 >C : c
 >  : ^
 
-    export module m {
+    export namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -49,7 +49,7 @@ interface Window {
 >           : ^^^^^^^^^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -57,7 +57,7 @@ module M {
 >W : W
 >  : ^
 
-    export module N {
+    export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

@@ -3,7 +3,7 @@
 namespace N {
     function S() {}
 }
-module M {
+namespace M {
     function F() {}
 }
 

@@ -1,4 +1,5 @@
-module Bugs {
+// @strict: false
+namespace Bugs {
                 export interface IToken {
                                 startIndex:number;
                                 type:string;

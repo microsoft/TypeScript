@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/fuzzy.ts] ////
 
 //// [fuzzy.ts]
-module M {
+namespace M {
     export interface I {
         works:()=>R;
         alsoWorks:()=>R;

@@ -1,4 +1,4 @@
-module bar {
+namespace bar {
  export function bar() {
   return this;
  } 

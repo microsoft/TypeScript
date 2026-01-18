@@ -1,6 +1,6 @@
-module A {
+namespace A {
 
-    module B {
+    namespace B {
         export function createB(): B {
             return null;
         }

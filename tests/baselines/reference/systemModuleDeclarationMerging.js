@@ -2,13 +2,13 @@
 
 //// [systemModuleDeclarationMerging.ts]
 export function F() {}
-export module F { var x; }
+export namespace F { var x; }
 
 export class C {}
-export module C { var x; }
+export namespace C { var x; }
 
 export enum E {}
-export module E { var x; }
+export namespace E { var x; }
 
 //// [systemModuleDeclarationMerging.js]
 System.register([], function (exports_1, context_1) {

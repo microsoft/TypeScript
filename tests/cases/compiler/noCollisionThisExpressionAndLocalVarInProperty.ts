@@ -1,3 +1,4 @@
+// @strict: false
 class class1 {
     public prop1 = {
         doStuff: (callback) => () => {

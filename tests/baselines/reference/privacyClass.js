@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyClass.ts] ////
 
 //// [privacyClass.ts]
-export module m1 {
+export namespace m1 {
     export interface m1_i_public {
     }
 
@@ -45,7 +45,7 @@ export module m1 {
 }
 
 
-module m2 {
+namespace m2 {
     export interface m2_i_public {
     }
 

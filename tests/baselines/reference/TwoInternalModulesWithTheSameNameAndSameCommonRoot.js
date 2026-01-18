@@ -1,13 +1,13 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesWithTheSameNameAndSameCommonRoot.ts] ////
 
 //// [part1.ts]
-module A {
+namespace A {
     export interface Point {
         x: number;
         y: number;
     }
 
-    export module Utils {
+    export namespace Utils {
         export function mirror<T extends Point>(p: T) {
             return { x: p.y, y: p.x };
         }
@@ -15,10 +15,10 @@ module A {
 }
 
 //// [part2.ts]
-module A {
+namespace A {
     export var Origin: Point = { x: 0, y: 0 };
 
-    export module Utils {
+    export namespace Utils {
         export class Plane {
             constructor(public tl: Point, public br: Point) { }
         }

@@ -9,7 +9,7 @@ privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is pr
         private static bar: string;
     }
     
-    module C {
+    namespace C {
         export var y = C.bar; // error
                          ~~~
 !!! error TS2341: Property 'bar' is private and only accessible within class 'C'.

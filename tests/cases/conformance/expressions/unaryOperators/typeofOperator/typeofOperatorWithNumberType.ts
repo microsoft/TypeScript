@@ -1,6 +1,6 @@
 // @allowUnusedLabels: true
 // typeof  operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
@@ -9,8 +9,8 @@ class A {
     public a: number;
     static foo() { return 1; }
 }
-module M {
-    export var n: number;
+namespace M {
+    export var n!: number;
 }
 
 var objA = new A();
@@ -46,8 +46,9 @@ typeof M.n;
 typeof objA.a, M.n;
 
 // use typeof in type query
-var z: number;
-var x: number[];
+declare var z: number;
+declare var x: number[];
+declare var r: () => number;
 z: typeof NUMBER;
 x: typeof NUMBER1;
 r: typeof foo;

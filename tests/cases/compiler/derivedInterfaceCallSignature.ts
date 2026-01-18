@@ -23,5 +23,5 @@ interface D3SvgArea extends D3SvgPath {
     defined(defined: (data: any, index?: number) => boolean): D3SvgArea;
 }
 
-var area: D3SvgArea;
+declare var area: D3SvgArea;
 area.interpolate('two')('one');

@@ -1,6 +1,6 @@
 // @noImplicitAny: true
 
-let a: Date[];
+declare let a: Date[];
 
 for (let x in a) {
     let a1 = a[x + 1];

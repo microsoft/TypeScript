@@ -39,9 +39,9 @@ function throw() {}
 >() {} : () => void
 >      : ^^^^^^^^^^
 
-module void {}
->module : any
->       : ^^^
+namespace void {}
+>namespace : any
+>          : ^^^
 >void {} : undefined
 >        : ^^^^^^^^^
 >{} : {}

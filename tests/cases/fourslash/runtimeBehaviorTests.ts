@@ -8,7 +8,7 @@
 ////    [n: number]: RT_JQueryElement;
 ////}
 ////
-////module RT_StaticModule {
+////namespace RT_StaticModule {
 ////    export class C {
 ////        x: number;
 ////        g: any;
@@ -36,7 +36,7 @@
 ////    }
 ////}
 ////
-////module RT_SuperCalls {
+////namespace RT_SuperCalls {
 ////    class Base {
 ////        constructor() {
 ////            var x: any;
@@ -67,7 +67,7 @@
 ////    export var result = s.foo() + ss.foo();
 ////}
 ////
-////module RT_SuperCalls2 {
+////namespace RT_SuperCalls2 {
 ////    // Case 5
 ////    class Base5 {
 ////        public x() {
@@ -118,8 +118,8 @@
 ////    export var result = results1.x() + results1.y() + results2.y();
 ////}
 ////
-////module RT_VarArgs {
-////    module M {
+////namespace RT_VarArgs {
+////    namespace M {
 ////        export class C {
 ////            public f(x: string, ...rest: number[]) {
 ////                var sum = 0;

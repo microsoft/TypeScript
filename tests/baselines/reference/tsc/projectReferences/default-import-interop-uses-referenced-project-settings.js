@@ -68,7 +68,6 @@ export const local = 0;
                     import ambiguous from "ambiguous-package"; // Ok
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

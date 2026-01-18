@@ -2,7 +2,7 @@
 
 === commentsDottedModuleName.ts ===
 /** this is multi declare module*/
-export module outerModule.InnerModule {
+export namespace outerModule.InnerModule {
 >outerModule : typeof outerModule
 >            : ^^^^^^^^^^^^^^^^^^
 >InnerModule : typeof InnerModule

@@ -30,7 +30,7 @@ invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because
     ~
 !!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

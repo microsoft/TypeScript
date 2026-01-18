@@ -67,8 +67,7 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
 function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     let depthRemaining = 40;
     let current = 0;
-    // Includes the EOF Token so that comments which aren't attached to statements are included
-    const statements = [...sourceFile.statements, sourceFile.endOfFileToken];
+    const statements = sourceFile.statements;
     const n = statements.length;
     while (current < n) {
         while (current < n && !isAnyImportSyntax(statements[current])) {
@@ -86,6 +85,9 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
             out.push(createOutliningSpanFromBounds(findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), statements[lastImport].getEnd(), OutliningSpanKind.Imports));
         }
     }
+
+    // Visit the EOF Token so that comments which aren't attached to statements are included.
+    visitNode(sourceFile.endOfFileToken);
 
     function visitNode(n: Node) {
         if (depthRemaining === 0) return;

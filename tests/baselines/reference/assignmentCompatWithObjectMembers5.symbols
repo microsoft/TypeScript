@@ -8,26 +8,26 @@ class C {
 >foo : Symbol(C.foo, Decl(assignmentCompatWithObjectMembers5.ts, 0, 9))
 }
 
-var c: C;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 3))
+declare var c: C;
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 11))
 >C : Symbol(C, Decl(assignmentCompatWithObjectMembers5.ts, 0, 0))
 
 interface I {
->I : Symbol(I, Decl(assignmentCompatWithObjectMembers5.ts, 4, 9))
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembers5.ts, 4, 17))
 
     fooo: string;
 >fooo : Symbol(I.fooo, Decl(assignmentCompatWithObjectMembers5.ts, 6, 13))
 }
 
-var i: I;
->i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 3))
->I : Symbol(I, Decl(assignmentCompatWithObjectMembers5.ts, 4, 9))
+declare var i: I;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 11))
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembers5.ts, 4, 17))
 
 c = i; // error
->c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 3))
->i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 3))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 11))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 11))
 
 i = c; // error
->i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 3))
->c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 3))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembers5.ts, 10, 11))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembers5.ts, 4, 11))
 

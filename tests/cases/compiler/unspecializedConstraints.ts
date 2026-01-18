@@ -1,4 +1,4 @@
-module ts {
+namespace ts {
     interface Map<T> {
         [index: string]: T;
     }

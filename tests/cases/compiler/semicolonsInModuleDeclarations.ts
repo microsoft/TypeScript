@@ -1,4 +1,4 @@
-declare module ambiModule {
+declare namespace ambiModule {
    export interface i1 { };
    export interface i2 { }
 }

@@ -1,3 +1,4 @@
+// @strict: false
 
 interface Number extends Comparable<number> {
 

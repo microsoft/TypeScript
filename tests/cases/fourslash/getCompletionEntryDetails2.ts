@@ -2,7 +2,7 @@
 
 ////class Foo {
 ////}
-////module Foo {
+////namespace Foo {
 ////    export var x: number;
 ////}
 ////Foo./**/

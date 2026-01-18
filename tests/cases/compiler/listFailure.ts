@@ -1,4 +1,4 @@
-module Editor {
+namespace Editor {
 
     export class Buffer {
     	lines: List<Line> = ListMakeHead<Line>();

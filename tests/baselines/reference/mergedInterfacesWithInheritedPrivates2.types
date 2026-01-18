@@ -5,7 +5,7 @@ class C {
 >C : C
 >  : ^
 
-    private x: number;
+    private x!: number;
 >x : number
 >  : ^^^^^^
 }
@@ -14,7 +14,7 @@ class C2 {
 >C2 : C2
 >   : ^^
 
-    private w: number;
+    private w!: number;
 >w : number
 >  : ^^^^^^
 }
@@ -37,15 +37,15 @@ class D extends C implements A { // error
 >C : C
 >  : ^
 
-    private w: number;
+    private w!: number;
 >w : number
 >  : ^^^^^^
 
-    y: string;
+    y!: string;
 >y : string
 >  : ^^^^^^
 
-    z: string;
+    z!: string;
 >z : string
 >  : ^^^^^^
 }
@@ -56,20 +56,20 @@ class E extends C2 implements A { // error
 >C2 : C2
 >   : ^^
 
-    w: number;
+    w!: number;
 >w : number
 >  : ^^^^^^
 
-    y: string;
+    y!: string;
 >y : string
 >  : ^^^^^^
 
-    z: string;
+    z!: string;
 >z : string
 >  : ^^^^^^
 }
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 

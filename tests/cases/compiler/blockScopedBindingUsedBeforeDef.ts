@@ -1,3 +1,4 @@
+// @strict: false
 // 1:
 for (let {[a]: a} of [{ }]) continue;
 

@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 class RoyalGuard {
     isLeader(): this is LeadGuard {
@@ -31,7 +32,7 @@ function invalidGuard(c: any): this is number {
     return false;
 }
 
-let c: number | number[];
+declare var c: number | number[];
 if (invalidGuard(c)) {
     c;
 }

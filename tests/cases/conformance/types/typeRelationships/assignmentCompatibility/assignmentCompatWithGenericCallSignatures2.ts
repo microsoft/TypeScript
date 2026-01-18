@@ -8,8 +8,8 @@ interface B {
     <S>(x: S, ...y: S[]): void
 }
 
-var a: A;
-var b: B;
+declare var a: A;
+declare var b: B;
 
 // Both errors
 a = b;

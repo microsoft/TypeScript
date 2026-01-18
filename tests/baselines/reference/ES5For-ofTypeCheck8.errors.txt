@@ -3,7 +3,7 @@ ES5For-ofTypeCheck8.ts(3,6): error TS2322: Type 'string | number | symbol' is no
 
 
 ==== ES5For-ofTypeCheck8.ts (1 errors) ====
-    var union: string | string[]| number[]| symbol[];
+    declare var union: string | string[]| number[]| symbol[];
     var v: symbol;
     for (v of union) { }
          ~

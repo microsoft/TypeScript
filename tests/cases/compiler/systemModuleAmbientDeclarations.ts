@@ -1,3 +1,4 @@
+// @strict: false
 // @module: system
 // @isolatedModules: true
 
@@ -25,4 +26,4 @@ export declare var v: number;
 export declare enum E {X = 1}
 
 // @filename: file6.ts
-export declare module M { var v: number; }
+export declare namespace M { var v: number; }

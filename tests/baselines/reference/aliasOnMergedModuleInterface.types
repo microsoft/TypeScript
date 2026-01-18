@@ -6,7 +6,7 @@ import foo = require("foo")
 >foo : any
 >    : ^^^
 
-var z: foo;
+declare var z: foo;
 >z : foo
 >  : ^^^
 
@@ -43,7 +43,7 @@ declare module "foo"
 >"foo" : typeof import("foo")
 >      : ^^^^^^^^^^^^^^^^^^^^
 {
-    module B {
+    namespace B {
         export interface A {
         }
     }

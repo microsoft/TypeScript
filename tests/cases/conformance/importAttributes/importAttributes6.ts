@@ -1,4 +1,4 @@
-// @module: node18,nodenext
+// @module: node18,node20,nodenext
 // @filename: mod.mts
 import * as thing1 from "./mod.mjs" with { field: 0 };
 import * as thing2 from "./mod.mjs" with { field: `a` };

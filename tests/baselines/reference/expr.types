@@ -21,7 +21,7 @@ function f() {
 >f : () => void
 >  : ^^^^^^^^^^
 
-    var a: any;
+    var a!: any;
 >a : any
 >  : ^^^
 
@@ -43,11 +43,11 @@ function f() {
 >false : false
 >      : ^^^^^
 
-    var i:I;
+    var i!: I;
 >i : I
 >  : ^
 
-    var e:E;
+    var e!: E;
 >e : E
 >  : ^
 

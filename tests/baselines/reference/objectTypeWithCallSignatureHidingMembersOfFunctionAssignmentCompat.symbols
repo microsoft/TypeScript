@@ -7,32 +7,32 @@ interface I {
     (): void;
 }
 
-var i: I;
->i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 3))
+declare var i: I;
+>i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 11))
 >I : Symbol(I, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 0, 0))
 
-var f: Object;
->f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
+declare var f: Object;
+>f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 11))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 f = i;
->f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
->i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 3))
+>f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 11))
+>i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 11))
 
 i = f;
->i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 3))
->f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
+>i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 4, 11))
+>f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 11))
 
-var a: {
->a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 3))
+declare var a: {
+>a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 11))
 
     (): void
 }
 f = a;
->f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
->a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 3))
+>f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 11))
+>a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 11))
 
 a = f;
->a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 3))
->f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
+>a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 9, 11))
+>f : Symbol(f, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 11))
 

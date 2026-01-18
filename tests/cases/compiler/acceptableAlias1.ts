@@ -1,5 +1,5 @@
-module M {
-    export module N {
+namespace M {
+    export namespace N {
     }
     export import X = N;
 }

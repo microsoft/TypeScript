@@ -5,7 +5,7 @@
 ////    x: T;
 ////}
 ////
-////module C {
+////namespace C {
 ////    export function f(x: typeof C) {
 ////        x./*1*/
 ////        var /*3*/r = new /*2*/x<number>();

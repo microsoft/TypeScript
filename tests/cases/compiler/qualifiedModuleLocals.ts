@@ -1,4 +1,4 @@
-module A {
+namespace A {
 
   function b() {}
 

@@ -1,1 +1,1 @@
-module string {}
+namespace string {}

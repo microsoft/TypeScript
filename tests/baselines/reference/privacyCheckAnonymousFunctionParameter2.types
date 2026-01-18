@@ -11,7 +11,7 @@ interface Iterator<T> { x: T }
 >x : T
 >  : ^
 
-module Q {
+namespace Q {
 >Q : typeof Q
 >  : ^^^^^^^^
 
@@ -29,7 +29,7 @@ module Q {
     }
 }
 
-module Q {
+namespace Q {
 >Q : typeof Q
 >  : ^^^^^^^^
 

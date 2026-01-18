@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/forInModule.ts] ////
 
 === forInModule.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

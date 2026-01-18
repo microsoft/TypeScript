@@ -7,6 +7,6 @@ var x: TypeModule1.
 >TypeModule1 : any
 >            : ^^^
 
-module TypeModule2 {
+namespace TypeModule2 {
 }
 

@@ -2,7 +2,7 @@ moduleNewExportBug.ts(10,14): error TS2694: Namespace 'mod1' has no exported mem
 
 
 ==== moduleNewExportBug.ts (1 errors) ====
-    module mod1 {
+    namespace mod1 {
     	interface mInt {
     		new (bar:any):any;
             foo (bar:any):any;

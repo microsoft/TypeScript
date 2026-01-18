@@ -15,7 +15,7 @@ verify.completions({
   includes: [
     {
       name: "someModule",
-      source: "/home/src/workspaces/project/someModule",
+      source: "./someModule",
       sourceDisplay: "./someModule",
       text: "(property) default: 1",
       kind: "property",
@@ -26,7 +26,7 @@ verify.completions({
     },
     {
       name: "someModule",
-      source: "/home/src/workspaces/project/someModule",
+      source: "./someModule",
       sourceDisplay: "./someModule",
       text: "const someModule: 0",
       kind: "const",
@@ -43,8 +43,8 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
   name: "someModule",
-  source: "/home/src/workspaces/project/someModule",
-  data: { exportName: "default", fileName: "/home/src/workspaces/project/someModule.ts" },
+  source: "./someModule",
+  data: { exportName: "default", fileName: "/home/src/workspaces/project/someModule.ts", "moduleSpecifier": "./someModule" },
   description: `Add import from "./someModule"`,
   newFileContent: `import someModule from "./someModule";\r\n\r\nsomeMo`
 });

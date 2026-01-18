@@ -6,7 +6,7 @@ import m = require('commentsMultiModuleMultiFile_0');
 >  : ^^^^^^^^
 
 /** this is multi module 3 comment*/
-export module multiM {
+export namespace multiM {
 >multiM : typeof multiM
 >       : ^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ new multiM.d();
 
 === commentsMultiModuleMultiFile_0.ts ===
 /** this is multi declare module*/
-export module multiM {
+export namespace multiM {
 >multiM : typeof multiM
 >       : ^^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ export module multiM {
     }
 }
 /** thi is multi module 2*/
-export module multiM {
+export namespace multiM {
 >multiM : typeof multiM
 >       : ^^^^^^^^^^^^^
 

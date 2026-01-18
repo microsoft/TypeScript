@@ -2,7 +2,7 @@
 
 //// [typeGuardsNestedAssignments.ts]
 class Foo {
-    x: string;
+    x: string = "";
 }
 
 declare function getFooOrNull(): Foo | null;
@@ -50,6 +50,7 @@ while ((match = re.exec("xxx")) != null) {
 //// [typeGuardsNestedAssignments.js]
 var Foo = /** @class */ (function () {
     function Foo() {
+        this.x = "";
     }
     return Foo;
 }());

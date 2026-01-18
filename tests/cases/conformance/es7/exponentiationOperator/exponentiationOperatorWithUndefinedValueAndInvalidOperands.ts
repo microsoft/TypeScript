@@ -1,9 +1,9 @@
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 
-var a: boolean;
-var b: string;
-var c: Object;
+declare var a: boolean;
+declare var b: string;
+declare var c: Object;
 
 // operator **
 var r1a1 = undefined ** a;

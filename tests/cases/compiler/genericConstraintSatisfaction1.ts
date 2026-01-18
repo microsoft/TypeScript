@@ -3,4 +3,5 @@ interface I<S> {
 }
  
 var x: I<{s: string}>
+declare var x: I<{s: string}>
 x.f({s: 1})

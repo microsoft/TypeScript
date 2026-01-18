@@ -14,12 +14,12 @@
 verify.completions(
     {
         marker: "i",
-        exact: { name: "s", insertText: "[s]", replacementSpan: test.ranges()[0] },
+        exact: { name: "s", insertText: "[s]", sortText: completion.SortText.GlobalsOrKeywords, replacementSpan: test.ranges()[0] },
         preferences: { includeInsertTextCompletions: true },
     },
     {
         marker: "j",
-        exact: { name: "N", insertText: "[N]", replacementSpan: test.ranges()[1] },
+        exact: { name: "N", insertText: "[N]", sortText: completion.SortText.GlobalsOrKeywords, replacementSpan: test.ranges()[1] },
         preferences: { includeInsertTextCompletions: true },
     }
 );

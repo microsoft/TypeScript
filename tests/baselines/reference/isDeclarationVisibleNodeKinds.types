@@ -2,7 +2,7 @@
 
 === isDeclarationVisibleNodeKinds.ts ===
 // Function types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -20,7 +20,7 @@ module schema {
 }
 
 // Constructor types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -38,7 +38,7 @@ module schema {
 }
 
 // union types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -56,7 +56,7 @@ module schema {
 }
 
 // Array types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -75,7 +75,7 @@ module schema {
 
 
 // TypeLiterals
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -93,7 +93,7 @@ module schema {
 }
 
 // Tuple types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -111,7 +111,7 @@ module schema {
 }
 
 // Paren Types
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -129,7 +129,7 @@ module schema {
 }
 
 // Type reference
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 
@@ -147,7 +147,7 @@ module schema {
 }
 
 
-module schema {
+namespace schema {
 >schema : typeof schema
 >       : ^^^^^^^^^^^^^
 

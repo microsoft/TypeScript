@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
 
 === variableDeclaratorResolvedDuringContextualTyping.ts ===
-module WinJS {
+namespace WinJS {
 >WinJS : typeof WinJS
 >      : ^^^^^^^^^^^^
 
@@ -284,7 +284,7 @@ module WinJS {
     }
 }
 
-module Services {
+namespace Services {
     export interface IRequestService {
         /**
          * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -325,7 +325,7 @@ module Services {
     }
 }
 
-module Errors {
+namespace Errors {
 >Errors : typeof Errors
 >       : ^^^^^^^^^^^^^
 
@@ -340,7 +340,7 @@ module Errors {
     }
 }
 
-module Files {
+namespace Files {
     export interface IUploadResult {
         stat: string;
 >stat : string

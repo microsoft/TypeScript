@@ -3,7 +3,7 @@
 === instantiatedModule.ts ===
 // adding the var makes this an instantiated module
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -73,7 +73,7 @@ var p1: M.Point;
 
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
@@ -203,7 +203,7 @@ var p2 = new M2.Point();
 >Point : typeof M2.Point
 >      : ^^^^^^^^^^^^^^^
 
-module M3 {
+namespace M3 {
 >M3 : typeof M3
 >   : ^^^^^^^^^
 

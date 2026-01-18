@@ -3,7 +3,7 @@ file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type
 
 
 ==== react.d.ts (0 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}

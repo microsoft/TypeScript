@@ -6,6 +6,7 @@ import {
     CallLikeExpression,
     canHaveSymbol,
     concatenate,
+    ContextFlags,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -51,6 +52,7 @@ import {
     isClassExpression,
     isClassLike,
     isClassStaticBlockDeclaration,
+    isComputedPropertyName,
     isConstructorDeclaration,
     isDeclarationFileName,
     isDefaultClause,
@@ -64,12 +66,15 @@ import {
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isKnownSymbol,
     isModifier,
     isModuleSpecifierLike,
     isNamedDeclaration,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
+    isObjectLiteralElementLike,
+    isObjectLiteralExpression,
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
@@ -310,7 +315,17 @@ function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: N
     if (element) {
         const contextualType = element && typeChecker.getContextualType(element.parent);
         if (contextualType) {
-            return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            let properties = getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false);
+            if (some(properties, p => !!(p.valueDeclaration && isObjectLiteralExpression(p.valueDeclaration.parent) && isObjectLiteralElementLike(p.valueDeclaration) && p.valueDeclaration.name === node))) {
+                const withoutNodeInferencesType = typeChecker.getContextualType(element.parent, ContextFlags.IgnoreNodeInferences);
+                if (withoutNodeInferencesType) {
+                    const withoutNodeInferencesProperties = getPropertySymbolsFromContextualType(element, typeChecker, withoutNodeInferencesType, /*unionSymbolOk*/ false);
+                    if (withoutNodeInferencesProperties.length) {
+                        properties = withoutNodeInferencesProperties;
+                    }
+                }
+            }
+            return flatMap(properties, propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
     }
     return emptyArray;
@@ -328,14 +343,29 @@ function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node)
     const expression = skipParentheses(baseTypeNode.expression);
     const base = isClassExpression(expression) ? expression.symbol : typeChecker.getSymbolAtLocation(expression);
     if (!base) return;
+    const baseType = hasStaticModifier(classElement) ? typeChecker.getTypeOfSymbol(base) : typeChecker.getDeclaredTypeOfSymbol(base);
+    let baseProp: Symbol | undefined;
 
-    const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
-    const symbol = hasStaticModifier(classElement)
-        ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbol(base), name)
-        : typeChecker.getPropertyOfType(typeChecker.getDeclaredTypeOfSymbol(base), name);
-    if (!symbol) return;
+    if (isComputedPropertyName(classElement.name)) {
+        const prop = typeChecker.getSymbolAtLocation(classElement.name);
 
-    return getDefinitionFromSymbol(typeChecker, symbol, node);
+        if (!prop) {
+            return;
+        }
+
+        if (isKnownSymbol(prop)) {
+            baseProp = find(typeChecker.getPropertiesOfType(baseType), s => s.escapedName === prop.escapedName);
+        }
+        else {
+            baseProp = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(prop.escapedName));
+        }
+    }
+    else {
+        baseProp = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name)));
+    }
+    if (!baseProp) return;
+
+    return getDefinitionFromSymbol(typeChecker, baseProp, node);
 }
 
 /** @internal */

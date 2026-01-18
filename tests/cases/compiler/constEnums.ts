@@ -47,9 +47,9 @@ const enum Comments {
     "-->",
 }
 
-module A {
-    export module B {
-        export module C {
+namespace A {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 1,
                 V2 = A.B.C.E.V1 | 100
@@ -58,9 +58,9 @@ module A {
     }
 }
 
-module A {
-    export module B {
-        export module C {
+namespace A {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V3 = A.B.C.E["V2"] & 200,
                 V4 = A.B.C.E[`V1`] << 1,
@@ -69,9 +69,9 @@ module A {
     }
 }
 
-module A1 {
-    export module B {
-        export module C {
+namespace A1 {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 10,
                 V2 = 110,
@@ -80,16 +80,16 @@ module A1 {
     }
 }
 
-module A2 {
-    export module B {
-        export module C {
+namespace A2 {
+    export namespace B {
+        export namespace C {
             export const enum E {
                 V1 = 10,
                 V2 = 110,
             }
         }
         // module C will be classified as value
-        export module C {
+        export namespace C {
             var x = 1
         }
     }

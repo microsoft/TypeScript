@@ -1,5 +1,5 @@
-﻿let x: "foo";
-let y: "foo" | "bar"; 
+﻿declare let x: "foo";
+declare let y: "foo" | "bar";
 
 declare function randBool(): boolean;
 

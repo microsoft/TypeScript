@@ -2,7 +2,7 @@
 
 //// [testContainerList.ts]
 // Regression test for #325
-module A {
+namespace A {
     class C {
         constructor(public d: {}) { }
     }

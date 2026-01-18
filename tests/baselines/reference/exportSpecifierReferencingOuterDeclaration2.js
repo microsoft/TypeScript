@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2.ts] ////
 
 //// [exportSpecifierReferencingOuterDeclaration2_A.ts]
-declare module X { export interface bar { } }
+declare namespace X { export interface bar { } }
 
 //// [exportSpecifierReferencingOuterDeclaration2_B.ts]
 export { X };

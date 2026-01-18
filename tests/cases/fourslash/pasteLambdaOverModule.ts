@@ -3,7 +3,7 @@
 //// /**/
 
 goTo.marker();
-var code = 'module B { }';
+var code = 'namespace B { }';
 edit.paste(code);
 goTo.bof();
 edit.deleteAtCaret(code.length);

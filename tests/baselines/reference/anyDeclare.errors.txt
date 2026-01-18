@@ -4,7 +4,7 @@ anyDeclare.ts(4,14): error TS2300: Duplicate identifier 'myFn'.
 
 ==== anyDeclare.ts (2 errors) ====
     declare var x: any;
-    module myMod {
+    namespace myMod {
         var myFn;
             ~~~~
 !!! error TS2300: Duplicate identifier 'myFn'.

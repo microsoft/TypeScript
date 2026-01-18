@@ -1,31 +1,30 @@
 enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
-    var t: T;
+    var t!: T;
 
-    var i: T["b"];
-    var k: keyof T;
+    var i!: T["b"];
+    var k!: keyof T;
 
-    var mapped_generic: {[P in keyof T]: T[P]};
-    var mapped: {[P in "b"]: T[P]};
+    var mapped_generic!: {[P in keyof T]: T[P]};
+    var mapped!: {[P in "b"]: T[P]};
 
-    var union_generic: T | { a: number };
-    var union_primitive: { a: number } | number;
+    var union_generic!: T | { a: number };
+    var union_primitive!: { a: number } | number;
+    var intersection_generic!: T & { a: number };
+    var intersection_primitive!: { a: number } | string;
 
-    var intersection_generic: T & { a: number };
-    var intersection_primitive: { a: number } | string;
+    var num!: number;
+    var str!: number;
+    var literal_string: "string" = "string";
+    var literal_number: 42 = 42;
 
-    var num: number;
-    var str: number;
-    var literal_string: "string";
-    var literal_number: 42;
-
-    var u: undefined;
-    var n: null;
-    var a: any;
+    var u: undefined = undefined;
+    var n: null = null;
+    var a: any = 0;
 
 
-    var e: E;
+    var e!: E;
 
     var o1 = { ...p1 };  // OK, generic type paramterre
     var o2 = { ...p2 };  // OK

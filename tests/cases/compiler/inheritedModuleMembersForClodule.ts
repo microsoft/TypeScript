@@ -7,7 +7,7 @@ class C {
 class D extends C {
 }
 
-module D {
+namespace D {
     export function foo(): number {
         return 0;
     };

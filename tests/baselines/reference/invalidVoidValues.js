@@ -10,17 +10,17 @@ enum E { A }
 x = E;
 x = E.A;
 
-class C { foo: string }
-var a: C;
+class C { foo!: string }
+declare var a: C;
 x = a;
 
 interface I { foo: string }
-var b: I;
+declare var b: I;
 x = b;
 
 x = { f() {} }
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 function f<T>(a: T) {
@@ -44,9 +44,7 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var a;
 x = a;
-var b;
 x = b;
 x = { f: function () { } };
 var M;

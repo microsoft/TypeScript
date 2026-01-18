@@ -1,3 +1,4 @@
+// @strict: false
 class EventBase {
     private _listeners = [];
 

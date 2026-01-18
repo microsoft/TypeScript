@@ -49,7 +49,7 @@ let z = new cls2();
 >cls2 : any
 >     : ^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

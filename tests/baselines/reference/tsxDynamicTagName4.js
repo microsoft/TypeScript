@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxDynamicTagName4.tsx] ////
 
 //// [tsxDynamicTagName4.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		div: any

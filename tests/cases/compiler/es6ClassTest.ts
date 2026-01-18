@@ -1,3 +1,4 @@
+// @strict: false
 class Bar {
     public goo: number;
     public prop1(x) {
@@ -31,7 +32,7 @@ class Foo  extends Bar {
 
 var f = new Foo();
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 	export class Provide {
 		foo:number;
 		zoo:string;

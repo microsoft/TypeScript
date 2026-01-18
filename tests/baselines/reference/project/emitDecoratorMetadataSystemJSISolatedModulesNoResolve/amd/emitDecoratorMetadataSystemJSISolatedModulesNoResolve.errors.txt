@@ -1,13 +1,19 @@
+tsconfig.json(5,15): error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+tsconfig.json(6,25): error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tsconfig.json (0 errors) ====
+==== tsconfig.json (2 errors) ====
     {
       "compileOnSave": true,
       "compilerOptions": {
         "target": "es5",
         "module": "system",
+                  ~~~~~~~~
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
         "moduleResolution": "node",
+                            ~~~~~~
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "isolatedModules": true,

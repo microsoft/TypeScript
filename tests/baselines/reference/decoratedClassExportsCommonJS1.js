@@ -1,6 +1,7 @@
 //// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts] ////
 
-//// [decoratedClassExportsCommonJS1.ts]
+//// [a.ts]
+declare function forwardRef(x: any): any;
 declare var Something: any;
 @Something({ v: () => Testing123 })
 export class Testing123 {
@@ -8,7 +9,7 @@ export class Testing123 {
     static prop1 = Testing123.prop0;
 }
 
-//// [decoratedClassExportsCommonJS1.js]
+//// [a.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

@@ -1302,7 +1302,7 @@ export namespace Core {
         const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
-        const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
+        const searchMeaning = node && options.use !== FindReferencesUse.Rename ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 

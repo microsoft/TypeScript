@@ -42,7 +42,7 @@ class C {
 >     : ^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -259,7 +259,7 @@ interface I {
 >     : ^^^^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -442,7 +442,7 @@ var r13 = i[-01]
 >01 : 1
 >   : ^
 
-var a: {
+declare var a: {
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
 >  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 

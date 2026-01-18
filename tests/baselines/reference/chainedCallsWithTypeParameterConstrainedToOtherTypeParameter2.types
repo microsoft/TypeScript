@@ -17,11 +17,11 @@ class Chain<T> {
 >x : T
 >  : ^
 
-        var t: T;
+        var t!: T;
 >t : T
 >  : ^
 
-        var s: S;
+        var s!: S;
 >s : S
 >  : ^
 
@@ -202,15 +202,15 @@ class Chain2<T extends I> {
 >x : T
 >  : ^
 
-        var i: I;
+        var i!: I;
 >i : I
 >  : ^
 
-        var t: T;
+        var t!: T;
 >t : T
 >  : ^
 
-        var s: S;
+        var s!: S;
 >s : S
 >  : ^
 

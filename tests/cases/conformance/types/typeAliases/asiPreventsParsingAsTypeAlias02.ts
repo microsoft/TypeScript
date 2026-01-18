@@ -1,3 +1,4 @@
+// @strict: false
 
 var type;
 var string;

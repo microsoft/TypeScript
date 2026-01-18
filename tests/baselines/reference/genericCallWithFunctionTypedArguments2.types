@@ -29,15 +29,15 @@ interface I2<T> {
 >x : T
 >  : ^
 }
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
-var i2: I2<string>;
+declare var i2: I2<string>;
 >i2 : I2<string>
 >   : ^^^^^^^^^^
 
-var a: {
+declare var a: {
 >a : new <T>(x: T) => T
 >  : ^^^^^ ^^ ^^ ^^^^^ 
 

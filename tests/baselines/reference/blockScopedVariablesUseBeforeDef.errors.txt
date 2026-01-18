@@ -5,9 +5,12 @@ blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: Block-scoped variable
 blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
 blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
 blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(128,9): error TS2448: Block-scoped variable 'foo' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(131,9): error TS2448: Block-scoped variable 'foo' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(153,20): error TS2450: Enum 'Enum' used before its declaration.
 
 
-==== blockScopedVariablesUseBeforeDef.ts (7 errors) ====
+==== blockScopedVariablesUseBeforeDef.ts (10 errors) ====
     function foo0() {
         let a = x;
                 ~
@@ -157,9 +160,15 @@ blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable
         const promise = (async () => {
             promise
             foo
+            ~~~
+!!! error TS2448: Block-scoped variable 'foo' used before its declaration.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:134:11: 'foo' is declared here.
             await null
             promise
             foo
+            ~~~
+!!! error TS2448: Block-scoped variable 'foo' used before its declaration.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:134:11: 'foo' is declared here.
         })()
     
         const foo = 1;
@@ -178,5 +187,16 @@ blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable
             iter;
             yield 1;
         })();
+    }
+    
+    function foo18() {
+        let a = (() => Enum.Yes)();
+                       ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:154:10: 'Enum' is declared here.
+        enum Enum {
+            No = 0,
+            Yes = 1,
+        }
     }
     

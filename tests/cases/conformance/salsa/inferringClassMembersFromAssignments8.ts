@@ -1,3 +1,4 @@
+// @strict: false
 // no inference in TS files, even for `this` aliases:
 
 var app = function() {

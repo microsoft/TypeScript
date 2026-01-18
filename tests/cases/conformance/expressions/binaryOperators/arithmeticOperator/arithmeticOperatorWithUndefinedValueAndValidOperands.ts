@@ -6,8 +6,8 @@ enum E {
     b
 }
 
-var a: any;
-var b: number;
+declare var a: any;
+declare var b: number;
 
 // operator *
 var ra1 = undefined * a;

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 //super.publicInstanceMemberFunction in constructor of derived class
 //super.publicInstanceMemberFunction in instance member function of derived class

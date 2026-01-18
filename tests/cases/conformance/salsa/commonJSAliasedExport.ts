@@ -1,3 +1,4 @@
+// @strict: false
 // @checkJs: true
 // @outdir: out/
 // @declaration: true

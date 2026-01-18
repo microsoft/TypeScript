@@ -1,3 +1,4 @@
+// @strict: false
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 

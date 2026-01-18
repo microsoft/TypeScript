@@ -46,21 +46,21 @@ interface T3 {
 >c1 : Symbol(c1, Decl(dynamicNamesErrors.ts, 1, 5))
 }
 
-let t1: T1;
->t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
+declare let t1: T1;
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 11))
 >T1 : Symbol(T1, Decl(dynamicNamesErrors.ts, 6, 1))
 
-let t2: T2;
->t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
+declare let t2: T2;
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 11))
 >T2 : Symbol(T2, Decl(dynamicNamesErrors.ts, 10, 1))
 
 t1 = t2;
->t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
->t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 11))
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 11))
 
 t2 = t1;
->t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
->t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 11))
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 11))
 
 const x = Symbol();
 >x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))

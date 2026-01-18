@@ -12,7 +12,7 @@ async function foo() {
 >    : ^^^^^^^^^^^^^^^^^^^
 }
 
-=== tslib.d.ts ===
+=== node_modules/tslib/index.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >          : ^ ^^        ^^ ^^        ^^^^^    

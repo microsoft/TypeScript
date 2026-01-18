@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyGloVar.ts] ////
 
 === privacyGloVar.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(privacyGloVar.ts, 0, 0))
 
     export class C1_public {
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private f1() {
 >f1 : Symbol(C1_public.f1, Decl(privacyGloVar.ts, 1, 28))
@@ -21,11 +21,11 @@ module m1 {
 
         private C3_v1_private: C1_public;
 >C3_v1_private : Symbol(C3_public.C3_v1_private, Decl(privacyGloVar.ts, 9, 28))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C3_v2_public: C1_public;
 >C3_v2_public : Symbol(C3_public.C3_v2_public, Decl(privacyGloVar.ts, 10, 41))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C3_v3_private: C2_private;
 >C3_v3_private : Symbol(C3_public.C3_v3_private, Decl(privacyGloVar.ts, 11, 39))
@@ -37,11 +37,11 @@ module m1 {
 
         private C3_v11_private = new C1_public();
 >C3_v11_private : Symbol(C3_public.C3_v11_private, Decl(privacyGloVar.ts, 13, 40))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C3_v12_public = new C1_public();
 >C3_v12_public : Symbol(C3_public.C3_v12_public, Decl(privacyGloVar.ts, 15, 49))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C3_v13_private = new C2_private();
 >C3_v13_private : Symbol(C3_public.C3_v13_private, Decl(privacyGloVar.ts, 16, 47))
@@ -53,13 +53,13 @@ module m1 {
 
         private C3_v21_private: C1_public = new C1_public();
 >C3_v21_private : Symbol(C3_public.C3_v21_private, Decl(privacyGloVar.ts, 18, 48))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C3_v22_public: C1_public = new C1_public();
 >C3_v22_public : Symbol(C3_public.C3_v22_public, Decl(privacyGloVar.ts, 20, 60))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C3_v23_private: C2_private = new C2_private();
 >C3_v23_private : Symbol(C3_public.C3_v23_private, Decl(privacyGloVar.ts, 21, 58))
@@ -77,11 +77,11 @@ module m1 {
 
         private C4_v1_private: C1_public;
 >C4_v1_private : Symbol(C4_public.C4_v1_private, Decl(privacyGloVar.ts, 26, 21))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C4_v2_public: C1_public;
 >C4_v2_public : Symbol(C4_public.C4_v2_public, Decl(privacyGloVar.ts, 27, 41))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C4_v3_private: C2_private;
 >C4_v3_private : Symbol(C4_public.C4_v3_private, Decl(privacyGloVar.ts, 28, 39))
@@ -93,11 +93,11 @@ module m1 {
 
         private C4_v11_private = new C1_public();
 >C4_v11_private : Symbol(C4_public.C4_v11_private, Decl(privacyGloVar.ts, 30, 40))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C4_v12_public = new C1_public();
 >C4_v12_public : Symbol(C4_public.C4_v12_public, Decl(privacyGloVar.ts, 32, 49))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C4_v13_private = new C2_private();
 >C4_v13_private : Symbol(C4_public.C4_v13_private, Decl(privacyGloVar.ts, 33, 47))
@@ -109,13 +109,13 @@ module m1 {
 
         private C4_v21_private: C1_public = new C1_public();
 >C4_v21_private : Symbol(C4_public.C4_v21_private, Decl(privacyGloVar.ts, 35, 48))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         public C4_v22_public: C1_public = new C1_public();
 >C4_v22_public : Symbol(C4_public.C4_v22_public, Decl(privacyGloVar.ts, 37, 60))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
         private C4_v23_private: C2_private = new C2_private();
 >C4_v23_private : Symbol(C4_public.C4_v23_private, Decl(privacyGloVar.ts, 38, 58))
@@ -130,11 +130,11 @@ module m1 {
 
     var m1_v1_private: C1_public;
 >m1_v1_private : Symbol(m1_v1_private, Decl(privacyGloVar.ts, 43, 7))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     export var m1_v2_public: C1_public;
 >m1_v2_public : Symbol(m1_v2_public, Decl(privacyGloVar.ts, 44, 14))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     var m1_v3_private: C2_private;
 >m1_v3_private : Symbol(m1_v3_private, Decl(privacyGloVar.ts, 45, 7))
@@ -146,11 +146,11 @@ module m1 {
 
     var m1_v11_private = new C1_public();
 >m1_v11_private : Symbol(m1_v11_private, Decl(privacyGloVar.ts, 48, 7))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     export var m1_v12_public = new C1_public();
 >m1_v12_public : Symbol(m1_v12_public, Decl(privacyGloVar.ts, 49, 14))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     var m1_v13_private = new C2_private();
 >m1_v13_private : Symbol(m1_v13_private, Decl(privacyGloVar.ts, 50, 7))
@@ -162,13 +162,13 @@ module m1 {
 
     var m1_v21_private: C1_public = new C1_public();
 >m1_v21_private : Symbol(m1_v21_private, Decl(privacyGloVar.ts, 53, 7))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     export var m1_v22_public: C1_public = new C1_public();
 >m1_v22_public : Symbol(m1_v22_public, Decl(privacyGloVar.ts, 54, 14))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
->C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
+>C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 14))
 
     var m1_v23_private: C2_private = new C2_private();
 >m1_v23_private : Symbol(m1_v23_private, Decl(privacyGloVar.ts, 55, 7))

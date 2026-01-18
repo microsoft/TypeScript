@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /foo/index.ts
 ////export const foo = 0;
 

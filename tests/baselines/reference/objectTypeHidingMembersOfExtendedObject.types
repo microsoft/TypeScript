@@ -1,16 +1,17 @@
 //// [tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,500
-Type Count: 10,000
-Instantiation count: 2,500
+Assignability cache: 10,000
+Type Count: 25,000
+Instantiation count: 25,000
+Symbol count: 50,000
 
 === objectTypeHidingMembersOfExtendedObject.ts ===
 class A {
 >A : A
 >  : ^
 
-    foo: string;
+    foo!: string;
 >foo : string
 >    : ^^^^^^
 }
@@ -21,7 +22,7 @@ class B extends A {
 >A : A
 >  : ^
 
-    bar: string;
+    bar!: string;
 >bar : string
 >    : ^^^^^^
 }
@@ -44,7 +45,7 @@ class C {
 >valueOf : () => void
 >        : ^^^^^^^^^^
 
-    data: B;
+    data!: B;
 >data : B
 >     : ^
 
@@ -53,7 +54,7 @@ class C {
 >  : ^^^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -113,7 +114,7 @@ interface I {
 >  : ^^^^^^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -222,7 +223,7 @@ var r3d = i['hm'];
 >'hm' : "hm"
 >     : ^^^^
 
-var b: {
+declare var b: {
 >b : { [x: string]: any; valueOf(): void; data: B; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^ ^^^
 

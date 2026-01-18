@@ -79,7 +79,7 @@ class D11 extends Base {
 }
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class D12 extends Base {
@@ -88,7 +88,7 @@ class D12 extends Base {
 
 
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 class D13 extends Base {

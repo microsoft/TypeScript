@@ -1,3 +1,4 @@
+// @strict: false
 class C {
     protected x: string;
     protected get y() { return null; }
@@ -10,7 +11,7 @@ class C {
     protected static foo() { }
 }
 
-var c: C;
+declare var c: C;
 // all errors
 c.x;
 c.y;

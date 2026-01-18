@@ -1,3 +1,4 @@
+// @strict: false
 var salt:any = new salt.pepper();   
 salt.pepper = function() {}
 

@@ -1,3 +1,4 @@
+// @strict: false
 interface Function {
     data: number;
     [x: string]: Object;

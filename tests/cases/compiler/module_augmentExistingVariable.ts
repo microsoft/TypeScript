@@ -1,6 +1,6 @@
 // @lib: es5
 var console: any;
 
-module console {
+namespace console {
     export var x = 2;
 }

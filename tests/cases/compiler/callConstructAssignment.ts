@@ -1,8 +1,8 @@
 
 
-var foo:{ ( ):void; }
+declare var foo:{ ( ):void; }
 
-var bar:{ new ( ):any; }
+declare var bar:{ new ( ):any; }
 
 foo = bar; // error
 bar = foo; // error

@@ -1,5 +1,5 @@
 // -- operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", ""];
 
 function foo(): string { return ""; }
@@ -8,7 +8,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 

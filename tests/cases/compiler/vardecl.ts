@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 var simpleVar;
 
@@ -59,7 +60,7 @@ var d4: {
     };
 }
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;

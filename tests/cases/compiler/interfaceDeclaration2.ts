@@ -1,5 +1,5 @@
 interface I1 { }
-module I1 { }
+namespace I1 { }
 
 interface I2 { }
 class I2 { }

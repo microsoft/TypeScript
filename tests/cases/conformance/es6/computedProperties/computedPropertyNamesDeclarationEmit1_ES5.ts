@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 // @declaration: true
 class C {

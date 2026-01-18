@@ -1,9 +1,11 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts] ////
 
 === nonPrimitiveIndexingWithForInNoImplicitAny.ts ===
-var a: object;
+var a: object = {};
 >a : object
 >  : ^^^^^^
+>{} : {}
+>   : ^^
 
 for (var key in a) {
 >key : string
@@ -12,10 +14,8 @@ for (var key in a) {
 >  : ^^^^^^
 
     var value = a[key]; // error
->value : any
->      : ^^^
->a[key] : any
->       : ^^^
+>value : error
+>a[key] : error
 >a : object
 >  : ^^^^^^
 >key : string

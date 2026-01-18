@@ -19,7 +19,7 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
 
 ==== deleteOperatorWithNumberType.ts (17 errors) ====
     // delete  operator on number type
-    var NUMBER: number;
+    declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
     
     function foo(): number { return 1; }
@@ -28,7 +28,7 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
         public a: number;
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     

@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnreachableCode: true
 // @target: ES6
 
@@ -86,7 +87,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     const c22 = 0;
 
     {

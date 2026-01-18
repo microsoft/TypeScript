@@ -1,7 +1,7 @@
 class C { foo: string; } // error
 var C = ''; // error
 
-module M {
+namespace M {
     class D { // error
         bar: string;
     }

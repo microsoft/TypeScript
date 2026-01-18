@@ -1,4 +1,5 @@
-module A {
+// @strict: false
+namespace A {
 
     export interface Point {
         x: number;

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 // @experimentaldecorators: true
 // @emitdecoratormetadata: true

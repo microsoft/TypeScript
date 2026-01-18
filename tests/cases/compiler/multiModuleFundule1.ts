@@ -1,9 +1,10 @@
+// @strict: false
 function C(x: number) { }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function foo() { }
 }
 

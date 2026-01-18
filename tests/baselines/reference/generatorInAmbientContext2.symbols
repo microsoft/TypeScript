@@ -1,9 +1,9 @@
 //// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext2.ts] ////
 
 === generatorInAmbientContext2.ts ===
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(generatorInAmbientContext2.ts, 0, 0))
 
     function *generator(): any;
->generator : Symbol(generator, Decl(generatorInAmbientContext2.ts, 0, 18))
+>generator : Symbol(generator, Decl(generatorInAmbientContext2.ts, 0, 21))
 }

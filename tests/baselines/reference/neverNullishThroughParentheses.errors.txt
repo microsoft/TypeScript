@@ -1,0 +1,44 @@
+neverNullishThroughParentheses.ts(6,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(7,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(10,15): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(11,16): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(14,15): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(15,16): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(16,17): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+neverNullishThroughParentheses.ts(16,17): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+
+
+==== neverNullishThroughParentheses.ts (8 errors) ====
+    // Repro for issue where "never nullish" checks miss "never nullish" through parentheses
+    
+    const x: { y: string | undefined } | undefined = undefined as any;
+    
+    // Both should error - both expressions are guaranteed to be "oops"
+    const foo = x?.y ?? `oops` ?? "";
+                ~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const bar = (x?.y ?? `oops`) ?? "";
+                 ~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    
+    // Additional test cases with various levels of nesting
+    const baz = ((x?.y ?? `oops`)) ?? "";
+                  ~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const qux = (((x?.y ?? `oops`))) ?? "";
+                   ~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    
+    // Test with different types
+    const str1 = ("literal") ?? "fallback";
+                  ~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const str2 = (("nested")) ?? "fallback";
+                   ~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const nested = ("a" ?? "b") ?? "c";
+                    ~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+                    ~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    

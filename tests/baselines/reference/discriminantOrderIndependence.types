@@ -1,0 +1,162 @@
+//// [tests/cases/compiler/discriminantOrderIndependence.ts] ////
+
+=== discriminantOrderIndependence.ts ===
+interface A {
+    subType: "b";
+>subType : "b"
+>        : ^^^
+
+    type: "a";
+>type : "a"
+>     : ^^^
+}
+
+declare let order1:
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+
+    | { type: "1" }
+>type : "1"
+>     : ^^^
+
+    | A
+    | { type: "2" }
+>type : "2"
+>     : ^^^
+
+    | { type: "3" }
+>type : "3"
+>     : ^^^
+
+    | undefined;
+
+// Should NOT error: 'order1' is possibly 'undefined' after the guard
+if (order1 && order1.type === "a") {
+>order1 && order1.type === "a" : boolean
+>                              : ^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order1.type === "a" : boolean
+>                    : ^^^^^^^
+>order1.type : "a" | "1" | "2" | "3"
+>            : ^^^^^^^^^^^^^^^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>type : "a" | "1" | "2" | "3"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    order1.type; // Should be OK
+>order1.type : "a"
+>            : ^^^
+>order1 : A
+>       : ^
+>type : "a"
+>     : ^^^
+}
+
+interface B {
+    subType: "b";
+>subType : "b"
+>        : ^^^
+
+    type: "a";
+>type : "a"
+>     : ^^^
+}
+
+declare let order2:
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+
+    | { type: "1" }
+>type : "1"
+>     : ^^^
+
+    | { type: "2" }
+>type : "2"
+>     : ^^^
+
+    | { type: "3" }
+>type : "3"
+>     : ^^^
+
+    | B
+    | undefined;
+
+// Should NOT error: 'order2' is possibly 'undefined' after the guard
+if (order2 && order2.type === "a") {
+>order2 && order2.type === "a" : boolean
+>                              : ^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order2.type === "a" : boolean
+>                    : ^^^^^^^
+>order2.type : "a" | "1" | "2" | "3"
+>            : ^^^^^^^^^^^^^^^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>type : "a" | "1" | "2" | "3"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    order2.type; // Should be OK
+>order2.type : "a"
+>            : ^^^
+>order2 : B
+>       : ^
+>type : "a"
+>     : ^^^
+}
+
+// Also test with !. type assertion
+if (order1 && order1.type === "a") {
+>order1 && order1.type === "a" : boolean
+>                              : ^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order1.type === "a" : boolean
+>                    : ^^^^^^^
+>order1.type : "a" | "1" | "2" | "3"
+>            : ^^^^^^^^^^^^^^^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>type : "a" | "1" | "2" | "3"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    order1.type; // Should be OK
+>order1.type : "a"
+>            : ^^^
+>order1 : A
+>       : ^
+>type : "a"
+>     : ^^^
+}
+if (order2 && order2.type === "a") {
+>order2 && order2.type === "a" : boolean
+>                              : ^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order2.type === "a" : boolean
+>                    : ^^^^^^^
+>order2.type : "a" | "1" | "2" | "3"
+>            : ^^^^^^^^^^^^^^^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>type : "a" | "1" | "2" | "3"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    order2.type; // Should be OK
+>order2.type : "a"
+>            : ^^^
+>order2 : B
+>       : ^
+>type : "a"
+>     : ^^^
+}

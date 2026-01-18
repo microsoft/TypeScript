@@ -12,7 +12,7 @@ classAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
         ~
 !!! error TS2300: Duplicate identifier 'C'.
     
-    module M {
+    namespace M {
         class D { // error
               ~
 !!! error TS2300: Duplicate identifier 'D'.

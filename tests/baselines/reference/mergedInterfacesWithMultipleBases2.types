@@ -97,7 +97,7 @@ var r = a.a;
 >  : ^^^^^^
 
 // generic interfaces in a module
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

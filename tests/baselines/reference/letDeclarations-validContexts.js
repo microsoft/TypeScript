@@ -85,7 +85,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     let l22 = 0;
 
     {
@@ -136,7 +136,7 @@ function f3() {
     }
 }
 
-module m3 {
+namespace m3 {
     label: let l34 = 0;
     {
         label2: let l35 = 0;

@@ -22,7 +22,7 @@ class D extends C {
 
 interface I extends C {}
 
-module M {
+namespace M {
     export class E<T> { foo: T }
 }
 

@@ -3,7 +3,7 @@ symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.t
 
 
 ==== symbolDeclarationEmit12.ts (2 errors) ====
-    module M {
+    namespace M {
         interface I { }
         export class C {
             [Symbol.iterator]: I;

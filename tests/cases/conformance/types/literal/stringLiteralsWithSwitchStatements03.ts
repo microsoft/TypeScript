@@ -1,6 +1,6 @@
-﻿let x: "foo";
-let y: "foo" | "bar"; 
-let z: "bar";
+﻿declare let x: "foo";
+declare let y: "foo" | "bar";
+declare let z: "bar";
 
 declare function randBool(): boolean;
 

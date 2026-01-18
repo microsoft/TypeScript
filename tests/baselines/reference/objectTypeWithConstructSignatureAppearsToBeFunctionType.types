@@ -7,7 +7,7 @@ interface I {
     new(): number;
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -41,7 +41,7 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 
-var b: {
+declare var b: {
 >b : new () => number
 >  : ^^^^^^^^^^      
 

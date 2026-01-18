@@ -1,3 +1,4 @@
+// @strict: false
 declare class Base {
     check<TProp extends this>(prop: TProp): boolean;
 }

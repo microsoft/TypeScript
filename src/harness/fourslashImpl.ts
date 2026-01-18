@@ -86,6 +86,10 @@ export interface TextSpan {
     end: number;
 }
 
+export interface VerbosityLevels {
+    [markerName: string]: number | number[] | undefined;
+}
+
 // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
 // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
 // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
@@ -419,26 +423,23 @@ export class TestState {
                 this.addMatchedInputFile(importedFilePath, exts);
             });
 
-            // Check if no-default-lib flag is false and if so add default library
-            if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(
-                    libName(Harness.Compiler.defaultLibFileName),
-                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
-                    /*isRootFile*/ false,
-                );
+            this.languageServiceAdapterHost.addScript(
+                libName(Harness.Compiler.defaultLibFileName),
+                Harness.Compiler.getDefaultLibrarySourceFile()!.text,
+                /*isRootFile*/ false,
+            );
 
-                compilationOptions.lib?.forEach(fileName => {
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    if (libFile) {
-                        this.languageServiceAdapterHost.addScript(
-                            libName(fileName),
-                            libFile.text,
-                            /*isRootFile*/ false,
-                        );
-                    }
-                });
-            }
+            compilationOptions.lib?.forEach(fileName => {
+                const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
+                ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
+                if (libFile) {
+                    this.languageServiceAdapterHost.addScript(
+                        libName(fileName),
+                        libFile.text,
+                        /*isRootFile*/ false,
+                    );
+                }
+            });
         }
         else {
             // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
@@ -2451,19 +2452,33 @@ export class TestState {
         return result;
     }
 
-    public baselineQuickInfo(): void {
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
-            marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
-        }));
+    public baselineQuickInfo(verbosityLevels?: VerbosityLevels, maximumLength?: number): void {
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
+            const verbosityLevel = toArray(verbosityLevels?.[name]);
+            const items = verbosityLevel.map(verbosityLevel => {
+                const item: ts.QuickInfo & { verbosityLevel?: number; } | undefined = this.languageService.getQuickInfoAtPosition(
+                    marker.fileName,
+                    marker.position,
+                    maximumLength,
+                    verbosityLevel,
+                );
+                if (item) item.verbosityLevel = verbosityLevel;
+                return {
+                    marker: { ...marker, name },
+                    item,
+                };
+            });
+            return items;
+        }).flat();
         const annotations = this.annotateContentWithTooltips(
             result,
             "quickinfo",
             item => item.textSpan,
-            ({ displayParts, documentation, tags }) => [
+            ({ displayParts, documentation, tags, verbosityLevel }) => [
                 ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
                 ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
                 ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
+                ...(verbosityLevel !== undefined ? [`(verbosity level: ${verbosityLevel})`] : []),
             ],
         );
         this.baseline("QuickInfo", annotations + "\n\n" + stringify(result));
@@ -2585,9 +2600,9 @@ export class TestState {
         const sorted = items.slice();
         // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
         sorted.sort((q1, q2) =>
-            q1.marker.fileName === q1.marker.fileName
+            q1.marker.fileName === q2.marker.fileName
                 ? (q1.marker.position > q2.marker.position ? -1 : 1)
-                : (q1.marker.fileName > q1.marker.fileName ? 1 : -1)
+                : (q1.marker.fileName > q2.marker.fileName ? 1 : -1)
         );
         const files = new Map<string, string[]>();
         let previous: T | undefined;

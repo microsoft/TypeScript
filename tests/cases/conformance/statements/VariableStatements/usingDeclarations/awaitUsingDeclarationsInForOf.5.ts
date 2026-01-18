@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5,esnext
 // @module: esnext
 // @lib: esnext

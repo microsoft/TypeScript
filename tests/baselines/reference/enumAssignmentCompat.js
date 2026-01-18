@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/enumAssignmentCompat.ts] ////
 
 //// [enumAssignmentCompat.ts]
-module W {
+namespace W {
     export class D { }
 }
 

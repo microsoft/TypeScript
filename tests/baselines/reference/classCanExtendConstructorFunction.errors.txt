@@ -1,6 +1,6 @@
 first.js(23,9): error TS2554: Expected 1 arguments, but got 0.
 first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
-  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[] | undefined) => void'.
     Target signature provides too few arguments. Expected 2 or more, but got 1.
 first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
@@ -8,7 +8,7 @@ generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to 
 second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
   Types of property 'circle' are incompatible.
-    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[] | undefined) => number'.
       Types of parameters 'others' and 'wagons' are incompatible.
         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
@@ -52,7 +52,7 @@ second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to p
         load(files, format) {
         ~~~~
 !!! error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
-!!! error TS2416:   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+!!! error TS2416:   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[] | undefined) => void'.
 !!! error TS2416:     Target signature provides too few arguments. Expected 2 or more, but got 1.
             if (format === "xmlolololol") {
                 throw new Error("please do not use XML. It was a joke.");
@@ -95,7 +95,7 @@ second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to p
           ~~~~~~~~~
 !!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
 !!! error TS2417:   Types of property 'circle' are incompatible.
-!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[] | undefined) => number'.
 !!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
 !!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
 !!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.

@@ -8,7 +8,7 @@ var NUMBER1: number[] = [1, 2];
 class A {
     public a: number;
 }
-module M {
+namespace M {
     export var n: number;
 }
 

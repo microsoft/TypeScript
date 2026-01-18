@@ -12,7 +12,7 @@
 goTo.marker("1");
 verify.applyCodeActionFromCompletion("1", {
     name: "abc",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import { abc } from "./a";
 
@@ -22,10 +22,11 @@ acb;`,
 goTo.marker("2");
 verify.applyCodeActionFromCompletion("2", {
     name: "abc",
-    source: "/a",
+    source: "./a",
     data: {
         exportName: "abc",
         fileName: "/a.ts",
+        moduleSpecifier: "./a",
     },
     description: `Add import from "./a"`,
     newFileContent: `import { abc } from "./a";

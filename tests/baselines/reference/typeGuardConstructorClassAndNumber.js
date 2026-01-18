@@ -3,10 +3,10 @@
 //// [typeGuardConstructorClassAndNumber.ts]
 // Typical case
 class C1 {
-    property1: string;
+    property1!: string;
 }
 
-let var1: C1 | number;
+declare let var1: C1 | number;
 if (var1.constructor == C1) {
     var1; // C1
     var1.property1; // string
@@ -139,7 +139,6 @@ var C1 = /** @class */ (function () {
     }
     return C1;
 }());
-var var1;
 if (var1.constructor == C1) {
     var1; // C1
     var1.property1; // string

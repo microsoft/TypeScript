@@ -1,7 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /home/src/workspaces/project/node_modules/lodash/package.json
 //// { "name": "lodash", "version": "4.17.15", "main": "./lodash.js" }
 

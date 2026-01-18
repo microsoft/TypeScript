@@ -1,14 +1,16 @@
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 test.ts(5,39): error TS1147: Import declarations in a namespace cannot reference a module.
 test.ts(5,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 test.ts(24,35): error TS1147: Import declarations in a namespace cannot reference a module.
 test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== test.ts (4 errors) ====
-    export module m1 {
+    export namespace m1 {
     }
     
-    module m2 {
+    namespace m2 {
         export import mExported = require("mExported");
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

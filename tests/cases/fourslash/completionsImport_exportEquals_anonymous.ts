@@ -2,6 +2,9 @@
 
 // Use `/src` to test that directory names are not included in conversion from module path to identifier.
 // @noLib: true
+// @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @Filename: /src/foo-bar.ts
 ////export = 0;
@@ -14,7 +17,7 @@ goTo.marker("0");
 const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
     name: "fooBar",
-    source: "/src/foo-bar",
+    source: "./foo-bar",
     sourceDisplay: "./foo-bar",
     text: "(property) export=: 0",
     kind: "property",
@@ -34,9 +37,9 @@ verify.completions(
         preferences
     }
 );
-verify.applyCodeActionFromCompletion("0", {
+verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
-    source: "/src/foo-bar",
+    source: "./foo-bar",
     description: `Add import from "./foo-bar"`,
     newFileContent: `import fooBar = require("./foo-bar")
 

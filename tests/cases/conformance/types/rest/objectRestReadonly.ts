@@ -1,3 +1,4 @@
+// @strict: false
 // #23734
 type ObjType = {
   foo: string

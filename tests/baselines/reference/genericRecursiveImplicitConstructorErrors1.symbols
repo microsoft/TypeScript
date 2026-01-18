@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts] ////
 
 === genericRecursiveImplicitConstructorErrors1.ts ===
-export declare module TypeScript {
+export declare namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 0))
 
   class PullSymbol { }
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 34))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 37))
 
   class PullSignatureSymbol <A,B,C> extends PullSymbol {
 >PullSignatureSymbol : Symbol(PullSignatureSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 1, 22))
 >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 29))
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 31))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 33))
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 34))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 37))
 
   public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;
 >addSpecialization : Symbol(PullSignatureSymbol.addSpecialization, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 56))
@@ -32,7 +32,7 @@ export declare module TypeScript {
 >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 24))
 >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 26))
 >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 28))
->PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 34))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 37))
 
     public findTypeParameter<A,B,C>(name: string): PullTypeParameterSymbol<A,B,C>;
 >findTypeParameter : Symbol(PullTypeSymbol.findTypeParameter, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 51))

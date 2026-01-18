@@ -1,12 +1,13 @@
+// @strict: false
 // @allowUnreachableCode: true
 
 // ~ operator on any type
 
-var ANY: any;
-var ANY1;
-var ANY2: any[] = ["", ""];
-var obj: () => {}
-var obj1 = { x:"", y: () => { }};
+declare var ANY: any;
+declare var ANY1;
+declare var ANY2: any[];
+declare var obj: () => {};
+declare var obj1: { x:"", y: () => { }};
 
 function foo(): any {
     var a;
@@ -19,10 +20,10 @@ class A {
         return a;
     }
 }
-module M {
-    export var n: any;
+namespace M {
+    export declare var n: any;
 }
-var objA = new A();
+declare var objA: A;
 
 // any other type var
 var ResultIsNumber = ~ANY1;

@@ -15,7 +15,7 @@ genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property '
     }
     
     function f<T extends Base>(a: { x: T; y: T }) {
-        var r: T;
+        var r!: T;
         return r;
     }
     
@@ -26,7 +26,7 @@ genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property '
 !!! related TS6500 genericCallWithObjectTypeArgsAndConstraints3.ts:13:39: The expected type comes from property 'y' which is declared here on type '{ x: Derived; y: Derived; }'
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
-        var r: T;
+        var r!: T;
         return r;
     }
     

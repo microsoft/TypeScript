@@ -19,7 +19,7 @@ function test1(x: Foo) {
 }
 
 class Bar {
-    a: number;
+    a: number = 0;
     b?: number;
     c? = 2;
     constructor(public d?: number, public e = 10) {}

@@ -2,7 +2,7 @@
 //@module: amd
 
 //@filename: file.tsx
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }

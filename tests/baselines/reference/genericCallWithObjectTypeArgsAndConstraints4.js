@@ -16,8 +16,8 @@ function foo<T, U extends T>(t: T, t2: U) {
     return (x: T) => t2;
 }
 
-var c: C;
-var d: D;
+declare var c: C;
+declare var d: D;
 var r = foo(c, d);
 var r2 = foo(d, c); // error because C does not extend D
 var r3 = foo(c, { x: '', foo: c });
@@ -50,8 +50,6 @@ var D = /** @class */ (function () {
 function foo(t, t2) {
     return function (x) { return t2; };
 }
-var c;
-var d;
 var r = foo(c, d);
 var r2 = foo(d, c); // error because C does not extend D
 var r3 = foo(c, { x: '', foo: c });

@@ -1,4 +1,4 @@
-module mod1 {
+namespace mod1 {
 	interface mInt {
 		new (bar:any):any;
         foo (bar:any):any;

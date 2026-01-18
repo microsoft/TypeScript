@@ -21,7 +21,7 @@ class ClassWithInitializer extends BaseErrClass {
     }
 }
 
-module M {
+namespace M {
     //'this' in module variable
     var x = this; // Error
 }

@@ -1,3 +1,4 @@
+// @strict: false
 
 // legal JS, if nonsensical, which also triggers the issue
 const {

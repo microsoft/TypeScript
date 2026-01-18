@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/moduleAndInterfaceSharingName4.ts] ////
 
 //// [moduleAndInterfaceSharingName4.ts]
-declare module D3 {
+declare namespace D3 {
     var x: D3.Color.Color;
 
-    module Color {
+    namespace Color {
         export interface Color {
             darker: Color;
         }

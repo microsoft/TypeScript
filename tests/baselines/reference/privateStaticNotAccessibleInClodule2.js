@@ -12,7 +12,7 @@ class D extends C {
     baz: number;   
 }
 
-module D {
+namespace D {
     export var y = D.bar; // error
 }
 

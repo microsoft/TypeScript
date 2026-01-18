@@ -18,7 +18,7 @@ class C {
     constructor(x: number) { }
 >x : Symbol(x, Decl(constructSignaturesWithOverloads2.ts, 6, 16))
 }
-module C {
+namespace C {
 >C : Symbol(C, Decl(constructSignaturesWithOverloads2.ts, 0, 0), Decl(constructSignaturesWithOverloads2.ts, 7, 1))
 
     export var x = 1;
@@ -47,7 +47,7 @@ class C2<T> {
 >x : Symbol(x, Decl(constructSignaturesWithOverloads2.ts, 17, 16))
 >T : Symbol(T, Decl(constructSignaturesWithOverloads2.ts, 14, 9))
 }
-module C2 {
+namespace C2 {
 >C2 : Symbol(C2, Decl(constructSignaturesWithOverloads2.ts, 12, 22), Decl(constructSignaturesWithOverloads2.ts, 18, 1))
 
     export var x = 1;
@@ -92,15 +92,15 @@ interface I<T> {
 >T : Symbol(T, Decl(constructSignaturesWithOverloads2.ts, 31, 12))
 }
 
-var i2: I<number>;
->i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 3))
+declare var i2: I<number>;
+>i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 11))
 >I : Symbol(I, Decl(constructSignaturesWithOverloads2.ts, 23, 23), Decl(constructSignaturesWithOverloads2.ts, 29, 1))
 
 var r4 = new i2(1, '');
 >r4 : Symbol(r4, Decl(constructSignaturesWithOverloads2.ts, 37, 3))
->i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 3))
+>i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 11))
 
 var r5 = new i2(1, 1);
 >r5 : Symbol(r5, Decl(constructSignaturesWithOverloads2.ts, 38, 3))
->i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 3))
+>i2 : Symbol(i2, Decl(constructSignaturesWithOverloads2.ts, 36, 11))
 

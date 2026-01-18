@@ -4,64 +4,120 @@ File: /home/src/workspaces/project/a/b/app.ts
 import * as fs from 'fs'
 
 resolvedModules:
-fs: {
+fs: esnext: {
   "failedLookupLocations": [
-    "/home/src/workspaces/project/a/b/fs.ts",
-    "/home/src/workspaces/project/a/b/fs.tsx",
-    "/home/src/workspaces/project/a/b/fs.d.ts",
-    "/home/src/workspaces/project/a/fs.ts",
-    "/home/src/workspaces/project/a/fs.tsx",
-    "/home/src/workspaces/project/a/fs.d.ts",
-    "/home/src/workspaces/project/fs.ts",
-    "/home/src/workspaces/project/fs.tsx",
-    "/home/src/workspaces/project/fs.d.ts",
-    "/home/src/workspaces/fs.ts",
-    "/home/src/workspaces/fs.tsx",
-    "/home/src/workspaces/fs.d.ts",
-    "/home/src/fs.ts",
-    "/home/src/fs.tsx",
-    "/home/src/fs.d.ts",
-    "/home/fs.ts",
-    "/home/fs.tsx",
-    "/home/fs.d.ts",
-    "/fs.ts",
-    "/fs.tsx",
-    "/fs.d.ts",
+    "/home/src/workspaces/project/a/b/package.json",
+    "/home/src/workspaces/project/a/package.json",
+    "/home/src/workspaces/project/package.json",
+    "/home/src/workspaces/package.json",
+    "/home/src/package.json",
+    "/home/package.json",
+    "/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.ts",
+    "/home/src/workspaces/project/node_modules/fs.tsx",
+    "/home/src/workspaces/project/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.ts",
+    "/home/src/workspaces/node_modules/fs.tsx",
+    "/home/src/workspaces/node_modules/fs.d.ts",
+    "/home/src/workspaces/node_modules/fs/index.ts",
+    "/home/src/workspaces/node_modules/fs/index.tsx",
+    "/home/src/workspaces/node_modules/fs/index.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/package.json",
     "/home/src/workspaces/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/index.d.ts",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.ts",
+    "/home/src/node_modules/fs.tsx",
+    "/home/src/node_modules/fs.d.ts",
+    "/home/src/node_modules/fs/index.ts",
+    "/home/src/node_modules/fs/index.tsx",
+    "/home/src/node_modules/fs/index.d.ts",
     "/home/src/node_modules/@types/fs/package.json",
     "/home/src/node_modules/@types/fs.d.ts",
     "/home/src/node_modules/@types/fs/index.d.ts",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.ts",
+    "/home/node_modules/fs.tsx",
+    "/home/node_modules/fs.d.ts",
+    "/home/node_modules/fs/index.ts",
+    "/home/node_modules/fs/index.tsx",
+    "/home/node_modules/fs/index.d.ts",
     "/home/node_modules/@types/fs/package.json",
     "/home/node_modules/@types/fs.d.ts",
     "/home/node_modules/@types/fs/index.d.ts",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.ts",
+    "/node_modules/fs.tsx",
+    "/node_modules/fs.d.ts",
+    "/node_modules/fs/index.ts",
+    "/node_modules/fs/index.tsx",
+    "/node_modules/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
     "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
-    "/home/src/workspaces/project/a/b/fs.js",
-    "/home/src/workspaces/project/a/b/fs.jsx",
-    "/home/src/workspaces/project/a/fs.js",
-    "/home/src/workspaces/project/a/fs.jsx",
-    "/home/src/workspaces/project/fs.js",
-    "/home/src/workspaces/project/fs.jsx",
-    "/home/src/workspaces/fs.js",
-    "/home/src/workspaces/fs.jsx",
-    "/home/src/fs.js",
-    "/home/src/fs.jsx",
-    "/home/fs.js",
-    "/home/fs.jsx",
-    "/fs.js",
-    "/fs.jsx"
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.js",
+    "/home/src/workspaces/project/a/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.js",
+    "/home/src/workspaces/project/node_modules/fs.jsx",
+    "/home/src/workspaces/project/node_modules/fs/index.js",
+    "/home/src/workspaces/project/node_modules/fs/index.jsx",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.js",
+    "/home/src/workspaces/node_modules/fs.jsx",
+    "/home/src/workspaces/node_modules/fs/index.js",
+    "/home/src/workspaces/node_modules/fs/index.jsx",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.js",
+    "/home/src/node_modules/fs.jsx",
+    "/home/src/node_modules/fs/index.js",
+    "/home/src/node_modules/fs/index.jsx",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.js",
+    "/home/node_modules/fs.jsx",
+    "/home/node_modules/fs/index.js",
+    "/home/node_modules/fs/index.jsx",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.js",
+    "/node_modules/fs.jsx",
+    "/node_modules/fs/index.js",
+    "/node_modules/fs/index.jsx"
   ]
 }
 
@@ -71,69 +127,126 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 declare module 'fs' {}
 
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/home/src/workspaces/project/a/b/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/b/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/fs.ts' does not exist.
-File '/home/src/workspaces/project/fs.tsx' does not exist.
-File '/home/src/workspaces/project/fs.d.ts' does not exist.
-File '/home/src/workspaces/fs.ts' does not exist.
-File '/home/src/workspaces/fs.tsx' does not exist.
-File '/home/src/workspaces/fs.d.ts' does not exist.
-File '/home/src/fs.ts' does not exist.
-File '/home/src/fs.tsx' does not exist.
-File '/home/src/fs.d.ts' does not exist.
-File '/home/fs.ts' does not exist.
-File '/home/fs.tsx' does not exist.
-File '/home/fs.d.ts' does not exist.
-File '/fs.ts' does not exist.
-File '/fs.tsx' does not exist.
-File '/fs.d.ts' does not exist.
-Searching all ancestor node_modules directories for preferred extensions: Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'fs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist.
+File '/home/src/node_modules/fs.ts' does not exist.
+File '/home/src/node_modules/fs.tsx' does not exist.
+File '/home/src/node_modules/fs.d.ts' does not exist.
+File '/home/src/node_modules/fs/index.ts' does not exist.
+File '/home/src/node_modules/fs/index.tsx' does not exist.
+File '/home/src/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/node_modules/fs/package.json' does not exist.
+File '/home/node_modules/fs.ts' does not exist.
+File '/home/node_modules/fs.tsx' does not exist.
+File '/home/node_modules/fs.d.ts' does not exist.
+File '/home/node_modules/fs/index.ts' does not exist.
+File '/home/node_modules/fs/index.tsx' does not exist.
+File '/home/node_modules/fs/index.d.ts' does not exist.
 File '/home/node_modules/@types/fs/package.json' does not exist.
 File '/home/node_modules/@types/fs.d.ts' does not exist.
 File '/home/node_modules/@types/fs/index.d.ts' does not exist.
+File '/node_modules/fs/package.json' does not exist.
+File '/node_modules/fs.ts' does not exist.
+File '/node_modules/fs.tsx' does not exist.
+File '/node_modules/fs.d.ts' does not exist.
+File '/node_modules/fs/index.ts' does not exist.
+File '/node_modules/fs/index.tsx' does not exist.
+File '/node_modules/fs/index.d.ts' does not exist.
 File '/node_modules/@types/fs/package.json' does not exist.
 File '/node_modules/@types/fs.d.ts' does not exist.
 File '/node_modules/@types/fs/index.d.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.js' does not exist.
-File '/home/src/workspaces/project/a/b/fs.jsx' does not exist.
-File '/home/src/workspaces/project/a/fs.js' does not exist.
-File '/home/src/workspaces/project/a/fs.jsx' does not exist.
-File '/home/src/workspaces/project/fs.js' does not exist.
-File '/home/src/workspaces/project/fs.jsx' does not exist.
-File '/home/src/workspaces/fs.js' does not exist.
-File '/home/src/workspaces/fs.jsx' does not exist.
-File '/home/src/fs.js' does not exist.
-File '/home/src/fs.jsx' does not exist.
-File '/home/fs.js' does not exist.
-File '/home/fs.jsx' does not exist.
-File '/fs.js' does not exist.
-File '/fs.jsx' does not exist.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/b/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.jsx' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/node_modules/fs.js' does not exist.
+File '/home/src/node_modules/fs.jsx' does not exist.
+File '/home/src/node_modules/fs/index.js' does not exist.
+File '/home/src/node_modules/fs/index.jsx' does not exist.
+File '/home/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/node_modules/fs.js' does not exist.
+File '/home/node_modules/fs.jsx' does not exist.
+File '/home/node_modules/fs/index.js' does not exist.
+File '/home/node_modules/fs/index.jsx' does not exist.
+File '/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/fs.js' does not exist.
+File '/node_modules/fs.jsx' does not exist.
+File '/node_modules/fs/index.js' does not exist.
+File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -144,64 +257,120 @@ File: /home/src/workspaces/project/a/b/app.ts
 import * as fs from 'fs'
 var x = 1;
 resolvedModules:
-fs: {
+fs: esnext: {
   "failedLookupLocations": [
-    "/home/src/workspaces/project/a/b/fs.ts",
-    "/home/src/workspaces/project/a/b/fs.tsx",
-    "/home/src/workspaces/project/a/b/fs.d.ts",
-    "/home/src/workspaces/project/a/fs.ts",
-    "/home/src/workspaces/project/a/fs.tsx",
-    "/home/src/workspaces/project/a/fs.d.ts",
-    "/home/src/workspaces/project/fs.ts",
-    "/home/src/workspaces/project/fs.tsx",
-    "/home/src/workspaces/project/fs.d.ts",
-    "/home/src/workspaces/fs.ts",
-    "/home/src/workspaces/fs.tsx",
-    "/home/src/workspaces/fs.d.ts",
-    "/home/src/fs.ts",
-    "/home/src/fs.tsx",
-    "/home/src/fs.d.ts",
-    "/home/fs.ts",
-    "/home/fs.tsx",
-    "/home/fs.d.ts",
-    "/fs.ts",
-    "/fs.tsx",
-    "/fs.d.ts",
+    "/home/src/workspaces/project/a/b/package.json",
+    "/home/src/workspaces/project/a/package.json",
+    "/home/src/workspaces/project/package.json",
+    "/home/src/workspaces/package.json",
+    "/home/src/package.json",
+    "/home/package.json",
+    "/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.ts",
+    "/home/src/workspaces/project/node_modules/fs.tsx",
+    "/home/src/workspaces/project/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.ts",
+    "/home/src/workspaces/node_modules/fs.tsx",
+    "/home/src/workspaces/node_modules/fs.d.ts",
+    "/home/src/workspaces/node_modules/fs/index.ts",
+    "/home/src/workspaces/node_modules/fs/index.tsx",
+    "/home/src/workspaces/node_modules/fs/index.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/package.json",
     "/home/src/workspaces/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/index.d.ts",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.ts",
+    "/home/src/node_modules/fs.tsx",
+    "/home/src/node_modules/fs.d.ts",
+    "/home/src/node_modules/fs/index.ts",
+    "/home/src/node_modules/fs/index.tsx",
+    "/home/src/node_modules/fs/index.d.ts",
     "/home/src/node_modules/@types/fs/package.json",
     "/home/src/node_modules/@types/fs.d.ts",
     "/home/src/node_modules/@types/fs/index.d.ts",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.ts",
+    "/home/node_modules/fs.tsx",
+    "/home/node_modules/fs.d.ts",
+    "/home/node_modules/fs/index.ts",
+    "/home/node_modules/fs/index.tsx",
+    "/home/node_modules/fs/index.d.ts",
     "/home/node_modules/@types/fs/package.json",
     "/home/node_modules/@types/fs.d.ts",
     "/home/node_modules/@types/fs/index.d.ts",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.ts",
+    "/node_modules/fs.tsx",
+    "/node_modules/fs.d.ts",
+    "/node_modules/fs/index.ts",
+    "/node_modules/fs/index.tsx",
+    "/node_modules/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
     "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
-    "/home/src/workspaces/project/a/b/fs.js",
-    "/home/src/workspaces/project/a/b/fs.jsx",
-    "/home/src/workspaces/project/a/fs.js",
-    "/home/src/workspaces/project/a/fs.jsx",
-    "/home/src/workspaces/project/fs.js",
-    "/home/src/workspaces/project/fs.jsx",
-    "/home/src/workspaces/fs.js",
-    "/home/src/workspaces/fs.jsx",
-    "/home/src/fs.js",
-    "/home/src/fs.jsx",
-    "/home/fs.js",
-    "/home/fs.jsx",
-    "/fs.js",
-    "/fs.jsx"
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.js",
+    "/home/src/workspaces/project/a/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.js",
+    "/home/src/workspaces/project/node_modules/fs.jsx",
+    "/home/src/workspaces/project/node_modules/fs/index.js",
+    "/home/src/workspaces/project/node_modules/fs/index.jsx",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.js",
+    "/home/src/workspaces/node_modules/fs.jsx",
+    "/home/src/workspaces/node_modules/fs/index.js",
+    "/home/src/workspaces/node_modules/fs/index.jsx",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.js",
+    "/home/src/node_modules/fs.jsx",
+    "/home/src/node_modules/fs/index.js",
+    "/home/src/node_modules/fs/index.jsx",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.js",
+    "/home/node_modules/fs.jsx",
+    "/home/node_modules/fs/index.js",
+    "/home/node_modules/fs/index.jsx",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.js",
+    "/node_modules/fs.jsx",
+    "/node_modules/fs/index.js",
+    "/node_modules/fs/index.jsx"
   ]
 }
 
@@ -211,69 +380,126 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 declare module 'fs' {}
 
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/home/src/workspaces/project/a/b/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/b/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/fs.ts' does not exist.
-File '/home/src/workspaces/project/fs.tsx' does not exist.
-File '/home/src/workspaces/project/fs.d.ts' does not exist.
-File '/home/src/workspaces/fs.ts' does not exist.
-File '/home/src/workspaces/fs.tsx' does not exist.
-File '/home/src/workspaces/fs.d.ts' does not exist.
-File '/home/src/fs.ts' does not exist.
-File '/home/src/fs.tsx' does not exist.
-File '/home/src/fs.d.ts' does not exist.
-File '/home/fs.ts' does not exist.
-File '/home/fs.tsx' does not exist.
-File '/home/fs.d.ts' does not exist.
-File '/fs.ts' does not exist.
-File '/fs.tsx' does not exist.
-File '/fs.d.ts' does not exist.
-Searching all ancestor node_modules directories for preferred extensions: Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'fs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist.
+File '/home/src/node_modules/fs.ts' does not exist.
+File '/home/src/node_modules/fs.tsx' does not exist.
+File '/home/src/node_modules/fs.d.ts' does not exist.
+File '/home/src/node_modules/fs/index.ts' does not exist.
+File '/home/src/node_modules/fs/index.tsx' does not exist.
+File '/home/src/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/node_modules/fs/package.json' does not exist.
+File '/home/node_modules/fs.ts' does not exist.
+File '/home/node_modules/fs.tsx' does not exist.
+File '/home/node_modules/fs.d.ts' does not exist.
+File '/home/node_modules/fs/index.ts' does not exist.
+File '/home/node_modules/fs/index.tsx' does not exist.
+File '/home/node_modules/fs/index.d.ts' does not exist.
 File '/home/node_modules/@types/fs/package.json' does not exist.
 File '/home/node_modules/@types/fs.d.ts' does not exist.
 File '/home/node_modules/@types/fs/index.d.ts' does not exist.
+File '/node_modules/fs/package.json' does not exist.
+File '/node_modules/fs.ts' does not exist.
+File '/node_modules/fs.tsx' does not exist.
+File '/node_modules/fs.d.ts' does not exist.
+File '/node_modules/fs/index.ts' does not exist.
+File '/node_modules/fs/index.tsx' does not exist.
+File '/node_modules/fs/index.d.ts' does not exist.
 File '/node_modules/@types/fs/package.json' does not exist.
 File '/node_modules/@types/fs.d.ts' does not exist.
 File '/node_modules/@types/fs/index.d.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.js' does not exist.
-File '/home/src/workspaces/project/a/b/fs.jsx' does not exist.
-File '/home/src/workspaces/project/a/fs.js' does not exist.
-File '/home/src/workspaces/project/a/fs.jsx' does not exist.
-File '/home/src/workspaces/project/fs.js' does not exist.
-File '/home/src/workspaces/project/fs.jsx' does not exist.
-File '/home/src/workspaces/fs.js' does not exist.
-File '/home/src/workspaces/fs.jsx' does not exist.
-File '/home/src/fs.js' does not exist.
-File '/home/src/fs.jsx' does not exist.
-File '/home/fs.js' does not exist.
-File '/home/fs.jsx' does not exist.
-File '/fs.js' does not exist.
-File '/fs.jsx' does not exist.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/b/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.jsx' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/node_modules/fs.js' does not exist.
+File '/home/src/node_modules/fs.jsx' does not exist.
+File '/home/src/node_modules/fs/index.js' does not exist.
+File '/home/src/node_modules/fs/index.jsx' does not exist.
+File '/home/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/node_modules/fs.js' does not exist.
+File '/home/node_modules/fs.jsx' does not exist.
+File '/home/node_modules/fs/index.js' does not exist.
+File '/home/node_modules/fs/index.jsx' does not exist.
+File '/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/fs.js' does not exist.
+File '/node_modules/fs.jsx' does not exist.
+File '/node_modules/fs/index.js' does not exist.
+File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -284,64 +510,120 @@ File: /home/src/workspaces/project/a/b/app.ts
 import * as fs from 'fs'
 var y = 1;
 resolvedModules:
-fs: {
+fs: esnext: {
   "failedLookupLocations": [
-    "/home/src/workspaces/project/a/b/fs.ts",
-    "/home/src/workspaces/project/a/b/fs.tsx",
-    "/home/src/workspaces/project/a/b/fs.d.ts",
-    "/home/src/workspaces/project/a/fs.ts",
-    "/home/src/workspaces/project/a/fs.tsx",
-    "/home/src/workspaces/project/a/fs.d.ts",
-    "/home/src/workspaces/project/fs.ts",
-    "/home/src/workspaces/project/fs.tsx",
-    "/home/src/workspaces/project/fs.d.ts",
-    "/home/src/workspaces/fs.ts",
-    "/home/src/workspaces/fs.tsx",
-    "/home/src/workspaces/fs.d.ts",
-    "/home/src/fs.ts",
-    "/home/src/fs.tsx",
-    "/home/src/fs.d.ts",
-    "/home/fs.ts",
-    "/home/fs.tsx",
-    "/home/fs.d.ts",
-    "/fs.ts",
-    "/fs.tsx",
-    "/fs.d.ts",
+    "/home/src/workspaces/project/a/b/package.json",
+    "/home/src/workspaces/project/a/package.json",
+    "/home/src/workspaces/project/package.json",
+    "/home/src/workspaces/package.json",
+    "/home/src/package.json",
+    "/home/package.json",
+    "/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.ts",
+    "/home/src/workspaces/project/a/node_modules/fs.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/a/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/a/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.ts",
+    "/home/src/workspaces/project/node_modules/fs.tsx",
+    "/home/src/workspaces/project/node_modules/fs.d.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.ts",
+    "/home/src/workspaces/project/node_modules/fs/index.tsx",
+    "/home/src/workspaces/project/node_modules/fs/index.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/package.json",
     "/home/src/workspaces/project/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/project/node_modules/@types/fs/index.d.ts",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.ts",
+    "/home/src/workspaces/node_modules/fs.tsx",
+    "/home/src/workspaces/node_modules/fs.d.ts",
+    "/home/src/workspaces/node_modules/fs/index.ts",
+    "/home/src/workspaces/node_modules/fs/index.tsx",
+    "/home/src/workspaces/node_modules/fs/index.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/package.json",
     "/home/src/workspaces/node_modules/@types/fs.d.ts",
     "/home/src/workspaces/node_modules/@types/fs/index.d.ts",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.ts",
+    "/home/src/node_modules/fs.tsx",
+    "/home/src/node_modules/fs.d.ts",
+    "/home/src/node_modules/fs/index.ts",
+    "/home/src/node_modules/fs/index.tsx",
+    "/home/src/node_modules/fs/index.d.ts",
     "/home/src/node_modules/@types/fs/package.json",
     "/home/src/node_modules/@types/fs.d.ts",
     "/home/src/node_modules/@types/fs/index.d.ts",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.ts",
+    "/home/node_modules/fs.tsx",
+    "/home/node_modules/fs.d.ts",
+    "/home/node_modules/fs/index.ts",
+    "/home/node_modules/fs/index.tsx",
+    "/home/node_modules/fs/index.d.ts",
     "/home/node_modules/@types/fs/package.json",
     "/home/node_modules/@types/fs.d.ts",
     "/home/node_modules/@types/fs/index.d.ts",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.ts",
+    "/node_modules/fs.tsx",
+    "/node_modules/fs.d.ts",
+    "/node_modules/fs/index.ts",
+    "/node_modules/fs/index.tsx",
+    "/node_modules/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
     "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
-    "/home/src/workspaces/project/a/b/fs.js",
-    "/home/src/workspaces/project/a/b/fs.jsx",
-    "/home/src/workspaces/project/a/fs.js",
-    "/home/src/workspaces/project/a/fs.jsx",
-    "/home/src/workspaces/project/fs.js",
-    "/home/src/workspaces/project/fs.jsx",
-    "/home/src/workspaces/fs.js",
-    "/home/src/workspaces/fs.jsx",
-    "/home/src/fs.js",
-    "/home/src/fs.jsx",
-    "/home/fs.js",
-    "/home/fs.jsx",
-    "/fs.js",
-    "/fs.jsx"
+    "/home/src/workspaces/project/a/b/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/b/node_modules/fs.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/b/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/package.json",
+    "/home/src/workspaces/project/a/node_modules/fs.js",
+    "/home/src/workspaces/project/a/node_modules/fs.jsx",
+    "/home/src/workspaces/project/a/node_modules/fs/index.js",
+    "/home/src/workspaces/project/a/node_modules/fs/index.jsx",
+    "/home/src/workspaces/project/node_modules/fs/package.json",
+    "/home/src/workspaces/project/node_modules/fs.js",
+    "/home/src/workspaces/project/node_modules/fs.jsx",
+    "/home/src/workspaces/project/node_modules/fs/index.js",
+    "/home/src/workspaces/project/node_modules/fs/index.jsx",
+    "/home/src/workspaces/node_modules/fs/package.json",
+    "/home/src/workspaces/node_modules/fs.js",
+    "/home/src/workspaces/node_modules/fs.jsx",
+    "/home/src/workspaces/node_modules/fs/index.js",
+    "/home/src/workspaces/node_modules/fs/index.jsx",
+    "/home/src/node_modules/fs/package.json",
+    "/home/src/node_modules/fs.js",
+    "/home/src/node_modules/fs.jsx",
+    "/home/src/node_modules/fs/index.js",
+    "/home/src/node_modules/fs/index.jsx",
+    "/home/node_modules/fs/package.json",
+    "/home/node_modules/fs.js",
+    "/home/node_modules/fs.jsx",
+    "/home/node_modules/fs/index.js",
+    "/home/node_modules/fs/index.jsx",
+    "/node_modules/fs/package.json",
+    "/node_modules/fs.js",
+    "/node_modules/fs.jsx",
+    "/node_modules/fs/index.js",
+    "/node_modules/fs/index.jsx"
   ]
 }
 
@@ -351,70 +633,127 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 declare var process: any
 
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/home/src/workspaces/project/a/b/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/b/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.ts' does not exist.
-File '/home/src/workspaces/project/a/fs.tsx' does not exist.
-File '/home/src/workspaces/project/a/fs.d.ts' does not exist.
-File '/home/src/workspaces/project/fs.ts' does not exist.
-File '/home/src/workspaces/project/fs.tsx' does not exist.
-File '/home/src/workspaces/project/fs.d.ts' does not exist.
-File '/home/src/workspaces/fs.ts' does not exist.
-File '/home/src/workspaces/fs.tsx' does not exist.
-File '/home/src/workspaces/fs.d.ts' does not exist.
-File '/home/src/fs.ts' does not exist.
-File '/home/src/fs.tsx' does not exist.
-File '/home/src/fs.d.ts' does not exist.
-File '/home/fs.ts' does not exist.
-File '/home/fs.tsx' does not exist.
-File '/home/fs.d.ts' does not exist.
-File '/fs.ts' does not exist.
-File '/fs.tsx' does not exist.
-File '/fs.d.ts' does not exist.
-Searching all ancestor node_modules directories for preferred extensions: Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'fs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/b/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/a/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/project/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist.
+File '/home/src/workspaces/node_modules/fs.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs.d.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.ts' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.tsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/workspaces/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist.
+File '/home/src/node_modules/fs.ts' does not exist.
+File '/home/src/node_modules/fs.tsx' does not exist.
+File '/home/src/node_modules/fs.d.ts' does not exist.
+File '/home/src/node_modules/fs/index.ts' does not exist.
+File '/home/src/node_modules/fs/index.tsx' does not exist.
+File '/home/src/node_modules/fs/index.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/package.json' does not exist.
 File '/home/src/node_modules/@types/fs.d.ts' does not exist.
 File '/home/src/node_modules/@types/fs/index.d.ts' does not exist.
+File '/home/node_modules/fs/package.json' does not exist.
+File '/home/node_modules/fs.ts' does not exist.
+File '/home/node_modules/fs.tsx' does not exist.
+File '/home/node_modules/fs.d.ts' does not exist.
+File '/home/node_modules/fs/index.ts' does not exist.
+File '/home/node_modules/fs/index.tsx' does not exist.
+File '/home/node_modules/fs/index.d.ts' does not exist.
 File '/home/node_modules/@types/fs/package.json' does not exist.
 File '/home/node_modules/@types/fs.d.ts' does not exist.
 File '/home/node_modules/@types/fs/index.d.ts' does not exist.
+File '/node_modules/fs/package.json' does not exist.
+File '/node_modules/fs.ts' does not exist.
+File '/node_modules/fs.tsx' does not exist.
+File '/node_modules/fs.d.ts' does not exist.
+File '/node_modules/fs/index.ts' does not exist.
+File '/node_modules/fs/index.tsx' does not exist.
+File '/node_modules/fs/index.d.ts' does not exist.
 File '/node_modules/@types/fs/package.json' does not exist.
 File '/node_modules/@types/fs.d.ts' does not exist.
 File '/node_modules/@types/fs/index.d.ts' does not exist.
-File '/home/src/workspaces/project/a/b/fs.js' does not exist.
-File '/home/src/workspaces/project/a/b/fs.jsx' does not exist.
-File '/home/src/workspaces/project/a/fs.js' does not exist.
-File '/home/src/workspaces/project/a/fs.jsx' does not exist.
-File '/home/src/workspaces/project/fs.js' does not exist.
-File '/home/src/workspaces/project/fs.jsx' does not exist.
-File '/home/src/workspaces/fs.js' does not exist.
-File '/home/src/workspaces/fs.jsx' does not exist.
-File '/home/src/fs.js' does not exist.
-File '/home/src/fs.jsx' does not exist.
-File '/home/fs.js' does not exist.
-File '/home/fs.jsx' does not exist.
-File '/fs.js' does not exist.
-File '/fs.jsx' does not exist.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+File '/home/src/workspaces/project/a/b/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/b/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/b/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/a/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/project/node_modules/fs/index.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/node_modules/fs.js' does not exist.
+File '/home/src/workspaces/node_modules/fs.jsx' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.js' does not exist.
+File '/home/src/workspaces/node_modules/fs/index.jsx' does not exist.
+File '/home/src/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/node_modules/fs.js' does not exist.
+File '/home/src/node_modules/fs.jsx' does not exist.
+File '/home/src/node_modules/fs/index.js' does not exist.
+File '/home/src/node_modules/fs/index.jsx' does not exist.
+File '/home/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/home/node_modules/fs.js' does not exist.
+File '/home/node_modules/fs.jsx' does not exist.
+File '/home/node_modules/fs/index.js' does not exist.
+File '/home/node_modules/fs/index.jsx' does not exist.
+File '/node_modules/fs/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/fs.js' does not exist.
+File '/node_modules/fs.jsx' does not exist.
+File '/node_modules/fs/index.js' does not exist.
+File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
-home/src/workspaces/project/a/b/app.ts(2,21): error TS2792: Cannot find module 'fs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+home/src/workspaces/project/a/b/app.ts(2,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
 
 

@@ -1,4 +1,4 @@
-module TypeScript2 {
+namespace TypeScript2 {
     export class MemberName {
         public prefix: string = "";
     }

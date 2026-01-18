@@ -12,8 +12,8 @@ genericDerivedTypeWithSpecializedBase2.ts(11,1): error TS2322: Type 'B<number>' 
         y: U;
     }
     
-    var x: A<{ length: number; foo: number }>;
-    var y: B<number>;
+    declare var x: A<{ length: number; foo: number }>;
+    declare var y: B<number>;
     x = y;  // error
     ~
 !!! error TS2322: Type 'B<number>' is not assignable to type 'A<{ length: number; foo: number; }>'.

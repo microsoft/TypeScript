@@ -4,14 +4,14 @@
 class A {
 >A : Symbol(A, Decl(propertyAccess.ts, 0, 0))
 
-    a: number;
+    a!: number;
 >a : Symbol(A.a, Decl(propertyAccess.ts, 0, 9))
 }
 class B extends A {
 >B : Symbol(B, Decl(propertyAccess.ts, 2, 1))
 >A : Symbol(A, Decl(propertyAccess.ts, 0, 0))
 
-    b: number;
+    b!: number;
 >b : Symbol(B.b, Decl(propertyAccess.ts, 3, 19))
 }
 enum Compass {
@@ -43,8 +43,8 @@ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East
 >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
 >East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
 
-var bothIndex:
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+declare var bothIndex:
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
     {
         [n: string]: A;
 >n : Symbol(n, Decl(propertyAccess.ts, 14, 9))
@@ -84,12 +84,12 @@ var obj = {
 var anyVar: any = {};
 >anyVar : Symbol(anyVar, Decl(propertyAccess.ts, 27, 3))
 
-var stringOrNumber: string | number;
->stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 3))
+declare var stringOrNumber: string | number;
+>stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 11))
 
-var someObject: { name: string };
->someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 3))
->name : Symbol(name, Decl(propertyAccess.ts, 29, 17))
+declare var someObject: { name: string };
+>someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 11))
+>name : Symbol(name, Decl(propertyAccess.ts, 29, 25))
 
 // Assign to a property access
 obj.y = 4;
@@ -199,7 +199,7 @@ var kk: any;
 var ll = numIndex[someObject]; // Error
 >ll : Symbol(ll, Decl(propertyAccess.ts, 79, 3))
 >numIndex : Symbol(numIndex, Decl(propertyAccess.ts, 10, 3))
->someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 3))
+>someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 11))
 
 // Bracket notation property access using string value on type with string index signature and no numeric index signature
 var mm = strIndex['N'];
@@ -287,7 +287,7 @@ var tt: any;
 var uu = noIndex[someObject]; // Error
 >uu : Symbol(uu, Decl(propertyAccess.ts, 116, 3))
 >noIndex : Symbol(noIndex, Decl(propertyAccess.ts, 16, 6))
->someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 3))
+>someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 11))
 
 // Bracket notation property access using numeric value on type with numeric index signature and string index signature
 var vv = noIndex[32];
@@ -300,7 +300,7 @@ var vv: any;
 // Bracket notation property access using enum value on type with numeric index signature and string index signature
 var ww = bothIndex[Compass.East];
 >ww : Symbol(ww, Decl(propertyAccess.ts, 123, 3), Decl(propertyAccess.ts, 124, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
 >Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
 >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
 >East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
@@ -312,7 +312,7 @@ var ww: B;
 // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
 var xx = bothIndex[<any>null];
 >xx : Symbol(xx, Decl(propertyAccess.ts, 127, 3), Decl(propertyAccess.ts, 128, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
 
 var xx: B;
 >xx : Symbol(xx, Decl(propertyAccess.ts, 127, 3), Decl(propertyAccess.ts, 128, 3))
@@ -321,7 +321,7 @@ var xx: B;
 // Bracket notation property access using string value on type with numeric index signature and string index signature
 var yy = bothIndex['foo'];
 >yy : Symbol(yy, Decl(propertyAccess.ts, 131, 3), Decl(propertyAccess.ts, 132, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
 
 var yy: A;
 >yy : Symbol(yy, Decl(propertyAccess.ts, 131, 3), Decl(propertyAccess.ts, 132, 3))
@@ -330,7 +330,7 @@ var yy: A;
 // Bracket notation property access using numeric string value on type with numeric index signature and string index signature
 var zz = bothIndex['1.0'];
 >zz : Symbol(zz, Decl(propertyAccess.ts, 135, 3), Decl(propertyAccess.ts, 136, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
 
 var zz: A;
 >zz : Symbol(zz, Decl(propertyAccess.ts, 135, 3), Decl(propertyAccess.ts, 136, 3))
@@ -339,13 +339,13 @@ var zz: A;
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
 var zzzz = bothIndex[someObject]; // Error
 >zzzz : Symbol(zzzz, Decl(propertyAccess.ts, 139, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
->someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
+>someObject : Symbol(someObject, Decl(propertyAccess.ts, 29, 11))
 
 var x1 = numIndex[stringOrNumber];
 >x1 : Symbol(x1, Decl(propertyAccess.ts, 141, 3), Decl(propertyAccess.ts, 142, 3))
 >numIndex : Symbol(numIndex, Decl(propertyAccess.ts, 10, 3))
->stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 3))
+>stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 11))
 
 var x1: any;
 >x1 : Symbol(x1, Decl(propertyAccess.ts, 141, 3), Decl(propertyAccess.ts, 142, 3))
@@ -353,7 +353,7 @@ var x1: any;
 var x2 = strIndex[stringOrNumber];
 >x2 : Symbol(x2, Decl(propertyAccess.ts, 144, 3), Decl(propertyAccess.ts, 145, 3))
 >strIndex : Symbol(strIndex, Decl(propertyAccess.ts, 11, 3))
->stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 3))
+>stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 11))
 
 var x2: Compass;
 >x2 : Symbol(x2, Decl(propertyAccess.ts, 144, 3), Decl(propertyAccess.ts, 145, 3))
@@ -361,8 +361,8 @@ var x2: Compass;
 
 var x3 = bothIndex[stringOrNumber];
 >x3 : Symbol(x3, Decl(propertyAccess.ts, 147, 3), Decl(propertyAccess.ts, 148, 3))
->bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
->stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 3))
+>bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 11))
+>stringOrNumber : Symbol(stringOrNumber, Decl(propertyAccess.ts, 28, 11))
 
 var x3: A;
 >x3 : Symbol(x3, Decl(propertyAccess.ts, 147, 3), Decl(propertyAccess.ts, 148, 3))

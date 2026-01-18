@@ -3,7 +3,7 @@ function salt() {
   return pepper();  
 }
 
-module M {
+namespace M {
     export function tungsten() {
         function oxygen() { return 6; };
         return oxygen();

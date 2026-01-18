@@ -26,7 +26,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
             ...input,
         });
 
-        it("verify getOutputFileNames", () => {
+        it("verify getOutputFileNames " + input.subScenario, () => {
             const sys = input.sys();
             assert.deepEqual(
                 ts.getOutputFileNames(
@@ -58,7 +58,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                 }),
             }),
         edits,
-    }, ["/home/src/workspaces/project/dist/index.js"]);
+    }, ["/home/src/workspaces/project/dist/src/index.js"]);
 
     verify({
         subScenario: "when rootDir is not specified and is composite",

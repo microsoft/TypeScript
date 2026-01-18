@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @strictPropertyInitialization: false
 // @noLib: true
 type Readonly<T> = {readonly [K in keyof T]: T[K]}
 interface A {

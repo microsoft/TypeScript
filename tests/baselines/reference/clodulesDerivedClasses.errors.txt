@@ -8,7 +8,7 @@ clodulesDerivedClasses.ts(9,7): error TS2417: Class static side 'typeof Path' in
         id: number;
     }
     
-    module Shape.Utils {
+    namespace Shape.Utils {
         export function convert(): Shape { return null;}
     }
     
@@ -22,7 +22,7 @@ clodulesDerivedClasses.ts(9,7): error TS2417: Class static side 'typeof Path' in
     
     }
     
-    module Path.Utils {
+    namespace Path.Utils {
         export function convert2(): Path {
             return null;
         }

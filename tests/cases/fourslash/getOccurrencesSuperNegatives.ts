@@ -4,7 +4,7 @@
 ////    [|super|];
 ////}
 ////
-////module M {
+////namespace M {
 ////    [|super|];
 ////    function f(x = [|super|]) {
 ////    [|super|];

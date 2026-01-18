@@ -1,15 +1,15 @@
 // + operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
 
 class A {
-    public a: string;
+    public a!: string;
     static foo() { return ""; }
 }
-module M {
-    export var n: string;
+namespace M {
+    export var n: string = "";
 }
 
 var objA = new A();
