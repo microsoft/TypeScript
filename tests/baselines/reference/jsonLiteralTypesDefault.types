@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/jsonLiteralTypesDefault.ts] ////
+
+=== data.json ===
+{
+>{    "s": "string literal",    "n": 123,    "b": true,    "arr": ["a", "b"]} : { s: string; n: number; b: boolean; arr: string[]; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "s": "string literal",
+>"s" : string
+>    : ^^^^^^
+>"string literal" : "string literal"
+>                 : ^^^^^^^^^^^^^^^^
+
+    "n": 123,
+>"n" : number
+>    : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    "b": true,
+>"b" : boolean
+>    : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    "arr": ["a", "b"]
+>"arr" : string[]
+>      : ^^^^^^^^
+>["a", "b"] : string[]
+>           : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+}
+
+=== main.ts ===
+import data from "./data.json";
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Should be wide types
+const s: string = data.s;
+>s : string
+>  : ^^^^^^
+>data.s : string
+>       : ^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+const n: number = data.n;
+>n : number
+>  : ^^^^^^
+>data.n : number
+>       : ^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+const b: boolean = data.b;
+>b : boolean
+>  : ^^^^^^^
+>data.b : boolean
+>       : ^^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : boolean
+>  : ^^^^^^^
+
+const arr: string[] = data.arr;
+>arr : string[]
+>    : ^^^^^^^^
+>data.arr : string[]
+>         : ^^^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : string[]
+>    : ^^^^^^^^
+
+// Should NOT be literal types (these assignments should fail if they were literals, but since we are assigning TO them, we check what they ARE)
+// Actually, data.s is string. So `const x: "literal" = data.s` would fail if data.s is string.
+// But here data.s IS string.
+// Let's verify by assigning to literals which should fail if it is string.
+
+const literalS: "string literal" = data.s; // Error expected: string not assignable to "string literal"
+>literalS : "string literal"
+>         : ^^^^^^^^^^^^^^^^
+>data.s : string
+>       : ^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+const literalN: 123 = data.n; // Error expected
+>literalN : 123
+>         : ^^^
+>data.n : number
+>       : ^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+const literalB: true = data.b; // Error expected
+>literalB : true
+>         : ^^^^
+>true : true
+>     : ^^^^
+>data.b : boolean
+>       : ^^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : boolean
+>  : ^^^^^^^
+
+const literalArr: readonly ["a", "b"] = data.arr; // Error expected
+>literalArr : readonly ["a", "b"]
+>           : ^^^^^^^^^^^^^^^^^^^
+>data.arr : string[]
+>         : ^^^^^^^^
+>data : { s: string; n: number; b: boolean; arr: string[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : string[]
+>    : ^^^^^^^^
+

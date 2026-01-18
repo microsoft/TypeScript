@@ -1,0 +1,43 @@
+main.ts(14,7): error TS2322: Type 'string' is not assignable to type '"string literal"'.
+main.ts(15,7): error TS2322: Type 'number' is not assignable to type '123'.
+main.ts(16,7): error TS2322: Type 'boolean' is not assignable to type 'true'.
+main.ts(17,7): error TS2322: Type 'string[]' is not assignable to type 'readonly ["a", "b"]'.
+  Target requires 2 element(s) but source may have fewer.
+
+
+==== data.json (0 errors) ====
+    {
+        "s": "string literal",
+        "n": 123,
+        "b": true,
+        "arr": ["a", "b"]
+    }
+    
+==== main.ts (4 errors) ====
+    import data from "./data.json";
+    
+    // Should be wide types
+    const s: string = data.s;
+    const n: number = data.n;
+    const b: boolean = data.b;
+    const arr: string[] = data.arr;
+    
+    // Should NOT be literal types (these assignments should fail if they were literals, but since we are assigning TO them, we check what they ARE)
+    // Actually, data.s is string. So `const x: "literal" = data.s` would fail if data.s is string.
+    // But here data.s IS string.
+    // Let's verify by assigning to literals which should fail if it is string.
+    
+    const literalS: "string literal" = data.s; // Error expected: string not assignable to "string literal"
+          ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"string literal"'.
+    const literalN: 123 = data.n; // Error expected
+          ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '123'.
+    const literalB: true = data.b; // Error expected
+          ~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'true'.
+    const literalArr: readonly ["a", "b"] = data.arr; // Error expected
+          ~~~~~~~~~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'readonly ["a", "b"]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+    

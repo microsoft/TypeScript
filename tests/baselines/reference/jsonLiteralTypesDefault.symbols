@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/jsonLiteralTypesDefault.ts] ////
+
+=== data.json ===
+{
+    "s": "string literal",
+>"s" : Symbol("s", Decl(data.json, 0, 1))
+
+    "n": 123,
+>"n" : Symbol("n", Decl(data.json, 1, 26))
+
+    "b": true,
+>"b" : Symbol("b", Decl(data.json, 2, 13))
+
+    "arr": ["a", "b"]
+>"arr" : Symbol("arr", Decl(data.json, 3, 14))
+}
+
+=== main.ts ===
+import data from "./data.json";
+>data : Symbol(data, Decl(main.ts, 0, 6))
+
+// Should be wide types
+const s: string = data.s;
+>s : Symbol(s, Decl(main.ts, 3, 5))
+>data.s : Symbol("s", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>s : Symbol("s", Decl(data.json, 0, 1))
+
+const n: number = data.n;
+>n : Symbol(n, Decl(main.ts, 4, 5))
+>data.n : Symbol("n", Decl(data.json, 1, 26))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>n : Symbol("n", Decl(data.json, 1, 26))
+
+const b: boolean = data.b;
+>b : Symbol(b, Decl(main.ts, 5, 5))
+>data.b : Symbol("b", Decl(data.json, 2, 13))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>b : Symbol("b", Decl(data.json, 2, 13))
+
+const arr: string[] = data.arr;
+>arr : Symbol(arr, Decl(main.ts, 6, 5))
+>data.arr : Symbol("arr", Decl(data.json, 3, 14))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>arr : Symbol("arr", Decl(data.json, 3, 14))
+
+// Should NOT be literal types (these assignments should fail if they were literals, but since we are assigning TO them, we check what they ARE)
+// Actually, data.s is string. So `const x: "literal" = data.s` would fail if data.s is string.
+// But here data.s IS string.
+// Let's verify by assigning to literals which should fail if it is string.
+
+const literalS: "string literal" = data.s; // Error expected: string not assignable to "string literal"
+>literalS : Symbol(literalS, Decl(main.ts, 13, 5))
+>data.s : Symbol("s", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>s : Symbol("s", Decl(data.json, 0, 1))
+
+const literalN: 123 = data.n; // Error expected
+>literalN : Symbol(literalN, Decl(main.ts, 14, 5))
+>data.n : Symbol("n", Decl(data.json, 1, 26))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>n : Symbol("n", Decl(data.json, 1, 26))
+
+const literalB: true = data.b; // Error expected
+>literalB : Symbol(literalB, Decl(main.ts, 15, 5))
+>data.b : Symbol("b", Decl(data.json, 2, 13))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>b : Symbol("b", Decl(data.json, 2, 13))
+
+const literalArr: readonly ["a", "b"] = data.arr; // Error expected
+>literalArr : Symbol(literalArr, Decl(main.ts, 16, 5))
+>data.arr : Symbol("arr", Decl(data.json, 3, 14))
+>data : Symbol(data, Decl(main.ts, 0, 6))
+>arr : Symbol("arr", Decl(data.json, 3, 14))
+
