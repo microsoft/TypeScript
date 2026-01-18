@@ -9,8 +9,8 @@ interface Refrigerator extends Runnable {
     makesFoodGoBrrr: boolean;
 }
 
-let x: string;
-let y: "foo" | Refrigerator;
+declare let x: string;
+declare let y: "foo" | Refrigerator;
 
 let b: boolean;
 b = x == y;
@@ -33,8 +33,6 @@ b = "bar" != y;
 
 
 //// [stringLiteralsWithEqualityChecks04.js]
-var x;
-var y;
 var b;
 b = x == y;
 b = "foo" == y;

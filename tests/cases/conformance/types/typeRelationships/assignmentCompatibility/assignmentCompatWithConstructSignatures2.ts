@@ -3,8 +3,8 @@
 interface T {
     f: new (x: number) => void;
 }
-var t: T;
-var a: { f: new (x: number) => void };
+declare var t: T;
+declare var a: { f: new (x: number) => void };
 
 t = a;
 a = t;
@@ -12,8 +12,8 @@ a = t;
 interface S {
     f: new (x: number) => string;
 }
-var s: S;
-var a2: { f: new (x: number) => string };
+declare var s: S;
+declare var a2: { f: new (x: number) => string };
 t = s;
 t = a2;
 a = s;
@@ -28,8 +28,8 @@ a = function (x: number) { return ''; }
 interface S2 {
     f(x: string): void;
 }
-var s2: S2;
-var a3: { f(x: string): void };
+declare var s2: S2;
+declare var a3: { f(x: string): void };
 // these are errors
 t = s2;
 t = a3;

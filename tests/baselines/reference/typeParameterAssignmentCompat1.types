@@ -13,11 +13,11 @@ function f<T, U>(): Foo<U> {
 >f : <T, U>() => Foo<U>
 >  : ^ ^^ ^^^^^^^      
 
-    var x: Foo<T>;
+    var x!: Foo<T>;
 >x : Foo<T>
 >  : ^^^^^^
 
-    var y: Foo<U>;
+    var y!: Foo<U>;
 >y : Foo<U>
 >  : ^^^^^^
 
@@ -42,11 +42,11 @@ class C<T> {
 >f : <U>() => Foo<U>
 >  : ^ ^^^^^^^      
 
-        var x: Foo<T>;
+        var x!: Foo<T>;
 >x : Foo<T>
 >  : ^^^^^^
 
-        var y: Foo<U>;
+        var y!: Foo<U>;
 >y : Foo<U>
 >  : ^^^^^^
 

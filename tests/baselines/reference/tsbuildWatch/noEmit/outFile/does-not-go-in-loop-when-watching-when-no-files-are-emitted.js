@@ -42,12 +42,17 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"root":["./myproject/a.js","./myproject/b.ts"],"version":"FakeTSVersion"}
+{"root":["./myproject/a.js","./myproject/b.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
@@ -55,8 +60,9 @@ Output::
     "./myproject/a.js",
     "./myproject/b.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 74
+  "size": 88
 }
 
 
@@ -90,10 +96,7 @@ Program files::
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/a.js
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -116,11 +119,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../out.tsbuildinfo' is older than input 'a.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../out.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -144,7 +152,7 @@ Program files::
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -169,11 +177,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../out.tsbuildinfo' is older than input 'a.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../out.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -199,10 +212,7 @@ Program files::
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/a.js
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

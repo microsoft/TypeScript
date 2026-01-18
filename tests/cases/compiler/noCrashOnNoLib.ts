@@ -1,7 +1,7 @@
 // @noLib: true
 
 export function f() {
-    let e: {}[];
+    let e: {}[] = [];
     while (true) {
       e = [...(e || [])];
     }

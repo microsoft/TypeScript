@@ -1122,56 +1122,56 @@ interface Foo {
     b: string;
 >b : Symbol(Foo.b, Decl(bluebirdStaticThis.ts, 121, 14))
 }
-var x: any;
->x : Symbol(x, Decl(bluebirdStaticThis.ts, 124, 3))
+declare var x: any;
+>x : Symbol(x, Decl(bluebirdStaticThis.ts, 124, 11))
 
-var arr: any[];
->arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 3))
+declare var arr: any[];
+>arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 11))
 
-var foo: Foo;
->foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 3))
+declare var foo: Foo;
+>foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 11))
 >Foo : Symbol(Foo, Decl(bluebirdStaticThis.ts, 118, 1))
 
-var fooProm: Promise<Foo>;
->fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 3))
+declare var fooProm: Promise<Foo>;
+>fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 11))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >Foo : Symbol(Foo, Decl(bluebirdStaticThis.ts, 118, 1))
 
 fooProm = Promise.try(Promise, () => {
->fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 3))
+>fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 11))
 >Promise.try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 
 	return foo;
->foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 3))
+>foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 11))
 
 });
 fooProm = Promise.try(Promise, () => {
->fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 3))
+>fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 11))
 >Promise.try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 
 	return foo;
->foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 3))
+>foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 11))
 
 }, arr);
->arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 3))
+>arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 11))
 
 fooProm = Promise.try(Promise, () => {
->fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 3))
+>fooProm : Symbol(fooProm, Decl(bluebirdStaticThis.ts, 127, 11))
 >Promise.try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >try : Symbol(Promise.try, Decl(bluebirdStaticThis.ts, 5, 125), Decl(bluebirdStaticThis.ts, 6, 107))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 
 	return foo;
->foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 3))
+>foo : Symbol(foo, Decl(bluebirdStaticThis.ts, 126, 11))
 
 }, arr, x);
->arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 3))
->x : Symbol(x, Decl(bluebirdStaticThis.ts, 124, 3))
+>arr : Symbol(arr, Decl(bluebirdStaticThis.ts, 125, 11))
+>x : Symbol(x, Decl(bluebirdStaticThis.ts, 124, 11))
 

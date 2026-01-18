@@ -1,3 +1,4 @@
+// @strict: false
 // object types are identical structurally
 
 class Base { foo: string; }

@@ -1,7 +1,7 @@
 var myCars=new Array(); 
 var myCars3 = new Array({});
-var myCars4: Array; // error
-var myCars5: Array<any>[];
+declare var myCars4: Array; // error
+declare var myCars5: Array<any>[];
  
 myCars = myCars3;
 myCars = myCars4;

@@ -5,7 +5,7 @@ class Foo {
 >Foo : Foo
 >    : ^^^
 
-    protected x: string;
+    protected x!: string;
 >x : string
 >  : ^^^^^^
 }
@@ -22,7 +22,7 @@ interface I2 extends Foo {
 >  : ^^^^^^
 }
 
-var i: I2;
+declare var i: I2;
 >i : I2
 >  : ^^
 

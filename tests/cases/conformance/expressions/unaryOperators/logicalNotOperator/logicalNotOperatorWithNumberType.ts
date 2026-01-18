@@ -1,15 +1,15 @@
 // ! operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
 
 class A {
-    public a: number;
+    public a!: number;
     static foo() { return 1; }
 }
 namespace M {
-    export var n: number;
+    export declare var n: number;
 }
 
 var objA = new A();

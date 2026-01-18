@@ -23,16 +23,16 @@ x.toString();
 var n = 0;
 >n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
 
-var N: Number;
->N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+declare var N: Number;
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 11))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 n = N;  // should not work, as 'number' has a different brand
 >n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
->N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 11))
 
 N = n; // should work
->N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 11))
 >n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
 
 var o: Object = {}

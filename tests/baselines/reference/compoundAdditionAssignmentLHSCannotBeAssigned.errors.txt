@@ -9,27 +9,27 @@ compoundAdditionAssignmentLHSCannotBeAssigned.ts(17,1): error TS2322: Type 'stri
     // string can add every type, and result string cannot be assigned to below types
     enum E { a, b, c }
     
-    var x1: boolean;
+    declare var x1: boolean;
     x1 += '';
     ~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     
-    var x2: number;
+    declare var x2: number;
     x2 += '';
     ~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
-    var x3: E;
+    declare var x3: E;
     x3 += '';
     ~~
 !!! error TS2322: Type 'string' is not assignable to type 'E'.
     
-    var x4: {a: string};
+    declare var x4: {a: string};
     x4 += '';
     ~~
 !!! error TS2322: Type 'string' is not assignable to type '{ a: string; }'.
     
-    var x5: void;
+    declare var x5: void;
     x5 += '';
     ~~
 !!! error TS2322: Type 'string' is not assignable to type 'void'.

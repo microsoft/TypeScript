@@ -1,5 +1,5 @@
 function extend<T, U>(obj1: T, obj2: U): T & U {
-    var result: T & U;
+    var result!: T & U;
     obj1 = result;
     obj2 = result;
     result = obj1;  // Error

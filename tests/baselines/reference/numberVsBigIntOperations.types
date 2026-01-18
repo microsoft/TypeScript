@@ -1070,7 +1070,7 @@ num = ~"3"; num = -false; // should infer number
 >false : false
 >      : ^^^^^
 
-let bigIntOrNumber: bigint | number;
+declare let bigIntOrNumber: bigint | number;
 >bigIntOrNumber : number | bigint
 >               : ^^^^^^^^^^^^^^^
 
@@ -1237,7 +1237,7 @@ const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
 >x : 0 | 1
 >  : ^^^^^
 
-const zeroOrBigOne: 0 | 1n;
+declare const zeroOrBigOne: 0 | 1n;
 >zeroOrBigOne : 0 | 1n
 >             : ^^^^^^
 
@@ -1286,7 +1286,7 @@ if (zeroOrBigOne) isOne(zeroOrBigOne);
 >zeroOrBigOne : 1n
 >             : ^^
 
-const bigZeroOrOne: 0n | 1;
+declare const bigZeroOrOne: 0n | 1;
 >bigZeroOrOne : 0n | 1
 >             : ^^^^^^
 

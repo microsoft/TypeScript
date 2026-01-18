@@ -1,3 +1,4 @@
+// @strict: false
 //@module: amd
 // @declaration: true
 var simpleVar;

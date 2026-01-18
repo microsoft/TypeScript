@@ -1,3 +1,4 @@
+// @strict: false
 function ExpandoMerge(n: number) {
     return n;
 }

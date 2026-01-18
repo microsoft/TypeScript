@@ -3,10 +3,10 @@
 //// [deleteOperatorWithAnyOtherType.ts]
 // delete  operator on any type
 
-var ANY: any;
-var ANY1;
+declare var ANY: any;
+declare var ANY1;
 var ANY2: any[] = ["", ""];
-var obj: () => {};
+declare var obj: () => {};
 var obj1 = { x: "", y: () => { }};
 function foo(): any {
     var a;
@@ -65,10 +65,7 @@ delete M.n;
 
 //// [deleteOperatorWithAnyOtherType.js]
 // delete  operator on any type
-var ANY;
-var ANY1;
 var ANY2 = ["", ""];
-var obj;
 var obj1 = { x: "", y: function () { } };
 function foo() {
     var a;

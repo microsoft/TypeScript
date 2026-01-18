@@ -6,7 +6,7 @@
 class C {
 >C : Symbol(C, Decl(typeGuardsTypeParameters.ts, 0, 0))
 
-    prop: string;
+    prop: string = "";
 >prop : Symbol(C.prop, Decl(typeGuardsTypeParameters.ts, 2, 9))
 }
 

@@ -1,3 +1,4 @@
+// @strict: false
 // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
 
 class C {

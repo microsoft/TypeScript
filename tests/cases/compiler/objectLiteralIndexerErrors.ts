@@ -6,8 +6,8 @@ interface B extends A {
     y: string;
 }
 
-var a: A;
-var b: B;
+declare var a: A;
+declare var b: B;
 var c: any;
 
 var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A

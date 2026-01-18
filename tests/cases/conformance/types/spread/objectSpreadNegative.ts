@@ -7,7 +7,7 @@ class PrivateOptionalX {
     private x?: number;
 }
 class PublicX {
-    public x: number;
+    public x: number = 42;
 }
 declare let publicX: PublicX;
 declare let privateOptionalX: PrivateOptionalX;

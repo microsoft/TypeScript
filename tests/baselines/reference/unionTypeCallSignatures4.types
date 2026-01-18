@@ -45,7 +45,7 @@ type F5 = (a: string, b: string) => void;
 >b : string
 >  : ^^^^^^
 
-var f12: F1 | F2;
+declare var f12: F1 | F2;
 >f12 : F1 | F2
 >    : ^^^^^^^
 
@@ -79,7 +79,7 @@ f12("a", "b", "c");  // ok
 >"c" : "c"
 >    : ^^^
 
-var f34: F3 | F4;
+declare var f34: F3 | F4;
 >f34 : F3 | F4
 >    : ^^^^^^^
 
@@ -113,7 +113,7 @@ f34("a", "b", "c");
 >"c" : "c"
 >    : ^^^
 
-var f1234: F1 | F2 | F3 | F4;
+declare var f1234: F1 | F2 | F3 | F4;
 >f1234 : F1 | F2 | F3 | F4
 >      : ^^^^^^^^^^^^^^^^^
 
@@ -147,7 +147,7 @@ f1234("a", "b", "c");  // ok
 >"c" : "c"
 >    : ^^^
 
-var f12345: F1 | F2 | F3 | F4 | F5;
+declare var f12345: F1 | F2 | F3 | F4 | F5;
 >f12345 : F1 | F2 | F3 | F4 | F5
 >       : ^^^^^^^^^^^^^^^^^^^^^^
 

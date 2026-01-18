@@ -1,3 +1,4 @@
+// @strict: false
 // Parameter properties are not valid in overloads of constructors
 
 class C {

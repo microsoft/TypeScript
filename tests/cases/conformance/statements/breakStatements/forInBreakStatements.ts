@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnusedLabels: true
 
 for(var x in {}) {

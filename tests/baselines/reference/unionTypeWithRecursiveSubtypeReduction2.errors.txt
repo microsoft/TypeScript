@@ -32,8 +32,8 @@ unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2322: Type 'Class' is 
         public parent: Module | Class;
     }
     
-    var c: Class;
-    var p: Property;
+    declare var c: Class;
+    declare var p: Property;
     c = p;
     ~
 !!! error TS2322: Type 'Property' is not assignable to type 'Class'.

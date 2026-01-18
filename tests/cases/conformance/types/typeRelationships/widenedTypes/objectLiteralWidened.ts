@@ -1,3 +1,4 @@
+// @strict: false
 // object literal properties are widened to any
 
 var x1 = {

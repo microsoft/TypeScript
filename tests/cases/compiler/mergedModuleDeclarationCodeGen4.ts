@@ -1,3 +1,4 @@
+// @strict: false
 namespace superContain {
     export namespace contain {
         export namespace my.buz {

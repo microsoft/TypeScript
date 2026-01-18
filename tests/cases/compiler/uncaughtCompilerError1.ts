@@ -1,3 +1,4 @@
+// @strict: false
 declare var index, lineTokens, token, tokens;
 
 function f() {

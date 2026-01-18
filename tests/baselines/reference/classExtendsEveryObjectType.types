@@ -22,7 +22,7 @@ class C2 extends { foo: string; } { } // error
 >string : any
 >       : ^^^
 
-var x: { foo: string; }
+declare var x: { foo: string; }
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string

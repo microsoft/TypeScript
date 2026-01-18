@@ -1,3 +1,4 @@
+// @strict: false
 // Constructors
 class c1 {
     constructor(i: number, ...arguments) { // error

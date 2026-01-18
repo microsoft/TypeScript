@@ -1,3 +1,4 @@
+// @strict: false
 namespace M {
     declare declare var x;
     declare declare function f();

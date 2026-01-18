@@ -5,7 +5,7 @@ function fee<T>() {
 >fee : <T>() => void
 >    : ^ ^^^^^^^^^^^
 
-    var t: T;
+    var t!: T;
 >t : T
 >  : ^
 
@@ -30,7 +30,7 @@ function fee2<T extends any>() {
 >fee2 : <T extends unknown>() => void
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    var t: T;
+    var t!: T;
 >t : T
 >  : ^
 

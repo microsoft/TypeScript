@@ -1,3 +1,4 @@
+// @strict: false
 // @noTypesAndSymbols: true
 // @esModuleInterop: true
 // @declaration: true

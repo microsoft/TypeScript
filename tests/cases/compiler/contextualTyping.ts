@@ -1,3 +1,4 @@
+// @strict: false
 // @sourcemap: true
 // DEFAULT INTERFACES
 interface IFoo {
@@ -18,7 +19,7 @@ class C1T5 {
     }
 }
 
-// CONTEXT: Module property declaration
+// CONTEXT: Namespace property declaration
 namespace C2T5 {
     export var foo: (i: number, s: string) => number = function(i) {
         return i;
@@ -63,7 +64,7 @@ class C4T5 {
     }
 }
 
-// CONTEXT: Module property assignment
+// CONTEXT: Namespace property assignment
 namespace C5T5 {
     export var foo: (i: number, s: string) => string;
     foo = function(i, s) {
@@ -76,7 +77,7 @@ var c6t5: (n: number) => IFoo;
 c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) };
 
 // CONTEXT: Array index assignment
-var c7t2: IFoo[];
+var c7t2: IFoo[] = [];
 c7t2[0] = <IFoo>({n: 1});
 
 // CONTEXT: Object property assignment

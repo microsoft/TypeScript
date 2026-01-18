@@ -1,3 +1,4 @@
+// @strict: false
 namespace One {
     enum A { X }
     namespace B {

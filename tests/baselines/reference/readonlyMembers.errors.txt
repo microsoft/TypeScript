@@ -108,13 +108,13 @@ readonlyMembers.ts(69,1): error TS2542: Index signature in type '{ readonly [x: 
     N.b = 1;
     N.c = 1;
     
-    let xx: { readonly [x: string]: string };
+    declare let xx: { readonly [x: string]: string };
     let s = xx["foo"];
     xx["foo"] = "abc";  // Error
     ~~~~~~~~~
 !!! error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
     
-    let yy: { readonly [x: number]: string, [x: string]: string };
+    declare let yy: { readonly [x: number]: string, [x: string]: string };
     yy[1] = "abc";  // Error
     ~~~~~
 !!! error TS2542: Index signature in type '{ readonly [x: number]: string; [x: string]: string; }' only permits reading.

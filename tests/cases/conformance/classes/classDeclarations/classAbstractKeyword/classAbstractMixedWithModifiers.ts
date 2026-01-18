@@ -1,3 +1,4 @@
+// @strict: false
 abstract class A {
     abstract foo_a();
 

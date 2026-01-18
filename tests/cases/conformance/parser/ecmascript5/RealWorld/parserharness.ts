@@ -1,4 +1,5 @@
-﻿// @lib: es5
+﻿// @useUnknownInCatchVariables: false
+// @lib: es5
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 

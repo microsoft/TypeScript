@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @Filename: decoratorOnImportEquals2_0.ts
 export var X;

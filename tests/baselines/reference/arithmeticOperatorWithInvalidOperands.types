@@ -13,29 +13,29 @@ enum E { a, b, c }
 >c : E.c
 >  : ^^^
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
-var b: boolean;
+declare var b: boolean;
 >b : boolean
 >  : ^^^^^^^
 
-var c: number;
+declare var c: number;
 >c : number
 >  : ^^^^^^
 
-var d: string;
+declare var d: string;
 >d : string
 >  : ^^^^^^
 
-var e: { a: number };
+declare var e: { a: number };
 >e : { a: number; }
 >  : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
-var f: Number;
+declare var f: Number;
 >f : Number
 >  : ^^^^^^
 

@@ -1,3 +1,4 @@
+// @strict: false
 class c {
     /**
      * @param {string} [`foo]

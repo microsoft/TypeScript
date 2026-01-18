@@ -19,7 +19,7 @@ interface Parsers {
 >delimiter : string
 >          : ^^^^^^
 }
-var parsers: Parsers;
+declare var parsers: Parsers;
 >parsers : Parsers
 >        : ^^^^^^^
 

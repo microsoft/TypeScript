@@ -5,25 +5,25 @@
 
 var s: string;
 namespace M1 {
-    export var s: number;
+    export var s: number = 0;
     var n = s;
     var n: number;
 }
 
 namespace M2 {
-    var s: number;
+    var s: number = 0;
     var n = s;
     var n: number;
 }
 
 function fn() {
-    var s: boolean;
+    var s: boolean = false;
     var n = s;
     var n: boolean;
 }
 
 class C {
-    s: Date;
+    s!: Date;
     n = this.s;
     x() {
         var p = this.n;
@@ -45,17 +45,18 @@ namespace M3 {
 var s;
 var M1;
 (function (M1) {
+    M1.s = 0;
     var n = M1.s;
     var n;
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
-    var s;
+    var s = 0;
     var n = s;
     var n;
 })(M2 || (M2 = {}));
 function fn() {
-    var s;
+    var s = false;
     var n = s;
     var n;
 }

@@ -65,6 +65,7 @@ class Button extends Control {
     "$schema": "http://json.schemastore.org/tsconfig",
     "compileOnSave": true,
     "compilerOptions": {
+      "strict": false,
       "sourceMap": true,
       "declaration": true,
       "declarationMap": true
@@ -201,6 +202,7 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/buttonClass/tscon
   "/tests/cases/fourslash/server/BaseClass/Source.d.ts"
  ],
  "options": {
+  "strict": false,
   "sourceMap": true,
   "declaration": true,
   "declarationMap": true,
@@ -269,7 +271,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/tests/cases/fourslash/server/buttonClass/Source.ts",
         "configFile": "/tests/cases/fourslash/server/buttonClass/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 7
+            },
+            "end": {
+              "line": 4,
+              "offset": 16
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/tests/cases/fourslash/server/buttonClass/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] `remove Project::

@@ -119,7 +119,7 @@ interface I<T> {
 >  : ^^^^^^
 }
 
-var i2: I<number>;
+declare var i2: I<number>;
 >i2 : I<number>
 >   : ^^^^^^^^^
 

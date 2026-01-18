@@ -2,12 +2,12 @@
 // an enum type
 enum E { a, b, c }
 
-var a: any;
-var b: boolean;
-var c: number;
-var d: string;
-var e: { a: number };
-var f: Number;
+declare var a: any;
+declare var b: boolean;
+declare var c: number;
+declare var d: string;
+declare var e: { a: number };
+declare var f: Number;
 
 // All of the below should be an error unless otherwise noted
 // operator **

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 var methodName = "method";
 var accessorName = "accessor";

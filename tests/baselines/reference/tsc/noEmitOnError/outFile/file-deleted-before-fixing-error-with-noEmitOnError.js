@@ -37,17 +37,22 @@ Output::
 [7m1[0m export const x: 30 = "hello";
 [7m [0m [91m             ~[0m
 
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 3 errors in 2 files.
 
 Errors  Files
      1  file1.ts[90m:1[0m
-     1  tsconfig.json[90m:4[0m
+     2  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
@@ -141,17 +146,22 @@ Output::
 [7m1[0m export const x: 30 = "hello";
 [7m [0m [91m             ~[0m
 
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 3 errors in 2 files.
 
 Errors  Files
      1  file1.ts[90m:1[0m
-     1  tsconfig.json[90m:4[0m
+     2  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]

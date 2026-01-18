@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReferences: true
 // @declaration: true
 // @typeRoots: /types

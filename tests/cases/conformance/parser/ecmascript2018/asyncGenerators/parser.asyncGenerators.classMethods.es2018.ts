@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2018
 // @lib: esnext
 // @noEmit: true

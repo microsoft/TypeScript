@@ -5,7 +5,7 @@ class A {
 >A : A
 >  : ^
 
-    protected x: string;
+    protected x!: string;
 >x : string
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ class B extends A {
 >A : A
 >  : ^
 
-    protected y: string;
+    protected y!: string;
 >y : string
 >  : ^^^^^^
 
@@ -117,9 +117,13 @@ class B extends A {
 >z : any
 >  : ^^^
 
-        var a: A;
+        var a: A = undefined as any;
 >a : A
 >  : ^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
         var a1 = a.x;    // error
 >a1 : string
@@ -163,9 +167,13 @@ class B extends A {
 >z : any
 >  : ^^^
 
-        var b: B;
+        var b: B = undefined as any;
 >b : B
 >  : ^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
         var b1 = b.x;
 >b1 : string
@@ -209,9 +217,13 @@ class B extends A {
 >z : any
 >  : ^^^
 
-        var c: C;
+        var c: C = undefined as any;
 >c : C
 >  : ^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
         var c1 = c.x;    // error
 >c1 : string
@@ -263,7 +275,7 @@ class C extends A {
 >A : A
 >  : ^
 
-    protected z: string;
+    protected z!: string;
 >z : string
 >  : ^^^^^^
 }

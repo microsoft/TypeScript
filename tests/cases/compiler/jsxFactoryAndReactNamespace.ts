@@ -1,3 +1,4 @@
+// @strict: false
 //@jsx: react
 //@target: es6
 //@module: commonjs
@@ -38,7 +39,7 @@ function toCamelCase(text: string): string {
 // @filename: test.tsx
 import { Element} from './Element';
 
-let c: {
+declare let c: {
 	a?: {
 		b: string
 	}

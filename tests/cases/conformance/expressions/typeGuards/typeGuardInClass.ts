@@ -1,4 +1,4 @@
-let x: string | number;
+declare var x: string | number;
 
 if (typeof x === "string") {
     let n = class {

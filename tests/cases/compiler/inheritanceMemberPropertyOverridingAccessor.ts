@@ -1,3 +1,4 @@
+// @strict: false
 class a {
     private __x: () => string;
     get x() {

@@ -1,3 +1,4 @@
+// @strict: false
 // @traceResolution: true
 
 // @Filename: /node_modules/foo/package.json

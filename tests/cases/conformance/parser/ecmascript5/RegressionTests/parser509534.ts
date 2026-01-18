@@ -1,3 +1,4 @@
+// @strict: false
 "use strict";
 var config = require("../config");
 module.exports.route = function (server) {

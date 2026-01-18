@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 // @lib: esnext
 // @filename: F1.ts

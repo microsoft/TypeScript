@@ -1,3 +1,4 @@
+// @strict: false
 // number unless otherwise specified
 var n1 = n1++;
 var n2: number = n2 + n2;

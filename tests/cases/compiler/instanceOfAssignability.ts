@@ -1,3 +1,4 @@
+// @strict: false
 interface Base {
 	foo: string|number;
 	optional?: number;

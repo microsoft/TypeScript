@@ -154,7 +154,7 @@ oub.b.a.n.a.n.a
 >a : { [x: string]: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
-let xhr: XMLHttpRequest;
+declare let xhr: XMLHttpRequest;
 >xhr : XMLHttpRequest
 >    : ^^^^^^^^^^^^^^
 

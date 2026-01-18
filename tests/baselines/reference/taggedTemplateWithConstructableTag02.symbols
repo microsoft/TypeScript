@@ -9,10 +9,10 @@ interface I {
 
     new (): number;
 }
-var tag: I;
->tag : Symbol(tag, Decl(taggedTemplateWithConstructableTag02.ts, 4, 3))
+declare var tag: I;
+>tag : Symbol(tag, Decl(taggedTemplateWithConstructableTag02.ts, 4, 11))
 >I : Symbol(I, Decl(taggedTemplateWithConstructableTag02.ts, 0, 0))
 
 tag `Hello world!`;
->tag : Symbol(tag, Decl(taggedTemplateWithConstructableTag02.ts, 4, 3))
+>tag : Symbol(tag, Decl(taggedTemplateWithConstructableTag02.ts, 4, 11))
 

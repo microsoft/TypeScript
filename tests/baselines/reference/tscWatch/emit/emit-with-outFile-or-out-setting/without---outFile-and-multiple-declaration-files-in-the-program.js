@@ -46,16 +46,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96msrc/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2724: [0m'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
-[7m [0m [91m                                                                                                                 ~[0m
+[7m3[0m     "outDir": "../output",
+[7m [0m [91m    ~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/home/src/projects/a/b/output/main.js]
+//// [/home/src/projects/a/b/output/src/main.js]
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -63,7 +64,7 @@ var Main;
 })(Main || (Main = {}));
 
 
-//// [/home/src/projects/a/b/output/main2.js]
+//// [/home/src/projects/a/b/output/src/main2.js]
 var main;
 (function (main) {
     var file4;
@@ -119,12 +120,7 @@ Program files::
 /home/src/projects/a/b/project/src/main.ts
 /home/src/projects/a/b/project/src/main2.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/projects/a/b/output/AnotherDependency/file1.d.ts
-/home/src/projects/a/b/dependencies/file2.d.ts
-/home/src/projects/a/b/project/src/main.ts
-/home/src/projects/a/b/project/src/main2.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)

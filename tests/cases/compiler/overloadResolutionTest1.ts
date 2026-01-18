@@ -1,3 +1,4 @@
+// @strict: false
 
 function foo(bar:{a:number;}[]):string;
 function foo(bar:{a:boolean;}[]):number;

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 
 let numberSet = new Set([0, 1, 2]);

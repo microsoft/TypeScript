@@ -199,11 +199,11 @@ var x = '';
 >'' : ""
 >   : ^^
 
-var a: String;
+declare var a: String;
 >a : String
 >  : ^^^^^^
 
-var b: NotString;
+declare var b: NotString;
 >b : NotString
 >  : ^^^^^^^^^
 

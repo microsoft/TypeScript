@@ -29,7 +29,7 @@ namespace __test2__ {
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 
-    export var aa:{[index:number]:number;};;
+    export declare var aa:{[index:number]:number;};;
 >aa : { [index: number]: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : number

@@ -170,6 +170,20 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
+              "line": 4,
+              "offset": 5
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 5,
               "offset": 15
             },

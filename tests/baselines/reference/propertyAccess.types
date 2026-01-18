@@ -5,7 +5,7 @@ class A {
 >A : A
 >  : ^
 
-    a: number;
+    a!: number;
 >a : number
 >  : ^^^^^^
 }
@@ -15,7 +15,7 @@ class B extends A {
 >A : A
 >  : ^
 
-    b: number;
+    b!: number;
 >b : number
 >  : ^^^^^^
 }
@@ -74,7 +74,7 @@ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East
 >East : Compass.East
 >     : ^^^^^^^^^^^^
 
-var bothIndex:
+declare var bothIndex:
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     {
@@ -149,11 +149,11 @@ var anyVar: any = {};
 >{} : {}
 >   : ^^
 
-var stringOrNumber: string | number;
+declare var stringOrNumber: string | number;
 >stringOrNumber : string | number
 >               : ^^^^^^^^^^^^^^^
 
-var someObject: { name: string };
+declare var someObject: { name: string };
 >someObject : { name: string; }
 >           : ^^^^^^^^      ^^^
 >name : string

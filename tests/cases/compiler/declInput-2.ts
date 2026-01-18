@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 namespace M {
     class C { }

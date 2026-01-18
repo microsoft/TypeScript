@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5,es2015.core,es2015.symbol.wellknown
 
 function f(x: number, y: number, z: number) {

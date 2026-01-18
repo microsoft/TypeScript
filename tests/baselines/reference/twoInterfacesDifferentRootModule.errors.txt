@@ -20,7 +20,7 @@ twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does no
             bar: number;
         }
     
-        var a: A;
+        declare var a: A;
         var r1 = a.foo; // error
                    ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'A'.
@@ -30,7 +30,7 @@ twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does no
             bar: T;
         }
     
-        var b: B<string>;
+        declare var b: B<string>;
         var r3 = b.foo; // error
                    ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'B<string>'.

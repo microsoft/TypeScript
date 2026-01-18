@@ -1,3 +1,4 @@
+// @strict: false
 // not contextually typing accessors
 
 var x: {

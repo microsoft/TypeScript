@@ -122,10 +122,10 @@ interface Foo {
     a: number;
     b: string;
 }
-var x: any;
-var arr: any[];
-var foo: Foo;
-var fooProm: Promise<Foo>;
+declare var x: any;
+declare var arr: any[];
+declare var foo: Foo;
+declare var fooProm: Promise<Foo>;
 
 fooProm = Promise.try(Promise, () => {
 	return foo;

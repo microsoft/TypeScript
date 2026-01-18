@@ -1,3 +1,4 @@
+// @strict: false
 class C {
 	public public p1;
 	private private p2;

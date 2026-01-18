@@ -1,3 +1,4 @@
+// @strict: false
 // @module: system
 // @filename: b.d.ts
 declare var b: number;

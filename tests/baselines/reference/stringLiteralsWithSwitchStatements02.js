@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts] ////
 
 //// [stringLiteralsWithSwitchStatements02.ts]
-let x: "foo";
-let y: "foo" | "bar";
+declare let x: "foo";
+declare let y: "foo" | "bar";
 
 let b: boolean;
 b = x == y;
@@ -18,8 +18,6 @@ b = "foo" != "bar";
 
 
 //// [stringLiteralsWithSwitchStatements02.js]
-var x;
-var y;
 var b;
 b = x == y;
 b = "foo" == y;

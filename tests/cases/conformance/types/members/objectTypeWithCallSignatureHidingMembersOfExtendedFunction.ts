@@ -1,3 +1,4 @@
+// @strict: false
 // object types with call signatures can override members of Function
 // no errors expected below 
 

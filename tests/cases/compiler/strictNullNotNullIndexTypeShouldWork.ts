@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @strictPropertyInitialization: false
 interface A {
     params?: { name: string; };
 }

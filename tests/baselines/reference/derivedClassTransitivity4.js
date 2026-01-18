@@ -15,9 +15,9 @@ class E extends D {
     public foo(x?: string) { } // ok to add optional parameters
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 c = e;
 var r = c.foo(1);
 var r2 = e.foo('');
@@ -61,9 +61,6 @@ var E = /** @class */ (function (_super) {
     E.prototype.foo = function (x) { }; // ok to add optional parameters
     return E;
 }(D));
-var c;
-var d;
-var e;
 c = e;
 var r = c.foo(1);
 var r2 = e.foo('');

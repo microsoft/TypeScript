@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 // @target: es5
 class a {

@@ -44,11 +44,11 @@ interface Base {
 >y : number
 >  : ^^^^^^
 }
-var b: Base;
+declare var b: Base;
 >b : Base
 >  : ^^^^
 
-var a: () => number;
+declare var a: () => number;
 >a : () => number
 >  : ^^^^^^      
 
@@ -158,7 +158,7 @@ var a: () => number;
 >a6 : (x: number, y: number) => number
 >   : ^ ^^      ^^ ^^      ^^^^^      
 
-var a2: (x?: number) => number; 
+declare var a2: (x?: number) => number; 
 >a2 : (x?: number) => number
 >   : ^ ^^^      ^^^^^      
 >x : number
@@ -270,7 +270,7 @@ var a2: (x?: number) => number;
 >a6 : (x: number, y: number) => number
 >   : ^ ^^      ^^ ^^      ^^^^^      
 
-var a3: (x: number) => number; 
+declare var a3: (x: number) => number; 
 >a3 : (x: number) => number
 >   : ^ ^^      ^^^^^      
 >x : number
@@ -396,7 +396,7 @@ var a3: (x: number) => number;
 >a6 : (x: number, y: number) => number
 >   : ^ ^^      ^^ ^^      ^^^^^      
 
-var a4: (x: number, y?: number) => number;
+declare var a4: (x: number, y?: number) => number;
 >a4 : (x: number, y?: number) => number
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >x : number
@@ -526,7 +526,7 @@ var a4: (x: number, y?: number) => number;
 >a6 : (x: number, y: number) => number
 >   : ^ ^^      ^^ ^^      ^^^^^      
 
-var a5: (x?: number, y?: number) => number;
+declare var a5: (x?: number, y?: number) => number;
 >a5 : (x?: number, y?: number) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
 >x : number

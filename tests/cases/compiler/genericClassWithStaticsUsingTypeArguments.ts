@@ -1,3 +1,4 @@
+// @strict: false
 // Should be error to use 'T' in all declarations within Foo.
 class Foo<T> {
     static a = (n: T) => { };

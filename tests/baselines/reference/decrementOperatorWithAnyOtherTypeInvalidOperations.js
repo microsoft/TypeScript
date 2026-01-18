@@ -2,10 +2,10 @@
 
 //// [decrementOperatorWithAnyOtherTypeInvalidOperations.ts]
 // -- operator on any type
-var ANY1: any;
+declare var ANY1: any;
 var ANY2: any[] = ["", ""];
 
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { } };
 function foo(): any {
     var a;
@@ -75,10 +75,7 @@ ANY2--;
 ++ANY2[0]--;
 
 //// [decrementOperatorWithAnyOtherTypeInvalidOperations.js]
-// -- operator on any type
-var ANY1;
 var ANY2 = ["", ""];
-var obj;
 var obj1 = { x: "", y: function () { } };
 function foo() {
     var a;

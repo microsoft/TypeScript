@@ -1,3 +1,4 @@
+// @strict: false
 // Rest parameters must be an array type if they have a type annotation, 
 // user defined subtypes of array do not count, all of these are errors
 

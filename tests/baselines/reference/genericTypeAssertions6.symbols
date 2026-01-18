@@ -82,8 +82,8 @@ class B<T extends Date, U extends Date> extends A<T, U> {
     }
 }
 
-var b: B<Date, Date>;
->b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 3))
+declare var b: B<Date, Date>;
+>b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 11))
 >B : Symbol(B, Decl(genericTypeAssertions6.ts, 10, 1))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -96,5 +96,5 @@ var c: A<Date, Date> = <A<Date, Date>>b;
 >A : Symbol(A, Decl(genericTypeAssertions6.ts, 0, 0))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 3))
+>b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 11))
 

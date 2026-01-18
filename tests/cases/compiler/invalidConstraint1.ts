@@ -1,3 +1,4 @@
+// @strict: false
 function f<T, U extends { a: T }>() {
     return undefined;
 }

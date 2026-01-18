@@ -1,3 +1,4 @@
+// @strict: false
 interface IPoint {
     x:number;
     y:number;

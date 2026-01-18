@@ -1,3 +1,4 @@
+// @strict: false
 // Basic type inference with generic calls, no errors expected
 
 function foo<T>(t: T) {

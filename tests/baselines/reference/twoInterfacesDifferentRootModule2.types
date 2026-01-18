@@ -29,7 +29,7 @@ namespace M {
 >    : ^^^^^^
         }
 
-        var a: A;
+        declare var a: A;
 >a : A
 >  : ^
 
@@ -59,7 +59,7 @@ namespace M {
 >    : ^
         }
 
-        var b: B<string>;
+        declare var b: B<string>;
 >b : B<string>
 >  : ^^^^^^^^^
 
@@ -84,7 +84,7 @@ namespace M {
 >    : ^^^^^^
     }
 
-    var a: A;
+    declare var a: A;
 >a : A
 >  : ^
 
@@ -108,7 +108,7 @@ namespace M {
 >bar : any
 >    : ^^^
 
-    var b: B<string>;
+    declare var b: B<string>;
 >b : B<string>
 >  : ^^^^^^^^^
 

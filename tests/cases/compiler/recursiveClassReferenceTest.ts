@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5
 // @sourcemap: true
 // Scenario 1: Test reqursive function call with "this" parameter

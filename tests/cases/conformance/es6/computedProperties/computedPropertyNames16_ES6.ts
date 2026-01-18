@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 var s: string;
 var n: number;

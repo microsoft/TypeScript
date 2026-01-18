@@ -3,9 +3,9 @@ enum E {
     B
 }
 
-var n: number;
-var a: any;
-var e: E;
+declare var n: number;
+declare var a: any;
+declare var e: E;
 
 n = e;
 n = E.A;

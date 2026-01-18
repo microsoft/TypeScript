@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: esnext
 // @declaration: true
 

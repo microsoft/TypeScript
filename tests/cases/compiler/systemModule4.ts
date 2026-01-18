@@ -1,3 +1,4 @@
+// @strict: false
 // @module: system
 
 export var x = 1;

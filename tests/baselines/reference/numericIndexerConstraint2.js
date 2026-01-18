@@ -2,8 +2,8 @@
 
 //// [numericIndexerConstraint2.ts]
 class Foo { foo() { } }
-var x: { [index: string]: Foo; };
-var a: { one: number; };
+declare var x: { [index: string]: Foo; };
+var a: { one: number; } = { one: 1 };
 x = a;
 
 //// [numericIndexerConstraint2.js]
@@ -13,6 +13,5 @@ var Foo = /** @class */ (function () {
     Foo.prototype.foo = function () { };
     return Foo;
 }());
-var x;
-var a;
+var a = { one: 1 };
 x = a;

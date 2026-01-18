@@ -29,5 +29,5 @@ function TodoListNoError({ todos }: TodoListProps) {
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
     </div>;
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
     <TodoList {...x}/>

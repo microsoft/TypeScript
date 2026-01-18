@@ -5,15 +5,15 @@ interface I {
     toString(): number;
 }
 
-var i: I;
-var o: Object;
+declare var i: I;
+declare var o: Object;
 o = i; // error
 i = o; // error
 
 class C {
     toString(): number { return 1; }
 }
-var c: C;
+declare var c: C;
 o = c; // error
 c = o; // error
 
@@ -24,8 +24,6 @@ o = a; // error
 a = o; // ok
 
 //// [objectTypeHidingMembersOfObjectAssignmentCompat2.js]
-var i;
-var o;
 o = i; // error
 i = o; // error
 var C = /** @class */ (function () {
@@ -34,7 +32,6 @@ var C = /** @class */ (function () {
     C.prototype.toString = function () { return 1; };
     return C;
 }());
-var c;
 o = c; // error
 c = o; // error
 var a = {

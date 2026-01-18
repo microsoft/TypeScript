@@ -1,17 +1,17 @@
 // string can add every type, and result string cannot be assigned to below types
 enum E { a, b, c }
 
-var x1: boolean;
+declare var x1: boolean;
 x1 += '';
 
-var x2: number;
+declare var x2: number;
 x2 += '';
 
-var x3: E;
+declare var x3: E;
 x3 += '';
 
-var x4: {a: string};
+declare var x4: {a: string};
 x4 += '';
 
-var x5: void;
+declare var x5: void;
 x5 += '';

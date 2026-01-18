@@ -1,3 +1,4 @@
+// @strict: false
 interface Foo {
     foo: (t: string) => string;
 }

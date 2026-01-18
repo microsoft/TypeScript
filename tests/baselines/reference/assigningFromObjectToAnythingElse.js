@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assigningFromObjectToAnythingElse.ts] ////
 
 //// [assigningFromObjectToAnythingElse.ts]
-var x: Object;
+declare var x: Object;
 var y: RegExp;
 y = x;
 
@@ -12,7 +12,6 @@ var w: Error = new Object();
 
 
 //// [assigningFromObjectToAnythingElse.js]
-var x;
 var y;
 y = x;
 var a = Object.create("");

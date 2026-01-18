@@ -1,3 +1,4 @@
+// @strict: false
 // Optional parameters allow initializers only in implementation signatures
 
 function foo(x = 1) { }
@@ -15,7 +16,7 @@ class C {
     foo(x = 1) { }
 }
 
-var c: C;
+declare var c: C;
 c.foo();
 c.foo(1);
 
@@ -25,14 +26,14 @@ interface I {
     foo(x: number, y = 1);
 }
 
-var i: I;
+declare var i: I;
 i();
 i(1);
 i.foo(1);
 i.foo(1, 2);
 
 // these are errors
-var a: {
+declare var a: {
     (x = 1);
     foo(x = 1);
 }

@@ -1,3 +1,4 @@
+// @strict: false
 class Type {
     public examples = [ // typing here
 }

@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnreachableCode: true
 
 function fn(x) {

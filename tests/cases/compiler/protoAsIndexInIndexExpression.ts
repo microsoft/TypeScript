@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @Filename: protoAsIndexInIndexExpression_0.ts
 export var x;

@@ -1,3 +1,4 @@
+// @strict: false
 //@noUnusedParameters: true
 const f = ([a]) => { };
 f([1]);

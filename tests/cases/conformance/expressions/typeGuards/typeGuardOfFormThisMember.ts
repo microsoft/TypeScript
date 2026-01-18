@@ -60,7 +60,7 @@ namespace Test {
 		isFollower: this is GenericFollowerGuard<T>;
 	}
 
-	let guard: GenericGuard<File>;
+	declare var guard: GenericGuard<File>;
 	if (guard.isLeader) {
 		guard.lead();
 	}
@@ -76,7 +76,7 @@ namespace Test {
 		do(): void;
 	}
 
-	let general: SpecificGuard;
+	declare var general: SpecificGuard;
 	if (general.isMoreSpecific) {
 		general.do();
 	}

@@ -117,9 +117,13 @@ namespace Everest {
 >z : any
 >  : ^^^
         }
-        var v1:I4;
+        var v1:I4 = undefined as any;
 >v1 : I4
 >   : ^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
         var v2:K1.I3=v1;
 >v2 : K1.I3
@@ -173,9 +177,13 @@ interface I {
 >  : ^^^
 }
 
-var y:I;
+var y:I = undefined as any;
 >y : I
 >  : ^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
 var x:T.I=y;
 >x : T.I

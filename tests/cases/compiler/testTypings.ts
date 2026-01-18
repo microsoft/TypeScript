@@ -1,3 +1,4 @@
+// @strict: false
 interface IComparable<T> {
    compareTo(other: T);
 }

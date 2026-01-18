@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReferences: true
 
 // @Filename: /src/b.js

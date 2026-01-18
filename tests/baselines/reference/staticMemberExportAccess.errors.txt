@@ -17,7 +17,7 @@ staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on
     interface JQueryStatic {
         sammy: Sammy; // class instance
     }
-    var $: JQueryStatic;
+    declare var $: JQueryStatic;
     var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
                                           ~~~~~~~
 !!! error TS2351: This expression is not constructable.

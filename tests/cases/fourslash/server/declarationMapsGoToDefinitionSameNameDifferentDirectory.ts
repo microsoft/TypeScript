@@ -21,6 +21,7 @@
 ////    "$schema": "http://json.schemastore.org/tsconfig",
 ////    "compileOnSave": true,
 ////    "compilerOptions": {
+////      "strict": false,
 ////      "sourceMap": true,
 ////      "declaration": true,
 ////      "declarationMap": true

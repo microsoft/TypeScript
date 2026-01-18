@@ -1,10 +1,10 @@
-﻿var numStrTuple: [number, string];
-var numNumTuple: [number, number];
-var numEmptyObjTuple: [number, {}];
-var emptyObjTuple: [{}];
+﻿declare var numStrTuple: [number, string];
+declare var numNumTuple: [number, number];
+declare var numEmptyObjTuple: [number, {}];
+declare var emptyObjTuple: [{}];
 
-var numArray: number[];
-var emptyObjArray: {}[];
+declare var numArray: number[];
+declare var emptyObjArray: {}[];
 
 // no error
 numArray = numNumTuple;

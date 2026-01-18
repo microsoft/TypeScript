@@ -1,3 +1,4 @@
+// @strict: false
 var aNumber: number;
 for (aNumber in {}) { }
 
@@ -12,7 +13,7 @@ for (var idx : number in {}) { }
 function fn(): void { }
 for (var x in fn()) { }
 
-var c : string, d:string, e;
+declare var c : string, d:string, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
@@ -57,6 +58,6 @@ interface I {
     id: number;
     [idx: number]: number;
 }
-var i: I;
+declare var i: I;
 
 for (var x in i[42]) { } 
