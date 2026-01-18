@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/noImplicitThisFunctions2.ts] ////
+
+=== noImplicitThisFunctions2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63001
+
+function f1() {
+>f1 : () => () => any
+>   : ^^^^^^^^^^^^^^^
+
+  return () => this;
+>() => this : () => any
+>           : ^^^^^^^^^
+>this : any
+>     : ^^^
+}
+
+function f2(this: typeof globalThis) {
+>f2 : (this: typeof globalThis) => () => typeof globalThis
+>   : ^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+
+  return () => this;
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+}
+
+const f3 = () => this;
+>f3 : () => typeof globalThis
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+function f4(this: typeof globalThis) {
+>f4 : (this: typeof globalThis) => () => () => typeof globalThis
+>   : ^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+
+  const inner = () => {
+>inner : () => () => typeof globalThis
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {    return () => this;  } : () => () => typeof globalThis
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return () => this;
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+  };
+  return inner;
+>inner : () => () => typeof globalThis
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class C1 {
+>C1 : C1
+>   : ^^
+
+  static method(this: typeof globalThis) {
+>method : (this: typeof globalThis) => () => typeof globalThis
+>       : ^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+
+    return () => this;
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+  }
+}
+
+const obj1 = {
+>obj1 : { arr: () => typeof globalThis; method(this: typeof globalThis): () => typeof globalThis; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  arr: () => this,  method(this: typeof globalThis) {    return () => this;  },} : { arr: () => typeof globalThis; method(this: typeof globalThis): () => typeof globalThis; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arr: () => this,
+>arr : () => typeof globalThis
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+  method(this: typeof globalThis) {
+>method : (this: typeof globalThis) => () => typeof globalThis
+>       : ^    ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
+
+    return () => this;
+>() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+  },
+};
+

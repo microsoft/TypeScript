@@ -1,0 +1,44 @@
+noImplicitThisFunctions2.ts(4,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+noImplicitThisFunctions2.ts(11,18): error TS7041: The containing arrow function captures the global value of 'this'.
+noImplicitThisFunctions2.ts(27,14): error TS7041: The containing arrow function captures the global value of 'this'.
+
+
+==== noImplicitThisFunctions2.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63001
+    
+    function f1() {
+      return () => this;
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    
+    function f2(this: typeof globalThis) {
+      return () => this;
+    }
+    
+    const f3 = () => this;
+                     ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
+    
+    function f4(this: typeof globalThis) {
+      const inner = () => {
+        return () => this;
+      };
+      return inner;
+    }
+    
+    class C1 {
+      static method(this: typeof globalThis) {
+        return () => this;
+      }
+    }
+    
+    const obj1 = {
+      arr: () => this,
+                 ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
+      method(this: typeof globalThis) {
+        return () => this;
+      },
+    };
+    

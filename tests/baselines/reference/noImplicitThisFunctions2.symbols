@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/noImplicitThisFunctions2.ts] ////
+
+=== noImplicitThisFunctions2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63001
+
+function f1() {
+>f1 : Symbol(f1, Decl(noImplicitThisFunctions2.ts, 0, 0))
+
+  return () => this;
+}
+
+function f2(this: typeof globalThis) {
+>f2 : Symbol(f2, Decl(noImplicitThisFunctions2.ts, 4, 1))
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 6, 12))
+>globalThis : Symbol(globalThis)
+
+  return () => this;
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 6, 12))
+}
+
+const f3 = () => this;
+>f3 : Symbol(f3, Decl(noImplicitThisFunctions2.ts, 10, 5))
+>this : Symbol(globalThis)
+
+function f4(this: typeof globalThis) {
+>f4 : Symbol(f4, Decl(noImplicitThisFunctions2.ts, 10, 22))
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 12, 12))
+>globalThis : Symbol(globalThis)
+
+  const inner = () => {
+>inner : Symbol(inner, Decl(noImplicitThisFunctions2.ts, 13, 7))
+
+    return () => this;
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 12, 12))
+
+  };
+  return inner;
+>inner : Symbol(inner, Decl(noImplicitThisFunctions2.ts, 13, 7))
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(noImplicitThisFunctions2.ts, 17, 1))
+
+  static method(this: typeof globalThis) {
+>method : Symbol(C1.method, Decl(noImplicitThisFunctions2.ts, 19, 10))
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 20, 16))
+>globalThis : Symbol(globalThis)
+
+    return () => this;
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 20, 16))
+  }
+}
+
+const obj1 = {
+>obj1 : Symbol(obj1, Decl(noImplicitThisFunctions2.ts, 25, 5))
+
+  arr: () => this,
+>arr : Symbol(arr, Decl(noImplicitThisFunctions2.ts, 25, 14))
+>this : Symbol(globalThis)
+
+  method(this: typeof globalThis) {
+>method : Symbol(method, Decl(noImplicitThisFunctions2.ts, 26, 18))
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 27, 9))
+>globalThis : Symbol(globalThis)
+
+    return () => this;
+>this : Symbol(this, Decl(noImplicitThisFunctions2.ts, 27, 9))
+
+  },
+};
+

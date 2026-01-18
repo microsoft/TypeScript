@@ -31383,7 +31383,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
         if (noImplicitThis) {
             const globalThisType = getTypeOfSymbol(globalThisSymbol);
-            if (type === globalThisType && capturedByArrowFunction) {
+            if (type === globalThisType && capturedByArrowFunction && isSourceFile(container)) {
                 error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
             }
             else if (!type) {
