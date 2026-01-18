@@ -7039,6 +7039,7 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
+        importJsonAsConst?: boolean;
         /** @deprecated */
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;

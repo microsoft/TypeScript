@@ -555,6 +555,11 @@ Enable experimental support for legacy experimental decorators.
 type: boolean
 default: false
 
+[94m--importJsonAsConst[39m
+Import JSON files as const assertions.
+type: boolean
+default: false
+
 [94m--jsx[39m
 Specify what JSX code is generated.
 one of: preserve, react, react-native, react-jsx, react-jsxdev
