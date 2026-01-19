@@ -6240,8 +6240,7 @@ export const enum NodeCheckFlags {
     ConstructorReference                     = 1 << 29,  // Binding to a class constructor inside of the class's body.
     ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
     ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
-    InCheckIdentifier                        = 1 << 22,
-    PartiallyTypeChecked                     = 1 << 23,  // Node has been partially type checked
+    PartiallyTypeChecked                     = 1 << 22,  // Node has been partially type checked
 
     /** These flags are LazyNodeCheckFlags and can be calculated lazily by `hasNodeCheckFlag` */
     LazyFlags = SuperInstance

@@ -30866,23 +30866,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const parent = declaration.parent.parent;
                 const rootDeclaration = getRootDeclaration(parent);
                 if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {
-                    const links = getNodeLinks(parent);
-                    if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
-                        links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
-                        const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
-                        links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
-                            const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
-                            if (narrowedType.flags & TypeFlags.Never) {
-                                return neverType;
-                            }
-                            // Destructurings are validated against the parent type elsewhere. Here we disable tuple bounds
-                            // checks because the narrowed type may have lower arity than the full parent type. For example,
-                            // for the declaration [x, y]: [1, 2] | [3], we may have narrowed the parent type to just [3].
-                            return getBindingElementTypeFromParentType(declaration, narrowedType, /*noTupleBoundsCheck*/ true);
+                    const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
+                    const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
+                    if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
+                        const pattern = declaration.parent;
+                        const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
+                        if (narrowedType.flags & TypeFlags.Never) {
+                            return neverType;
                         }
+                        // Destructurings are validated against the parent type elsewhere. Here we disable tuple bounds
+                        // checks because the narrowed type may have lower arity than the full parent type. For example,
+                        // for the declaration [x, y]: [1, 2] | [3], we may have narrowed the parent type to just [3].
+                        return getBindingElementTypeFromParentType(declaration, narrowedType, /*noTupleBoundsCheck*/ true);
                     }
                 }
             }
