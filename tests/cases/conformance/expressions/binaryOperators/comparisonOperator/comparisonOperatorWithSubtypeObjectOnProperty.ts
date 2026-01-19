@@ -1,3 +1,4 @@
+// @strict: false
 class Base {
     public a: string;
 }

@@ -1,3 +1,4 @@
+// @strict: false
 // @downlevelIteration: true
 function f0() {
     var a = [1, 2, 3];

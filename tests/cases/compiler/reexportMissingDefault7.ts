@@ -1,3 +1,4 @@
+// @strict: false
 // @module: ES2015
 // @filename: b.ts
 export const b = null;

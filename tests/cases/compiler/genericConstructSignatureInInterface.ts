@@ -1,3 +1,4 @@
+// @strict: false
 interface C {
     new <T>(x: T);
 }

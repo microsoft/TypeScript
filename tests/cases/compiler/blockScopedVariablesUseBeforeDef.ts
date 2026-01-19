@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES5
 // @lib: esnext, dom
 function foo0() {

@@ -1,3 +1,4 @@
+// @strict: false
 namespace M {
     export interface I { }
 }

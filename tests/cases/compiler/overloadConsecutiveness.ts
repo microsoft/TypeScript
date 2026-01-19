@@ -1,3 +1,4 @@
+// @strict: false
 // Making sure compiler won't break with declarations that are consecutive in the AST but not consecutive in the source. Syntax errors intentional.
 
 function f1(), function f1();

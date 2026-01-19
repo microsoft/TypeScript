@@ -1,3 +1,4 @@
+// @strict: false
 class foo { 
    static fnOverload();
    static fnOverload(foo:string);

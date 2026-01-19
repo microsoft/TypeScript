@@ -1,3 +1,4 @@
+// @strict: false
 class X {
   constructor(public z) { }
   a: number;

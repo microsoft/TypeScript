@@ -1,3 +1,4 @@
+// @strict: false
 //@module: commonjs
 // @Filename: exportEqualErrorType_0.ts
 namespace server {

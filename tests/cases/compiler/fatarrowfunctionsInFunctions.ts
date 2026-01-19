@@ -1,3 +1,4 @@
+// @strict: false
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 
 var messenger = {

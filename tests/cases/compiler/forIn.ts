@@ -1,3 +1,4 @@
+// @strict: false
 var arr = null;
 for (var i:number in arr) { // error
     var x1 = arr[i];

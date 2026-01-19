@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 // @module: commonjs
 // @filename: file1.ts

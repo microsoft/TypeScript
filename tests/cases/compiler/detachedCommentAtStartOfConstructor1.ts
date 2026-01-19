@@ -1,3 +1,4 @@
+// @strict: false
 class TestFile {
     public message: string;
     public name;

@@ -1,3 +1,4 @@
+// @strict: false
 class Foo {
 	public v = "Yo";
 }

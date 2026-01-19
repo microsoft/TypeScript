@@ -1,3 +1,4 @@
+// @strict: false
 // errors
 var y = {
     "stringLiteral",

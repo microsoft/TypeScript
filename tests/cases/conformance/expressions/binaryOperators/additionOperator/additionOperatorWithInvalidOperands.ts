@@ -1,3 +1,4 @@
+// @strict: false
 function foo() { }
 class C {
     public a: string;

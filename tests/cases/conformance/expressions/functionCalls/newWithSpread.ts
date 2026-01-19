@@ -1,3 +1,4 @@
+// @strict: false
 
 function f(x: number, y: number, ...z: string[]) {
 }

@@ -1,3 +1,4 @@
+// @strict: false
 interface I1 {
 	IM1():void[];
 }

@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5
 1..toString();
 1.0.toString();

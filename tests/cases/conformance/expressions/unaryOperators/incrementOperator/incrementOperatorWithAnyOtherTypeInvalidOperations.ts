@@ -1,3 +1,4 @@
+// @strict: false
 // ++ operator on any type
 var ANY1: any;
 var ANY2: any[] = [1, 2];

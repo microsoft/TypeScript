@@ -1,3 +1,4 @@
+// @strict: false
 interface Collection<T> {
     length: number;
     add(x: T): void;

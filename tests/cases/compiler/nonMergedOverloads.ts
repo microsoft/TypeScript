@@ -1,3 +1,4 @@
+// @strict: false
 var f = 10;
 
 export function f();

@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReturns: true
 function isMissingReturnExpression(): number {
     return;

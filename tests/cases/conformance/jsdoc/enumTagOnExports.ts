@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: enumTagOnExports.js
 // @allowjs: true
 // @checkjs: true

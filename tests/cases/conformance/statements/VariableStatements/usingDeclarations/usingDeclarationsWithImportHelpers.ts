@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2022
 // @module: esnext
 // @lib: esnext

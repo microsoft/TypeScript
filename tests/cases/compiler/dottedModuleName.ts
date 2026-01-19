@@ -1,3 +1,4 @@
+// @strict: false
 namespace M {
     export namespace N {
 	export function f(x:number)=>2*x;

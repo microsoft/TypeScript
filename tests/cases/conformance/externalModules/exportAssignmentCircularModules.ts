@@ -1,3 +1,4 @@
+// @strict: false
 // @module: amd
 // @Filename: foo_0.ts
 import foo1 = require('./foo_1');

@@ -1,3 +1,4 @@
+// @strict: false
 // @moduleResolution: classic,node16,nodenext,bundler
 // @allowJs: true
 // @checkJs: true

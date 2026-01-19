@@ -1,3 +1,4 @@
+// @strict: false
 // @module: system
 
 declare function use(a: any);

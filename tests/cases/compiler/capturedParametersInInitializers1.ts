@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 // ok - usage is deferred
 function foo1(y = class {c = x}, x = 1) {

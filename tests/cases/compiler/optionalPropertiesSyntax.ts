@@ -1,3 +1,4 @@
+// @strict: false
 interface fnSigs {
     //functions signatures can be optional
     fn(): void;

@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: file1.ts
 class A {
     protected _f: number;

@@ -65,6 +65,7 @@ class Button extends Control {
     "$schema": "http://json.schemastore.org/tsconfig",
     "compileOnSave": true,
     "compilerOptions": {
+      "strict": false,
       "sourceMap": true,
       "declaration": true,
       "declarationMap": true
@@ -201,6 +202,7 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/buttonClass/tscon
   "/tests/cases/fourslash/server/BaseClass/Source.d.ts"
  ],
  "options": {
+  "strict": false,
   "sourceMap": true,
   "declaration": true,
   "declarationMap": true,

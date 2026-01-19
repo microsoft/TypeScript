@@ -1,3 +1,4 @@
+// @strict: false
 
 class Foo {
     var; // ok
