@@ -1,3 +1,4 @@
+// @strict: false
 //@module: commonjs
 function Greeter() {
     //...

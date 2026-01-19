@@ -1,3 +1,4 @@
+// @strict: false
 // @allowSyntheticDefaultImports: true
 // @filename: b.ts
 export const b = null;

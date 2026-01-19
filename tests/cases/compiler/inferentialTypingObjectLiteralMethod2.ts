@@ -1,3 +1,4 @@
+// @strict: false
 interface Int<T, U> {
     [s: string]: (x: T) => U;
 }

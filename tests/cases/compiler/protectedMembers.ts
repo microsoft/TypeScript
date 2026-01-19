@@ -1,3 +1,4 @@
+// @strict: false
 // Class with protected members
 class C1 {
     protected x!: number;

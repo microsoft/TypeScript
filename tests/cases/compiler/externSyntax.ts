@@ -1,3 +1,4 @@
+// @strict: false
 declare var v;
 declare namespace M {
     export class D {

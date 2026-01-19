@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 
 // https://github.com/Microsoft/TypeScript/issues/11236

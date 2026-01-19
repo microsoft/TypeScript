@@ -1,3 +1,4 @@
+// @strict: false
 function a0() {
     for (let x of [1]) {
         x = x + 1;

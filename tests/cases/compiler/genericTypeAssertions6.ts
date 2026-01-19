@@ -1,3 +1,4 @@
+// @strict: false
 class A<T,U> {
     constructor(x) {
         var y = <T>x;

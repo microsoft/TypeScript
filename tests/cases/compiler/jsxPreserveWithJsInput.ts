@@ -1,3 +1,4 @@
+// @strict: false
 // @outdir: out
 // @jsx: preserve
 // @allowjs: true

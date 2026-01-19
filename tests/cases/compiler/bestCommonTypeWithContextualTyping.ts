@@ -1,3 +1,4 @@
+// @strict: false
 interface Contextual {
     dummy;
     p?: number;

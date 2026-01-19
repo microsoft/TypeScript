@@ -1,3 +1,4 @@
+// @strict: false
 class a {
     public a;
     public a;

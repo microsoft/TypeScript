@@ -1,3 +1,4 @@
+// @strict: false
 namespace A {
     declare namespace My {
         export var x: number;

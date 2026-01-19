@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnreachableCode: true
 
 var a = false ? 1 : null;

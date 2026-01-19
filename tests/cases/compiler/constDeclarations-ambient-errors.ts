@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES6
 
 // error: no intialization expected in ambient declarations

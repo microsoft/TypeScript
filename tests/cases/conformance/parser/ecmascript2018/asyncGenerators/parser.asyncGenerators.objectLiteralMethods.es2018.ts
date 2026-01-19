@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2018
 // @skipLibCheck: true
 // @lib: esnext

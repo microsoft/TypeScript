@@ -2,6 +2,9 @@
 // @emitDecoratorMetadata: true
 // @target: es5
 // @filename: Class1.ts
+// @strictNullChecks: true, false
+// @strictPropertyInitialization: false
+
 export class Class1 {
 }
 // @filename: Class2.ts
@@ -12,7 +15,11 @@ function decorate(target: any, propertyKey: string) {
 
 export class Class2 {
     @decorate
-    get prop(): Class1 | undefined {
+    get maybeProp(): Class1 | undefined {
+        return undefined;
+    }
+    @decorate
+    get prop(): Class1 {
         return undefined;
     }
 }

@@ -1,3 +1,4 @@
+// @strict: false
 function f<T>(array: T[], ...args) { }
 function g(array: number[], ...args) { }
 function h<T>(nonarray: T, ...args) { }

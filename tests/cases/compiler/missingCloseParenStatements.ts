@@ -1,3 +1,4 @@
+// @strict: false
 var a1, a2, a3 = 0;
 if ( a1 && (a2 + a3 > 0) {
     while( (a2 > 0) && a1

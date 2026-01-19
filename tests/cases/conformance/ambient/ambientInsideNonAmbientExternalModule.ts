@@ -1,3 +1,4 @@
+// @strict: false
 // @module: amd
 export declare var x;
 export declare function f();

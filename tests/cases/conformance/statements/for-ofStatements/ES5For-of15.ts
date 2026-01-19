@@ -1,3 +1,4 @@
+// @strict: false
 for (let v of []) {
     v;
     for (const v of []) {

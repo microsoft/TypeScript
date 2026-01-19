@@ -1,3 +1,4 @@
+// @strict: false
 // checking subtype relations for function types as it relates to contextual signature instantiation
 
 class Base { foo: string; }

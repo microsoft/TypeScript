@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es5
 namespace WinJS {
     export interface ValueCallback {

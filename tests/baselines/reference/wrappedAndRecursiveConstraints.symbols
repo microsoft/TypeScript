@@ -32,8 +32,9 @@ interface Foo extends Date {
 >foo : Symbol(Foo.foo, Decl(wrappedAndRecursiveConstraints.ts, 9, 28))
 }
 
-var y: Foo = null;
+var y: Foo = {} as Foo;
 >y : Symbol(y, Decl(wrappedAndRecursiveConstraints.ts, 13, 3))
+>Foo : Symbol(Foo, Decl(wrappedAndRecursiveConstraints.ts, 7, 1))
 >Foo : Symbol(Foo, Decl(wrappedAndRecursiveConstraints.ts, 7, 1))
 
 var c = new C(y);

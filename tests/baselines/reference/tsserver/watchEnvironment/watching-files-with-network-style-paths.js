@@ -378,8 +378,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "//vda1cs4850/myprojects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",

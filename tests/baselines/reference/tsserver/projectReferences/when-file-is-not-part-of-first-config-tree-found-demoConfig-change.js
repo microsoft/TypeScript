@@ -545,6 +545,32 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/demos/helpers.ts Text-1 "export const foo = 1;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/tsconfig.json",
+        "configFile": "/home/src/projects/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './app'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/home/src/projects/project/tsconfig.json"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -831,6 +857,17 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/app/Component.ts Text-1 "export const Component = () => {}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/tsconfig.json",
+        "configFile": "/home/src/projects/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {

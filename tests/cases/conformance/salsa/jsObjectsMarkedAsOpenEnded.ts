@@ -1,3 +1,4 @@
+// @strict: false
 // @outFile: output.js
 // @allowJs: true
 

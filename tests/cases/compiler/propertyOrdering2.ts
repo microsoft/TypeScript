@@ -1,3 +1,4 @@
+// @strict: false
 class Foo {
     constructor(public x, y) { }
        foo() {

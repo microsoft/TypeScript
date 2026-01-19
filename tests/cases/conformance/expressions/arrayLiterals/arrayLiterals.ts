@@ -1,3 +1,4 @@
+// @strict: false
 // Empty array literal with no contextual type has type Undefined[]
 
 var arr1= [[], [1], ['']];

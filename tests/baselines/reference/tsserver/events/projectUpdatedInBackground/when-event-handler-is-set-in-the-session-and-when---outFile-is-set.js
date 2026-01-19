@@ -136,7 +136,22 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "CustomHandler::configFileDiag",
       "body": {
         "configFileName": "/users/username/projects/project/tsconfig.json",
-        "diagnostics": [],
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 5
+            },
+            "end": {
+              "line": 3,
+              "offset": 14
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/users/username/projects/project/tsconfig.json"
+          }
+        ],
         "triggerFile": "/users/username/projects/project/a.ts"
       }
     }

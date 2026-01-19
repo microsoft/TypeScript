@@ -49,7 +49,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/core/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96msample1/logic/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -62,7 +72,7 @@ declare function foo(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5450201652-function foo() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5450201652-function foo() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -85,10 +95,20 @@ declare function foo(): number;
     "declaration": true,
     "outFile": "./index.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "517738360-declare function foo(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 745
+  "size": 780
 }
 
 //// [/user/username/workspaces/solution/sample1/logic/index.js]
@@ -101,7 +121,7 @@ declare function bar(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -126,10 +146,24 @@ declare function bar(): number;
     "declaration": true,
     "outFile": "./index.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../core/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "1113083433-declare function bar(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 820
+  "size": 857
 }
 
 
@@ -165,9 +199,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspaces/solution/sample1/core/index.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -188,10 +220,7 @@ Program files::
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspaces/solution/sample1/core/index.d.ts
-/user/username/workspaces/solution/sample1/logic/index.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -217,6 +246,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+[96msample1/core/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.js]
@@ -230,7 +264,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -253,10 +287,20 @@ declare function myFunc(): number;
     "declaration": true,
     "outFile": "./index.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 817
+  "size": 852
 }
 
 
@@ -280,9 +324,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspaces/solution/sample1/core/index.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -298,13 +340,18 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/logic/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/workspaces/solution/sample1/logic/index.js] file written with same contents
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -329,10 +376,24 @@ Output::
     "declaration": true,
     "outFile": "./index.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../core/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "1113083433-declare function bar(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 857
+  "size": 894
 }
 
 
@@ -354,10 +415,7 @@ Program files::
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspaces/solution/sample1/core/index.d.ts
-/user/username/workspaces/solution/sample1/logic/index.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -378,12 +436,15 @@ Before running Timeout callback:: count: 1
 3: timerToBuildInvalidatedProject
 
 Host is moving to new time
-After running Timeout callback:: count: 0
+After running Timeout callback:: count: 1
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/core/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
 
@@ -393,7 +454,7 @@ function myFunc() { return 100; }
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -416,13 +477,25 @@ function myFunc() { return 100; }
     "declaration": true,
     "outFile": "./index.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 818
+  "size": 853
 }
 
-//// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo] file changed its modified time
+
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
 
 
 Program root files: [
@@ -441,9 +514,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspaces/solution/sample1/core/index.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -453,9 +524,43 @@ Change:: Build logic
 
 Input::
 
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
+Output::
+[96msample1/logic/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
+[7m5[0m     "outFile": "index.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+
+
+
+//// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo] file changed its modified time
+
+
+Program root files: [
+  "/user/username/workspaces/solution/sample1/logic/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/workspaces/solution/sample1/logic/index.js",
+  "watch": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/workspaces/solution/sample1/logic/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspaces/solution/sample1/core/index.d.ts
+/user/username/workspaces/solution/sample1/logic/index.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined

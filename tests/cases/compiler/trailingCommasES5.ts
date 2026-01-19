@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 
 var o1 = { a: 1, b: 2 };

@@ -1,3 +1,4 @@
+// @strict: false
 enum TokenType { One, Two };
 
 var list = {};

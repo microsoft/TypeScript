@@ -1,3 +1,4 @@
+// @strict: false
 // basic uses of specialized signatures without errors
 
 class Base { foo: string }

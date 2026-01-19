@@ -9,6 +9,7 @@ function MyClass() {
 >this.prop = null : null
 >                 : ^^^^
 >this.prop : any
+>          : ^^^
 >this : this
 >     : ^^^^
 >prop : any
@@ -23,6 +24,7 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >MyClass.prototype.optionalParam = function(required, notRequired) {    return this;} : (required: string, notRequired?: string) => MyClass
 >                                                                                     : ^        ^^      ^^           ^^^      ^^^^^       
 >MyClass.prototype.optionalParam : any
+>                                : ^^^
 >MyClass.prototype : any
 >                  : ^^^
 >MyClass : typeof MyClass

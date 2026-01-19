@@ -1,3 +1,4 @@
+// @strict: false
 interface A<T> {
     foo<U extends T>(x: A<A<U>>)
 }

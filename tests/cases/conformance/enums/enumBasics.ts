@@ -1,3 +1,4 @@
+// @strict: false
 // Enum without initializers have first member = 0 and successive members = N + 1
 enum E1 {
     A,

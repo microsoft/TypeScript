@@ -1,3 +1,4 @@
+// @strict: false
 // Repro from #19043
 
 type B = {b: string}

@@ -1,3 +1,4 @@
+// @strict: false
 // String indexer providing a constraint of a user defined type
 
 class A {

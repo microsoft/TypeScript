@@ -1,3 +1,4 @@
+// @strict: false
 // type inference on 'bug' should give 'any'
 
 interface Ib { m(test: string, fn: Function); }

@@ -1,3 +1,4 @@
+// @strict: false
 // @noImplicitReferences: true
 // @currentDirectory: /
 // This tests that augmenting an untyped module is forbidden.

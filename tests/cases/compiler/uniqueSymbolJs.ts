@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 // @checkJs: true
 // @allowJs: true

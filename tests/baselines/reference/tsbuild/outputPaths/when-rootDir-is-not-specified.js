@@ -34,9 +34,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
 
-//// [/home/src/workspaces/project/dist/index.js]
+Found 1 error.
+
+
+
+//// [/home/src/workspaces/project/dist/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -44,19 +53,20 @@ exports.x = 10;
 
 
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo]
-{"root":["../src/index.ts"],"version":"FakeTSVersion"}
+{"root":["../src/index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../src/index.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 54
+  "size": 68
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -67,12 +77,26 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/index.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
+
+
+Found 1 error.
 
 
 
+//// [/home/src/workspaces/project/dist/src/index.js] file written with same contents
+//// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
 
@@ -80,8 +104,17 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
 
-//// [/home/src/workspaces/project/dist/index.js] file written with same contents
+Found 1 error in tsconfig.json[90m:3[0m
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/workspaces/project/dist/src/index.js] file written with same contents
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -1,3 +1,4 @@
+// @strict: false
 class CDoc {
         constructor() {
         function doSomething(a: Function) {

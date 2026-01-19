@@ -4,7 +4,7 @@
 // Type guards involving type parameters produce intersection types
 
 class C {
-    prop: string;
+    prop: string = "";
 }
 
 function f1<T>(x: T) {
@@ -40,6 +40,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 // Type guards involving type parameters produce intersection types
 var C = /** @class */ (function () {
     function C() {
+        this.prop = "";
     }
     return C;
 }());

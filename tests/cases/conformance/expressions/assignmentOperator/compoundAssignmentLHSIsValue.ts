@@ -1,3 +1,4 @@
+// @strict: false
 // @allowUnusedLabels: true
 
 // expected error for all the LHS of compound assignments (arithmetic and addition)

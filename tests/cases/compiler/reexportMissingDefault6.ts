@@ -1,3 +1,4 @@
+// @strict: false
 // @module: commonjs
 // @filename: b.ts
 export const b = null;

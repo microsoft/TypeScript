@@ -1,3 +1,4 @@
+// @strict: false
 // @isolatedModules: true
 // @module: commonjs
 // @filename: file1.ts

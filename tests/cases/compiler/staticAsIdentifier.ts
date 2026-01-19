@@ -1,3 +1,4 @@
+// @strict: false
 class C1 {
     static static
     [x: string]: string;

@@ -4,7 +4,7 @@
 class C {
 >C : Symbol(C, Decl(optionalParameterProperty.ts, 0, 0))
 
-    p: number;
+    p: number = 0;
 >p : Symbol(C.p, Decl(optionalParameterProperty.ts, 0, 9))
 }
 

@@ -1,3 +1,4 @@
+// @strict: false
 // @removeComments: false
 var Person = makeClass( 
    { 

@@ -1,3 +1,4 @@
+// @strict: false
 class foo { 
    private bar();
    private bar(foo: string);
