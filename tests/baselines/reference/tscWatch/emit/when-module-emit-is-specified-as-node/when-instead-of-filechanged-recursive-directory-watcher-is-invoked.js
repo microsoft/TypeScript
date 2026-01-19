@@ -43,15 +43,21 @@ Output::
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './Scripts'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outDir": "Static/scripts/"
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/Javascript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js]
 var zz = 10;
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/TypeScript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
 var z = 10;
 
 
@@ -130,12 +136,18 @@ Output::
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './Scripts'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m5[0m     "outDir": "Static/scripts/"
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/Javascript.js] file written with same contents
-//// [/home/src/projects/a/rootFolder/project/Static/scripts/TypeScript.js]
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js] file written with same contents
+//// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
 var zz30 = 100;
 
 

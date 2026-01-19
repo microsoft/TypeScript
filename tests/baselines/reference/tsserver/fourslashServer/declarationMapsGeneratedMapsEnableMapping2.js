@@ -77,6 +77,7 @@ instance.methodName({member: 12});
 //// [/home/src/workspaces/project/tsconfig.json]
 {
     "compilerOptions": {
+        "strict": false,
         "outDir": "./dist",
         "sourceMap": true,
         "sourceRoot": "/home/src/workspaces/project/",
@@ -105,6 +106,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "/home/src/workspaces/project/index.ts"
  ],
  "options": {
+  "strict": false,
   "outDir": "/home/src/workspaces/project/dist",
   "sourceMap": true,
   "sourceRoot": "/home/src/workspaces/project/",
@@ -186,7 +188,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"outDir\": \"./dist\",\n        \"sourceMap\": true,\n        \"sourceRoot\": \"/home/src/workspaces/project/\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"sourceMap\": true,\n        \"sourceRoot\": \"/home/src/workspaces/project/\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts

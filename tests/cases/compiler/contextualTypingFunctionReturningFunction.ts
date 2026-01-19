@@ -1,3 +1,4 @@
+// @strict: false
 interface I {
 	a(s: string): void;
 	b(): (n: number) => void;

@@ -1,3 +1,4 @@
+// @strict: false
 // @target:es5
 'use strict'
 declare function use(a: any);

@@ -1,3 +1,4 @@
+// @strict: false
 // @Filename: underscoreTest1_underscore.ts
 interface Dictionary<T> {
     [x: string]: T;

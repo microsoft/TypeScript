@@ -1,3 +1,4 @@
+// @strict: false
 // @Filename: missingFunctionImplementation2_a.ts
 export {};
 declare module "./missingFunctionImplementation2_b" {

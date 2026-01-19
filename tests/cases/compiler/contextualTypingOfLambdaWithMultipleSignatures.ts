@@ -1,3 +1,4 @@
+// @strict: false
 interface Foo {
     getFoo(n: number): void;
     getFoo(s: string): void;

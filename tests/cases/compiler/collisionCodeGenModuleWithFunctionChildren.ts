@@ -1,3 +1,4 @@
+// @strict: false
 namespace M {
     export var x = 3;
     function fn(M, p = x) { }

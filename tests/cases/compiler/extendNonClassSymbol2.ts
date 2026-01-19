@@ -1,3 +1,4 @@
+// @strict: false
 function Foo() {
    this.x = 1;
 }

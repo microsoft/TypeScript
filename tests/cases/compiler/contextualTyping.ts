@@ -1,3 +1,4 @@
+// @strict: false
 // @sourcemap: true
 // DEFAULT INTERFACES
 interface IFoo {

@@ -1,3 +1,4 @@
+// @strict: false
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 var goodObj: Object = {
     toString(x?) {

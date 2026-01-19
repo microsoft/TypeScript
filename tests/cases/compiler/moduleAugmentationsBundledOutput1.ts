@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 // @module: amd
 // @declaration: true

@@ -1,3 +1,4 @@
+// @strict: false
 // @removeComments: false
 var v = {
     f: a => 0 /*t1*/,

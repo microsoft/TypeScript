@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 namespace a {
     export namespace b {

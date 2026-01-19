@@ -1,3 +1,4 @@
+// @strict: false
 var f: {
     (x: string): string;
     (x: number): string

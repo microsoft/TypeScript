@@ -1,3 +1,4 @@
+// @strict: false
 interface IResultCallback extends Function {
     x: number;
 }

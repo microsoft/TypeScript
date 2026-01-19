@@ -1,3 +1,4 @@
+// @strict: false
 // Optional parameters cannot also have initializer expressions, these are all errors
 
 function foo(x?: number = 1) { }

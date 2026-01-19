@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext,es2015,es5
 // @noTypesAndSymbols: true
 // @noEmit: true

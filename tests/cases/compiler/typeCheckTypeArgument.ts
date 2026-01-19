@@ -1,3 +1,4 @@
+// @strict: false
 
 var f: <T extends UNKNOWN>() => void;
 

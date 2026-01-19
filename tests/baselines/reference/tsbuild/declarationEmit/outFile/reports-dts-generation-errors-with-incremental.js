@@ -62,6 +62,12 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m8[0m     "outFile": "./outFile.js"
@@ -76,7 +82,7 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors.
+Found 4 errors.
 
 
 
@@ -84,7 +90,7 @@ Found 3 errors.
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define("index", ["require", "exports", "ky"], function (require, exports, ky_1) {
+define("src/index", ["require", "exports", "ky"], function (require, exports, ky_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.api = void 0;
@@ -179,6 +185,12 @@ Output::
 [7m3[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outFile": "./outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m8[0m     "outFile": "./outFile.js"
@@ -191,7 +203,7 @@ ky.d.ts
 src/index.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors.
+Found 4 errors.
 
 
 

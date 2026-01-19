@@ -1,3 +1,4 @@
+// @strict: false
 interface IHandler {
     (e): boolean;
 }

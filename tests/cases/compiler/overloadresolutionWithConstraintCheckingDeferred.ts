@@ -1,3 +1,4 @@
+// @strict: false
 interface A { x }
 interface B { x; y }
 interface C { z }

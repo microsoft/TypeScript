@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 
 // Should all be strings.

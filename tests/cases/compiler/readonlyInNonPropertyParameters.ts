@@ -1,3 +1,4 @@
+// @strict: false
 //@target: ES5
 
 // `readonly` won't work outside of property parameters

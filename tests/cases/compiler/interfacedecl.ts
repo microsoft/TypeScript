@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 interface a0 {
     (): string;

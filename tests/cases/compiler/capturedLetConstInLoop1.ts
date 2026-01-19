@@ -1,3 +1,4 @@
+// @strict: false
 declare function use(x: any): any;
 
 //==== let

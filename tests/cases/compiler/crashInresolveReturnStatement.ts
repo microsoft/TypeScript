@@ -1,3 +1,4 @@
+// @strict: false
 class WorkItemToolbar {
     public onToolbarItemClick() {
         WITDialogs.createCopyOfWorkItem();

@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 // @filename: foo.ts
 export class Foo {}

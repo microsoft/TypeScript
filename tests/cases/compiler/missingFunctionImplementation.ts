@@ -1,3 +1,4 @@
+// @strict: false
 
 export class C1 {
   m(): void;

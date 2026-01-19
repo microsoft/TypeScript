@@ -1,3 +1,4 @@
+// @strict: false
 declare var a;
 
 a(/*1*/);

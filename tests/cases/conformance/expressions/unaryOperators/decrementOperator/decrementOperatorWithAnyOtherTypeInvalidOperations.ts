@@ -1,3 +1,4 @@
+// @strict: false
 // -- operator on any type
 declare var ANY1: any;
 var ANY2: any[] = ["", ""];

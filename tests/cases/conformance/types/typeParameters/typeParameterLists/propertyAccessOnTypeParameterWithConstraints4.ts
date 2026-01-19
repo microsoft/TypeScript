@@ -1,3 +1,4 @@
+// @strict: false
 class C<T extends Date> {
     f() {
         var x: T = {} as any;

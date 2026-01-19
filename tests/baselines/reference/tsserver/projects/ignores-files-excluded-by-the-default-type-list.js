@@ -221,30 +221,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo-ui/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo-ui/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo-ui/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/q/lib/kendo-ui/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/scripts/Office/1/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/scripts/Office/1/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/scripts/Office/1/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/scripts/Office/1/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["kendo-ui","office"]
 TI:: [hh:mm:ss:mss] 'kendo-ui':: Entry for package 'kendo-ui' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'office':: Entry for package 'office' does not exist in local types registry - skipping...
@@ -343,44 +319,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/Vscode/Projects/bin/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/a/b/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/a/b/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/c/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/c/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/q/lib/kendo-ui/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/q/lib/kendo-ui/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/q/lib/kendo/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/q/lib/kendo/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/scripts/Office/1/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/scripts/Office/1/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/a/b/f1.js:
-  {}
 
 Projects::
 project (External) *changed*

@@ -1,3 +1,4 @@
+// @strict: false
 interface I2 {
     (): number;
     (q): boolean;

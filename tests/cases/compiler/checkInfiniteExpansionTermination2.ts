@@ -1,3 +1,4 @@
+// @strict: false
 // Regression test for #1002
 // Before fix this code would cause infinite loop
 

@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 
 // @Filename: declFile.d.ts

@@ -147,6 +147,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "outFile": "../outFile.js",
@@ -158,7 +164,7 @@ Output::
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -240,7 +246,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -252,7 +258,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -264,17 +270,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -310,6 +316,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "outFile": "../outFile.js",
@@ -321,7 +333,7 @@ Output::
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -403,7 +415,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -415,7 +427,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -427,17 +439,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;
@@ -554,6 +566,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "outFile": "../outFile.js",
@@ -565,7 +583,7 @@ Output::
 [7m [0m [91m              ~~~~~[0m
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -647,7 +665,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
+define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
@@ -659,7 +677,7 @@ define("class", ["require", "exports"], function (require, exports) {
     }());
     exports.classC = classC;
 });
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
@@ -671,17 +689,17 @@ define("indirectClass", ["require", "exports", "class"], function (require, expo
     }());
     exports.indirectClass = indirectClass;
 });
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_1.indirectClass().classC.prop;
 });
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new indirectClass_2.indirectClass().classC.prop;
 });
-define("noChangeFile", ["require", "exports"], function (require, exports) {
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.writeLog = writeLog;

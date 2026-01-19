@@ -1,3 +1,4 @@
+// @strict: false
 // @checkjs: true
 // @filename: jsdocOuterTypeParameters1.js
 /** @return {T} */

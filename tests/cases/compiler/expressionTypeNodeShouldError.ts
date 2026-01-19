@@ -1,3 +1,4 @@
+// @strict: false
 // @Filename: base.d.ts
 declare const x: "foo".charCodeAt(0);
 

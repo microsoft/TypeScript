@@ -170,6 +170,43 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/user/username/projects/myproject/app1/tsconfig.json",
         "diagnostics": [
           {
+            "text": "File '/user/username/projects/myproject/core/core.ts' is not under 'rootDir' '/user/username/projects/myproject/app1'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Part of 'files' list in tsconfig.json",
+            "code": 6059,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 4,
+                    "offset": 5
+                  },
+                  "end": {
+                    "line": 4,
+                    "offset": 22
+                  },
+                  "file": "/user/username/projects/myproject/app1/tsconfig.json"
+                },
+                "message": "File is matched by 'files' list specified here.",
+                "category": "message",
+                "code": 1410
+              }
+            ]
+          },
+          {
+            "start": {
+              "line": 7,
+              "offset": 5
+            },
+            "end": {
+              "line": 7,
+              "offset": 14
+            },
+            "text": "The common source directory of 'tsconfig.json' is '..'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/app1/tsconfig.json"
+          },
+          {
             "start": {
               "line": 7,
               "offset": 5
@@ -360,6 +397,43 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/app2/app.ts",
         "configFile": "/user/username/projects/myproject/app2/tsconfig.json",
         "diagnostics": [
+          {
+            "text": "File '/user/username/projects/myproject/core/core.ts' is not under 'rootDir' '/user/username/projects/myproject/app2'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Part of 'files' list in tsconfig.json",
+            "code": 6059,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 4,
+                    "offset": 5
+                  },
+                  "end": {
+                    "line": 4,
+                    "offset": 22
+                  },
+                  "file": "/user/username/projects/myproject/app2/tsconfig.json"
+                },
+                "message": "File is matched by 'files' list specified here.",
+                "category": "message",
+                "code": 1410
+              }
+            ]
+          },
+          {
+            "start": {
+              "line": 7,
+              "offset": 5
+            },
+            "end": {
+              "line": 7,
+              "offset": 14
+            },
+            "text": "The common source directory of 'tsconfig.json' is '..'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/app2/tsconfig.json"
+          },
           {
             "start": {
               "line": 7,

@@ -1,3 +1,4 @@
+// @strict: false
 // same as promisePermutations but without the same overloads in IPromise<T>
 
 interface Promise<T> {

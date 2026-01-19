@@ -1,3 +1,4 @@
+// @strict: false
 //@noUnusedLocals:true
 //@module: commonjs
 //@reactNamespace: Element

@@ -1,3 +1,4 @@
+// @strict: false
 // Duplicate parameter names are always an error
 
 function foo(x, x) { }

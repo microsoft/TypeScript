@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es5
 function f(s: string): string;
 function f(n: number): number;

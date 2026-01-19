@@ -1,3 +1,4 @@
+// @strict: false
 class A {
     foo() {
         for (let x of [0]) {

@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 
 type T = number | "foo" | "bar";

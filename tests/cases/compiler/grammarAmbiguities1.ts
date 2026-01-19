@@ -1,3 +1,4 @@
+// @strict: false
 class A { foo() { } }
 class B { bar() { }}
 function f(x) { return x; }

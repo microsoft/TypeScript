@@ -1,3 +1,4 @@
+// @strict: false
 interface Animal { x }
 interface Giraffe extends Animal { y }
 interface Elephant extends Animal { z }

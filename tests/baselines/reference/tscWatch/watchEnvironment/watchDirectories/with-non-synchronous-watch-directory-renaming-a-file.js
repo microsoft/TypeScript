@@ -33,18 +33,24 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file2.js] Inode:: 116
+//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 117
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 117
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -63,6 +69,8 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
   {"inode":115}
+/user/username/projects/myproject/dist/src: *new*
+  {"inode":116}
 /user/username/projects/myproject/src: *new*
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
@@ -87,10 +95,7 @@ Program files::
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/src/file2.ts
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -109,7 +114,7 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 118
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 119
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
@@ -133,6 +138,8 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -162,11 +169,17 @@ Output::
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 117
+//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 118
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -187,6 +200,8 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -209,8 +224,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
@@ -240,16 +254,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96msrc/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m import { x } from "./file2";
-[7m [0m [91m                  ~~~~~~~~~[0m
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 119
+//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -274,12 +289,14 @@ FsWatches::
   {"inode":4}
 /user/username/projects/myproject/dist:
   {"inode":115}
+/user/username/projects/myproject/dist/src:
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/renamed.ts: *new*
-  {"inode":118}
+  {"inode":119}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":8}
 
@@ -308,9 +325,7 @@ Program files::
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/renamed.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file1.ts
-/user/username/projects/myproject/src/renamed.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/renamed.ts (computed .d.ts)

@@ -1,3 +1,4 @@
+// @strict: false
 // Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
 
 function foo(...x) { }

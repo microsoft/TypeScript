@@ -1,3 +1,4 @@
+// @strict: false
 function int8ArraySubarray() {
     var arr = new Int8Array(10);
     arr.subarray();

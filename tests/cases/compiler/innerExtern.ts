@@ -1,3 +1,4 @@
+// @strict: false
 namespace A {
     export declare namespace BB {
         export var Elephant;
