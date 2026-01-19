@@ -27352,8 +27352,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const constraint = param && getBaseConstraintOfType(param);
                                     if (constraint && isTupleType(constraint) && !(constraint.target.combinedFlags & ElementFlags.Variable)) {
                                         const impliedArity = constraint.target.fixedLength;
-                                        inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
-                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
+                                        if (startLength + impliedArity <= source.target.fixedLength) {
+                                            inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
+                                            inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
+                                        }
                                     }
                                 }
                                 else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic) {
@@ -27363,12 +27365,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     const constraint = param && getBaseConstraintOfType(param);
                                     if (constraint && isTupleType(constraint) && !(constraint.target.combinedFlags & ElementFlags.Variable)) {
                                         const impliedArity = constraint.target.fixedLength;
-                                        const endIndex = sourceArity - getEndElementCount(target.target, ElementFlags.Fixed);
-                                        const startIndex = endIndex - impliedArity;
-                                        const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex), /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
+                                        if (endLength + impliedArity <= getEndElementCount(source.target, ElementFlags.Fixed)) {
+                                            const endIndex = sourceArity - getEndElementCount(target.target, ElementFlags.Fixed);
+                                            const startIndex = endIndex - impliedArity;
+                                            const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex), /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
 
-                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
-                                        inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
+                                            inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
+                                            inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
+                                        }
                                     }
                                 }
                             }
