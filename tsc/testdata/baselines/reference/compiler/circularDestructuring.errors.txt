@@ -1,0 +1,21 @@
+circularDestructuring.ts(1,7): error TS2322: Type '{ c: number; f: any; }' is not assignable to type 'string | number'.
+circularDestructuring.ts(1,9): error TS2339: Property 'c' does not exist on type 'string | number'.
+circularDestructuring.ts(1,12): error TS2339: Property 'f' does not exist on type 'string | number'.
+circularDestructuring.ts(1,12): error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularDestructuring.ts(1,43): error TS2448: Block-scoped variable 'f' used before its declaration.
+
+
+==== circularDestructuring.ts (5 errors) ====
+    const { c, f }: string | number = { c: 0, f };
+          ~~~~~~~~
+!!! error TS2322: Type '{ c: number; f: any; }' is not assignable to type 'string | number'.
+            ~
+!!! error TS2339: Property 'c' does not exist on type 'string | number'.
+               ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+               ~
+!!! error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                                              ~
+!!! error TS2448: Block-scoped variable 'f' used before its declaration.
+!!! related TS2728 circularDestructuring.ts:1:12: 'f' is declared here.
+    
