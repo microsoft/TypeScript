@@ -10,11 +10,23 @@ dependentDestructuredVariablesRefereinceInDeclaration1.ts(14,9): error TS2322: T
 dependentDestructuredVariablesRefereinceInDeclaration1.ts(14,11): error TS2339: Property 'c' does not exist on type 'string | number'.
 dependentDestructuredVariablesRefereinceInDeclaration1.ts(14,14): error TS2339: Property 'f' does not exist on type 'string | number'.
 dependentDestructuredVariablesRefereinceInDeclaration1.ts(14,17): error TS2339: Property 'g' does not exist on type 'string | number'.
-dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,14): error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,71): error TS2448: Block-scoped variable 'f' used before its declaration.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,9): error TS2322: Type '{ c: number; f: number; }' is not assignable to type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,11): error TS2339: Property 'c' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,14): error TS2339: Property 'f' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,14): error TS2451: Cannot redeclare block-scoped variable 'f'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,17): error TS2339: Property 'f' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,17): error TS2451: Cannot redeclare block-scoped variable 'f'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(25,9): error TS2322: Type '{ c: number; f: number; }' is not assignable to type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(25,11): error TS2339: Property 'c' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(25,14): error TS2339: Property 'f' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(25,17): error TS2339: Property 'f' does not exist on type 'string | number'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(30,14): error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(30,71): error TS2448: Block-scoped variable 'f' used before its declaration.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(58,14): error TS2451: Cannot redeclare block-scoped variable 'f'.
+dependentDestructuredVariablesRefereinceInDeclaration1.ts(58,17): error TS2451: Cannot redeclare block-scoped variable 'f'.
 
 
-==== dependentDestructuredVariablesRefereinceInDeclaration1.ts (14 errors) ====
+==== dependentDestructuredVariablesRefereinceInDeclaration1.ts (26 errors) ====
     // https://github.com/microsoft/TypeScript/issues/62993
     
     {
@@ -59,12 +71,42 @@ dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,71): error TS2448: 
     }
     
     {
+      const { c, f, f }: string | number = { c: 0, f: 0 };
+            ~~~~~~~~~~~
+!!! error TS2322: Type '{ c: number; f: number; }' is not assignable to type 'string | number'.
+              ~
+!!! error TS2339: Property 'c' does not exist on type 'string | number'.
+                 ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+                 ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
+                    ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+                    ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
+      f;
+    }
+    
+    {
+      const { c, f, f: g }: string | number = { c: 0, f: 0 };
+            ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ c: number; f: number; }' is not assignable to type 'string | number'.
+              ~
+!!! error TS2339: Property 'c' does not exist on type 'string | number'.
+                 ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+                    ~
+!!! error TS2339: Property 'f' does not exist on type 'string | number'.
+      g;
+    }
+    
+    {
       const { c, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f };
                  ~
 !!! error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
                                                                           ~
 !!! error TS2448: Block-scoped variable 'f' used before its declaration.
-!!! related TS2728 dependentDestructuredVariablesRefereinceInDeclaration1.ts:20:14: 'f' is declared here.
+!!! related TS2728 dependentDestructuredVariablesRefereinceInDeclaration1.ts:30:14: 'f' is declared here.
       f;
     }
     
@@ -91,3 +133,16 @@ dependentDestructuredVariablesRefereinceInDeclaration1.ts(20,71): error TS2448: 
       g;
     }
     
+    {
+      const { c, f, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
+                 ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
+                    ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
+      f;
+    }
+    
+    {
+      const { c, f, f: g }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
+      g;
+    }

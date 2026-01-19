@@ -21,6 +21,16 @@
 }
 
 {
+  const { c, f, f }: string | number = { c: 0, f: 0 };
+  f;
+}
+
+{
+  const { c, f, f: g }: string | number = { c: 0, f: 0 };
+  g;
+}
+
+{
   const { c, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f };
   f;
 }
@@ -45,5 +55,15 @@
     f: 10n,
   };
   f;
+  g;
+}
+
+{
+  const { c, f, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
+  f;
+}
+
+{
+  const { c, f, f: g }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
   g;
 }

@@ -44,75 +44,131 @@
 }
 
 {
-  const { c, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f };
+  const { c, f, f }: string | number = { c: 0, f: 0 };
 >c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 9))
 >f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 12))
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 19))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 25))
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 41))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 47))
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 63))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 69))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 15))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 40))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 46))
 
   f;
 >f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 19, 12))
 }
 
 {
-  const { c, f }: { c: 0; f: () => unknown } | { c: 1; f: string } = {
+  const { c, f, f: g }: string | number = { c: 0, f: 0 };
 >c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 9))
 >f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 12))
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 19))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 25))
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 48))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 54))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 15))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 43))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 49))
+
+  g;
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 15))
+}
+
+{
+  const { c, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f };
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 12))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 19))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 25))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 41))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 47))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 63))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 69))
+
+  f;
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 29, 12))
+}
+
+{
+  const { c, f }: { c: 0; f: () => unknown } | { c: 1; f: string } = {
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 12))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 19))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 25))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 48))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 54))
 
     c: 0,
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 70))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 70))
 
     f: () => f,
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 25, 9))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 12))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 35, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 12))
 
   };
   f;
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 24, 12))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 12))
 }
 
 {
   const {
     c,
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 32, 9))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 42, 9))
 
     f,
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 33, 6))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 43, 6))
 
     g = f,
->g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 6))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 33, 6))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 44, 6))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 43, 6))
 
   }:
     | { c: 0; f: bigint; g?: bigint | number }
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 37, 7))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 37, 13))
->g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 37, 24))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 47, 7))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 47, 13))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 47, 24))
 
     | { c: 1; f: number; g: string } = {
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 38, 7))
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 38, 13))
->g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 38, 24))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 48, 7))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 48, 13))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 48, 24))
 
     c: 0,
->c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 38, 40))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 48, 40))
 
     f: 10n,
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 39, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 49, 9))
 
   };
   f;
->f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 33, 6))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 43, 6))
 
   g;
->g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 34, 6))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 44, 6))
 }
 
+{
+  const { c, f, f }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 12))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 15))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 22))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 28))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 44))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 50))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 66))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 72))
+
+  f;
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 57, 12))
+}
+
+{
+  const { c, f, f: g }: { c: 0; f: number } | { c: 1; f: string } = { c: 0, f: 0 };
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 9))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 12))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 31), Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 53))
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 15))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 25))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 31))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 47))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 53))
+>c : Symbol(c, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 69))
+>f : Symbol(f, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 75))
+
+  g;
+>g : Symbol(g, Decl(dependentDestructuredVariablesRefereinceInDeclaration1.ts, 62, 15))
+}
