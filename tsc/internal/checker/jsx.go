@@ -276,7 +276,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 		return (initializer == nil || c.isPossiblyDiscriminantValue(initializer)) && c.isDiscriminantProperty(contextualType, symbol.Name)
 	})
 	discriminantMembers := core.Filter(c.getPropertiesOfType(contextualType), func(s *ast.Symbol) bool {
-		if s.Flags&ast.SymbolFlagsOptional == 0 || node.Symbol() == nil || len(node.Symbol().Members) == 0 {
+		if s.Flags&ast.SymbolFlagsOptional == 0 || node.Symbol() == nil {
 			return false
 		}
 		element := node.Parent.Parent

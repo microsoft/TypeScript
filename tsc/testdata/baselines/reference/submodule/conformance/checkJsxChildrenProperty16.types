@@ -46,8 +46,8 @@ export const Test = () => {
       <Foo>{(value) => {}}</Foo>
 ><Foo>{(value) => {}}</Foo> : JSX.Element
 >Foo : (props: Props) => JSX.Element
->(value) => {} : (value: any) => void
->value : any
+>(value) => {} : (value: string) => void
+>value : string
 >Foo : (props: Props) => JSX.Element
 
       <Foo renderNumber>{(value) => {}}</Foo>
