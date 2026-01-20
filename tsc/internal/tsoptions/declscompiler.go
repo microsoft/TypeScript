@@ -1169,16 +1169,6 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription:    diagnostics.X_true_for_ES2022_and_above_including_ESNext,
 	},
 	{
-		Name:                    "preserveValueImports",
-		Kind:                    CommandLineOptionTypeBoolean,
-		AffectsEmit:             true,
-		AffectsBuildInfo:        true,
-		Category:                diagnostics.Backwards_Compatibility,
-		Description:             diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
-		DefaultValueDescription: false,
-	},
-
-	{
 		// A list of plugins to load in the language service
 		Name:           "plugins",
 		Kind:           CommandLineOptionTypeList,

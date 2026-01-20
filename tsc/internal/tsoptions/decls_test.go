@@ -58,13 +58,7 @@ func TestCompilerOptionsDeclaration(t *testing.T) {
 	}
 
 	skippedOptions := []string{
-		"charset",
-		"noImplicitUseStrict",
-		"noStrictGenericChecks",
 		"plugins",
-		"preserveValueImports",
-		"suppressExcessPropertyErrors",
-		"suppressImplicitAnyIndexErrors",
 	}
 
 	for _, opt := range skippedOptions {

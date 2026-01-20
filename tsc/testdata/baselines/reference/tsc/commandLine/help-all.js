@@ -587,13 +587,6 @@ Enable color and formatting in TypeScript's output to make compiler errors easie
 type: boolean
 default: true
 
-### Backwards Compatibility
-
-[94m--preserveValueImports[39m
-Preserve unused imported values in the JavaScript output that would otherwise be removed.
-type: boolean
-default: false
-
 ### Completeness
 
 [94m--skipDefaultLibCheck[39m
