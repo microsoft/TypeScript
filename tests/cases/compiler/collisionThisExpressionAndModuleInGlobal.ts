@@ -1,3 +1,4 @@
+// @strict: false
 namespace _this { //Error
     class c {
     }
