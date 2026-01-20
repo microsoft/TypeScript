@@ -180,11 +180,11 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >v : Symbol(v, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 3, 76))
 }
 
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 53, 1))
 
     class Base<T> {
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 56, 15))
 
         foo: T;
@@ -203,7 +203,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 60, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 60, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 60, 13))
 
         [x: string]: T;
@@ -226,7 +226,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 65, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 65, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 65, 13))
 
         [x: string]: T;
@@ -249,7 +249,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 70, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 70, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 70, 13))
 
         [x: string]: T;
@@ -272,7 +272,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 75, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 75, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 75, 30))
 
         [x: string]: U;
@@ -295,7 +295,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 80, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 80, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 80, 30))
 
         [x: string]: U;
@@ -318,7 +318,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 85, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 85, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 85, 30))
 
         [x: string]: U;
@@ -341,7 +341,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 90, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 90, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 90, 48))
 
         [x: string]: V;
@@ -364,7 +364,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 95, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 95, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 95, 48))
 
         [x: string]: V;
@@ -387,7 +387,7 @@ module M1 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 100, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 100, 48))
->Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 11))
+>Base : Symbol(Base, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 55, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 100, 48))
 
         [x: string]: V;
@@ -401,11 +401,11 @@ module M1 {
 }
 
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 104, 1))
 
     class Base2<T> {
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 108, 16))
 
         foo: Foo<T>;
@@ -425,7 +425,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 112, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 112, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 112, 13))
 
         [x: string]: T;
@@ -448,7 +448,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 117, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 117, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 117, 13))
 
         [x: string]: T;
@@ -471,7 +471,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 122, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 122, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 122, 13))
 
         [x: string]: T;
@@ -494,7 +494,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 127, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 127, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 127, 30))
 
         [x: string]: U;
@@ -517,7 +517,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 132, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 132, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 132, 30))
 
         [x: string]: U;
@@ -540,7 +540,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 137, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 137, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >U : Symbol(U, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 137, 30))
 
         [x: string]: U;
@@ -563,7 +563,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 142, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 142, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 142, 48))
 
         [x: string]: V;
@@ -586,7 +586,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 147, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 147, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 147, 48))
 
         [x: string]: V;
@@ -609,7 +609,7 @@ module M2 {
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 152, 48))
 >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 0, 0))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 152, 48))
->Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 11))
+>Base2 : Symbol(Base2, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 107, 14))
 >V : Symbol(V, Decl(subtypesOfTypeParameterWithRecursiveConstraints.ts, 152, 48))
 
         [x: string]: V;

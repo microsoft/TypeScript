@@ -10,7 +10,6 @@ import { E1 } from "./file1"; export const enum E2 { V = E1.V }
 import { E2 } from "./file2"; const v: E2 = E2.V;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

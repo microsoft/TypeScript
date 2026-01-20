@@ -1,7 +1,8 @@
+// @strict: false
 // @declaration: true
-module a.b.c {
+namespace a.b.c {
       export var d;
 }
-module a.e.f {
+namespace a.e.f {
       import g = b.c;
 }

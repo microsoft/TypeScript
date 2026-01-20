@@ -1,3 +1,4 @@
+// @strict: false
 interface A {
   readonly b
 }

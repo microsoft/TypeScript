@@ -47,30 +47,30 @@ enum y4 { One } // error
 function y5() { }
 >y5 : Symbol(y5, Decl(augmentedTypesFunction.ts, 20, 15), Decl(augmentedTypesFunction.ts, 23, 17))
 
-module y5 { } // ok since module is not instantiated
+namespace y5 { } // ok since module is not instantiated
 >y5 : Symbol(y5, Decl(augmentedTypesFunction.ts, 20, 15), Decl(augmentedTypesFunction.ts, 23, 17))
 
 function y5a() { }
->y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 13), Decl(augmentedTypesFunction.ts, 26, 18))
+>y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 16), Decl(augmentedTypesFunction.ts, 26, 18))
 
-module y5a { var y = 2; } // should be an error
->y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 13), Decl(augmentedTypesFunction.ts, 26, 18))
->y : Symbol(y, Decl(augmentedTypesFunction.ts, 27, 16))
+namespace y5a { var y = 2; } // should be an error
+>y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 16), Decl(augmentedTypesFunction.ts, 26, 18))
+>y : Symbol(y, Decl(augmentedTypesFunction.ts, 27, 19))
 
 function y5b() { }
->y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 25), Decl(augmentedTypesFunction.ts, 29, 18))
+>y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 28), Decl(augmentedTypesFunction.ts, 29, 18))
 
-module y5b { export var y = 3; } // should be an error
->y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 25), Decl(augmentedTypesFunction.ts, 29, 18))
->y : Symbol(y, Decl(augmentedTypesFunction.ts, 30, 23))
+namespace y5b { export var y = 3; } // should be an error
+>y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 28), Decl(augmentedTypesFunction.ts, 29, 18))
+>y : Symbol(y, Decl(augmentedTypesFunction.ts, 30, 26))
 
 function y5c() { }
->y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 32), Decl(augmentedTypesFunction.ts, 32, 18))
+>y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 35), Decl(augmentedTypesFunction.ts, 32, 18))
 
-module y5c { export interface I { foo(): void } } // should be an error
->y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 32), Decl(augmentedTypesFunction.ts, 32, 18))
->I : Symbol(I, Decl(augmentedTypesFunction.ts, 33, 12))
->foo : Symbol(I.foo, Decl(augmentedTypesFunction.ts, 33, 33))
+namespace y5c { export interface I { foo(): void } } // should be an error
+>y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 35), Decl(augmentedTypesFunction.ts, 32, 18))
+>I : Symbol(I, Decl(augmentedTypesFunction.ts, 33, 15))
+>foo : Symbol(I.foo, Decl(augmentedTypesFunction.ts, 33, 36))
 
 // function then import, messes with other errors
 //function y6() { }

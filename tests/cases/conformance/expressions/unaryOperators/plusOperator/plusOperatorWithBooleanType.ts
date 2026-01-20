@@ -1,14 +1,14 @@
 // + operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
 class A {
-    public a: boolean;
+    public a!: boolean;
     static foo() { return false; }
 }
-module M {
-    export var n: boolean;
+namespace M {
+    export var n: boolean = false;
 }
 
 var objA = new A();

@@ -65,10 +65,10 @@
     >break
     >:=> (line 5, col 39) to (line 5, col 44)
 --------------------------------
-6  >module M {
+6  >namespace M {
 
-    ~~~~~~~~~~~                                   => Pos: (170 to 180)  SpanInfo: {"start":170,"length":133}
-    >module M {
+    ~~~~~~~~~~~~~~                                => Pos: (170 to 183)  SpanInfo: {"start":170,"length":136}
+    >namespace M {
     >    export const cc1 = false;
     >    export const cc2: number = 23;
     >    export const cc3 = 0, cc4 :string = "", cc5 = null;
@@ -77,41 +77,41 @@
 --------------------------------
 7  >    export const cc1 = false;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (181 to 210)  SpanInfo: {"start":192,"length":17}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (184 to 213)  SpanInfo: {"start":195,"length":17}
     >const cc1 = false
     >:=> (line 7, col 11) to (line 7, col 28)
 --------------------------------
 8  >    export const cc2: number = 23;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (211 to 245)  SpanInfo: {"start":222,"length":22}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (214 to 248)  SpanInfo: {"start":225,"length":22}
     >const cc2: number = 23
     >:=> (line 8, col 11) to (line 8, col 33)
 --------------------------------
 9  >    export const cc3 = 0, cc4 :string = "", cc5 = null;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (246 to 270)  SpanInfo: {"start":257,"length":13}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (249 to 273)  SpanInfo: {"start":260,"length":13}
     >const cc3 = 0
     >:=> (line 9, col 11) to (line 9, col 24)
 9  >    export const cc3 = 0, cc4 :string = "", cc5 = null;
 
-                             ~~~~~~~~~~~~~~~~~~   => Pos: (271 to 288)  SpanInfo: {"start":272,"length":16}
+                             ~~~~~~~~~~~~~~~~~~   => Pos: (274 to 291)  SpanInfo: {"start":275,"length":16}
     >cc4 :string = ""
     >:=> (line 9, col 26) to (line 9, col 42)
 9  >    export const cc3 = 0, cc4 :string = "", cc5 = null;
 
-                                               ~~~~~~~~~~~~~=> Pos: (289 to 301)  SpanInfo: {"start":290,"length":10}
+                                               ~~~~~~~~~~~~~=> Pos: (292 to 304)  SpanInfo: {"start":293,"length":10}
     >cc5 = null
     >:=> (line 9, col 44) to (line 9, col 54)
 --------------------------------
 10 >}
 
-    ~~                                            => Pos: (302 to 303)  SpanInfo: {"start":302,"length":1}
+    ~~                                            => Pos: (305 to 306)  SpanInfo: {"start":305,"length":1}
     >}
     >:=> (line 10, col 0) to (line 10, col 1)
 --------------------------------
 11 >const enum E {
 
-    ~~~~~~~~~~~~~~~                               => Pos: (304 to 318)  SpanInfo: {"start":304,"length":52}
+    ~~~~~~~~~~~~~~~                               => Pos: (307 to 321)  SpanInfo: {"start":307,"length":52}
     >const enum E {
     >    A = 1,
     >    B = 2,
@@ -121,31 +121,31 @@
 --------------------------------
 12 >    A = 1,
 
-    ~~~~~~~~~~~                                   => Pos: (319 to 329)  SpanInfo: {"start":323,"length":5}
+    ~~~~~~~~~~~                                   => Pos: (322 to 332)  SpanInfo: {"start":326,"length":5}
     >A = 1
     >:=> (line 12, col 4) to (line 12, col 9)
 --------------------------------
 13 >    B = 2,
 
-    ~~~~~~~~~~~                                   => Pos: (330 to 340)  SpanInfo: {"start":334,"length":5}
+    ~~~~~~~~~~~                                   => Pos: (333 to 343)  SpanInfo: {"start":337,"length":5}
     >B = 2
     >:=> (line 13, col 4) to (line 13, col 9)
 --------------------------------
 14 >    C = A | B
 
-    ~~~~~~~~~~~~~~                                => Pos: (341 to 354)  SpanInfo: {"start":345,"length":9}
+    ~~~~~~~~~~~~~~                                => Pos: (344 to 357)  SpanInfo: {"start":348,"length":9}
     >C = A | B
     >:=> (line 14, col 4) to (line 14, col 13)
 --------------------------------
 15 >}
 
-    ~~                                            => Pos: (355 to 356)  SpanInfo: {"start":355,"length":1}
+    ~~                                            => Pos: (358 to 359)  SpanInfo: {"start":358,"length":1}
     >}
     >:=> (line 15, col 0) to (line 15, col 1)
 --------------------------------
 16 >const enum E2 {
 
-    ~~~~~~~~~~~~~~~~                              => Pos: (357 to 372)  SpanInfo: {"start":357,"length":41}
+    ~~~~~~~~~~~~~~~~                              => Pos: (360 to 375)  SpanInfo: {"start":360,"length":41}
     >const enum E2 {
     >    A = 1,
     >    B,
@@ -155,23 +155,23 @@
 --------------------------------
 17 >    A = 1,
 
-    ~~~~~~~~~~~                                   => Pos: (373 to 383)  SpanInfo: {"start":377,"length":5}
+    ~~~~~~~~~~~                                   => Pos: (376 to 386)  SpanInfo: {"start":380,"length":5}
     >A = 1
     >:=> (line 17, col 4) to (line 17, col 9)
 --------------------------------
 18 >    B,
 
-    ~~~~~~~                                       => Pos: (384 to 390)  SpanInfo: {"start":388,"length":1}
+    ~~~~~~~                                       => Pos: (387 to 393)  SpanInfo: {"start":391,"length":1}
     >B
     >:=> (line 18, col 4) to (line 18, col 5)
 --------------------------------
 19 >    C
 
-    ~~~~~~                                        => Pos: (391 to 396)  SpanInfo: {"start":395,"length":1}
+    ~~~~~~                                        => Pos: (394 to 399)  SpanInfo: {"start":398,"length":1}
     >C
     >:=> (line 19, col 4) to (line 19, col 5)
 --------------------------------
 20 >}
-    ~                                             => Pos: (397 to 397)  SpanInfo: {"start":397,"length":1}
+    ~                                             => Pos: (400 to 400)  SpanInfo: {"start":400,"length":1}
     >}
     >:=> (line 20, col 0) to (line 20, col 1)

@@ -190,68 +190,71 @@ function g<T>() {
 
     x = "str";
 >x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
+
+    x = "whatever"; // error
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
 }
 
 // https://github.com/microsoft/TypeScript/issues/57827
 
 type StringKeys<T> = Extract<
->StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 68, 1))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
+>StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 69, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 73, 16))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 
   keyof {
     [P in keyof T as T[P] extends string ? P : never]: any;
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 75, 5))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 73, 16))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 73, 16))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 75, 5))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 75, 5))
 
   },
   string
 >;
 
 function test_57827<T>(z: StringKeys<T>) {
->test_57827 : Symbol(test_57827, Decl(keyRemappingKeyofResult.ts, 77, 2))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 79, 20))
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 79, 23))
->StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 68, 1))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 79, 20))
+>test_57827 : Symbol(test_57827, Decl(keyRemappingKeyofResult.ts, 78, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 80, 20))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 80, 23))
+>StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 69, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 80, 20))
 
   const f: string = z;
->f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 80, 7))
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 79, 23))
+>f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 81, 7))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 80, 23))
 
   z = "foo"; // error
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 79, 23))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 80, 23))
 }
 
 type StringKeys2<T> = keyof {
->StringKeys2 : Symbol(StringKeys2, Decl(keyRemappingKeyofResult.ts, 82, 1))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 84, 17))
+>StringKeys2 : Symbol(StringKeys2, Decl(keyRemappingKeyofResult.ts, 83, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 85, 17))
 
   [P in keyof T as T[P] extends string ? P : never]: any;
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 85, 3))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 84, 17))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 84, 17))
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 85, 3))
->P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 85, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 86, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 85, 17))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 85, 17))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 86, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 86, 3))
 
 };
 
 function h<T>(z: StringKeys2<T>) {
->h : Symbol(h, Decl(keyRemappingKeyofResult.ts, 86, 2))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 88, 11))
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 88, 14))
->StringKeys2 : Symbol(StringKeys2, Decl(keyRemappingKeyofResult.ts, 82, 1))
->T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 88, 11))
+>h : Symbol(h, Decl(keyRemappingKeyofResult.ts, 87, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 89, 11))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 89, 14))
+>StringKeys2 : Symbol(StringKeys2, Decl(keyRemappingKeyofResult.ts, 83, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 89, 11))
 
   z = "foo"; // error
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 88, 14))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 89, 14))
 
   const f: string = z; // ok
->f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 90, 7))
->z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 88, 14))
+>f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 91, 7))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 89, 14))
 }
 
 export {};

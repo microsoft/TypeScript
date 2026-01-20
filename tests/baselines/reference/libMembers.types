@@ -57,7 +57,7 @@ String.fromCharCode(12);
 >12 : 12
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

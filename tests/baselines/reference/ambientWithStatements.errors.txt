@@ -5,7 +5,7 @@ ambientWithStatements.ts(25,5): error TS2410: The 'with' statement is not suppor
 
 
 ==== ambientWithStatements.ts (4 errors) ====
-    declare module M {
+    declare namespace M {
         break;
         ~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

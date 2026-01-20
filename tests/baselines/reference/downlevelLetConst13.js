@@ -11,7 +11,7 @@ export const [bar2] = [2];
 export let {a: bar3} = { a: 1 };
 export const {a: bar4} = { a: 1 };
 
-export module M {
+export namespace M {
     export let baz = 100;
     export const baz2 = true;
     export let [bar5] = [1];

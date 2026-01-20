@@ -27,7 +27,7 @@ import iArray = require('./expArray');
 
 var v4: Array<number> = iArray;
 >v4 : Symbol(v4, Decl(consumer.ts, 10, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iArray : Symbol(iArray, Decl(consumer.ts, 7, 27))
 
 import iObject = require('./expObject');

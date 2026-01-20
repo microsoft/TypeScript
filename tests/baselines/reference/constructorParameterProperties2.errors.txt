@@ -13,7 +13,7 @@ constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y'
         constructor(y: number) { } // ok
     }
     
-    var c: C;
+    declare var c: C;
     var r = c.y;
     
     class D {
@@ -23,7 +23,7 @@ constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y'
 !!! error TS2300: Duplicate identifier 'y'.
     }
     
-    var d: D;
+    declare var d: D;
     var r2 = d.y;
     
     class E {
@@ -37,7 +37,7 @@ constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y'
 !!! error TS2687: All declarations of 'y' must have identical modifiers.
     }
     
-    var e: E;
+    declare var e: E;
     var r3 = e.y; // error
     
     class F {
@@ -51,6 +51,6 @@ constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y'
 !!! error TS2687: All declarations of 'y' must have identical modifiers.
     }
     
-    var f: F;
+    declare var f: F;
     var r4 = f.y; // error
     

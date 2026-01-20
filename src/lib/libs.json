@@ -86,6 +86,10 @@
         "esnext.array",
         "esnext.iterator",
         "esnext.promise",
+        "esnext.float16",
+        "esnext.typedarrays",
+        "esnext.error",
+        "esnext.sharedmemory",
         "decorators",
         "decorators.legacy",
         // Default libraries

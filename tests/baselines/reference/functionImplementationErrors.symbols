@@ -38,12 +38,12 @@ function f5(): number {
 >f5 : Symbol(f5, Decl(functionImplementationErrors.ts, 21, 1))
 }
 
-var m;
->m : Symbol(m, Decl(functionImplementationErrors.ts, 27, 3))
+declare var m: any;
+>m : Symbol(m, Decl(functionImplementationErrors.ts, 27, 11))
 
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
->f6 : Symbol(f6, Decl(functionImplementationErrors.ts, 27, 6))
+>f6 : Symbol(f6, Decl(functionImplementationErrors.ts, 27, 19))
 >n : Symbol(n, Decl(functionImplementationErrors.ts, 29, 12))
 >m : Symbol(m, Decl(functionImplementationErrors.ts, 30, 7))
 

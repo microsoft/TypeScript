@@ -42,11 +42,11 @@ class C1 { foo: number; }
 class C2<T> { foo: T; }
 enum E { A }
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 

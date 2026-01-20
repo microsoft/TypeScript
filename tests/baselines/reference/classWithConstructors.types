@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
 
 === classWithConstructors.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : typeof NonGeneric
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -112,7 +112,7 @@ module NonGeneric {
 >   : ^^
 }
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 >         : ^^^^^^^^^^^^^^^
 

@@ -1,6 +1,6 @@
 ﻿//@noImplicitAny: true
 
-declare module D_M {
+declare namespace D_M {
     // No implicit-'any' errors.
     function dm_f1(): void;
 

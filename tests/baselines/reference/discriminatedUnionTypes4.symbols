@@ -1,0 +1,180 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes4.ts] ////
+
+=== discriminatedUnionTypes4.ts ===
+// https://github.com/microsoft/TypeScript/issues/61207
+
+enum AnimalType {
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+
+  cat = "cat",
+>cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+
+  dog = "dog",
+>dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+}
+
+type Animal =
+>Animal : Symbol(Animal, Decl(discriminatedUnionTypes4.ts, 5, 1))
+
+  | {
+      type: `${AnimalType.cat}`;
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+
+      meow: string;
+>meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+    }
+  | {
+      type: `${AnimalType.dog}`;
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 12, 5))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+
+      bark: string;
+>bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+
+    };
+
+function check(p: never) {
+>check : Symbol(check, Decl(discriminatedUnionTypes4.ts, 15, 6))
+>p : Symbol(p, Decl(discriminatedUnionTypes4.ts, 17, 15))
+
+  throw new Error("Error!");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function action1(animal: Animal) {
+>action1 : Symbol(action1, Decl(discriminatedUnionTypes4.ts, 19, 1))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+>Animal : Symbol(Animal, Decl(discriminatedUnionTypes4.ts, 5, 1))
+
+  if (animal.type === AnimalType.cat) {
+>animal.type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+>AnimalType.cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+
+    console.log(animal.meow);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+>meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+
+  } else if (animal.type === AnimalType.dog) {
+>animal.type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 12, 5))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 12, 5))
+>AnimalType.dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+
+    console.log(animal.bark);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+>bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+
+  } else {
+    check(animal);
+>check : Symbol(check, Decl(discriminatedUnionTypes4.ts, 15, 6))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 21, 17))
+  }
+}
+
+function action2(animal: Animal) {
+>action2 : Symbol(action2, Decl(discriminatedUnionTypes4.ts, 29, 1))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 31, 17))
+>Animal : Symbol(Animal, Decl(discriminatedUnionTypes4.ts, 5, 1))
+
+  switch (animal.type) {
+>animal.type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 31, 17))
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+
+    case `${AnimalType.cat}`:
+>AnimalType.cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+
+      console.log(animal.meow);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 31, 17))
+>meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+
+      break;
+    case `${AnimalType.dog}`:
+>AnimalType.dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+
+      console.log(animal.bark);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 31, 17))
+>bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+
+      break;
+    default:
+      check(animal);
+>check : Symbol(check, Decl(discriminatedUnionTypes4.ts, 15, 6))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 31, 17))
+  }
+}
+
+function action3(animal: Animal) {
+>action3 : Symbol(action3, Decl(discriminatedUnionTypes4.ts, 42, 1))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 44, 17))
+>Animal : Symbol(Animal, Decl(discriminatedUnionTypes4.ts, 5, 1))
+
+  switch (animal.type) {
+>animal.type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 44, 17))
+>type : Symbol(type, Decl(discriminatedUnionTypes4.ts, 8, 5), Decl(discriminatedUnionTypes4.ts, 12, 5))
+
+    case AnimalType.cat:
+>AnimalType.cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>cat : Symbol(AnimalType.cat, Decl(discriminatedUnionTypes4.ts, 2, 17))
+
+      console.log(animal.meow);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 44, 17))
+>meow : Symbol(meow, Decl(discriminatedUnionTypes4.ts, 9, 32))
+
+      break;
+    case AnimalType.dog:
+>AnimalType.dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+>AnimalType : Symbol(AnimalType, Decl(discriminatedUnionTypes4.ts, 0, 0))
+>dog : Symbol(AnimalType.dog, Decl(discriminatedUnionTypes4.ts, 3, 14))
+
+      console.log(animal.bark);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>animal.bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 44, 17))
+>bark : Symbol(bark, Decl(discriminatedUnionTypes4.ts, 13, 32))
+
+      break;
+    default:
+      check(animal);
+>check : Symbol(check, Decl(discriminatedUnionTypes4.ts, 15, 6))
+>animal : Symbol(animal, Decl(discriminatedUnionTypes4.ts, 44, 17))
+  }
+}
+

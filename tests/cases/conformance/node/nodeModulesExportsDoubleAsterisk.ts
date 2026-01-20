@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,node20,nodenext
 // @noTypesAndSymbols: true
 // @noEmit: true
 

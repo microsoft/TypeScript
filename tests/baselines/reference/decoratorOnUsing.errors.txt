@@ -1,0 +1,14 @@
+decoratorOnUsing.ts(4,7): error TS1134: Variable declaration expected.
+
+
+==== decoratorOnUsing.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    using 1
+          ~
+!!! error TS1134: Variable declaration expected.
+    
+    @dec
+    using x
+    

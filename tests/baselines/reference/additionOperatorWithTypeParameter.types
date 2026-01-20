@@ -18,31 +18,31 @@ function foo<T, U>(t: T, u: U) {
 >u : U
 >  : ^
 
-    var a: any;
+    let a!: any;
 >a : any
 >  : ^^^
 
-    var b: boolean;
+    let b!: boolean;
 >b : boolean
 >  : ^^^^^^^
 
-    var c: number;
+    let c!: number;
 >c : number
 >  : ^^^^^^
 
-    var d: string;
+    let d!: string;
 >d : string
 >  : ^^^^^^
 
-    var e: Object;
+    let e!: Object;
 >e : Object
 >  : ^^^^^^
 
-    var g: E;
+    let g!: E;
 >g : E
 >  : ^
 
-    var f: void;
+    let f!: void;
 >f : void
 >  : ^^^^
 

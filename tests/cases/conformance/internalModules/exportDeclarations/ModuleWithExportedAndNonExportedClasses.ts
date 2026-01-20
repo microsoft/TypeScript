@@ -1,4 +1,4 @@
-module A {
+namespace A {
     export class A {
         id: number;
         name: string;

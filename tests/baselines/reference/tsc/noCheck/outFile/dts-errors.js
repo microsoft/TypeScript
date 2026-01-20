@@ -16,7 +16,6 @@ export const b = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -43,9 +42,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -104,9 +116,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -139,6 +164,19 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -183,7 +221,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -191,6 +229,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -213,7 +264,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No Change run with checking
 
@@ -221,6 +272,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -242,7 +306,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No Change run with checking
 
@@ -250,6 +314,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -271,7 +348,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -279,6 +356,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -301,7 +391,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Introduce error with noCheck
 
@@ -322,9 +412,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -383,9 +486,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -425,9 +541,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -459,6 +588,19 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -495,7 +637,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No Change run with checking
 
@@ -503,6 +645,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -524,7 +679,7 @@ Program files::
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Add file with error
 
@@ -535,13 +690,18 @@ export const c: number = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in c.ts[90m:1[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 
@@ -618,9 +778,22 @@ Output::
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     2  tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -680,6 +853,19 @@ export const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js]
@@ -724,7 +910,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No Change run with checking
 
@@ -732,13 +918,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in c.ts[90m:1[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 
@@ -771,6 +962,19 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
 
 
 //// [/home/src/workspaces/outFile.js] file written with same contents
@@ -795,7 +999,7 @@ Program files::
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: No Change run with checking
 
@@ -803,13 +1007,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js 
 Output::
-[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in c.ts[90m:1[0m
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 

@@ -169,3 +169,46 @@ function foo1 () {
     }
 }
 
+class foo2 {
+>foo2 : foo2
+>     : ^^^^
+
+    static {
+        this.b  // should error
+>this.b : number
+>       : ^^^^^^
+>this : typeof foo2
+>     : ^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
+        let b: typeof this.b;   // ok
+>b : number
+>  : ^^^^^^
+>this.b : number
+>       : ^^^^^^
+>this : typeof foo2
+>     : ^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
+        if (1) {
+>1 : 1
+>  : ^
+
+            this.b; // should error
+>this.b : number
+>       : ^^^^^^
+>this : typeof foo2
+>     : ^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+        }
+    }
+
+    static b = 1;
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}

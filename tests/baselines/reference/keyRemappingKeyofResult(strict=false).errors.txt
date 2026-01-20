@@ -1,9 +1,11 @@
-keyRemappingKeyofResult.ts(82,3): error TS2322: Type 'string' is not assignable to type 'Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>'.
-keyRemappingKeyofResult.ts(90,3): error TS2322: Type 'string' is not assignable to type 'keyof { [P in keyof T as T[P] extends string ? P : never]: any; }'.
+keyRemappingKeyofResult.ts(69,5): error TS2322: Type 'string' is not assignable to type 'keyof Remapped'.
+  Type '"whatever"' is not assignable to type 'unique symbol | "str" | DistributiveNonIndex<K>'.
+keyRemappingKeyofResult.ts(83,3): error TS2322: Type 'string' is not assignable to type 'Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>'.
+keyRemappingKeyofResult.ts(91,3): error TS2322: Type 'string' is not assignable to type 'keyof { [P in keyof T as T[P] extends string ? P : never]: any; }'.
   Type 'string' is not assignable to type 'T[P] extends string ? P : never'.
 
 
-==== keyRemappingKeyofResult.ts (2 errors) ====
+==== keyRemappingKeyofResult.ts (3 errors) ====
     const sym = Symbol("")
     type Orig = { [k: string]: any, str: any, [sym]: any }
     
@@ -72,6 +74,10 @@ keyRemappingKeyofResult.ts(90,3): error TS2322: Type 'string' is not assignable 
         let x: Oops;
         x = sym;
         x = "str";
+        x = "whatever"; // error
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'keyof Remapped'.
+!!! error TS2322:   Type '"whatever"' is not assignable to type 'unique symbol | "str" | DistributiveNonIndex<K>'.
     }
     
     // https://github.com/microsoft/TypeScript/issues/57827

@@ -11,7 +11,7 @@ constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protecte
         constructor(private x: string, protected z: string) { }
     }
     
-    var c: C;
+    declare var c: C;
     var r = c.y;
     var r2 = c.x; // error
                ~
@@ -25,7 +25,7 @@ constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protecte
         constructor(a: T, private x: T, protected z: T) { }
     }
     
-    var d: D<string>;
+    declare var d: D<string>;
     var r = d.y;
     var r2 = d.x; // error
                ~

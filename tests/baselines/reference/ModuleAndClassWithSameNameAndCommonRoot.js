@@ -1,14 +1,14 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndClassWithSameNameAndCommonRoot.ts] ////
 
 //// [module.ts]
-module X.Y {
-    export module Point {
+namespace X.Y {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }
 
 //// [classPoint.ts]
-module X.Y {
+namespace X.Y {
     // duplicate identifier
     export class Point {
         constructor(x: number, y: number) {
@@ -21,7 +21,7 @@ module X.Y {
 }
 
 //// [simple.ts]
-module A {
+namespace A {
     export var Instance = new A();
 }
 

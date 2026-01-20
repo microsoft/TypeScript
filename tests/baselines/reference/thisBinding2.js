@@ -2,7 +2,7 @@
 
 //// [thisBinding2.ts]
 class C {
- x: number;
+ x!: number;
     constructor() {
         this.x = (() => {
    var x = 1;

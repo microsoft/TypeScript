@@ -7,8 +7,8 @@
 
 // @filename: extendedEscapesForAstralsInVarsAndClasses.ts
 // U+102A7 CARIAN LETTER A2
-var 𐊧: string;
-var \u{102A7}: string;
+declare var 𐊧: string;
+declare var \u{102A7}: string;
 
 if (Math.random()) {
     𐊧 = "hello";

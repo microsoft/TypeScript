@@ -1,8 +1,9 @@
-module A {
-    export declare module BB {
+// @strict: false
+namespace A {
+    export declare namespace BB {
         export var Elephant;
     }
-    export module B {
+    export namespace B {
         export class C {
             x = BB.Elephant.X;
         }

@@ -1,6 +1,8 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
 
 
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (1 errors) ====
     import React = require('react')
     

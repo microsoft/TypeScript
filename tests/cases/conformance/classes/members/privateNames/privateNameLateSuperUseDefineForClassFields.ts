@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext, es2022
 // @useDefineForClassFields: true
 class B {}

@@ -1,5 +1,5 @@
 // @target: es5
-module M {
+namespace M {
     var obj = {
         [this.bar]: 0
     }

@@ -17,7 +17,7 @@ var c = new C(1);
 var d = new D(1); // error
 var e = new E(1); // error
 
-module Generic {
+namespace Generic {
     class C<T> {
         public constructor(public x: T) { }
     }

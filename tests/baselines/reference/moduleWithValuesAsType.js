@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleWithValuesAsType.ts] ////
 
 //// [moduleWithValuesAsType.ts]
-module A {
+namespace A {
     var b = 1;
 }
 

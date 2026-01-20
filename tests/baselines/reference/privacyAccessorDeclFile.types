@@ -555,7 +555,7 @@ class privateClassWithPrivateModuleSetAccessorTypes {
     }
 }
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : typeof publicModule
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -1113,7 +1113,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : typeof privateModule
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -1777,7 +1777,7 @@ class publicClassInGlobalWithWithPublicSetAccessorTypes {
     }
 }
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1791,7 +1791,7 @@ module publicModuleInGlobal {
 >            : ^^^^^^^^^^^
     }
 
-    module privateModule {
+    namespace privateModule {
 >privateModule : typeof privateModule
 >              : ^^^^^^^^^^^^^^^^^^^^
 

@@ -1,6 +1,7 @@
+// @strict: false
 // @module: commonjs
 // @Filename: exportEqualMemberMissing_0.ts
-module server {
+namespace server {
     export interface connectModule {
         (res, req, next): void;
     }
@@ -8,7 +9,7 @@ module server {
         use: (mod: connectModule) => connectExport;
     }
 }
-var server: {
+declare var server: {
     (): server.connectExport;
     foo: Date;
 };

@@ -3,7 +3,7 @@
 === invalidModuleWithStatementsOfEveryKind.ts ===
 // All of these should be an error
 
-module Y {
+namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
@@ -25,7 +25,7 @@ module Y {
     }
 }
 
-module Y2 {
+namespace Y2 {
 >Y2 : typeof Y2
 >   : ^^^^^^^^^
 
@@ -48,11 +48,11 @@ module Y2 {
 >   : ^^^^^^
 }
 
-module Y3 {
+namespace Y3 {
 >Y3 : typeof Y3
 >   : ^^^^^^^^^
 
-    public module Module {
+    public namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 
@@ -64,7 +64,7 @@ module Y3 {
     }
 }
 
-module Y4 {
+namespace Y4 {
 >Y4 : typeof Y4
 >   : ^^^^^^^^^
 
@@ -77,7 +77,7 @@ module Y4 {
 >    : ^^^^^^^^^
 }
 
-module YY {
+namespace YY {
 >YY : typeof YY
 >   : ^^^^^^^^^
 
@@ -99,7 +99,7 @@ module YY {
     }
 }
 
-module YY2 {
+namespace YY2 {
 >YY2 : typeof YY2
 >    : ^^^^^^^^^^
 
@@ -122,11 +122,11 @@ module YY2 {
 >   : ^^^^^^
 }
 
-module YY3 {
+namespace YY3 {
 >YY3 : typeof YY3
 >    : ^^^^^^^^^^
 
-    private module Module {
+    private namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 
@@ -138,7 +138,7 @@ module YY3 {
     }
 }
 
-module YY4 {
+namespace YY4 {
 >YY4 : typeof YY4
 >    : ^^^^^^^^^^
 
@@ -152,7 +152,7 @@ module YY4 {
 }
 
 
-module YYY {
+namespace YYY {
 >YYY : typeof YYY
 >    : ^^^^^^^^^^
 
@@ -174,7 +174,7 @@ module YYY {
     }
 }
 
-module YYY2 {
+namespace YYY2 {
 >YYY2 : typeof YYY2
 >     : ^^^^^^^^^^^
 
@@ -197,11 +197,11 @@ module YYY2 {
 >   : ^^^^^^
 }
 
-module YYY3 {
+namespace YYY3 {
 >YYY3 : typeof YYY3
 >     : ^^^^^^^^^^^
 
-    static module Module {
+    static namespace Module {
 >Module : typeof Module
 >       : ^^^^^^^^^^^^^
 
@@ -213,7 +213,7 @@ module YYY3 {
     }
 }
 
-module YYY4 {
+namespace YYY4 {
 >YYY4 : typeof YYY4
 >     : ^^^^^^^^^^^
 

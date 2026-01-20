@@ -1,6 +1,6 @@
 // @allowJs: true
 // @checkJs: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @declaration: true
 // @emitDeclarationOnly: true
 // @filename: rectangle.js

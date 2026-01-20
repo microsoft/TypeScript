@@ -1,3 +1,4 @@
+// @strict: false
 // Call signatures without a return type annotation and function body return 'any'
 
 function foo(x) { }

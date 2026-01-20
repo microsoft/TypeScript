@@ -1,4 +1,4 @@
-module m1 {
+namespace m1 {
     export interface m1_i_public {
     }
 

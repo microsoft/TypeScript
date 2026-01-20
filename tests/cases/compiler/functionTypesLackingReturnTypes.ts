@@ -1,3 +1,4 @@
+// @strict: false
 
 // Error (no '=>')
 function f(x: ()) {

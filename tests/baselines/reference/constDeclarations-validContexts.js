@@ -85,7 +85,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     const c22 = 0;
 
     {

@@ -1,6 +1,6 @@
 ﻿//@noImplicitAny: true
 
-module M {
+namespace M {
     // No implicit-'any' errors.
     function m_f1(): void { }
 

@@ -1,3 +1,4 @@
+// @strict: false
 class K {
     private priv;
     protected prot;

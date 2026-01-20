@@ -1,3 +1,4 @@
+// @strict: false
 //@module: amd
 // @declaration: true
 // @Filename: withImportDecl_0.ts
@@ -32,7 +33,7 @@ function simpleFunction() {
     };
 }
 
-module m1 {
+namespace m1 {
     export function foo() {
         return "Hello";
     }

@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/checkingObjectWithThisInNamePositionNoCrash.ts] ////
+
+=== checkingObjectWithThisInNamePositionNoCrash.ts ===
+export const thing = {
+>thing : { doit(): { [x: number]: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    doit() {        return {            [this.a]: "", // should refer to the outer object with the doit method, notably not present        }    }} : { doit(): { [x: number]: string; }; }
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    doit() {
+>doit : () => { [x: number]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return {
+>{            [this.a]: "", // should refer to the outer object with the doit method, notably not present        } : { [x: number]: string; }
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+            [this.a]: "", // should refer to the outer object with the doit method, notably not present
+>[this.a] : string
+>         : ^^^^^^
+>this.a : any
+>       : ^^^
+>this : { doit(): { [x: number]: string; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>"" : ""
+>   : ^^
+        }
+    }
+}

@@ -4,7 +4,7 @@
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 
-module NonGenericParameter {
+namespace NonGenericParameter {
     var a: {
         new(x: boolean): boolean;
         new(x: string): string;
@@ -19,7 +19,7 @@ module NonGenericParameter {
     var r2 = foo4(b);
 }
 
-module GenericParameter {
+namespace GenericParameter {
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
         return cb;
     }

@@ -1,12 +1,13 @@
-module superContain {
-    export module contain {
-        export module my.buz {
-            export module data {
+// @strict: false
+namespace superContain {
+    export namespace contain {
+        export namespace my.buz {
+            export namespace data {
                 export function foo() { }
             }
         }
-        export module my.buz {
-            export module data {
+        export namespace my.buz {
+            export namespace data {
                 export function bar(contain, my, buz, data) {
                     foo();
                 }

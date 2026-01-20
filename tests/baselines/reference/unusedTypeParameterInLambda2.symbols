@@ -11,7 +11,7 @@ class A {
 >T : Symbol(T, Decl(unusedTypeParameterInLambda2.ts, 2, 16))
 >X : Symbol(X, Decl(unusedTypeParameterInLambda2.ts, 2, 18))
 
-            var a: X;
+            var a!: X;
 >a : Symbol(a, Decl(unusedTypeParameterInLambda2.ts, 3, 15))
 >X : Symbol(X, Decl(unusedTypeParameterInLambda2.ts, 2, 18))
 

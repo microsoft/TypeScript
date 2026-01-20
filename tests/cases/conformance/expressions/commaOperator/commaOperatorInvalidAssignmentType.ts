@@ -1,12 +1,12 @@
 // @allowUnreachableCode: true
 
-var BOOLEAN: boolean;
-var NUMBER: number;
-var STRING: string;
+declare var BOOLEAN: boolean;
+declare var NUMBER: number;
+declare var STRING: string;
 
-var resultIsBoolean: boolean
-var resultIsNumber: number
-var resultIsString: string
+declare var resultIsBoolean: boolean
+declare var resultIsNumber: number
+declare var resultIsString: string
 
 //Expect errors when the results type is different form the second operand
 resultIsBoolean = (BOOLEAN, STRING);

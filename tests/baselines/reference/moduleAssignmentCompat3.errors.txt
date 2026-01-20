@@ -3,10 +3,10 @@ moduleAssignmentCompat3.ts(9,8): error TS2709: Cannot use namespace 'B' as a typ
 
 
 ==== moduleAssignmentCompat3.ts (2 errors) ====
-    module A {
+    namespace A {
         export var x = 1;
     }
-    module B {
+    namespace B {
         export var x = "";
     }
     

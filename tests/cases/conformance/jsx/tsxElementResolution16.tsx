@@ -1,7 +1,7 @@
 //@filename: file.tsx
 //@jsx: preserve
 //@noImplicitAny: true
-declare module JSX {
+declare namespace JSX {
 }
 
 interface Obj1 {

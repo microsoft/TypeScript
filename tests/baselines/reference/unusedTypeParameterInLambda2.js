@@ -4,7 +4,7 @@
 class A {
     public f1() {
         return <T, X>() => {
-            var a: X;
+            var a!: X;
             a;
         }
     }

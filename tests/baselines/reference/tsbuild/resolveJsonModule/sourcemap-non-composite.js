@@ -29,7 +29,6 @@ export default hello.hello
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -53,9 +52,21 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-TSFILE: /home/src/workspaces/solution/project/dist/hello.json
-TSFILE: /home/src/workspaces/solution/project/dist/index.js
-TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -65,17 +76,20 @@ project/src/hello.json
 project/src/index.ts
   Part of 'files' list in tsconfig.json
 
+Found 2 errors.
 
-//// [/home/src/workspaces/solution/project/dist/hello.json]
+
+
+//// [/home/src/workspaces/solution/project/dist/src/hello.json]
 {
     "hello": "world"
 }
 
 
-//// [/home/src/workspaces/solution/project/dist/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
-//// [/home/src/workspaces/solution/project/dist/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -86,7 +100,7 @@ exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
-{"root":["../src/index.ts","../src/hello.json"],"version":"FakeTSVersion"}
+{"root":["../src/index.ts","../src/hello.json"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -94,12 +108,13 @@ exports.default = hello_json_1.default.hello;
     "../src/index.ts",
     "../src/hello.json"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 74
+  "size": 88
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -110,9 +125,42 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/hello.json'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because buildinfo file 'project/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
+
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+project/src/hello.json
+  Imported via "./hello.json" from file 'project/src/index.ts'
+  Part of 'files' list in tsconfig.json
+project/src/index.ts
+  Part of 'files' list in tsconfig.json
+
+Found 2 errors.
 
 
 
+//// [/home/src/workspaces/solution/project/dist/src/hello.json] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/src/index.js] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

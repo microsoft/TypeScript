@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitComputedNameWithQuestionToken.ts] ////
+
+=== declarationEmitComputedNameWithQuestionToken.ts ===
+declare var something: string;
+>something : string
+>          : ^^^^^^
+
+export const dataSomething = `data-${something}` as const;
+>dataSomething : `data-${string}`
+>              : ^^^^^^^^^^^^^^^^
+>`data-${something}` as const : `data-${string}`
+>                             : ^^^^^^^^^^^^^^^^
+>`data-${something}` : `data-${string}`
+>                    : ^^^^^^^^^^^^^^^^
+>something : string
+>          : ^^^^^^
+
+export class WithData {
+>WithData : WithData
+>         : ^^^^^^^^
+
+    [dataSomething]?() {
+>[dataSomething] : () => string
+>                : ^^^^^^^^^^^^
+>dataSomething : `data-${string}`
+>              : ^^^^^^^^^^^^^^^^
+
+        return "something";
+>"something" : "something"
+>            : ^^^^^^^^^^^
+    }
+}
+
+export const a = (new WithData())["ahahahaahah"]!();
+>a : string
+>  : ^^^^^^
+>(new WithData())["ahahahaahah"]!() : string
+>                                   : ^^^^^^
+>(new WithData())["ahahahaahah"]! : () => string
+>                                 : ^^^^^^^^^^^^
+>(new WithData())["ahahahaahah"] : () => string
+>                                : ^^^^^^^^^^^^
+>(new WithData()) : WithData
+>                 : ^^^^^^^^
+>new WithData() : WithData
+>               : ^^^^^^^^
+>WithData : typeof WithData
+>         : ^^^^^^^^^^^^^^^
+>"ahahahaahah" : "ahahahaahah"
+>              : ^^^^^^^^^^^^^
+

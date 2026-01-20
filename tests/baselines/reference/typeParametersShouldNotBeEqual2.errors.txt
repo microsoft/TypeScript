@@ -14,7 +14,7 @@ typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assi
 
 ==== typeParametersShouldNotBeEqual2.ts (6 errors) ====
     function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
-        var zz: Object;
+        var zz!: Object;
         x = x;  // Ok
         x = y;  // Ok
         ~

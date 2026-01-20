@@ -10,7 +10,6 @@ var y: number;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -125,10 +124,12 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -157,12 +158,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+
+[7m14[0m     readonly fullscreen: boolean;
+[7m  [0m [91m             ~~~~~~~~~~[0m
+
 [96ma.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m4[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -182,9 +188,11 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined

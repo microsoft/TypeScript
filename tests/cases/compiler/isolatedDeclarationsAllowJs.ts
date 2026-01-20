@@ -1,3 +1,4 @@
+// @strict: false
 // @isolatedDeclarations: true
 // @allowJS: true
 // @declaration: true

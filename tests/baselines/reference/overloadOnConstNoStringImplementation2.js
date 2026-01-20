@@ -16,7 +16,7 @@ class C implements I {
     }
 }
 
-var c: C;
+declare var c: C;
 c.x1(1, (x: 'hi') => { return 1; } );
 c.x1(1, (x: 'bye') => { return 1; } ); 
 c.x1(1, (x: string) => { return 1; } );
@@ -35,7 +35,6 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var c;
 c.x1(1, function (x) { return 1; });
 c.x1(1, function (x) { return 1; });
 c.x1(1, function (x) { return 1; });

@@ -2,7 +2,7 @@
 //@declaration: true
 
 declare module "test" {
-    module A {
+    namespace A {
         class C {
         }
     }

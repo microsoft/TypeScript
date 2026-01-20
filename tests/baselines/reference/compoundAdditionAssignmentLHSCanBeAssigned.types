@@ -9,15 +9,15 @@ enum E { a, b }
 >b : E.b
 >  : ^^^
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
-var b: void;
+declare var b: void;
 >b : void
 >  : ^^^^
 
-var x1: any;
+declare var x1: any;
 >x1 : any
 >   : ^^^
 
@@ -95,7 +95,7 @@ x1 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x2: string;
+declare var x2: string;
 >x2 : string
 >   : ^^^^^^
 
@@ -173,7 +173,7 @@ x2 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x3: number;
+declare var x3: number;
 >x3 : number
 >   : ^^^^^^
 
@@ -219,7 +219,7 @@ x3 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x4: E;
+declare var x4: E;
 >x4 : E
 >   : ^
 
@@ -265,7 +265,7 @@ x4 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x5: boolean;
+declare var x5: boolean;
 >x5 : boolean
 >   : ^^^^^^^
 
@@ -277,7 +277,7 @@ x5 += a;
 >a : any
 >  : ^^^
 
-var x6: {};
+declare var x6: {};
 >x6 : {}
 >   : ^^
 
@@ -297,7 +297,7 @@ x6 += '';
 >'' : ""
 >   : ^^
 
-var x7: void;
+declare var x7: void;
 >x7 : void
 >   : ^^^^
 

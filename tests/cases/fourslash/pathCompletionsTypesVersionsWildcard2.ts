@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: commonjs
+// @resolveJsonModule: false
 
 // @Filename: /node_modules/foo/package.json
 //// {

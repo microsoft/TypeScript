@@ -425,11 +425,11 @@ class privateClassWithPrivateModuleSetAccessorTypes {
     }
 }
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyAccessorDeclFile_externalModule.ts, 200, 1))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
     }
 
     export class publicClass {
@@ -440,25 +440,25 @@ export module publicModule {
 
         static get myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 208, 61))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 211, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         get myPublicMethod(): privateClass { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 214, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 217, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
@@ -466,25 +466,25 @@ export module publicModule {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 220, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 223, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         get myPublicMethod1() { // Error
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 226, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 229, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
     }
 
@@ -546,25 +546,25 @@ export module publicModule {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 262, 55))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 265, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 268, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 271, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
 
             return null;
         }
@@ -572,25 +572,25 @@ export module publicModule {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 274, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 277, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         get myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 280, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 283, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
     }
 
@@ -653,22 +653,22 @@ export module publicModule {
         static set myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 316, 61))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 317, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 318, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 319, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         set myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 320, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 321, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 322, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 323, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
     }
 
@@ -703,22 +703,22 @@ export module publicModule {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 338, 55))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 339, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 340, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 341, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 342, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 343, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 344, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 345, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 28))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 202, 31))
         }
     }
 
@@ -852,11 +852,11 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyAccessorDeclFile_externalModule.ts, 403, 1))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
     }
 
     export class publicClass {
@@ -867,25 +867,25 @@ module privateModule {
 
         static get myPublicStaticMethod(): privateClass { 
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 411, 61))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 414, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         get myPublicMethod(): privateClass { 
 >myPublicMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 417, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 420, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
@@ -893,25 +893,25 @@ module privateModule {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 423, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 426, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         get myPublicMethod1() { 
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 429, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 432, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
     }
 
@@ -973,25 +973,25 @@ module privateModule {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 465, 55))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 468, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 471, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 474, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
 
             return null;
         }
@@ -999,25 +999,25 @@ module privateModule {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 477, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 480, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         get myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 483, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_externalModule.ts, 486, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
     }
 
@@ -1080,22 +1080,22 @@ module privateModule {
         static set myPublicStaticMethod(param: privateClass) { 
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 519, 61))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 520, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 521, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 522, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         set myPublicMethod(param: privateClass) { 
 >myPublicMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 523, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 524, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 525, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 526, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
     }
 
@@ -1130,22 +1130,22 @@ module privateModule {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 541, 55))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 542, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 543, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 544, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 545, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 546, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_externalModule.ts, 547, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_externalModule.ts, 548, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 22))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_externalModule.ts, 405, 25))
         }
     }
 
@@ -1362,22 +1362,22 @@ class publicClassInGlobalWithWithPublicSetAccessorTypes {
     }
 }
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyAccessorDeclFile_GlobalFile.ts, 39, 1))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
     }
 
     export class publicClass {
 >publicClass : Symbol(publicClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 43, 5))
     }
 
-    module privateModule {
+    namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyAccessorDeclFile_GlobalFile.ts, 46, 5))
 
         class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
         }
 
         export class publicClass {
@@ -1388,25 +1388,25 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 54, 65))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 57, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             get myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 60, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 63, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
@@ -1414,25 +1414,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 66, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 69, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             get myPublicMethod1() {
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 72, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 75, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
         }
 
@@ -1494,25 +1494,25 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 108, 59))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 111, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             get myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 114, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
             private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 117, 13))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
 
                 return null;
             }
@@ -1520,25 +1520,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 120, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 123, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             get myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 126, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 129, 13))
 
                 return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
         }
 
@@ -1601,22 +1601,22 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 162, 65))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 163, 44))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 164, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 165, 53))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             set myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 166, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 167, 31))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 168, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 169, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
         }
 
@@ -1651,22 +1651,22 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 184, 59))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 185, 44))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 186, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 187, 53))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             set myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 188, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 189, 31))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
             private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 190, 13))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 191, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 26))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 48, 29))
             }
         }
 
@@ -1805,25 +1805,25 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 251, 61))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 254, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         get myPublicMethod(): privateClass { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 257, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 260, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
@@ -1831,25 +1831,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 263, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 266, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         get myPublicMethod1() { // Error
 >myPublicMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 269, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 272, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
     }
 
@@ -1911,25 +1911,25 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 305, 55))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 308, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 311, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 314, 9))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
 
             return null;
         }
@@ -1937,25 +1937,25 @@ module publicModuleInGlobal {
 >myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 317, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private static get myPrivateStaticMethod1() {
 >myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 320, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         get myPublicMethod1() {
 >myPublicMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 323, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private get myPrivateMethod1() {
 >myPrivateMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyAccessorDeclFile_GlobalFile.ts, 326, 9))
 
             return new privateClass();
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
     }
 
@@ -2018,22 +2018,22 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 359, 61))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 360, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 361, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 362, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         set myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 363, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 364, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 365, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 366, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
     }
 
@@ -2068,22 +2068,22 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 381, 55))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 382, 40))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateStaticMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 383, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 384, 49))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPublicMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 385, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 386, 27))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateSetAccessorTypes.myPrivateMethod, Decl(privacyAccessorDeclFile_GlobalFile.ts, 387, 9))
 >param : Symbol(param, Decl(privacyAccessorDeclFile_GlobalFile.ts, 388, 36))
->privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 29))
+>privateClass : Symbol(privateClass, Decl(privacyAccessorDeclFile_GlobalFile.ts, 41, 32))
         }
     }
 

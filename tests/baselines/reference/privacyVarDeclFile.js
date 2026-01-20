@@ -81,7 +81,7 @@ class privateClassWithPrivateModulePropertyTypes {
 var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 
-export module publicModule {
+export namespace publicModule {
     class privateClass {
     }
 
@@ -163,7 +163,7 @@ export module publicModule {
     declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 }
 
-module privateModule {
+namespace privateModule {
     class privateClass {
     }
 
@@ -260,14 +260,14 @@ class publicClassWithWithPublicPropertyTypesInGlobal {
 var publicVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
 declare var publicAmbientVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     class privateClass {
     }
 
     export class publicClass {
     }
 
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
 

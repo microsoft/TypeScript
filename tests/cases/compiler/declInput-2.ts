@@ -1,5 +1,6 @@
+// @strict: false
 // @declaration: true
-module M {
+namespace M {
     class C { }
     export class E {}
     export interface I1 {}

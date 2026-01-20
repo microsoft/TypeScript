@@ -1,3 +1,4 @@
+// @strict: false
 class Foo { }
 declare function as(...args: any[]);
 

@@ -2,6 +2,6 @@ namespace Foo {
   export default foo;
 }
 
-module Bar {
+namespace Bar {
   export default bar;
 }

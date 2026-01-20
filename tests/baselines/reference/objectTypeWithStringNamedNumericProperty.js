@@ -16,7 +16,7 @@ class C {
     "-1": Date;
 }
 
-var c: C;
+declare var c: C;
 var r1 = c['0.1'];
 var r2 = c['.1'];
 var r3 = c['1'];
@@ -47,7 +47,7 @@ interface I {
     "-1": Date;
 }
 
-var i: I;
+declare var i: I;
 var r1 = i['0.1'];
 var r2 = i['.1'];
 var r3 = i['1'];
@@ -67,7 +67,7 @@ var r11 = i[-0x1]
 var r12 = i[01]
 var r13 = i[-01]
 
-var a: {
+declare var a: {
     "0.1": void;
     ".1": Object;
     "1": number;
@@ -137,7 +137,6 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var c;
 var r1 = c['0.1'];
 var r2 = c['.1'];
 var r3 = c['1'];
@@ -156,7 +155,6 @@ var r10 = i[0x1];
 var r11 = i[-0x1];
 var r12 = i[1];
 var r13 = i[-1];
-var i;
 var r1 = i['0.1'];
 var r2 = i['.1'];
 var r3 = i['1'];
@@ -175,7 +173,6 @@ var r10 = i[0x1];
 var r11 = i[-0x1];
 var r12 = i[1];
 var r13 = i[-1];
-var a;
 var r1 = a['0.1'];
 var r2 = a['.1'];
 var r3 = a['1'];

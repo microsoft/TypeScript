@@ -20,9 +20,9 @@ genericCallWithFunctionTypedArguments2.ts(40,18): error TS2345: Argument of type
     interface I2<T> {
         new (x: T): T;
     }
-    var i: I;
-    var i2: I2<string>;
-    var a: {
+    declare var i: I;
+    declare var i2: I2<string>;
+    declare var a: {
         new <T>(x: T): T;
     }
     

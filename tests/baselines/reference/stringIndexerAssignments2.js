@@ -3,21 +3,21 @@
 //// [stringIndexerAssignments2.ts]
 class C1 {
     [index: string]: string
-    one: string;
+    one!: string;
 }
 
 class C2 {
-    one: string;
+    one!: string;
 }
 
 class C3 {
-    one: number;
-    two: string;
+    one!: number;
+    two!: string;
 }
 
-var x: C1;
-var a: C2;
-var b: C3;
+declare var x: C1;
+declare var a: C2;
+declare var b: C3;
 
 x = a;
 x = b;
@@ -38,8 +38,5 @@ var C3 = /** @class */ (function () {
     }
     return C3;
 }());
-var x;
-var a;
-var b;
 x = a;
 x = b;

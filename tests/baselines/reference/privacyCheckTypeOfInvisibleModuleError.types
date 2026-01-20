@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts] ////
 
 === privacyCheckTypeOfInvisibleModuleError.ts ===
-module Outer {
+namespace Outer {
 >Outer : typeof Outer
 >      : ^^^^^^^^^^^^
 
-    module Inner {
+    namespace Inner {
 >Inner : typeof Inner
 >      : ^^^^^^^^^^^^
 

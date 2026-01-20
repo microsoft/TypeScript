@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/classes/mixinAccessors2.ts] ////
+
+=== mixinAccessors2.ts ===
+function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
+>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>      : ^ ^^^^^^^^^                             ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+>superclass : T
+>           : ^
+
+  return class extends superclass {
+>class extends superclass {    accessor name = "";  } : { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>                                                     : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>superclass : {}
+>           : ^^
+
+    accessor name = "";
+>name : string
+>     : ^^^^^^
+>"" : ""
+>   : ^^
+
+  };
+}
+
+class BaseClass {
+>BaseClass : BaseClass
+>          : ^^^^^^^^^
+
+  accessor name = "";
+>name : string
+>     : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+class MyClass extends mixin(BaseClass) {
+>MyClass : MyClass
+>        : ^^^^^^^
+>mixin(BaseClass) : mixin<typeof BaseClass>.(Anonymous class) & BaseClass
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
+>      : ^ ^^^^^^^^^                             ^^          ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BaseClass : typeof BaseClass
+>          : ^^^^^^^^^^^^^^^^
+
+  accessor name = "";
+>name : string
+>     : ^^^^^^
+>"" : ""
+>   : ^^
+}
+

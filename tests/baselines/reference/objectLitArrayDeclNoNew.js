@@ -3,7 +3,7 @@
 //// [objectLitArrayDeclNoNew.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
     export interface IState {
     }
 

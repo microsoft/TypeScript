@@ -8,7 +8,7 @@ export class Bar {
 
     constructor(private x?: Array | undefined) {}
 >x : Symbol(Bar.x, Decl(isolatedDeclarationsAddUndefined2.ts, 3, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 export class Bar2 {
@@ -16,7 +16,7 @@ export class Bar2 {
 
     constructor(private x?: Array) {}
 >x : Symbol(Bar2.x, Decl(isolatedDeclarationsAddUndefined2.ts, 7, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 export class Bar3 {
@@ -24,7 +24,7 @@ export class Bar3 {
 
     constructor(private x: Array | undefined) {}
 >x : Symbol(Bar3.x, Decl(isolatedDeclarationsAddUndefined2.ts, 11, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 export class Bar4 {
@@ -32,13 +32,13 @@ export class Bar4 {
 
     constructor(private x: Array) {}
 >x : Symbol(Bar4.x, Decl(isolatedDeclarationsAddUndefined2.ts, 15, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 export function test1(x?: Array | undefined): void {}
 >test1 : Symbol(test1, Decl(isolatedDeclarationsAddUndefined2.ts, 16, 1))
 >x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 18, 22))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export function test2(x?: Unresolved | undefined): void {}
 >test2 : Symbol(test2, Decl(isolatedDeclarationsAddUndefined2.ts, 18, 53))

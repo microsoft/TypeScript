@@ -1,3 +1,4 @@
+// @strict: false
 // https://github.com/Microsoft/TypeScript/issues/19799
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true

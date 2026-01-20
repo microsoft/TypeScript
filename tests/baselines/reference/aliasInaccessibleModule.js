@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/aliasInaccessibleModule.ts] ////
 
 //// [aliasInaccessibleModule.ts]
-module M {
-    module N {
+namespace M {
+    namespace N {
     }
     export import X = N;
 }

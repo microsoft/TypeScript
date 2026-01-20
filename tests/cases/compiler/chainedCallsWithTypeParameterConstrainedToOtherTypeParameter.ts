@@ -1,3 +1,4 @@
+// @strict: false
 class Chain<T extends A> {
     constructor(public value: T) { }
     then<S extends T>(cb: (x: T) => S): Chain<S> {

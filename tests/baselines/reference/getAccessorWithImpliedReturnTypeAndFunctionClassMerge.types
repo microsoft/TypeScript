@@ -13,7 +13,7 @@ declare function _<T>(value: T): _<T>;
 >value : T
 >      : ^
 
-declare module _ {
+declare namespace _ {
 >_ : typeof _
 >  : ^^^^^^^^
 
@@ -51,7 +51,7 @@ declare class _<T> {
 >context : any
 }
 
-module MyModule { 
+namespace MyModule { 
 >MyModule : typeof MyModule
 >         : ^^^^^^^^^^^^^^^
 

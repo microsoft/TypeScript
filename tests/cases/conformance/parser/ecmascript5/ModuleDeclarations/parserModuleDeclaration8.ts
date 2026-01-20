@@ -1,2 +1,2 @@
-module a.number {
+namespace a.number {
 }

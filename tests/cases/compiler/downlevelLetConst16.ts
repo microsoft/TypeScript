@@ -1,3 +1,4 @@
+// @strict: false
 // @target:es5
 // @allowUnreachableCode: true
 
@@ -101,7 +102,7 @@ function bar2() {
     use(x);
 }
 
-module M1 {
+namespace M1 {
     let x = 1;
     use(x);
     let [y] = [1];
@@ -110,7 +111,7 @@ module M1 {
     use(z);
 }
 
-module M2 {
+namespace M2 {
     {
         let x = 1;
         use(x);
@@ -122,7 +123,7 @@ module M2 {
     use(x);
 }
 
-module M3 {
+namespace M3 {
     const x = 1;
     use(x);
     const [y] = [1];
@@ -132,7 +133,7 @@ module M3 {
 
 }
 
-module M4 {
+namespace M4 {
     {
         const x = 1;
         use(x);

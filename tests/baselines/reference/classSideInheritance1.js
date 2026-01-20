@@ -10,8 +10,8 @@ class A {
  
 class C2 extends A {}
 
-var a: A;
-var c: C2;
+declare var a: A;
+declare var c: C2;
 a.bar(); // static off an instance - should be an error
 c.bar(); // static off an instance - should be an error
 A.bar(); // valid
@@ -49,8 +49,6 @@ var C2 = /** @class */ (function (_super) {
     }
     return C2;
 }(A));
-var a;
-var c;
 a.bar(); // static off an instance - should be an error
 c.bar(); // static off an instance - should be an error
 A.bar(); // valid

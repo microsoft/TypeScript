@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveBaseCheck2.ts] ////
 
 === recursiveBaseCheck2.ts ===
-declare module Box2D.Collision.Shapes {
+declare namespace Box2D.Collision.Shapes {
 >Box2D : typeof Box2D
 >      : ^^^^^^^^^^^^
 >Collision : typeof Collision
@@ -34,7 +34,7 @@ declare module Box2D.Collision.Shapes {
 >              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
-declare module Box2D.Dynamics {
+declare namespace Box2D.Dynamics {
 >Box2D : typeof Box2D
 >      : ^^^^^^^^^^^^
 >Dynamics : typeof Dynamics

@@ -1,5 +1,4 @@
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: main.ts
 import {Row} from '.'
 Row();

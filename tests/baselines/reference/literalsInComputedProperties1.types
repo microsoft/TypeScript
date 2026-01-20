@@ -113,7 +113,7 @@ interface A {
 >    : ^^^
 }
 
-let y:A;
+declare let y:A;
 >y : A
 >  : ^
 
@@ -177,11 +177,11 @@ class C {
 >C : C
 >  : ^
 
-    1:number;
+    1!:number;
 >1 : number
 >  : ^^^^^^
 
-    [2]:number;
+    [2]!:number;
 >[2] : number
 >    : ^^^^^^
 >2 : 2
@@ -191,14 +191,14 @@ class C {
 >"3" : number
 >    : ^^^^^^
 
-    ["4"]:number;
+    ["4"]!:number;
 >["4"] : number
 >      : ^^^^^^
 >"4" : "4"
 >    : ^^^
 }
 
-let z:C;
+declare let z:C;
 >z : C
 >  : ^
 

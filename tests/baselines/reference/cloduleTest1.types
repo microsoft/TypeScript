@@ -14,7 +14,7 @@
 >className : string
 >          : ^^^^^^
   }
-  module $ {
+  namespace $ {
 >$ : typeof $
 >  : ^^^^^^^^
 

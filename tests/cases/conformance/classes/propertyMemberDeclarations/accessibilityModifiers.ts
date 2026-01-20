@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES5
 
 // No errors

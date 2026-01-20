@@ -8,7 +8,7 @@ aliasUsageInOrExpression_main.ts(11,40): error TS2873: This kind of expression i
     interface IHasVisualizationModel {
         VisualizationModel: typeof Backbone.Model;
     }
-    var i: IHasVisualizationModel;
+    declare var i: IHasVisualizationModel;
     var d1 = i || moduleA;
     var d2: IHasVisualizationModel = i || moduleA;
     var d2: IHasVisualizationModel = moduleA || i;

@@ -68,6 +68,7 @@ function g<T>() {
     let x: Oops;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 
 // https://github.com/microsoft/TypeScript/issues/57827

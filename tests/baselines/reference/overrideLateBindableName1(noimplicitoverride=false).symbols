@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/override/overrideLateBindableName1.ts] ////
+
+=== overrideLateBindableName1.ts ===
+const prop = "foo"
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+
+class Base1 {
+>Base1 : Symbol(Base1, Decl(overrideLateBindableName1.ts, 0, 18))
+
+  [prop]() {}
+>[prop] : Symbol(Base1[prop], Decl(overrideLateBindableName1.ts, 2, 13))
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+}
+
+class Derived1 extends Base1 {
+>Derived1 : Symbol(Derived1, Decl(overrideLateBindableName1.ts, 4, 1))
+>Base1 : Symbol(Base1, Decl(overrideLateBindableName1.ts, 0, 18))
+
+  override [prop]() {}
+>[prop] : Symbol(Derived1[prop], Decl(overrideLateBindableName1.ts, 6, 30))
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(overrideLateBindableName1.ts, 8, 1))
+
+  [prop]() {}
+>[prop] : Symbol(Base2[prop], Decl(overrideLateBindableName1.ts, 10, 13))
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(overrideLateBindableName1.ts, 12, 1))
+>Base2 : Symbol(Base2, Decl(overrideLateBindableName1.ts, 8, 1))
+
+  [prop]() {}
+>[prop] : Symbol(Derived2[prop], Decl(overrideLateBindableName1.ts, 14, 30))
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+}
+
+class Base3 {}
+>Base3 : Symbol(Base3, Decl(overrideLateBindableName1.ts, 16, 1))
+
+class Derived3 extends Base3 {
+>Derived3 : Symbol(Derived3, Decl(overrideLateBindableName1.ts, 18, 14))
+>Base3 : Symbol(Base3, Decl(overrideLateBindableName1.ts, 16, 1))
+
+  override [prop]() {}
+>[prop] : Symbol(Derived3[prop], Decl(overrideLateBindableName1.ts, 20, 30))
+>prop : Symbol(prop, Decl(overrideLateBindableName1.ts, 0, 5))
+}
+

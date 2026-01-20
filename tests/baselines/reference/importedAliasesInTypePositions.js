@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
 
 //// [file1.ts]
-export module elaborate.nested.mod.name {
+export namespace elaborate.nested.mod.name {
     export class ReferredTo {
         doSomething(): void {
         }
@@ -12,7 +12,7 @@ export module elaborate.nested.mod.name {
 import RT_ALIAS = require("file1");
 import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 
-export module ImportingModule {
+export namespace ImportingModule {
     class UsesReferredType {
         constructor(private referred: ReferredTo) { }
     }

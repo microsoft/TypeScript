@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importDeclWithClassModifiers.ts] ////
 
 === importDeclWithClassModifiers.ts ===
-module x {
+namespace x {
     interface c {
     }
 }

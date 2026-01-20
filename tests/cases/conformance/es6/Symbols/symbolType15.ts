@@ -1,5 +1,5 @@
 //@target: ES6
-var sym: symbol;
+declare var sym: symbol;
 var symObj: Symbol;
 
 symObj = sym;

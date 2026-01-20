@@ -1,3 +1,4 @@
+// @strict: false
 interface Test {
     readonly [key: string]: string;
 }

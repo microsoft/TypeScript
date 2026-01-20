@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////
-////module classes {
+////namespace classes {
 ////{| "indent": 0 |} 
 ////    class Bar {
 ////{| "indent": 0 |} 
@@ -27,7 +27,7 @@
 ////}
 ////
 ////
-////module interfaces {
+////namespace interfaces {
 ////{| "indent": 0 |} 
 ////    interface Foo {
 ////{| "indent": 0 |} 
@@ -41,8 +41,8 @@
 ////}
 ////
 ////
-////module nestedModules {
-////    module Foo2 {
+////namespace nestedModules {
+////    namespace Foo2 {
 ////{| "indent": 0 |} 
 ////        function f() {
 ////        }
@@ -53,7 +53,7 @@
 ////}
 ////
 ////
-////module Enums {
+////namespace Enums {
 ////    enum Foo3 {
 ////{| "indent": 0 |} 
 ////        val1,

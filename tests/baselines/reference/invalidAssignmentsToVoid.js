@@ -7,16 +7,16 @@ x = true;
 x = '';
 x = {}
 
-class C { foo: string; }
-var c: C;
+class C { foo!: string; }
+declare var c: C;
 x = C;
 x = c;
 
 interface I { foo: string; }
-var i: I;
+declare var i: I;
 x = i;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 function f<T>(a: T) {
@@ -35,10 +35,8 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var c;
 x = C;
 x = c;
-var i;
 x = i;
 var M;
 (function (M) {

@@ -1,3 +1,4 @@
+// @strict: false
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 var goodObj: Object = {
     toString(x?) {
@@ -8,21 +9,21 @@ var goodObj: Object = {
 var errFun: Function = {}; // Error for no call signature
 
 function foo() { }
-module foo {
+namespace foo {
     export var boom = 0;
 }
 
 var goodFundule: Function = foo; // ok
 
 function bar() { }
-module bar {
+namespace bar {
     export function apply(thisArg: string, argArray?: string) { }
 }
 
 var goodFundule2: Function = bar; // ok
 
 function bad() { }
-module bad {
+namespace bad {
     export var apply = 0;
 }
 

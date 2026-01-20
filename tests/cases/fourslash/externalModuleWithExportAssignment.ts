@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: externalModuleWithExportAssignment_file0.ts
-////module m2 {
+////namespace m2 {
 ////    export interface connectModule {
 ////        (res, req, next): void;
 ////    }

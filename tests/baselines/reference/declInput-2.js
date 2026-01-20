@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declInput-2.ts] ////
 
 //// [declInput-2.ts]
-module M {
+namespace M {
     class C { }
     export class E {}
     export interface I1 {}

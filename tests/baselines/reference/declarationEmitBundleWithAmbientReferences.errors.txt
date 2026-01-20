@@ -1,0 +1,25 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== lib/lib.d.ts (0 errors) ====
+    declare module "lib/result" {
+        export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
+        export interface Failure<E extends Error> { }
+        export interface Success<T> { }
+    }
+    
+==== src/datastore_result.ts (0 errors) ====
+    import { Result } from "lib/result";
+    
+    export type T<T> = Result<Error, T>;
+    
+==== src/conditional_directive_field.ts (0 errors) ====
+    import * as DatastoreResult from "src/datastore_result";
+    
+    export const build = (): DatastoreResult.T<string> => {
+    	return null;
+    };
+    

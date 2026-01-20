@@ -1,5 +1,8 @@
 /// <reference path='fourslash.ts'/>
 // @allowJs: true
+// @module: commonjs
+// @allowSyntheticDefaultImports: false
+// @esModuleInterop: false
 
 // @Filename: mod.js
 //// function foo() { return {a: "hello, world"}; }

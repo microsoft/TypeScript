@@ -7,7 +7,7 @@ interface NamedColors {
     "blue": _Color;
     "pale blue": _Color;
 }
-module Color {
+namespace Color {
     export var namedColors: NamedColors;
 }
 var a = Color.namedColors["azure"];

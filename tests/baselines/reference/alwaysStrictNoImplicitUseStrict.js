@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts] ////
 
 //// [alwaysStrictNoImplicitUseStrict.ts]
-module M {
+namespace M {
     export function f() {
         var arguments = [];
     }

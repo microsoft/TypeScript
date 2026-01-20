@@ -56,12 +56,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/common-dependency/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/common-dependency/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/common-dependency/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -127,15 +121,9 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
-/home/src/workspaces/project/node_modules: *new*
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/common-dependency/node_modules: *new*
   {}
 /home/src/workspaces/project/node_modules/common-dependency/node_modules/@types: *new*
   {}
@@ -398,18 +386,12 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
 /home/src/workspaces/node_modules/@types:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules:
-  {}
 /home/src/workspaces/project/node_modules/@types:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules/common-dependency/node_modules:
-  {}
 /home/src/workspaces/project/node_modules/common-dependency/node_modules/@types:
   {}
 /home/src/workspaces/project/node_modules/node_modules/@types:
@@ -527,8 +509,10 @@ Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 2 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -543,7 +527,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -955,12 +939,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/common-dependency/index",
+            "source": "common-dependency",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "common-dependency",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "CommonDependency",
               "exportMapKey": "16 * CommonDependency ",
+              "moduleSpecifier": "common-dependency",
               "fileName": "/home/src/workspaces/project/node_modules/common-dependency/index.d.ts",
               "isPackageJsonImport": true
             }
@@ -970,12 +961,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/home/src/workspaces/project/node_modules/package-dependency/index",
+            "source": "package-dependency",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "package-dependency",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "PackageDependency",
               "exportMapKey": "17 * PackageDependency ",
+              "moduleSpecifier": "package-dependency",
               "fileName": "/home/src/workspaces/project/node_modules/package-dependency/index.d.ts",
               "isPackageJsonImport": true
             }
@@ -989,6 +987,60 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/common-dependency/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/common-dependency/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/common-dependency/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/common-dependency/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package-dependency/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/package-dependency/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":250}
+/home/src/workspaces/project/packages/a/package.json:
+  {"pollingInterval":250}
+/home/src/workspaces/project/packages/a/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/node_modules: *new*
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/node_modules/common-dependency/node_modules/@types:
+  {}
+/home/src/workspaces/project/node_modules/node_modules/@types:
+  {}
+/home/src/workspaces/project/packages/a:
+  {}
+/home/src/workspaces/project/packages/a/node_modules/@types:
+  {}
+/home/src/workspaces/project/packages/node_modules/@types:
+  {}
+
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 2

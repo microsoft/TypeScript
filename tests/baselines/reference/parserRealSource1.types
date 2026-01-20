@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
 >CompilerDiagnostics : typeof CompilerDiagnostics
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

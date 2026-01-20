@@ -1,3 +1,4 @@
+// @strict: false
 function a0() {
     {
         for (let x = 0; x < 1; ) {

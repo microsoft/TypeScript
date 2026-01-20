@@ -14,15 +14,15 @@ enum E {
 >  : ^^^
 }
 
-var n: number;
+declare var n: number;
 >n : number
 >  : ^^^^^^
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
-var e: E;
+declare var e: E;
 >e : E
 >  : ^
 

@@ -14,7 +14,6 @@ let y = 1
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -35,7 +34,6 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 
 [7m3[0m     "out": "/home/src/projects/a/out.js"
 [7m [0m [91m    ~~~~~[0m
@@ -118,7 +116,6 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 
 [7m3[0m     "out": "/home/src/projects/a/out.js"
 [7m [0m [91m    ~~~~~[0m
@@ -154,6 +151,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -178,7 +176,6 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 
 [7m3[0m     "out": "/home/src/projects/a/out.js"
 [7m [0m [91m    ~~~~~[0m
@@ -214,6 +211,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

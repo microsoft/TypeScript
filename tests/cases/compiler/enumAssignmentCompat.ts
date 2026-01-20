@@ -1,4 +1,4 @@
-module W {
+namespace W {
     export class D { }
 }
 

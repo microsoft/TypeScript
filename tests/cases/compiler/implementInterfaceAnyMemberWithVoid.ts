@@ -1,3 +1,4 @@
+// @strict: false
 interface I {
     foo(value: number);
 }

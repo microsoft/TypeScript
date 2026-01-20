@@ -1,6 +1,8 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 aliasesInSystemModule1.ts(1,24): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== aliasesInSystemModule1.ts (1 errors) ====
     import alias = require('foo');
                            ~~~~~
@@ -12,7 +14,7 @@ aliasesInSystemModule1.ts(1,24): error TS2792: Cannot find module 'foo'. Did you
     let y = new cls();
     let z = new cls2();
     
-    module M {
+    namespace M {
       export import cls = alias.Class;
       let x = new alias.Class();
       let y = new cls(); 

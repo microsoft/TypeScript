@@ -1,4 +1,5 @@
 // @strict: true
+
 interface Thenable<Value> {
     then<V>(
         onFulfilled: (value: Value) => V | Thenable<V>,

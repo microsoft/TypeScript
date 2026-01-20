@@ -1,8 +1,8 @@
-module A {
+namespace A {
     export interface I { x: number }
 }
 
-module B {
+namespace B {
     export import A1 = A
     
 }

@@ -21,7 +21,7 @@ var array3: any[] = [null, undefined];
 var array4: number[] = [null, undefined];
 var array5 = <any[]>[null, undefined];
 
-var objLit: { new (n: number): any; };
+declare var objLit: { new (n: number): any; };
 function anyReturnFunc(): any { }
 var obj0 = new objLit(1);
 var obj1 = anyReturnFunc();

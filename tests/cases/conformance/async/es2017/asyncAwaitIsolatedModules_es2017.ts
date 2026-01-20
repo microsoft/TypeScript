@@ -36,6 +36,6 @@ class C {
 	static async m6(): MyPromise<void> { }
 }
 
-module M {
+namespace M {
 	export async function f1() { }
 }

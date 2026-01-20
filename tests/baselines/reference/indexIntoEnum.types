@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/indexIntoEnum.ts] ////
 
 === indexIntoEnum.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

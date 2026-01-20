@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript.AstWalkerWithDetailCallback {
+namespace TypeScript.AstWalkerWithDetailCallback {
     export interface AstWalkerDetailCallback {
         EmptyCallback? (pre, ast: AST): boolean;
         EmptyExprCallback? (pre, ast: AST): boolean;

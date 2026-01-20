@@ -11,8 +11,8 @@ stringLiteralsWithSwitchStatements04.ts(19,20): error TS2872: This kind of expre
 
 
 ==== stringLiteralsWithSwitchStatements04.ts (10 errors) ====
-    let x: "foo";
-    let y: "foo" | "bar"; 
+    declare let x: "foo";
+    declare let y: "foo" | "bar";
     
     declare function randBool(): boolean;
     

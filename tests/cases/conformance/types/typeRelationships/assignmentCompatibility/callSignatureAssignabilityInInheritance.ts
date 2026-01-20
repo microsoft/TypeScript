@@ -1,4 +1,4 @@
-module CallSignature {
+namespace CallSignature {
     interface Base { // T
         // M's
         (x: number): void;
@@ -31,7 +31,7 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
     interface Base { // T
         // M's
         a: (x: number) => void;

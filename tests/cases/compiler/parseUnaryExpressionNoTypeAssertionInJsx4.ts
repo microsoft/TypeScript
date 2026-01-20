@@ -1,3 +1,4 @@
+// @strict: false
 // @filename: index.tsx
 // @jsx: preserve
 

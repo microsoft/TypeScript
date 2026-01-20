@@ -6,8 +6,8 @@ interface B1 {
     b?: string;
 }
 
-var a: A1;
-var b: B1;
+declare var a: A1;
+declare var b: B1;
 
 // operator <
 var ra1 = a < b;

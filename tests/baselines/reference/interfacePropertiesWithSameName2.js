@@ -15,7 +15,7 @@ interface MoverShaker extends Mover, Shaker {
 }
 
 // Inside a module
-declare module MoversAndShakers {
+declare namespace MoversAndShakers {
     export class Mover {
         move(): void;
         getStatus(): { speed: number; };

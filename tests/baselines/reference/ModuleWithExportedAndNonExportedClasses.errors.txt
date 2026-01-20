@@ -3,7 +3,7 @@ ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' d
 
 
 ==== ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
-    module A {
+    namespace A {
         export class A {
             id: number;
             name: string;

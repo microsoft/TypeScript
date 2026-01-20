@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyGloFunc.ts] ////
 
 === privacyGloFunc.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -34,6 +34,7 @@ export module m1 {
 
         constructor (m1_c3_c1_2: any) {
 >m1_c3_c1_2 : any
+>           : ^^^
         }
 
         private f1_private(m1_c3_f1_arg: C1_public) {
@@ -167,6 +168,7 @@ export module m1 {
 
         constructor (m1_c4_c1_2: any) {
 >m1_c4_c1_2 : any
+>           : ^^^
         }
         private f1_private(m1_c4_f1_arg: C1_public) {
 >f1_private : (m1_c4_f1_arg: C1_public) => void
@@ -445,7 +447,7 @@ export module m1 {
     }
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -478,6 +480,7 @@ module m2 {
 
         constructor (m2_c3_c1_2: any) {
 >m2_c3_c1_2 : any
+>           : ^^^
         }
 
         private f1_private(m2_c3_f1_arg: m2_C1_public) {
@@ -611,6 +614,7 @@ module m2 {
 
         constructor (m2_c4_c1_2: any) {
 >m2_c4_c1_2 : any
+>           : ^^^
         }
 
         private f1_private(m2_c4_f1_arg: m2_C1_public) {
@@ -919,6 +923,7 @@ export class C7_public {
 
     constructor (c7_c1_2: any) {
 >c7_c1_2 : any
+>        : ^^^
     }
     private f1_private(c7_f1_arg: C6_public) {
 >f1_private : (c7_f1_arg: C6_public) => void
@@ -1051,6 +1056,7 @@ class C8_private {
 
     constructor (c8_c1_2: any) {
 >c8_c1_2 : any
+>        : ^^^
     }
         
     private f1_private(c8_f1_arg: C6_public) {

@@ -1301,7 +1301,7 @@ enum bigEnum {
 >     : ^^^^^^^^^^^^
 }
 
-module bigModule {
+namespace bigModule {
 >bigModule : typeof bigModule
 >          : ^^^^^^^^^^^^^^^^
 

@@ -52,9 +52,9 @@ function foo5(x: number | string | boolean) {
         }
     }
 }
-module m {
+namespace m {
     var x: number | string | boolean;
-    module m2 {
+    namespace m2 {
         var b = x; // new scope - number | boolean | string
         var y: string;
         if (typeof x === "string") {
@@ -66,9 +66,9 @@ module m {
         }
     }
 }
-module m1 {
+namespace m1 {
     var x: number | string | boolean;
-    module m2.m3 {
+    namespace m2.m3 {
         var b = x; // new scope - number | boolean | string
         var y: string;
         if (typeof x === "string") {

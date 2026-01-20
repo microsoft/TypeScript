@@ -17,17 +17,17 @@ var r2 = y<string>();
 >r2 : Symbol(r2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 4, 3))
 >y : Symbol(y, Decl(untypedFunctionCallsWithTypeParameters1.ts, 3, 3))
 
-var c: Function;
->c : Symbol(c, Decl(untypedFunctionCallsWithTypeParameters1.ts, 6, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+declare var c: Function;
+>c : Symbol(c, Decl(untypedFunctionCallsWithTypeParameters1.ts, 6, 11))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var r3 = c<number>(); // should be an error
 >r3 : Symbol(r3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 7, 3))
->c : Symbol(c, Decl(untypedFunctionCallsWithTypeParameters1.ts, 6, 3))
+>c : Symbol(c, Decl(untypedFunctionCallsWithTypeParameters1.ts, 6, 11))
 
 class C implements Function {
 >C : Symbol(C, Decl(untypedFunctionCallsWithTypeParameters1.ts, 7, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     prototype = null;
 >prototype : Symbol(C.prototype, Decl(untypedFunctionCallsWithTypeParameters1.ts, 9, 29))
@@ -42,25 +42,25 @@ class C implements Function {
 >caller : Symbol(C.caller, Decl(untypedFunctionCallsWithTypeParameters1.ts, 12, 21))
 }
 
-var c2: C;
->c2 : Symbol(c2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 16, 3))
+declare var c2: C;
+>c2 : Symbol(c2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 16, 11))
 >C : Symbol(C, Decl(untypedFunctionCallsWithTypeParameters1.ts, 7, 21))
 
 var r4 = c2<number>(); // should be an error
 >r4 : Symbol(r4, Decl(untypedFunctionCallsWithTypeParameters1.ts, 17, 3))
->c2 : Symbol(c2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 16, 3))
+>c2 : Symbol(c2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 16, 11))
 
 class C2 extends Function { } // error
 >C2 : Symbol(C2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 17, 22))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-var c3: C2;
->c3 : Symbol(c3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 20, 3))
+declare var c3: C2;
+>c3 : Symbol(c3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 20, 11))
 >C2 : Symbol(C2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 17, 22))
 
 var r5 = c3<number>(); // error
 >r5 : Symbol(r5, Decl(untypedFunctionCallsWithTypeParameters1.ts, 21, 3))
->c3 : Symbol(c3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 20, 3))
+>c3 : Symbol(c3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 20, 11))
 
 interface I {
 >I : Symbol(I, Decl(untypedFunctionCallsWithTypeParameters1.ts, 21, 22))
@@ -68,13 +68,13 @@ interface I {
     (number): number;
 >number : Symbol(number, Decl(untypedFunctionCallsWithTypeParameters1.ts, 24, 5))
 }
-var z: I;
->z : Symbol(z, Decl(untypedFunctionCallsWithTypeParameters1.ts, 26, 3))
+declare var z: I;
+>z : Symbol(z, Decl(untypedFunctionCallsWithTypeParameters1.ts, 26, 11))
 >I : Symbol(I, Decl(untypedFunctionCallsWithTypeParameters1.ts, 21, 22))
 
 var r6 = z<string>(1); // error
 >r6 : Symbol(r6, Decl(untypedFunctionCallsWithTypeParameters1.ts, 27, 3))
->z : Symbol(z, Decl(untypedFunctionCallsWithTypeParameters1.ts, 26, 3))
+>z : Symbol(z, Decl(untypedFunctionCallsWithTypeParameters1.ts, 26, 11))
 
 interface callable2<T> {
 >callable2 : Symbol(callable2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 27, 22))
@@ -86,12 +86,12 @@ interface callable2<T> {
 >T : Symbol(T, Decl(untypedFunctionCallsWithTypeParameters1.ts, 29, 20))
 }
 
-var c4: callable2<number>;
->c4 : Symbol(c4, Decl(untypedFunctionCallsWithTypeParameters1.ts, 33, 3))
+declare var c4: callable2<number>;
+>c4 : Symbol(c4, Decl(untypedFunctionCallsWithTypeParameters1.ts, 33, 11))
 >callable2 : Symbol(callable2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 27, 22))
 
 c4<number>(1);
->c4 : Symbol(c4, Decl(untypedFunctionCallsWithTypeParameters1.ts, 33, 3))
+>c4 : Symbol(c4, Decl(untypedFunctionCallsWithTypeParameters1.ts, 33, 11))
 
 interface callable3<T> {
 >callable3 : Symbol(callable3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 34, 14))
@@ -103,11 +103,11 @@ interface callable3<T> {
 >T : Symbol(T, Decl(untypedFunctionCallsWithTypeParameters1.ts, 35, 20))
 }
 
-var c5: callable3<number>;
->c5 : Symbol(c5, Decl(untypedFunctionCallsWithTypeParameters1.ts, 39, 3))
+declare var c5: callable3<number>;
+>c5 : Symbol(c5, Decl(untypedFunctionCallsWithTypeParameters1.ts, 39, 11))
 >callable3 : Symbol(callable3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 34, 14))
 
 c5<string>(1); // error
->c5 : Symbol(c5, Decl(untypedFunctionCallsWithTypeParameters1.ts, 39, 3))
+>c5 : Symbol(c5, Decl(untypedFunctionCallsWithTypeParameters1.ts, 39, 11))
 
 

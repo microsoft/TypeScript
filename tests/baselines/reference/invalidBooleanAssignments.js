@@ -20,7 +20,7 @@ var g: I = x;
 var h: { (): string } = x;
 var h2: { toString(): string } = x; // no error
 
-module M { export var a = 1; }
+namespace M { export var a = 1; }
 M = x;
 
 function i<T>(a: T) {

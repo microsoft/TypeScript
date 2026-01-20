@@ -6,7 +6,7 @@ declare module 'react' {
 	export = x;
 }
 
-declare module ReactRouter {
+declare namespace ReactRouter {
 	var Route: any;
 	interface Thing { }
 }
@@ -23,10 +23,10 @@ import Route = ReactRouter.Route;
 
 var routes1 = <Route />;
 
-module M {
+namespace M {
 	export var X: any;
 }
-module M {
+namespace M {
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
 }

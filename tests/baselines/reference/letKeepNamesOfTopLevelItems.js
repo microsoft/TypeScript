@@ -6,7 +6,7 @@ function foo() {
     let x;
 }
 
-module A {
+namespace A {
     let x;
 }
 

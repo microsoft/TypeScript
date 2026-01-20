@@ -1,3 +1,4 @@
+// @strict: false
 // Not OK
 interface B { x; }
 interface B { x?; }

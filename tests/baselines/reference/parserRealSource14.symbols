@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
 
     export function lastOf(items: any[]): any {
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
 
         return (items === null || items.length === 0) ? null : items[items.length - 1];
@@ -537,7 +537,7 @@ module TypeScript {
 
             var ast = lastOf(this.asts);
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 144, 15))
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -580,7 +580,7 @@ module TypeScript {
 
             var ast = lastOf(this.asts);
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 152, 15))
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -623,7 +623,7 @@ module TypeScript {
 
             var ast = lastOf(this.asts);
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 160, 15))
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -666,7 +666,7 @@ module TypeScript {
 
             var ast = lastOf(this.asts);
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 168, 15))
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
@@ -769,7 +769,7 @@ module TypeScript {
 
             var ast = lastOf(this.asts);
 >ast : Symbol(ast, Decl(parserRealSource14.ts, 181, 15))
->lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 22))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))

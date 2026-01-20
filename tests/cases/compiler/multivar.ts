@@ -1,7 +1,8 @@
+// @strict: false
 var a,b,c;
 var x=1,y=2,z=3;
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;

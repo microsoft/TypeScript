@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/undeclaredBase.ts] ////
 
 === undeclaredBase.ts ===
-module M { export class C extends M.I { } }
+namespace M { export class C extends M.I { } }
 >M : Symbol(M, Decl(undeclaredBase.ts, 0, 0))
->C : Symbol(C, Decl(undeclaredBase.ts, 0, 10))
+>C : Symbol(C, Decl(undeclaredBase.ts, 0, 13))
 >M : Symbol(M, Decl(undeclaredBase.ts, 0, 0))
 
 

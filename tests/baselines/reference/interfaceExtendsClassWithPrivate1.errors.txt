@@ -20,8 +20,8 @@ interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: Type 'C' is missing th
     } 
     
     var c: C;
-    var i: I;
-    var d: D;
+    declare var i: I;
+    declare var d: D;
     
     c = i;
     i = c; // error

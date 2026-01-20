@@ -2,5 +2,5 @@
 
 === parserModuleDeclaration3.d.ts ===
 
-declare module M {
+declare namespace M {
 }

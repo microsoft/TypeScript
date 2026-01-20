@@ -1,3 +1,4 @@
+// @strict: false
 // @lib: es2015
 
 // es2016

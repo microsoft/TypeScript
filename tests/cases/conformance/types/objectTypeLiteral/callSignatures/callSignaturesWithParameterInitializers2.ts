@@ -1,3 +1,4 @@
+// @strict: false
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors
 
@@ -12,7 +13,7 @@ class C {
     foo(x = 1) { }
 }
 
-var c: C;
+declare var c: C;
 c.foo();
 c.foo(1);
 

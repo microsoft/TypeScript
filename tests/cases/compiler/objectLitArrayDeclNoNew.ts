@@ -1,7 +1,8 @@
+// @strict: false
 // @lib: es5
 declare var console;
 "use strict";
-module Test {
+namespace Test {
     export interface IState {
     }
 

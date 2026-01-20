@@ -3,8 +3,7 @@
 // @noImplicitAny: true
 // @jsx: react
 // @module: es2015
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 ////declare namespace React {
 ////    export class Component { render(): JSX.Element | null; }
 ////}

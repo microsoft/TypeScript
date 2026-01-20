@@ -22,7 +22,7 @@ interface IPoint {
 }
 
 /// Module
-module Shapes {
+namespace Shapes {
     // Class
     export class Point implements IPoint {
         constructor (public x: number, public y: number) { }
@@ -66,10 +66,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -82,7 +78,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/navbar01.ts SVC-1-0 "// Interface\ninterface IPoint {\n    getDist(): number;\n    new(): IPoint;\n    (): any;\n    [x:string]: number;\n    prop: string;\n}\n\n/// Module\nmodule Shapes {\n    // Class\n    export class Point implements IPoint {\n        constructor (public x: number, public y: number) { }\n\n        // Instance member\n        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }\n\n        // Getter\n        get value(): number { return 0; }\n\n        // Setter\n        set value(newValue: number) { return; }\n\n        // Static member\n        static origin = new Point(0, 0);\n\n        // Static method\n        private static getOrigin() { return Point.origin;}\n    }\n\n    enum Values { value1, value2, value3 }\n}\n\n// Local variables\nvar p: IPoint = new Shapes.Point(3, 4);\nvar dist = p.getDist();"
+	/tests/cases/fourslash/server/navbar01.ts SVC-1-0 "// Interface\ninterface IPoint {\n    getDist(): number;\n    new(): IPoint;\n    (): any;\n    [x:string]: number;\n    prop: string;\n}\n\n/// Module\nnamespace Shapes {\n    // Class\n    export class Point implements IPoint {\n        constructor (public x: number, public y: number) { }\n\n        // Instance member\n        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }\n\n        // Getter\n        get value(): number { return 0; }\n\n        // Setter\n        set value(newValue: number) { return; }\n\n        // Static member\n        static origin = new Point(0, 0);\n\n        // Static method\n        private static getOrigin() { return Point.origin;}\n    }\n\n    enum Values { value1, value2, value3 }\n}\n\n// Local variables\nvar p: IPoint = new Shapes.Point(3, 4);\nvar dist = p.getDist();"
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.d.ts
@@ -127,11 +123,7 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules: *new*
-  {}
 /tests/cases/fourslash/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/node_modules: *new*
   {}
 /tests/cases/fourslash/server/node_modules/@types: *new*
   {}
@@ -400,11 +392,11 @@ Info seq  [hh:mm:ss:mss] response:
             "nameSpan": {
               "start": {
                 "line": 11,
-                "offset": 8
+                "offset": 11
               },
               "end": {
                 "line": 11,
-                "offset": 14
+                "offset": 17
               }
             },
             "childItems": [

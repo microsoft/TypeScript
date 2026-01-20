@@ -1,3 +1,4 @@
+// @strict: false
 // @experimentaldecorators: true
 // @target: ES5
 

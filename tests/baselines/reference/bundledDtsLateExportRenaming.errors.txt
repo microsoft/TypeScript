@@ -1,0 +1,30 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== index.ts (0 errors) ====
+    export * from "./nested";
+    
+==== nested/base.ts (0 errors) ====
+    import { B } from "./shared";
+    
+    export function f() {
+        return new B();
+    }
+    
+==== nested/derived.ts (0 errors) ====
+    import { f } from "./base";
+    
+    export function g() {
+        return f();
+    }
+    
+==== nested/index.ts (0 errors) ====
+    export * from "./base";
+    
+    export * from "./derived";
+    export * from "./shared";
+    
+==== nested/shared.ts (0 errors) ====
+    export class B {}
+    

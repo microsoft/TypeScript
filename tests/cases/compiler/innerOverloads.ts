@@ -1,3 +1,4 @@
+// @strict: false
 
 function outer() {
     function inner(x:number); // should work

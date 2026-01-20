@@ -1,3 +1,4 @@
+// @strict: false
 // errors
 declare class C {
     constructor(x: "hi");

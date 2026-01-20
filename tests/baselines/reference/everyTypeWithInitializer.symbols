@@ -40,11 +40,11 @@ function F(x: string): number { return 42; }
 >F : Symbol(F, Decl(everyTypeWithInitializer.ts, 12, 1))
 >x : Symbol(x, Decl(everyTypeWithInitializer.ts, 14, 11))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
 
     export class A {
->A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(everyTypeWithInitializer.ts, 17, 20))
@@ -66,7 +66,7 @@ var aString = 'this is a string';
 
 var aDate = new Date(12);
 >aDate : Symbol(aDate, Decl(everyTypeWithInitializer.ts, 26, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var anObject = new Object();
 >anObject : Symbol(anObject, Decl(everyTypeWithInitializer.ts, 27, 3))
@@ -110,9 +110,9 @@ var aModule = M;
 
 var aClassInModule = new M.A();
 >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithInitializer.ts, 42, 3))
->M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 13))
 >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
->A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 13))
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithInitializer.ts, 43, 3))

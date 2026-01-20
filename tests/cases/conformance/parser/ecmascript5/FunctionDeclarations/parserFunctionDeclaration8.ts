@@ -1,3 +1,4 @@
-declare module M {
+// @strict: false
+declare namespace M {
    function foo();
 }

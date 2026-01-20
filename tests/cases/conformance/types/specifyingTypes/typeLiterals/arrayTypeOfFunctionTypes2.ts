@@ -1,3 +1,4 @@
+// @strict: false
 // valid uses of arrays of function types
 
 var x: new () => string[];

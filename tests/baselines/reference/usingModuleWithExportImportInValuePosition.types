@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts] ////
 
 === usingModuleWithExportImportInValuePosition.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ export class Point {
 >y : number
 >  : ^^^^^^
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
 >name : string
@@ -29,7 +29,7 @@ export class Point {
         }
     }
 }
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

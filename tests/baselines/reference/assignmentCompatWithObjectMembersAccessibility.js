@@ -3,7 +3,7 @@
 //// [assignmentCompatWithObjectMembersAccessibility.ts]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
-module TargetIsPublic {
+namespace TargetIsPublic {
     // targets
     class Base {
         public foo: string;
@@ -13,9 +13,9 @@ module TargetIsPublic {
         foo: string;
     }
 
-    var a: { foo: string; }
-    var b: Base;
-    var i: I;
+    declare var a: { foo: string; };
+    declare var b: Base;
+    declare var i: I;
 
     // sources
     class D {
@@ -25,8 +25,8 @@ module TargetIsPublic {
     class E {
         private foo: string;
     }
-    var d: D;
-    var e: E;
+    declare var d: D;
+    declare var e: E;
 
     a = b;
     a = i;
@@ -56,7 +56,7 @@ module TargetIsPublic {
 
 }
 
-module TargetIsPublic {
+namespace TargetIsPublic {
     // targets
     class Base {
         private foo: string;
@@ -65,9 +65,9 @@ module TargetIsPublic {
     interface I extends Base {
     }
 
-    var a: { foo: string; }
-    var b: Base;
-    var i: I;
+    declare var a: { foo: string; };
+    declare var b: Base;
+    declare var i: I;
 
     // sources
     class D {
@@ -78,8 +78,8 @@ module TargetIsPublic {
         private foo: string;
     }
 
-    var d: D;
-    var e: E;
+    declare var d: D;
+    declare var e: E;
 
     a = b; // error
     a = i; // error
@@ -121,9 +121,6 @@ var TargetIsPublic;
         }
         return Base;
     }());
-    var a;
-    var b;
-    var i;
     // sources
     var D = /** @class */ (function () {
         function D() {
@@ -135,8 +132,6 @@ var TargetIsPublic;
         }
         return E;
     }());
-    var d;
-    var e;
     a = b;
     a = i;
     a = d;
@@ -166,9 +161,6 @@ var TargetIsPublic;
         }
         return Base;
     }());
-    var a;
-    var b;
-    var i;
     // sources
     var D = /** @class */ (function () {
         function D() {
@@ -180,8 +172,6 @@ var TargetIsPublic;
         }
         return E;
     }());
-    var d;
-    var e;
     a = b; // error
     a = i; // error
     a = d;

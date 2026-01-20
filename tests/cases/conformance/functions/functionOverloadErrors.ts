@@ -1,3 +1,4 @@
+// @strict: false
 //Function overload signature with initializer
 function fn1(x = 3);
 function fn1() { }
@@ -71,7 +72,7 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
     export function fn1();
     function fn1(n: string);
     function fn1() { } 

@@ -29,32 +29,32 @@
 
 verify.completions({ 
     marker: "1",
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: true, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {
     marker: "2", 
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: false, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {
     marker: "3", 
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: false, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {
     marker: "4", 
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: true, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {
     marker: "5", 
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: false, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {
     marker: "6", 
-    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    includes: { name: "foo", source: "./a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: false, 
     preferences: { includeCompletionsForModuleExports: true } 
 }, {

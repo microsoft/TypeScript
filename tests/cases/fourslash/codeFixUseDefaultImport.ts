@@ -21,6 +21,9 @@
 ////import * as n from "./non-existant";
 ////n;
 
+// @Filename: /f.ts
+////export import [|foo|] = require("./a");
+
 for (const file of ["/b.ts", "/c.ts"]) {
     goTo.file(file);
 
@@ -38,7 +41,7 @@ a;`,
     });
 }
 
-for (const file of ["/d.ts", "/e.ts"]) {
+for (const file of ["/d.ts", "/e.ts", "/f.ts"]) {
     goTo.file(file);
     verify.getSuggestionDiagnostics([]);
 }

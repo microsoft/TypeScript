@@ -4,7 +4,7 @@
 function fn() { }
 fn = () => 3;
 
-module foo {
+namespace foo {
     function xyz() {
         function bar() {
         }

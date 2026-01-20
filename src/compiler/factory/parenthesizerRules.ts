@@ -112,6 +112,16 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return parenthesizerRule;
     }
 
+    function mixingBinaryOperatorsRequiresParentheses(a: SyntaxKind, b: SyntaxKind) {
+        if (a === SyntaxKind.QuestionQuestionToken) {
+            return b === SyntaxKind.AmpersandAmpersandToken || b === SyntaxKind.BarBarToken;
+        }
+        if (b === SyntaxKind.QuestionQuestionToken) {
+            return a === SyntaxKind.AmpersandAmpersandToken || a === SyntaxKind.BarBarToken;
+        }
+        return false;
+    }
+
     /**
      * Determines whether the operand to a BinaryExpression needs to be parenthesized.
      *
@@ -121,6 +131,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      *                           BinaryExpression.
      */
     function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
+        const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        if (isBinaryExpression(emittedOperand) && mixingBinaryOperatorsRequiresParentheses(binaryOperator, emittedOperand.operatorToken.kind)) {
+            return true;
+        }
         // If the operand has lower precedence, then it needs to be parenthesized to preserve the
         // intent of the expression. For example, if the operand is `a + b` and the operator is
         // `*`, then we need to parenthesize the operand to preserve the intended order of
@@ -140,7 +154,6 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
-        const emittedOperand = skipPartiallyEmittedExpressions(operand);
         if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`

@@ -1,3 +1,4 @@
+// @strict: false
 declare abstract class A {
     abstract constructor() {}
 }

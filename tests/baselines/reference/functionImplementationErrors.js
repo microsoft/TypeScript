@@ -28,7 +28,7 @@ var f4 = function () {
 function f5(): number {
 }
 
-var m;
+declare var m: any;
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
     var m = 4;
@@ -116,7 +116,6 @@ var f4 = function () {
 // Function implemetnation with non -void return type annotation with no return
 function f5() {
 }
-var m;
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n) {
     if (n === void 0) { n = m; }

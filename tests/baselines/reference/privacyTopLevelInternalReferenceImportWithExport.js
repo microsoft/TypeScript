@@ -2,7 +2,7 @@
 
 //// [privacyTopLevelInternalReferenceImportWithExport.ts]
 // private elements
-module m_private {
+namespace m_private {
     export class c_private {
     }
     export enum e_private {
@@ -15,18 +15,18 @@ module m_private {
     export var v_private = new c_private();
     export interface i_private {
     }
-    export module mi_private {
+    export namespace mi_private {
         export class c {
         }
     }
-    export module mu_private {
+    export namespace mu_private {
         export interface i {
         }
     }
 }
 
 // Public elements
-export module m_public {
+export namespace m_public {
     export class c_public {
     }
     export enum e_public {
@@ -39,11 +39,11 @@ export module m_public {
     export var v_public = 10;
     export interface i_public {
     }
-    export module mi_public {
+    export namespace mi_public {
         export class c {
         }
     }
-    export module mu_public {
+    export namespace mu_public {
         export interface i {
         }
     }

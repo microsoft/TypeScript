@@ -112,8 +112,8 @@ var propAcc1 = {
 };
 var propAcc1: { m: any; }
 
-// Property access of module member
-module M2 {
+// Property access of namespace member
+namespace M2 {
     export var x = M2.x;
     var y = x;
     var y: any;
@@ -240,7 +240,7 @@ var propAcc1 = {
     m: propAcc1.m
 };
 var propAcc1;
-// Property access of module member
+// Property access of namespace member
 var M2;
 (function (M2) {
     M2.x = M2.x;

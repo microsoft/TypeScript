@@ -3,7 +3,7 @@
 // @Filename: /tsconfig.json
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "moduleResolution": "bundler",
     "noEmit": true
   }

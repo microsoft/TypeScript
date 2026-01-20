@@ -37,7 +37,7 @@ var i: I = x;
 var j: { (): string } = x;
 var j2: { <T>(x: T): string } = x;
 
-module M {
+namespace M {
     export var foo = 1;
 }
 

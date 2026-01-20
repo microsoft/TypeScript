@@ -20,7 +20,6 @@ import settings from './settings.json';
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -40,17 +39,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mindex.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS1259: [0mModule '"/user/username/projects/myproject/settings"' can only be default-imported using the 'esModuleInterop' flag
-
-[7m1[0m import settings from './settings.json';
-[7m [0m [91m       ~~~~~~~~[0m
-
-  [96msettings.json[0m:[93m1[0m:[93m1[0m
-    [7m1[0m {
-    [7m [0m [96m~[0m
-    This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
-
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

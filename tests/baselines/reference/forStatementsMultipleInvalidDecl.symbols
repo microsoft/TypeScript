@@ -51,11 +51,11 @@ function F(x: string): number { return 42; }
 >F : Symbol(F, Decl(forStatementsMultipleInvalidDecl.ts, 17, 1))
 >x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 19, 11))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
 
     export class A {
->A : Symbol(A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+>A : Symbol(A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(forStatementsMultipleInvalidDecl.ts, 22, 20))
@@ -129,7 +129,7 @@ for(var arr2 = [new D<string>()];;){}
 
 for( var arr2 = new Array<D<number>>();;){}
 >arr2 : Symbol(arr2, Decl(forStatementsMultipleInvalidDecl.ts, 48, 7), Decl(forStatementsMultipleInvalidDecl.ts, 49, 8))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
 
 for(var m: typeof M;;){}
@@ -138,7 +138,7 @@ for(var m: typeof M;;){}
 
 for( var m = M.A;;){}
 >m : Symbol(m, Decl(forStatementsMultipleInvalidDecl.ts, 51, 7), Decl(forStatementsMultipleInvalidDecl.ts, 52, 8))
->M.A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+>M.A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 13))
 >M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
->A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+>A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 13))
 

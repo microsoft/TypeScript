@@ -6,9 +6,9 @@
 // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
 // Boolean primitive type.
 
-module test {
+namespace test {
     class Object { }
-    var obj: Object;
+    declare var obj: Object;
 
 
 
@@ -38,7 +38,6 @@ var test;
         }
         return Object;
     }());
-    var obj;
     4 instanceof null;
     // Error and should be error
     obj instanceof 4;

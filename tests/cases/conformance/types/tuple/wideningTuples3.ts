@@ -1,3 +1,4 @@
+//@strict: false
 //@noImplicitAny: true
 var a: [any];
 

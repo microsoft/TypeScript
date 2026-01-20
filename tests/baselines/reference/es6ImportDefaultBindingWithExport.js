@@ -5,24 +5,24 @@ var a = 10;
 export default a;
 
 //// [client.ts]
-export import defaultBinding from "server";
+export import defaultBinding from "./server";
 export var x = defaultBinding;
-export import defaultBinding2 from "server"; // non referenced
+export import defaultBinding2 from "./server"; // non referenced
 
 //// [server.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = 10;
-    exports.default = a;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a = 10;
+exports.default = a;
 //// [client.js]
-define(["require", "exports", "server"], function (require, exports, server_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.x = void 0;
-    exports.x = server_1.default;
-});
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+var server_1 = __importDefault(require("./server"));
+exports.x = server_1.default;
 
 
 //// [server.d.ts]

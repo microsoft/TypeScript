@@ -8,7 +8,7 @@ export enum exports { // Error
     _thisVal1,
     _thisVal2,
 }
-module m1 {
+namespace m1 {
     enum require {
         _thisVal1,
         _thisVal2,
@@ -18,7 +18,7 @@ module m1 {
         _thisVal2,
     }
 }
-module m2 {
+namespace m2 {
     export enum require { 
         _thisVal1,
         _thisVal2,
@@ -38,7 +38,7 @@ enum exports {
     _thisVal1,
     _thisVal2,
 }
-module m3 {
+namespace m3 {
     enum require {
         _thisVal1,
         _thisVal2,
@@ -48,7 +48,7 @@ module m3 {
         _thisVal2,
     }
 }
-module m4 {
+namespace m4 {
     export enum require {
         _thisVal1,
         _thisVal2,

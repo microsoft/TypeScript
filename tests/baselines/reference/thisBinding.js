@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisBinding.ts] ////
 
 //// [thisBinding.ts]
-module M {
+namespace M {
     export interface I {
 	z;
     }

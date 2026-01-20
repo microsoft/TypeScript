@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts] ////
 
 //// [collisionCodeGenModuleWithEnumMemberConflict.ts]
-module m1 {
+namespace m1 {
     enum e {
         m1, 
         m2 = m1

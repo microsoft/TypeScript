@@ -77,7 +77,7 @@ class C implements I {
     }
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 

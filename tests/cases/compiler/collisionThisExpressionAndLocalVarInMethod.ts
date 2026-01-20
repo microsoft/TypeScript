@@ -1,3 +1,4 @@
+// @strict: false
 class a {
     method1() {
         return {

@@ -1,10 +1,10 @@
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {
-    var a: any;
-    var b: boolean;
-    var c: number;
-    var d: string;
-    var e: {};
+    var a!: any;
+    var b!: boolean;
+    var c!: number;
+    var d!: string;
+    var e!: {};
 
     var r1a1 = a ** t;
     var r2a1 = t ** a;

@@ -1,4 +1,5 @@
+// @strict: false
 // @declaration: true
 
-module M { export var x; }
+namespace M { export var x; }
 var m = M;

@@ -28,7 +28,7 @@ var a: A;
 var r = a.a;
 
 // generic interfaces in a module
-module M {
+namespace M {
     class C<T> {
         a: T;
     }

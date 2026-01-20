@@ -1,5 +1,6 @@
-// @noImplicitAny: true
-var a: object;
+// @strict: false
+
+var a: object = {};
 
 for (var key in a) {
     var value = a[key]; // error

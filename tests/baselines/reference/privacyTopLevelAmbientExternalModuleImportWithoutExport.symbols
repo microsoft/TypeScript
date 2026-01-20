@@ -10,11 +10,11 @@ import im_private_mi_private = require("m");
 import im_private_mu_private = require("m2");
 >im_private_mu_private : Symbol(im_private_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts, 3, 44))
 
-import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
+import im_private_mi_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
 >im_private_mi_public : Symbol(im_private_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts, 4, 45))
 
-import im_private_mu_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");
->im_private_mu_public : Symbol(im_private_mu_public, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts, 5, 105))
+import im_private_mu_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");
+>im_private_mu_public : Symbol(im_private_mu_public, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts, 5, 107))
 
 // Usage of privacy error imports
 var privateUse_im_private_mi_private = new im_private_mi_private.c_private();

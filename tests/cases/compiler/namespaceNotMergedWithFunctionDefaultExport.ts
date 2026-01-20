@@ -1,4 +1,4 @@
-// @moduleResolution: node10
+// @moduleResolution: bundler
 // @module: commonjs
 
 // repro from https://github.com/microsoft/TypeScript/issues/54342

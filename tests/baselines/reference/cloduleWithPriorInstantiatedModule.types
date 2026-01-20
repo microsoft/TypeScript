@@ -2,7 +2,7 @@
 
 === cloduleWithPriorInstantiatedModule.ts ===
 // Non-ambient & instantiated module.
-module Moclodule {
+namespace Moclodule {
 >Moclodule : typeof Moclodule
 >          : ^^^^^^^^^^^^^^^^
 
@@ -24,7 +24,7 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
 >Moclodule : typeof Moclodule
 >          : ^^^^^^^^^^^^^^^^
 

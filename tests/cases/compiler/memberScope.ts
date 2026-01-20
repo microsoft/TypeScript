@@ -1,6 +1,6 @@
-module Salt {
+namespace Salt {
   export class Pepper {}
-  export module Basil { }
+  export namespace Basil { }
   var z = Basil.Pepper;
 }
 

@@ -32,11 +32,15 @@ function foo(x: Promise<any>) {
 >value => {        let b = new value.B();        b.print();    } : (value: any) => void
 >                                                                : ^     ^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
         let b = new value.B();
 >b : any
+>  : ^^^
 >new value.B() : any
+>              : ^^^
 >value.B : any
+>        : ^^^
 >value : any
 >      : ^^^
 >B : any
@@ -44,7 +48,9 @@ function foo(x: Promise<any>) {
 
         b.print();
 >b.print() : any
+>          : ^^^
 >b.print : any
+>        : ^^^
 >b : any
 >  : ^^^
 >print : any

@@ -1,3 +1,4 @@
+// @strict: false
 // Functions
 function f1(_i: number, ...restParameters) { //_i is error
     var _i = 10; // no error

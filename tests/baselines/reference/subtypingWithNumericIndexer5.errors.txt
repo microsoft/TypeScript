@@ -41,7 +41,7 @@ subtypingWithNumericIndexer5.ts(40,11): error TS2420: Class 'B5<T>' incorrectly 
         [x: string]: Derived2; // ok
     }
     
-    module Generics {
+    namespace Generics {
         interface A<T extends Base> {
             [x: number]: T;
         }

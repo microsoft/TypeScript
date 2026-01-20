@@ -9,13 +9,13 @@
 enum E { a, b, c }
 
 var a1: any;
-var a2: boolean;
-var a3: number
-var a4: string;
-var a5: void;
-var a6: E;
-var a7: {a: string};
-var a8: string[];
+declare var a2: boolean;
+declare var a3: number;
+declare var a4: string;
+declare var a5: void;
+declare var a6: E;
+declare var a7: {a: string};
+declare var a8: string[];
 
 var ra1 = a1 || a1;         // any       || any is any
 var ra2 = a2 || a1;         // boolean   || any is any
@@ -139,13 +139,6 @@ var E;
     E[E["c"] = 2] = "c";
 })(E || (E = {}));
 var a1;
-var a2;
-var a3;
-var a4;
-var a5;
-var a6;
-var a7;
-var a8;
 var ra1 = a1 || a1; // any       || any is any
 var ra2 = a2 || a1; // boolean   || any is any
 var ra3 = a3 || a1; // number    || any is any

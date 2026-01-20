@@ -1,3 +1,4 @@
+// @strict: false
 declare function alert(message?: any): void;
 var x = {
     doStuff: (callback) => () => {

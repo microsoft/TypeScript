@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/missingDiscriminants.ts] ////
+
+=== missingDiscriminants.ts ===
+// https://github.com/microsoft/typescript-go/issues/1020
+
+type Thing =
+>Thing : Symbol(Thing, Decl(missingDiscriminants.ts, 0, 0))
+
+  | { str: "a", num: 0 }
+>str : Symbol(str, Decl(missingDiscriminants.ts, 3, 5))
+>num : Symbol(num, Decl(missingDiscriminants.ts, 3, 15))
+
+  | { str: "b" }
+>str : Symbol(str, Decl(missingDiscriminants.ts, 4, 5))
+
+  | { num: 1 }
+>num : Symbol(num, Decl(missingDiscriminants.ts, 5, 5))
+
+const thing1: Thing = { str: "a", num: 0 }
+>thing1 : Symbol(thing1, Decl(missingDiscriminants.ts, 7, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants.ts, 0, 0))
+>str : Symbol(str, Decl(missingDiscriminants.ts, 7, 23))
+>num : Symbol(num, Decl(missingDiscriminants.ts, 7, 33))
+
+const thing2: Thing = { str: "b", num: 1 } // Shouldn't be error
+>thing2 : Symbol(thing2, Decl(missingDiscriminants.ts, 8, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants.ts, 0, 0))
+>str : Symbol(str, Decl(missingDiscriminants.ts, 8, 23))
+>num : Symbol(num, Decl(missingDiscriminants.ts, 8, 33))
+
+const thing3: Thing = { num: 1, str: "b" } // Shouldn't be error
+>thing3 : Symbol(thing3, Decl(missingDiscriminants.ts, 9, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants.ts, 0, 0))
+>num : Symbol(num, Decl(missingDiscriminants.ts, 9, 23))
+>str : Symbol(str, Decl(missingDiscriminants.ts, 9, 31))
+
+type Item =
+>Item : Symbol(Item, Decl(missingDiscriminants.ts, 9, 42))
+
+  | { kind: "a", subkind: 0, value: string }
+>kind : Symbol(kind, Decl(missingDiscriminants.ts, 12, 5))
+>subkind : Symbol(subkind, Decl(missingDiscriminants.ts, 12, 16))
+>value : Symbol(value, Decl(missingDiscriminants.ts, 12, 28))
+
+  | { kind: "a", subkind: 1, value: number }
+>kind : Symbol(kind, Decl(missingDiscriminants.ts, 13, 5))
+>subkind : Symbol(subkind, Decl(missingDiscriminants.ts, 13, 16))
+>value : Symbol(value, Decl(missingDiscriminants.ts, 13, 28))
+
+  | { kind: "b" }
+>kind : Symbol(kind, Decl(missingDiscriminants.ts, 14, 5))
+
+const item1: Item = { subkind: 1, kind: "b" } // Error, type "b" not assignable to type "a"
+>item1 : Symbol(item1, Decl(missingDiscriminants.ts, 16, 5))
+>Item : Symbol(Item, Decl(missingDiscriminants.ts, 9, 42))
+>subkind : Symbol(subkind, Decl(missingDiscriminants.ts, 16, 21))
+>kind : Symbol(kind, Decl(missingDiscriminants.ts, 16, 33))
+
+const item2: Item = { kind: "b", subkind: 1 } // Error, 'subkind' isn't a known property
+>item2 : Symbol(item2, Decl(missingDiscriminants.ts, 17, 5))
+>Item : Symbol(Item, Decl(missingDiscriminants.ts, 9, 42))
+>kind : Symbol(kind, Decl(missingDiscriminants.ts, 17, 21))
+>subkind : Symbol(subkind, Decl(missingDiscriminants.ts, 17, 32))
+

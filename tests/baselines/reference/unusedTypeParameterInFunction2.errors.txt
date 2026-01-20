@@ -5,6 +5,6 @@ unusedTypeParameterInFunction2.ts(1,16): error TS6133: 'Y' is declared but its v
     function f1<X, Y>() {
                    ~
 !!! error TS6133: 'Y' is declared but its value is never read.
-        var a: X;
+        var a!: X;
         a;
     }

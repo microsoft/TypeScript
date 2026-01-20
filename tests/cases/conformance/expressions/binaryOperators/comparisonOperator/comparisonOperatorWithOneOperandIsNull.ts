@@ -20,13 +20,13 @@ function foo<T>(t: T) {
     var foo_r8 = null !== t;
 }
 
-var a: boolean;
-var b: number;
-var c: string;
-var d: void;
-var e: E;
-var f: {};
-var g: string[];
+declare var a: boolean;
+declare var b: number;
+declare var c: string;
+declare var d: void;
+declare var e: E;
+declare var f: {};
+declare var g: string[];
 
 // operator <
 var r1a1 = null < a;

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module M {
+////namespace M {
 ////   export class C<T extends Date> {
 ////      static foo(): C<Date> {
 ////          return null;

@@ -1,5 +1,6 @@
+// @strict: false
 declare module "m2" {
-    export module X {
+    export namespace X {
         interface I { }
     }
     function Y();

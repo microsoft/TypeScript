@@ -8,7 +8,7 @@ class C {
     protected static bar: string;
 }
 
-module C {
+namespace C {
     export var f = C.foo; // OK
     export var b = C.bar; // error
 }

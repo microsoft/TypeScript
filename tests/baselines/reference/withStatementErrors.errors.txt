@@ -18,7 +18,7 @@ withStatementErrors.ts(3,1): error TS2410: The 'with' statement is not supported
         
         interface I {} // error
         
-        module M {} // error
+        namespace M {} // error
             
     }
     

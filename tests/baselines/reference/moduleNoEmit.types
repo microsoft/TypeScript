@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleNoEmit.ts] ////
 
 === moduleNoEmit.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

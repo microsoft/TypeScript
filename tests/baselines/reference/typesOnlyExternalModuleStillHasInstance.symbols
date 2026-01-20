@@ -27,11 +27,11 @@ export interface Person {
 >age : Symbol(Person.age, Decl(foo_0.ts, 1, 14))
 }
 
-export module M2 {
+export namespace M2 {
 >M2 : Symbol(M2, Decl(foo_0.ts, 3, 1))
 
 	export interface I2 {
->I2 : Symbol(I2, Decl(foo_0.ts, 5, 18))
+>I2 : Symbol(I2, Decl(foo_0.ts, 5, 21))
 
 		x: Person;
 >x : Symbol(I2.x, Decl(foo_0.ts, 6, 22))

@@ -1,3 +1,5 @@
+// @strict: false
+
 let foo: string = "";
 
 function f1 (bar = foo) { // unexpected compiler error; works at runtime

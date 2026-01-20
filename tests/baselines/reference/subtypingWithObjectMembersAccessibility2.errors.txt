@@ -23,7 +23,7 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
         bar: string;
     }
     
-    module ExplicitPublic {
+    namespace ExplicitPublic {
         class A {
             private foo: Base;
         }
@@ -58,7 +58,7 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
         }
     }
     
-    module ImplicitPublic {
+    namespace ImplicitPublic {
         class A {
             private foo: Base;
         }

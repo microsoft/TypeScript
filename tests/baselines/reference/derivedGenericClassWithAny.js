@@ -36,9 +36,9 @@ class E<T extends string> extends D {
     }
 }
 
-var c: C<number>;
-var d: D;
-var e: E<string>;
+declare var c: C<number>;
+declare var d: D;
+declare var e: E<string>;
 
 c = d;
 c = e;
@@ -117,9 +117,6 @@ var E = /** @class */ (function (_super) {
     };
     return E;
 }(D));
-var c;
-var d;
-var e;
 c = d;
 c = e;
 var r = c.foo(); // e.foo would return string

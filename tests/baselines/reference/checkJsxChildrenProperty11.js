@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty11.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementAttributesProperty { props: {} }
 	interface IntrinsicElements { 

@@ -109,7 +109,7 @@ class B3 extends A3 {
 >      : ^^^^^^
 }
 
-module TwoLevels {
+namespace TwoLevels {
 >TwoLevels : typeof TwoLevels
 >          : ^^^^^^^^^^^^^^^^
 

@@ -1,13 +1,13 @@
 // @filename: function.ts
-module A {
+namespace A {
     export function Point() {
         return { x: 0, y: 0 };
     }
 }
 
 // @filename: module.ts
-module B {
-    export module Point {
+namespace B {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }

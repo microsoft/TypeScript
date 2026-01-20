@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericCallbacksAndClassHierarchy.ts] ////
 
 === genericCallbacksAndClassHierarchy.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

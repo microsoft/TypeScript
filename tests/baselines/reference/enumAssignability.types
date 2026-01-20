@@ -81,7 +81,7 @@ x = f; // ok
 >f : F
 >  : ^
 
-module Others {
+namespace Others {
 >Others : typeof Others
 >       : ^^^^^^^^^^^^^
 

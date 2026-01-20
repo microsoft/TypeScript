@@ -71,10 +71,10 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
 ==== compoundArithmeticAssignmentWithInvalidOperands.ts (68 errors) ====
     enum E { a, b }
     
-    var a: any;
-    var b: void;
+    declare var a: any;
+    declare var b: void;
     
-    var x1: boolean;
+    declare var x1: boolean;
     x1 *= a;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -115,7 +115,7 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
           ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x2: string;
+    declare var x2: string;
     x2 *= a;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -156,7 +156,7 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
           ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x3: {};
+    declare var x3: {};
     x3 *= a;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -197,7 +197,7 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
           ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x4: void;
+    declare var x4: void;
     x4 *= a;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -238,7 +238,7 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
           ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x5: number;
+    declare var x5: number;
     x5 *= b;
           ~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -252,7 +252,7 @@ compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The righ
           ~~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     
-    var x6: E;
+    declare var x6: E;
     x6 *= b;
           ~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

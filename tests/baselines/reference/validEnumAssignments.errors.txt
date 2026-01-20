@@ -7,9 +7,9 @@ validEnumAssignments.ts(26,1): error TS2322: Type '-1' is not assignable to type
         B
     }
     
-    var n: number;
-    var a: any;
-    var e: E;
+    declare var n: number;
+    declare var a: any;
+    declare var e: E;
     
     n = e;
     n = E.A;

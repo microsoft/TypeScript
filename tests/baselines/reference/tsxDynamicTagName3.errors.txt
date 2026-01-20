@@ -3,7 +3,7 @@ tsxDynamicTagName3.tsx(9,2): error TS2604: JSX element type 'CustomTag' does not
 
 
 ==== tsxDynamicTagName3.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		div: any

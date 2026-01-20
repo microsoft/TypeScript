@@ -1,6 +1,6 @@
+// @strict: false
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: node_modules/ref.ts
 var x = 1;
 

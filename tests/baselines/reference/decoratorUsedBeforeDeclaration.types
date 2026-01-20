@@ -1,0 +1,438 @@
+//// [tests/cases/compiler/decoratorUsedBeforeDeclaration.ts] ////
+
+=== decoratorUsedBeforeDeclaration.ts ===
+@lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+@deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+class Greeter {
+>Greeter : Greeter
+>        : ^^^^^^^
+
+  @lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  @deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  greeting: string;
+>greeting : string
+>         : ^^^^^^
+
+  constructor(message: string) {
+>message : string
+>        : ^^^^^^
+
+    this.greeting = message;
+>this.greeting = message : string
+>                        : ^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+>message : string
+>        : ^^^^^^
+  }
+
+  @lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  @deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  greet() {
+>greet : () => string
+>      : ^^^^^^^^^^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  @lambda
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+
+  @deco
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+
+  greet1() {
+>greet1 : () => string
+>       : ^^^^^^^^^^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+>greet2 : (param: any) => string
+>       : ^     ^^^^^^^^^^^^^^^^
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+>param : any
+>      : ^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  greet3(@lambda @deco param) {
+>greet3 : (param: any) => string
+>       : ^     ^^^^^^^^^^^^^^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>param : any
+>      : ^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+}
+
+function deco(...args: any[]): any {}
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>args : any[]
+>     : ^^^^^
+
+enum Enum {
+>Enum : Enum
+>     : ^^^^
+
+  No = 0,
+>No : Enum.No
+>   : ^^^^^^^
+>0 : 0
+>  : ^
+
+  Yes = 1,
+>Yes : Enum.Yes
+>    : ^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+const lambda = (...args: any[]): any => {};
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>(...args: any[]): any => {} : (...args: any[]) => any
+>                            : ^^^^    ^^     ^^^^^   
+>args : any[]
+>     : ^^^^^
+
+@lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+@deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+class Greeter1 {
+>Greeter1 : Greeter1
+>         : ^^^^^^^^
+
+  @lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  @deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  greeting: string;
+>greeting : string
+>         : ^^^^^^
+
+  constructor(message: string) {
+>message : string
+>        : ^^^^^^
+
+    this.greeting = message;
+>this.greeting = message : string
+>                        : ^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+>message : string
+>        : ^^^^^^
+  }
+
+  @lambda(Enum.No)
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  @deco(Enum.No)
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+
+  greet() {
+>greet : () => string
+>      : ^^^^^^^^^^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  @lambda
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+
+  @deco
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+
+  greet1() {
+>greet1 : () => string
+>       : ^^^^^^^^^^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+>greet2 : (param: any) => string
+>       : ^     ^^^^^^^^^^^^^^^^
+>lambda(Enum.No) : any
+>                : ^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+>deco(Enum.No) : any
+>              : ^^^
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>Enum.No : Enum.No
+>        : ^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>No : Enum.No
+>   : ^^^^^^^
+>param : any
+>      : ^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+
+  greet3(@lambda @deco param) {
+>greet3 : (param: any) => string
+>       : ^     ^^^^^^^^^^^^^^^^
+>lambda : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
+>deco : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
+>param : any
+>      : ^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>greeting : string
+>         : ^^^^^^
+  }
+}
+

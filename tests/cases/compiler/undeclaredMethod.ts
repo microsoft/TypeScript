@@ -1,5 +1,5 @@
 
-module M {
+namespace M {
     export class C {
         public salt() {}
     }

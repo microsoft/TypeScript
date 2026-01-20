@@ -1,5 +1,6 @@
+// @strict: false
 //@target: ES6
-module M {
+namespace M {
     var Symbol;
 
     class C {

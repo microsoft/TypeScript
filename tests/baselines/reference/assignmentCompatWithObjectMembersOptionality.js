@@ -7,14 +7,14 @@ class Base { foo: string; }
 class Derived extends Base { bar: string; }
 class Derived2 extends Derived { baz: string; }
 
-module TargetHasOptional {
+namespace TargetHasOptional {
     // targets
     interface C {
         opt?: Base
     }
-    var c: C;
+    declare var c: C;
 
-    var a: { opt?: Base; }
+    declare var a: { opt?: Base; };
     var b: typeof a = { opt: new Base() }
 
     // sources
@@ -27,9 +27,9 @@ module TargetHasOptional {
     interface F {
         opt?: Derived;
     }
-    var d: D;
-    var e: E;
-    var f: F;
+    declare var d: D;
+    declare var e: E;
+    declare var f: F;
 
     // all ok
     c = d;
@@ -49,14 +49,14 @@ module TargetHasOptional {
     b = c;
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
     // targets
     interface C {
         opt: Base
     }
-    var c: C;
+    declare var c: C;
 
-    var a: { opt: Base; }
+    declare var a: { opt: Base; };
     var b = { opt: new Base() }
 
     // sources
@@ -69,9 +69,9 @@ module SourceHasOptional {
     interface F {
         opt: Derived;
     }
-    var d: D;
-    var e: E;
-    var f: F;
+    declare var d: D;
+    declare var e: E;
+    declare var f: F;
 
     c = d; // error
     c = e; // error
@@ -128,12 +128,7 @@ var Derived2 = /** @class */ (function (_super) {
 }(Derived));
 var TargetHasOptional;
 (function (TargetHasOptional) {
-    var c;
-    var a;
     var b = { opt: new Base() };
-    var d;
-    var e;
-    var f;
     // all ok
     c = d;
     c = e;
@@ -151,12 +146,7 @@ var TargetHasOptional;
 })(TargetHasOptional || (TargetHasOptional = {}));
 var SourceHasOptional;
 (function (SourceHasOptional) {
-    var c;
-    var a;
     var b = { opt: new Base() };
-    var d;
-    var e;
-    var f;
     c = d; // error
     c = e; // error
     c = f; // ok

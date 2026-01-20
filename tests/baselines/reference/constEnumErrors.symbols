@@ -8,7 +8,7 @@ const enum E {
 >A : Symbol(E.A, Decl(constEnumErrors.ts, 0, 14))
 }
 
-module E {
+namespace E {
 >E : Symbol(E, Decl(constEnumErrors.ts, 2, 1))
 
     var x = 1;

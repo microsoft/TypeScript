@@ -1,3 +1,4 @@
+// @strict: false
 // @noemithelpers: true
 // @experimentaldecorators: true
 // @emitdecoratormetadata: true

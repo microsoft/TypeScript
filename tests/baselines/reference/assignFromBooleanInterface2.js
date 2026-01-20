@@ -10,8 +10,8 @@ interface NotBoolean {
 }
 
 var x = true;
-var a: Boolean;
-var b: NotBoolean;
+declare var a: Boolean;
+declare var b: NotBoolean;
 
 a = x;
 a = b;
@@ -26,8 +26,6 @@ x = b; // expected error
 
 //// [assignFromBooleanInterface2.js]
 var x = true;
-var a;
-var b;
 a = x;
 a = b;
 b = a;

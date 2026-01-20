@@ -1,3 +1,4 @@
+// @strict: false
 // @allowJs: true
 // @noEmit: true
 // @checkJs: true

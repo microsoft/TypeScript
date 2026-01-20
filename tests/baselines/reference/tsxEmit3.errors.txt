@@ -5,14 +5,14 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
 
 
 ==== file.tsx (4 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
-    module M {
+    namespace M {
     	export class Foo { constructor() { } }
-    	export module S {
+    	export namespace S {
     		export class Bar { }
     
     		// Emit Foo
@@ -20,13 +20,13 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     	}
     }
     
-    module M {
+    namespace M {
     	// Emit M.Foo
     	Foo, <Foo />;
     	~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     
-    	export module S {
+    	export namespace S {
     		// Emit M.Foo
     		Foo, <Foo />;
     		~~~
@@ -40,12 +40,12 @@ file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no s
     
     }
     
-    module M {
+    namespace M {
     	// Emit M.S.Bar
     	S.Bar, <S.Bar />;
     }
     
-    module M {
+    namespace M {
     	var M = 100;
     	// Emit M_1.Foo
     	Foo, <Foo />;

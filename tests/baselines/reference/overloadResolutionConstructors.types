@@ -53,7 +53,7 @@ interface fn1 {
 >s : number
 >  : ^^^^^^
 }
-var fn1: fn1;
+declare var fn1: fn1;
 >fn1 : fn1
 >    : ^^^
 
@@ -95,7 +95,7 @@ interface fn2 {
 >t : T
 >  : ^
 }
-var fn2: fn2;
+declare var fn2: fn2;
 >fn2 : fn2
 >    : ^^^
 
@@ -172,7 +172,7 @@ interface fn3 {
 >t : T
 >  : ^
 }
-var fn3: fn3;
+declare var fn3: fn3;
 >fn3 : fn3
 >    : ^^^
 
@@ -278,7 +278,7 @@ interface fn4 {
 >m : U
 >  : ^
 }
-var fn4: fn4;
+declare var fn4: fn4;
 >fn4 : fn4
 >    : ^^^
 
@@ -399,7 +399,7 @@ interface fn5 {
 >n : number
 >  : ^^^^^^
 }
-var fn5: fn5;
+declare var fn5: fn5;
 >fn5 : fn5
 >    : ^^^
 

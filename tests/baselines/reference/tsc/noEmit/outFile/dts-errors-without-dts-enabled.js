@@ -11,7 +11,6 @@ const a = class { private p = 10; };
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -28,6 +27,14 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -45,7 +52,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -53,6 +60,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -70,7 +85,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Fix error
 
@@ -81,6 +96,14 @@ const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -98,7 +121,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -106,6 +129,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -123,7 +154,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Emit after fixing error
 
@@ -131,6 +162,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 //// [/home/src/projects/outFile.js]
@@ -151,7 +190,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -159,6 +198,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -176,7 +223,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Introduce error
 
@@ -187,6 +234,14 @@ const a = class { private p = 10; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -204,7 +259,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Emit when error
 
@@ -212,6 +267,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 //// [/home/src/projects/outFile.js]
@@ -237,7 +300,7 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -245,6 +308,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -262,4 +333,4 @@ Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

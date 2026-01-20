@@ -1,3 +1,4 @@
+// @strict: false
 interface I {
     [index: string]: { prop }
 }

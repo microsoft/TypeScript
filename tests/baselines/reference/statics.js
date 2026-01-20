@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/statics.ts] ////
 
 //// [statics.ts]
-module M {
+namespace M {
     export class C {
         x: number;
         constructor(public c1: number, public c2: number, c3: number) {

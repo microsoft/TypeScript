@@ -1,5 +1,5 @@
 //@jsx: react
-//@module: amd
+//@module: commonjs
 
 //@filename: react.d.ts
 declare module "react" {
@@ -7,7 +7,7 @@ declare module "react" {
 }
 
 //@filename: file1.tsx
-declare module JSX {
+declare namespace JSX {
     interface Element { }
 }
 export class MyClass { }

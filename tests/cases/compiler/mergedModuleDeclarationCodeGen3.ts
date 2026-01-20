@@ -1,7 +1,8 @@
-module my.data {
+// @strict: false
+namespace my.data {
     export function buz() { }
 }
-module my.data.foo {
+namespace my.data.foo {
     function data(my, foo) {
         buz();
     }

@@ -1,3 +1,4 @@
+// @strict: false
 interface IPoint {
     x:number;
     y:number;
@@ -18,7 +19,7 @@ class Point implements IPoint {
 var result="";
 result+=(new Point(3,4).move(2,2));
 
-module M {
+namespace M {
     export var origin=new Point(0,0);
 }
 
