@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// [|class A {
 ////     constructor() {
 ////         let e: any = 10;

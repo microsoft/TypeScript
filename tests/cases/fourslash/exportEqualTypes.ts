@@ -1,5 +1,6 @@
 /// <reference path='./fourslash.ts'/>
 
+// @strict: false
 // @Filename: exportEqualTypes_file0.ts
 ////interface x {
 ////    (): Date;

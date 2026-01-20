@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //@Filename: file.tsx
 //// declare namespace JSX {
 ////     interface Element { }

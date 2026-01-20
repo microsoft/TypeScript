@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 ////declare class C {
 ////    /** @type {number | null} */
 ////    p;
