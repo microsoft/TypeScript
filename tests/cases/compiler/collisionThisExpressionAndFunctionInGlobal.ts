@@ -1,3 +1,4 @@
+// @strict: false
 function _this() { //Error
     return 10;
 }

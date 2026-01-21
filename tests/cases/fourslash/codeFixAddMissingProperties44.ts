@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts' />
+// @strict: false
 // @lib: es2020
 // @target: es2020
 

@@ -39,6 +39,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFi
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
+        strict: false,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
         ...options,
     };

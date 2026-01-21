@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// [|class A {
 ////     y: number;
 ////     constructor(public a: number) {

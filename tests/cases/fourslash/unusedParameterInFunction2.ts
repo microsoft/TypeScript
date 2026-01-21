@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noUnusedParameters: true
 ////function [|greeter(x,y)|] {
 ////    use(x);

@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noUnusedLocals: true
 ////class greeter {
 ////    [|private greeting: string;|]

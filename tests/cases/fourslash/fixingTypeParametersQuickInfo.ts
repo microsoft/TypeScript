@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 ////var /*1*/result = /*2*/f(0, /*3*/x => null, /*4*/x => x.blahblah);
 

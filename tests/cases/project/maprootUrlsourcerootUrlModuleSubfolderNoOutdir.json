@@ -8,5 +8,6 @@
     "declaration": true,
     "baselineCheck": true,
     "mapRoot": "http://www.typescriptlang.org/",
-    "sourceRoot": "http://typescript.codeplex.com/"
+    "sourceRoot": "http://typescript.codeplex.com/",
+    "strict": false
 }
