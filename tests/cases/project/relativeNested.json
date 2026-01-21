@@ -4,5 +4,6 @@
     "inputFiles": [
         "app.ts"
     ],
-    "runTest": true
+    "runTest": true,
+    "strict": false
 }
