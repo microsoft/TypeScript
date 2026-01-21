@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 // @Filename: cloduleAsBaseClass2_0.ts
 ////class A {
 ////    constructor(x: number) { }

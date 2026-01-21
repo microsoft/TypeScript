@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////var /*1*/a = null;                   // var a: any
 ////var /*2*/b = undefined;              // var b: any
 ////var /*3*/c = { x: 0, y: null };	// var c: { x: number, y: any }

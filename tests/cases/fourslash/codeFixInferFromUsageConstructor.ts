@@ -1,4 +1,6 @@
 /// <reference path='fourslash.ts' />
+
+// @strict: false
 // @strictNullChecks: true
 
 ////class TokenType {

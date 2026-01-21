@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////interface A<T> {
 ////    foo(a: T): B<T>;
 ////    foo(): void ;

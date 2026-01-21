@@ -2,6 +2,7 @@
 
 // Tests that the spelling fix is returned first.
 
+// @strict: false
 ////class C {
 ////    foof: number;
 ////    method() {
