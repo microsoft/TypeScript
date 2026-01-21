@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 // @strictNullChecks: true
 // @exactOptionalPropertyTypes: true
 //// interface IC2 {

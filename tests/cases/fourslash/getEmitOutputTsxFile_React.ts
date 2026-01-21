@@ -4,6 +4,7 @@
 // @declaration: true
 // @sourceMap: true
 // @jsx: react
+// @strict: false
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true
