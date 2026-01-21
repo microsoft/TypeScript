@@ -29,3 +29,22 @@ module.exports = {
 export const thing: Something;
 import Something_1 = require("fs");
 import Something = Something_1.Something;
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/conformance/jsdoc/declarations/out/index.d.ts(2,30): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/jsdoc/declarations/out/index.d.ts (1 errors) ====
+    export const thing: Something;
+    import Something_1 = require("fs");
+                                 ~~~~
+!!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+    import Something = Something_1.Something;
+    
+==== node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "fs" {
+        export class Something {}
+    }

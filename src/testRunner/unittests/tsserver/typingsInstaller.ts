@@ -222,7 +222,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         });
         openExternalProjectForSession({
             projectFileName,
-            options: {},
+            options: { types: ["*"] },
             rootFiles: [toExternalFile(appJs.path)],
             typeAcquisition: { enable: true, include: ["node"] },
         }, session);

@@ -329,7 +329,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Default library for target 'es5'
 	node_modules/@types/pad/index.d.ts
 	  Imported via "pad" from file 'a.ts'
-	  Entry point for implicit type library 'pad'
 	a.ts
 	  Root file specified for compilation
 

@@ -394,34 +394,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/node_modules",
     "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
@@ -479,34 +451,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   },
   {
     "key": "/user/username/projects/project/c",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]
@@ -623,34 +567,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   },
   {
     "key": "/user/username/projects/project/c",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]

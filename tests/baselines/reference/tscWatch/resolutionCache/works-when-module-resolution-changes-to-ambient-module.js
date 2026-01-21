@@ -145,37 +145,15 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mfoo.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
+
+[7m1[0m import * as fs from "fs";
+[7m [0m [91m                    ~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/users/username/projects/project/foo.js] file written with same contents
-
-PolledWatches::
-/users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/users/username/projects:
-  {}
-/users/username/projects/project:
-  {}
-/users/username/projects/project/foo.ts:
-  {}
-/users/username/projects/project/node_modules/@types/node/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/@types/node/package.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules:
-  {}
-/users/username/projects/project/node_modules/@types:
-  {}
 
 Timeout callback:: count: 0
 17: timerToInvalidateFailedLookupResolutions *deleted*
@@ -191,14 +169,9 @@ Program structureReused: SafeModules
 Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
-/users/username/projects/project/node_modules/@types/node/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/foo.ts
-/users/username/projects/project/node_modules/@types/node/index.d.ts
 
-Shape signatures in builder refreshed for::
-/users/username/projects/project/foo.ts (computed .d.ts)
-/users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined

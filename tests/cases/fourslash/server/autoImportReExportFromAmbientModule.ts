@@ -3,7 +3,8 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
-////     "module": "commonjs"
+////     "module": "commonjs",
+////     "types": ["node", "fs-extra"]
 ////   }
 //// }
 

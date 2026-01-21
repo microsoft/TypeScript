@@ -34,7 +34,8 @@ declare module 'util' {
     "checkJs": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "types": ["node"]
   },
   "include": ["**/*"],
   "typeAcquisition": {
@@ -66,6 +67,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "typeRoots": [
    "/home/src/workspaces/project/node_modules/@types"
   ],
+  "types": [
+   "node"
+  ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -93,8 +97,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -114,7 +116,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	a.js
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	node_modules/@types/node/index.d.ts
-	  Entry point for implicit type library 'node'
+	  Entry point of type library 'node' specified in compilerOptions
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -147,24 +149,17 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
-	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ],\n    \"types\": [\"node\"]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -175,8 +170,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
-	node_modules/@types/node/index.d.ts
-	  Entry point for implicit type library 'node'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
@@ -185,7 +178,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -218,15 +211,11 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/node/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json: *new*
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json: *new*
@@ -239,9 +228,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
   {}
 
 Projects::
@@ -276,9 +263,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts *new*
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -300,7 +286,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -330,15 +316,11 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/node/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json:
@@ -355,9 +337,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::
@@ -393,9 +373,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1035,7 +1014,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1106,9 +1085,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1159,9 +1137,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1233,9 +1210,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1307,9 +1283,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1381,9 +1356,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1455,9 +1429,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1529,9 +1502,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1603,9 +1575,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1677,9 +1648,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1751,9 +1721,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1825,9 +1794,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1899,9 +1867,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1973,9 +1940,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2047,9 +2013,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2121,9 +2086,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2195,9 +2159,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2269,9 +2232,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2343,9 +2305,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2417,9 +2378,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2491,9 +2451,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2565,9 +2524,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2639,9 +2597,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2713,9 +2670,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2787,9 +2743,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2861,9 +2816,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2935,9 +2889,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3009,9 +2962,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3083,9 +3035,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3157,9 +3108,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3231,9 +3181,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3305,9 +3254,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3379,9 +3327,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3453,9 +3400,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3527,9 +3473,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -4213,15 +4158,11 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/node/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json:
@@ -4236,9 +4177,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::
@@ -4306,9 +4245,8 @@ ScriptInfos::
         /home/src/workspaces/project/tsconfig.json *default*
 /home/src/workspaces/project/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
