@@ -158,11 +158,14 @@ func (a *autoImportRegistryCloneHost) GetSourceFile(fileName string, path tspath
 		JSDocParsingMode: ast.JSDocParsingModeParseAll,
 	}
 	key := NewParseCacheKey(opts, fh.Hash(), fh.Kind())
+	result := a.parseCache.Load(key, fh)
 
 	a.filesMu.Lock()
 	a.files = append(a.files, key)
 	a.filesMu.Unlock()
-	return a.parseCache.Acquire(key, fh)
+
+	a.parseCache.Ref(key)
+	return result
 }
 
 // Dispose implements autoimport.RegistryCloneHost.

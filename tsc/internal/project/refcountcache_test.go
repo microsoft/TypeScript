@@ -108,6 +108,69 @@ func TestRefCountingCaches(t *testing.T) {
 			mainEntry, ok := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			assert.Equal(t, ok, false)
 		})
+
+		t.Run("unchanged program does not over-ref", func(t *testing.T) {
+			t.Parallel()
+
+			// When a program is reused across snapshots without changes, we should
+			// not accumulate extra refs. The ref count should stay at 1 per source file
+			// until the program is finally disposed.
+			session := setup(files)
+			session.DidOpenFile(context.Background(), "file:///user/username/projects/myproject/src/main.ts", 1, files["/user/username/projects/myproject/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
+			session.DidOpenFile(context.Background(), "file:///user/username/projects/myproject/src/utils.ts", 1, files["/user/username/projects/myproject/src/utils.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			// Get first snapshot and capture the program/entries
+			snapshot1, release1 := session.Snapshot()
+			program1 := snapshot1.ProjectCollection.InferredProject().Program
+			main := program1.GetSourceFile("/user/username/projects/myproject/src/main.ts")
+			mainEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			assert.Equal(t, mainEntry.refCount, 1, "initial refCount should be 1")
+
+			// Change utils.ts to trigger a new snapshot, but main.ts stays the same
+			// so main's source file should be reused.
+			session.DidChangeFile(context.Background(), "file:///user/username/projects/myproject/src/utils.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{
+					Partial: &lsproto.TextDocumentContentChangePartial{
+						Range: lsproto.Range{
+							Start: lsproto.Position{Line: 0, Character: 0},
+							End:   lsproto.Position{Line: 0, Character: 25},
+						},
+						Text: "export function util2() {}",
+					},
+				},
+			})
+
+			// Get second snapshot - main.ts should be reused (program is new but shares source files)
+			ls, err := session.GetLanguageService(context.Background(), "file:///user/username/projects/myproject/src/main.ts")
+			assert.NilError(t, err)
+			program2 := ls.GetProgram()
+			main2 := program2.GetSourceFile("/user/username/projects/myproject/src/main.ts")
+			assert.Equal(t, main, main2, "main.ts source file should be reused")
+
+			// main.ts refCount should be 2: one for old program, one for new program
+			mainEntry, _ = session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			assert.Equal(t, mainEntry.refCount, 2, "refCount should be 2 (old and new program)")
+
+			// Now release the first snapshot
+			release1()
+
+			// The entry should still exist with refCount 1 (new snapshot still holds it)
+			mainEntry, ok := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			assert.Assert(t, ok, "entry should still exist after releasing old snapshot")
+			assert.Equal(t, mainEntry.refCount, 1, "refCount should be 1 after releasing old snapshot")
+
+			// Close files to trigger cleanup
+			session.DidCloseFile(context.Background(), "file:///user/username/projects/myproject/src/main.ts")
+			session.DidCloseFile(context.Background(), "file:///user/username/projects/myproject/src/utils.ts")
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+
+			// Entry should now be gone (refCount 0, deleted)
+			mainEntry, ok = session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			if ok {
+				t.Logf("Entry still exists with refCount=%d, deleted=%v", mainEntry.refCount, mainEntry.deleted)
+			}
+			assert.Assert(t, !ok, "entry should be deleted after program is disposed")
+		})
 	})
 
 	t.Run("extendedConfigCache", func(t *testing.T) {

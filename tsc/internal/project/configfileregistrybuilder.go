@@ -646,7 +646,7 @@ func (c *configFileRegistryBuilder) GetExtendedConfig(fileName string, path tspa
 		content = fh.Content()
 	}
 
-	return c.extendedConfigCache.Acquire(path, ExtendedConfigParseArgs{
+	return c.extendedConfigCache.Load(path, ExtendedConfigParseArgs{
 		FileName:        fileName,
 		Content:         content,
 		FS:              c.fs.source,

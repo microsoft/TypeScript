@@ -325,13 +325,6 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		newProgram, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
-			for _, file := range newProgram.GetSourceFiles() {
-				if file.Path() != p.dirtyFilePath {
-					// UpdateProgram only called host.GetSourceFile for the dirty file.
-					// Increment ref count for all other files.
-					p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
-				}
-			}
 		}
 	} else {
 		var typingsLocation string
