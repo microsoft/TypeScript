@@ -9,6 +9,7 @@
     "baselineCheck": true,
     "mapRoot": "http://www.typescriptlang.org/",
     "sourceRoot": "http://typescript.codeplex.com/",
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",
