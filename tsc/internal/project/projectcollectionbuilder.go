@@ -29,6 +29,7 @@ type ProjectCollectionBuilder struct {
 	sessionOptions      *SessionOptions
 	parseCache          *ParseCache
 	extendedConfigCache *ExtendedConfigCache
+	toPath              func(fileName string) tspath.Path
 
 	ctx                                context.Context
 	fs                                 *snapshotFSBuilder
@@ -61,6 +62,7 @@ func newProjectCollectionBuilder(
 	return &ProjectCollectionBuilder{
 		ctx:                                ctx,
 		fs:                                 fs,
+		toPath:                             fs.toPath,
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		sessionOptions:                     sessionOptions,
 		parseCache:                         parseCache,
@@ -903,10 +905,6 @@ func (b *ProjectCollectionBuilder) findOrCreateProject(
 	}
 	entry, _ := b.configuredProjects.LoadOrStore(configFilePath, NewConfiguredProject(configFileName, configFilePath, b, logger))
 	return entry
-}
-
-func (b *ProjectCollectionBuilder) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, b.sessionOptions.CurrentDirectory, b.fs.fs.UseCaseSensitiveFileNames())
 }
 
 func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []string, logger *logging.LogTree) bool {
