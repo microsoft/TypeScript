@@ -795,9 +795,9 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >            : ^^^^^
 }
 
-function CreateTypedArraysOf(obj) {
+function CreateTypedArraysOf(obj: any) {
 >CreateTypedArraysOf : (obj: any) => any[]
->                    : ^   ^^^^^^^^^^^^^^^
+>                    : ^   ^^   ^^^^^^^^^^
 >obj : any
 
     var typedArrays = [];

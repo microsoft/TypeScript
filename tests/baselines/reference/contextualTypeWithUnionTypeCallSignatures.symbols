@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/union/contextualTypeWithUnionTypeCallSignatures.ts] ////
 
 === contextualTypeWithUnionTypeCallSignatures.ts ===
-//When used as a contextual type, a union type U has those members that are present in any of 
+// When used as a contextual type, a union type U has those members that are present in any of 
 // its constituent types, with types that are unions of the respective members in the constituent types. 
 
 // Let S be the set of types in U that have call signatures.
@@ -84,7 +84,5 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
 >IWithCallSignatures4 : Symbol(IWithCallSignatures4, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 18, 1))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 

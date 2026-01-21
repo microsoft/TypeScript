@@ -1,0 +1,73 @@
+unionTypeIndexSignature.ts(8,13): error TS2454: Variable 'unionOfDifferentReturnType' is used before being assigned.
+unionTypeIndexSignature.ts(9,13): error TS2454: Variable 'unionOfDifferentReturnType' is used before being assigned.
+unionTypeIndexSignature.ts(12,10): error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature' is used before being assigned.
+unionTypeIndexSignature.ts(12,10): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type 'boolean | { [a: string]: number; }'.
+  Property 'hello' does not exist on type 'boolean | { [a: string]: number; }'.
+unionTypeIndexSignature.ts(13,10): error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature' is used before being assigned.
+unionTypeIndexSignature.ts(13,10): error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type 'boolean | { [a: string]: number; }'.
+  Property '10' does not exist on type 'boolean | { [a: string]: number; }'.
+unionTypeIndexSignature.ts(18,13): error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+unionTypeIndexSignature.ts(18,41): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+unionTypeIndexSignature.ts(19,13): error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+unionTypeIndexSignature.ts(22,10): error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature1' is used before being assigned.
+unionTypeIndexSignature.ts(22,10): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type 'boolean | { [a: number]: number; }'.
+  Property 'hello' does not exist on type 'boolean | { [a: number]: number; }'.
+unionTypeIndexSignature.ts(23,10): error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature1' is used before being assigned.
+unionTypeIndexSignature.ts(23,10): error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type 'boolean | { [a: number]: number; }'.
+  Property '10' does not exist on type 'boolean | { [a: number]: number; }'.
+
+
+==== unionTypeIndexSignature.ts (13 errors) ====
+    var numOrDate: number | Date;
+    var anyVar: number;
+    
+    // If each type in U has a string index signature, 
+    // U has a string index signature of a union type of the types of the string index signatures from each type in U.
+    
+    var unionOfDifferentReturnType: { [a: string]: number; } | { [a: string]: Date; };
+    numOrDate = unionOfDifferentReturnType["hello"]; // number | Date
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfDifferentReturnType' is used before being assigned.
+    numOrDate = unionOfDifferentReturnType[10]; // number | Date
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfDifferentReturnType' is used before being assigned.
+    
+    var unionOfTypesWithAndWithoutStringSignature: { [a: string]: number; } | boolean;
+    anyVar = unionOfTypesWithAndWithoutStringSignature["hello"]; // any
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature' is used before being assigned.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type 'boolean | { [a: string]: number; }'.
+!!! error TS7053:   Property 'hello' does not exist on type 'boolean | { [a: string]: number; }'.
+    anyVar = unionOfTypesWithAndWithoutStringSignature[10]; // any
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature' is used before being assigned.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type 'boolean | { [a: string]: number; }'.
+!!! error TS7053:   Property '10' does not exist on type 'boolean | { [a: string]: number; }'.
+    
+    // If each type in U has a numeric index signature, 
+    // U has a numeric index signature of a union type of the types of the numeric index signatures from each type in U.
+    var unionOfDifferentReturnType1: { [a: number]: number; } | { [a: number]: Date; };
+    numOrDate = unionOfDifferentReturnType1["hello"]; // any
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+                                            ~~~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    numOrDate = unionOfDifferentReturnType1[10]; // number | Date
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+    
+    var unionOfTypesWithAndWithoutStringSignature1: { [a: number]: number; } | boolean;
+    anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"]; // any
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature1' is used before being assigned.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type 'boolean | { [a: number]: number; }'.
+!!! error TS7053:   Property 'hello' does not exist on type 'boolean | { [a: number]: number; }'.
+    anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfTypesWithAndWithoutStringSignature1' is used before being assigned.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type 'boolean | { [a: number]: number; }'.
+!!! error TS7053:   Property '10' does not exist on type 'boolean | { [a: number]: number; }'.

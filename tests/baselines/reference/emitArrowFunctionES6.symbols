@@ -9,7 +9,7 @@ var f2 = (x: string, y: string) => { }
 >x : Symbol(x, Decl(emitArrowFunctionES6.ts, 1, 10))
 >y : Symbol(y, Decl(emitArrowFunctionES6.ts, 1, 20))
 
-var f3 = (x: string, y: number, ...rest) => { }
+var f3 = (x: string, y: number, ...rest: any[]) => { }
 >f3 : Symbol(f3, Decl(emitArrowFunctionES6.ts, 2, 3))
 >x : Symbol(x, Decl(emitArrowFunctionES6.ts, 2, 10))
 >y : Symbol(y, Decl(emitArrowFunctionES6.ts, 2, 20))

@@ -17,11 +17,11 @@ var f2 = (x: string, y: string) => { }
 >y : string
 >  : ^^^^^^
 
-var f3 = (x: string, y: number, ...rest) => { }
+var f3 = (x: string, y: number, ...rest: any[]) => { }
 >f3 : (x: string, y: number, ...rest: any[]) => void
->   : ^ ^^      ^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
->(x: string, y: number, ...rest) => { } : (x: string, y: number, ...rest: any[]) => void
->                                       : ^ ^^      ^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^    ^^     ^^^^^^^^^
+>(x: string, y: number, ...rest: any[]) => { } : (x: string, y: number, ...rest: any[]) => void
+>                                              : ^ ^^      ^^ ^^      ^^^^^    ^^     ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : number

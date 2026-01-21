@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/union/contextualTypeWithUnionTypeCallSignatures.ts] ////
 
 //// [contextualTypeWithUnionTypeCallSignatures.ts]
-//When used as a contextual type, a union type U has those members that are present in any of 
+// When used as a contextual type, a union type U has those members that are present in any of 
 // its constituent types, with types that are unions of the respective members in the constituent types. 
 
 // Let S be the set of types in U that have call signatures.
@@ -39,7 +39,8 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any*/ a.toString();
 
 //// [contextualTypeWithUnionTypeCallSignatures.js]
-//When used as a contextual type, a union type U has those members that are present in any of 
+"use strict";
+// When used as a contextual type, a union type U has those members that are present in any of 
 // its constituent types, with types that are unions of the respective members in the constituent types. 
 // With no call signature | callSignatures
 var x = function (a) { return a.toString(); };

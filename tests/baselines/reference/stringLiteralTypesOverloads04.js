@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts] ////
 
 //// [stringLiteralTypesOverloads04.ts]
-declare function f(x: (p: "foo" | "bar") => "foo");
+declare function f(x: (p: "foo" | "bar") => "foo"): void;
 
 f(y => {
     const z = y = "foo";
@@ -16,4 +16,4 @@ f(function (y) {
 
 
 //// [stringLiteralTypesOverloads04.d.ts]
-declare function f(x: (p: "foo" | "bar") => "foo"): any;
+declare function f(x: (p: "foo" | "bar") => "foo"): void;

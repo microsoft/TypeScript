@@ -308,7 +308,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 }
 
-function CreateTypedArraysOf(obj) {
+function CreateTypedArraysOf(obj: any) {
 >CreateTypedArraysOf : Symbol(CreateTypedArraysOf, Decl(typedArrays.ts, 73, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
 
