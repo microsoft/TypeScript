@@ -190,16 +190,14 @@ func (e *SyncMapEntry[K, V]) DeleteIf(cond func(V) bool) {
 }
 
 type SyncMap[K comparable, V Cloneable[V]] struct {
-	base          map[K]V
-	dirty         collections.SyncMap[K, *SyncMapEntry[K, V]]
-	finalizeValue func(dirty V, original V) V
+	base  map[K]V
+	dirty collections.SyncMap[K, *SyncMapEntry[K, V]]
 }
 
-func NewSyncMap[K comparable, V Cloneable[V]](base map[K]V, finalizeValue func(dirty V, original V) V) *SyncMap[K, V] {
+func NewSyncMap[K comparable, V Cloneable[V]](base map[K]V) *SyncMap[K, V] {
 	return &SyncMap[K, V]{
-		base:          base,
-		dirty:         collections.SyncMap[K, *SyncMapEntry[K, V]]{},
-		finalizeValue: finalizeValue,
+		base:  base,
+		dirty: collections.SyncMap[K, *SyncMapEntry[K, V]]{},
 	}
 }
 
@@ -303,7 +301,13 @@ func (m *SyncMap[K, V]) Range(fn func(*SyncMapEntry[K, V]) bool) {
 	}
 }
 
-func (m *SyncMap[K, V]) Finalize() (map[K]V, bool) {
+type FinalizationHooks[K comparable, V any] struct {
+	OnDelete func(key K, value V)
+	OnChange func(key K, oldValue V, newValue V)
+	OnAdd    func(key K, value V)
+}
+
+func (m *SyncMap[K, V]) finalize(hooks FinalizationHooks[K, V]) (map[K]V, bool) {
 	var changed bool
 	result := m.base
 	ensureCloned := func() {
@@ -320,16 +324,32 @@ func (m *SyncMap[K, V]) Finalize() (map[K]V, bool) {
 	m.dirty.Range(func(key K, entry *SyncMapEntry[K, V]) bool {
 		if entry.delete {
 			ensureCloned()
+			if hooks.OnDelete != nil {
+				hooks.OnDelete(key, entry.original)
+			}
 			delete(result, key)
 		} else if entry.dirty {
 			ensureCloned()
-			if m.finalizeValue != nil {
-				result[key] = m.finalizeValue(entry.value, entry.original)
-			} else {
-				result[key] = entry.value
+			if hooks.OnChange != nil || hooks.OnAdd != nil {
+				if _, ok := m.base[key]; ok {
+					if hooks.OnChange != nil {
+						hooks.OnChange(key, entry.original, entry.value)
+					}
+				} else if hooks.OnAdd != nil {
+					hooks.OnAdd(key, entry.value)
+				}
 			}
+			result[key] = entry.value
 		}
 		return true
 	})
 	return result, changed
+}
+
+func (m *SyncMap[K, V]) Finalize() (map[K]V, bool) {
+	return m.finalize(FinalizationHooks[K, V]{})
+}
+
+func (m *SyncMap[K, V]) FinalizeWith(hooks FinalizationHooks[K, V]) (map[K]V, bool) {
+	return m.finalize(hooks)
 }

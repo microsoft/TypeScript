@@ -26,7 +26,7 @@ func TestSyncMapProxyFor(t *testing.T) {
 		base := map[string]*testValue{
 			"key1": {data: "original"},
 		}
-		syncMap := NewSyncMap(base, nil)
+		syncMap := NewSyncMap(base)
 
 		// Load the same entry from multiple goroutines to simulate race condition
 		var entry1, entry2 *SyncMapEntry[string, *testValue]
@@ -108,7 +108,7 @@ func TestSyncMapProxyFor(t *testing.T) {
 		base := map[string]*testValue{
 			"key1": {data: "original"},
 		}
-		syncMap := NewSyncMap(base, nil)
+		syncMap := NewSyncMap(base)
 
 		// Load two entries for the same key
 		entry1, ok1 := syncMap.Load("key1")
@@ -170,7 +170,7 @@ func TestSyncMapProxyFor(t *testing.T) {
 		base := map[string]*testValue{
 			"key1": {data: "original"},
 		}
-		syncMap := NewSyncMap(base, nil)
+		syncMap := NewSyncMap(base)
 
 		// Load two entries and make one a proxy
 		entry1, _ := syncMap.Load("key1")
@@ -198,7 +198,7 @@ func TestSyncMapProxyFor(t *testing.T) {
 		base2 := map[string]*testValue{
 			"key2": {data: "test"},
 		}
-		syncMap2 := NewSyncMap(base2, nil)
+		syncMap2 := NewSyncMap(base2)
 
 		entry3, _ := syncMap2.Load("key2")
 		entry4, _ := syncMap2.Load("key2")
@@ -227,7 +227,7 @@ func TestSyncMapProxyFor(t *testing.T) {
 		base := map[string]*testValue{
 			"key1": {data: "original"},
 		}
-		syncMap := NewSyncMap(base, nil)
+		syncMap := NewSyncMap(base)
 
 		// Load and modify a single entry - no race condition
 		entry, ok := syncMap.Load("key1")

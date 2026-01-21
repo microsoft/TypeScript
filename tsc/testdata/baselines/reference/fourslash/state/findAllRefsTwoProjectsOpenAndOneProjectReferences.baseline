@@ -298,7 +298,7 @@ Projects::
     /myproject/indirectDisabledChildLoad1/src/file1.ts  
   [/myproject/indirectDisabledChildLoad2/tsconfig.json] *new*
     /myproject/indirectDisabledChildLoad2/src/file1.ts  
-  [/myproject/main/tsconfig.json] 
+  [/myproject/main/tsconfig.json] *modified*
     /myproject/main/src/file1.ts  
   [/myproject/refToCoreRef3/tsconfig.json] *new*
     /myproject/refToCoreRef3/src/file1.ts  

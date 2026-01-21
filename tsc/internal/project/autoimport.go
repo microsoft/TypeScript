@@ -56,6 +56,10 @@ func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) F
 	return fh
 }
 
+func (a *autoImportBuilderFS) GetAccessibleEntries(path string) vfs.Entries {
+	return a.snapshotFSBuilder.GetAccessibleEntries(path)
+}
+
 type autoImportRegistryCloneHost struct {
 	projectCollection *ProjectCollection
 	parseCache        *ParseCache

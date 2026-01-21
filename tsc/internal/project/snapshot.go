@@ -265,7 +265,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(session.fs.fs, overlays, s.fs.diskFiles, session.options.PositionEncoding, s.toPath)
+	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, session.options.PositionEncoding, s.toPath)
 	if change.fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if !fs.watchChangesOverlapCache(change.fileChanges) {
@@ -280,6 +280,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		}
 	} else {
 		fs.markDirtyFiles(change.fileChanges)
+		change.fileChanges = fs.convertOpenAndCloseToChanges(change.fileChanges)
 	}
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -338,7 +339,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 
 	// Clean cached disk files not touched by any open project. It's not important that we do this on
 	// file open specifically, but we don't need to do it on every snapshot clone.
-	if len(change.fileChanges.Opened) != 0 {
+	if change.fileChanges.Opened != "" || change.fileChanges.Reopened != "" {
 		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
 		if len(projectsWithNewProgramStructure) > 0 {
 			cleanFilesStart := time.Now()

@@ -3,6 +3,7 @@ package project_test
 import (
 	"context"
 	"maps"
+	"slices"
 	"strings"
 	"testing"
 
@@ -685,6 +686,7 @@ func TestSession(t *testing.T) {
 			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
 			assert.NilError(t, err)
 			program := ls.GetProgram()
+			assert.Check(t, slices.Contains(program.CommandLine().ParsedConfig.FileNames, "/home/projects/TS/p1/src/x.ts"))
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 0)
 
 			err = utils.FS().Remove("/home/projects/TS/p1/src/x.ts")
@@ -700,8 +702,16 @@ func TestSession(t *testing.T) {
 			ls, err = session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
 			assert.NilError(t, err)
 			program = ls.GetProgram()
+			// File name is still in the command line, was explicitly included
+			assert.Check(t, slices.Contains(program.CommandLine().ParsedConfig.FileNames, "/home/projects/TS/p1/src/x.ts"))
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 1)
 			assert.Check(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
+
+			// Open file to trigger cleanup
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+			snapshot, release := session.Snapshot()
+			defer release()
+			assert.Check(t, snapshot.GetFile("/home/projects/TS/p1/src/x.ts") == nil)
 		})
 
 		t.Run("delete wildcard included file", func(t *testing.T) {
@@ -722,6 +732,7 @@ func TestSession(t *testing.T) {
 			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/x.ts")
 			assert.NilError(t, err)
 			program := ls.GetProgram()
+			assert.Check(t, slices.Contains(program.CommandLine().ParsedConfig.FileNames, "/home/projects/TS/p1/src/index.ts"))
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/x.ts"))), 0)
 
 			err = utils.FS().Remove("/home/projects/TS/p1/src/index.ts")
@@ -737,7 +748,15 @@ func TestSession(t *testing.T) {
 			ls, err = session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/x.ts")
 			assert.NilError(t, err)
 			program = ls.GetProgram()
+			// File name is gone from the command line, was originally included via wildcard
+			assert.Check(t, !slices.Contains(program.CommandLine().ParsedConfig.FileNames, "/home/projects/TS/p1/src/index.ts"))
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/x.ts"))), 1)
+
+			// Open file to trigger cleanup
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+			snapshot, release := session.Snapshot()
+			defer release()
+			assert.Check(t, snapshot.GetFile("/home/projects/TS/p1/src/index.ts") == nil)
 		})
 
 		t.Run("create explicitly included file", func(t *testing.T) {

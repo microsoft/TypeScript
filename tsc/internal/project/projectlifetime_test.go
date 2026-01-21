@@ -344,4 +344,80 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 	})
+
+	t.Run("deleted open file remains in project until closed", func(t *testing.T) {
+		t.Parallel()
+		// Scenario:
+		// 1. Start with two files included by a tsconfig, both open
+		// 2. In a single batch change, delete one of the files but leave it open, and create a new file included by the tsconfig
+		// 3. Request a LS for the deleted but open file
+		// 4. Project should include both the new file and the deleted open file
+		// 5. Close the deleted file
+		// 6. On next LS request, the project should exclude the deleted file
+
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": `{
+				"compilerOptions": {
+					"noLib": true
+				},
+				"include": ["src"]
+			}`,
+			"/home/projects/TS/p1/src/index.ts": ``,
+			"/home/projects/TS/p1/src/x.ts":     `export const x = 1;`,
+		}
+		session, utils := projecttestutil.Setup(files)
+
+		// Step 1: Open both files
+		indexUri := lsproto.DocumentUri("file:///home/projects/TS/p1/src/index.ts")
+		xUri := lsproto.DocumentUri("file:///home/projects/TS/p1/src/x.ts")
+		session.DidOpenFile(context.Background(), indexUri, 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), xUri, 1, files["/home/projects/TS/p1/src/x.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Verify initial state - both files should be in the project
+		ls, err := session.GetLanguageService(context.Background(), indexUri)
+		assert.NilError(t, err)
+		program := ls.GetProgram()
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/index.ts") != nil, "index.ts should be in project")
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil, "x.ts should be in project")
+
+		// Step 2: In a single batch change:
+		// - Delete x.ts from disk (but leave it open)
+		// - Create a new file y.ts on disk
+		err = utils.FS().Remove("/home/projects/TS/p1/src/x.ts")
+		assert.NilError(t, err)
+		err = utils.FS().WriteFile("/home/projects/TS/p1/src/y.ts", `export const y = 2;`, false)
+		assert.NilError(t, err)
+
+		// Send both events in a single batch
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Uri:  xUri,
+				Type: lsproto.FileChangeTypeDeleted,
+			},
+			{
+				Uri:  lsproto.DocumentUri("file:///home/projects/TS/p1/src/y.ts"),
+				Type: lsproto.FileChangeTypeCreated,
+			},
+		})
+
+		// Step 3 & 4: Request LS for the deleted but still open file
+		// Project should include: index.ts, x.ts (open overlay), y.ts (new disk file)
+		ls, err = session.GetLanguageService(context.Background(), xUri)
+		assert.NilError(t, err)
+		program = ls.GetProgram()
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/index.ts") != nil, "index.ts should still be in project")
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil, "x.ts should still be in project (open overlay)")
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/y.ts") != nil, "y.ts should be in project (new file)")
+
+		// Step 5: Close the deleted file
+		session.DidCloseFile(context.Background(), xUri)
+
+		// Step 6: On next LS request, x.ts should be excluded
+		ls, err = session.GetLanguageService(context.Background(), indexUri)
+		assert.NilError(t, err)
+		program = ls.GetProgram()
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/index.ts") != nil, "index.ts should still be in project")
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil, "x.ts should no longer be in project (closed and deleted)")
+		assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/src/y.ts") != nil, "y.ts should still be in project")
+	})
 }

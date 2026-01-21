@@ -651,10 +651,18 @@ func comparableValuesEqual[T comparable](a, b T) bool {
 	return a == b
 }
 
+// DiffMaps compares two maps m1 and m2 and calls the provided callbacks for added, removed, and changed entries.
+// onAdded is called for each key-value pair that is in m2 but not in m1.
+// onRemoved is called for each key-value pair that is in m1 but not in m2.
+// onChanged is called for each key where the value in m1 differs from the value in m2.
 func DiffMaps[K comparable, V comparable](m1 map[K]V, m2 map[K]V, onAdded func(K, V), onRemoved func(K, V), onChanged func(K, V, V)) {
 	DiffMapsFunc(m1, m2, comparableValuesEqual, onAdded, onRemoved, onChanged)
 }
 
+// DiffMapsFunc compares two maps m1 and m2 and calls the provided callbacks for added, removed, and changed entries.
+// onAdded is called for each key-value pair that is in m2 but not in m1.
+// onRemoved is called for each key-value pair that is in m1 but not in m2.
+// onChanged is called for each key where the value in m1 differs from the value in m2.
 func DiffMapsFunc[K comparable, V1 any, V2 any](m1 map[K]V1, m2 map[K]V2, equalValues func(V1, V2) bool, onAdded func(K, V2), onRemoved func(K, V1), onChanged func(K, V1, V2)) {
 	if onAdded != nil {
 		for k, v2 := range m2 {

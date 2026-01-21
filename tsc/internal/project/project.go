@@ -151,29 +151,27 @@ func NewProject(
 	}
 
 	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
-	if builder.sessionOptions.WatchEnabled {
-		project.programFilesWatch = NewWatchedFiles(
-			"non-root program files for "+configFileName,
+	project.programFilesWatch = NewWatchedFiles(
+		"non-root program files for "+configFileName,
+		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+		core.Identity,
+	)
+	project.failedLookupsWatch = NewWatchedFiles(
+		"failed lookups for "+configFileName,
+		lsproto.WatchKindCreate,
+		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+	)
+	project.affectingLocationsWatch = NewWatchedFiles(
+		"affecting locations for "+configFileName,
+		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+	)
+	if builder.sessionOptions.TypingsLocation != "" {
+		project.typingsWatch = NewWatchedFiles(
+			"typings installer files",
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 			core.Identity,
 		)
-		project.failedLookupsWatch = NewWatchedFiles(
-			"failed lookups for "+configFileName,
-			lsproto.WatchKindCreate,
-			createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
-		)
-		project.affectingLocationsWatch = NewWatchedFiles(
-			"affecting locations for "+configFileName,
-			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
-			createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
-		)
-		if builder.sessionOptions.TypingsLocation != "" {
-			project.typingsWatch = NewWatchedFiles(
-				"typings installer files",
-				lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
-				core.Identity,
-			)
-		}
 	}
 	return project
 }

@@ -272,7 +272,6 @@ func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
 		Kind: FileChangeKindClose,
 		URI:  uri,
-		Hash: s.fs.getFile(uri.FileName()).Hash(),
 	})
 }
 
