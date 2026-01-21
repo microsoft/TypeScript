@@ -1,3 +1,4 @@
+// @strict: false
 enum _this { // Error
     _thisVal1,
     _thisVal2,
