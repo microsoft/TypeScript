@@ -1135,8 +1135,8 @@ func getReferencesForThisKeyword(thisOrSuperKeyword *ast.Node, sourceFiles []*as
 	}
 
 	filesToSearch := sourceFiles
-	if searchSpaceNode.Kind == ast.KindSourceFile {
-		filesToSearch = []*ast.SourceFile{searchSpaceNode.AsSourceFile()}
+	if searchSpaceNode.Kind != ast.KindSourceFile {
+		filesToSearch = []*ast.SourceFile{ast.GetSourceFileOfNode(searchSpaceNode)}
 	}
 	references := core.Map(
 		core.FlatMap(filesToSearch, func(sourceFile *ast.SourceFile) []*ast.Node {

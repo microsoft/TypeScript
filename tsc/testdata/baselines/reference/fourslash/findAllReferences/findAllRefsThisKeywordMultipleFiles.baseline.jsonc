@@ -2,29 +2,70 @@
 // === /file1.ts ===
 // /*FIND ALL REFS*/[|this|]; [|this|];
 
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
+// === /file3.ts ===
+// ((x = [|this|], y) => [|this|])([|this|], [|this|]);
+// // different 'this'
+// function f(this) { return this; }
+
 
 
 // === findAllReferences ===
 // === /file1.ts ===
 // [|this|]; /*FIND ALL REFS*/[|this|];
 
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
+// === /file3.ts ===
+// ((x = [|this|], y) => [|this|])([|this|], [|this|]);
+// // different 'this'
+// function f(this) { return this; }
+
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
 // === /file2.ts ===
 // /*FIND ALL REFS*/[|this|];
 // [|this|];
 
+// === /file3.ts ===
+// ((x = [|this|], y) => [|this|])([|this|], [|this|]);
+// // different 'this'
+// function f(this) { return this; }
+
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
 // === /file2.ts ===
 // [|this|];
 // /*FIND ALL REFS*/[|this|];
 
+// === /file3.ts ===
+// ((x = [|this|], y) => [|this|])([|this|], [|this|]);
+// // different 'this'
+// function f(this) { return this; }
+
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
 // === /file3.ts ===
 // ((x = /*FIND ALL REFS*/[|this|], y) => [|this|])([|this|], [|this|]);
 // // different 'this'
@@ -33,6 +74,13 @@
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
 // === /file3.ts ===
 // ((x = [|this|], y) => /*FIND ALL REFS*/[|this|])([|this|], [|this|]);
 // // different 'this'
@@ -41,6 +89,13 @@
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
 // === /file3.ts ===
 // ((x = [|this|], y) => [|this|])(/*FIND ALL REFS*/[|this|], [|this|]);
 // // different 'this'
@@ -49,6 +104,13 @@
 
 
 // === findAllReferences ===
+// === /file1.ts ===
+// [|this|]; [|this|];
+
+// === /file2.ts ===
+// [|this|];
+// [|this|];
+
 // === /file3.ts ===
 // ((x = [|this|], y) => [|this|])([|this|], /*FIND ALL REFS*/[|this|]);
 // // different 'this'
