@@ -28708,6 +28708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getNodeLinks(node);
         let signature = links.effectsSignature;
         if (signature === undefined) {
+            links.effectsSignature = unknownSignature;
             // A call expression parented by an expression statement is a potential assertion. Other call
             // expressions are potential type predicate function calls. In order to avoid triggering
             // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
