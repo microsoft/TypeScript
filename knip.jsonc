@@ -1,7 +1,13 @@
 {
     "$schema": "https://unpkg.com/knip@5/schema.json",
-    "exclude": ["duplicates", "enumMembers"],
-    "tags": ["+internal", "-knipignore"],
+    "exclude": [
+        "duplicates",
+        "enumMembers"
+    ],
+    "tags": [
+        "+internal",
+        "-knipignore"
+    ],
     "includeEntryExports": true,
     "entry": [
         "Herebyfile.mjs",
@@ -11,10 +17,8 @@
         "src/typescript/typescript.ts",
         "src/typingsInstaller/nodeTypingsInstaller.ts",
         "src/watchGuard/watchGuard.ts",
-
         "src/testRunner/tests.ts",
         "src/testRunner/_namespaces/Harness.ts",
-
         // The rest of the entry files, mostly to track used dependencies:
         ".gulp.js",
         "scripts/eslint/{rules,tests}/*.cjs",
@@ -26,9 +30,15 @@
         "!src/lib/**/*.d.ts"
     ],
     "ignore": [
-        "scripts/failed-tests.d.cts"
+        "scripts/failed-tests.d.cts",
+        "src/types/messageformat/index.d.ts"
     ],
-    "ignoreDependencies": ["c8", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter", "monocart-coverage-reports"],
+    "ignoreDependencies": [
+        "c8",
+        "eslint-formatter-autolinkable-stylish",
+        "mocha-fivemat-progress-reporter",
+        "monocart-coverage-reports"
+    ],
     "ignoreExportsUsedInFile": {
         "enum": true,
         "interface": true,
