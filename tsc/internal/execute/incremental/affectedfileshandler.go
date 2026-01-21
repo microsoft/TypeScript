@@ -35,7 +35,7 @@ type affectedFilesHandler struct {
 	dtsMayChange                           []dtsMayChange
 	filesToRemoveDiagnostics               collections.SyncSet[tspath.Path]
 	cleanedDiagnosticsOfLibFiles           sync.Once
-	seenFileAndExportsOfFile               collections.SyncMap[tspath.Path, bool]
+	seenFileAndReferences                  collections.SyncMap[tspath.Path, bool]
 }
 
 func (h *affectedFilesHandler) getDtsMayChange(affectedFilePath tspath.Path, affectedFileEmitKind FileEmitKind) dtsMayChange {
@@ -200,6 +200,9 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfAffectedFile(dtsMayChange dts
 		return
 	}
 
+	// At this point affectedFile is actually one of the changed files
+	// that has some change in its .d.ts signature.
+
 	// Since isolated modules dont change js files, files affected by change in signature is itself
 	// But we need to cleanup semantic diagnostics and queue dts emit for affected files
 	if h.program.snapshot.options.IsolatedModules.IsTrue() {
@@ -250,30 +253,36 @@ func (h *affectedFilesHandler) handleDtsMayChangeOfAffectedFile(dtsMayChange dts
 	}
 
 	// Go through files that reference affected file and handle dts emit and semantic diagnostics for them and their references
-	for exportedFromPath := range h.program.snapshot.referencedMap.getReferencedBy(affectedFile.Path()) {
-		if h.handleDtsMayChangeOfGlobalScope(dtsMayChange, exportedFromPath, invalidateJsFiles) {
+	for fileReferencingChangedFile := range h.program.snapshot.referencedMap.getReferencedBy(affectedFile.Path()) {
+		if h.handleDtsMayChangeOfGlobalScope(dtsMayChange, fileReferencingChangedFile, invalidateJsFiles) {
 			return
 		}
-		for filePath := range h.program.snapshot.referencedMap.getReferencedBy(exportedFromPath) {
-			if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, filePath, invalidateJsFiles) {
+		// Since references of changed file = affected files - we would have already handled d.ts emit and semantic diagnostics
+		// for those files. Now we need to handle files referencing those affected files to ensure correctness.
+		for fileReferencingAffectedFile := range h.program.snapshot.referencedMap.getReferencedBy(fileReferencingChangedFile) {
+			if h.handleDtsMayChangeOfFileAndReferences(dtsMayChange, fileReferencingAffectedFile, invalidateJsFiles) {
 				return
 			}
 		}
 	}
 }
 
-func (h *affectedFilesHandler) handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange dtsMayChange, filePath tspath.Path, invalidateJsFiles bool) bool {
-	if existing, loaded := h.seenFileAndExportsOfFile.LoadOrStore(filePath, invalidateJsFiles); loaded && (existing || !invalidateJsFiles) {
+func (h *affectedFilesHandler) handleDtsMayChangeOfFileAndReferences(dtsMayChange dtsMayChange, filePath tspath.Path, invalidateJsFiles bool) bool {
+	if existing, loaded := h.seenFileAndReferences.LoadOrStore(filePath, invalidateJsFiles); loaded && (existing || !invalidateJsFiles) {
 		return false
+	} else if loaded && invalidateJsFiles {
+		h.seenFileAndReferences.Store(filePath, true)
 	}
+
 	if h.handleDtsMayChangeOfGlobalScope(dtsMayChange, filePath, invalidateJsFiles) {
 		return true
 	}
 	h.handleDtsMayChangeOf(dtsMayChange, filePath, invalidateJsFiles)
 
-	// Remove the diagnostics of files that import this file and handle all its exports too
+	// Remove the diagnostics of files that import this file and
+	// any files that are referenced by it (directly or indirectly)
 	for referencingFilePath := range h.program.snapshot.referencedMap.getReferencedBy(filePath) {
-		if h.handleDtsMayChangeOfFileAndExportsOfFile(dtsMayChange, referencingFilePath, invalidateJsFiles) {
+		if h.handleDtsMayChangeOfFileAndReferences(dtsMayChange, referencingFilePath, invalidateJsFiles) {
 			return true
 		}
 	}
