@@ -4526,6 +4526,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         });
 
         checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.alwaysStrict === false) {
+                createDeprecatedDiagnostic("alwaysStrict", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
             if (options.moduleResolution === ModuleResolutionKind.Node10) {
                 createDeprecatedDiagnostic("moduleResolution", "node10", /*useInstead*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information);
             }
