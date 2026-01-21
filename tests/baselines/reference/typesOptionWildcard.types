@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/typesOptionWildcard.ts] ////
+
+=== /app.ts ===
+// With "types": ["*"], all @types packages are automatically included
+// This is the opt-in to the old behavior
+$.x;
+>$.x : number
+>    : ^^^^^^
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+
+_.map;
+>_.map : any
+>_ : { map: any; }
+>  : ^^^^^^^   ^^^
+>map : any
+>    : ^^^
+
+=== /node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: number };
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+
+=== /node_modules/@types/lodash/index.d.ts ===
+declare var _: { map: any };
+>_ : { map: any; }
+>  : ^^^^^^^   ^^^
+>map : any
+

@@ -810,7 +810,18 @@ export function resolvePackageNameToPackageJson(
 export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
     // Use explicit type list from tsconfig.json
     if (options.types) {
-        return options.types;
+        // Check if the special "*" value is present, which means "include all"
+        if (options.types.length === 1 && options.types[0] === "*") {
+            // Fall through to enumerate all packages from typeRoots
+        }
+        else {
+            return options.types;
+        }
+    }
+    else {
+        // When types is undefined (not specified in tsconfig), default to empty array
+        // This is a breaking change from the previous behavior which included all @types packages
+        return emptyArray;
     }
 
     // Walk the primary type lookup locations

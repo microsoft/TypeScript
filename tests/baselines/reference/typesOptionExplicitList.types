@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/typesOptionExplicitList.ts] ////
+
+=== /app.ts ===
+// With "types": ["jquery"], only jquery is included
+$.x;
+>$.x : number
+>    : ^^^^^^
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+
+// lodash is not included, so this should error
+_.map;
+>_.map : any
+>      : ^^^
+>_ : any
+>  : ^^^
+>map : any
+>    : ^^^
+
+=== /node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: number };
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+

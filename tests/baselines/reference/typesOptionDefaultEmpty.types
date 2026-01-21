@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/typesOptionDefaultEmpty.ts] ////
+
+=== /app.ts ===
+// With the new default behavior, @types packages are not automatically included
+// unless explicitly listed in the types array or imported
+const value = 42;
+>value : 42
+>      : ^^
+>42 : 42
+>   : ^^
+

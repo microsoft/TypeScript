@@ -1,0 +1,21 @@
+/app.ts(5,1): error TS2304: Cannot find name '_'.
+
+
+==== /tsconfig.json (0 errors) ====
+    { "compilerOptions": { "types": ["jquery"] } }
+    
+==== /app.ts (1 errors) ====
+    // With "types": ["jquery"], only jquery is included
+    $.x;
+    
+    // lodash is not included, so this should error
+    _.map;
+    ~
+!!! error TS2304: Cannot find name '_'.
+    
+==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: number };
+    
+==== /node_modules/@types/lodash/index.d.ts (0 errors) ====
+    declare var _: { map: any };
+    
