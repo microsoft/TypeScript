@@ -1,4 +1,5 @@
-﻿class Base {
+﻿// @strict: false
+class Base {
     constructor(...arg) {
     }
 }

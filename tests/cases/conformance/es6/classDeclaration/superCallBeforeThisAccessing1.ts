@@ -1,4 +1,5 @@
-﻿declare var Factory: any
+﻿// @noImplicitAny: false
+declare var Factory: any
 
 class Base {
     constructor(c) { }

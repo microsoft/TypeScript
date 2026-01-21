@@ -1,4 +1,5 @@
-﻿// @target:ES5
+﻿// @strict: false
+// @target:ES5
 var arrow1 = a => { };
 var arrow2 = (a) => { };
 

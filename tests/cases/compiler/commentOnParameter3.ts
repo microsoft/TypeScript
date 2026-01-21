@@ -1,4 +1,5 @@
-﻿function commentedParameters(
+﻿// @strict: false
+function commentedParameters(
 a /* parameter a */, 
 b /* parameter b */,
 /* extra comment */

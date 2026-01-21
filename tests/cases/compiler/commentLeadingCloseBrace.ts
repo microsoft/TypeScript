@@ -1,4 +1,5 @@
-﻿declare function commentedParameters(...args): any;
+﻿// @strict: false
+declare function commentedParameters(...args): any;
 
 function ifelse() {
     if (commentedParameters(1, 2)) {

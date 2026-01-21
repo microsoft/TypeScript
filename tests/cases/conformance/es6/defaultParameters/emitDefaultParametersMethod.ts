@@ -1,4 +1,5 @@
-﻿// @target: es5
+﻿// @noImplicitAny: false
+// @target: es5
 class C {
     constructor(t: boolean, z: string, x: number, y = "hello") { }
 

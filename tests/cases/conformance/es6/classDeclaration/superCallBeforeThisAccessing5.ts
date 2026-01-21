@@ -1,4 +1,5 @@
-﻿class D extends null {
+﻿// @noImplicitAny: false
+class D extends null {
     private _t;
     constructor() {
         this._t;  // No error

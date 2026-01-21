@@ -1,4 +1,5 @@
-﻿// ElementList:  ( Modified )
+﻿// @strict: false
+// ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement
 //      ElementList, Elisionopt   AssignmentExpression

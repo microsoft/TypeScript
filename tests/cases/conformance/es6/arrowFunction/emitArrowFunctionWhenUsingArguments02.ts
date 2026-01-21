@@ -1,3 +1,4 @@
-﻿// @target: es5
+﻿// @strict: false
+// @target: es5
 
 var a = () => arguments;

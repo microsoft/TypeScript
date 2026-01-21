@@ -1,3 +1,4 @@
+// @strict: false
 // @strictNullChecks: true
 
 // Repro for #8401

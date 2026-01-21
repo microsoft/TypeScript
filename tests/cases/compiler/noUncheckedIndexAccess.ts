@@ -1,4 +1,5 @@
 //@noUncheckedIndexedAccess: true
+//@strict: false
 //@strictNullChecks: true
 
 enum Meat {

@@ -1,4 +1,5 @@
-﻿class T {
+﻿// @strict: false
+class T {
     m(...p3) {
 
     }
