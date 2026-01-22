@@ -1,0 +1,164 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesSemantics.ts] ////
+
+=== types.d.ts ===
+// Test exact match with attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : typeof import("*.css")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+
+    export default stylesheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+}
+
+// Test exact match with different attributes
+declare module "*.json" with { type: "json" } {
+>"*.json" : typeof import("*.json")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    const data: any;
+>data : any
+>     : ^^^
+
+    export default data;
+>data : any
+>     : ^^^
+}
+
+// Test exact match without attributes
+declare module "*.txt" {
+>"*.txt" : typeof import("*.txt")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const content: string;
+>content : string
+>        : ^^^^^^
+
+    export default content;
+>content : string
+>        : ^^^^^^
+}
+
+// Test multiple attributes
+declare module "*.wasm" with { type: "module", version: "1" } {
+>"*.wasm" : typeof import("*.wasm")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    const module: WebAssembly.Module;
+>module : WebAssembly.Module
+>       : ^^^^^^^^^^^^^^^^^^
+>WebAssembly : any
+>            : ^^^
+
+    export default module;
+>module : WebAssembly.Module
+>       : ^^^^^^^^^^^^^^^^^^
+}
+
+=== test.ts ===
+// Should resolve correctly - matching attributes
+import styles from "styles.css" with { type: "css" };
+>styles : CSSStyleSheet
+>       : ^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+styles; // Should be CSSStyleSheet
+>styles : CSSStyleSheet
+>       : ^^^^^^^^^^^^^
+
+// Should resolve correctly - matching attributes
+import data from "data.json" with { type: "json" };
+>data : any
+>     : ^^^
+>type : any
+>     : ^^^
+
+data; // Should be any
+>data : any
+>     : ^^^
+
+// Should resolve correctly - no attributes on either side
+import text from "file.txt";
+>text : string
+>     : ^^^^^^
+
+text; // Should be string
+>text : string
+>     : ^^^^^^
+
+// Should resolve correctly - multiple matching attributes
+import wasmModule from "module.wasm" with { type: "module", version: "1" };
+>wasmModule : WebAssembly.Module
+>           : ^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+>version : any
+>        : ^^^
+
+wasmModule; // Should be WebAssembly.Module
+>wasmModule : WebAssembly.Module
+>           : ^^^^^^^^^^^^^^^^^^
+
+// Should NOT resolve - import has attributes but declaration doesn't
+import text2 from "file2.txt" with { type: "text" };
+>text2 : any
+>      : ^^^
+>type : any
+>     : ^^^
+
+text2; // Should be any (no match)
+>text2 : any
+>      : ^^^
+
+// Should NOT resolve - import has no attributes but declaration does
+import styles2 from "styles2.css";
+>styles2 : any
+>        : ^^^
+
+styles2; // Should be any (no match)
+>styles2 : any
+>        : ^^^
+
+// Should NOT resolve - mismatched attribute values
+import styles3 from "styles3.css" with { type: "style" };
+>styles3 : any
+>        : ^^^
+>type : any
+>     : ^^^
+
+styles3; // Should be any (no match)
+>styles3 : any
+>        : ^^^
+
+// Should NOT resolve - missing attribute
+import wasmModule2 from "module2.wasm" with { type: "module" };
+>wasmModule2 : any
+>            : ^^^
+>type : any
+>     : ^^^
+
+wasmModule2; // Should be any (no match - missing version attribute)
+>wasmModule2 : any
+>            : ^^^
+
+// Should NOT resolve - extra attribute
+import wasmModule3 from "module3.wasm" with { type: "module", version: "1", extra: "value" };
+>wasmModule3 : any
+>            : ^^^
+>type : any
+>     : ^^^
+>version : any
+>        : ^^^
+>extra : any
+>      : ^^^
+
+wasmModule3; // Should be any (no match - extra attribute)
+>wasmModule3 : any
+>            : ^^^
+
+

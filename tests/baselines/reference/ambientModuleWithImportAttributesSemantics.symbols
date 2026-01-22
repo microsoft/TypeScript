@@ -1,0 +1,115 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesSemantics.ts] ////
+
+=== types.d.ts ===
+// Test exact match with attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : Symbol("*.css", Decl(types.d.ts, 0, 0))
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+>CSSStyleSheet : Symbol(CSSStyleSheet, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default stylesheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+}
+
+// Test exact match with different attributes
+declare module "*.json" with { type: "json" } {
+>"*.json" : Symbol("*.json", Decl(types.d.ts, 4, 1))
+
+    const data: any;
+>data : Symbol(data, Decl(types.d.ts, 8, 9))
+
+    export default data;
+>data : Symbol(data, Decl(types.d.ts, 8, 9))
+}
+
+// Test exact match without attributes
+declare module "*.txt" {
+>"*.txt" : Symbol("*.txt", Decl(types.d.ts, 10, 1))
+
+    const content: string;
+>content : Symbol(content, Decl(types.d.ts, 14, 9))
+
+    export default content;
+>content : Symbol(content, Decl(types.d.ts, 14, 9))
+}
+
+// Test multiple attributes
+declare module "*.wasm" with { type: "module", version: "1" } {
+>"*.wasm" : Symbol("*.wasm", Decl(types.d.ts, 16, 1))
+
+    const module: WebAssembly.Module;
+>module : Symbol(module, Decl(types.d.ts, 20, 9))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default module;
+>module : Symbol(module, Decl(types.d.ts, 20, 9))
+}
+
+=== test.ts ===
+// Should resolve correctly - matching attributes
+import styles from "styles.css" with { type: "css" };
+>styles : Symbol(styles, Decl(test.ts, 1, 6))
+
+styles; // Should be CSSStyleSheet
+>styles : Symbol(styles, Decl(test.ts, 1, 6))
+
+// Should resolve correctly - matching attributes
+import data from "data.json" with { type: "json" };
+>data : Symbol(data, Decl(test.ts, 5, 6))
+
+data; // Should be any
+>data : Symbol(data, Decl(test.ts, 5, 6))
+
+// Should resolve correctly - no attributes on either side
+import text from "file.txt";
+>text : Symbol(text, Decl(test.ts, 9, 6))
+
+text; // Should be string
+>text : Symbol(text, Decl(test.ts, 9, 6))
+
+// Should resolve correctly - multiple matching attributes
+import wasmModule from "module.wasm" with { type: "module", version: "1" };
+>wasmModule : Symbol(wasmModule, Decl(test.ts, 13, 6))
+
+wasmModule; // Should be WebAssembly.Module
+>wasmModule : Symbol(wasmModule, Decl(test.ts, 13, 6))
+
+// Should NOT resolve - import has attributes but declaration doesn't
+import text2 from "file2.txt" with { type: "text" };
+>text2 : Symbol(text2, Decl(test.ts, 17, 6))
+
+text2; // Should be any (no match)
+>text2 : Symbol(text2, Decl(test.ts, 17, 6))
+
+// Should NOT resolve - import has no attributes but declaration does
+import styles2 from "styles2.css";
+>styles2 : Symbol(styles2, Decl(test.ts, 21, 6))
+
+styles2; // Should be any (no match)
+>styles2 : Symbol(styles2, Decl(test.ts, 21, 6))
+
+// Should NOT resolve - mismatched attribute values
+import styles3 from "styles3.css" with { type: "style" };
+>styles3 : Symbol(styles3, Decl(test.ts, 25, 6))
+
+styles3; // Should be any (no match)
+>styles3 : Symbol(styles3, Decl(test.ts, 25, 6))
+
+// Should NOT resolve - missing attribute
+import wasmModule2 from "module2.wasm" with { type: "module" };
+>wasmModule2 : Symbol(wasmModule2, Decl(test.ts, 29, 6))
+
+wasmModule2; // Should be any (no match - missing version attribute)
+>wasmModule2 : Symbol(wasmModule2, Decl(test.ts, 29, 6))
+
+// Should NOT resolve - extra attribute
+import wasmModule3 from "module3.wasm" with { type: "module", version: "1", extra: "value" };
+>wasmModule3 : Symbol(wasmModule3, Decl(test.ts, 33, 6))
+
+wasmModule3; // Should be any (no match - extra attribute)
+>wasmModule3 : Symbol(wasmModule3, Decl(test.ts, 33, 6))
+
+

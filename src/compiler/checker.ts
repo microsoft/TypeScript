@@ -4705,6 +4705,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : undefined;
     }
 
+    function getImportAttributesFromLocation(location: Node): ImportAttributes | undefined {
+        // Try to find import attributes from the location node
+        const importDecl = findAncestor(location, isImportDeclaration);
+        if (importDecl?.attributes) {
+            return importDecl.attributes;
+        }
+        const exportDecl = findAncestor(location, isExportDeclaration);
+        if (exportDecl?.attributes) {
+            return exportDecl.attributes;
+        }
+        const importType = findAncestor(location, isImportTypeNode);
+        if (importType?.attributes) {
+            return importType.attributes;
+        }
+        return undefined;
+    }
+
     function resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage | undefined, errorNode: Node | undefined, isForAugmentation = false): Symbol | undefined {
         if (errorNode && startsWith(moduleReference, "@types/")) {
             const diag = Diagnostics.Cannot_import_type_declaration_files_Consider_importing_0_instead_of_1;
@@ -4712,7 +4729,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(errorNode, diag, withoutAtTypePrefix, moduleReference);
         }
 
-        const ambientModule = tryFindAmbientModule(moduleReference, /*withAugmentations*/ true);
+        // Get import attributes from the import/export statement
+        const importAttributes = getImportAttributesFromLocation(location);
+
+        const ambientModule = tryFindAmbientModule(moduleReference, /*withAugmentations*/ true, importAttributes);
         if (ambientModule) {
             return ambientModule;
         }
@@ -4845,6 +4865,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (patternAmbientModules) {
             const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
             if (pattern) {
+                // Check if the pattern module has matching import attributes
+                const patternSymbol = pattern.symbol;
+                if (patternSymbol.declarations) {
+                    const hasMatchingDeclaration = patternSymbol.declarations.some(decl => {
+                        if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+                            return importAttributesMatch(importAttributes, decl.withClause);
+                        }
+                        return false;
+                    });
+                    if (!hasMatchingDeclaration) {
+                        // Pattern matched but attributes don't match - continue searching
+                        return undefined;
+                    }
+                }
                 // If the module reference matched a pattern ambient module ('*.foo') but there's also a
                 // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
                 // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
@@ -16010,11 +16044,61 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
+    function importAttributesMatch(importAttributes: ImportAttributes | undefined, moduleAttributes: ImportAttributes | undefined): boolean {
+        // If neither has attributes, they match
+        if (!importAttributes && !moduleAttributes) {
+            return true;
+        }
+        // If only one has attributes, they don't match
+        if (!importAttributes || !moduleAttributes) {
+            return false;
+        }
+        // Both have attributes - check if they match
+        // For now, we require exact match of all attributes
+        if (importAttributes.elements.length !== moduleAttributes.elements.length) {
+            return false;
+        }
+        // Create a map of module attributes for easier lookup
+        const moduleAttrsMap = new Map<string, string>();
+        for (const attr of moduleAttributes.elements) {
+            const name = isIdentifier(attr.name) ? idText(attr.name) : attr.name.text;
+            const value = isStringLiteral(attr.value) ? attr.value.text : undefined;
+            if (value !== undefined) {
+                moduleAttrsMap.set(name, value);
+            }
+        }
+        // Check that all import attributes match
+        for (const attr of importAttributes.elements) {
+            const name = isIdentifier(attr.name) ? idText(attr.name) : attr.name.text;
+            const value = isStringLiteral(attr.value) ? attr.value.text : undefined;
+            if (value === undefined || moduleAttrsMap.get(name) !== value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function tryFindAmbientModule(moduleName: string, withAugmentations: boolean, importAttributes?: ImportAttributes) {
         if (isExternalModuleNameRelative(moduleName)) {
             return undefined;
         }
         const symbol = getSymbol(globals, '"' + moduleName + '"' as __String, SymbolFlags.ValueModule);
+        if (!symbol) {
+            return undefined;
+        }
+        // Check if the module declaration has matching import attributes
+        const declarations = symbol.declarations;
+        if (declarations) {
+            const hasMatchingDeclaration = declarations.some(decl => {
+                if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+                    return importAttributesMatch(importAttributes, decl.withClause);
+                }
+                return false;
+            });
+            if (!hasMatchingDeclaration) {
+                return undefined;
+            }
+        }
         // merged symbol is module declaration symbol combined with all augmentations
         return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
     }
