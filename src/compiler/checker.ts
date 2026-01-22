@@ -3812,6 +3812,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // it definitely is a module and does not have a synthetic default
                 return false;
             }
+            // If this is a declaration file from a project reference, check the referenced project's options
+            // to determine if the module format is ESM
+            if (file && file.isDeclarationFile) {
+                const redirect = host.getRedirectFromSourceFile(file.path);
+                if (redirect?.resolvedRef) {
+                    const referencedOptions = redirect.resolvedRef.commandLine.options;
+                    // If the referenced project has allowSyntheticDefaultImports disabled, respect that
+                    if (!getAllowSyntheticDefaultImports(referencedOptions)) {
+                        return false;
+                    }
+                    // If the referenced project's module format is ESM (ES2015 or later), 
+                    // it cannot have a synthetic default
+                    const referencedModuleKind = referencedOptions.module ?? ModuleKind.CommonJS;
+                    if (referencedModuleKind >= ModuleKind.ES2015) {
+                        return false;
+                    }
+                }
+            }
             // There are _many_ declaration files not written with esmodules in mind that still get compiled into a format with __esModule set
             // Meaning there may be no default at runtime - however to be on the permissive side, we allow access to a synthetic default member
             // as there is no marker to indicate if the accompanying JS has `__esModule` or not, or is even native esm
