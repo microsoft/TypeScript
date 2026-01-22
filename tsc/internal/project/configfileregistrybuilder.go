@@ -298,7 +298,7 @@ func (c *configFileRegistryBuilder) releaseConfigForProject(configFilePath tspat
 // didCloseFile removes the open file from the config entry. Once no projects
 // or files are associated with the config entry, it will be removed on the next call to `cleanup`.
 func (c *configFileRegistryBuilder) didCloseFile(path tspath.Path) {
-	if isDynamicFileName(string(path)) {
+	if tspath.IsDynamicFileName(string(path)) {
 		return
 	}
 	c.configFileNames.Delete(path)
@@ -565,7 +565,7 @@ func (c *configFileRegistryBuilder) computeConfigFileName(fileName string, skipS
 }
 
 func (c *configFileRegistryBuilder) getConfigFileNameForFile(fileName string, path tspath.Path, logger *logging.LogTree) string {
-	if isDynamicFileName(fileName) {
+	if tspath.IsDynamicFileName(fileName) {
 		return ""
 	}
 
@@ -583,7 +583,7 @@ func (c *configFileRegistryBuilder) getConfigFileNameForFile(fileName string, pa
 }
 
 func (c *configFileRegistryBuilder) forEachConfigFileNameFor(path tspath.Path, cb func(configFileName string)) {
-	if isDynamicFileName(string(path)) {
+	if tspath.IsDynamicFileName(string(path)) {
 		return
 	}
 
@@ -601,7 +601,7 @@ func (c *configFileRegistryBuilder) forEachConfigFileNameFor(path tspath.Path, c
 }
 
 func (c *configFileRegistryBuilder) getAncestorConfigFileName(fileName string, path tspath.Path, configFileName string, logger *logging.LogTree) string {
-	if isDynamicFileName(fileName) {
+	if tspath.IsDynamicFileName(fileName) {
 		return ""
 	}
 

@@ -388,7 +388,9 @@ func typeNodeToAutoImportableTypeNode(
 ) *ast.TypeNode {
 	referenceTypeNode, importableSymbols := tryGetAutoImportableReferenceFromTypeNode(typeNode, idToSymbol)
 	if referenceTypeNode != nil {
-		importSymbols(importAdder, importableSymbols)
+		if importAdder != nil {
+			importSymbols(importAdder, importableSymbols)
+		}
 		typeNode = referenceTypeNode
 	}
 

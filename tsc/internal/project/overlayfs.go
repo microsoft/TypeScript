@@ -147,7 +147,7 @@ func (o *Overlay) MatchesDiskText() bool {
 
 // !!! optimization: incorporate mtime
 func (o *Overlay) computeMatchesDiskText(fs vfs.FS) (matchesDiskText bool, exists bool) {
-	if isDynamicFileName(o.fileName) {
+	if tspath.IsDynamicFileName(o.fileName) {
 		return false, false
 	}
 	diskContent, ok := fs.ReadFile(o.fileName)

@@ -157,7 +157,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	testData := ParseTestData(t, content, fileName)
 	for _, file := range testData.Files {
 		filePath := tspath.GetNormalizedAbsolutePath(file.fileName, rootDir)
-		testfs[filePath] = file.Content
+		// Dynamic files (e.g., untitled:) shouldn't be added to the VFS
+		if !tspath.IsDynamicFileName(filePath) {
+			testfs[filePath] = file.Content
+		}
 		scriptInfos[filePath] = newScriptInfo(filePath, file.Content)
 	}
 

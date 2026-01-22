@@ -44,6 +44,12 @@ func IsDiskPathRoot(path string) bool {
 	return rootLength > 0 && rootLength == len(path)
 }
 
+// IsDynamicFileName returns true if the file name represents a dynamic/virtual file
+// that doesn't exist on disk (e.g., untitled files with paths like "^/untitled/...").
+func IsDynamicFileName(fileName string) bool {
+	return strings.HasPrefix(fileName, "^/")
+}
+
 // Determines whether a path starts with an absolute path component (i.e. `/`, `c:/`, `file://`, etc.).
 //
 //	```

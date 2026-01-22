@@ -349,7 +349,7 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) {
 }
 
 func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummary) FileChangeSummary {
-	if change.Opened != "" && !isDynamicFileName(change.Opened.FileName()) {
+	if change.Opened != "" && !tspath.IsDynamicFileName(change.Opened.FileName()) {
 		path := s.toPath(change.Opened.FileName())
 		if entry, ok := s.diskFiles.Load(path); !ok || entry.Original() == nil {
 			change.Created.Add(change.Opened)
@@ -357,7 +357,7 @@ func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummar
 	}
 	for uri := range change.Closed.Keys() {
 		fileName := uri.FileName()
-		if isDynamicFileName(fileName) {
+		if tspath.IsDynamicFileName(fileName) {
 			continue
 		}
 		path := s.toPath(fileName)
