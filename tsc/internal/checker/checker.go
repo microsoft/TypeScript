@@ -538,6 +538,8 @@ type WideningContext struct {
 	propertyName       string           // Name of property in parent
 	siblings           []*Type          // Types of siblings
 	resolvedProperties []*ast.Symbol    // Properties occurring in sibling object literals
+	childContexts      map[string]*WideningContext
+	widenedTypes       map[*Type]*Type
 }
 
 type Program interface {
@@ -17901,6 +17903,11 @@ func (c *Checker) getWidenedTypeWithContext(t *Type, context *WideningContext) *
 }
 
 func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContext) *Type {
+	if context != nil {
+		if cached := context.widenedTypes[t]; cached != nil {
+			return cached
+		}
+	}
 	members := make(ast.SymbolTable)
 	for _, prop := range c.getPropertiesOfObjectType(t) {
 		members[prop.Name] = c.getWidenedProperty(prop, context)
@@ -17917,6 +17924,13 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 	}))
 	// Retain js literal flag through widening
 	result.objectFlags |= t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	// Only cache in child contexts since the root context never widens a particular object literal type more than once
+	if context != nil && context.parent != nil {
+		if context.widenedTypes == nil {
+			context.widenedTypes = make(map[*Type]*Type)
+		}
+		context.widenedTypes[t] = result
+	}
 	return result
 }
 
@@ -17929,13 +17943,25 @@ func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext)
 	original := c.getTypeOfSymbol(prop)
 	var propContext *WideningContext
 	if context != nil {
-		propContext = &WideningContext{parent: context, propertyName: prop.Name}
+		propContext = context.getChildContext(prop.Name)
 	}
 	widened := c.getWidenedTypeWithContext(original, propContext)
 	if widened == original {
 		return prop
 	}
 	return c.createSymbolWithType(prop, widened)
+}
+
+func (w *WideningContext) getChildContext(propertyName string) *WideningContext {
+	if cached := w.childContexts[propertyName]; cached != nil {
+		return cached
+	}
+	result := &WideningContext{parent: w, propertyName: propertyName}
+	if w.childContexts == nil {
+		w.childContexts = make(map[string]*WideningContext)
+	}
+	w.childContexts[propertyName] = result
+	return result
 }
 
 func (c *Checker) getPropertiesOfContext(context *WideningContext) []*ast.Symbol {
