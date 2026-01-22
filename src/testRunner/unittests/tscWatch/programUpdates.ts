@@ -1600,7 +1600,7 @@ foo().hello`,
             },
             {
                 caption: "Set always strict false",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strict: true, alwaysStrict: false, ignoreDeprecations: "6.0" } })), // Avoid changing 'alwaysStrict' or must re-bind
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
