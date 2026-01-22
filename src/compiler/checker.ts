@@ -3794,12 +3794,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // are ESM, there cannot be a synthetic default.
                 return false;
             }
-            // For declaration files from project references, check if the referenced project's
-            // emit format is ESM, in which case there cannot be a synthetic default
-            if (file.isDeclarationFile && host.getRedirectFromSourceFile(file.path)) {
-                const targetModuleKind = host.getEmitModuleFormatOfFile(file);
-                if (usageMode === ModuleKind.ESNext && targetModuleKind >= ModuleKind.ES2015) {
-                    return false;
+            // For other files (not node16/nodenext with impliedNodeFormat), check if we can determine
+            // the module format from project references
+            if (!targetMode && file.isDeclarationFile) {
+                const redirect = host.getRedirectFromSourceFile(file.path);
+                if (redirect) {
+                    // This is a declaration file from a project reference, so we can determine
+                    // its module format from the referenced project's options
+                    const targetModuleKind = host.getEmitModuleFormatOfFile(file);
+                    if (usageMode === ModuleKind.ESNext && targetModuleKind >= ModuleKind.ES2015) {
+                        return false;
+                    }
                 }
             }
         }
