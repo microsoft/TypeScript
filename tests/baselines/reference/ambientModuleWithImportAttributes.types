@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributes.ts] ////
+
+=== ambientModuleWithImportAttributes.ts ===
+// Ambient module declaration with import attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : typeof import("*.css")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+
+    export default stylesheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+}
+
+declare module "*.json" with { type: "json" } {
+>"*.json" : typeof import("*.json")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    const data: any;
+>data : any
+>     : ^^^
+
+    export default data;
+>data : any
+>     : ^^^
+}
+
+// Ambient module with specific name and import attributes
+declare module "my-module" with { type: "custom" } {
+>"my-module" : typeof import("my-module")
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+
+    export const bar: string;
+>bar : string
+>    : ^^^^^^
+}
+
+// Ambient module with multiple attributes
+declare module "multi-attr" with { type: "json", integrity: "sha384-..." } {
+>"multi-attr" : typeof import("multi-attr")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export const value: number;
+>value : number
+>      : ^^^^^^
+}
+
+// Ambient module without import attributes (should still work)
+declare module "regular-module" {
+>"regular-module" : typeof import("regular-module")
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export function baz(): void;
+>baz : () => void
+>    : ^^^^^^    
+}
+
+export {};
+
+

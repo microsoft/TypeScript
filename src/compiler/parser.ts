@@ -8324,6 +8324,7 @@ namespace Parser {
             name = parseLiteralNode() as StringLiteral;
             name.text = internIdentifier(name.text);
         }
+        const withClause = tryParseImportAttributes();
         let body: ModuleBlock | undefined;
         if (token() === SyntaxKind.OpenBraceToken) {
             body = parseModuleBlock();
@@ -8331,7 +8332,7 @@ namespace Parser {
         else {
             parseSemicolon();
         }
-        const node = factory.createModuleDeclaration(modifiersIn, name, body, flags);
+        const node = factory.createModuleDeclaration(modifiersIn, name, body, flags, withClause);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 

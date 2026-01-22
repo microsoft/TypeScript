@@ -1,0 +1,48 @@
+ambientModuleWithImportAttributes.ts(2,16): error TS2664: Invalid module name in augmentation, module '*.css' cannot be found.
+ambientModuleWithImportAttributes.ts(7,16): error TS2664: Invalid module name in augmentation, module '*.json' cannot be found.
+ambientModuleWithImportAttributes.ts(13,16): error TS2664: Invalid module name in augmentation, module 'my-module' cannot be found.
+ambientModuleWithImportAttributes.ts(19,16): error TS2664: Invalid module name in augmentation, module 'multi-attr' cannot be found.
+ambientModuleWithImportAttributes.ts(24,16): error TS2664: Invalid module name in augmentation, module 'regular-module' cannot be found.
+
+
+==== ambientModuleWithImportAttributes.ts (5 errors) ====
+    // Ambient module declaration with import attributes
+    declare module "*.css" with { type: "css" } {
+                   ~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module '*.css' cannot be found.
+        const stylesheet: CSSStyleSheet;
+        export default stylesheet;
+    }
+    
+    declare module "*.json" with { type: "json" } {
+                   ~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module '*.json' cannot be found.
+        const data: any;
+        export default data;
+    }
+    
+    // Ambient module with specific name and import attributes
+    declare module "my-module" with { type: "custom" } {
+                   ~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'my-module' cannot be found.
+        export function foo(): void;
+        export const bar: string;
+    }
+    
+    // Ambient module with multiple attributes
+    declare module "multi-attr" with { type: "json", integrity: "sha384-..." } {
+                   ~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'multi-attr' cannot be found.
+        export const value: number;
+    }
+    
+    // Ambient module without import attributes (should still work)
+    declare module "regular-module" {
+                   ~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'regular-module' cannot be found.
+        export function baz(): void;
+    }
+    
+    export {};
+    
+    

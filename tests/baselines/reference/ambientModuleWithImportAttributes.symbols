@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributes.ts] ////
+
+=== ambientModuleWithImportAttributes.ts ===
+// Ambient module declaration with import attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : Symbol("*.css", Decl(ambientModuleWithImportAttributes.ts, 0, 0))
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : Symbol(stylesheet, Decl(ambientModuleWithImportAttributes.ts, 2, 9))
+>CSSStyleSheet : Symbol(CSSStyleSheet, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default stylesheet;
+>stylesheet : Symbol(stylesheet, Decl(ambientModuleWithImportAttributes.ts, 2, 9))
+}
+
+declare module "*.json" with { type: "json" } {
+>"*.json" : Symbol("*.json", Decl(ambientModuleWithImportAttributes.ts, 4, 1))
+
+    const data: any;
+>data : Symbol(data, Decl(ambientModuleWithImportAttributes.ts, 7, 9))
+
+    export default data;
+>data : Symbol(data, Decl(ambientModuleWithImportAttributes.ts, 7, 9))
+}
+
+// Ambient module with specific name and import attributes
+declare module "my-module" with { type: "custom" } {
+>"my-module" : Symbol("my-module", Decl(ambientModuleWithImportAttributes.ts, 9, 1))
+
+    export function foo(): void;
+>foo : Symbol(foo, Decl(ambientModuleWithImportAttributes.ts, 12, 52))
+
+    export const bar: string;
+>bar : Symbol(bar, Decl(ambientModuleWithImportAttributes.ts, 14, 16))
+}
+
+// Ambient module with multiple attributes
+declare module "multi-attr" with { type: "json", integrity: "sha384-..." } {
+>"multi-attr" : Symbol("multi-attr", Decl(ambientModuleWithImportAttributes.ts, 15, 1))
+
+    export const value: number;
+>value : Symbol(value, Decl(ambientModuleWithImportAttributes.ts, 19, 16))
+}
+
+// Ambient module without import attributes (should still work)
+declare module "regular-module" {
+>"regular-module" : Symbol("regular-module", Decl(ambientModuleWithImportAttributes.ts, 20, 1))
+
+    export function baz(): void;
+>baz : Symbol(baz, Decl(ambientModuleWithImportAttributes.ts, 23, 33))
+}
+
+export {};
+
+

@@ -3635,6 +3635,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
         emit(node.name);
 
+        if (node.withClause) {
+            writeSpace();
+            emit(node.withClause);
+        }
+
         let body = node.body;
         if (!body) return writeTrailingSemicolon();
         while (body && isModuleDeclaration(body)) {

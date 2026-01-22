@@ -1486,6 +1486,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleName)),
             nodeVisitor(node.body, visitor, isModuleBody),
+            nodeVisitor(node.withClause, visitor, isImportAttributes),
         );
     },
 

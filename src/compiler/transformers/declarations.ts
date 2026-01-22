@@ -1360,7 +1360,7 @@ export function transformDeclarations(context: TransformationContext): Transform
         name: ModuleName,
         body: ModuleBody | undefined,
     ) {
-        const updated = factory.updateModuleDeclaration(node, modifiers, name, body);
+        const updated = factory.updateModuleDeclaration(node, modifiers, name, body, node.withClause);
 
         if (isAmbientModule(updated) || updated.flags & NodeFlags.Namespace) {
             return updated;
@@ -1371,6 +1371,7 @@ export function transformDeclarations(context: TransformationContext): Transform
             updated.name,
             updated.body,
             updated.flags | NodeFlags.Namespace,
+            updated.withClause,
         );
 
         setOriginalNode(fixed, updated);
@@ -1512,6 +1513,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                         modifiers,
                         namespaceDecl.name,
                         namespaceDecl.body,
+                        namespaceDecl.withClause,
                     );
 
                     const exportDefaultDeclaration = factory.createExportAssignment(
