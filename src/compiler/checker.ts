@@ -3822,7 +3822,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!getAllowSyntheticDefaultImports(referencedOptions)) {
                         return false;
                     }
-                    // If the referenced project's module format is ESM (ES2015 or later), 
+                    // If the referenced project's module format is ESM (ES2015 or later),
                     // it cannot have a synthetic default
                     const referencedModuleKind = referencedOptions.module ?? ModuleKind.CommonJS;
                     if (referencedModuleKind >= ModuleKind.ES2015) {
