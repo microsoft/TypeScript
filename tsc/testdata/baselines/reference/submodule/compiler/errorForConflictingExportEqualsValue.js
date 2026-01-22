@@ -43,4 +43,4 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 exports.x = void 0;
 Promise.resolve().then(() => __importStar(require("./a")));
-module.exports = x;
+module.exports = exports.x;

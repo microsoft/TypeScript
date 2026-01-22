@@ -1,8 +1,0 @@
---- old.errorForConflictingExportEqualsValue.js
-+++ new.errorForConflictingExportEqualsValue.js
-@@= skipped -42, +42 lines =@@
- })();
- exports.x = void 0;
- Promise.resolve().then(() => __importStar(require("./a")));
--module.exports = exports.x;
-+module.exports = x;

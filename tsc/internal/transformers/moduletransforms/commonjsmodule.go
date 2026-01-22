@@ -383,7 +383,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 // - The `statements` parameter is a statement list to which the down-level export statements are to be appended.
 func (tx *CommonJSModuleTransformer) appendExportEqualsIfNeeded(statements []*ast.Statement) []*ast.Statement {
 	if tx.currentModuleInfo.exportEquals != nil {
-		expressionResult := tx.Visitor().VisitNode(tx.currentModuleInfo.exportEquals.Expression)
+		expressionResult := tx.visitExportEquals(tx.currentModuleInfo.exportEquals)
 		if expressionResult != nil {
 			statement := tx.Factory().NewExpressionStatement(
 				tx.Factory().NewAssignmentExpression(
@@ -403,6 +403,12 @@ func (tx *CommonJSModuleTransformer) appendExportEqualsIfNeeded(statements []*as
 		}
 	}
 	return statements
+}
+
+func (tx *CommonJSModuleTransformer) visitExportEquals(node *ast.ExportAssignment) *ast.Expression {
+	grandparentNode := tx.pushNode(node.AsNode())
+	defer tx.popNode(grandparentNode)
+	return tx.Visitor().VisitNode(node.Expression)
 }
 
 // Appends the exports of an ImportDeclaration to a statement list, returning the statement list.

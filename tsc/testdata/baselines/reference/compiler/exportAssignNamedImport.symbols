@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/exportAssignNamedImport.ts] ////
+
+=== bar.ts ===
+export class Bar {
+>Bar : Symbol(Bar, Decl(bar.ts, 0, 0))
+
+    name: string = "bar";
+>name : Symbol(Bar.name, Decl(bar.ts, 0, 18))
+}
+export function baz() {
+>baz : Symbol(baz, Decl(bar.ts, 2, 1))
+
+    return "baz";
+}
+
+=== reexport.ts ===
+import { Bar } from './bar';
+>Bar : Symbol(Bar, Decl(reexport.ts, 0, 8))
+
+export = Bar;
+>Bar : Symbol(Bar, Decl(reexport.ts, 0, 8))
+

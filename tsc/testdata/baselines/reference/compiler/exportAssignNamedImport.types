@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/exportAssignNamedImport.ts] ////
+
+=== bar.ts ===
+export class Bar {
+>Bar : Bar
+
+    name: string = "bar";
+>name : string
+>"bar" : "bar"
+}
+export function baz() {
+>baz : () => string
+
+    return "baz";
+>"baz" : "baz"
+}
+
+=== reexport.ts ===
+import { Bar } from './bar';
+>Bar : typeof Bar
+
+export = Bar;
+>Bar : Bar
+

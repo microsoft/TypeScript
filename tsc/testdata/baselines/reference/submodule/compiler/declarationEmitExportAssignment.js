@@ -19,7 +19,7 @@ function bar() { }
 //// [index.js]
 "use strict";
 const utils_1 = require("./utils");
-module.exports = foo;
+module.exports = utils_1.foo;
 
 
 //// [utils.d.ts]

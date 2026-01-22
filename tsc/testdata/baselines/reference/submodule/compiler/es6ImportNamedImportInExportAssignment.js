@@ -15,7 +15,7 @@ exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 "use strict";
 const es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");
-module.exports = a;
+module.exports = es6ImportNamedImportInExportAssignment_0_1.a;
 
 
 //// [es6ImportNamedImportInExportAssignment_0.d.ts]
