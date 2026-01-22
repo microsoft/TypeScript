@@ -12,4 +12,4 @@ import { x } from "xyz";
 x;
 
 // @Filename: /src/tsconfig.json
-{}
+{ "compilerOptions": { "types": ["foo"] } }

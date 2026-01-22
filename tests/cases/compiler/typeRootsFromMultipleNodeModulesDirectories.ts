@@ -24,4 +24,4 @@ import { z } from "abc";
 x + y + z;
 
 // @Filename: /foo/bar/tsconfig.json
-{}
+{ "compilerOptions": { "types": ["dopey", "grumpy", "sneezy"] } }
