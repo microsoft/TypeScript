@@ -3814,7 +3814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // If this is a declaration file from a project reference, check the referenced project's options
             // to determine if the module format is ESM
-            if (file && file.isDeclarationFile) {
+            if (file) {
                 const redirect = host.getRedirectFromSourceFile(file.path);
                 if (redirect?.resolvedRef) {
                     const referencedOptions = redirect.resolvedRef.commandLine.options;
