@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 // @module: CommonJS
 
 //// interface Dictionary<T> {

@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noImplicitAny: true
 //// function foo([|p, a, b |]) {
 ////     var x

@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts' />
+// @strict: false
 /////**
 //// * @param {number} x - the first parameter
 //// * @param {{ a: string, b: Date }} y - the most complex parameter

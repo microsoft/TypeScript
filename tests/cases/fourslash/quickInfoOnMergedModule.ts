@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////namespace M2 {
 ////    export interface A {
 ////        foo: string;

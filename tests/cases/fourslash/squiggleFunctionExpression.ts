@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
+// @strict: false
 ////function takesCallback(callback: (n) => any) { }
 ////takesCallback(function inner(n) { var /*1*/k/*2*/: string = 10; });
 
