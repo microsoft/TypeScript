@@ -8547,5 +8547,13 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "Module '{0}' was resolved to '{1}', but import attributes do not match the ambient module declaration.": {
+        "category": "Error",
+        "code": 18062
+    },
+    "No ambient module declaration matches import of '{0}' with the specified import attributes.": {
+        "category": "Error",
+        "code": 18063
     }
 }

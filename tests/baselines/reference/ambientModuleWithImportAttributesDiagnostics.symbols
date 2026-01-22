@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesDiagnostics.ts] ////
+
+=== types.d.ts ===
+// Declare ambient modules with import attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : Symbol("*.css", Decl(types.d.ts, 0, 0))
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+>CSSStyleSheet : Symbol(CSSStyleSheet, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default stylesheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+}
+
+declare module "*.json" with { type: "json" } {
+>"*.json" : Symbol("*.json", Decl(types.d.ts, 4, 1))
+
+    const data: any;
+>data : Symbol(data, Decl(types.d.ts, 7, 9))
+
+    export default data;
+>data : Symbol(data, Decl(types.d.ts, 7, 9))
+}
+
+declare module "*.txt" {
+>"*.txt" : Symbol("*.txt", Decl(types.d.ts, 9, 1))
+
+    const content: string;
+>content : Symbol(content, Decl(types.d.ts, 12, 9))
+
+    export default content;
+>content : Symbol(content, Decl(types.d.ts, 12, 9))
+}
+
+=== test.ts ===
+// Should error - pattern matches but attributes don't match
+import styles1 from "styles.css" with { type: "style" };
+>styles1 : Symbol(styles1, Decl(test.ts, 1, 6))
+
+// Should error - pattern matches but import has no attributes when declaration requires them
+import styles2 from "styles2.css";
+>styles2 : Symbol(styles2, Decl(test.ts, 4, 6))
+
+// Should error - pattern matches but import has attributes when declaration doesn't
+import text from "file.txt" with { type: "text" };
+>text : Symbol(text, Decl(test.ts, 7, 6))
+
+// Should error - pattern matches but attribute value is wrong
+import data from "data.json" with { type: "data" };
+>data : Symbol(data, Decl(test.ts, 10, 6))
+
+

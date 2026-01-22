@@ -1,9 +1,14 @@
 test.ts(2,33): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 test.ts(6,30): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 test.ts(14,38): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+test.ts(18,19): error TS18063: No ambient module declaration matches import of 'file2.txt' with the specified import attributes.
 test.ts(18,31): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+test.ts(22,21): error TS18063: No ambient module declaration matches import of 'styles2.css' with the specified import attributes.
+test.ts(26,21): error TS18063: No ambient module declaration matches import of 'styles3.css' with the specified import attributes.
 test.ts(26,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+test.ts(30,25): error TS18063: No ambient module declaration matches import of 'module2.wasm' with the specified import attributes.
 test.ts(30,40): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+test.ts(34,25): error TS18063: No ambient module declaration matches import of 'module3.wasm' with the specified import attributes.
 test.ts(34,40): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 
 
@@ -32,7 +37,7 @@ test.ts(34,40): error TS2856: Import attributes are not allowed on statements th
         export default module;
     }
     
-==== test.ts (7 errors) ====
+==== test.ts (12 errors) ====
     // Should resolve correctly - matching attributes
     import styles from "styles.css" with { type: "css" };
                                     ~~~~~~~~~~~~~~~~~~~~
@@ -57,28 +62,38 @@ test.ts(34,40): error TS2856: Import attributes are not allowed on statements th
     
     // Should NOT resolve - import has attributes but declaration doesn't
     import text2 from "file2.txt" with { type: "text" };
+                      ~~~~~~~~~~~
+!!! error TS18063: No ambient module declaration matches import of 'file2.txt' with the specified import attributes.
                                   ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     text2; // Should be any (no match)
     
     // Should NOT resolve - import has no attributes but declaration does
     import styles2 from "styles2.css";
+                        ~~~~~~~~~~~~~
+!!! error TS18063: No ambient module declaration matches import of 'styles2.css' with the specified import attributes.
     styles2; // Should be any (no match)
     
     // Should NOT resolve - mismatched attribute values
     import styles3 from "styles3.css" with { type: "style" };
+                        ~~~~~~~~~~~~~
+!!! error TS18063: No ambient module declaration matches import of 'styles3.css' with the specified import attributes.
                                       ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     styles3; // Should be any (no match)
     
     // Should NOT resolve - missing attribute
     import wasmModule2 from "module2.wasm" with { type: "module" };
+                            ~~~~~~~~~~~~~~
+!!! error TS18063: No ambient module declaration matches import of 'module2.wasm' with the specified import attributes.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     wasmModule2; // Should be any (no match - missing version attribute)
     
     // Should NOT resolve - extra attribute
     import wasmModule3 from "module3.wasm" with { type: "module", version: "1", extra: "value" };
+                            ~~~~~~~~~~~~~~
+!!! error TS18063: No ambient module declaration matches import of 'module3.wasm' with the specified import attributes.
                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     wasmModule3; // Should be any (no match - extra attribute)

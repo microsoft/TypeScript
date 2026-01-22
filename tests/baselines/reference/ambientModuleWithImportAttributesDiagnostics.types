@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesDiagnostics.ts] ////
+
+=== types.d.ts ===
+// Declare ambient modules with import attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : typeof import("*.css")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+
+    export default stylesheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+}
+
+declare module "*.json" with { type: "json" } {
+>"*.json" : typeof import("*.json")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    const data: any;
+>data : any
+>     : ^^^
+
+    export default data;
+>data : any
+>     : ^^^
+}
+
+declare module "*.txt" {
+>"*.txt" : typeof import("*.txt")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const content: string;
+>content : string
+>        : ^^^^^^
+
+    export default content;
+>content : string
+>        : ^^^^^^
+}
+
+=== test.ts ===
+// Should error - pattern matches but attributes don't match
+import styles1 from "styles.css" with { type: "style" };
+>styles1 : any
+>        : ^^^
+>type : any
+>     : ^^^
+
+// Should error - pattern matches but import has no attributes when declaration requires them
+import styles2 from "styles2.css";
+>styles2 : any
+>        : ^^^
+
+// Should error - pattern matches but import has attributes when declaration doesn't
+import text from "file.txt" with { type: "text" };
+>text : any
+>     : ^^^
+>type : any
+>     : ^^^
+
+// Should error - pattern matches but attribute value is wrong
+import data from "data.json" with { type: "data" };
+>data : any
+>     : ^^^
+>type : any
+>     : ^^^
+
+

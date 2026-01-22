@@ -4875,7 +4875,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return false;
                     });
                     if (!hasMatchingDeclaration) {
-                        // Pattern matched but attributes don't match - continue searching
+                        // Pattern matched but attributes don't match
+                        if (errorNode && moduleNotFoundError) {
+                            error(errorNode, Diagnostics.No_ambient_module_declaration_matches_import_of_0_with_the_specified_import_attributes, moduleReference);
+                        }
                         return undefined;
                     }
                 }
