@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/typesOptionWildcardWithExplicit.ts] ////
+
+=== /app.ts ===
+// With "types": ["*", "extra"], all @types packages are automatically included
+// plus any explicitly listed types (even if they don't exist in @types)
+// This is useful for gradual migration
+$.x;
+>$.x : number
+>    : ^^^^^^
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+
+_.map;
+>_.map : any
+>      : ^^^
+>_ : { map: any; }
+>  : ^^^^^^^   ^^^
+>map : any
+>    : ^^^
+
+=== /node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: number };
+>$ : { x: number; }
+>  : ^^^^^      ^^^
+>x : number
+>  : ^^^^^^
+
+=== /node_modules/@types/lodash/index.d.ts ===
+declare var _: { map: any };
+>_ : { map: any; }
+>  : ^^^^^^^   ^^^
+>map : any
+>    : ^^^
+

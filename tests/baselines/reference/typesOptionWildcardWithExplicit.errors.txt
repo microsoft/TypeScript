@@ -1,0 +1,25 @@
+error TS2688: Cannot find type definition file for 'extra'.
+  The file is in the program because:
+    Entry point of type library 'extra' specified in compilerOptions
+
+
+!!! error TS2688: Cannot find type definition file for 'extra'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library 'extra' specified in compilerOptions
+!!! related TS1419 /tsconfig.json:1:39: File is entry point of type library specified here.
+==== /tsconfig.json (0 errors) ====
+    { "compilerOptions": { "types": ["*", "extra"] } }
+    
+==== /app.ts (0 errors) ====
+    // With "types": ["*", "extra"], all @types packages are automatically included
+    // plus any explicitly listed types (even if they don't exist in @types)
+    // This is useful for gradual migration
+    $.x;
+    _.map;
+    
+==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: number };
+    
+==== /node_modules/@types/lodash/index.d.ts (0 errors) ====
+    declare var _: { map: any };
+    

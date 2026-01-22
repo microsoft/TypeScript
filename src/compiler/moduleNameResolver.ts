@@ -810,9 +810,44 @@ export function resolvePackageNameToPackageJson(
 export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
     // Use explicit type list from tsconfig.json
     if (options.types) {
-        // Check if the special "*" value is present, which means "include all"
-        if (options.types.length === 1 && options.types[0] === "*") {
-            // Fall through to enumerate all packages from typeRoots
+        // Check if the special "*" value is present, which means "include all from typeRoots"
+        const hasWildcard = options.types.includes("*");
+        if (hasWildcard) {
+            // Enumerate all packages from typeRoots
+            const result: string[] = [];
+            if (host.directoryExists && host.getDirectories) {
+                const typeRoots = getEffectiveTypeRoots(options, host);
+                if (typeRoots) {
+                    for (const root of typeRoots) {
+                        if (host.directoryExists(root)) {
+                            for (const typeDirectivePath of host.getDirectories(root)) {
+                                const normalized = normalizePath(typeDirectivePath);
+                                const packageJsonPath = combinePaths(root, normalized, "package.json");
+                                // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+                                // See `createNotNeededPackageJSON` in the types-publisher` repo.
+                                // eslint-disable-next-line no-restricted-syntax
+                                const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
+                                if (!isNotNeededPackage) {
+                                    const baseFileName = getBaseFileName(normalized);
+
+                                    // At this stage, skip results with leading dot.
+                                    if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
+                                        // Return just the type directive names
+                                        result.push(baseFileName);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Add any explicitly listed types that aren't already included (and aren't the wildcard itself)
+            for (const type of options.types) {
+                if (type !== "*" && !result.includes(type)) {
+                    result.push(type);
+                }
+            }
+            return result;
         }
         else {
             return options.types;
@@ -823,36 +858,6 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
         // This is a breaking change from the previous behavior which included all @types packages
         return emptyArray;
     }
-
-    // Walk the primary type lookup locations
-    const result: string[] = [];
-    if (host.directoryExists && host.getDirectories) {
-        const typeRoots = getEffectiveTypeRoots(options, host);
-        if (typeRoots) {
-            for (const root of typeRoots) {
-                if (host.directoryExists(root)) {
-                    for (const typeDirectivePath of host.getDirectories(root)) {
-                        const normalized = normalizePath(typeDirectivePath);
-                        const packageJsonPath = combinePaths(root, normalized, "package.json");
-                        // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
-                        // See `createNotNeededPackageJSON` in the types-publisher` repo.
-                        // eslint-disable-next-line no-restricted-syntax
-                        const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
-                        if (!isNotNeededPackage) {
-                            const baseFileName = getBaseFileName(normalized);
-
-                            // At this stage, skip results with leading dot.
-                            if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
-                                // Return just the type directive names
-                                result.push(baseFileName);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return result;
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
