@@ -26,6 +26,7 @@ import {
     emptyArray,
     endsWith,
     ensureTrailingDirectorySeparator,
+    equateValues,
     every,
     Extension,
     extensionIsTS,
@@ -33,6 +34,7 @@ import {
     fileExtensionIsOneOf,
     filter,
     firstDefined,
+    flatten,
     forEach,
     forEachAncestorDirectory,
     formatMessage,
@@ -808,44 +810,44 @@ export function resolvePackageNameToPackageJson(
  *   this list is only the set of defaults that are implicitly included.
  */
 export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
-    if (options.types) {
-        const hasWildcard = options.types.includes("*");
-        if (!hasWildcard) {
-            return options.types;
-        }
+    // Default to [] if nothing specified
+    if (options.types === undefined) {
+        return emptyArray;
+    }
 
-        const result: string[] = [];
-        if (host.directoryExists && host.getDirectories) {
-            const typeRoots = getEffectiveTypeRoots(options, host);
-            if (typeRoots) {
-                for (const root of typeRoots) {
-                    if (host.directoryExists(root)) {
-                        for (const typeDirectivePath of host.getDirectories(root)) {
-                            const normalized = normalizePath(typeDirectivePath);
-                            const packageJsonPath = combinePaths(root, normalized, "package.json");
-                            // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
-                            // See `createNotNeededPackageJSON` in the types-publisher` repo.
-                            // eslint-disable-next-line no-restricted-syntax
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
-                            if (!isNotNeededPackage) {
-                                const baseFileName = getBaseFileName(normalized);
-                                if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
-                                    result.push(baseFileName);
-                                }
+    if (!options.types.includes("*")) {
+        // No wildcard, no need to iterate anything
+        return options.types;
+    }
+
+    const wildcardMatches: string[] = [];
+    if (host.directoryExists && host.getDirectories) {
+        const typeRoots = getEffectiveTypeRoots(options, host);
+        if (typeRoots) {
+            for (const root of typeRoots) {
+                if (host.directoryExists(root)) {
+                    for (const typeDirectivePath of host.getDirectories(root)) {
+                        const normalized = normalizePath(typeDirectivePath);
+                        const packageJsonPath = combinePaths(root, normalized, "package.json");
+                        // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+                        // See `createNotNeededPackageJSON` in the types-publisher` repo.
+                        // eslint-disable-next-line no-restricted-syntax
+                        const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
+                        if (!isNotNeededPackage) {
+                            const baseFileName = getBaseFileName(normalized);
+                            if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
+                                wildcardMatches.push(baseFileName);
                             }
                         }
                     }
                 }
             }
         }
-        for (const type of options.types) {
-            if (type !== "*" && !result.includes(type)) {
-                result.push(type);
-            }
-        }
-        return result;
     }
-    return emptyArray;
+
+    // Order potentially matters in program construction, so substitute
+    // in the wildcard in the position it was specified in the types array
+    return deduplicate(flatten(options.types.map(t => t === "*" ? wildcardMatches : [])), equateValues);
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
