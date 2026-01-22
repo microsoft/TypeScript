@@ -180,7 +180,9 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 		toParse = make([]resolvedRef, 0, len(automaticTypeDirectiveNames))
 		typeResolutionsInFile = make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(automaticTypeDirectiveNames))
 		for _, name := range automaticTypeDirectiveNames {
-			resolutionMode := core.ModuleKindNodeNext
+			// Under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode.
+			// Under bundler module resolution, this also triggers the "import" condition to be used.
+			resolutionMode := core.ResolutionModeNone
 			resolved, trace := p.resolver.ResolveTypeReferenceDirective(name, containingFileName, resolutionMode, nil)
 			typeResolutionsInFile[module.ModeAwareCacheKey{Name: name, Mode: resolutionMode}] = resolved
 			typeResolutionsTrace = append(typeResolutionsTrace, trace...)
