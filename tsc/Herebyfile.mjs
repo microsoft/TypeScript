@@ -1307,7 +1307,8 @@ export const packNativePreviewExtensions = task({
         await rimraf(builtVsix);
         await fs.promises.mkdir(builtVsix, { recursive: true });
 
-        await $({ cwd: extensionDir })`npm run bundle`;
+        // We don't use vscode:prepublish, as that would run the build for each package below.
+        await $({ cwd: extensionDir })`npm run bundle:release`;
 
         let version = "0.0.0";
         if (options.forRelease) {
@@ -1341,7 +1342,6 @@ export const packNativePreviewExtensions = task({
             const packageJsonPath = path.join(thisExtensionDir, "package.json");
             const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
             packageJson.version = version;
-            packageJson.main = "dist/extension.bundle.js";
             fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
 
             await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));

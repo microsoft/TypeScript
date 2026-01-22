@@ -49,7 +49,28 @@
                 "reveal": "never"
             },
             "problemMatcher": [
-                "$tsc"
+                "$tsc",
+                // Copy-paste from https://github.com/connor4312/esbuild-problem-matchers to avoid the extension dependency
+                {
+                    "owner": "esbuild",
+                    "severity": "error",
+                    "applyTo": "closedDocuments",
+                    "source": "esbuild",
+                    "fileLocation": "relative",
+                    "pattern": [
+                        {
+                            "regexp": "^[✘▲] \\[([A-Z]+)\\] (.+)",
+                            "severity": 1,
+                            "message": 2
+                        },
+                        {
+                            "regexp": "^(?:\\t| {4})(?!\\s)([^:]+)(?::([0-9]+))?(?::([0-9]+))?:$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3
+                        }
+                    ]
+                }
             ]
         },
         {
@@ -65,9 +86,36 @@
                 "panel": "dedicated",
                 "reveal": "never"
             },
-            "problemMatcher": [
-                "$tsc-watch"
-            ]
+            // Copy-paste from https://github.com/connor4312/esbuild-problem-matchers to avoid the extension dependency
+            "problemMatcher": {
+                "owner": "esbuild-watch",
+                "severity": "error",
+                "applyTo": "closedDocuments",
+                "source": "esbuild",
+                "fileLocation": "relative",
+                "pattern": [
+                    {
+                        "regexp": "^[✘▲] \\[([A-Z]+)\\] (.+)",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^(?:\\t| {4})(?!\\s)([^:]+)(?::([0-9]+))?(?::([0-9]+))?:$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "\\[watch\\] build started"
+                    },
+                    "endsPattern": {
+                        "regexp": "\\[watch\\] build finished"
+                    }
+                }
+            }
         },
         {
             "label": "Watch for extension run",
