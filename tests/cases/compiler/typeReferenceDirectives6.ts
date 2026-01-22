@@ -4,6 +4,7 @@
 // @declaration: true
 // @typeRoots: /types
 // @currentDirectory: /
+// @types: lib
 
 // $ comes from type declaration file - type reference directive should be added
 

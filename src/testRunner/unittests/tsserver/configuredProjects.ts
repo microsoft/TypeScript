@@ -1177,7 +1177,7 @@ describe("unittests:: tsserver:: configuredProjects:: non-existing directories l
         const config = {
             path: "/user/username/projects/project/a/tsconfig.json",
             content: jsonToReadableText({
-                compiler: {},
+                compilerOptions: { types: ["typings"] },
                 files: [],
             }),
         };

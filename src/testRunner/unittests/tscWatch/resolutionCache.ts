@@ -241,6 +241,9 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
             TestServerHost.createWatchedSystem([{
                 path: "/users/username/projects/project/foo.ts",
                 content: `import * as fs from "fs";`,
+            }, {
+                path: "/users/username/projects/project/tsconfig.json",
+                content: jsonToReadableText({ compilerOptions: { types: ["node"] } }),
             }], { currentDirectory: "/users/username/projects/project" }),
         edits: [
             {
@@ -565,7 +568,7 @@ declare namespace NodeJS {
                 };
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{}",
+                    content: jsonToReadableText({ compilerOptions: { types: ["node"] } }),
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return TestServerHost.createWatchedSystem(

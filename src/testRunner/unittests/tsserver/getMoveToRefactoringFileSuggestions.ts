@@ -36,7 +36,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         };
         const tsconfig: File = {
             path: "/home/src/projects/project/tsconfig.json",
-            content: "{}",
+            content: jsonToReadableText({ compilerOptions: { types: ["node"] } }),
         };
         const host = TestServerHost.createServerHost([file1, file2, file3, file3, file4, nodeModulesFile1, nodeModulesFile2, tsconfig]);
         const session = new TestSession(host);

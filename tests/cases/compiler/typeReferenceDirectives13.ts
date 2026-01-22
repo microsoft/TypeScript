@@ -4,6 +4,7 @@
 // @typeRoots: /types
 // @traceResolution: true
 // @currentDirectory: /
+// @types: lib
 
 // @filename: /ref.d.ts
 export interface $ { x }
