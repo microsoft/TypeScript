@@ -847,7 +847,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
 
     // Order potentially matters in program construction, so substitute
     // in the wildcard in the position it was specified in the types array
-    return deduplicate(flatten(options.types.map(t => t === "*" ? wildcardMatches : [])), equateValues);
+    return deduplicate(flatten(options.types.map(t => t === "*" ? wildcardMatches : t)), equateValues);
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
