@@ -5,8 +5,15 @@
 $.x;
 >$.x : any
 >    : ^^^
->$ : any
+>$ : { x: any; }
+>  : ^^^^^   ^^^
+>x : any
 >  : ^^^
+
+=== /node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: any };
+>$ : { x: any; }
+>  : ^^^^^   ^^^
 >x : any
 >  : ^^^
 

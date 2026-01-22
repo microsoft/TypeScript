@@ -1,5 +1,6 @@
 // @declaration: true
 // @noImplicitReferences: true
+// @types: node
 // @filename: /.src/node_modules/@types/node/index.d.ts
 declare module "url" {
     export class Url {}

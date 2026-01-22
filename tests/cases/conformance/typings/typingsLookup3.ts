@@ -4,7 +4,7 @@
 // This tests that `types` references are not lowercased.
 
 // @filename: /tsconfig.json
-{ "files": "a.ts" }
+{ "files": "a.ts", "compilerOptions": { "types": ["jquery"] } }
 
 // @filename: /node_modules/@types/jquery/index.d.ts
 declare var $: { x: any };
