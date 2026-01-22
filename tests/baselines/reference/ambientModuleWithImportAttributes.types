@@ -5,6 +5,8 @@
 declare module "*.css" with { type: "css" } {
 >"*.css" : typeof import("*.css")
 >        : ^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
 
     const stylesheet: CSSStyleSheet;
 >stylesheet : CSSStyleSheet
@@ -18,6 +20,8 @@ declare module "*.css" with { type: "css" } {
 declare module "*.json" with { type: "json" } {
 >"*.json" : typeof import("*.json")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
 
     const data: any;
 >data : any
@@ -32,6 +36,8 @@ declare module "*.json" with { type: "json" } {
 declare module "my-module" with { type: "custom" } {
 >"my-module" : typeof import("my-module")
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
 
     export function foo(): void;
 >foo : () => void
@@ -46,6 +52,10 @@ declare module "my-module" with { type: "custom" } {
 declare module "multi-attr" with { type: "json", integrity: "sha384-..." } {
 >"multi-attr" : typeof import("multi-attr")
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+>integrity : any
+>          : ^^^
 
     export const value: number;
 >value : number

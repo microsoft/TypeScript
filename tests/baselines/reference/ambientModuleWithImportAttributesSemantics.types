@@ -5,6 +5,8 @@
 declare module "*.css" with { type: "css" } {
 >"*.css" : typeof import("*.css")
 >        : ^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
 
     const stylesheet: CSSStyleSheet;
 >stylesheet : CSSStyleSheet
@@ -19,6 +21,8 @@ declare module "*.css" with { type: "css" } {
 declare module "*.json" with { type: "json" } {
 >"*.json" : typeof import("*.json")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
 
     const data: any;
 >data : any
@@ -47,6 +51,10 @@ declare module "*.txt" {
 declare module "*.wasm" with { type: "module", version: "1" } {
 >"*.wasm" : typeof import("*.wasm")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+>version : any
+>        : ^^^
 
     const module: WebAssembly.Module;
 >module : WebAssembly.Module
