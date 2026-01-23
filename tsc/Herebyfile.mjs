@@ -19,7 +19,7 @@ import which from "which";
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
-const isCI = !!process.env.CI;
+const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 
 const $pipe = _$({ verbose: "short" });
 const $ = _$({ verbose: "short", stdio: "inherit" });
@@ -1113,9 +1113,7 @@ export const buildNativePreviewPackages = task({
         }
         const extraFlags = ["-trimpath", ldflags];
 
-        const buildLimit = pLimit(os.availableParallelism());
-
-        await Promise.all(platforms.map(async ({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => {
+        const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
             const packageJson = {
                 ...inputPackageJson,
                 bin: undefined,
@@ -1140,19 +1138,29 @@ export const buildNativePreviewPackages = task({
                 `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
             ];
 
-            fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
+            await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
 
-            await Promise.all([
-                generateLibs(out),
-                buildLimit(() =>
-                    buildTsgo({
-                        out,
-                        env: { GOOS: goos, GOARCH: goarch, GOARM: "6", CGO_ENABLED: "0" },
-                        extraFlags,
-                    })
-                ),
-            ]);
-        }));
+            await generateLibs(out);
+
+            await buildTsgo({
+                out,
+                env: { GOOS: goos, GOARCH: goarch, GOARM: "6", CGO_ENABLED: "0" },
+                extraFlags,
+            });
+        });
+
+        if (isCI) {
+            for (const build of platformBuilders) {
+                await build();
+                // Build machines have too little space.
+                // Clear the Go build cache between platforms.
+                await $`go clean -cache`;
+            }
+        }
+        else {
+            const buildLimit = pLimit(os.availableParallelism());
+            await Promise.all(platformBuilders.map(f => buildLimit(f)));
+        }
     },
 });
 
