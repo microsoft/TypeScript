@@ -82,6 +82,7 @@
         "es2024.string",
         "es2025.collection",
         "es2025.float16",
+        "es2025.intl",
         "es2025.iterator",
         "es2025.promise",
         "es2025.regexp",

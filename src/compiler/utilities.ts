@@ -1733,6 +1733,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2022: [
                 "Segmenter",
             ],
+            es2025: [
+                "DurationFormat",
+            ],
         })),
         NumberFormat: new Map(Object.entries({
             es2018: [
