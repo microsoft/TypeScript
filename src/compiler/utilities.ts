@@ -1725,6 +1725,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2020: [
                 "RelativeTimeFormat",
                 "Locale",
+                "DisplayNames",
             ],
             es2021: [
                 "ListFormat",
