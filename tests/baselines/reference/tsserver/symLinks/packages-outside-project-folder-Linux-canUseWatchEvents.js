@@ -693,7 +693,7 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in a
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 146
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 150
 export const a = 10;
 
 
@@ -823,7 +823,7 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in c
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 147
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 151
 export const a = 10;
 
 
@@ -971,18 +971,18 @@ Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/b
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt created
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 149
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 153
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 150
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 154
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 151
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 155
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1002,14 +1002,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 152
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 156
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 153
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 157
 {"root":["./src/c.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 154
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 158
 {
   "root": [
     "./src/c.ts",
@@ -1019,18 +1019,18 @@ export * from './c';
   "size": 66
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 156
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 160
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 157
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 161
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 158
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 162
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1051,15 +1051,15 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 159
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 163
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 160
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 164
 {"root":["./src/a.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 161
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 165
 {
   "root": [
     "./src/a.ts",
@@ -1582,7 +1582,7 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in a
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 162
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 166
 export const a = 10;
 
 
@@ -1698,7 +1698,7 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in c
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 163
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 167
 export const a = 10;
 
 
@@ -2378,22 +2378,22 @@ Custom watchDirectory:: Triggered Ignored:: {"id":30,"path":"/home/src/projects/
 Custom watchDirectory:: Triggered Ignored:: {"id":30,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo updated
 Custom watchDirectory:: Triggered Ignored:: {"id":30,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 153
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 154
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 160
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 161
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 165
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 157
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 158
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 164
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 165
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 169
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 166
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 170
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 167
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 171
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2413,22 +2413,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 168
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 172
 export * from './c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 170
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 174
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 171
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 175
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 172
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 176
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2449,7 +2449,7 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 173
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 177
 export * from './a';
 export * from 'c';
 

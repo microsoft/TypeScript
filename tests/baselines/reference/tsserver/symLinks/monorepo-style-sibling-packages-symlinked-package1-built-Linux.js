@@ -84,22 +84,22 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 34
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 35
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 126
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 130
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 127
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 131
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 128
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 132
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 129
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 133
 {
   "root": [
     "./src/index.ts"
@@ -330,9 +330,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":125}
+  {"inode":129}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":127}
+  {"inode":131}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -346,7 +346,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
-  {"inode":34}
+  {"inode":35}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *new*
@@ -536,13 +536,13 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":125}
+  {"inode":129}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":127}
+  {"inode":131}
 
 Timeout callback:: count: 3
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
@@ -717,7 +717,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -983,14 +983,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 128
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 129
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 131
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 132
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 133
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 135
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 132
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 136
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1024,7 +1024,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":132}
+  {"inode":136}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1038,7 +1038,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 14: timerToUpdateChildWatches *new*
@@ -1090,9 +1090,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":130}
+  {"inode":134}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":132}
+  {"inode":136}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1106,7 +1106,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -1235,9 +1235,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":130}
+  {"inode":134}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":132}
+  {"inode":136}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1251,7 +1251,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
