@@ -1,3 +1,4 @@
+// @strict: false
 declare class _this { // no error - as no code generation
 }
 var f = () => this;

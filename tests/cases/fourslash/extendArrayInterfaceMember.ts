@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
+// @strict: false
 ////var x = [1, 2, 3];
 ////var /*y*/y = x.pop(/*1*/5/*2*/);
 ////

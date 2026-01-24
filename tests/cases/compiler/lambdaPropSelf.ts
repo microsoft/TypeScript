@@ -1,3 +1,4 @@
+// @strict: false
 declare var ko: any;
 
 class Person {
