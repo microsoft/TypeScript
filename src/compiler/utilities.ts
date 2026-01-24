@@ -1717,6 +1717,17 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2018: [
                 "PluralRules",
             ],
+            es2020: [
+                "RelativeTimeFormat",
+                "Locale",
+            ],
+            es2021: [
+                "ListFormat",
+                "DateTimeFormat",
+            ],
+            es2022: [
+                "Segmenter",
+            ],
         })),
         NumberFormat: new Map(Object.entries({
             es2018: [
@@ -1914,11 +1925,22 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "cause",
             ],
         })),
+        ErrorConstructor: new Map(Object.entries({
+            esnext: [
+                "isError",
+            ],
+        })),
         Uint8ArrayConstructor: new Map(Object.entries({
             esnext: [
                 "fromBase64",
                 "fromHex",
             ],
+        })),
+        DisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
+        })),
+        AsyncDisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
         })),
     }))
 );
