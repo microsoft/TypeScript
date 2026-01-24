@@ -1565,7 +1565,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fround",
                 "cbrt",
             ],
-            esnext: [
+            es2025: [
                 "f16round",
             ],
         })),
@@ -1587,7 +1587,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "keys",
                 "values",
             ],
-            esnext: [
+            es2025: [
                 "union",
                 "intersection",
                 "difference",
@@ -1612,6 +1612,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2024: [
                 "withResolvers",
+            ],
+            es2025: [
+                "try",
             ],
         })),
         Symbol: new Map(Object.entries({
@@ -1737,7 +1740,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "getBigInt64",
                 "getBigUint64",
             ],
-            esnext: [
+            es2025: [
                 "setFloat16",
                 "getFloat16",
             ],
@@ -1850,7 +1853,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
         })),
         Float16Array: new Map(Object.entries({
-            esnext: emptyArray,
+            es2025: emptyArray,
         })),
         Float32Array: new Map(Object.entries({
             es2022: [

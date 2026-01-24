@@ -311,6 +311,7 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2025, "lib.es2025.full.d.ts"],
     [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
     [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
     [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
