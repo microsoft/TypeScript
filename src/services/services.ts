@@ -337,6 +337,8 @@ import {
     Type,
     TypeChecker,
     TypeFlags,
+    TypeHierarchy,
+    TypeHierarchyItem,
     TypeNode,
     TypeParameter,
     TypePredicate,
@@ -3363,6 +3365,26 @@ export function createLanguageService(
         return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
     }
 
+    function prepareTypeHierarchy(fileName: string, position: number): TypeHierarchyItem | TypeHierarchyItem[] | undefined {
+        synchronizeHostData();
+        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+        return declaration && TypeHierarchy.createTypeHierarchyItem(program, declaration);
+    }
+
+    function provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[] {
+        synchronizeHostData();
+        const sourceFile = getValidSourceFile(fileName);
+        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position));
+        return declaration ? TypeHierarchy.getSupertypes(program, declaration, cancellationToken) : [];
+    }
+
+    function provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[] {
+        synchronizeHostData();
+        const sourceFile = getValidSourceFile(fileName);
+        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position));
+        return declaration ? TypeHierarchy.getSubtypes(program, declaration, cancellationToken) : [];
+    }
+
     function provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences = emptyOptions): InlayHint[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
@@ -3445,6 +3467,9 @@ export function createLanguageService(
         prepareCallHierarchy,
         provideCallHierarchyIncomingCalls,
         provideCallHierarchyOutgoingCalls,
+        prepareTypeHierarchy,
+        provideTypeHierarchySupertypes,
+        provideTypeHierarchySubtypes,
         toggleLineComment,
         toggleMultilineComment,
         commentSelection,

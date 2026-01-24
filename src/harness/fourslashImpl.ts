@@ -211,6 +211,12 @@ const enum CallHierarchyItemDirection {
     Outgoing,
 }
 
+const enum TypeHierarchyItemDirection {
+    Root,
+    Supertypes,
+    Subtypes,
+}
+
 interface RealizedDiagnostic {
     message: string;
     start: number;
@@ -4419,6 +4425,99 @@ export class TestState {
         const callHierarchyItem = this.languageService.prepareCallHierarchy(this.activeFile.fileName, this.currentCaretPosition);
         const text = callHierarchyItem ? ts.mapOneOrMany(callHierarchyItem, item => this.formatCallHierarchy(item), result => result.join("")) : "none";
         this.baseline("Call Hierarchy", text, ".callHierarchy.txt");
+    }
+
+    private formatTypeHierarchyItem(file: FourSlashFile, item: ts.TypeHierarchyItem, direction: TypeHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix): string {
+        const key = `${item.file}|${JSON.stringify(item.span)}|${direction}`;
+        const alreadySeen = seen.has(key);
+        seen.set(key, true);
+
+        const supertypes = direction === TypeHierarchyItemDirection.Subtypes ? { result: "skip" } as const :
+            alreadySeen ? { result: "seen" } as const :
+            { result: "show", values: this.languageService.provideTypeHierarchySupertypes(item.file, item.selectionSpan.start) } as const;
+
+        const subtypes = direction === TypeHierarchyItemDirection.Supertypes ? { result: "skip" } as const :
+            alreadySeen ? { result: "seen" } as const :
+            { result: "show", values: this.languageService.provideTypeHierarchySubtypes(item.file, item.selectionSpan.start) } as const;
+
+        let text = "";
+        text += `${prefix}╭ name: ${item.name}\n`;
+        text += `${prefix}├ kind: ${item.kind}\n`;
+        if (item.containerName) {
+            text += `${prefix}├ containerName: ${item.containerName}\n`;
+        }
+        text += `${prefix}├ file: ${item.file}\n`;
+        text += `${prefix}├ span:\n`;
+        text += this.formatCallHierarchyItemSpan(file, item.span, `${prefix}│ `);
+        text += `${prefix}├ selectionSpan:\n`;
+        text += this.formatCallHierarchyItemSpan(
+            file,
+            item.selectionSpan,
+            `${prefix}│ `,
+            supertypes.result !== "skip" || subtypes.result !== "skip" ? `${prefix}│ ` : `${trailingPrefix}╰ `,
+        );
+
+        if (supertypes.result === "seen") {
+            if (subtypes.result === "skip") {
+                text += `${trailingPrefix}╰ supertypes: ...\n`;
+            }
+            else {
+                text += `${prefix}├ supertypes: ...\n`;
+            }
+        }
+        else if (supertypes.result === "show") {
+            if (!ts.some(supertypes.values)) {
+                if (subtypes.result === "skip") {
+                    text += `${trailingPrefix}╰ supertypes: none\n`;
+                }
+                else {
+                    text += `${prefix}├ supertypes: none\n`;
+                }
+            }
+            else {
+                text += `${prefix}├ supertypes:\n`;
+                for (let i = 0; i < supertypes.values.length; i++) {
+                    const supertype = supertypes.values[i];
+                    const supertypeFile = this.findFile(supertype.file);
+                    text += `${prefix}│ ╭\n`;
+                    text += this.formatTypeHierarchyItem(supertypeFile, supertype, TypeHierarchyItemDirection.Supertypes, seen, `${prefix}│ │ `, i < supertypes.values.length - 1 ? `${prefix}│ ╰ ` : subtypes.result !== "skip" ? `${prefix}│ ╰ ` : `${trailingPrefix}╰ ╰ `);
+                }
+            }
+        }
+
+        if (subtypes.result === "seen") {
+            text += `${trailingPrefix}╰ subtypes: ...\n`;
+        }
+        else if (subtypes.result === "show") {
+            if (!ts.some(subtypes.values)) {
+                text += `${trailingPrefix}╰ subtypes: none\n`;
+            }
+            else {
+                text += `${prefix}├ subtypes:\n`;
+                for (let i = 0; i < subtypes.values.length; i++) {
+                    const subtype = subtypes.values[i];
+                    const subtypeFile = this.findFile(subtype.file);
+                    text += `${prefix}│ ╭\n`;
+                    text += this.formatTypeHierarchyItem(subtypeFile, subtype, TypeHierarchyItemDirection.Subtypes, seen, `${prefix}│ │ `, i < subtypes.values.length - 1 ? `${prefix}│ ╰ ` : `${trailingPrefix}╰ ╰ `);
+                }
+            }
+        }
+        return text;
+    }
+
+    private formatTypeHierarchy(item: ts.TypeHierarchyItem | undefined): string {
+        let text = "";
+        if (item) {
+            const file = this.findFile(item.file);
+            text += this.formatTypeHierarchyItem(file, item, TypeHierarchyItemDirection.Root, new Map(), "");
+        }
+        return text;
+    }
+
+    public baselineTypeHierarchy(): void {
+        const item = this.languageService.prepareTypeHierarchy(this.activeFile.fileName, this.currentCaretPosition);
+        const text = item ? ts.mapOneOrMany(item, i => this.formatTypeHierarchy(i), result => result.join("")) : "none";
+        this.baseline("Type Hierarchy", text, ".typeHierarchy.txt");
     }
 
     private getLineContent(index: number) {

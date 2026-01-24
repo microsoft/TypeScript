@@ -20,6 +20,8 @@ import * as BreakpointResolver from "./ts.BreakpointResolver.js";
 export { BreakpointResolver };
 import * as CallHierarchy from "./ts.CallHierarchy.js";
 export { CallHierarchy };
+import * as TypeHierarchy from "./ts.TypeHierarchy.js";
+export { TypeHierarchy };
 import * as classifier from "./ts.classifier.js";
 export { classifier };
 import * as codefix from "./ts.codefix.js";

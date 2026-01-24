@@ -644,6 +644,10 @@ export class Verify extends VerifyNegatable {
         this.state.baselineCallHierarchy();
     }
 
+    public baselineTypeHierarchy(): void {
+        this.state.baselineTypeHierarchy();
+    }
+
     public moveToNewFile(options: MoveToNewFileOptions): void {
         this.state.moveToNewFile(options);
     }

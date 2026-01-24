@@ -626,6 +626,10 @@ export interface LanguageService {
     provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
     provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
+    prepareTypeHierarchy(fileName: string, position: number): TypeHierarchyItem | TypeHierarchyItem[] | undefined;
+    provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[];
+    provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[];
+
     provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
 
     getOutliningSpans(fileName: string): OutliningSpan[];
@@ -903,6 +907,16 @@ export interface CallHierarchyIncomingCall {
 export interface CallHierarchyOutgoingCall {
     to: CallHierarchyItem;
     fromSpans: TextSpan[];
+}
+
+export interface TypeHierarchyItem {
+    name: string;
+    kind: ScriptElementKind;
+    kindModifiers?: string;
+    file: string;
+    span: TextSpan;
+    selectionSpan: TextSpan;
+    containerName?: string;
 }
 
 export const enum InlayHintKind {

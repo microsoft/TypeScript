@@ -134,6 +134,7 @@ import {
     toArray,
     toFileNameLowerCase,
     tracing,
+    TypeHierarchyItem,
     unmangleScopedPackageName,
     version,
     WithMetadata,
@@ -937,6 +938,9 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.PrepareCallHierarchy,
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+    protocol.CommandTypes.PrepareTypeHierarchy,
+    protocol.CommandTypes.ProvideTypeHierarchySupertypes,
+    protocol.CommandTypes.ProvideTypeHierarchySubtypes,
     protocol.CommandTypes.GetPasteEdits,
     protocol.CommandTypes.CopilotRelated,
 ];
@@ -3385,6 +3389,44 @@ export class Session<TMessage = string> implements EventSender {
         return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
     }
 
+    private toProtocolTypeHierarchyItem(item: TypeHierarchyItem): protocol.TypeHierarchyItem {
+        const scriptInfo = this.getScriptInfoFromProjectService(item.file);
+        return {
+            name: item.name,
+            kind: item.kind,
+            kindModifiers: item.kindModifiers,
+            file: item.file,
+            containerName: item.containerName,
+            span: toProtocolTextSpan(item.span, scriptInfo),
+            selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo),
+        };
+    }
+
+    private prepareTypeHierarchy(args: protocol.FileLocationRequestArgs): protocol.TypeHierarchyItem | protocol.TypeHierarchyItem[] | undefined {
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+        if (scriptInfo) {
+            const position = this.getPosition(args, scriptInfo);
+            const result = project.getLanguageService().prepareTypeHierarchy(file, position);
+            return result && mapOneOrMany(result, item => this.toProtocolTypeHierarchyItem(item));
+        }
+        return undefined;
+    }
+
+    private provideTypeHierarchySupertypes(args: protocol.FileLocationRequestArgs): protocol.TypeHierarchyItem[] {
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = this.getScriptInfoFromProjectService(file);
+        const supertypes = project.getLanguageService().provideTypeHierarchySupertypes(file, this.getPosition(args, scriptInfo));
+        return supertypes.map(item => this.toProtocolTypeHierarchyItem(item));
+    }
+
+    private provideTypeHierarchySubtypes(args: protocol.FileLocationRequestArgs): protocol.TypeHierarchyItem[] {
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = this.getScriptInfoFromProjectService(file);
+        const subtypes = project.getLanguageService().provideTypeHierarchySubtypes(file, this.getPosition(args, scriptInfo));
+        return subtypes.map(item => this.toProtocolTypeHierarchyItem(item));
+    }
+
     getCanonicalFileName(fileName: string): string {
         const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
         return normalizePath(name);
@@ -3776,6 +3818,15 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
             return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+        },
+        [protocol.CommandTypes.PrepareTypeHierarchy]: (request: protocol.PrepareTypeHierarchyRequest) => {
+            return this.requiredResponse(this.prepareTypeHierarchy(request.arguments));
+        },
+        [protocol.CommandTypes.ProvideTypeHierarchySupertypes]: (request: protocol.ProvideTypeHierarchySupertypesRequest) => {
+            return this.requiredResponse(this.provideTypeHierarchySupertypes(request.arguments));
+        },
+        [protocol.CommandTypes.ProvideTypeHierarchySubtypes]: (request: protocol.ProvideTypeHierarchySubtypesRequest) => {
+            return this.requiredResponse(this.provideTypeHierarchySubtypes(request.arguments));
         },
         [protocol.CommandTypes.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
             return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ true));

@@ -76,6 +76,7 @@ import {
     TextSpan,
     TodoComment,
     TodoCommentDescriptor,
+    TypeHierarchyItem,
     UserPreferences,
 } from "./_namespaces/ts.js";
 import { protocol } from "./_namespaces/ts.server.js";
@@ -1015,6 +1016,39 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls, args);
         const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
         return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
+    }
+
+    private convertTypeHierarchyItem(item: protocol.TypeHierarchyItem): TypeHierarchyItem {
+        return {
+            file: item.file,
+            name: item.name,
+            kind: item.kind,
+            kindModifiers: item.kindModifiers,
+            containerName: item.containerName,
+            span: this.decodeSpan(item.span, item.file),
+            selectionSpan: this.decodeSpan(item.selectionSpan, item.file),
+        };
+    }
+
+    prepareTypeHierarchy(fileName: string, position: number): TypeHierarchyItem | TypeHierarchyItem[] | undefined {
+        const args = this.createFileLocationRequestArgs(fileName, position);
+        const request = this.processRequest<protocol.PrepareTypeHierarchyRequest>(protocol.CommandTypes.PrepareTypeHierarchy, args);
+        const response = this.processResponse<protocol.PrepareTypeHierarchyResponse>(request);
+        return response.body && mapOneOrMany(response.body, item => this.convertTypeHierarchyItem(item));
+    }
+
+    provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[] {
+        const args = this.createFileLocationRequestArgs(fileName, position);
+        const request = this.processRequest<protocol.ProvideTypeHierarchySupertypesRequest>(protocol.CommandTypes.ProvideTypeHierarchySupertypes, args);
+        const response = this.processResponse<protocol.ProvideTypeHierarchySupertypesResponse>(request);
+        return response.body.map(item => this.convertTypeHierarchyItem(item));
+    }
+
+    provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[] {
+        const args = this.createFileLocationRequestArgs(fileName, position);
+        const request = this.processRequest<protocol.ProvideTypeHierarchySubtypesRequest>(protocol.CommandTypes.ProvideTypeHierarchySubtypes, args);
+        const response = this.processResponse<protocol.ProvideTypeHierarchySubtypesResponse>(request);
+        return response.body.map(item => this.convertTypeHierarchyItem(item));
     }
 
     getSupportedCodeFixes(): readonly string[] {

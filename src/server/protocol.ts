@@ -199,6 +199,9 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+    PrepareTypeHierarchy = "prepareTypeHierarchy",
+    ProvideTypeHierarchySupertypes = "provideTypeHierarchySupertypes",
+    ProvideTypeHierarchySubtypes = "provideTypeHierarchySubtypes",
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
@@ -3216,6 +3219,32 @@ export interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRe
 
 export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
     readonly body: CallHierarchyOutgoingCall[];
+}
+
+export type TypeHierarchyItem = ChangePropertyTypes<ts.TypeHierarchyItem, { span: TextSpan; selectionSpan: TextSpan; }>;
+
+export interface PrepareTypeHierarchyRequest extends FileLocationRequest {
+    command: CommandTypes.PrepareTypeHierarchy;
+}
+
+export interface PrepareTypeHierarchyResponse extends Response {
+    readonly body: TypeHierarchyItem | TypeHierarchyItem[];
+}
+
+export interface ProvideTypeHierarchySupertypesRequest extends FileLocationRequest {
+    command: CommandTypes.ProvideTypeHierarchySupertypes;
+}
+
+export interface ProvideTypeHierarchySupertypesResponse extends Response {
+    readonly body: TypeHierarchyItem[];
+}
+
+export interface ProvideTypeHierarchySubtypesRequest extends FileLocationRequest {
+    command: CommandTypes.ProvideTypeHierarchySubtypes;
+}
+
+export interface ProvideTypeHierarchySubtypesResponse extends Response {
+    readonly body: TypeHierarchyItem[];
 }
 
 export const enum IndentStyle {
