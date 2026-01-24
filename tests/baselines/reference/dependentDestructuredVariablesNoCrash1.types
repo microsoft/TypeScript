@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesNoCrash1.ts] ////
+
+=== dependentDestructuredVariablesNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/63044
+
+function f() 
+>f : () => any
+>  : ^^^^^^^^^
+
+function f([first, undefined]?: () => any = undefined) {}
+>f : () => any
+>  : ^^^^^^^^^
+>first : any
+>      : ^^^
+>undefined : any
+>          : ^^^
+>undefined : any
+>          : ^^^
+

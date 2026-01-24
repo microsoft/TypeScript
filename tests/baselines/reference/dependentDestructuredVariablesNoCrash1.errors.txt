@@ -1,0 +1,24 @@
+dependentDestructuredVariablesNoCrash1.ts(3,10): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+dependentDestructuredVariablesNoCrash1.ts(5,12): error TS1015: Parameter cannot have question mark and initializer.
+dependentDestructuredVariablesNoCrash1.ts(5,12): error TS2461: Type '(() => any) | undefined' is not an array type.
+dependentDestructuredVariablesNoCrash1.ts(5,20): error TS7022: 'undefined' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariablesNoCrash1.ts(5,45): error TS2373: Parameter '[first, undefined]' cannot reference identifier 'undefined' declared after it.
+
+
+==== dependentDestructuredVariablesNoCrash1.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63044
+    
+    function f() 
+             ~
+!!! error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    function f([first, undefined]?: () => any = undefined) {}
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS1015: Parameter cannot have question mark and initializer.
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS2461: Type '(() => any) | undefined' is not an array type.
+                       ~~~~~~~~~
+!!! error TS7022: 'undefined' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                                                ~~~~~~~~~
+!!! error TS2373: Parameter '[first, undefined]' cannot reference identifier 'undefined' declared after it.
+    
