@@ -120,6 +120,9 @@ declare namespace ts {
                 PrepareCallHierarchy = "prepareCallHierarchy",
                 ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+                PrepareTypeHierarchy = "prepareTypeHierarchy",
+                ProvideTypeHierarchySupertypes = "provideTypeHierarchySupertypes",
+                ProvideTypeHierarchySubtypes = "provideTypeHierarchySubtypes",
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
                 MapCode = "mapCode",
@@ -2481,6 +2484,28 @@ declare namespace ts {
             export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
                 readonly body: CallHierarchyOutgoingCall[];
             }
+            export type TypeHierarchyItem = ChangePropertyTypes<ts.TypeHierarchyItem, {
+                span: TextSpan;
+                selectionSpan: TextSpan;
+            }>;
+            export interface PrepareTypeHierarchyRequest extends FileLocationRequest {
+                command: CommandTypes.PrepareTypeHierarchy;
+            }
+            export interface PrepareTypeHierarchyResponse extends Response {
+                readonly body: TypeHierarchyItem | TypeHierarchyItem[];
+            }
+            export interface ProvideTypeHierarchySupertypesRequest extends FileLocationRequest {
+                command: CommandTypes.ProvideTypeHierarchySupertypes;
+            }
+            export interface ProvideTypeHierarchySupertypesResponse extends Response {
+                readonly body: TypeHierarchyItem[];
+            }
+            export interface ProvideTypeHierarchySubtypesRequest extends FileLocationRequest {
+                command: CommandTypes.ProvideTypeHierarchySubtypes;
+            }
+            export interface ProvideTypeHierarchySubtypesResponse extends Response {
+                readonly body: TypeHierarchyItem[];
+            }
             export enum IndentStyle {
                 None = "None",
                 Block = "Block",
@@ -3616,6 +3641,10 @@ declare namespace ts {
             private prepareCallHierarchy;
             private provideCallHierarchyIncomingCalls;
             private provideCallHierarchyOutgoingCalls;
+            private toProtocolTypeHierarchyItem;
+            private prepareTypeHierarchy;
+            private provideTypeHierarchySupertypes;
+            private provideTypeHierarchySubtypes;
             getCanonicalFileName(fileName: string): string;
             exit(): void;
             private notRequired;
@@ -10235,6 +10264,9 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+        prepareTypeHierarchy(fileName: string, position: number): TypeHierarchyItem | TypeHierarchyItem[] | undefined;
+        provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[];
+        provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[];
         provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -10456,6 +10488,15 @@ declare namespace ts {
     interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+    interface TypeHierarchyItem {
+        name: string;
+        kind: ScriptElementKind;
+        kindModifiers?: string;
+        file: string;
+        span: TextSpan;
+        selectionSpan: TextSpan;
+        containerName?: string;
     }
     enum InlayHintKind {
         Type = "Type",
