@@ -1486,6 +1486,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "unicodeSets",
             ],
         })),
+        RegExpConstructor: new Map(Object.entries({
+            es2025: [
+                "excape",
+            ],
+        })),
         Reflect: new Map(Object.entries({
             es2015: [
                 "apply",
