@@ -4427,14 +4427,18 @@ export class TestState {
         this.baseline("Call Hierarchy", text, ".callHierarchy.txt");
     }
 
-    private formatTypeHierarchyItemSpan(file: FourSlashFile | undefined, item: ts.TypeHierarchyItem, span: ts.TextSpan, prefix: string, trailingPrefix = prefix) {
+    private formatLibFileHierarchyItemSpan(item: ts.TypeHierarchyItem, prefix: string, trailingPrefix: string): string {
         // For lib files, we don't have the source available in the test
+        let text = "";
+        text += `${prefix}╭ ${item.file} (lib file)\n`;
+        text += `${prefix}│ <source not available>\n`;
+        text += `${trailingPrefix}╰\n`;
+        return text;
+    }
+
+    private formatTypeHierarchyItemSpan(file: FourSlashFile | undefined, item: ts.TypeHierarchyItem, span: ts.TextSpan, prefix: string, trailingPrefix = prefix) {
         if (!file) {
-            let text = "";
-            text += `${prefix}╭ ${item.file} (lib file)\n`;
-            text += `${prefix}│ <source not available>\n`;
-            text += `${trailingPrefix}╰\n`;
-            return text;
+            return this.formatLibFileHierarchyItemSpan(item, prefix, trailingPrefix);
         }
         return this.formatCallHierarchyItemSpan(file, span, prefix, trailingPrefix);
     }
@@ -4532,7 +4536,7 @@ export class TestState {
 
     public baselineTypeHierarchy(): void {
         const item = this.languageService.prepareTypeHierarchy(this.activeFile.fileName, this.currentCaretPosition);
-        const text = item ? ts.mapOneOrMany(item, i => this.formatTypeHierarchy(i), result => result.join("")) : "none";
+        const text = item ? ts.mapOneOrMany(item, hierarchyItem => this.formatTypeHierarchy(hierarchyItem), result => result.join("")) : "none";
         this.baseline("Type Hierarchy", text, ".typeHierarchy.txt");
     }
 

@@ -3371,17 +3371,21 @@ export function createLanguageService(
         return declaration && TypeHierarchy.createTypeHierarchyItem(program, declaration);
     }
 
+    function getTypeHierarchyNodeAtPosition(sourceFile: SourceFile, position: number): Node {
+        return position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position);
+    }
+
     function provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position));
+        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, getTypeHierarchyNodeAtPosition(sourceFile, position));
         return declaration ? TypeHierarchy.getSupertypes(program, declaration, cancellationToken) : [];
     }
 
     function provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position));
+        const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, getTypeHierarchyNodeAtPosition(sourceFile, position));
         return declaration ? TypeHierarchy.getSubtypes(program, declaration, cancellationToken) : [];
     }
 
