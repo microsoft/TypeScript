@@ -920,9 +920,11 @@ function mixinUsesSymbolInChain(callExpr: CallExpression, targetSymbol: Symbol, 
  * This is true for:
  * - Direct references: type Foo = Bar (Foo is an alias for Bar, considered a subtype)
  * - Intersection types: type A = B & C (A is a subtype of B and C)
+ * - Mapped types that produce subtypes: Required<T> is a subtype of T
  *
  * This is NOT true for:
  * - Union types: type A = B | C (A is a SUPERtype of B and C, not a subtype)
+ * - Mapped types that produce supertypes: Partial<T> is a SUPERtype of T
  */
 function typeAliasIsSubtypeOfSymbol(alias: TypeAliasDeclaration, targetSymbol: Symbol, typeChecker: TypeChecker): boolean {
     const typeNode = alias.type;
@@ -949,6 +951,11 @@ function typeAliasIsSubtypeOfSymbol(alias: TypeAliasDeclaration, targetSymbol: S
     // Union types are NOT subtypes of their members - the relationship is reversed
     // type Pet = Dog | Cat means Pet is a SUPERTYPE of Dog (every Dog is a Pet)
     // So we don't include union type aliases as subtypes
+    //
+    // Note: Mapped types like Required<T>, Pick<T, K> are not included as subtypes
+    // because the structural subtype check is expensive and can produce noisy results.
+    // These utility types create new types that may or may not be assignable to the original
+    // depending on the specific mapped type semantics.
 
     return false;
 }
