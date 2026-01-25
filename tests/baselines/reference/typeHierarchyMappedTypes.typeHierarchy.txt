@@ -1,0 +1,244 @@
+// === Type Hierarchy ===
+╭ name: MyPartial
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:7:1-10:3
+│ │  7: // Basic mapped type - Partial
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  8: type MyPartial<T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     [P in keyof T]?: T[P];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:8:6-8:15
+│ │ 8: type MyPartial<T> = {
+│ │         ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyReadonly
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:12:1-15:3
+│ │ 12: // Readonly mapped type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: type MyReadonly<T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     readonly [P in keyof T]: T[P];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:13:6-13:16
+│ │ 13: type MyReadonly<T> = {
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyPick
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:17:1-20:3
+│ │ 17: // Pick mapped type
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 18: type MyPick<T, K extends keyof T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     [P in K]: T[P];
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 20: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:18:6-18:12
+│ │ 18: type MyPick<T, K extends keyof T> = {
+│ │          ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyRecord
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:22:1-25:3
+│ │ 22: // Record mapped type
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 23: type MyRecord<K extends keyof any, T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24:     [P in K]: T;
+│ │     ^^^^^^^^^^^^^^^^
+│ │ 25: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:23:6-23:14
+│ │ 23: type MyRecord<K extends keyof any, T> = {
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PartialPerson
+├ kind: type
+├ kindModifiers: alias
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:27:1-28:40
+│ │ 27: // Applied mapped types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: type PartialPerson = MyPartial<Person>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:28:6-28:19
+│ │ 28: type PartialPerson = MyPartial<Person>;
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ReadonlyPerson
+├ kind: type
+├ kindModifiers: alias
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:29:1-29:42
+│ │ 29: type ReadonlyPerson = MyReadonly<Person>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:29:6-29:20
+│ │ 29: type ReadonlyPerson = MyReadonly<Person>;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PickedPerson
+├ kind: type
+├ kindModifiers: alias
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:30:1-30:52
+│ │ 30: type PickedPerson = MyPick<Person, "name" | "age">;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:30:6-30:18
+│ │ 30: type PickedPerson = MyPick<Person, "name" | "age">;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Getters
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:37:1-40:3
+│ │ 37: // Mapped type with remapping (key remapping)
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 38: type Getters<T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 39:     [P in keyof T as `get${Capitalize<string & P>}`]: () => T[P];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 40: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:38:6-38:13
+│ │ 38: type Getters<T> = {
+│ │          ^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PersonGetters
+├ kind: type
+├ kindModifiers: alias
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:42:1-42:38
+│ │ 42: type PersonGetters = Getters<Person>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:42:6-42:19
+│ │ 42: type PersonGetters = Getters<Person>;
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DeepReadonly
+├ kind: type
+├ kindModifiers: mapped
+├ file: /mappedTypes.ts
+├ span:
+│ ╭ /mappedTypes.ts:44:1-47:3
+│ │ 44: // Deep mapped type
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 45: type DeepReadonly<T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 46:     readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 47: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mappedTypes.ts:45:6-45:18
+│ │ 45: type DeepReadonly<T> = {
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

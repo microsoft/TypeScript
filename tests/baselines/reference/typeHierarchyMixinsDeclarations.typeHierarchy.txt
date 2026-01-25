@@ -1,0 +1,405 @@
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+╭ name: User
+├ kind: class
+├ file: /mixins.ts
+├ span:
+│ ╭ /mixins.ts:18:1-20:2
+│ │ 18: class User {
+│ │     ^^^^^^^^^^^^
+│ │ 19:     name: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins.ts:18:7-18:11
+│ │ 18: class User {
+│ │           ^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: TimestampedUser
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins.ts:23:7-23:42
+│ │ │ │ 23: const TimestampedUser = Timestamped(User);
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins.ts:23:7-23:22
+│ │ │ │ 23: const TimestampedUser = Timestamped(User);
+│ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ActivatableTimestampedUser
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins.ts:24:7-24:66
+│ │ │ │ 24: const ActivatableTimestampedUser = Activatable(Timestamped(User));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins.ts:24:7-24:33
+│ │ │ │ 24: const ActivatableTimestampedUser = Activatable(Timestamped(User));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: SpecialUser
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /mixins.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins.ts:26:1-28:2
+│ │ │ │ │ │ 26: class SpecialUser extends ActivatableTimestampedUser {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 27:     special: boolean = true;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 28: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins.ts:26:7-26:18
+│ │ │ │ │ │ 26: class SpecialUser extends ActivatableTimestampedUser {
+│ │ │ │ │ │           ^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExternalBase
+├ kind: class
+├ kindModifiers: declare
+├ file: /declarations.ts
+├ span:
+│ ╭ /declarations.ts:1:1-4:2
+│ │ 1: // Ambient declarations
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: declare class ExternalBase {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     baseMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarations.ts:2:15-2:27
+│ │ 2: declare class ExternalBase {
+│ │                  ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ExternalDerived
+│ │ ├ kind: class
+│ │ ├ kindModifiers: declare
+│ │ ├ file: /declarations.ts
+│ │ ├ span:
+│ │ │ ╭ /declarations.ts:10:1-13:2
+│ │ │ │ 10: declare class ExternalDerived extends ExternalBase implements ExternalInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     interfaceMethod(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     derivedMethod(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarations.ts:10:15-10:30
+│ │ │ │ 10: declare class ExternalDerived extends ExternalBase implements ExternalInterface {
+│ │ │ │                   ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: LocalDerived
+│ │ ├ kind: class
+│ │ ├ file: /declarations.ts
+│ │ ├ span:
+│ │ │ ╭ /declarations.ts:15:1-18:2
+│ │ │ │ 15: // Implementation extending ambient
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16: class LocalDerived extends ExternalBase {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:     localMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarations.ts:16:7-16:19
+│ │ │ │ 16: class LocalDerived extends ExternalBase {
+│ │ │ │           ^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExternalInterface
+├ kind: interface
+├ kindModifiers: declare
+├ file: /declarations.ts
+├ span:
+│ ╭ /declarations.ts:6:1-8:2
+│ │ 6: declare interface ExternalInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     interfaceMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarations.ts:6:19-6:36
+│ │ 6: declare interface ExternalInterface {
+│ │                      ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ExternalDerived
+│ │ ├ kind: class
+│ │ ├ kindModifiers: declare
+│ │ ├ file: /declarations.ts
+│ │ ├ span:
+│ │ │ ╭ /declarations.ts:10:1-13:2
+│ │ │ │ 10: declare class ExternalDerived extends ExternalBase implements ExternalInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     interfaceMethod(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     derivedMethod(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarations.ts:10:15-10:30
+│ │ │ │ 10: declare class ExternalDerived extends ExternalBase implements ExternalInterface {
+│ │ │ │                   ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: LocalDerived
+├ kind: class
+├ file: /declarations.ts
+├ span:
+│ ╭ /declarations.ts:15:1-18:2
+│ │ 15: // Implementation extending ambient
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16: class LocalDerived extends ExternalBase {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:     localMethod(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarations.ts:16:7-16:19
+│ │ 16: class LocalDerived extends ExternalBase {
+│ │           ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ExternalBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: declare
+│ │ ├ file: /declarations.ts
+│ │ ├ span:
+│ │ │ ╭ /declarations.ts:1:1-4:2
+│ │ │ │ 1: // Ambient declarations
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: declare class ExternalBase {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     baseMethod(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarations.ts:2:15-2:27
+│ │ │ │ 2: declare class ExternalBase {
+│ │ │ │                  ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Mergeable
+├ kind: interface
+├ file: /declarationMerging.ts
+├ span:
+│ ╭ /declarationMerging.ts:1:1-4:2
+│ │ 1: // Interface declaration merging
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: interface Mergeable {
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     firstMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarationMerging.ts:2:11-2:20
+│ │ 2: interface Mergeable {
+│ │              ^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: MergedImpl
+│ │ ├ kind: class
+│ │ ├ file: /declarationMerging.ts
+│ │ ├ span:
+│ │ │ ╭ /declarationMerging.ts:10:1-14:2
+│ │ │ │ 10: // Class implementing merged interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: class MergedImpl implements Mergeable {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     firstMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     secondMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarationMerging.ts:11:7-11:17
+│ │ │ │ 11: class MergedImpl implements Mergeable {
+│ │ │ │           ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NamespaceInterface
+├ kind: interface
+├ kindModifiers: export
+├ containerName: MyNamespace
+├ file: /declarationMerging.ts
+├ span:
+│ ╭ /declarationMerging.ts:18:5-20:6
+│ │ 18:     export interface NamespaceInterface {
+│ │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:         nsMethod(): void;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20:     }
+│ │     ^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarationMerging.ts:18:22-18:40
+│ │ 18:     export interface NamespaceInterface {
+│ │                          ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: NamespaceClass
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ containerName: MyNamespace
+│ │ ├ file: /declarationMerging.ts
+│ │ ├ span:
+│ │ │ ╭ /declarationMerging.ts:22:5-24:6
+│ │ │ │ 22:     export class NamespaceClass implements NamespaceInterface {
+│ │ │ │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:         nsMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     }
+│ │ │ │     ^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarationMerging.ts:22:18-22:32
+│ │ │ │ 22:     export class NamespaceClass implements NamespaceInterface {
+│ │ │ │                      ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ExternalImplementer
+│ │ ├ kind: class
+│ │ ├ file: /declarationMerging.ts
+│ │ ├ span:
+│ │ │ ╭ /declarationMerging.ts:27:1-30:2
+│ │ │ │ 27: // Class implementing namespace interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 28: class ExternalImplementer implements MyNamespace.NamespaceInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 29:     nsMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 30: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarationMerging.ts:28:7-28:26
+│ │ │ │ 28: class ExternalImplementer implements MyNamespace.NamespaceInterface {
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExternalImplementer
+├ kind: class
+├ file: /declarationMerging.ts
+├ span:
+│ ╭ /declarationMerging.ts:27:1-30:2
+│ │ 27: // Class implementing namespace interface
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: class ExternalImplementer implements MyNamespace.NamespaceInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 29:     nsMethod(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /declarationMerging.ts:28:7-28:26
+│ │ 28: class ExternalImplementer implements MyNamespace.NamespaceInterface {
+│ │           ^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MyNamespace.NamespaceInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ containerName: MyNamespace
+│ │ ├ file: /declarationMerging.ts
+│ │ ├ span:
+│ │ │ ╭ /declarationMerging.ts:18:5-20:6
+│ │ │ │ 18:     export interface NamespaceInterface {
+│ │ │ │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:         nsMethod(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20:     }
+│ │ │ │     ^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /declarationMerging.ts:18:22-18:40
+│ │ │ │ 18:     export interface NamespaceInterface {
+│ │ │ │                          ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none

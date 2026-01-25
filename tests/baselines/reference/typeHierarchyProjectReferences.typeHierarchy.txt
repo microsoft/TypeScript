@@ -1,0 +1,1146 @@
+// === Type Hierarchy ===
+╭ name: BaseEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/src/base.ts
+├ span:
+│ ╭ /lib/src/base.ts:1:1-6:2
+│ │ 1: /** Base entity for all domain models */
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: export interface BaseEntity {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     id: string;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 4:     createdAt: Date;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     updatedAt: Date;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/base.ts:2:18-2:28
+│ │ 2: export interface BaseEntity {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: NamedEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:8:1-11:2
+│ │ │ │  8: /** Named entity adds a name property */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9: export interface NamedEntity extends BaseEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     name: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:9:18-9:29
+│ │ │ │ 9: export interface NamedEntity extends BaseEntity {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: AbstractEntity
+│ │ ├ kind: class
+│ │ ├ kindModifiers: abstract,export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:20:1-25:2
+│ │ │ │ 20: /** Abstract base class for entities */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 21: export abstract class AbstractEntity implements BaseEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 22:     abstract id: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:     createdAt: Date = new Date();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     updatedAt: Date = new Date();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:21:23-21:37
+│ │ │ │ 21: export abstract class AbstractEntity implements BaseEntity {
+│ │ │ │                           ^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NamedEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/src/base.ts
+├ span:
+│ ╭ /lib/src/base.ts:8:1-11:2
+│ │  8: /** Named entity adds a name property */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9: export interface NamedEntity extends BaseEntity {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     name: string;
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 11: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/base.ts:9:18-9:29
+│ │ 9: export interface NamedEntity extends BaseEntity {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 4:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Repository
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/src/base.ts
+├ span:
+│ ╭ /lib/src/base.ts:13:1-18:2
+│ │ 13: /** Base repository interface */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: export interface Repository<T extends BaseEntity> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:     find(id: string): Promise<T | null>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:     save(entity: T): Promise<T>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:     delete(id: string): Promise<void>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/base.ts:14:18-14:28
+│ │ 14: export interface Repository<T extends BaseEntity> {
+│ │                      ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: T extends BaseEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 4:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AbstractEntity
+├ kind: class
+├ kindModifiers: abstract,export
+├ file: /lib/src/base.ts
+├ span:
+│ ╭ /lib/src/base.ts:20:1-25:2
+│ │ 20: /** Abstract base class for entities */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21: export abstract class AbstractEntity implements BaseEntity {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22:     abstract id: string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 23:     createdAt: Date = new Date();
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24:     updatedAt: Date = new Date();
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 25: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/base.ts:21:23-21:37
+│ │ 21: export abstract class AbstractEntity implements BaseEntity {
+│ │                           ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 4:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DomainEvent
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/src/events.ts
+├ span:
+│ ╭ /lib/src/events.ts:3:1-8:2
+│ │ 3: /** Event interface for domain events */
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export interface DomainEvent<T extends BaseEntity = BaseEntity> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     type: string;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 6:     payload: T;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 7:     timestamp: Date;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/events.ts:4:18-4:29
+│ │ 4: export interface DomainEvent<T extends BaseEntity = BaseEntity> {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: T extends BaseEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 4:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: EntityCreatedEvent
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/events.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/events.ts:10:1-13:2
+│ │ │ │ 10: /** Created event */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: export interface EntityCreatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     type: 'created';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/events.ts:11:18-11:36
+│ │ │ │ 11: export interface EntityCreatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: EntityUpdatedEvent
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/events.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/events.ts:15:1-19:2
+│ │ │ │ 15: /** Updated event */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16: export interface EntityUpdatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:     type: 'updated';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     changes: Partial<T>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/events.ts:16:18-16:36
+│ │ │ │ 16: export interface EntityUpdatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: EntityDeletedEvent
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/events.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/events.ts:21:1-24:2
+│ │ │ │ 21: /** Deleted event */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 22: export interface EntityDeletedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:     type: 'deleted';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/events.ts:22:18-22:36
+│ │ │ │ 22: export interface EntityDeletedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: EntityCreatedEvent
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/src/events.ts
+├ span:
+│ ╭ /lib/src/events.ts:10:1-13:2
+│ │ 10: /** Created event */
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 11: export interface EntityCreatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     type: 'created';
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 13: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/src/events.ts:11:18-11:36
+│ │ 11: export interface EntityCreatedEvent<T extends BaseEntity> extends DomainEvent<T> {
+│ │                      ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: DomainEvent<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/events.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/events.ts:3:1-8:2
+│ │ │ │ 3: /** Event interface for domain events */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface DomainEvent<T extends BaseEntity = BaseEntity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     type: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     payload: T;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 7:     timestamp: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/events.ts:4:18-4:29
+│ │ │ │ 4: export interface DomainEvent<T extends BaseEntity = BaseEntity> {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: T extends BaseEntity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /lib/src/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2: export interface BaseEntity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     createdAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     updatedAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ │ │ 2: export interface BaseEntity {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: T extends BaseEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/src/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/src/base.ts:1:1-6:2
+│ │ │ │ 1: /** Base entity for all domain models */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 4:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/src/base.ts:2:18-2:28
+│ │ │ │ 2: export interface BaseEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /app/src/models/user.ts
+├ span:
+│ ╭ /app/src/models/user.ts:3:1-7:2
+│ │ 3: /** User entity interface */
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export interface UserEntity extends NamedEntity {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     email: string;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 6:     role: 'admin' | 'user';
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/models/user.ts:4:18-4:28
+│ │ 4: export interface UserEntity extends NamedEntity {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: User
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/models/user.ts:9:1-15:2
+│ │ │ │  9: /** User class implementation */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     id: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     name: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     email: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     role: 'admin' | 'user' = 'user';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/models/user.ts:10:14-10:18
+│ │ │ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │ │ │                  ^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AdminUser
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /app/src/models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /app/src/models/user.ts:17:1-25:2
+│ │ │ │ │ │ 17: /** Admin user extends User */
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 18: export class AdminUser extends User {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 19:     permissions: string[] = [];
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 20:
+│ │ │ │ │ │     ^
+│ │ │ │ │ │ 21:     constructor() {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 22:         super();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 23:         this.role = 'admin';
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 24:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ 25: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /app/src/models/user.ts:18:14-18:23
+│ │ │ │ │ │ 18: export class AdminUser extends User {
+│ │ │ │ │ │                  ^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: User
+├ kind: class
+├ kindModifiers: export
+├ file: /app/src/models/user.ts
+├ span:
+│ ╭ /app/src/models/user.ts:9:1-15:2
+│ │  9: /** User class implementation */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     id: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     name: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     email: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     role: 'admin' | 'user' = 'user';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/models/user.ts:10:14-10:18
+│ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │                  ^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UserEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/models/user.ts:3:1-7:2
+│ │ │ │ 3: /** User entity interface */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface UserEntity extends NamedEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     role: 'admin' | 'user';
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/models/user.ts:4:18-4:28
+│ │ │ │ 4: export interface UserEntity extends NamedEntity {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: AdminUser
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/models/user.ts:17:1-25:2
+│ │ │ │ 17: /** Admin user extends User */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18: export class AdminUser extends User {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     permissions: string[] = [];
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20:
+│ │ │ │     ^
+│ │ │ │ 21:     constructor() {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 22:         super();
+│ │ │ │     ^^^^^^^^^^^^^^^^
+│ │ │ │ 23:         this.role = 'admin';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/models/user.ts:18:14-18:23
+│ │ │ │ 18: export class AdminUser extends User {
+│ │ │ │                  ^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AdminUser
+├ kind: class
+├ kindModifiers: export
+├ file: /app/src/models/user.ts
+├ span:
+│ ╭ /app/src/models/user.ts:17:1-25:2
+│ │ 17: /** Admin user extends User */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: export class AdminUser extends User {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     permissions: string[] = [];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20:
+│ │     ^
+│ │ 21:     constructor() {
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 22:         super();
+│ │     ^^^^^^^^^^^^^^^^
+│ │ 23:         this.role = 'admin';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24:     }
+│ │     ^^^^^
+│ │ 25: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/models/user.ts:18:14-18:23
+│ │ 18: export class AdminUser extends User {
+│ │                  ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: User
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/models/user.ts:9:1-15:2
+│ │ │ │  9: /** User class implementation */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     id: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     name: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     email: string = '';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     role: 'admin' | 'user' = 'user';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/models/user.ts:10:14-10:18
+│ │ │ │ 10: export class User extends AbstractEntity implements UserEntity {
+│ │ │ │                  ^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserEntity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /app/src/models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /app/src/models/user.ts:3:1-7:2
+│ │ │ │ │ │ 3: /** User entity interface */
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: export interface UserEntity extends NamedEntity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     role: 'admin' | 'user';
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /app/src/models/user.ts:4:18-4:28
+│ │ │ │ │ │ 4: export interface UserEntity extends NamedEntity {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /app/src/models/user.ts
+├ span:
+│ ╭ /app/src/models/user.ts:27:1-31:2
+│ │ 27: /** User repository interface */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: export interface UserRepository extends Repository<UserEntity> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 29:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 31: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/models/user.ts:28:18-28:32
+│ │ 28: export interface UserRepository extends Repository<UserEntity> {
+│ │                      ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Product
+├ kind: class
+├ kindModifiers: export
+├ file: /app/src/models/product.ts
+├ span:
+│ ╭ /app/src/models/product.ts:9:1-15:2
+│ │  9: /** Product class */
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 10: export class Product extends AbstractEntity implements ProductEntity {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     id: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     name: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     price: number = 0;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     sku: string = '';
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/models/product.ts:10:14-10:21
+│ │ 10: export class Product extends AbstractEntity implements ProductEntity {
+│ │                  ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ProductEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/models/product.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/models/product.ts:3:1-7:2
+│ │ │ │ 3: /** Product entity */
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface ProductEntity extends NamedEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     price: number;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     sku: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/models/product.ts:4:18-4:31
+│ │ │ │ 4: export interface ProductEntity extends NamedEntity {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserCreatedEvent
+├ kind: interface
+├ kindModifiers: export
+├ file: /app/src/services/userEvents.ts
+├ span:
+│ ╭ /app/src/services/userEvents.ts:4:1-10:2
+│ │  4: /** User created event */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  5: export interface UserCreatedEvent extends EntityCreatedEvent<UserEntity> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  6:     metadata: {
+│ │     ^^^^^^^^^^^^^^^
+│ │  7:         source: string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │  8:         ipAddress?: string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     };
+│ │     ^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/services/userEvents.ts:5:18-5:34
+│ │ 5: export interface UserCreatedEvent extends EntityCreatedEvent<UserEntity> {
+│ │                     ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserEvents
+├ kind: type
+├ kindModifiers: export,union
+├ file: /app/src/services/userEvents.ts
+├ span:
+│ ╭ /app/src/services/userEvents.ts:19:1-23:38
+│ │ 19: /** Union of all user events */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20: export type UserEvents =
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21:     | UserCreatedEvent
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22:     | UserUpdatedEvent
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 23:     | EntityDeletedEvent<UserEntity>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/services/userEvents.ts:20:13-20:23
+│ │ 20: export type UserEvents =
+│ │                 ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UserCreatedEvent
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/services/userEvents.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/services/userEvents.ts:4:1-10:2
+│ │ │ │  4: /** User created event */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  5: export interface UserCreatedEvent extends EntityCreatedEvent<UserEntity> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  6:     metadata: {
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │  7:         source: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  8:         ipAddress?: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     };
+│ │ │ │     ^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/services/userEvents.ts:5:18-5:34
+│ │ │ │ 5: export interface UserCreatedEvent extends EntityCreatedEvent<UserEntity> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: UserUpdatedEvent
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/services/userEvents.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/services/userEvents.ts:12:1-17:2
+│ │ │ │ 12: /** User updated event */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: export interface UserUpdatedEvent extends EntityUpdatedEvent<UserEntity> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     metadata: {
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 15:         changedBy: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16:     };
+│ │ │ │     ^^^^^^
+│ │ │ │ 17: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/services/userEvents.ts:13:18-13:34
+│ │ │ │ 13: export interface UserUpdatedEvent extends EntityUpdatedEvent<UserEntity> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: EventHandler
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /app/src/services/userEvents.ts
+├ span:
+│ ╭ /app/src/services/userEvents.ts:25:1-26:79
+│ │ 25: /** Event handler type */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 26: export type EventHandler<E extends DomainEvent> = (event: E) => Promise<void>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/services/userEvents.ts:26:13-26:25
+│ │ 26: export type EventHandler<E extends DomainEvent> = (event: E) => Promise<void>;
+│ │                 ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: InMemoryRepository
+├ kind: class
+├ kindModifiers: export
+├ file: /app/src/services/repository.ts
+├ span:
+│ ╭ /app/src/services/repository.ts:3:1-19:2
+│ │  3: /** In-memory repository implementation */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  4: export class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  5:     protected items: Map<string, T> = new Map();
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  6:
+│ │     ^
+│ │  7:     async find(id: string): Promise<T | null> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  8:         return this.items.get(id) ?? null;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     }
+│ │     ^^^^^
+│ │ 10:
+│ │     ^
+│ │ 11:     async save(entity: T): Promise<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:         this.items.set(entity.id, entity);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:         return entity;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     }
+│ │     ^^^^^
+│ │ 15:
+│ │     ^
+│ │ 16:     async delete(id: string): Promise<void> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:         this.items.delete(id);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     }
+│ │     ^^^^^
+│ │ 19: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/services/repository.ts:4:14-4:32
+│ │ 4: export class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
+│ │                 ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CachedRepository
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/services/repository.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/services/repository.ts:21:1-32:2
+│ │ │ │ 21: /** Cached repository decorator */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 22: export class CachedRepository<T extends BaseEntity> extends InMemoryRepository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:     private cache: Map<string, { value: T; expiry: number }> = new Map();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:
+│ │ │ │     ^
+│ │ │ │ 25:     override async find(id: string): Promise<T | null> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 26:         const cached = this.cache.get(id);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 27:         if (cached && cached.expiry > Date.now()) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 28:             return cached.value;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 29:         }
+│ │ │ │     ^^^^^^^^^
+│ │ │ │ 30:         return super.find(id);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 32: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/services/repository.ts:22:14-22:30
+│ │ │ │ 22: export class CachedRepository<T extends BaseEntity> extends InMemoryRepository<T> {
+│ │ │ │                  ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CachedRepository
+├ kind: class
+├ kindModifiers: export
+├ file: /app/src/services/repository.ts
+├ span:
+│ ╭ /app/src/services/repository.ts:21:1-32:2
+│ │ 21: /** Cached repository decorator */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22: export class CachedRepository<T extends BaseEntity> extends InMemoryRepository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 23:     private cache: Map<string, { value: T; expiry: number }> = new Map();
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24:
+│ │     ^
+│ │ 25:     override async find(id: string): Promise<T | null> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 26:         const cached = this.cache.get(id);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 27:         if (cached && cached.expiry > Date.now()) {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28:             return cached.value;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 29:         }
+│ │     ^^^^^^^^^
+│ │ 30:         return super.find(id);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 31:     }
+│ │     ^^^^^
+│ │ 32: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /app/src/services/repository.ts:22:14-22:30
+│ │ 22: export class CachedRepository<T extends BaseEntity> extends InMemoryRepository<T> {
+│ │                  ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: InMemoryRepository<T>
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /app/src/services/repository.ts
+│ │ ├ span:
+│ │ │ ╭ /app/src/services/repository.ts:3:1-19:2
+│ │ │ │  3: /** In-memory repository implementation */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  4: export class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  5:     protected items: Map<string, T> = new Map();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  6:
+│ │ │ │     ^
+│ │ │ │  7:     async find(id: string): Promise<T | null> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  8:         return this.items.get(id) ?? null;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 10:
+│ │ │ │     ^
+│ │ │ │ 11:     async save(entity: T): Promise<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:         this.items.set(entity.id, entity);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:         return entity;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 15:
+│ │ │ │     ^
+│ │ │ │ 16:     async delete(id: string): Promise<void> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:         this.items.delete(id);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /app/src/services/repository.ts:4:14-4:32
+│ │ │ │ 4: export class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none

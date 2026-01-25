@@ -1,0 +1,257 @@
+// === Type Hierarchy ===
+╭ name: AnonymousClass
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:2:24-4:2
+│ │ 2: const AnonymousClass = class {
+│ │                           ^^^^^^^
+│ │ 3:     method(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: };
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:2:7-2:21
+│ │ 2: const AnonymousClass = class {
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyNamedClass
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:7:27-9:2
+│ │ 7: const VarWithNamedClass = class MyNamedClass {
+│ │                              ^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     method(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 9: };
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:7:33-7:45
+│ │ 7: const VarWithNamedClass = class MyNamedClass {
+│ │                                    ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: InnerClass
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:12:26-14:2
+│ │ 12: const VarForNamedClass = class InnerClass {
+│ │                              ^^^^^^^^^^^^^^^^^^
+│ │ 13:     value: number = 0;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:12:32-12:42
+│ │ 12: const VarForNamedClass = class InnerClass {
+│ │                                    ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DerivedAnonymous
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:21:26-23:2
+│ │ 21: const DerivedAnonymous = class extends BaseClass {
+│ │                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22:     derived(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 23: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:21:7-21:23
+│ │ 21: const DerivedAnonymous = class extends BaseClass {
+│ │           ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseClass
+│ │ ├ kind: class
+│ │ ├ file: /classExpressions.ts
+│ │ ├ span:
+│ │ │ ╭ /classExpressions.ts:16:1-19:2
+│ │ │ │ 16: // Anonymous class extending another class
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17: class BaseClass {
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     base(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /classExpressions.ts:17:7-17:16
+│ │ │ │ 17: class BaseClass {
+│ │ │ │           ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DerivedNamed
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:26:25-28:2
+│ │ 26: const DerivedNamedVar = class DerivedNamed extends BaseClass {
+│ │                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 27:     derived(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:26:31-26:43
+│ │ 26: const DerivedNamedVar = class DerivedNamed extends BaseClass {
+│ │                                   ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseClass
+│ │ ├ kind: class
+│ │ ├ file: /classExpressions.ts
+│ │ ├ span:
+│ │ │ ╭ /classExpressions.ts:16:1-19:2
+│ │ │ │ 16: // Anonymous class extending another class
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17: class BaseClass {
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     base(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /classExpressions.ts:17:7-17:16
+│ │ │ │ 17: class BaseClass {
+│ │ │ │           ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ImplementingClass
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:35:27-37:2
+│ │ 35: const ImplementingClass = class implements IFace {
+│ │                               ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36:     doSomething(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 37: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:35:7-35:24
+│ │ 35: const ImplementingClass = class implements IFace {
+│ │           ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: IFace
+│ │ ├ kind: interface
+│ │ ├ file: /classExpressions.ts
+│ │ ├ span:
+│ │ │ ╭ /classExpressions.ts:30:1-33:2
+│ │ │ │ 30: // Anonymous class implementing interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31: interface IFace {
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 32:     doSomething(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 33: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /classExpressions.ts:31:11-31:16
+│ │ │ │ 31: interface IFace {
+│ │ │ │               ^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Level1
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:40:16-42:2
+│ │ 40: const Level1 = class {
+│ │                    ^^^^^^^
+│ │ 41:     level1(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 42: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:40:7-40:13
+│ │ 40: const Level1 = class {
+│ │           ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyGeneric
+├ kind: class
+├ file: /classExpressions.ts
+├ span:
+│ ╭ /classExpressions.ts:45:22-47:2
+│ │ 45: const GenericClass = class MyGeneric<T> {
+│ │                          ^^^^^^^^^^^^^^^^^^^^
+│ │ 46:     value: T | undefined;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 47: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /classExpressions.ts:45:28-45:37
+│ │ 45: const GenericClass = class MyGeneric<T> {
+│ │                                ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+none

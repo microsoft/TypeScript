@@ -1,0 +1,488 @@
+// === Type Hierarchy ===
+╭ name: StringType
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:1:1-2:26
+│ │ 1: // Primitive types hierarchy
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: type StringType = string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:2:6-2:16
+│ │ 2: type StringType = string;
+│ │         ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NeverType
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:10:1-10:24
+│ │ 10: type NeverType = never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:10:6-10:15
+│ │ 10: type NeverType = never;
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UnknownType
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:11:1-11:28
+│ │ 11: type UnknownType = unknown;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:11:6-11:17
+│ │ 11: type UnknownType = unknown;
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringArray
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:17:1-18:29
+│ │ 17: // Array types
+│ │     ^^^^^^^^^^^^^^
+│ │ 18: type StringArray = string[];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:18:6-18:17
+│ │ 18: type StringArray = string[];
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ReadonlyStringArray
+├ kind: type
+├ kindModifiers: readonly
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:20:1-20:46
+│ │ 20: type ReadonlyStringArray = readonly string[];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:20:6-20:25
+│ │ 20: type ReadonlyStringArray = readonly string[];
+│ │          ^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Pair
+├ kind: type
+├ kindModifiers: tuple
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:22:1-23:30
+│ │ 22: // Tuple types
+│ │     ^^^^^^^^^^^^^^
+│ │ 23: type Pair = [string, number];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:23:6-23:10
+│ │ 23: type Pair = [string, number];
+│ │          ^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NamedTuple
+├ kind: type
+├ kindModifiers: tuple
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:25:1-25:47
+│ │ 25: type NamedTuple = [name: string, age: number];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:25:6-25:16
+│ │ 25: type NamedTuple = [name: string, age: number];
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: RestTuple
+├ kind: type
+├ kindModifiers: tuple
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:26:1-26:40
+│ │ 26: type RestTuple = [string, ...number[]];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:26:6-26:15
+│ │ 26: type RestTuple = [string, ...number[]];
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: OptionalTuple
+├ kind: type
+├ kindModifiers: tuple
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:27:1-27:40
+│ │ 27: type OptionalTuple = [string, number?];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:27:6-27:19
+│ │ 27: type OptionalTuple = [string, number?];
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PrimitiveUnion
+├ kind: type
+├ kindModifiers: union
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:29:1-30:49
+│ │ 29: // Union and intersection of primitives
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30: type PrimitiveUnion = string | number | boolean;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:30:6-30:20
+│ │ 30: type PrimitiveUnion = string | number | boolean;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyPartial
+├ kind: type
+├ kindModifiers: mapped
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:38:1-39:47
+│ │ 38: // Custom utility type patterns (no lib dependency)
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 39: type MyPartial<T> = { [K in keyof T]?: T[K] };
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:39:6-39:15
+│ │ 39: type MyPartial<T> = { [K in keyof T]?: T[K] };
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyPick
+├ kind: type
+├ kindModifiers: mapped
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:42:1-42:56
+│ │ 42: type MyPick<T, K extends keyof T> = { [P in K]: T[P] };
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:42:6-42:12
+│ │ 42: type MyPick<T, K extends keyof T> = { [P in K]: T[P] };
+│ │          ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PickedUser
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:52:1-52:51
+│ │ 52: type PickedUser = MyPick<FullUser, 'id' | 'name'>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:52:6-52:16
+│ │ 52: type PickedUser = MyPick<FullUser, 'id' | 'name'>;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PartialUser
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:53:1-53:40
+│ │ 53: type PartialUser = MyPartial<FullUser>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:53:6-53:17
+│ │ 53: type PartialUser = MyPartial<FullUser>;
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FuncWithParams
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:58:1-58:57
+│ │ 58: type FuncWithParams = (a: string, b: number) => boolean;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:58:6-58:20
+│ │ 58: type FuncWithParams = (a: string, b: number) => boolean;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyReturnType
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:61:1-62:102
+│ │ 61: // Custom Parameters/ReturnType patterns
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 62: type MyReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:62:6-62:18
+│ │ 62: type MyReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : never;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FuncReturn
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:65:1-65:48
+│ │ 65: type FuncReturn = MyReturnType<FuncWithParams>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:65:6-65:16
+│ │ 65: type FuncReturn = MyReturnType<FuncWithParams>;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FuncParams
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:66:1-66:48
+│ │ 66: type FuncParams = MyParameters<FuncWithParams>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:66:6-66:16
+│ │ 66: type FuncParams = MyParameters<FuncWithParams>;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: LiteralString
+├ kind: type
+├ kindModifiers: alias
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:76:1-77:30
+│ │ 76: // Literal types
+│ │     ^^^^^^^^^^^^^^^^
+│ │ 77: type LiteralString = 'hello';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:77:6-77:19
+│ │ 77: type LiteralString = 'hello';
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: LiteralUnion
+├ kind: type
+├ kindModifiers: union
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:80:1-80:37
+│ │ 80: type LiteralUnion = 'a' | 'b' | 'c';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:80:6-80:18
+│ │ 80: type LiteralUnion = 'a' | 'b' | 'c';
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: JsonValue
+├ kind: type
+├ kindModifiers: union
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:85:1-92:36
+│ │ 85: // Recursive type
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 86: type JsonValue =
+│ │     ^^^^^^^^^^^^^^^^
+│ │ 87:     | string
+│ │     ^^^^^^^^^^^^
+│ │ 88:     | number
+│ │     ^^^^^^^^^^^^
+│ │ 89:     | boolean
+│ │     ^^^^^^^^^^^^^
+│ │ 90:     | null
+│ │     ^^^^^^^^^^
+│ │ 91:     | JsonValue[]
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 92:     | { [key: string]: JsonValue };
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:86:6-86:15
+│ │ 86: type JsonValue =
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: IsString
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /primitiveTypes.ts
+├ span:
+│ ╭ /primitiveTypes.ts:94:1-95:52
+│ │ 94: // Conditional types with primitives
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 95: type IsString<T> = T extends string ? true : false;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /primitiveTypes.ts:95:6-95:14
+│ │ 95: type IsString<T> = T extends string ? true : false;
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

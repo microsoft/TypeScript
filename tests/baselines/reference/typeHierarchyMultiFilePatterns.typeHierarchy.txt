@@ -1,0 +1,1474 @@
+// === Type Hierarchy ===
+╭ name: GenericBase
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics/base.ts
+├ span:
+│ ╭ /generics/base.ts:1:1-4:2
+│ │ 1: export interface GenericBase<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     value: T;
+│ │    ^^^^^^^^^^^^^
+│ │ 3:     getValue(): T;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/base.ts:1:18-1:29
+│ │ 1: export interface GenericBase<T> {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: GenericBaseImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/base.ts:6:1-10:2
+│ │ │ │  6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/base.ts:6:14-6:29
+│ │ │ │ 6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: StringImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/string-impl.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/string-impl.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/string-impl.ts:7:14-7:24
+│ │ │ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: NumberImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/number-impl.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/number-impl.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class NumberImpl extends GenericBaseImpl<number> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     isPositive(): boolean { return this.value > 0; }
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/number-impl.ts:7:14-7:24
+│ │ │ │ │ │ 7: export class NumberImpl extends GenericBaseImpl<number> {
+│ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: StringGeneric
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/string-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/string-impl.ts:3:1-5:2
+│ │ │ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     format(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/string-impl.ts:3:18-3:31
+│ │ │ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: StringImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/string-impl.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/string-impl.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/string-impl.ts:7:14-7:24
+│ │ │ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: ...
+│ ╭
+│ │ ╭ name: NumberGeneric
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/number-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/number-impl.ts:3:1-5:2
+│ │ │ │ 3: export interface NumberGeneric extends GenericBase<number> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     isPositive(): boolean;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/number-impl.ts:3:18-3:31
+│ │ │ │ 3: export interface NumberGeneric extends GenericBase<number> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringGeneric
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics/string-impl.ts
+├ span:
+│ ╭ /generics/string-impl.ts:3:1-5:2
+│ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     format(): string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/string-impl.ts:3:18-3:31
+│ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBase<string>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/base.ts:1:18-1:29
+│ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: StringImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/string-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/string-impl.ts:7:1-9:2
+│ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/string-impl.ts:7:14-7:24
+│ │ │ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │ │ │                 ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /generics/string-impl.ts
+├ span:
+│ ╭ /generics/string-impl.ts:7:1-9:2
+│ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     format(): string { return this.value.toUpperCase(); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/string-impl.ts:7:14-7:24
+│ │ 7: export class StringImpl extends GenericBaseImpl<string> implements StringGeneric {
+│ │                 ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBaseImpl<string>
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/base.ts:6:1-10:2
+│ │ │ │  6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/base.ts:6:14-6:29
+│ │ │ │ 6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/base.ts:1:18-1:29
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: StringGeneric
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/string-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/string-impl.ts:3:1-5:2
+│ │ │ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     format(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/string-impl.ts:3:18-3:31
+│ │ │ │ 3: export interface StringGeneric extends GenericBase<string> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<string>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/base.ts:1:18-1:29
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NumberImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /generics/number-impl.ts
+├ span:
+│ ╭ /generics/number-impl.ts:7:1-9:2
+│ │ 7: export class NumberImpl extends GenericBaseImpl<number> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     isPositive(): boolean { return this.value > 0; }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/number-impl.ts:7:14-7:24
+│ │ 7: export class NumberImpl extends GenericBaseImpl<number> {
+│ │                 ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBaseImpl<number>
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/base.ts:6:1-10:2
+│ │ │ │  6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/base.ts:6:14-6:29
+│ │ │ │ 6: export class GenericBaseImpl<T> implements GenericBase<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/base.ts:1:18-1:29
+│ │ │ │ │ │ 1: export interface GenericBase<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MergeableInterface
+├ kind: interface
+├ kindModifiers: export
+├ file: /merging/mergeable.ts
+├ span:
+│ ╭ /merging/mergeable.ts:1:1-3:2
+│ │ 1: export interface MergeableInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     firstProp: string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/mergeable.ts:1:18-1:36
+│ │ 1: export interface MergeableInterface {
+│ │                     ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: MergeImplementer
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/mergeable-ext.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/mergeable-ext.ts:10:1-13:2
+│ │ │ │ 10: export class MergeImplementer implements MergeableInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     firstProp: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     secondProp: number = 0;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/mergeable-ext.ts:10:14-10:30
+│ │ │ │ 10: export class MergeImplementer implements MergeableInterface {
+│ │ │ │                  ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MergeImplementer
+├ kind: class
+├ kindModifiers: export
+├ file: /merging/mergeable-ext.ts
+├ span:
+│ ╭ /merging/mergeable-ext.ts:10:1-13:2
+│ │ 10: export class MergeImplementer implements MergeableInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     firstProp: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     secondProp: number = 0;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/mergeable-ext.ts:10:14-10:30
+│ │ 10: export class MergeImplementer implements MergeableInterface {
+│ │                  ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MergeableInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/mergeable.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/mergeable.ts:1:1-3:2
+│ │ │ │ 1: export interface MergeableInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     firstProp: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/mergeable.ts:1:18-1:36
+│ │ │ │ 1: export interface MergeableInterface {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Printable
+├ kind: interface
+├ kindModifiers: export
+├ file: /intersections/printable.ts
+├ span:
+│ ╭ /intersections/printable.ts:1:1-3:2
+│ │ 1: export interface Printable {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     print(): void;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections/printable.ts:1:18-1:27
+│ │ 1: export interface Printable {
+│ │                     ^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CombinedImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/combined.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/combined.ts:6:1-9:2
+│ │ │ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     print(): void { console.log("printing"); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     log(): void { console.log("logging"); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/combined.ts:6:14-6:26
+│ │ │ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │ │ │                 ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: PrintableLoggable
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,intersection
+│ │ ├ file: /intersections/combined.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/combined.ts:4:1-4:54
+│ │ │ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/combined.ts:4:13-4:30
+│ │ │ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │ │ │                ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Loggable
+├ kind: interface
+├ kindModifiers: export
+├ file: /intersections/loggable.ts
+├ span:
+│ ╭ /intersections/loggable.ts:1:1-3:2
+│ │ 1: export interface Loggable {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     log(): void;
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections/loggable.ts:1:18-1:26
+│ │ 1: export interface Loggable {
+│ │                     ^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CombinedImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/combined.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/combined.ts:6:1-9:2
+│ │ │ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     print(): void { console.log("printing"); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     log(): void { console.log("logging"); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/combined.ts:6:14-6:26
+│ │ │ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │ │ │                 ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: PrintableLoggable
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,intersection
+│ │ ├ file: /intersections/combined.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/combined.ts:4:1-4:54
+│ │ │ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/combined.ts:4:13-4:30
+│ │ │ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │ │ │                ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PrintableLoggable
+├ kind: type
+├ kindModifiers: export,intersection
+├ file: /intersections/combined.ts
+├ span:
+│ ╭ /intersections/combined.ts:4:1-4:54
+│ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections/combined.ts:4:13-4:30
+│ │ 4: export type PrintableLoggable = Printable & Loggable;
+│ │                ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Printable
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/printable.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/printable.ts:1:1-3:2
+│ │ │ │ 1: export interface Printable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     print(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/printable.ts:1:18-1:27
+│ │ │ │ 1: export interface Printable {
+│ │ │ │                     ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Loggable
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/loggable.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/loggable.ts:1:1-3:2
+│ │ │ │ 1: export interface Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     log(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/loggable.ts:1:18-1:26
+│ │ │ │ 1: export interface Loggable {
+│ │ │ │                     ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CombinedImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /intersections/combined.ts
+├ span:
+│ ╭ /intersections/combined.ts:6:1-9:2
+│ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     print(): void { console.log("printing"); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     log(): void { console.log("logging"); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections/combined.ts:6:14-6:26
+│ │ 6: export class CombinedImpl implements Printable, Loggable {
+│ │                 ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Printable
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/printable.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/printable.ts:1:1-3:2
+│ │ │ │ 1: export interface Printable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     print(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/printable.ts:1:18-1:27
+│ │ │ │ 1: export interface Printable {
+│ │ │ │                     ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Loggable
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /intersections/loggable.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections/loggable.ts:1:1-3:2
+│ │ │ │ 1: export interface Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     log(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections/loggable.ts:1:18-1:26
+│ │ │ │ 1: export interface Loggable {
+│ │ │ │                     ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: BarrelEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /barrel/types/entity.ts
+├ span:
+│ ╭ /barrel/types/entity.ts:1:1-3:2
+│ │ 1: export interface BarrelEntity {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     id: string;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /barrel/types/entity.ts:1:18-1:30
+│ │ 1: export interface BarrelEntity {
+│ │                     ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: BarrelNamed
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/types/named.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/types/named.ts:3:1-5:2
+│ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/types/named.ts:3:18-3:29
+│ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BarrelUser
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /barrel/consumer.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /barrel/consumer.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /barrel/consumer.ts:4:18-4:28
+│ │ │ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BarrelUserImpl
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /barrel/consumer.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /barrel/consumer.ts:8:1-12:2
+│ │ │ │ │ │ │ │  8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │  9:     id: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 10:     name: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 11:     email: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 12: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /barrel/consumer.ts:8:14-8:28
+│ │ │ │ │ │ │ │ 8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │ │ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: BarrelNamed
+├ kind: interface
+├ kindModifiers: export
+├ file: /barrel/types/named.ts
+├ span:
+│ ╭ /barrel/types/named.ts:3:1-5:2
+│ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     name: string;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /barrel/types/named.ts:3:18-3:29
+│ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BarrelEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/types/entity.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/types/entity.ts:1:1-3:2
+│ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/types/entity.ts:1:18-1:30
+│ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: BarrelUser
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/consumer.ts:4:1-6:2
+│ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/consumer.ts:4:18-4:28
+│ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BarrelUserImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /barrel/consumer.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /barrel/consumer.ts:8:1-12:2
+│ │ │ │ │ │  8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     id: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10:     name: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     email: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /barrel/consumer.ts:8:14-8:28
+│ │ │ │ │ │ 8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: BarrelUser
+├ kind: interface
+├ kindModifiers: export
+├ file: /barrel/consumer.ts
+├ span:
+│ ╭ /barrel/consumer.ts:4:1-6:2
+│ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     email: string;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /barrel/consumer.ts:4:18-4:28
+│ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BarrelNamed
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/types/named.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/types/named.ts:3:1-5:2
+│ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/types/named.ts:3:18-3:29
+│ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BarrelEntity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /barrel/types/entity.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /barrel/types/entity.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /barrel/types/entity.ts:1:18-1:30
+│ │ │ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │ │ │                     ^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: BarrelUserImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/consumer.ts:8:1-12:2
+│ │ │ │  8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     email: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/consumer.ts:8:14-8:28
+│ │ │ │ 8: export class BarrelUserImpl implements BarrelUser {
+│ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: BarrelUserImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /barrel/consumer.ts
+├ span:
+│ ╭ /barrel/consumer.ts:8:1-12:2
+│ │  8: export class BarrelUserImpl implements BarrelUser {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     id: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     name: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     email: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /barrel/consumer.ts:8:14-8:28
+│ │ 8: export class BarrelUserImpl implements BarrelUser {
+│ │                 ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BarrelUser
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /barrel/consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /barrel/consumer.ts:4:1-6:2
+│ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /barrel/consumer.ts:4:18-4:28
+│ │ │ │ 4: export interface BarrelUser extends BarrelNamed {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BarrelNamed
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /barrel/types/named.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /barrel/types/named.ts:3:1-5:2
+│ │ │ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /barrel/types/named.ts:3:18-3:29
+│ │ │ │ │ │ 3: export interface BarrelNamed extends BarrelEntity {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BarrelEntity
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /barrel/types/entity.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /barrel/types/entity.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /barrel/types/entity.ts:1:18-1:30
+│ │ │ │ │ │ │ │ 1: export interface BarrelEntity {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Repository
+├ kind: interface
+├ kindModifiers: export
+├ file: /deep/repository.ts
+├ span:
+│ ╭ /deep/repository.ts:1:1-4:2
+│ │ 1: export interface Repository<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     find(id: string): T | null;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     save(entity: T): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /deep/repository.ts:1:18-1:28
+│ │ 1: export interface Repository<T> {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CachedRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/cached-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/cached-repository.ts:3:1-5:2
+│ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     clearCache(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/cached-repository.ts:3:18-3:34
+│ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /deep/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /deep/user-repository.ts:8:1-10:2
+│ │ │ │ │ │  8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     findByName(name: string): User | null;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /deep/user-repository.ts:8:18-8:32
+│ │ │ │ │ │ 8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /deep/user-repository.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /deep/user-repository.ts:12:1-17:2
+│ │ │ │ │ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 13:     find(id: string): User | null { return null; }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 14:     save(entity: User): void {}
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 15:     clearCache(): void {}
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 16:     findByName(name: string): User | null { return null; }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 17: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /deep/user-repository.ts:12:14-12:32
+│ │ │ │ │ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CachedRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /deep/cached-repository.ts
+├ span:
+│ ╭ /deep/cached-repository.ts:3:1-5:2
+│ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     clearCache(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /deep/cached-repository.ts:3:18-3:34
+│ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │                     ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Repository<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/repository.ts:1:1-4:2
+│ │ │ │ 1: export interface Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     save(entity: T): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/repository.ts:1:18-1:28
+│ │ │ │ 1: export interface Repository<T> {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/user-repository.ts:8:1-10:2
+│ │ │ │  8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     findByName(name: string): User | null;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/user-repository.ts:8:18-8:32
+│ │ │ │ 8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /deep/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /deep/user-repository.ts:12:1-17:2
+│ │ │ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 13:     find(id: string): User | null { return null; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14:     save(entity: User): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 15:     clearCache(): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 16:     findByName(name: string): User | null { return null; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 17: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /deep/user-repository.ts:12:14-12:32
+│ │ │ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /deep/user-repository.ts
+├ span:
+│ ╭ /deep/user-repository.ts:8:1-10:2
+│ │  8: export interface UserRepository extends CachedRepository<User> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     findByName(name: string): User | null;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /deep/user-repository.ts:8:18-8:32
+│ │ 8: export interface UserRepository extends CachedRepository<User> {
+│ │                     ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: CachedRepository<User>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/cached-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/cached-repository.ts:3:1-5:2
+│ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     clearCache(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/cached-repository.ts:3:18-3:34
+│ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /deep/repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /deep/repository.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /deep/repository.ts:1:18-1:28
+│ │ │ │ │ │ 1: export interface Repository<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserRepositoryImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/user-repository.ts:12:1-17:2
+│ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     find(id: string): User | null { return null; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     save(entity: User): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15:     clearCache(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16:     findByName(name: string): User | null { return null; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/user-repository.ts:12:14-12:32
+│ │ │ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepositoryImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /deep/user-repository.ts
+├ span:
+│ ╭ /deep/user-repository.ts:12:1-17:2
+│ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     find(id: string): User | null { return null; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     save(entity: User): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:     clearCache(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:     findByName(name: string): User | null { return null; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /deep/user-repository.ts:12:14-12:32
+│ │ 12: export class UserRepositoryImpl implements UserRepository {
+│ │                  ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UserRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /deep/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /deep/user-repository.ts:8:1-10:2
+│ │ │ │  8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     findByName(name: string): User | null;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /deep/user-repository.ts:8:18-8:32
+│ │ │ │ 8: export interface UserRepository extends CachedRepository<User> {
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: CachedRepository<User>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /deep/cached-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /deep/cached-repository.ts:3:1-5:2
+│ │ │ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     clearCache(): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /deep/cached-repository.ts:3:18-3:34
+│ │ │ │ │ │ 3: export interface CachedRepository<T> extends Repository<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /deep/repository.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /deep/repository.ts:1:1-4:2
+│ │ │ │ │ │ │ │ 1: export interface Repository<T> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 4: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /deep/repository.ts:1:18-1:28
+│ │ │ │ │ │ │ │ 1: export interface Repository<T> {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none

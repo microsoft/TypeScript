@@ -1,0 +1,242 @@
+// === Type Hierarchy ===
+╭ name: Pet
+├ kind: type
+├ kindModifiers: union
+├ file: /typeAliasHierarchy.ts
+├ span:
+│ ╭ /typeAliasHierarchy.ts:13:1-13:22
+│ │ 13: type Pet = Dog | Cat;
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /typeAliasHierarchy.ts:13:6-13:9
+│ │ 13: type Pet = Dog | Cat;
+│ │          ^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Dog
+│ │ ├ kind: interface
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /typeAliasHierarchy.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Cat
+│ │ ├ kind: interface
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:9:1-11:2
+│ │ │ │  9: interface Cat extends Animal {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     meow(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:9:11-9:14
+│ │ │ │ 9: interface Cat extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /typeAliasHierarchy.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Dog
+├ kind: interface
+├ file: /typeAliasHierarchy.ts
+├ span:
+│ ╭ /typeAliasHierarchy.ts:5:1-7:2
+│ │ 5: interface Dog extends Animal {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     bark(): void;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /typeAliasHierarchy.ts:5:11-5:14
+│ │ 5: interface Dog extends Animal {
+│ │              ^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Animal
+│ │ ├ kind: interface
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:1:1-3:2
+│ │ │ │ 1: interface Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:1:11-1:17
+│ │ │ │ 1: interface Animal {
+│ │ │ │              ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: Labrador
+│ │ ├ kind: class
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:17:1-20:2
+│ │ │ │ 17: class Labrador implements Dog {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     bark() {}
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │ 20: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:17:7-17:15
+│ │ │ │ 17: class Labrador implements Dog {
+│ │ │ │           ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: Poodle
+│ │ ├ kind: class
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:22:1-25:2
+│ │ │ │ 22: class Poodle implements Dog {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     bark() {}
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:22:7-22:13
+│ │ │ │ 22: class Poodle implements Dog {
+│ │ │ │           ^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Labrador
+├ kind: class
+├ file: /typeAliasHierarchy.ts
+├ span:
+│ ╭ /typeAliasHierarchy.ts:17:1-20:2
+│ │ 17: class Labrador implements Dog {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     name: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     bark() {}
+│ │     ^^^^^^^^^^^^^
+│ │ 20: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /typeAliasHierarchy.ts:17:7-17:15
+│ │ 17: class Labrador implements Dog {
+│ │           ^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Dog
+│ │ ├ kind: interface
+│ │ ├ file: /typeAliasHierarchy.ts
+│ │ ├ span:
+│ │ │ ╭ /typeAliasHierarchy.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /typeAliasHierarchy.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /typeAliasHierarchy.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /typeAliasHierarchy.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none

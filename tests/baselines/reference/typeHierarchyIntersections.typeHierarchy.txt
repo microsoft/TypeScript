@@ -1,0 +1,450 @@
+// === Type Hierarchy ===
+╭ name: PrintableLoggable
+├ kind: type
+├ kindModifiers: intersection
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:13:1-14:47
+│ │ 13: // Simple intersection
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: type PrintableLoggable = Printable & Loggable;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:14:6-14:23
+│ │ 14: type PrintableLoggable = Printable & Loggable;
+│ │          ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Printable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:1:1-3:2
+│ │ │ │ 1: interface Printable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     print(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:1:11-1:20
+│ │ │ │ 1: interface Printable {
+│ │ │ │              ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Loggable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:5:1-7:2
+│ │ │ │ 5: interface Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     log(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:5:11-5:19
+│ │ │ │ 5: interface Loggable {
+│ │ │ │              ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FullEntity
+├ kind: type
+├ kindModifiers: intersection
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:16:1-17:55
+│ │ 16: // Intersection with three types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17: type FullEntity = Printable & Loggable & Serializable;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:17:6-17:16
+│ │ 17: type FullEntity = Printable & Loggable & Serializable;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Printable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:1:1-3:2
+│ │ │ │ 1: interface Printable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     print(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:1:11-1:20
+│ │ │ │ 1: interface Printable {
+│ │ │ │              ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Loggable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:5:1-7:2
+│ │ │ │ 5: interface Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     log(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:5:11-5:19
+│ │ │ │ 5: interface Loggable {
+│ │ │ │              ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Serializable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:9:1-11:2
+│ │ │ │  9: interface Serializable {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     toJSON(): string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:9:11-9:23
+│ │ │ │ 9: interface Serializable {
+│ │ │ │              ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Printer
+├ kind: class
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:19:1-23:2
+│ │ 19: // Class implementing intersection-like pattern
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20: class Printer implements Printable, Loggable {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21:     print(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 22:     log(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 23: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:20:7-20:14
+│ │ 20: class Printer implements Printable, Loggable {
+│ │           ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Printable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:1:1-3:2
+│ │ │ │ 1: interface Printable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     print(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:1:11-1:20
+│ │ │ │ 1: interface Printable {
+│ │ │ │              ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Loggable
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:5:1-7:2
+│ │ │ │ 5: interface Loggable {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     log(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:5:11-5:19
+│ │ │ │ 5: interface Loggable {
+│ │ │ │              ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Record
+├ kind: type
+├ kindModifiers: intersection
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:38:1-38:45
+│ │ 38: type Record = Base & Timestamped & Metadata;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:38:6-38:12
+│ │ 38: type Record = Base & Timestamped & Metadata;
+│ │          ^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Base
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:25:1-28:2
+│ │ │ │ 25: // Intersection with interfaces
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 26: interface Base {
+│ │ │ │     ^^^^^^^^^^^^^^^^
+│ │ │ │ 27:     id: string;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 28: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:26:11-26:15
+│ │ │ │ 26: interface Base {
+│ │ │ │               ^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Timestamped
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:30:1-32:2
+│ │ │ │ 30: interface Timestamped {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31:     createdAt: Date;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 32: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:30:11-30:22
+│ │ │ │ 30: interface Timestamped {
+│ │ │ │               ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Metadata
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:34:1-36:2
+│ │ │ │ 34: interface Metadata {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 35:     tags: string[];
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:34:11-34:19
+│ │ │ │ 34: interface Metadata {
+│ │ │ │               ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtendedRecord
+├ kind: type
+├ kindModifiers: intersection
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:42:1-42:48
+│ │ 42: type ExtendedRecord = PartialRecord & Metadata;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:42:6-42:20
+│ │ 42: type ExtendedRecord = PartialRecord & Metadata;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Metadata
+│ │ ├ kind: interface
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:34:1-36:2
+│ │ │ │ 34: interface Metadata {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 35:     tags: string[];
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:34:11-34:19
+│ │ │ │ 34: interface Metadata {
+│ │ │ │               ^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: WithId
+├ kind: type
+├ kindModifiers: intersection
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:44:1-45:37
+│ │ 44: // Intersection with type parameter
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 45: type WithId<T> = T & { id: string };
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:45:6-45:12
+│ │ 45: type WithId<T> = T & { id: string };
+│ │          ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: IdentifiedPerson
+├ kind: type
+├ kindModifiers: alias
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:51:1-51:40
+│ │ 51: type IdentifiedPerson = WithId<Person>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:51:6-51:22
+│ │ 51: type IdentifiedPerson = WithId<Person>;
+│ │          ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Printable
+├ kind: interface
+├ file: /intersections.ts
+├ span:
+│ ╭ /intersections.ts:1:1-3:2
+│ │ 1: interface Printable {
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     print(): void;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /intersections.ts:1:11-1:20
+│ │ 1: interface Printable {
+│ │              ^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: Printer
+│ │ ├ kind: class
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:19:1-23:2
+│ │ │ │ 19: // Class implementing intersection-like pattern
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20: class Printer implements Printable, Loggable {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 21:     print(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 22:     log(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:20:7-20:14
+│ │ │ │ 20: class Printer implements Printable, Loggable {
+│ │ │ │           ^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: PrintableLoggable
+│ │ ├ kind: type
+│ │ ├ kindModifiers: intersection
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:13:1-14:47
+│ │ │ │ 13: // Simple intersection
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14: type PrintableLoggable = Printable & Loggable;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:14:6-14:23
+│ │ │ │ 14: type PrintableLoggable = Printable & Loggable;
+│ │ │ │          ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: FullEntity
+│ │ ├ kind: type
+│ │ ├ kindModifiers: intersection
+│ │ ├ file: /intersections.ts
+│ │ ├ span:
+│ │ │ ╭ /intersections.ts:16:1-17:55
+│ │ │ │ 16: // Intersection with three types
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17: type FullEntity = Printable & Loggable & Serializable;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /intersections.ts:17:6-17:16
+│ │ │ │ 17: type FullEntity = Printable & Loggable & Serializable;
+│ │ │ │          ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none

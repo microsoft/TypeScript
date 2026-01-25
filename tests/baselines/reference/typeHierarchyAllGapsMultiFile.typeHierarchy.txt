@@ -1,0 +1,2499 @@
+// === Type Hierarchy ===
+╭ name: BaseReexport
+├ kind: interface
+├ kindModifiers: export
+├ file: /reexports/module-a.ts
+├ span:
+│ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ 1: export interface BaseReexport {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     id: string;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ 1: export interface BaseReexport {
+│ │                     ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: BaseClassReexport
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-a.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-a.ts:5:1-7:2
+│ │ │ │ 5: export class BaseClassReexport implements BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     id: string = "";
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-a.ts:5:14-5:31
+│ │ │ │ 5: export class BaseClassReexport implements BaseReexport {
+│ │ │ │                 ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ImplReexport
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-c.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-c.ts:8:1-10:2
+│ │ │ │  8: export class ImplReexport implements BaseReexport {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-c.ts:8:14-8:26
+│ │ │ │ 8: export class ImplReexport implements BaseReexport {
+│ │ │ │                 ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ConsumerClass
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/consumer.ts:8:1-10:2
+│ │ │ │  8: export class ConsumerClass implements BaseReexport {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/consumer.ts:8:14-8:27
+│ │ │ │ 8: export class ConsumerClass implements BaseReexport {
+│ │ │ │                 ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ExtendedReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-b.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-b.ts:6:1-8:2
+│ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-b.ts:6:18-6:34
+│ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: DerivedFromReexport
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /reexports/module-c.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /reexports/module-c.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /reexports/module-c.ts:4:18-4:37
+│ │ │ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: ConsumerInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /reexports/consumer.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /reexports/consumer.ts:4:1-6:2
+│ │ │ │ │ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 5:     role: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /reexports/consumer.ts:4:18-4:35
+│ │ │ │ │ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtendedReexport
+├ kind: interface
+├ kindModifiers: export
+├ file: /reexports/module-b.ts
+├ span:
+│ ╭ /reexports/module-b.ts:6:1-8:2
+│ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     name: string;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/module-b.ts:6:18-6:34
+│ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │                     ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-a.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: DerivedFromReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-c.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-c.ts:4:1-6:2
+│ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-c.ts:4:18-4:37
+│ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ConsumerInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /reexports/consumer.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /reexports/consumer.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     role: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /reexports/consumer.ts:4:18-4:35
+│ │ │ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DerivedFromReexport
+├ kind: interface
+├ kindModifiers: export
+├ file: /reexports/module-c.ts
+├ span:
+│ ╭ /reexports/module-c.ts:4:1-6:2
+│ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     email: string;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/module-c.ts:4:18-4:37
+│ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │                     ^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ExtendedReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-b.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-b.ts:6:1-8:2
+│ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-b.ts:6:18-6:34
+│ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BaseReexport
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /reexports/module-a.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface BaseReexport {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ │ │ │ │ 1: export interface BaseReexport {
+│ │ │ │ │ │                     ^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ConsumerInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/consumer.ts:4:1-6:2
+│ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     role: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/consumer.ts:4:18-4:35
+│ │ │ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ImplReexport
+├ kind: class
+├ kindModifiers: export
+├ file: /reexports/module-c.ts
+├ span:
+│ ╭ /reexports/module-c.ts:8:1-10:2
+│ │  8: export class ImplReexport implements BaseReexport {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     id: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/module-c.ts:8:14-8:26
+│ │ 8: export class ImplReexport implements BaseReexport {
+│ │                 ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-a.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConsumerInterface
+├ kind: interface
+├ kindModifiers: export
+├ file: /reexports/consumer.ts
+├ span:
+│ ╭ /reexports/consumer.ts:4:1-6:2
+│ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     role: string;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/consumer.ts:4:18-4:35
+│ │ 4: export interface ConsumerInterface extends DerivedFromReexport {
+│ │                     ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: DerivedFromReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-c.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-c.ts:4:1-6:2
+│ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-c.ts:4:18-4:37
+│ │ │ │ 4: export interface DerivedFromReexport extends ExtendedReexport {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ExtendedReexport
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /reexports/module-b.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /reexports/module-b.ts:6:1-8:2
+│ │ │ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /reexports/module-b.ts:6:18-6:34
+│ │ │ │ │ │ 6: export interface ExtendedReexport extends BaseReexport {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BaseReexport
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /reexports/module-a.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface BaseReexport {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ │ │ │ │ │ │ 1: export interface BaseReexport {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConsumerClass
+├ kind: class
+├ kindModifiers: export
+├ file: /reexports/consumer.ts
+├ span:
+│ ╭ /reexports/consumer.ts:8:1-10:2
+│ │  8: export class ConsumerClass implements BaseReexport {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     id: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /reexports/consumer.ts:8:14-8:27
+│ │ 8: export class ConsumerClass implements BaseReexport {
+│ │                 ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseReexport
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /reexports/module-a.ts
+│ │ ├ span:
+│ │ │ ╭ /reexports/module-a.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /reexports/module-a.ts:1:18-1:30
+│ │ │ │ 1: export interface BaseReexport {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Logger
+├ kind: interface
+├ kindModifiers: export
+├ file: /merging/logger-base.ts
+├ span:
+│ ╭ /merging/logger-base.ts:1:1-3:2
+│ │ 1: export interface Logger {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     log(msg: string): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/logger-base.ts:1:18-1:24
+│ │ 1: export interface Logger {
+│ │                     ^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ConsoleLogger
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/logger-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/logger-impl.ts:3:1-8:2
+│ │ │ │ 3: // Class implementing the merged interface
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export class ConsoleLogger implements Logger {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     log(msg: string): void { console.log(msg); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     debug(msg: string): void { console.debug(msg); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     warn(msg: string): void { console.warn(msg); }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/logger-impl.ts:4:14-4:27
+│ │ │ │ 4: export class ConsoleLogger implements Logger {
+│ │ │ │                 ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: FileLogger
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/logger-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/logger-impl.ts:10:1-15:2
+│ │ │ │ 10: // Another implementation
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: export class FileLogger implements Logger {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     log(msg: string): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     debug(msg: string): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     warn(msg: string): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/logger-impl.ts:11:14-11:24
+│ │ │ │ 11: export class FileLogger implements Logger {
+│ │ │ │                  ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConsoleLogger
+├ kind: class
+├ kindModifiers: export
+├ file: /merging/logger-impl.ts
+├ span:
+│ ╭ /merging/logger-impl.ts:3:1-8:2
+│ │ 3: // Class implementing the merged interface
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export class ConsoleLogger implements Logger {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     log(msg: string): void { console.log(msg); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     debug(msg: string): void { console.debug(msg); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     warn(msg: string): void { console.warn(msg); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/logger-impl.ts:4:14-4:27
+│ │ 4: export class ConsoleLogger implements Logger {
+│ │                 ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Logger
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/logger-base.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/logger-base.ts:1:1-3:2
+│ │ │ │ 1: export interface Logger {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     log(msg: string): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/logger-base.ts:1:18-1:24
+│ │ │ │ 1: export interface Logger {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FileLogger
+├ kind: class
+├ kindModifiers: export
+├ file: /merging/logger-impl.ts
+├ span:
+│ ╭ /merging/logger-impl.ts:10:1-15:2
+│ │ 10: // Another implementation
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11: export class FileLogger implements Logger {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     log(msg: string): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     debug(msg: string): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     warn(msg: string): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/logger-impl.ts:11:14-11:24
+│ │ 11: export class FileLogger implements Logger {
+│ │                  ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Logger
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/logger-base.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/logger-base.ts:1:1-3:2
+│ │ │ │ 1: export interface Logger {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     log(msg: string): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/logger-base.ts:1:18-1:24
+│ │ │ │ 1: export interface Logger {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: WithStatic
+├ kind: interface
+├ kindModifiers: export
+├ file: /merging/namespace-merge.ts
+├ span:
+│ ╭ /merging/namespace-merge.ts:1:1-3:2
+│ │ 1: export interface WithStatic {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     instanceMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/namespace-merge.ts:1:18-1:28
+│ │ 1: export interface WithStatic {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: StaticImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/namespace-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/namespace-impl.ts:3:1-5:2
+│ │ │ │ 3: export class StaticImpl implements WithStatic {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     instanceMethod(): void {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/namespace-impl.ts:3:14-3:24
+│ │ │ │ 3: export class StaticImpl implements WithStatic {
+│ │ │ │                 ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StaticImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /merging/namespace-impl.ts
+├ span:
+│ ╭ /merging/namespace-impl.ts:3:1-5:2
+│ │ 3: export class StaticImpl implements WithStatic {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     instanceMethod(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/namespace-impl.ts:3:14-3:24
+│ │ 3: export class StaticImpl implements WithStatic {
+│ │                 ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: WithStatic
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /merging/namespace-merge.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/namespace-merge.ts:1:1-3:2
+│ │ │ │ 1: export interface WithStatic {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     instanceMethod(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/namespace-merge.ts:1:18-1:28
+│ │ │ │ 1: export interface WithStatic {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GenericEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics-multi/base.ts
+├ span:
+│ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ 1: export interface GenericEntity<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     value: T;
+│ │    ^^^^^^^^^^^^^
+│ │ 3:     getValue(): T;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ 1: export interface GenericEntity<T> {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: GenericEntityImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:6:1-9:2
+│ │ │ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     constructor(public value: T) {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     getValue(): T { return this.value; }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:6:14-6:31
+│ │ │ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: StringEntityImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/string-entity.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/string-entity.ts:8:1-10:2
+│ │ │ │ │ │  8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/string-entity.ts:8:14-8:30
+│ │ │ │ │ │ 8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: NumberEntityImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/number-entity.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/number-entity.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class NumberEntityImpl extends GenericEntityImpl<number> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     isPositive(): boolean { return this.value > 0; }
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/number-entity.ts:7:14-7:30
+│ │ │ │ │ │ 7: export class NumberEntityImpl extends GenericEntityImpl<number> {
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: StringEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/string-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/string-entity.ts:3:1-6:2
+│ │ │ │ 3: // Concrete instantiation
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     format(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/string-entity.ts:4:18-4:30
+│ │ │ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: StringEntityImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/string-entity.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/string-entity.ts:8:1-10:2
+│ │ │ │ │ │  8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/string-entity.ts:8:14-8:30
+│ │ │ │ │ │ 8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: ...
+│ ╭
+│ │ ╭ name: NumberEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/number-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/number-entity.ts:3:1-5:2
+│ │ │ │ 3: export interface NumberEntity extends GenericEntity<number> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     isPositive(): boolean;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/number-entity.ts:3:18-3:30
+│ │ │ │ 3: export interface NumberEntity extends GenericEntity<number> {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ConstrainedEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/constrained.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/constrained.ts:3:1-6:2
+│ │ │ │ 3: // Generic with constraint extending another generic
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     getId(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/constrained.ts:4:18-4:35
+│ │ │ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ConstrainedImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/constrained.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/constrained.ts:8:1-12:2
+│ │ │ │ │ │  8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     constructor(public value: T) {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10:     getValue(): T { return this.value; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     getId(): string { return this.value.id; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/constrained.ts:8:14-8:29
+│ │ │ │ │ │ 8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: NestedGeneric
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/nested-generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/nested-generics.ts:3:1-7:2
+│ │ │ │ 3: // Nested generic inheritance
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface NestedGeneric<T, U> extends GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     secondValue: U;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     getSecond(): U;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/nested-generics.ts:4:18-4:31
+│ │ │ │ 4: export interface NestedGeneric<T, U> extends GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ParameterizedClass
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/nested-generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/nested-generics.ts:9:1-13:2
+│ │ │ │  9: // Parameterized class extending generic class
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: export class ParameterizedClass<T> implements GenericEntity<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     constructor(public value: T) {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/nested-generics.ts:10:14-10:32
+│ │ │ │ 10: export class ParameterizedClass<T> implements GenericEntity<T> {
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GenericEntityImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /generics-multi/base.ts
+├ span:
+│ ╭ /generics-multi/base.ts:6:1-9:2
+│ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     constructor(public value: T) {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     getValue(): T { return this.value; }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/base.ts:6:14-6:31
+│ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │                 ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: StringEntityImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/string-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/string-entity.ts:8:1-10:2
+│ │ │ │  8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/string-entity.ts:8:14-8:30
+│ │ │ │ 8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: NumberEntityImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/number-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/number-entity.ts:7:1-9:2
+│ │ │ │ 7: export class NumberEntityImpl extends GenericEntityImpl<number> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     isPositive(): boolean { return this.value > 0; }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/number-entity.ts:7:14-7:30
+│ │ │ │ 7: export class NumberEntityImpl extends GenericEntityImpl<number> {
+│ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics-multi/string-entity.ts
+├ span:
+│ ╭ /generics-multi/string-entity.ts:3:1-6:2
+│ │ 3: // Concrete instantiation
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     format(): string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/string-entity.ts:4:18-4:30
+│ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │                     ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<string>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: StringEntityImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/string-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/string-entity.ts:8:1-10:2
+│ │ │ │  8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/string-entity.ts:8:14-8:30
+│ │ │ │ 8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │ │ │                 ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringEntityImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /generics-multi/string-entity.ts
+├ span:
+│ ╭ /generics-multi/string-entity.ts:8:1-10:2
+│ │  8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     format(): string { return this.value.toUpperCase(); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/string-entity.ts:8:14-8:30
+│ │ 8: export class StringEntityImpl extends GenericEntityImpl<string> implements StringEntity {
+│ │                 ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntityImpl<string>
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:6:1-9:2
+│ │ │ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     constructor(public value: T) {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     getValue(): T { return this.value; }
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:6:14-6:31
+│ │ │ │ 6: export class GenericEntityImpl<T> implements GenericEntity<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericEntity<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: StringEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/string-entity.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/string-entity.ts:3:1-6:2
+│ │ │ │ 3: // Concrete instantiation
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     format(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/string-entity.ts:4:18-4:30
+│ │ │ │ 4: export interface StringEntity extends GenericEntity<string> {
+│ │ │ │                     ^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericEntity<string>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NumberEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics-multi/number-entity.ts
+├ span:
+│ ╭ /generics-multi/number-entity.ts:3:1-5:2
+│ │ 3: export interface NumberEntity extends GenericEntity<number> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     isPositive(): boolean;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/number-entity.ts:3:18-3:30
+│ │ 3: export interface NumberEntity extends GenericEntity<number> {
+│ │                     ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<number>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConstrainedEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics-multi/constrained.ts
+├ span:
+│ ╭ /generics-multi/constrained.ts:3:1-6:2
+│ │ 3: // Generic with constraint extending another generic
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     getId(): string;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/constrained.ts:4:18-4:35
+│ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │                     ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ConstrainedImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/constrained.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/constrained.ts:8:1-12:2
+│ │ │ │  8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     constructor(public value: T) {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     getId(): string { return this.value.id; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/constrained.ts:8:14-8:29
+│ │ │ │ 8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConstrainedImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /generics-multi/constrained.ts
+├ span:
+│ ╭ /generics-multi/constrained.ts:8:1-12:2
+│ │  8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     constructor(public value: T) {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     getValue(): T { return this.value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     getId(): string { return this.value.id; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/constrained.ts:8:14-8:29
+│ │ 8: export class ConstrainedImpl<T extends { id: string }> implements ConstrainedEntity<T> {
+│ │                 ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ConstrainedEntity<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/constrained.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/constrained.ts:3:1-6:2
+│ │ │ │ 3: // Generic with constraint extending another generic
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     getId(): string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/constrained.ts:4:18-4:35
+│ │ │ │ 4: export interface ConstrainedEntity<T extends { id: string }> extends GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericEntity<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /generics-multi/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NestedGeneric
+├ kind: interface
+├ kindModifiers: export
+├ file: /generics-multi/nested-generics.ts
+├ span:
+│ ╭ /generics-multi/nested-generics.ts:3:1-7:2
+│ │ 3: // Nested generic inheritance
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export interface NestedGeneric<T, U> extends GenericEntity<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     secondValue: U;
+│ │    ^^^^^^^^^^^^^^^^^^^
+│ │ 6:     getSecond(): U;
+│ │    ^^^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/nested-generics.ts:4:18-4:31
+│ │ 4: export interface NestedGeneric<T, U> extends GenericEntity<T> {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ParameterizedClass
+├ kind: class
+├ kindModifiers: export
+├ file: /generics-multi/nested-generics.ts
+├ span:
+│ ╭ /generics-multi/nested-generics.ts:9:1-13:2
+│ │  9: // Parameterized class extending generic class
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: export class ParameterizedClass<T> implements GenericEntity<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     constructor(public value: T) {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     getValue(): T { return this.value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics-multi/nested-generics.ts:10:14-10:32
+│ │ 10: export class ParameterizedClass<T> implements GenericEntity<T> {
+│ │                  ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericEntity<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /generics-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /generics-multi/base.ts:1:1-4:2
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics-multi/base.ts:1:18-1:31
+│ │ │ │ 1: export interface GenericEntity<T> {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AnimalCond
+├ kind: interface
+├ kindModifiers: export
+├ file: /conditional-multi/base-types.ts
+├ span:
+│ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ 1: export interface AnimalCond {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     name: string;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ 1: export interface AnimalCond {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: DogCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:1-7:2
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:18-5:25
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │                     ^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: DogImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /conditional-multi/conditional-impl.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/conditional-impl.ts:4:1-8:2
+│ │ │ │ │ │ 4: // Classes implementing the base types
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: export class DogImpl implements DogCond {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     name: string = "";
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     bark(): void {}
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/conditional-impl.ts:5:14-5:21
+│ │ │ │ │ │ 5: export class DogImpl implements DogCond {
+│ │ │ │ │ │                 ^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: DogOnly
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /conditional-multi/conditional-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/conditional-types.ts:6:1-7:46
+│ │ │ │ │ │ 6: // Applied conditional types - these should resolve to the concrete types
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/conditional-types.ts:7:13-7:20
+│ │ │ │ │ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │ │ │ │ │                ^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: CatCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:9:1-11:2
+│ │ │ │  9: export interface CatCond extends AnimalCond {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     meow(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:9:18-9:25
+│ │ │ │ 9: export interface CatCond extends AnimalCond {
+│ │ │ │                     ^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: CatImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /conditional-multi/conditional-impl.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/conditional-impl.ts:10:1-13:2
+│ │ │ │ │ │ 10: export class CatImpl implements CatCond {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     name: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12:     meow(): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 13: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/conditional-impl.ts:10:14-10:21
+│ │ │ │ │ │ 10: export class CatImpl implements CatCond {
+│ │ │ │ │ │                  ^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: CatOnly
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /conditional-multi/conditional-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/conditional-types.ts:8:1-8:46
+│ │ │ │ │ │ 8: export type CatOnly = ExtractAnimal<CatCond>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/conditional-types.ts:8:13-8:20
+│ │ │ │ │ │ 8: export type CatOnly = ExtractAnimal<CatCond>;
+│ │ │ │ │ │                ^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DogCond
+├ kind: interface
+├ kindModifiers: export
+├ file: /conditional-multi/base-types.ts
+├ span:
+│ ╭ /conditional-multi/base-types.ts:5:1-7:2
+│ │ 5: export interface DogCond extends AnimalCond {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     bark(): void;
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/base-types.ts:5:18-5:25
+│ │ 5: export interface DogCond extends AnimalCond {
+│ │                     ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: AnimalCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: DogImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/conditional-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/conditional-impl.ts:4:1-8:2
+│ │ │ │ 4: // Classes implementing the base types
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: export class DogImpl implements DogCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     name: string = "";
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     bark(): void {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/conditional-impl.ts:5:14-5:21
+│ │ │ │ 5: export class DogImpl implements DogCond {
+│ │ │ │                 ^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: DogOnly
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,alias
+│ │ ├ file: /conditional-multi/conditional-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/conditional-types.ts:6:1-7:46
+│ │ │ │ 6: // Applied conditional types - these should resolve to the concrete types
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/conditional-types.ts:7:13-7:20
+│ │ │ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │ │ │                ^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CatCond
+├ kind: interface
+├ kindModifiers: export
+├ file: /conditional-multi/base-types.ts
+├ span:
+│ ╭ /conditional-multi/base-types.ts:9:1-11:2
+│ │  9: export interface CatCond extends AnimalCond {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     meow(): void;
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 11: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/base-types.ts:9:18-9:25
+│ │ 9: export interface CatCond extends AnimalCond {
+│ │                     ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: AnimalCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CatImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/conditional-impl.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/conditional-impl.ts:10:1-13:2
+│ │ │ │ 10: export class CatImpl implements CatCond {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     meow(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/conditional-impl.ts:10:14-10:21
+│ │ │ │ 10: export class CatImpl implements CatCond {
+│ │ │ │                  ^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: CatOnly
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,alias
+│ │ ├ file: /conditional-multi/conditional-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/conditional-types.ts:8:1-8:46
+│ │ │ │ 8: export type CatOnly = ExtractAnimal<CatCond>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/conditional-types.ts:8:13-8:20
+│ │ │ │ 8: export type CatOnly = ExtractAnimal<CatCond>;
+│ │ │ │                ^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtractAnimal
+├ kind: type
+├ kindModifiers: export,conditional,extends
+├ file: /conditional-multi/conditional-types.ts
+├ span:
+│ ╭ /conditional-multi/conditional-types.ts:3:1-4:65
+│ │ 3: // Conditional type that extracts
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export type ExtractAnimal<T> = T extends AnimalCond ? T : never;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/conditional-types.ts:4:13-4:26
+│ │ 4: export type ExtractAnimal<T> = T extends AnimalCond ? T : never;
+│ │                ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: AnimalCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ 1: export interface AnimalCond {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DogOnly
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /conditional-multi/conditional-types.ts
+├ span:
+│ ╭ /conditional-multi/conditional-types.ts:6:1-7:46
+│ │ 6: // Applied conditional types - these should resolve to the concrete types
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/conditional-types.ts:7:13-7:20
+│ │ 7: export type DogOnly = ExtractAnimal<DogCond>;
+│ │                ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ExtractAnimal<DogCond>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:1-7:2
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:18-5:25
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │                     ^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AnimalCond
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /conditional-multi/base-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DogImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /conditional-multi/conditional-impl.ts
+├ span:
+│ ╭ /conditional-multi/conditional-impl.ts:4:1-8:2
+│ │ 4: // Classes implementing the base types
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: export class DogImpl implements DogCond {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     name: string = "";
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     bark(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/conditional-impl.ts:5:14-5:21
+│ │ 5: export class DogImpl implements DogCond {
+│ │                 ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: DogCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:1-7:2
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:5:18-5:25
+│ │ │ │ 5: export interface DogCond extends AnimalCond {
+│ │ │ │                     ^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AnimalCond
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /conditional-multi/base-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CatImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /conditional-multi/conditional-impl.ts
+├ span:
+│ ╭ /conditional-multi/conditional-impl.ts:10:1-13:2
+│ │ 10: export class CatImpl implements CatCond {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     name: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     meow(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 13: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditional-multi/conditional-impl.ts:10:14-10:21
+│ │ 10: export class CatImpl implements CatCond {
+│ │                  ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: CatCond
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /conditional-multi/base-types.ts
+│ │ ├ span:
+│ │ │ ╭ /conditional-multi/base-types.ts:9:1-11:2
+│ │ │ │  9: export interface CatCond extends AnimalCond {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     meow(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditional-multi/base-types.ts:9:18-9:25
+│ │ │ │ 9: export interface CatCond extends AnimalCond {
+│ │ │ │                     ^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AnimalCond
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /conditional-multi/base-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditional-multi/base-types.ts:1:18-1:28
+│ │ │ │ │ │ 1: export interface AnimalCond {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MixinBase
+├ kind: class
+├ kindModifiers: export
+├ file: /mixins-multi/base.ts
+├ span:
+│ ╭ /mixins-multi/base.ts:3:1-5:2
+│ │ 3: export class MixinBase {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     baseProp: string = "base";
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins-multi/base.ts:3:14-3:23
+│ │ 3: export class MixinBase {
+│ │                 ^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: TimestampedBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export,mixin
+│ │ ├ file: /mixins-multi/composed.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/composed.ts:7:14-7:54
+│ │ │ │ 7: export const TimestampedBase = Timestamped(MixinBase);
+│ │ │ │                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/composed.ts:7:14-7:29
+│ │ │ │ 7: export const TimestampedBase = Timestamped(MixinBase);
+│ │ │ │                 ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ActivatableTimestamped
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export,mixin
+│ │ ├ file: /mixins-multi/composed.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/composed.ts:10:14-10:74
+│ │ │ │ 10: export const ActivatableTimestamped = Activatable(Timestamped(MixinBase));
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/composed.ts:10:14-10:36
+│ │ │ │ 10: export const ActivatableTimestamped = Activatable(Timestamped(MixinBase));
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: FullMixin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export,mixin
+│ │ ├ file: /mixins-multi/composed.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:75
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:23
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MixinUser
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /mixins-multi/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins-multi/user.ts:3:1-10:2
+│ │ │ │ │ │  3: // Class extending the fully composed mixin
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  4: export class MixinUser extends FullMixin {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  5:     userName: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  6:
+│ │ │ │ │ │     ^
+│ │ │ │ │ │  7:     greet(): string {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  8:         return `Hello, ${this.userName}! Created at ${this.getTimestamp()}`;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ 10: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins-multi/user.ts:4:14-4:23
+│ │ │ │ │ │ 4: export class MixinUser extends FullMixin {
+│ │ │ │ │ │                 ^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: MixinAdmin
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /mixins-multi/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins-multi/user.ts:12:1-19:2
+│ │ │ │ │ │ 12: // Another class extending the same mixin
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 13: export class MixinAdmin extends FullMixin {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14:     permissions: string[] = [];
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 15:
+│ │ │ │ │ │     ^
+│ │ │ │ │ │ 16:     hasPermission(perm: string): boolean {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 17:         return this.permissions.includes(perm);
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 18:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ 19: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins-multi/user.ts:13:14-13:24
+│ │ │ │ │ │ 13: export class MixinAdmin extends FullMixin {
+│ │ │ │ │ │                  ^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FullMixin
+├ kind: class
+├ kindModifiers: export,mixin
+├ file: /mixins-multi/composed.ts
+├ span:
+│ ╭ /mixins-multi/composed.ts:13:14-13:75
+│ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins-multi/composed.ts:13:14-13:23
+│ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │                  ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MixinBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /mixins-multi/base.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/base.ts:3:1-5:2
+│ │ │ │ 3: export class MixinBase {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     baseProp: string = "base";
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/base.ts:3:14-3:23
+│ │ │ │ 3: export class MixinBase {
+│ │ │ │                 ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: MixinUser
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /mixins-multi/user.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/user.ts:3:1-10:2
+│ │ │ │  3: // Class extending the fully composed mixin
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  4: export class MixinUser extends FullMixin {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  5:     userName: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  6:
+│ │ │ │     ^
+│ │ │ │  7:     greet(): string {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  8:         return `Hello, ${this.userName}! Created at ${this.getTimestamp()}`;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/user.ts:4:14-4:23
+│ │ │ │ 4: export class MixinUser extends FullMixin {
+│ │ │ │                 ^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: MixinAdmin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /mixins-multi/user.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/user.ts:12:1-19:2
+│ │ │ │ 12: // Another class extending the same mixin
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: export class MixinAdmin extends FullMixin {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     permissions: string[] = [];
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15:
+│ │ │ │     ^
+│ │ │ │ 16:     hasPermission(perm: string): boolean {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:         return this.permissions.includes(perm);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/user.ts:13:14-13:24
+│ │ │ │ 13: export class MixinAdmin extends FullMixin {
+│ │ │ │                  ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MixinUser
+├ kind: class
+├ kindModifiers: export
+├ file: /mixins-multi/user.ts
+├ span:
+│ ╭ /mixins-multi/user.ts:3:1-10:2
+│ │  3: // Class extending the fully composed mixin
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  4: export class MixinUser extends FullMixin {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  5:     userName: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  6:
+│ │     ^
+│ │  7:     greet(): string {
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │  8:         return `Hello, ${this.userName}! Created at ${this.getTimestamp()}`;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     }
+│ │     ^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins-multi/user.ts:4:14-4:23
+│ │ 4: export class MixinUser extends FullMixin {
+│ │                 ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: FullMixin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export,mixin
+│ │ ├ file: /mixins-multi/composed.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:75
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:23
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MixinBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /mixins-multi/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins-multi/base.ts:3:1-5:2
+│ │ │ │ │ │ 3: export class MixinBase {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     baseProp: string = "base";
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins-multi/base.ts:3:14-3:23
+│ │ │ │ │ │ 3: export class MixinBase {
+│ │ │ │ │ │                 ^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MixinAdmin
+├ kind: class
+├ kindModifiers: export
+├ file: /mixins-multi/user.ts
+├ span:
+│ ╭ /mixins-multi/user.ts:12:1-19:2
+│ │ 12: // Another class extending the same mixin
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: export class MixinAdmin extends FullMixin {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     permissions: string[] = [];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:
+│ │     ^
+│ │ 16:     hasPermission(perm: string): boolean {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:         return this.permissions.includes(perm);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     }
+│ │     ^^^^^
+│ │ 19: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins-multi/user.ts:13:14-13:24
+│ │ 13: export class MixinAdmin extends FullMixin {
+│ │                  ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: FullMixin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export,mixin
+│ │ ├ file: /mixins-multi/composed.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:75
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins-multi/composed.ts:13:14-13:23
+│ │ │ │ 13: export const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │                  ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MixinBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /mixins-multi/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins-multi/base.ts:3:1-5:2
+│ │ │ │ │ │ 3: export class MixinBase {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     baseProp: string = "base";
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins-multi/base.ts:3:14-3:23
+│ │ │ │ │ │ 3: export class MixinBase {
+│ │ │ │ │ │                 ^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none

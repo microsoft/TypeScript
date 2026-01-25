@@ -1,0 +1,353 @@
+// === Type Hierarchy ===
+╭ name: BaseGeneric
+├ kind: interface
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:1:1-4:2
+│ │ 1: // Test interface that extends the same generic interface with different type args
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: interface BaseGeneric<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     value: T;
+│ │    ^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:2:11-2:22
+│ │ 2: interface BaseGeneric<T> {
+│ │              ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: MultiExtends
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:6:1-9:2
+│ │ │ │ 6: // This extends BaseGeneric twice with different type arguments
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: interface MultiExtends extends BaseGeneric<string>, BaseGeneric<number> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     extra: boolean;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:7:11-7:23
+│ │ │ │ 7: interface MultiExtends extends BaseGeneric<string>, BaseGeneric<number> {
+│ │ │ │              ^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MultiExtends
+├ kind: interface
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:6:1-9:2
+│ │ 6: // This extends BaseGeneric twice with different type arguments
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: interface MultiExtends extends BaseGeneric<string>, BaseGeneric<number> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     extra: boolean;
+│ │    ^^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:7:11-7:23
+│ │ 7: interface MultiExtends extends BaseGeneric<string>, BaseGeneric<number> {
+│ │              ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseGeneric<string>
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:1:1-4:2
+│ │ │ │ 1: // Test interface that extends the same generic interface with different type args
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: interface BaseGeneric<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:2:11-2:22
+│ │ │ │ 2: interface BaseGeneric<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: BaseGeneric<number>
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:1:1-4:2
+│ │ │ │ 1: // Test interface that extends the same generic interface with different type args
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: interface BaseGeneric<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:2:11-2:22
+│ │ │ │ 2: interface BaseGeneric<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UnionTarget
+├ kind: interface
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:11:1-14:2
+│ │ 11: // Type alias union with same type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: interface UnionTarget {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     id: string;
+│ │     ^^^^^^^^^^^^^^^
+│ │ 14: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:12:11-12:22
+│ │ 12: interface UnionTarget {
+│ │               ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UnionWithDuplicates
+├ kind: type
+├ kindModifiers: union
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:16:1-16:63
+│ │ 16: type UnionWithDuplicates = UnionTarget | UnionTarget | string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:16:6-16:25
+│ │ 16: type UnionWithDuplicates = UnionTarget | UnionTarget | string;
+│ │          ^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UnionTarget
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:11:1-14:2
+│ │ │ │ 11: // Type alias union with same type
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: interface UnionTarget {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     id: string;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 14: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:12:11-12:22
+│ │ │ │ 12: interface UnionTarget {
+│ │ │ │               ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ImplTarget
+├ kind: interface
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:18:1-21:2
+│ │ 18: // Test class implementing same interface multiple times indirectly
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19: interface ImplTarget {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20:     doIt(): void;
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 21: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:19:11-19:21
+│ │ 19: interface ImplTarget {
+│ │               ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ExtendedTarget
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:23:1-25:2
+│ │ │ │ 23: interface ExtendedTarget extends ImplTarget {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     doMore(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:23:11-23:25
+│ │ │ │ 23: interface ExtendedTarget extends ImplTarget {
+│ │ │ │               ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MultiImplementer
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /duplicates.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /duplicates.ts:27:1-30:2
+│ │ │ │ │ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 28:     doIt(): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 29:     doMore(): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 30: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /duplicates.ts:27:7-27:23
+│ │ │ │ │ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: MultiImplementer
+│ │ ├ kind: class
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:27:1-30:2
+│ │ │ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 28:     doIt(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 29:     doMore(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 30: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:27:7-27:23
+│ │ │ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: ...
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MultiImplementer
+├ kind: class
+├ file: /duplicates.ts
+├ span:
+│ ╭ /duplicates.ts:27:1-30:2
+│ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28:     doIt(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 29:     doMore(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 30: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /duplicates.ts:27:7-27:23
+│ │ 27: class MultiImplementer implements ImplTarget, ExtendedTarget {
+│ │           ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ImplTarget
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:18:1-21:2
+│ │ │ │ 18: // Test class implementing same interface multiple times indirectly
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19: interface ImplTarget {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20:     doIt(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 21: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:19:11-19:21
+│ │ │ │ 19: interface ImplTarget {
+│ │ │ │               ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: ExtendedTarget
+│ │ ├ kind: interface
+│ │ ├ file: /duplicates.ts
+│ │ ├ span:
+│ │ │ ╭ /duplicates.ts:23:1-25:2
+│ │ │ │ 23: interface ExtendedTarget extends ImplTarget {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     doMore(): void;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /duplicates.ts:23:11-23:25
+│ │ │ │ 23: interface ExtendedTarget extends ImplTarget {
+│ │ │ │               ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ImplTarget
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /duplicates.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /duplicates.ts:18:1-21:2
+│ │ │ │ │ │ 18: // Test class implementing same interface multiple times indirectly
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 19: interface ImplTarget {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 20:     doIt(): void;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 21: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /duplicates.ts:19:11-19:21
+│ │ │ │ │ │ 19: interface ImplTarget {
+│ │ │ │ │ │               ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none

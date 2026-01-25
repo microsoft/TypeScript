@@ -1,0 +1,336 @@
+// === Type Hierarchy ===
+╭ name: IsDog
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:17:1-18:46
+│ │ 17: // Basic conditional type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: type IsDog<T> = T extends Dog ? true : false;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:18:6-18:11
+│ │ 18: type IsDog<T> = T extends Dog ? true : false;
+│ │          ^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Dog
+│ │ ├ kind: interface
+│ │ ├ file: /conditionalTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /conditionalTypes.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditionalTypes.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /conditionalTypes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AnimalSound
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:20:1-21:83
+│ │ 20: // Conditional type with different results
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21: type AnimalSound<T> = T extends Dog ? "bark" : T extends Cat ? "meow" : "unknown";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:21:6-21:17
+│ │ 21: type AnimalSound<T> = T extends Dog ? "bark" : T extends Cat ? "meow" : "unknown";
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Dog
+│ │ ├ kind: interface
+│ │ ├ file: /conditionalTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /conditionalTypes.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditionalTypes.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /conditionalTypes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtractDog
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:23:1-24:48
+│ │ 23: // Extract utility type pattern
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24: type ExtractDog<T> = T extends Dog ? T : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:24:6-24:16
+│ │ 24: type ExtractDog<T> = T extends Dog ? T : never;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Dog
+│ │ ├ kind: interface
+│ │ ├ file: /conditionalTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /conditionalTypes.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditionalTypes.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /conditionalTypes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ReturnTypeOf
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:29:1-30:74
+│ │ 29: // Inferring in conditional types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30: type ReturnTypeOf<T> = T extends (...args: any[]) => infer R ? R : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:30:6-30:18
+│ │ 30: type ReturnTypeOf<T> = T extends (...args: any[]) => infer R ? R : never;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: WalkingPets
+├ kind: type
+├ kindModifiers: alias
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:34:1-34:37
+│ │ 34: type WalkingPets = ExtractDog<Pets>; // Should be Dog
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:34:6-34:17
+│ │ 34: type WalkingPets = ExtractDog<Pets>; // Should be Dog
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ExtractDog<Pets>
+│ │ ├ kind: interface
+│ │ ├ file: /conditionalTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /conditionalTypes.ts:5:1-7:2
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     bark(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditionalTypes.ts:5:11-5:14
+│ │ │ │ 5: interface Dog extends Animal {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Animal
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /conditionalTypes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:1-3:2
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /conditionalTypes.ts:1:11-1:17
+│ │ │ │ │ │ 1: interface Animal {
+│ │ │ │ │ │              ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NonFish
+├ kind: type
+├ kindModifiers: alias
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:38:1-38:39
+│ │ 38: type NonFish = ExcludeDog<AllAnimals>; // Should be Cat | Fish (exclude Dog)
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:38:6-38:13
+│ │ 38: type NonFish = ExcludeDog<AllAnimals>; // Should be Cat | Fish (exclude Dog)
+│ │          ^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NestedConditional
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /conditionalTypes.ts
+├ span:
+│ ╭ /conditionalTypes.ts:38:40-45:20
+│ │ 38: type NonFish = ExcludeDog<AllAnimals>; // Should be Cat | Fish (exclude Dog)
+│ │                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 39:
+│ │     ^
+│ │ 40: // Nested conditional
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 41: type NestedConditional<T> = T extends Animal
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 42:     ? T extends Dog
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 43:         ? "dog"
+│ │     ^^^^^^^^^^^^^^^
+│ │ 44:         : "other-animal"
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 45:     : "not-animal";
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /conditionalTypes.ts:41:6-41:23
+│ │ 41: type NestedConditional<T> = T extends Animal
+│ │          ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Animal
+│ │ ├ kind: interface
+│ │ ├ file: /conditionalTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /conditionalTypes.ts:1:1-3:2
+│ │ │ │ 1: interface Animal {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /conditionalTypes.ts:1:11-1:17
+│ │ │ │ 1: interface Animal {
+│ │ │ │              ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none

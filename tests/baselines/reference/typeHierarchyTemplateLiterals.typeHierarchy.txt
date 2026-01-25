@@ -1,0 +1,235 @@
+// === Type Hierarchy ===
+╭ name: Greeting
+├ kind: type
+├ kindModifiers: template
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:1:1-2:37
+│ │ 1: // Basic template literal types
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: type Greeting = `Hello, ${string}!`;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:2:6-2:14
+│ │ 2: type Greeting = `Hello, ${string}!`;
+│ │         ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ColorMessage
+├ kind: type
+├ kindModifiers: template
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:7:1-7:45
+│ │ 7: type ColorMessage = `The color is ${Color}`;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:7:6-7:18
+│ │ 7: type ColorMessage = `The color is ${Color}`;
+│ │         ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UppercaseColor
+├ kind: type
+├ kindModifiers: alias
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:9:1-10:40
+│ │  9: // Uppercase/Lowercase intrinsic types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: type UppercaseColor = Uppercase<Color>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:10:6-10:20
+│ │ 10: type UppercaseColor = Uppercase<Color>;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CapitalizeColor
+├ kind: type
+├ kindModifiers: alias
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:12:1-12:42
+│ │ 12: type CapitalizeColor = Capitalize<Color>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:12:6-12:21
+│ │ 12: type CapitalizeColor = Capitalize<Color>;
+│ │          ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Coordinate
+├ kind: type
+├ kindModifiers: template
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:14:1-15:44
+│ │ 14: // Template literal with multiple placeholders
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: type Coordinate = `(${number}, ${number})`;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:15:6-15:16
+│ │ 15: type Coordinate = `(${number}, ${number})`;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: HandlerName
+├ kind: type
+├ kindModifiers: template
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:20:1-20:49
+│ │ 20: type HandlerName = `on${Capitalize<EventName>}`;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:20:6-20:17
+│ │ 20: type HandlerName = `on${Capitalize<EventName>}`;
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CSSValue
+├ kind: type
+├ kindModifiers: template
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:24:1-24:39
+│ │ 24: type CSSValue = `${number}${CSSUnit}`;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:24:6-24:14
+│ │ 24: type CSSValue = `${number}${CSSUnit}`;
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtractString
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:26:1-27:74
+│ │ 26: // Template literal inference pattern
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 27: type ExtractString<T> = T extends `prefix-${infer U}-suffix` ? U : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:27:6-27:19
+│ │ 27: type ExtractString<T> = T extends `prefix-${infer U}-suffix` ? U : never;
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Extracted
+├ kind: type
+├ kindModifiers: alias
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:28:1-28:55
+│ │ 28: type Extracted = ExtractString<'prefix-hello-suffix'>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:28:6-28:15
+│ │ 28: type Extracted = ExtractString<'prefix-hello-suffix'>;
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PersonGetter
+├ kind: type
+├ kindModifiers: alias
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:45:1-45:36
+│ │ 45: type PersonGetter = Getter<Person>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:45:6-45:18
+│ │ 45: type PersonGetter = Getter<Person>;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GetRoute
+├ kind: type
+├ kindModifiers: alias
+├ file: /templateLiterals.ts
+├ span:
+│ ╭ /templateLiterals.ts:50:1-50:33
+│ │ 50: type GetRoute = APIRoute<'GET'>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /templateLiterals.ts:50:6-50:14
+│ │ 50: type GetRoute = APIRoute<'GET'>;
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

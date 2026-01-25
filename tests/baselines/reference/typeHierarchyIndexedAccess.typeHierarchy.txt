@@ -1,0 +1,309 @@
+// === Type Hierarchy ===
+╭ name: ConfigKeys
+├ kind: type
+├ kindModifiers: keyof
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:18:1-19:32
+│ │ 18: // keyof type
+│ │     ^^^^^^^^^^^^^
+│ │ 19: type ConfigKeys = keyof Config;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:19:6-19:16
+│ │ 19: type ConfigKeys = keyof Config;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ServerConfig
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:21:1-22:38
+│ │ 21: // Indexed access - single level
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22: type ServerConfig = Config['server'];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:22:6-22:18
+│ │ 22: type ServerConfig = Config['server'];
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ServerHost
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:24:1-25:44
+│ │ 24: // Indexed access - nested
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 25: type ServerHost = Config['server']['host'];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:25:6-25:16
+│ │ 25: type ServerHost = Config['server']['host'];
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConfigValues
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:27:1-28:42
+│ │ 27: // Indexed access with keyof
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: type ConfigValues = Config[keyof Config];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:28:6-28:18
+│ │ 28: type ConfigValues = Config[keyof Config];
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DefaultConfigType
+├ kind: type
+├ kindModifiers: alias
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:37:1-37:47
+│ │ 37: type DefaultConfigType = typeof defaultConfig;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:37:6-37:23
+│ │ 37: type DefaultConfigType = typeof defaultConfig;
+│ │          ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CreateUserType
+├ kind: type
+├ kindModifiers: alias
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:44:1-44:41
+│ │ 44: type CreateUserType = typeof createUser;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:44:6-44:20
+│ │ 44: type CreateUserType = typeof createUser;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserReturnType
+├ kind: type
+├ kindModifiers: alias
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:45:1-45:53
+│ │ 45: type UserReturnType = ReturnType<typeof createUser>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:45:6-45:20
+│ │ 45: type UserReturnType = ReturnType<typeof createUser>;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ServerOrDatabase
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:52:1-53:55
+│ │ 52: // Indexed access with union
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 53: type ServerOrDatabase = Config['server' | 'database'];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:53:6-53:22
+│ │ 53: type ServerOrDatabase = Config['server' | 'database'];
+│ │          ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GetUserResponse
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:69:1-69:65
+│ │ 69: type GetUserResponse = APIEndpoints['users']['get']['response'];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:69:6-69:21
+│ │ 69: type GetUserResponse = APIEndpoints['users']['get']['response'];
+│ │          ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PropType
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:71:1-72:44
+│ │ 71: // Generic indexed access
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 72: type PropType<T, K extends keyof T> = T[K];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:72:6-72:14
+│ │ 72: type PropType<T, K extends keyof T> = T[K];
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: LookupOrNever
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:75:1-76:61
+│ │ 75: // Lookup type with conditional
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 76: type LookupOrNever<T, K> = K extends keyof T ? T[K] : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:76:6-76:19
+│ │ 76: type LookupOrNever<T, K> = K extends keyof T ? T[K] : never;
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Dictionary
+├ kind: interface
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:80:1-83:2
+│ │ 80: // Index signatures
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 81: interface Dictionary<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 82:     [key: string]: T;
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 83: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:81:11-81:21
+│ │ 81: interface Dictionary<T> {
+│ │               ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ArrayElement
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:94:1-94:47
+│ │ 94: type ArrayElement = ArrayLike<string>[number];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:94:6-94:18
+│ │ 94: type ArrayElement = ArrayLike<string>[number];
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Direction
+├ kind: type
+├ kindModifiers: indexed
+├ file: /indexedAccessTypes.ts
+├ span:
+│ ╭ /indexedAccessTypes.ts:98:1-98:44
+│ │ 98: type Direction = typeof directions[number];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /indexedAccessTypes.ts:98:6-98:15
+│ │ 98: type Direction = typeof directions[number];
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

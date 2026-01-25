@@ -1,0 +1,565 @@
+// === Type Hierarchy ===
+╭ name: Parse
+├ kind: type
+├ kindModifiers: alias
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:1:1-2:59
+│ │ 1: /** The core parser type */
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: type Parse<A extends Parser, B> = ReturnType<A & {0?: B}>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:2:6-2:11
+│ │ 2: type Parse<A extends Parser, B> = ReturnType<A & {0?: B}>;
+│ │         ^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Choice
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:4:1-7:2
+│ │ 4: /** Tries each parser in order until one succeeds */
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: interface Choice {
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 6:     <G extends readonly Parser[]>(g: this extends {0?: infer G extends readonly Parser[]} ? G : G): DoChoice<typeof g>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:5:11-5:17
+│ │ 5: interface Choice {
+│ │              ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoneChoice
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:12:1-16:12
+│ │ 12: type DoneChoice<G, S extends string> = G extends readonly [infer H extends Parser, ...infer T]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     ? [ParseResult<H, S>] extends [Ok<`${infer R}`, infer Data>]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:         ? Ok<R, Data>
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:     : DoneChoice<T, S>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:   : Err<S>;
+│ │     ^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:12:6-12:16
+│ │ 12: type DoneChoice<G, S extends string> = G extends readonly [infer H extends Parser, ...infer T]
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: EOF
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:18:1-21:2
+│ │ 18: /** Matches the end of input */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19: interface EOF {
+│ │     ^^^^^^^^^^^^^^^
+│ │ 20:     <S extends string>(s: this extends {0?: `${infer S}`} ? S : S): string extends typeof s ? MaybeResult : DoneEOF<typeof s>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:19:11-19:14
+│ │ 19: interface EOF {
+│ │               ^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Just
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:24:1-28:2
+│ │ 24: /** Matches exactly one character/token */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 25: interface Just {
+│ │     ^^^^^^^^^^^^^^^^
+│ │ 26:     <J extends Parser | readonly unknown[] | string>(j: this extends {0?: infer J extends Parser | readonly unknown[] | string} ? J : J)
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 27:     : DoJust<typeof j>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:25:11-25:15
+│ │ 25: interface Just {
+│ │               ^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoneJust
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:32:1-38:14
+│ │ 32: type DoneJust<J, S extends string> = S extends `${infer H}${infer T}`
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 33:     ? [J] extends [Parser]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 34:         ? Parse<J, H> extends Ok<string> ? Ok<T, H> : Err<S>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 35:         : [J] extends [readonly unknown[]]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36:             ? [H] extends [J[number]] ? Ok<T, H> : Err<S>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 37:             : [H] extends [J] ? Ok<T, H> : Err<S>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 38:     : Err<S>;
+│ │     ^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:32:6-32:14
+│ │ 32: type DoneJust<J, S extends string> = S extends `${infer H}${infer T}`
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Many0
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:40:1-41:112
+│ │ 40: /** Matches zero or more of the parser */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 41: interface Many0 { <P extends Parser>(p: this extends {0?: infer P extends Parser} ? P : P): DoMany0<typeof p> }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:41:11-41:16
+│ │ 41: interface Many0 { <P extends Parser>(p: this extends {0?: infer P extends Parser} ? P : P): DoMany0<typeof p> }
+│ │               ^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoneMany0
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:45:1-48:9
+│ │ 45: type DoneMany0<P extends Parser, O extends Ok<string, unknown[]>>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 46:   = [ParseResult<P, O["rest"]>] extends [Ok<`${infer Rest}`, infer Data>]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 47:     ? DoneMany0<P, Ok<Rest, [...O["data"], Data]>>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 48:     : O;
+│ │     ^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:45:6-45:15
+│ │ 45: type DoneMany0<P extends Parser, O extends Ok<string, unknown[]>>
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: O extends Ok<string, unknown[]>
+│ │ ├ kind: interface
+│ │ ├ file: /parserCombinators.ts
+│ │ ├ span:
+│ │ │ ╭ /parserCombinators.ts:67:1-72:2
+│ │ │ │ 67: /** Helpers */
+│ │ │ │     ^^^^^^^^^^^^^^
+│ │ │ │ 68: interface Ok<Rest extends string, Data = unknown> extends MaybeResult {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 69:     data: Data;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 70:     rest: Rest;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 71:     success: true;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 72: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /parserCombinators.ts:68:11-68:13
+│ │ │ │ 68: interface Ok<Rest extends string, Data = unknown> extends MaybeResult {
+│ │ │ │               ^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MaybeResult
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /parserCombinators.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /parserCombinators.ts:60:1-65:2
+│ │ │ │ │ │ 60: /** A result type for parsers that may fail */
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 61: interface MaybeResult {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 62:     data: unknown;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 63:     rest: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 64:     success: boolean;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 65: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /parserCombinators.ts:61:11-61:22
+│ │ │ │ │ │ 61: interface MaybeResult {
+│ │ │ │ │ │               ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MaybeResult
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:60:1-65:2
+│ │ 60: /** A result type for parsers that may fail */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 61: interface MaybeResult {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 62:     data: unknown;
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 63:     rest: string;
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 64:     success: boolean;
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 65: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:61:11-61:22
+│ │ 61: interface MaybeResult {
+│ │               ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: Ok
+│ │ ├ kind: interface
+│ │ ├ file: /parserCombinators.ts
+│ │ ├ span:
+│ │ │ ╭ /parserCombinators.ts:67:1-72:2
+│ │ │ │ 67: /** Helpers */
+│ │ │ │     ^^^^^^^^^^^^^^
+│ │ │ │ 68: interface Ok<Rest extends string, Data = unknown> extends MaybeResult {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 69:     data: Data;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 70:     rest: Rest;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 71:     success: true;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 72: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /parserCombinators.ts:68:11-68:13
+│ │ │ │ 68: interface Ok<Rest extends string, Data = unknown> extends MaybeResult {
+│ │ │ │               ^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: Err
+│ │ ├ kind: interface
+│ │ ├ file: /parserCombinators.ts
+│ │ ├ span:
+│ │ │ ╭ /parserCombinators.ts:73:1-77:2
+│ │ │ │ 73: interface Err<Rest extends string> extends MaybeResult {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 74:     data: "";
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │ 75:     rest: Rest;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 76:     success: false;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 77: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /parserCombinators.ts:73:11-73:14
+│ │ │ │ 73: interface Err<Rest extends string> extends MaybeResult {
+│ │ │ │               ^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Err
+├ kind: interface
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:73:1-77:2
+│ │ 73: interface Err<Rest extends string> extends MaybeResult {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 74:     data: "";
+│ │     ^^^^^^^^^^^^^
+│ │ 75:     rest: Rest;
+│ │     ^^^^^^^^^^^^^^^
+│ │ 76:     success: false;
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 77: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:73:11-73:14
+│ │ 73: interface Err<Rest extends string> extends MaybeResult {
+│ │               ^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MaybeResult
+│ │ ├ kind: interface
+│ │ ├ file: /parserCombinators.ts
+│ │ ├ span:
+│ │ │ ╭ /parserCombinators.ts:60:1-65:2
+│ │ │ │ 60: /** A result type for parsers that may fail */
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 61: interface MaybeResult {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 62:     data: unknown;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 63:     rest: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 64:     success: boolean;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 65: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /parserCombinators.ts:61:11-61:22
+│ │ │ │ 61: interface MaybeResult {
+│ │ │ │               ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ParseResult
+├ kind: type
+├ kindModifiers: conditional,extends
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:79:1-81:29
+│ │ 79: type ParseResult<A extends Parser, B> = A extends (...args: any) => MaybeResult
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 80:     ? Parse<A, B>
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 81:     : Parse<Parse<A, B>, B>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:79:6-79:17
+│ │ 79: type ParseResult<A extends Parser, B> = A extends (...args: any) => MaybeResult
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Parser
+├ kind: type
+├ kindModifiers: alias
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:83:1-84:37
+│ │ 83: /** A parser is a function that attempts to parse an input string */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 84: type Parser = (...args: any) => any;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:84:6-84:12
+│ │ 84: type Parser = (...args: any) => any;
+│ │          ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoFlatten
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:86:1-94:19
+│ │ 86: /** Deeply recursive mapped type for flattening */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 87: type DoFlatten<Array extends readonly unknown[]> = Array extends readonly [
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 88:     infer Head,
+│ │     ^^^^^^^^^^^^^^^
+│ │ 89:     ...infer Rest,
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 90: ]
+│ │     ^
+│ │ 91:     ? Head extends readonly unknown[]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 92:         ? readonly [...DoFlatten<Head>, ...DoFlatten<Rest>]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 93:         : readonly [Head, ...DoFlatten<Rest>]
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 94:     : readonly [];
+│ │     ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:87:6-87:15
+│ │ 87: type DoFlatten<Array extends readonly unknown[]> = Array extends readonly [
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoStringToNumber
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:96:1-97:93
+│ │ 96: /** String to number conversion */
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 97: type DoStringToNumber<T extends string> = T extends `${infer N extends number}` ? N : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:97:6-97:22
+│ │ 97: type DoStringToNumber<T extends string> = T extends `${infer N extends number}` ? N : never;
+│ │          ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoJoin
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:99:1-105:11
+│ │  99: /** Join type - recursive string concatenation */
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 100: type DoJoin<T extends readonly string[], Acc extends string = ""> = T extends readonly [
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 101:     infer Head extends string,
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 102:     ...infer Rest extends readonly string[],
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 103: ]
+│ │      ^
+│ │ 104:     ? DoJoin<Rest, `${Acc}${Head}`>
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 105:     : Acc;
+│ │      ^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:100:6-100:12
+│ │ 100: type DoJoin<T extends readonly string[], Acc extends string = ""> = T extends readonly [
+│ │           ^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DoIntersectAll
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /parserCombinators.ts
+├ span:
+│ ╭ /parserCombinators.ts:107:1-113:34
+│ │ 107: /** Intersect all objects in array */
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 108: type DoIntersectAll<T extends object[], Acc extends object = {}> = T extends readonly [
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 109:     infer Head,
+│ │      ^^^^^^^^^^^^^^^
+│ │ 110:     ...infer Rest extends object[],
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 111: ]
+│ │      ^
+│ │ 112:     ? DoIntersectAll<Rest, Acc & Head>
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 113:     : {[P in keyof Acc]: Acc[P]};
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /parserCombinators.ts:108:6-108:20
+│ │ 108: type DoIntersectAll<T extends object[], Acc extends object = {}> = T extends readonly [
+│ │           ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

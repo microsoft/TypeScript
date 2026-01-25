@@ -1,0 +1,1369 @@
+// === Type Hierarchy ===
+╭ name: BaseInterface
+├ kind: interface
+├ kindModifiers: export
+├ file: /lib/base.ts
+├ span:
+│ ╭ /lib/base.ts:1:1-3:2
+│ │ 1: export interface BaseInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     baseMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/base.ts:1:18-1:31
+│ │ 1: export interface BaseInterface {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: BaseClass
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/base.ts:5:1-7:2
+│ │ │ │ 5: export class BaseClass implements BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     baseMethod(): void {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/base.ts:5:14-5:23
+│ │ │ │ 5: export class BaseClass implements BaseInterface {
+│ │ │ │                 ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ClassFromDirect
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /consumer.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /consumer.ts:8:1-10:2
+│ │ │ │ │ │  8: class ClassFromDirect extends BaseClass {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     directMethod(): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /consumer.ts:8:7-8:22
+│ │ │ │ │ │ 8: class ClassFromDirect extends BaseClass {
+│ │ │ │ │ │          ^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ExtendedDirect
+│ │ ├ kind: interface
+│ │ ├ file: /consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /consumer.ts:4:1-6:2
+│ │ │ │ 4: interface ExtendedDirect extends BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     directMethod(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /consumer.ts:4:11-4:25
+│ │ │ │ 4: interface ExtendedDirect extends BaseInterface {
+│ │ │ │              ^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: BaseClass
+├ kind: class
+├ kindModifiers: export
+├ file: /lib/base.ts
+├ span:
+│ ╭ /lib/base.ts:5:1-7:2
+│ │ 5: export class BaseClass implements BaseInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     baseMethod(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /lib/base.ts:5:14-5:23
+│ │ 5: export class BaseClass implements BaseInterface {
+│ │                 ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/base.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     baseMethod(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/base.ts:1:18-1:31
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ClassFromDirect
+│ │ ├ kind: class
+│ │ ├ file: /consumer.ts
+│ │ ├ span:
+│ │ │ ╭ /consumer.ts:8:1-10:2
+│ │ │ │  8: class ClassFromDirect extends BaseClass {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     directMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /consumer.ts:8:7-8:22
+│ │ │ │ 8: class ClassFromDirect extends BaseClass {
+│ │ │ │          ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtendedDirect
+├ kind: interface
+├ file: /consumer.ts
+├ span:
+│ ╭ /consumer.ts:4:1-6:2
+│ │ 4: interface ExtendedDirect extends BaseInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     directMethod(): void;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /consumer.ts:4:11-4:25
+│ │ 4: interface ExtendedDirect extends BaseInterface {
+│ │              ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/base.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     baseMethod(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/base.ts:1:18-1:31
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ClassFromDirect
+├ kind: class
+├ file: /consumer.ts
+├ span:
+│ ╭ /consumer.ts:8:1-10:2
+│ │  8: class ClassFromDirect extends BaseClass {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     directMethod(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /consumer.ts:8:7-8:22
+│ │ 8: class ClassFromDirect extends BaseClass {
+│ │          ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseClass
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /lib/base.ts
+│ │ ├ span:
+│ │ │ ╭ /lib/base.ts:5:1-7:2
+│ │ │ │ 5: export class BaseClass implements BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     baseMethod(): void {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /lib/base.ts:5:14-5:23
+│ │ │ │ 5: export class BaseClass implements BaseInterface {
+│ │ │ │                 ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BaseInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /lib/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /lib/base.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     baseMethod(): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /lib/base.ts:1:18-1:31
+│ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MergedInterface
+├ kind: interface
+├ file: /merging/interfaces.ts
+├ span:
+│ ╭ /merging/interfaces.ts:1:1-4:2
+│ │ 1: // Interface merging - multiple declarations
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: interface MergedInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     firstProp: string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/interfaces.ts:2:11-2:26
+│ │ 2: interface MergedInterface {
+│ │              ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ImplementsMerged
+│ │ ├ kind: class
+│ │ ├ file: /merging/interfaces.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/interfaces.ts:14:1-19:2
+│ │ │ │ 14: // Class implementing merged interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: class ImplementsMerged implements MergedInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16:     firstProp: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:     secondProp: number = 0;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     thirdProp: boolean = false;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/interfaces.ts:15:7-15:23
+│ │ │ │ 15: class ImplementsMerged implements MergedInterface {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ImplementsMerged
+├ kind: class
+├ file: /merging/interfaces.ts
+├ span:
+│ ╭ /merging/interfaces.ts:14:1-19:2
+│ │ 14: // Class implementing merged interface
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: class ImplementsMerged implements MergedInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:     firstProp: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:     secondProp: number = 0;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     thirdProp: boolean = false;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/interfaces.ts:15:7-15:23
+│ │ 15: class ImplementsMerged implements MergedInterface {
+│ │           ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MergedInterface
+│ │ ├ kind: interface
+│ │ ├ file: /merging/interfaces.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/interfaces.ts:1:1-4:2
+│ │ │ │ 1: // Interface merging - multiple declarations
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: interface MergedInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     firstProp: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/interfaces.ts:2:11-2:26
+│ │ │ │ 2: interface MergedInterface {
+│ │ │ │              ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MergeableClass
+├ kind: class
+├ file: /merging/classInterface.ts
+├ span:
+│ ╭ /merging/classInterface.ts:1:1-4:2
+│ │ 1: // Class-interface merging
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: class MergeableClass {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     classMethod(): void {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/classInterface.ts:2:7-2:21
+│ │ 2: class MergeableClass {
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: SubMergeable
+│ │ ├ kind: class
+│ │ ├ file: /merging/classInterface.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/classInterface.ts:10:1-14:2
+│ │ │ │ 10: // Subclass of merged class-interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11: class SubMergeable extends MergeableClass {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     interfaceMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     subMethod(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/classInterface.ts:11:7-11:19
+│ │ │ │ 11: class SubMergeable extends MergeableClass {
+│ │ │ │           ^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: SubMergeable
+├ kind: class
+├ file: /merging/classInterface.ts
+├ span:
+│ ╭ /merging/classInterface.ts:10:1-14:2
+│ │ 10: // Subclass of merged class-interface
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11: class SubMergeable extends MergeableClass {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     interfaceMethod(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     subMethod(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/classInterface.ts:11:7-11:19
+│ │ 11: class SubMergeable extends MergeableClass {
+│ │           ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: MergeableClass
+│ │ ├ kind: class
+│ │ ├ file: /merging/classInterface.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/classInterface.ts:1:1-4:2
+│ │ │ │ 1: // Class-interface merging
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: class MergeableClass {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     classMethod(): void {}
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/classInterface.ts:2:7-2:21
+│ │ │ │ 2: class MergeableClass {
+│ │ │ │          ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NsInterface
+├ kind: interface
+├ file: /merging/namespaceInterface.ts
+├ span:
+│ ╭ /merging/namespaceInterface.ts:1:1-4:2
+│ │ 1: // Namespace-interface merging
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: interface NsInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     getValue(): number;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/namespaceInterface.ts:2:11-2:22
+│ │ 2: interface NsInterface {
+│ │              ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: NsImplementer
+│ │ ├ kind: class
+│ │ ├ file: /merging/namespaceInterface.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/namespaceInterface.ts:12:1-15:2
+│ │ │ │ 12: // Implement the merged namespace-interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: class NsImplementer implements NsInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     getValue(): number { return 0; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/namespaceInterface.ts:13:7-13:20
+│ │ │ │ 13: class NsImplementer implements NsInterface {
+│ │ │ │           ^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NsImplementer
+├ kind: class
+├ file: /merging/namespaceInterface.ts
+├ span:
+│ ╭ /merging/namespaceInterface.ts:12:1-15:2
+│ │ 12: // Implement the merged namespace-interface
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: class NsImplementer implements NsInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     getValue(): number { return 0; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /merging/namespaceInterface.ts:13:7-13:20
+│ │ 13: class NsImplementer implements NsInterface {
+│ │           ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: NsInterface
+│ │ ├ kind: interface
+│ │ ├ file: /merging/namespaceInterface.ts
+│ │ ├ span:
+│ │ │ ╭ /merging/namespaceInterface.ts:1:1-4:2
+│ │ │ │ 1: // Namespace-interface merging
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2: interface NsInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): number;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /merging/namespaceInterface.ts:2:11-2:22
+│ │ │ │ 2: interface NsInterface {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MixinBase
+├ kind: class
+├ file: /mixins/core.ts
+├ span:
+│ ╭ /mixins/core.ts:3:1-6:2
+│ │ 3: // Base class
+│ │    ^^^^^^^^^^^^^
+│ │ 4: class MixinBase {
+│ │    ^^^^^^^^^^^^^^^^^
+│ │ 5:     baseProp: string = "";
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins/core.ts:4:7-4:16
+│ │ 4: class MixinBase {
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: TimestampedBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins/core.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins/core.ts:31:7-31:47
+│ │ │ │ 31: const TimestampedBase = Timestamped(MixinBase);
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins/core.ts:31:7-31:22
+│ │ │ │ 31: const TimestampedBase = Timestamped(MixinBase);
+│ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ActivatableTimestampedBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins/core.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins/core.ts:32:7-32:71
+│ │ │ │ 32: const ActivatableTimestampedBase = Activatable(Timestamped(MixinBase));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins/core.ts:32:7-32:33
+│ │ │ │ 32: const ActivatableTimestampedBase = Activatable(Timestamped(MixinBase));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: FullMixin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins/core.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins/core.ts:33:7-33:68
+│ │ │ │ 33: const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins/core.ts:33:7-33:16
+│ │ │ │ 33: const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │           ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FullMixinUser
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /mixins/core.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins/core.ts:35:1-38:2
+│ │ │ │ │ │ 35: // Class extending composed mixin
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 36: class FullMixinUser extends FullMixin {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 37:     userName: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 38: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins/core.ts:36:7-36:20
+│ │ │ │ │ │ 36: class FullMixinUser extends FullMixin {
+│ │ │ │ │ │           ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FullMixinUser
+├ kind: class
+├ file: /mixins/core.ts
+├ span:
+│ ╭ /mixins/core.ts:35:1-38:2
+│ │ 35: // Class extending composed mixin
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36: class FullMixinUser extends FullMixin {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 37:     userName: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 38: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /mixins/core.ts:36:7-36:20
+│ │ 36: class FullMixinUser extends FullMixin {
+│ │           ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: FullMixin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: mixin
+│ │ ├ file: /mixins/core.ts
+│ │ ├ span:
+│ │ │ ╭ /mixins/core.ts:33:7-33:68
+│ │ │ │ 33: const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /mixins/core.ts:33:7-33:16
+│ │ │ │ 33: const FullMixin = Serializable(Activatable(Timestamped(MixinBase)));
+│ │ │ │           ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: MixinBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /mixins/core.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /mixins/core.ts:3:1-6:2
+│ │ │ │ │ │ 3: // Base class
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: class MixinBase {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     baseProp: string = "";
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /mixins/core.ts:4:7-4:16
+│ │ │ │ │ │ 4: class MixinBase {
+│ │ │ │ │ │          ^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GenericBase
+├ kind: interface
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:1:1-4:2
+│ │ 1: interface GenericBase<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     value: T;
+│ │    ^^^^^^^^^^^^^
+│ │ 3:     getValue(): T;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:1:11-1:22
+│ │ 1: interface GenericBase<T> {
+│ │              ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: GenericImpl
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:6:1-10:2
+│ │ │ │  6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:6:7-6:18
+│ │ │ │ 6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │          ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: StringImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:17:1-20:2
+│ │ │ │ │ │ 17: // Extend generic class with concrete type
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 18: class StringImpl extends GenericImpl<string> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 19:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 20: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:18:7-18:17
+│ │ │ │ │ │ 18: class StringImpl extends GenericImpl<string> {
+│ │ │ │ │ │           ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: ParameterizedClass
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:27:1-32:2
+│ │ │ │ │ │ 27: // Class with generic type parameter in extends
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 29:     clone(): ParameterizedClass<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 30:         return new ParameterizedClass(this.value);
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 31:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ 32: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:28:7-28:25
+│ │ │ │ │ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: StringBase
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:12:1-15:2
+│ │ │ │ 12: // Extend generic with concrete type
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13: interface StringBase extends GenericBase<string> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     format(): string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:13:11-13:21
+│ │ │ │ 13: interface StringBase extends GenericBase<string> {
+│ │ │ │               ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: NestedGeneric
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:22:1-25:2
+│ │ │ │ 22: // Generic extending generic
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23: interface NestedGeneric<T, U> extends GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24:     secondValue: U;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 25: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:23:11-23:24
+│ │ │ │ 23: interface NestedGeneric<T, U> extends GenericBase<T> {
+│ │ │ │               ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ConstrainedBase
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:34:1-37:2
+│ │ │ │ 34: // Generic with constraint as base
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36:     getId(): number;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 37: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:35:11-35:26
+│ │ │ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │ │ │               ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ConstrainedImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:39:1-45:2
+│ │ │ │ │ │ 39: // Implementation with constraint
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 41:     value: T;
+│ │ │ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │ │ │ 42:     constructor(value: T) { this.value = value; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 43:     getValue(): T { return this.value; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 44:     getId(): number { return this.value.id; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 45: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:40:7-40:22
+│ │ │ │ │ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GenericImpl
+├ kind: class
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:6:1-10:2
+│ │  6: class GenericImpl<T> implements GenericBase<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  7:     value: T;
+│ │     ^^^^^^^^^^^^^
+│ │  8:     constructor(value: T) { this.value = value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     getValue(): T { return this.value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:6:7-6:18
+│ │ 6: class GenericImpl<T> implements GenericBase<T> {
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBase<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: StringImpl
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:17:1-20:2
+│ │ │ │ 17: // Extend generic class with concrete type
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18: class StringImpl extends GenericImpl<string> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     format(): string { return this.value.toUpperCase(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:18:7-18:17
+│ │ │ │ 18: class StringImpl extends GenericImpl<string> {
+│ │ │ │           ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ParameterizedClass
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:27:1-32:2
+│ │ │ │ 27: // Class with generic type parameter in extends
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 29:     clone(): ParameterizedClass<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 30:         return new ParameterizedClass(this.value);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 32: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:28:7-28:25
+│ │ │ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │ │ │           ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringBase
+├ kind: interface
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:12:1-15:2
+│ │ 12: // Extend generic with concrete type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13: interface StringBase extends GenericBase<string> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     format(): string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:13:11-13:21
+│ │ 13: interface StringBase extends GenericBase<string> {
+│ │               ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBase<string>
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StringImpl
+├ kind: class
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:17:1-20:2
+│ │ 17: // Extend generic class with concrete type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: class StringImpl extends GenericImpl<string> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     format(): string { return this.value.toUpperCase(); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:18:7-18:17
+│ │ 18: class StringImpl extends GenericImpl<string> {
+│ │           ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericImpl<string>
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:6:1-10:2
+│ │ │ │  6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:6:7-6:18
+│ │ │ │ 6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │          ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │              ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NestedGeneric
+├ kind: interface
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:22:1-25:2
+│ │ 22: // Generic extending generic
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 23: interface NestedGeneric<T, U> extends GenericBase<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24:     secondValue: U;
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 25: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:23:11-23:24
+│ │ 23: interface NestedGeneric<T, U> extends GenericBase<T> {
+│ │               ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBase<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ParameterizedClass
+├ kind: class
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:27:1-32:2
+│ │ 27: // Class with generic type parameter in extends
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 29:     clone(): ParameterizedClass<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30:         return new ParameterizedClass(this.value);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 31:     }
+│ │     ^^^^^
+│ │ 32: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:28:7-28:25
+│ │ 28: class ParameterizedClass<T> extends GenericImpl<T> {
+│ │           ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericImpl<T>
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:6:1-10:2
+│ │ │ │  6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │  8:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:6:7-6:18
+│ │ │ │ 6: class GenericImpl<T> implements GenericBase<T> {
+│ │ │ │          ^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │              ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConstrainedBase
+├ kind: interface
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:34:1-37:2
+│ │ 34: // Generic with constraint as base
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36:     getId(): number;
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 37: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:35:11-35:26
+│ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │               ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: GenericBase<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     value: T;
+│ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ 3:     getValue(): T;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │              ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ConstrainedImpl
+│ │ ├ kind: class
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:39:1-45:2
+│ │ │ │ 39: // Implementation with constraint
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 41:     value: T;
+│ │ │ │     ^^^^^^^^^^^^^
+│ │ │ │ 42:     constructor(value: T) { this.value = value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 43:     getValue(): T { return this.value; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 44:     getId(): number { return this.value.id; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 45: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:40:7-40:22
+│ │ │ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConstrainedImpl
+├ kind: class
+├ file: /generics/all.ts
+├ span:
+│ ╭ /generics/all.ts:39:1-45:2
+│ │ 39: // Implementation with constraint
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 41:     value: T;
+│ │     ^^^^^^^^^^^^^
+│ │ 42:     constructor(value: T) { this.value = value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 43:     getValue(): T { return this.value; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 44:     getId(): number { return this.value.id; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 45: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics/all.ts:40:7-40:22
+│ │ 40: class ConstrainedImpl<T extends { id: number }> implements ConstrainedBase<T> {
+│ │           ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ConstrainedBase<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics/all.ts
+│ │ ├ span:
+│ │ │ ╭ /generics/all.ts:34:1-37:2
+│ │ │ │ 34: // Generic with constraint as base
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36:     getId(): number;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 37: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics/all.ts:35:11-35:26
+│ │ │ │ 35: interface ConstrainedBase<T extends { id: number }> extends GenericBase<T> {
+│ │ │ │               ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: GenericBase<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics/all.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics/all.ts:1:1-4:2
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     value: T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     getValue(): T;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics/all.ts:1:11-1:22
+│ │ │ │ │ │ 1: interface GenericBase<T> {
+│ │ │ │ │ │              ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none

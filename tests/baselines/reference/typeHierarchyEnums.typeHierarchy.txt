@@ -1,0 +1,188 @@
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+╭ name: DirectionNorth
+├ kind: type
+├ kindModifiers: alias
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:39:1-40:39
+│ │ 39: // Enum member types
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 40: type DirectionNorth = Direction.North;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:40:6-40:20
+│ │ 40: type DirectionNorth = Direction.North;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AnyDirection
+├ kind: type
+├ kindModifiers: alias
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:43:1-44:31
+│ │ 43: // Enum as union type
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 44: type AnyDirection = Direction;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:44:6-44:18
+│ │ 44: type AnyDirection = Direction;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Compass
+├ kind: interface
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:46:1-50:2
+│ │ 46: // Type using enum
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 47: interface Compass {
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 48:     current: Direction;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 49:     history: Direction[];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 50: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:47:11-47:18
+│ │ 47: interface Compass {
+│ │               ^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ColorValue
+├ kind: type
+├ kindModifiers: union
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:57:1-58:40
+│ │ 57: // Type that depends on enum
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 58: type ColorValue = `#${string}` | Color;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:58:6-58:16
+│ │ 58: type ColorValue = `#${string}` | Color;
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+none
+
+
+
+// === Type Hierarchy ===
+╭ name: DirectionKey
+├ kind: type
+├ kindModifiers: keyof
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:77:1-78:44
+│ │ 77: // Reverse mapping access
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 78: type DirectionKey = keyof typeof Direction;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:78:6-78:18
+│ │ 78: type DirectionKey = keyof typeof Direction;
+│ │          ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: GetDirectionReturn
+├ kind: type
+├ kindModifiers: alias
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:89:1-89:59
+│ │ 89: type GetDirectionReturn = ReturnType<typeof getDirection>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:89:6-89:24
+│ │ 89: type GetDirectionReturn = ReturnType<typeof getDirection>;
+│ │          ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: StatusCode
+├ kind: type
+├ kindModifiers: indexed
+├ file: /enums.ts
+├ span:
+│ ╭ /enums.ts:98:1-98:64
+│ │ 98: type StatusCode = typeof StatusCodes[keyof typeof StatusCodes];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /enums.ts:98:6-98:16
+│ │ 98: type StatusCode = typeof StatusCodes[keyof typeof StatusCodes];
+│ │          ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

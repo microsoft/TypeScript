@@ -4427,7 +4427,19 @@ export class TestState {
         this.baseline("Call Hierarchy", text, ".callHierarchy.txt");
     }
 
-    private formatTypeHierarchyItem(file: FourSlashFile, item: ts.TypeHierarchyItem, direction: TypeHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix): string {
+    private formatTypeHierarchyItemSpan(file: FourSlashFile | undefined, item: ts.TypeHierarchyItem, span: ts.TextSpan, prefix: string, trailingPrefix = prefix) {
+        // For lib files, we don't have the source available in the test
+        if (!file) {
+            let text = "";
+            text += `${prefix}╭ ${item.file} (lib file)\n`;
+            text += `${prefix}│ <source not available>\n`;
+            text += `${trailingPrefix}╰\n`;
+            return text;
+        }
+        return this.formatCallHierarchyItemSpan(file, span, prefix, trailingPrefix);
+    }
+
+    private formatTypeHierarchyItem(file: FourSlashFile | undefined, item: ts.TypeHierarchyItem, direction: TypeHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix): string {
         const key = `${item.file}|${JSON.stringify(item.span)}|${direction}`;
         const alreadySeen = seen.has(key);
         seen.set(key, true);
@@ -4443,15 +4455,19 @@ export class TestState {
         let text = "";
         text += `${prefix}╭ name: ${item.name}\n`;
         text += `${prefix}├ kind: ${item.kind}\n`;
+        if (item.kindModifiers) {
+            text += `${prefix}├ kindModifiers: ${item.kindModifiers}\n`;
+        }
         if (item.containerName) {
             text += `${prefix}├ containerName: ${item.containerName}\n`;
         }
         text += `${prefix}├ file: ${item.file}\n`;
         text += `${prefix}├ span:\n`;
-        text += this.formatCallHierarchyItemSpan(file, item.span, `${prefix}│ `);
+        text += this.formatTypeHierarchyItemSpan(file, item, item.span, `${prefix}│ `);
         text += `${prefix}├ selectionSpan:\n`;
-        text += this.formatCallHierarchyItemSpan(
+        text += this.formatTypeHierarchyItemSpan(
             file,
+            item,
             item.selectionSpan,
             `${prefix}│ `,
             supertypes.result !== "skip" || subtypes.result !== "skip" ? `${prefix}│ ` : `${trailingPrefix}╰ `,
@@ -4478,7 +4494,7 @@ export class TestState {
                 text += `${prefix}├ supertypes:\n`;
                 for (let i = 0; i < supertypes.values.length; i++) {
                     const supertype = supertypes.values[i];
-                    const supertypeFile = this.findFile(supertype.file);
+                    const supertypeFile = this.tryFindFileWorker(supertype.file).file;
                     text += `${prefix}│ ╭\n`;
                     text += this.formatTypeHierarchyItem(supertypeFile, supertype, TypeHierarchyItemDirection.Supertypes, seen, `${prefix}│ │ `, i < supertypes.values.length - 1 ? `${prefix}│ ╰ ` : subtypes.result !== "skip" ? `${prefix}│ ╰ ` : `${trailingPrefix}╰ ╰ `);
                 }
@@ -4496,7 +4512,7 @@ export class TestState {
                 text += `${prefix}├ subtypes:\n`;
                 for (let i = 0; i < subtypes.values.length; i++) {
                     const subtype = subtypes.values[i];
-                    const subtypeFile = this.findFile(subtype.file);
+                    const subtypeFile = this.tryFindFileWorker(subtype.file).file;
                     text += `${prefix}│ ╭\n`;
                     text += this.formatTypeHierarchyItem(subtypeFile, subtype, TypeHierarchyItemDirection.Subtypes, seen, `${prefix}│ │ `, i < subtypes.values.length - 1 ? `${prefix}│ ╰ ` : `${trailingPrefix}╰ ╰ `);
                 }
@@ -4508,7 +4524,7 @@ export class TestState {
     private formatTypeHierarchy(item: ts.TypeHierarchyItem | undefined): string {
         let text = "";
         if (item) {
-            const file = this.findFile(item.file);
+            const file = this.tryFindFileWorker(item.file).file;
             text += this.formatTypeHierarchyItem(file, item, TypeHierarchyItemDirection.Root, new Map(), "");
         }
         return text;

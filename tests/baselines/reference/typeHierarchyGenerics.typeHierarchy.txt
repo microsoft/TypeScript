@@ -1,0 +1,566 @@
+// === Type Hierarchy ===
+╭ name: BaseRepository
+├ kind: class
+├ file: /generics.ts
+├ span:
+│ ╭ /generics.ts:11:1-15:2
+│ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     find(id: string): T | null { return null; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     save(entity: T): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     delete(id: string): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics.ts:11:7-11:21
+│ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │           ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Repository<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ 1: interface Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     save(entity: T): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     delete(id: string): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ 1: interface Repository<T> {
+│ │ │ │              ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: CachedRepository
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:17:1-20:2
+│ │ │ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     private cache: Map<string, T> = new Map();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     clearCache(): void { this.cache.clear(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:17:7-17:23
+│ │ │ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepository
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:31:1-33:2
+│ │ │ │ │ │ 31: class UserRepository extends CachedRepository<User> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 32:     findByName(name: string): User | null { return null; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 33: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:31:7-31:21
+│ │ │ │ │ │ 31: class UserRepository extends CachedRepository<User> {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: AdminRepository
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ file: /generics.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /generics.ts:35:1-37:2
+│ │ │ │ │ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 36:     findAdmins(): User[] { return []; }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 37: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /generics.ts:35:7-35:22
+│ │ │ │ │ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │ │ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: CachedRepository
+├ kind: class
+├ file: /generics.ts
+├ span:
+│ ╭ /generics.ts:17:1-20:2
+│ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     private cache: Map<string, T> = new Map();
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     clearCache(): void { this.cache.clear(); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics.ts:17:7-17:23
+│ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │           ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseRepository<T>
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:11:1-15:2
+│ │ │ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     find(id: string): T | null { return null; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     save(entity: T): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     delete(id: string): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:11:7-11:21
+│ │ │ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │ │ │           ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     delete(id: string): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │              ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: CacheableRepository<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:7:1-9:2
+│ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     clearCache(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:7:11-7:30
+│ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │              ^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     delete(id: string): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │              ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserRepository
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:31:1-33:2
+│ │ │ │ 31: class UserRepository extends CachedRepository<User> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 32:     findByName(name: string): User | null { return null; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 33: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:31:7-31:21
+│ │ │ │ 31: class UserRepository extends CachedRepository<User> {
+│ │ │ │           ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AdminRepository
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:35:1-37:2
+│ │ │ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 36:     findAdmins(): User[] { return []; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 37: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:35:7-35:22
+│ │ │ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepository
+├ kind: class
+├ file: /generics.ts
+├ span:
+│ ╭ /generics.ts:31:1-33:2
+│ │ 31: class UserRepository extends CachedRepository<User> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 32:     findByName(name: string): User | null { return null; }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 33: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics.ts:31:7-31:21
+│ │ 31: class UserRepository extends CachedRepository<User> {
+│ │           ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: CachedRepository<User>
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:17:1-20:2
+│ │ │ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     private cache: Map<string, T> = new Map();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     clearCache(): void { this.cache.clear(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:17:7-17:23
+│ │ │ │ 17: class CachedRepository<T> extends BaseRepository<T> implements CacheableRepository<T> {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BaseRepository<T>
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:11:1-15:2
+│ │ │ │ │ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12:     find(id: string): T | null { return null; }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 13:     save(entity: T): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14:     delete(id: string): void {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 15: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:11:7-11:21
+│ │ │ │ │ │ 11: class BaseRepository<T> implements Repository<T> {
+│ │ │ │ │ │           ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ file: /generics.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 4:     delete(id: string): void;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 5: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │ │ │              ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ ╰ ╰ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: CacheableRepository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:7:1-9:2
+│ │ │ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     clearCache(): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:7:11-7:30
+│ │ │ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │ │ │              ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ file: /generics.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 4:     delete(id: string): void;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 5: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │ │ │              ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: AdminRepository
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:35:1-37:2
+│ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36:     findAdmins(): User[] { return []; }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 37: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:35:7-35:22
+│ │ │ │ 35: class AdminRepository extends UserRepository {
+│ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: RepositoryType
+├ kind: type
+├ kindModifiers: union
+├ file: /generics.ts
+├ span:
+│ ╭ /generics.ts:39:1-40:65
+│ │ 39: // Generic type alias
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 40: type RepositoryType<T> = Repository<T> | CacheableRepository<T>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics.ts:40:6-40:20
+│ │ 40: type RepositoryType<T> = Repository<T> | CacheableRepository<T>;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Repository<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ 1: interface Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:     save(entity: T): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     delete(id: string): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ 1: interface Repository<T> {
+│ │ │ │              ^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: CacheableRepository<T>
+│ │ ├ kind: interface
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:7:1-9:2
+│ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     clearCache(): void;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:7:11-7:30
+│ │ │ │ 7: interface CacheableRepository<T> extends Repository<T> {
+│ │ │ │              ^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /generics.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /generics.ts:1:1-5:2
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     find(id: string): T | null;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3:     save(entity: T): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     delete(id: string): void;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /generics.ts:1:11-1:21
+│ │ │ │ │ │ 1: interface Repository<T> {
+│ │ │ │ │ │              ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Identifiable
+├ kind: interface
+├ file: /generics.ts
+├ span:
+│ ╭ /generics.ts:42:1-45:2
+│ │ 42: // Constrained generic
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 43: interface Identifiable<T extends Entity> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 44:     identify(entity: T): string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 45: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /generics.ts:43:11-43:23
+│ │ 43: interface Identifiable<T extends Entity> {
+│ │               ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: T extends Entity
+│ │ ├ kind: interface
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:22:1-24:2
+│ │ │ │ 22: interface Entity {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 23:     id: string;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 24: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:22:11-22:17
+│ │ │ │ 22: interface Entity {
+│ │ │ │               ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: EntityIdentifier
+│ │ ├ kind: class
+│ │ ├ file: /generics.ts
+│ │ ├ span:
+│ │ │ ╭ /generics.ts:47:1-51:2
+│ │ │ │ 47: class EntityIdentifier<T extends Entity> implements Identifiable<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 48:     identify(entity: T): string {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 49:         return entity.id;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 50:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 51: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /generics.ts:47:7-47:23
+│ │ │ │ 47: class EntityIdentifier<T extends Entity> implements Identifiable<T> {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none

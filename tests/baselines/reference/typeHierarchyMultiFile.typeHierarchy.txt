@@ -1,0 +1,934 @@
+// === Type Hierarchy ===
+╭ name: BaseInterface
+├ kind: interface
+├ kindModifiers: export
+├ file: /base/interfaces.ts
+├ span:
+│ ╭ /base/interfaces.ts:1:1-3:2
+│ │ 1: export interface BaseInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     id: string;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /base/interfaces.ts:1:18-1:31
+│ │ 1: export interface BaseInterface {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ExtendedInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /base/interfaces.ts
+│ │ ├ span:
+│ │ │ ╭ /base/interfaces.ts:5:1-7:2
+│ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     name: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /base/interfaces.ts:5:18-5:35
+│ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/user.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/user.ts:4:18-4:31
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: User
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /models/user.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │ │ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │  9:     id: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 10:     name: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 11:     email: string = "";
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 12: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ │ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │ │ │                 ^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ subtypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: Admin
+│ │ │ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /models/admin.ts:3:1-5:2
+│ │ │ │ │ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 4:     permissions: string[] = [];
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 5: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /models/admin.ts:3:14-3:19
+│ │ │ │ │ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │ │ │ │ │                 ^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ subtypes:
+│ │ │ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ │ │ ╭ name: SuperAdmin
+│ │ │ │ │ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /models/admin.ts:7:1-9:2
+│ │ │ │ │ │ │ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 8:     canManageAll: boolean = true;
+│ │ │ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 9: }
+│ │ │ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /models/admin.ts:7:14-7:24
+│ │ │ │ │ │ │ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │ │ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: AbstractBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: abstract,export
+│ │ ├ file: /base/classes.ts
+│ │ ├ span:
+│ │ │ ╭ /base/classes.ts:3:1-5:2
+│ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     abstract id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /base/classes.ts:3:23-3:35
+│ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │                          ^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ConcreteBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /base/classes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /base/classes.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class ConcreteBase extends AbstractBase {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     id: string = "";
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /base/classes.ts:7:14-7:26
+│ │ │ │ │ │ 7: export class ConcreteBase extends AbstractBase {
+│ │ │ │ │ │                 ^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: User
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     id: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10:     name: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     email: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │                 ^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: ...
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AbstractBase
+├ kind: class
+├ kindModifiers: abstract,export
+├ file: /base/classes.ts
+├ span:
+│ ╭ /base/classes.ts:3:1-5:2
+│ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     abstract id: string;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /base/classes.ts:3:23-3:35
+│ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │                          ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /base/interfaces.ts
+│ │ ├ span:
+│ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ 1: export interface BaseInterface {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ConcreteBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /base/classes.ts
+│ │ ├ span:
+│ │ │ ╭ /base/classes.ts:7:1-9:2
+│ │ │ │ 7: export class ConcreteBase extends AbstractBase {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     id: string = "";
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /base/classes.ts:7:14-7:26
+│ │ │ │ 7: export class ConcreteBase extends AbstractBase {
+│ │ │ │                 ^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: User
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     email: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │                 ^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Admin
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/admin.ts:3:1-5:2
+│ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     permissions: string[] = [];
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/admin.ts:3:14-3:19
+│ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │                 ^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: SuperAdmin
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /models/admin.ts:7:1-9:2
+│ │ │ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 8:     canManageAll: boolean = true;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 9: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /models/admin.ts:7:14-7:24
+│ │ │ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: User
+├ kind: class
+├ kindModifiers: export
+├ file: /models/user.ts
+├ span:
+│ ╭ /models/user.ts:8:1-12:2
+│ │  8: export class User extends AbstractBase implements UserInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:     id: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     name: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     email: string = "";
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /models/user.ts:8:14-8:18
+│ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │                 ^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: AbstractBase
+│ │ ├ kind: class
+│ │ ├ kindModifiers: abstract,export
+│ │ ├ file: /base/classes.ts
+│ │ ├ span:
+│ │ │ ╭ /base/classes.ts:3:1-5:2
+│ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     abstract id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /base/classes.ts:3:23-3:35
+│ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │                          ^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: BaseInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: UserInterface
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:4:1-6:2
+│ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:4:18-4:31
+│ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ExtendedInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /base/interfaces.ts:5:1-7:2
+│ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     name: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /base/interfaces.ts:5:18-5:35
+│ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BaseInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: Admin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/admin.ts
+│ │ ├ span:
+│ │ │ ╭ /models/admin.ts:3:1-5:2
+│ │ │ │ 3: export class Admin extends User {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     permissions: string[] = [];
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/admin.ts:3:14-3:19
+│ │ │ │ 3: export class Admin extends User {
+│ │ │ │                 ^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: SuperAdmin
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/admin.ts:7:1-9:2
+│ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8:     canManageAll: boolean = true;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 9: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/admin.ts:7:14-7:24
+│ │ │ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │ │ │                 ^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Admin
+├ kind: class
+├ kindModifiers: export
+├ file: /models/admin.ts
+├ span:
+│ ╭ /models/admin.ts:3:1-5:2
+│ │ 3: export class Admin extends User {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     permissions: string[] = [];
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /models/admin.ts:3:14-3:19
+│ │ 3: export class Admin extends User {
+│ │                 ^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: User
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     email: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │                 ^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AbstractBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: abstract,export
+│ │ │ │ ├ file: /base/classes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /base/classes.ts:3:1-5:2
+│ │ │ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     abstract id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /base/classes.ts:3:23-3:35
+│ │ │ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │ │ │                          ^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BaseInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ ╰ ╰ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: UserInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/user.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/user.ts:4:18-4:31
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: ExtendedInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:5:1-7:2
+│ │ │ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6:     name: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 7: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:5:18-5:35
+│ │ │ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: BaseInterface
+│ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: SuperAdmin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/admin.ts
+│ │ ├ span:
+│ │ │ ╭ /models/admin.ts:7:1-9:2
+│ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     canManageAll: boolean = true;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/admin.ts:7:14-7:24
+│ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │                 ^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AnyUser
+├ kind: type
+├ kindModifiers: export,union
+├ file: /services/userService.ts
+├ span:
+│ ╭ /services/userService.ts:4:1-4:49
+│ │ 4: export type AnyUser = User | Admin | SuperAdmin;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/userService.ts:4:13-4:20
+│ │ 4: export type AnyUser = User | Admin | SuperAdmin;
+│ │                ^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: User
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     id: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 10:     name: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     email: string = "";
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │                 ^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: AbstractBase
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: abstract,export
+│ │ │ │ ├ file: /base/classes.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /base/classes.ts:3:1-5:2
+│ │ │ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     abstract id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /base/classes.ts:3:23-3:35
+│ │ │ │ │ │ 3: export abstract class AbstractBase implements BaseInterface {
+│ │ │ │ │ │                          ^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: BaseInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ ╰ ╰ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: UserInterface
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/user.ts:4:1-6:2
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     email: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/user.ts:4:18-4:31
+│ │ │ │ │ │ 4: export interface UserInterface extends ExtendedInterface {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: ExtendedInterface
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:5:1-7:2
+│ │ │ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6:     name: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 7: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /base/interfaces.ts:5:18-5:35
+│ │ │ │ │ │ │ │ 5: export interface ExtendedInterface extends BaseInterface {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: BaseInterface
+│ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /base/interfaces.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:1-3:2
+│ │ │ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /base/interfaces.ts:1:18-1:31
+│ │ │ │ │ │ │ │ │ │ 1: export interface BaseInterface {
+│ │ │ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+│ ╭
+│ │ ╭ name: Admin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/admin.ts
+│ │ ├ span:
+│ │ │ ╭ /models/admin.ts:3:1-5:2
+│ │ │ │ 3: export class Admin extends User {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     permissions: string[] = [];
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/admin.ts:3:14-3:19
+│ │ │ │ 3: export class Admin extends User {
+│ │ │ │                 ^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: User
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/user.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/user.ts:8:1-12:2
+│ │ │ │ │ │  8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:     id: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10:     name: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     email: string = "";
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/user.ts:8:14-8:18
+│ │ │ │ │ │ 8: export class User extends AbstractBase implements UserInterface {
+│ │ │ │ │ │                 ^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+│ ╭
+│ │ ╭ name: SuperAdmin
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/admin.ts
+│ │ ├ span:
+│ │ │ ╭ /models/admin.ts:7:1-9:2
+│ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8:     canManageAll: boolean = true;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 9: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/admin.ts:7:14-7:24
+│ │ │ │ 7: export class SuperAdmin extends Admin {
+│ │ │ │                 ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Admin
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /models/admin.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /models/admin.ts:3:1-5:2
+│ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 4:     permissions: string[] = [];
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /models/admin.ts:3:14-3:19
+│ │ │ │ │ │ 3: export class Admin extends User {
+│ │ │ │ │ │                 ^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserService
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/userService.ts
+├ span:
+│ ╭ /services/userService.ts:6:1-8:2
+│ │ 6: export interface UserService {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     getUser(id: string): AnyUser;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/userService.ts:6:18-6:29
+│ │ 6: export interface UserService {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: DefaultUserService
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/userService.ts
+│ │ ├ span:
+│ │ │ ╭ /services/userService.ts:10:1-14:2
+│ │ │ │ 10: export class DefaultUserService implements UserService {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     getUser(id: string): AnyUser {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:         return new User();
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 14: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/userService.ts:10:14-10:32
+│ │ │ │ 10: export class DefaultUserService implements UserService {
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none

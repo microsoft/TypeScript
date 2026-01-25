@@ -1,0 +1,2158 @@
+// === Type Hierarchy ===
+╭ name: Entity
+├ kind: interface
+├ kindModifiers: export
+├ file: /types/base.ts
+├ span:
+│ ╭ /types/base.ts:1:1-3:2
+│ │ 1: export interface Entity {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     id: string;
+│ │    ^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/base.ts:1:18-1:24
+│ │ 1: export interface Entity {
+│ │                     ^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:3:1-6:2
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     role: 'admin' | 'user';
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:3:18-3:28
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FindUserResult
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/user-repository.ts:23:1-24:70
+│ │ │ │ │ │ 23: // Use conditional type to extract return type
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/user-repository.ts:24:13-24:27
+│ │ │ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: UnwrappedFind
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /utils/applied-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /utils/applied-types.ts:13:1-14:79
+│ │ │ │ │ │ 13: // Unwrap nested promise
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /utils/applied-types.ts:14:13-14:26
+│ │ │ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │ │ │                 ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ProductEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/product.ts
+│ │ ├ span:
+│ │ │ ╭ /models/product.ts:3:1-6:2
+│ │ │ │ 3: export interface ProductEntity extends Entity, Named {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     price: number;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     sku: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/product.ts:3:18-3:31
+│ │ │ │ 3: export interface ProductEntity extends Entity, Named {
+│ │ │ │                     ^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Timestamped
+├ kind: interface
+├ kindModifiers: export
+├ file: /types/base.ts
+├ span:
+│ ╭ /types/base.ts:5:1-8:2
+│ │ 5: export interface Timestamped {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     createdAt: Date;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     updatedAt: Date;
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/base.ts:5:18-5:29
+│ │ 5: export interface Timestamped {
+│ │                     ^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserEntity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:3:1-6:2
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     role: 'admin' | 'user';
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:3:18-3:28
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FindUserResult
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/user-repository.ts:23:1-24:70
+│ │ │ │ │ │ 23: // Use conditional type to extract return type
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/user-repository.ts:24:13-24:27
+│ │ │ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: UnwrappedFind
+│ │ │ │ ├ kind: type
+│ │ │ │ ├ kindModifiers: export,alias
+│ │ │ │ ├ file: /utils/applied-types.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /utils/applied-types.ts:13:1-14:79
+│ │ │ │ │ │ 13: // Unwrap nested promise
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /utils/applied-types.ts:14:13-14:26
+│ │ │ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │ │ │                 ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtractNamed
+├ kind: type
+├ kindModifiers: export,conditional,extends
+├ file: /types/conditionals.ts
+├ span:
+│ ╭ /types/conditionals.ts:3:1-4:59
+│ │ 3: // Extract entities that have a specific property
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export type ExtractNamed<T> = T extends Named ? T : never;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/conditionals.ts:4:13-4:25
+│ │ 4: export type ExtractNamed<T> = T extends Named ? T : never;
+│ │                ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Named
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:10:1-12:2
+│ │ │ │ 10: export interface Named {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     name: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:10:18-10:23
+│ │ │ │ 10: export interface Named {
+│ │ │ │                      ^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ConditionalPartial
+├ kind: type
+├ kindModifiers: export,conditional,extends
+├ file: /types/conditionals.ts
+├ span:
+│ ╭ /types/conditionals.ts:6:1-9:18
+│ │ 6: // Make all properties optional conditionally
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: export type ConditionalPartial<T> = T extends Entity
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     ? Partial<T> & Pick<T, 'id'>
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9:     : Partial<T>;
+│ │    ^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/conditionals.ts:7:13-7:31
+│ │ 7: export type ConditionalPartial<T> = T extends Entity
+│ │                ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Entity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ 1: export interface Entity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ 1: export interface Entity {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AsyncReturnType
+├ kind: type
+├ kindModifiers: export,conditional,infer
+├ file: /types/conditionals.ts
+├ span:
+│ ╭ /types/conditionals.ts:11:1-13:62
+│ │ 11: // Infer return type from function
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: export type AsyncReturnType<T extends (...args: any) => Promise<any>> =
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     T extends (...args: any) => Promise<infer R> ? R : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/conditionals.ts:12:13-12:28
+│ │ 12: export type AsyncReturnType<T extends (...args: any) => Promise<any>> =
+│ │                 ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MakeReadonly
+├ kind: type
+├ kindModifiers: export,mapped
+├ file: /types/mapped.ts
+├ span:
+│ ╭ /types/mapped.ts:3:1-6:3
+│ │ 3: // Mapped type with conditional
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export type MakeReadonly<T> = {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     readonly [K in keyof T]: T[K] extends object ? MakeReadonly<T[K]> : T[K];
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6: };
+│ │    ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/mapped.ts:4:13-4:25
+│ │ 4: export type MakeReadonly<T> = {
+│ │                ^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Getters
+├ kind: type
+├ kindModifiers: export,mapped
+├ file: /types/mapped.ts
+├ span:
+│ ╭ /types/mapped.ts:13:1-16:3
+│ │ 13: // Create getters for all properties
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: export type Getters<T> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:     [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /types/mapped.ts:14:13-14:20
+│ │ 14: export type Getters<T> = {
+│ │                 ^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Repository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/repository-base.ts
+├ span:
+│ ╭ /services/repository-base.ts:4:1-8:2
+│ │ 4: export interface Repository<T extends Entity> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     find(id: string): Promise<T | null>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     delete(id: string): Promise<void>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/repository-base.ts:4:18-4:28
+│ │ 4: export interface Repository<T extends Entity> {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: T extends Entity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ 1: export interface Entity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ 1: export interface Entity {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: TimestampedRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:10:1-12:2
+│ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     findByDateRange(start: Date, end: Date): Promise<T[]>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:10:18-10:39
+│ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FullRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/full-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: UserRepository
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:5:1-8:2
+│ │ │ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 8: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:5:18-5:32
+│ │ │ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ subtypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:1-21:2
+│ │ │ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 14:     }
+│ │ │ │ │ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ │ │ │ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 21: }
+│ │ │ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:14-10:32
+│ │ │ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: NamedRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:14:1-16:2
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15:     findByName(name: string): Promise<T[]>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:14:18-14:33
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FullRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/full-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ subtypes: ...
+│ │ │ ╭
+│ │ │ │ ╭ name: ProductRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/product-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/product-repository.ts:4:1-7:2
+│ │ │ │ │ │ 4: // Product only has Entity & Named (not Timestamped), so can only use NamedRepository
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     findBySku(sku: string): Promise<ProductEntity | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/product-repository.ts:5:18-5:35
+│ │ │ │ │ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: TimestampedRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/repository-base.ts
+├ span:
+│ ╭ /services/repository-base.ts:10:1-12:2
+│ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     findByDateRange(start: Date, end: Date): Promise<T[]>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/repository-base.ts:10:18-10:39
+│ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │                      ^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Repository<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: T extends Entity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: FullRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/full-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/user-repository.ts:5:1-8:2
+│ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/user-repository.ts:5:18-5:32
+│ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:1-21:2
+│ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 14:     }
+│ │ │ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ │ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 21: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:14-10:32
+│ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NamedRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/repository-base.ts
+├ span:
+│ ╭ /services/repository-base.ts:14:1-16:2
+│ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15:     findByName(name: string): Promise<T[]>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/repository-base.ts:14:18-14:33
+│ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │                      ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Repository<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: T extends Entity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: FullRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/full-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepository
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/user-repository.ts:5:1-8:2
+│ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/user-repository.ts:5:18-5:32
+│ │ │ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ subtypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:1-21:2
+│ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 14:     }
+│ │ │ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ │ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 21: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/user-repository.ts:10:14-10:32
+│ │ │ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: ProductRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/product-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/product-repository.ts:4:1-7:2
+│ │ │ │ 4: // Product only has Entity & Named (not Timestamped), so can only use NamedRepository
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     findBySku(sku: string): Promise<ProductEntity | null>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/product-repository.ts:5:18-5:35
+│ │ │ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │ │ │                     ^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FullRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/full-repository.ts
+├ span:
+│ ╭ /services/full-repository.ts:4:1-8:2
+│ │ 4: // Interface with multiple constraints
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     search(query: string): Promise<T[]>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/full-repository.ts:5:18-5:32
+│ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │                     ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: TimestampedRepository<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:10:1-12:2
+│ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     findByDateRange(start: Date, end: Date): Promise<T[]>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:10:18-10:39
+│ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: T extends Entity
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /types/base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: NamedRepository<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:14:1-16:2
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15:     findByName(name: string): Promise<T[]>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:14:18-14:33
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/user-repository.ts:5:1-8:2
+│ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/user-repository.ts:5:18-5:32
+│ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: UserRepositoryImpl
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/user-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/user-repository.ts:10:1-21:2
+│ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 21: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/user-repository.ts:10:14-10:32
+│ │ │ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /models/user.ts
+├ span:
+│ ╭ /models/user.ts:3:1-6:2
+│ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     email: string;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 5:     role: 'admin' | 'user';
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /models/user.ts:3:18-3:28
+│ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │                     ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Entity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ 1: export interface Entity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ 1: export interface Entity {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Timestamped
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:5:1-8:2
+│ │ │ │ 5: export interface Timestamped {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     createdAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     updatedAt: Date;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:5:18-5:29
+│ │ │ │ 5: export interface Timestamped {
+│ │ │ │                     ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Named
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:10:1-12:2
+│ │ │ │ 10: export interface Named {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     name: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:10:18-10:23
+│ │ │ │ 10: export interface Named {
+│ │ │ │                      ^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: FindUserResult
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,alias
+│ │ ├ file: /services/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/user-repository.ts:23:1-24:70
+│ │ │ │ 23: // Use conditional type to extract return type
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/user-repository.ts:24:13-24:27
+│ │ │ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │ │ │                 ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: UnwrappedFind
+│ │ ├ kind: type
+│ │ ├ kindModifiers: export,alias
+│ │ ├ file: /utils/applied-types.ts
+│ │ ├ span:
+│ │ │ ╭ /utils/applied-types.ts:13:1-14:79
+│ │ │ │ 13: // Unwrap nested promise
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /utils/applied-types.ts:14:13-14:26
+│ │ │ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │ │ │                 ^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ProductEntity
+├ kind: interface
+├ kindModifiers: export
+├ file: /models/product.ts
+├ span:
+│ ╭ /models/product.ts:3:1-6:2
+│ │ 3: export interface ProductEntity extends Entity, Named {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4:     price: number;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 5:     sku: string;
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /models/product.ts:3:18-3:31
+│ │ 3: export interface ProductEntity extends Entity, Named {
+│ │                     ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Entity
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ 1: export interface Entity {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     id: string;
+│ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ 1: export interface Entity {
+│ │ │ │                     ^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: Named
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /types/base.ts
+│ │ ├ span:
+│ │ │ ╭ /types/base.ts:10:1-12:2
+│ │ │ │ 10: export interface Named {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     name: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /types/base.ts:10:18-10:23
+│ │ │ │ 10: export interface Named {
+│ │ │ │                      ^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/user-repository.ts
+├ span:
+│ ╭ /services/user-repository.ts:5:1-8:2
+│ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/user-repository.ts:5:18-5:32
+│ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │                     ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: FullRepository<UserEntity>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/full-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: TimestampedRepository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/repository-base.ts:10:1-12:2
+│ │ │ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     findByDateRange(start: Date, end: Date): Promise<T[]>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/repository-base.ts:10:18-10:39
+│ │ │ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │ │ │                      ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 8: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: T extends Entity
+│ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /types/base.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: NamedRepository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/repository-base.ts:14:1-16:2
+│ │ │ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 15:     findByName(name: string): Promise<T[]>;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 16: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/repository-base.ts:14:18-14:33
+│ │ │ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │ │ │                      ^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 8: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+├ subtypes:
+│ ╭
+│ │ ╭ name: UserRepositoryImpl
+│ │ ├ kind: class
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/user-repository.ts:10:1-21:2
+│ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 14:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 21: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/user-repository.ts:10:14-10:32
+│ │ │ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │ │ │                  ^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserRepositoryImpl
+├ kind: class
+├ kindModifiers: export
+├ file: /services/user-repository.ts
+├ span:
+│ ╭ /services/user-repository.ts:10:1-21:2
+│ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:     find(id: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     save(entity: Partial<UserEntity> & Pick<UserEntity, 'id'>): Promise<UserEntity> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:         return Promise.resolve(entity as UserEntity);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14:     }
+│ │     ^^^^^
+│ │ 15:     delete(id: string): Promise<void> { return Promise.resolve(); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:     findByDateRange(start: Date, end: Date): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:     findByName(name: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     search(query: string): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     findByEmail(email: string): Promise<UserEntity | null> { return Promise.resolve(null); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 20:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]> { return Promise.resolve([]); }
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/user-repository.ts:10:14-10:32
+│ │ 10: export class UserRepositoryImpl implements UserRepository {
+│ │                  ^^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UserRepository
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/user-repository.ts
+│ │ ├ span:
+│ │ │ ╭ /services/user-repository.ts:5:1-8:2
+│ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     findByEmail(email: string): Promise<UserEntity | null>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 7:     findByRole(role: 'admin' | 'user'): Promise<UserEntity[]>;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 8: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/user-repository.ts:5:18-5:32
+│ │ │ │ 5: export interface UserRepository extends FullRepository<UserEntity> {
+│ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: FullRepository<UserEntity>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/full-repository.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/full-repository.ts:4:1-8:2
+│ │ │ │ │ │ 4: // Interface with multiple constraints
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     extends TimestampedRepository<T>, NamedRepository<T> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     search(query: string): Promise<T[]>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/full-repository.ts:5:18-5:32
+│ │ │ │ │ │ 5: export interface FullRepository<T extends Entity & Timestamped & Named>
+│ │ │ │ │ │                     ^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: TimestampedRepository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:10:1-12:2
+│ │ │ │ │ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 11:     findByDateRange(start: Date, end: Date): Promise<T[]>;
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 12: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:10:18-10:39
+│ │ │ │ │ │ │ │ 10: export interface TimestampedRepository<T extends Entity & Timestamped> extends Repository<T> {
+│ │ │ │ │ │ │ │                      ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 8: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ │ │ ╭ name: T extends Entity
+│ │ │ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ │ │ ├ file: /types/base.ts
+│ │ │ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: NamedRepository<T>
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:14:1-16:2
+│ │ │ │ │ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 15:     findByName(name: string): Promise<T[]>;
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 16: }
+│ │ │ │ │ │ │ │     ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /services/repository-base.ts:14:18-14:33
+│ │ │ │ │ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │ │ │ │ │                      ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: Repository<T>
+│ │ │ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 8: }
+│ │ │ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: FindUserResult
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /services/user-repository.ts
+├ span:
+│ ╭ /services/user-repository.ts:23:1-24:70
+│ │ 23: // Use conditional type to extract return type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/user-repository.ts:24:13-24:27
+│ │ 24: export type FindUserResult = AsyncReturnType<UserRepository['find']>;
+│ │                 ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: AsyncReturnType<UserRepository['find']>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:3:1-6:2
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     role: 'admin' | 'user';
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:3:18-3:28
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Entity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: Timestamped
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:5:1-8:2
+│ │ │ │ │ │ 5: export interface Timestamped {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     createdAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     updatedAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:5:18-5:29
+│ │ │ │ │ │ 5: export interface Timestamped {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: Named
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:10:1-12:2
+│ │ │ │ │ │ 10: export interface Named {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     name: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:10:18-10:23
+│ │ │ │ │ │ 10: export interface Named {
+│ │ │ │ │ │                      ^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ProductRepository
+├ kind: interface
+├ kindModifiers: export
+├ file: /services/product-repository.ts
+├ span:
+│ ╭ /services/product-repository.ts:4:1-7:2
+│ │ 4: // Product only has Entity & Named (not Timestamped), so can only use NamedRepository
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     findBySku(sku: string): Promise<ProductEntity | null>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /services/product-repository.ts:5:18-5:35
+│ │ 5: export interface ProductRepository extends NamedRepository<ProductEntity> {
+│ │                     ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: NamedRepository<ProductEntity>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /services/repository-base.ts
+│ │ ├ span:
+│ │ │ ╭ /services/repository-base.ts:14:1-16:2
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15:     findByName(name: string): Promise<T[]>;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /services/repository-base.ts:14:18-14:33
+│ │ │ │ 14: export interface NamedRepository<T extends Entity & Named> extends Repository<T> {
+│ │ │ │                      ^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Repository<T>
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /services/repository-base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:1-8:2
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 5:     find(id: string): Promise<T | null>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     save(entity: ConditionalPartial<T>): Promise<T>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     delete(id: string): Promise<void>;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /services/repository-base.ts:4:18-4:28
+│ │ │ │ │ │ 4: export interface Repository<T extends Entity> {
+│ │ │ │ │ │                     ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: T extends Entity
+│ │ │ │ │ │ ├ kind: interface
+│ │ │ │ │ │ ├ kindModifiers: export
+│ │ │ │ │ │ ├ file: /types/base.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 3: }
+│ │ │ │ │ │ │ │    ^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: EntityType
+├ kind: type
+├ kindModifiers: export,conditional,extends
+├ file: /utils/type-utils.ts
+├ span:
+│ ╭ /utils/type-utils.ts:3:1-9:15
+│ │ 3: // Deeply conditional type
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: export type EntityType<T> =
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 5:     T extends Entity & Timestamped & Named ? 'full' :
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 6:     T extends Entity & Named ? 'named' :
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7:     T extends Entity & Timestamped ? 'timestamped' :
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     T extends Entity ? 'basic' :
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 9:     'unknown';
+│ │    ^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/type-utils.ts:4:13-4:23
+│ │ 4: export type EntityType<T> =
+│ │                ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: KeysOfType
+├ kind: type
+├ kindModifiers: export,indexed
+├ file: /utils/type-utils.ts
+├ span:
+│ ╭ /utils/type-utils.ts:11:1-14:12
+│ │ 11: // Extract all keys of a specific type
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12: export type KeysOfType<T, V> = {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 13:     [K in keyof T]: T[K] extends V ? K : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: }[keyof T];
+│ │     ^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/type-utils.ts:12:13-12:23
+│ │ 12: export type KeysOfType<T, V> = {
+│ │                 ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UnwrapPromise
+├ kind: type
+├ kindModifiers: export,conditional,infer
+├ file: /utils/type-utils.ts
+├ span:
+│ ╭ /utils/type-utils.ts:16:1-19:9
+│ │ 16: // Recursive unwrap
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 17: export type UnwrapPromise<T> = T extends Promise<infer U>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18:     ? UnwrapPromise<U>
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 19:     : T;
+│ │     ^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/type-utils.ts:17:13-17:26
+│ │ 17: export type UnwrapPromise<T> = T extends Promise<infer U>
+│ │                 ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Promise<infer U>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserEntityType
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /utils/applied-types.ts
+├ span:
+│ ╭ /utils/applied-types.ts:6:1-7:53
+│ │ 6: // Apply conditional types
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: export type UserEntityType = EntityType<UserEntity>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/applied-types.ts:7:13-7:27
+│ │ 7: export type UserEntityType = EntityType<UserEntity>;
+│ │                ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ProductEntityType
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /utils/applied-types.ts
+├ span:
+│ ╭ /utils/applied-types.ts:8:1-8:59
+│ │ 8: export type ProductEntityType = EntityType<ProductEntity>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/applied-types.ts:8:13-8:30
+│ │ 8: export type ProductEntityType = EntityType<ProductEntity>;
+│ │                ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserStringKeys
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /utils/applied-types.ts
+├ span:
+│ ╭ /utils/applied-types.ts:10:1-11:61
+│ │ 10: // Extract string keys
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11: export type UserStringKeys = KeysOfType<UserEntity, string>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/applied-types.ts:11:13-11:27
+│ │ 11: export type UserStringKeys = KeysOfType<UserEntity, string>;
+│ │                 ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UnwrappedFind
+├ kind: type
+├ kindModifiers: export,alias
+├ file: /utils/applied-types.ts
+├ span:
+│ ╭ /utils/applied-types.ts:13:1-14:79
+│ │ 13: // Unwrap nested promise
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /utils/applied-types.ts:14:13-14:26
+│ │ 14: export type UnwrappedFind = UnwrapPromise<ReturnType<UserRepository['find']>>;
+│ │                 ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: UnwrapPromise<ReturnType<UserRepository['find']>>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: export
+│ │ ├ file: /models/user.ts
+│ │ ├ span:
+│ │ │ ╭ /models/user.ts:3:1-6:2
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     email: string;
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     role: 'admin' | 'user';
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /models/user.ts:3:18-3:28
+│ │ │ │ 3: export interface UserEntity extends Entity, Timestamped, Named {
+│ │ │ │                     ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Entity
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:1:1-3:2
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 2:     id: string;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 3: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:1:18-1:24
+│ │ │ │ │ │ 1: export interface Entity {
+│ │ │ │ │ │                     ^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: Timestamped
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:5:1-8:2
+│ │ │ │ │ │ 5: export interface Timestamped {
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 6:     createdAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 7:     updatedAt: Date;
+│ │ │ │ │ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 8: }
+│ │ │ │ │ │    ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:5:18-5:29
+│ │ │ │ │ │ 5: export interface Timestamped {
+│ │ │ │ │ │                     ^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ ╰ ╰ supertypes: none
+│ │ │ ╭
+│ │ │ │ ╭ name: Named
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: export
+│ │ │ │ ├ file: /types/base.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /types/base.ts:10:1-12:2
+│ │ │ │ │ │ 10: export interface Named {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     name: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /types/base.ts:10:18-10:23
+│ │ │ │ │ │ 10: export interface Named {
+│ │ │ │ │ │                      ^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none

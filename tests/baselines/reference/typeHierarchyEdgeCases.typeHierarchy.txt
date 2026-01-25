@@ -1,0 +1,672 @@
+// === Type Hierarchy ===
+╭ name: IsolatedClass
+├ kind: class
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:1:1-4:2
+│ │ 1: // Isolated class with no hierarchy
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2: class IsolatedClass {
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     value: number = 0;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:2:7-2:20
+│ │ 2: class IsolatedClass {
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: IsolatedInterface
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:6:1-9:2
+│ │ 6: // Isolated interface with no hierarchy
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 7: interface IsolatedInterface {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     value: string;
+│ │    ^^^^^^^^^^^^^^^^^^
+│ │ 9: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:7:11-7:28
+│ │ 7: interface IsolatedInterface {
+│ │              ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: EmptyInterface
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:11:1-12:28
+│ │ 11: // Empty interface
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 12: interface EmptyInterface {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:12:11-12:25
+│ │ 12: interface EmptyInterface {}
+│ │               ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ExtendsEmpty
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:14:1-17:2
+│ │ │ │ 14: // Interface extending empty interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 15: interface ExtendsEmpty extends EmptyInterface {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 16:     something: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 17: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:15:11-15:23
+│ │ │ │ 15: interface ExtendsEmpty extends EmptyInterface {
+│ │ │ │               ^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ExtendsEmpty
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:14:1-17:2
+│ │ 14: // Interface extending empty interface
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 15: interface ExtendsEmpty extends EmptyInterface {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16:     something: string;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:15:11-15:23
+│ │ 15: interface ExtendsEmpty extends EmptyInterface {
+│ │               ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: EmptyInterface
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:11:1-12:28
+│ │ │ │ 11: // Empty interface
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12: interface EmptyInterface {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:12:11-12:25
+│ │ │ │ 12: interface EmptyInterface {}
+│ │ │ │               ^^^^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ClassExpression
+├ kind: class
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:20:25-22:2
+│ │ 20: const ClassExpression = class {
+│ │                             ^^^^^^^
+│ │ 21:     method(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 22: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:20:7-20:22
+│ │ 20: const ClassExpression = class {
+│ │           ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: MyClass
+├ kind: class
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:25:30-27:2
+│ │ 25: const NamedClassExpression = class MyClass {
+│ │                                  ^^^^^^^^^^^^^^^
+│ │ 26:     method(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 27: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:25:36-25:43
+│ │ 25: const NamedClassExpression = class MyClass {
+│ │                                        ^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DerivedExpression
+├ kind: class
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:34:27-36:2
+│ │ 34: const DerivedExpression = class extends BaseForExpr {
+│ │                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 35:     derived(): void {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36: };
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:34:7-34:24
+│ │ 34: const DerivedExpression = class extends BaseForExpr {
+│ │           ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: BaseForExpr
+│ │ ├ kind: class
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:29:1-32:2
+│ │ │ │ 29: // Class expression extending a class
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 30: class BaseForExpr {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31:     base(): void {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 32: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:30:7-30:18
+│ │ │ │ 30: class BaseForExpr {
+│ │ │ │           ^^^^^^^^^^^
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: TreeNode
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:38:1-43:2
+│ │ 38: // Self-referential interface (for linked list, tree, etc.)
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 39: interface TreeNode<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 40:     value: T;
+│ │     ^^^^^^^^^^^^^
+│ │ 41:     children: TreeNode<T>[];
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 42:     parent?: TreeNode<T>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 43: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:39:11-39:19
+│ │ 39: interface TreeNode<T> {
+│ │               ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: NodeA
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:45:1-49:2
+│ │ 45: // Mutually recursive types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 46: interface NodeA {
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 47:     value: string;
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 48:     next?: NodeB;
+│ │     ^^^^^^^^^^^^^^^^^
+│ │ 49: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:46:11-46:16
+│ │ 46: interface NodeA {
+│ │               ^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ChainC
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:65:1-67:2
+│ │ 65: interface ChainC extends ChainB {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 66:     c: string;
+│ │     ^^^^^^^^^^^^^^
+│ │ 67: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:65:11-65:17
+│ │ 65: interface ChainC extends ChainB {
+│ │               ^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ChainB
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:61:1-63:2
+│ │ │ │ 61: interface ChainB extends ChainA {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 62:     b: string;
+│ │ │ │     ^^^^^^^^^^^^^^
+│ │ │ │ 63: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:61:11-61:17
+│ │ │ │ 61: interface ChainB extends ChainA {
+│ │ │ │               ^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: ChainA
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:56:1-59:2
+│ │ │ │ │ │ 56: // Interface extending itself via intermediate
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 57: interface ChainA {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 58:     a: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^
+│ │ │ │ │ │ 59: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:57:11-57:17
+│ │ │ │ │ │ 57: interface ChainA {
+│ │ │ │ │ │               ^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: Level5
+├ kind: class
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:74:1-74:31
+│ │ 74: class Level5 extends Level4 {}
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:74:7-74:13
+│ │ 74: class Level5 extends Level4 {}
+│ │           ^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Level4
+│ │ ├ kind: class
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:73:1-73:31
+│ │ │ │ 73: class Level4 extends Level3 {}
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:73:7-73:13
+│ │ │ │ 73: class Level4 extends Level3 {}
+│ │ │ │           ^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Level3
+│ │ │ │ ├ kind: class
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:72:1-72:31
+│ │ │ │ │ │ 72: class Level3 extends Level2 {}
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:72:7-72:13
+│ │ │ │ │ │ 72: class Level3 extends Level2 {}
+│ │ │ │ │ │           ^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ supertypes:
+│ │ │ │ │ ╭
+│ │ │ │ │ │ ╭ name: Level2
+│ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /edgeCases.ts:71:1-71:31
+│ │ │ │ │ │ │ │ 71: class Level2 extends Level1 {}
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /edgeCases.ts:71:7-71:13
+│ │ │ │ │ │ │ │ 71: class Level2 extends Level1 {}
+│ │ │ │ │ │ │ │           ^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ supertypes:
+│ │ │ │ │ │ │ ╭
+│ │ │ │ │ │ │ │ ╭ name: Level1
+│ │ │ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /edgeCases.ts:69:1-70:16
+│ │ │ │ │ │ │ │ │ │ 69: // Deeply nested inheritance
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 70: class Level1 {}
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /edgeCases.ts:70:7-70:13
+│ │ │ │ │ │ │ │ │ │ 70: class Level1 {}
+│ │ │ │ │ │ │ │ │ │           ^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: SharedBase
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:76:1-79:2
+│ │ 76: // Multiple inheritance paths to same base
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 77: interface SharedBase {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 78:     shared: string;
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 79: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:77:11-77:21
+│ │ 77: interface SharedBase {
+│ │               ^^^^^^^^^^
+│ ╰
+├ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: PathA
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:81:1-83:2
+│ │ │ │ 81: interface PathA extends SharedBase {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 82:     pathA: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 83: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:81:11-81:16
+│ │ │ │ 81: interface PathA extends SharedBase {
+│ │ │ │               ^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: DiamondBottom
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:89:1-91:2
+│ │ │ │ │ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 90:     bottom: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 91: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:89:11-89:24
+│ │ │ │ │ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │ │ │ │ │               ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ subtypes: none
+│ ╭
+│ │ ╭ name: PathB
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:85:1-87:2
+│ │ │ │ 85: interface PathB extends SharedBase {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 86:     pathB: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 87: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:85:11-85:16
+│ │ │ │ 85: interface PathB extends SharedBase {
+│ │ │ │               ^^^^^
+│ │ │ ╰
+│ │ ├ subtypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: DiamondBottom
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:89:1-91:2
+│ │ │ │ │ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 90:     bottom: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 91: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:89:11-89:24
+│ │ │ │ │ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │ │ │ │ │               ^^^^^^^^^^^^^
+│ │ │ │ │ ╰
+╰ ╰ ╰ ╰ ╰ subtypes: ...
+
+
+
+
+// === Type Hierarchy ===
+╭ name: DiamondBottom
+├ kind: interface
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:89:1-91:2
+│ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 90:     bottom: string;
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 91: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:89:11-89:24
+│ │ 89: interface DiamondBottom extends PathA, PathB {
+│ │               ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: PathA
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:81:1-83:2
+│ │ │ │ 81: interface PathA extends SharedBase {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 82:     pathA: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 83: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:81:11-81:16
+│ │ │ │ 81: interface PathA extends SharedBase {
+│ │ │ │               ^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: SharedBase
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:76:1-79:2
+│ │ │ │ │ │ 76: // Multiple inheritance paths to same base
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 77: interface SharedBase {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 78:     shared: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 79: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:77:11-77:21
+│ │ │ │ │ │ 77: interface SharedBase {
+│ │ │ │ │ │               ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+│ ╭
+│ │ ╭ name: PathB
+│ │ ├ kind: interface
+│ │ ├ file: /edgeCases.ts
+│ │ ├ span:
+│ │ │ ╭ /edgeCases.ts:85:1-87:2
+│ │ │ │ 85: interface PathB extends SharedBase {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 86:     pathB: string;
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 87: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /edgeCases.ts:85:11-85:16
+│ │ │ │ 85: interface PathB extends SharedBase {
+│ │ │ │               ^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: SharedBase
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ file: /edgeCases.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /edgeCases.ts:76:1-79:2
+│ │ │ │ │ │ 76: // Multiple inheritance paths to same base
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 77: interface SharedBase {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 78:     shared: string;
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 79: }
+│ │ │ │ │ │     ^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /edgeCases.ts:77:11-77:21
+│ │ │ │ │ │ 77: interface SharedBase {
+│ │ │ │ │ │               ^^^^^^^^^^
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: ...
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: JsonValue
+├ kind: type
+├ kindModifiers: union
+├ file: /edgeCases.ts
+├ span:
+│ ╭ /edgeCases.ts:93:1-100:36
+│ │  93: // Type alias to itself (recursive)
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  94: type JsonValue =
+│ │      ^^^^^^^^^^^^^^^^
+│ │  95:     | string
+│ │      ^^^^^^^^^^^^
+│ │  96:     | number
+│ │      ^^^^^^^^^^^^
+│ │  97:     | boolean
+│ │      ^^^^^^^^^^^^^
+│ │  98:     | null
+│ │      ^^^^^^^^^^
+│ │  99:     | JsonValue[]
+│ │      ^^^^^^^^^^^^^^^^^
+│ │ 100:     | { [key: string]: JsonValue };
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /edgeCases.ts:94:6-94:15
+│ │ 94: type JsonValue =
+│ │          ^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none

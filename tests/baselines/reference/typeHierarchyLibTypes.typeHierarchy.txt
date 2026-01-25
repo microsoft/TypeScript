@@ -1,0 +1,522 @@
+// === Type Hierarchy ===
+╭ name: CustomPromise
+├ kind: interface
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:1:1-4:2
+│ │ 1: // Promise types
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 2: interface CustomPromise<T> extends Promise<T> {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 3:     finally(onfinally?: () => void): Promise<T>;
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 4: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:2:11-2:24
+│ │ 2: interface CustomPromise<T> extends Promise<T> {
+│ │              ^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Promise<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es5.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AsyncResult
+├ kind: class
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:6:1-13:2
+│ │  6: class AsyncResult<T> implements PromiseLike<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  7:     then<TResult1 = T, TResult2 = never>(
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  8:         onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │  9:         onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 10:     ): PromiseLike<TResult1 | TResult2> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 11:         return this as any;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 12:     }
+│ │     ^^^^^
+│ │ 13: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:6:7-6:18
+│ │ 6: class AsyncResult<T> implements PromiseLike<T> {
+│ │          ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: PromiseLike<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es5.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: SearchableArray
+├ kind: interface
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:15:1-18:2
+│ │ 15: // Array types with lib
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 16: interface SearchableArray<T> extends Array<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 17:     search(predicate: (item: T) => boolean): T | undefined;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 18: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:16:11-16:26
+│ │ 16: interface SearchableArray<T> extends Array<T> {
+│ │               ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Array<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es5.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: SortedArray
+├ kind: class
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:20:1-24:2
+│ │ 20: class SortedArray<T> extends Array<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 21:     binarySearch(item: T): number {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 22:         return -1;
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 23:     }
+│ │     ^^^^^
+│ │ 24: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:20:7-20:18
+│ │ 20: class SortedArray<T> extends Array<T> {
+│ │           ^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Array<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es5.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ApplicationError
+├ kind: class
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:26:1-32:2
+│ │ 26: // Error hierarchy
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 27: class ApplicationError extends Error {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 28:     constructor(message: string, public code: number) {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 29:         super(message);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 30:         this.name = 'ApplicationError';
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 31:     }
+│ │     ^^^^^
+│ │ 32: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:27:7-27:23
+│ │ 27: class ApplicationError extends Error {
+│ │           ^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Error
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es5.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+├ subtypes:
+│ ╭
+│ │ ╭ name: ValidationError
+│ │ ├ kind: class
+│ │ ├ file: /builtinLibTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /builtinLibTypes.ts:34:1-38:2
+│ │ │ │ 34: class ValidationError extends ApplicationError {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 35:     constructor(message: string, public field: string) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 36:         super(message, 400);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 37:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 38: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /builtinLibTypes.ts:34:7-34:22
+│ │ │ │ 34: class ValidationError extends ApplicationError {
+│ │ │ │           ^^^^^^^^^^^^^^^
+│ │ │ ╰
+╰ ╰ ╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ValidationError
+├ kind: class
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:34:1-38:2
+│ │ 34: class ValidationError extends ApplicationError {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 35:     constructor(message: string, public field: string) {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 36:         super(message, 400);
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 37:     }
+│ │     ^^^^^
+│ │ 38: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:34:7-34:22
+│ │ 34: class ValidationError extends ApplicationError {
+│ │           ^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: ApplicationError
+│ │ ├ kind: class
+│ │ ├ file: /builtinLibTypes.ts
+│ │ ├ span:
+│ │ │ ╭ /builtinLibTypes.ts:26:1-32:2
+│ │ │ │ 26: // Error hierarchy
+│ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 27: class ApplicationError extends Error {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 28:     constructor(message: string, public code: number) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 29:         super(message);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 30:         this.name = 'ApplicationError';
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 31:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 32: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /builtinLibTypes.ts:27:7-27:23
+│ │ │ │ 27: class ApplicationError extends Error {
+│ │ │ │           ^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ supertypes:
+│ │ │ ╭
+│ │ │ │ ╭ name: Error
+│ │ │ │ ├ kind: interface
+│ │ │ │ ├ kindModifiers: declare
+│ │ │ │ ├ file: lib.es5.d.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ │ │ <source not available>
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ lib.es5.d.ts (lib file)
+│ │ │ │ │ │ <source not available>
+│ │ │ │ │ ╰
+│ ╰ ╰ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: OrderedMap
+├ kind: interface
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:40:1-44:2
+│ │ 40: // Map/Set extensions
+│ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ 41: interface OrderedMap<K, V> extends Map<K, V> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 42:     first(): V | undefined;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 43:     last(): V | undefined;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 44: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:41:11-41:21
+│ │ 41: interface OrderedMap<K, V> extends Map<K, V> {
+│ │               ^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Map<K, V>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es2015.collection.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es2015.collection.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es2015.collection.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UniqueSet
+├ kind: interface
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:46:1-48:2
+│ │ 46: interface UniqueSet<T> extends Set<T> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 47:     addUnique(value: T): boolean;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 48: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:46:11-46:20
+│ │ 46: interface UniqueSet<T> extends Set<T> {
+│ │               ^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Set<T>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es2015.collection.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es2015.collection.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es2015.collection.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PageIterator
+├ kind: interface
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:50:1-54:2
+│ │ 50: // Iterator extensions
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 51: interface PageIterator<T> extends Iterator<T[]> {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 52:     currentPage: number;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 53:     totalPages: number;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 54: }
+│ │     ^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:51:11-51:23
+│ │ 51: interface PageIterator<T> extends Iterator<T[]> {
+│ │               ^^^^^^^^^^^^
+│ ╰
+├ supertypes:
+│ ╭
+│ │ ╭ name: Iterator<T[]>
+│ │ ├ kind: interface
+│ │ ├ kindModifiers: declare
+│ │ ├ file: lib.es2015.iterable.d.ts
+│ │ ├ span:
+│ │ │ ╭ lib.es2015.iterable.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ lib.es2015.iterable.d.ts (lib file)
+│ │ │ │ <source not available>
+│ │ │ ╰
+│ ╰ ╰ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: ImmutableList
+├ kind: type
+├ kindModifiers: intersection
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:61:1-64:3
+│ │ 61: // ReadonlyArray usage
+│ │     ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 62: type ImmutableList<T> = readonly T[] & {
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 63:     readonly length: number;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 64: };
+│ │     ^^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:62:6-62:19
+│ │ 62: type ImmutableList<T> = readonly T[] & {
+│ │          ^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: PromiseReturnType
+├ kind: type
+├ kindModifiers: conditional,infer
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:66:1-68:62
+│ │ 66: // Utility types with built-in types
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 67: type PromiseReturnType<T extends (...args: any) => Promise<any>> =
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 68:     T extends (...args: any) => Promise<infer R> ? R : never;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:67:6-67:23
+│ │ 67: type PromiseReturnType<T extends (...args: any) => Promise<any>> =
+│ │          ^^^^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: UserType
+├ kind: type
+├ kindModifiers: alias
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:74:1-74:53
+│ │ 74: type UserType = PromiseReturnType<typeof fetchUser>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:74:6-74:14
+│ │ 74: type UserType = PromiseReturnType<typeof fetchUser>;
+│ │          ^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
+
+
+
+
+// === Type Hierarchy ===
+╭ name: AwaitedExample
+├ kind: type
+├ kindModifiers: alias
+├ file: /builtinLibTypes.ts
+├ span:
+│ ╭ /builtinLibTypes.ts:76:1-77:57
+│ │ 76: // Awaited utility
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 77: type AwaitedExample = Awaited<Promise<Promise<string>>>;
+│ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /builtinLibTypes.ts:77:6-77:20
+│ │ 77: type AwaitedExample = Awaited<Promise<Promise<string>>>;
+│ │          ^^^^^^^^^^^^^^
+│ ╰
+├ supertypes: none
+╰ subtypes: none
