@@ -2599,12 +2599,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeprecatedSymbol(symbol: Symbol) {
-        const parentSymbol = getParentOfSymbol(symbol);
-        if (parentSymbol && length(symbol.declarations) > 1) {
-            return parentSymbol.flags & SymbolFlags.Interface ? some(symbol.declarations, isDeprecatedDeclaration) : every(symbol.declarations, isDeprecatedDeclaration);
+        const declarations = symbol.declarations;
+        if (length(declarations)) {
+            if (symbol.flags & SymbolFlags.Accessor) {
+                return some(declarations, isDeprecatedDeclaration);
+            }
+            const parentSymbol = getParentOfSymbol(symbol);
+            if (parentSymbol && length(declarations) > 1) {
+                return parentSymbol.flags & SymbolFlags.Interface ? some(declarations, isDeprecatedDeclaration) : every(declarations, isDeprecatedDeclaration);
+            }
         }
         return !!symbol.valueDeclaration && isDeprecatedDeclaration(symbol.valueDeclaration)
-            || length(symbol.declarations) && every(symbol.declarations, isDeprecatedDeclaration);
+            || length(declarations) && every(declarations, isDeprecatedDeclaration);
     }
 
     function isDeprecatedDeclaration(declaration: Declaration) {
