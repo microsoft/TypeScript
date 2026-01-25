@@ -110,6 +110,8 @@ import {
     PropertyDeclaration,
     QuotePreference,
     SignatureDeclarationBase,
+    Signature,
+    signatureHasRestParameter,
     skipParentheses,
     some,
     Symbol,
@@ -301,31 +303,30 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const signature = checker.getResolvedSignature(expr);
         if (signature === undefined) return;
 
+        const argumentSpans = args.map(arg => getArgumentSpan(skipParentheses(arg)));
+        let totalArgumentPositions = 0;
+        for (const span of argumentSpans) {
+            totalArgumentPositions += span;
+        }
+
+        const nonRestParamCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
+        const restTupleInfo = getRestTupleInfo(signature, nonRestParamCount, totalArgumentPositions);
+
         let signatureParamPos = 0;
-        for (const originalArg of args) {
+        for (let argIndex = 0; argIndex < args.length; argIndex++) {
+            const originalArg = args[argIndex];
             const arg = skipParentheses(originalArg);
+            const spreadArgs = argumentSpans[argIndex];
+            if (spreadArgs === 0) {
+                continue;
+            }
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
-                signatureParamPos++;
+                signatureParamPos += spreadArgs;
                 continue;
             }
 
-            let spreadArgs = 0;
-            if (isSpreadElement(arg)) {
-                const spreadType = checker.getTypeAtLocation(arg.expression);
-                if (checker.isTupleType(spreadType)) {
-                    const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
-                    if (fixedLength === 0) {
-                        continue;
-                    }
-                    const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
-                    const requiredArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
-                    if (requiredArgs > 0) {
-                        spreadArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
-                    }
-                }
-            }
-
-            const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, signatureParamPos);
+            const parameterPos = getAdjustedParameterPosition(signatureParamPos, restTupleInfo);
+            const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, parameterPos);
             signatureParamPos = signatureParamPos + (spreadArgs || 1);
             if (identifierInfo) {
                 const { parameter, parameterName, isRestParameter: isFirstVariadicArgument } = identifierInfo;
@@ -341,6 +342,64 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
                 addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument);
             }
+        }
+
+        function getArgumentSpan(arg: Expression) {
+            if (isSpreadElement(arg)) {
+                const spreadType = checker.getTypeAtLocation(arg.expression);
+                if (checker.isTupleType(spreadType)) {
+                    const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+                    if (fixedLength === 0) {
+                        return 0;
+                    }
+                    const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    if (requiredArgs > 0) {
+                        return requiredArgs;
+                    }
+                }
+            }
+            return 1;
+        }
+
+        function getRestTupleInfo(signature: Signature, paramCount: number, totalPositions: number) {
+            if (!signatureHasRestParameter(signature)) {
+                return undefined;
+            }
+            const restParameter = signature.parameters[paramCount];
+            if (!restParameter) {
+                return undefined;
+            }
+            const restType = checker.getTypeOfSymbol(restParameter);
+            if (!checker.isTupleType(restType)) {
+                return undefined;
+            }
+            const elementFlags = (restType as TupleTypeReference).target.elementFlags;
+            const restStartIndex = findIndex(elementFlags, f => !!(f & ElementFlags.Variable));
+            if (restStartIndex < 0) {
+                return undefined;
+            }
+            const restTailCount = elementFlags.length - restStartIndex - 1;
+            const restPositionsTotal = Math.max(0, totalPositions - paramCount);
+            return { restStartIndex, restTailCount, restPositionsTotal, paramCount };
+        }
+
+        function getAdjustedParameterPosition(signatureParamPos: number, restInfo?: { restStartIndex: number; restTailCount: number; restPositionsTotal: number; paramCount: number; }) {
+            if (!restInfo || signatureParamPos < restInfo.paramCount) {
+                return signatureParamPos;
+            }
+            const restPosition = signatureParamPos - restInfo.paramCount;
+            if (restPosition < restInfo.restStartIndex) {
+                return signatureParamPos;
+            }
+            if (restInfo.restTailCount > 0 && restInfo.restPositionsTotal >= restInfo.restTailCount) {
+                const tailStart = restInfo.restPositionsTotal - restInfo.restTailCount;
+                if (restPosition >= tailStart) {
+                    const tailIndex = restPosition - tailStart;
+                    return restInfo.paramCount + restInfo.restStartIndex + 1 + tailIndex;
+                }
+            }
+            return restInfo.paramCount + restInfo.restStartIndex;
         }
     }
 
