@@ -66,15 +66,18 @@ Types are annotated with descriptive `kindModifiers` to help distinguish differe
    - `resolveTypeHierarchyDeclaration()` - Entry point for type hierarchy requests
    - `createTypeHierarchyItem()` - Creates hierarchy items with proper metadata
    - `getSupertypes()` - Collects base types, implemented interfaces, and type parameter constraints
-   - `getSubtypes()` - Finds derived types using hybrid approach with performance limits
+   - `getSubtypes()` - Finds derived types using hybrid approach with configurable limits
    - `getTypeHierarchyKindModifiers()` - Returns modifiers based on type pattern
    - `findMixinVariablesUsingSymbol()` - Reverse mixin lookup
    - `collectTypeParameterConstraints()` - Collects type parameter constraints as supertypes
 
-2. **`src/harness/fourslashImpl.ts`** (modified)
+2. **`src/compiler/types.ts`** (modified)
+   - Added `typeHierarchyMaxResults` to `UserPreferences` for configurable result limits
+
+3. **`src/harness/fourslashImpl.ts`** (modified)
    - Added `kindModifiers` display in type hierarchy baselines
 
-3. **Test Files** (27 new fourslash tests)
+4. **Test Files** (27 new fourslash tests)
    - Comprehensive coverage of all supported patterns
    - Multi-file tests for cross-file scenarios
    - Edge case and negative case testing
@@ -187,7 +190,8 @@ Conditional types like `ExtractDog<T> = T extends Dog ? T : never` are shown as 
 - **AST Traversal**: Avoided when possible; uses targeted lookups
 - **Seen Sets**: Prevents duplicate processing
 - **Cancellation Tokens**: Supports responsiveness during long operations
-- **Results Limit**: Subtype collection is capped at 1000 results per level to prevent issues in very large codebases
+- **Results Limit**: Subtype collection is capped at a configurable limit (default: 1000) to prevent performance issues in very large codebases
+- **Configurable via `UserPreferences.typeHierarchyMaxResults`**: The limit can be adjusted per-request
 
 ## Known Limitations
 
@@ -198,10 +202,10 @@ Conditional types like `ExtractDog<T> = T extends Dog ? T : never` are shown as 
 
 ## Future Enhancements
 
+- [ ] **Truncation indicator** - Show indicator when results exceed the configured limit
 - [ ] Handle more complex generic type inference
 - [ ] Show inferred type widening in hierarchy
 - [ ] Enhanced cross-project reference support
-- [ ] Add truncation indicator when results exceed limit
 
 ---
 

@@ -627,8 +627,8 @@ export interface LanguageService {
     provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
     prepareTypeHierarchy(fileName: string, position: number): TypeHierarchyItem | TypeHierarchyItem[] | undefined;
-    provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[];
-    provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[];
+    provideTypeHierarchySupertypes(fileName: string, position: number, preferences?: UserPreferences): TypeHierarchyItem[];
+    provideTypeHierarchySubtypes(fileName: string, position: number, preferences?: UserPreferences): TypeHierarchyItem[];
 
     provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
 

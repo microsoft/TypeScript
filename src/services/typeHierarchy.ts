@@ -43,8 +43,12 @@ import {
     TypeHierarchyItem,
     TypeReference,
     TypeReferenceNode,
+    UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts.js";
+
+/** Default maximum results per level in type hierarchy */
+const DEFAULT_TYPE_HIERARCHY_MAX_RESULTS = 1000;
 
 /** @internal */
 export type TypeHierarchyDeclaration =
@@ -410,9 +414,12 @@ function getSymbolFromHeritageClauseType(typeNode: ExpressionWithTypeArguments, 
  *
  * @internal
  */
-export function getSupertypes(program: Program, declaration: TypeHierarchyDeclaration, _cancellationToken: CancellationToken): TypeHierarchyItem[] {
+export function getSupertypes(program: Program, declaration: TypeHierarchyDeclaration, _cancellationToken: CancellationToken, _preferences?: UserPreferences): TypeHierarchyItem[] {
     const typeChecker = program.getTypeChecker();
     const result: TypeHierarchyItem[] = [];
+    // Note: maxResults is not used for supertypes as they are naturally limited
+    // (a class has one base class plus some interfaces). The preference is accepted
+    // for API consistency with getSubtypes.
 
     if (isClassDeclaration(declaration) || isClassExpression(declaration)) {
         // Get base class
@@ -678,10 +685,11 @@ function addTypeReferenceToResult(
  *
  * @internal
  */
-export function getSubtypes(program: Program, declaration: TypeHierarchyDeclaration, cancellationToken: CancellationToken): TypeHierarchyItem[] {
+export function getSubtypes(program: Program, declaration: TypeHierarchyDeclaration, cancellationToken: CancellationToken, preferences?: UserPreferences): TypeHierarchyItem[] {
     const typeChecker = program.getTypeChecker();
     const result: TypeHierarchyItem[] = [];
     const seen = new Set<TypeHierarchyDeclaration>();
+    const maxResults = preferences?.typeHierarchyMaxResults ?? DEFAULT_TYPE_HIERARCHY_MAX_RESULTS;
 
     // Get the name node - for assigned class expressions and mixin variables, use the variable name
     let locationNode: Node | undefined;
@@ -704,9 +712,6 @@ export function getSubtypes(program: Program, declaration: TypeHierarchyDeclarat
     if (!targetSymbol) {
         return result;
     }
-
-    // Maximum number of subtypes to return for performance
-    const maxResults = 1000;
 
     // PART 1: Use FindAllReferences with { implementations: true } for heritage clauses
     // This efficiently finds classes/interfaces that extend/implement the target using the name index

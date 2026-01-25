@@ -10564,6 +10564,14 @@ export interface UserPreferences {
      * Default: `500`
      */
     readonly maximumHoverLength?: number;
+    /**
+     * Maximum number of results to return per level in type hierarchy requests.
+     * A positive integer limiting the number of supertypes/subtypes returned to prevent
+     * performance issues in very large codebases.
+     *
+     * Default: `1000`
+     */
+    readonly typeHierarchyMaxResults?: number;
 }
 
 export type OrganizeImportsTypeOrder = "last" | "inline" | "first";

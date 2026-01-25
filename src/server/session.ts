@@ -3416,14 +3416,14 @@ export class Session<TMessage = string> implements EventSender {
     private provideTypeHierarchySupertypes(args: protocol.FileLocationRequestArgs): protocol.TypeHierarchyItem[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.getScriptInfoFromProjectService(file);
-        const supertypes = project.getLanguageService().provideTypeHierarchySupertypes(file, this.getPosition(args, scriptInfo));
+        const supertypes = project.getLanguageService().provideTypeHierarchySupertypes(file, this.getPosition(args, scriptInfo), this.getPreferences(file));
         return supertypes.map(item => this.toProtocolTypeHierarchyItem(item));
     }
 
     private provideTypeHierarchySubtypes(args: protocol.FileLocationRequestArgs): protocol.TypeHierarchyItem[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.getScriptInfoFromProjectService(file);
-        const subtypes = project.getLanguageService().provideTypeHierarchySubtypes(file, this.getPosition(args, scriptInfo));
+        const subtypes = project.getLanguageService().provideTypeHierarchySubtypes(file, this.getPosition(args, scriptInfo), this.getPreferences(file));
         return subtypes.map(item => this.toProtocolTypeHierarchyItem(item));
     }
 

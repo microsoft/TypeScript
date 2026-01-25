@@ -3375,18 +3375,18 @@ export function createLanguageService(
         return position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position);
     }
 
-    function provideTypeHierarchySupertypes(fileName: string, position: number): TypeHierarchyItem[] {
+    function provideTypeHierarchySupertypes(fileName: string, position: number, preferences: UserPreferences = emptyOptions): TypeHierarchyItem[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, getTypeHierarchyNodeAtPosition(sourceFile, position));
-        return declaration ? TypeHierarchy.getSupertypes(program, declaration, cancellationToken) : [];
+        return declaration ? TypeHierarchy.getSupertypes(program, declaration, cancellationToken, preferences) : [];
     }
 
-    function provideTypeHierarchySubtypes(fileName: string, position: number): TypeHierarchyItem[] {
+    function provideTypeHierarchySubtypes(fileName: string, position: number, preferences: UserPreferences = emptyOptions): TypeHierarchyItem[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const declaration = TypeHierarchy.resolveTypeHierarchyDeclaration(program, getTypeHierarchyNodeAtPosition(sourceFile, position));
-        return declaration ? TypeHierarchy.getSubtypes(program, declaration, cancellationToken) : [];
+        return declaration ? TypeHierarchy.getSubtypes(program, declaration, cancellationToken, preferences) : [];
     }
 
     function provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences = emptyOptions): InlayHint[] {
