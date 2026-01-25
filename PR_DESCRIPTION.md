@@ -217,4 +217,4 @@ All code has been reviewed by the contributor @kbrilla and tested against the fu
 
 ---
 
-Fixes #TBD (Type Hierarchy LSP Support - please link to the appropriate issue)
+Fixes #45877
