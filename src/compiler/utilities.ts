@@ -1488,7 +1488,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         })),
         RegExpConstructor: new Map(Object.entries({
             es2025: [
-                "excape",
+                "escape",
             ],
         })),
         Reflect: new Map(Object.entries({
