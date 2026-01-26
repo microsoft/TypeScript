@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
@@ -81,7 +82,7 @@ func getScanStartPosition(enclosingNode *ast.Node, originalRange core.TextRange,
  * if parent is on the different line - its delta was already contributed
  * to the initial indentation.
  */
-func getOwnOrInheritedDelta(n *ast.Node, options *FormatCodeSettings, sourceFile *ast.SourceFile) int {
+func getOwnOrInheritedDelta(n *ast.Node, options *lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) int {
 	previousLine := -1
 	var child *ast.Node
 	for n != nil {
@@ -267,7 +268,7 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 			w.insertIndentation(item.Loc.Pos(), indentation, false)
 		})
 
-		if opt.TrimTrailingWhitespace != false {
+		if opt.TrimTrailingWhitespace {
 			w.trimTrailingWhitespacesForRemainingRange(remainingTrivia)
 		}
 	}
@@ -302,6 +303,9 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 			// edit in the middle of a token where the range ended, so if we have a non-contiguous
 			// pair here, we're already done and we can ignore it.
 			parent := astnav.FindPrecedingToken(w.sourceFile, tokenInfo.Loc.End())
+			if parent != nil {
+				parent = parent.Parent
+			}
 			if parent == nil {
 				parent = w.previousParent
 			}
@@ -968,7 +972,7 @@ func (w *formatSpanWorker) indentMultilineComment(commentRange core.TextRange, i
 	}
 }
 
-func getIndentationString(indentation int, options *FormatCodeSettings) string {
+func getIndentationString(indentation int, options *lsutil.FormatCodeSettings) string {
 	// go's `strings.Repeat` already has static, global caching for repeated tabs and spaces, so there's no need to cache here like in strada
 	if !options.ConvertTabsToSpaces {
 		tabs := int(math.Floor(float64(indentation) / float64(options.TabSize)))
@@ -1080,7 +1084,7 @@ type dynamicIndenter struct {
 	indentation   int
 	delta         int
 
-	options    *FormatCodeSettings
+	options    *lsutil.FormatCodeSettings
 	sourceFile *ast.SourceFile
 }
 

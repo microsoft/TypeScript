@@ -16,5 +16,5 @@ func TestFormattingRegexes(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "removeAllButLast(sortedTypes, undefinedType, /keepNullableType**/ true);")
+	f.VerifyCurrentLineContent(t, `removeAllButLast(sortedTypes, undefinedType, /keepNullableType**/ true);`)
 }

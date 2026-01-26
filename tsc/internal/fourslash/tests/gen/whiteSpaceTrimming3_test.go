@@ -18,5 +18,5 @@ bar     \
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentFileContentIs(t, "let t = \"foo \\\nbar     \\   \n\";")
+	f.VerifyCurrentFileContent(t, "let t = \"foo \\\nbar     \\   \n\";")
 }

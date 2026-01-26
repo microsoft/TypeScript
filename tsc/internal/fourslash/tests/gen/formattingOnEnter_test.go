@@ -18,5 +18,8 @@ class bar {/**/ }
 	defer done()
 	f.GoToMarker(t, "")
 	f.InsertLine(t, "")
-	f.VerifyCurrentFileContentIs(t, "class foo { }\nclass bar {\n}\n// new line here")
+	f.VerifyCurrentFileContent(t, `class foo { }
+class bar {
+}
+// new line here`)
 }

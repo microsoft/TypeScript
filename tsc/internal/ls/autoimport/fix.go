@@ -16,7 +16,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
-	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls/change"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
@@ -56,7 +55,7 @@ func (f *Fix) Edits(
 	ctx context.Context,
 	file *ast.SourceFile,
 	compilerOptions *core.CompilerOptions,
-	formatOptions *format.FormatCodeSettings,
+	formatOptions *lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences *lsutil.UserPreferences,
 ) ([]*lsproto.TextEdit, string) {

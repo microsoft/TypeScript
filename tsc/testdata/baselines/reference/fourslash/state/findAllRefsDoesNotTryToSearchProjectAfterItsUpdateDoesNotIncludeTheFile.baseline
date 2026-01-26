@@ -177,6 +177,40 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 1
+    },
+    "ch": "/",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts      *modified*
+    /packages/core/src/loading-indicator.ts  *deleted*
+    /packages/core/src/index.ts              *deleted*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+Open Files::
+  [/packages/babel-loader/src/index.ts] 
+    /packages/babel-loader/tsconfig.json  (default) 
+  [/packages/core/src/index.ts] *modified*
+    /packages/babel-loader/tsconfig.json  *deleted*
+    /packages/core/tsconfig.json          (default) 
+
+{
   "method": "textDocument/didChange",
   "params": {
     "textDocument": {
@@ -200,6 +234,32 @@ Config File Names::
     ]
   }
 }
+
+{
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 2
+    },
+    "ch": "/",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -227,6 +287,32 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 3
+    },
+    "ch": " ",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+
+{
   "method": "textDocument/didChange",
   "params": {
     "textDocument": {
@@ -250,6 +336,32 @@ Config File Names::
     ]
   }
 }
+
+{
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 4
+    },
+    "ch": "c",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -277,6 +389,32 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 5
+    },
+    "ch": "o",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+
+{
   "method": "textDocument/didChange",
   "params": {
     "textDocument": {
@@ -300,6 +438,32 @@ Config File Names::
     ]
   }
 }
+
+{
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 6
+    },
+    "ch": "m",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -327,6 +491,32 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 7
+    },
+    "ch": "m",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+
+{
   "method": "textDocument/didChange",
   "params": {
     "textDocument": {
@@ -350,6 +540,32 @@ Config File Names::
     ]
   }
 }
+
+{
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 8
+    },
+    "ch": "e",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -377,6 +593,32 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 9
+    },
+    "ch": "n",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+
+{
   "method": "textDocument/didChange",
   "params": {
     "textDocument": {
@@ -402,6 +644,32 @@ Config File Names::
 }
 
 {
+  "method": "textDocument/onTypeFormatting",
+  "params": {
+    "textDocument": {
+      "uri": "file:///packages/babel-loader/src/index.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 10
+    },
+    "ch": "t",
+    "options": {
+      "tabSize": 4,
+      "insertSpaces": true,
+      "trimTrailingWhitespace": true
+    }
+  }
+}
+
+Projects::
+  [/packages/babel-loader/tsconfig.json] *modified*
+    /packages/babel-loader/src/index.ts  *modified*
+  [/packages/core/tsconfig.json] 
+    /packages/core/src/loading-indicator.ts  
+    /packages/core/src/index.ts              
+
+{
   "method": "textDocument/references",
   "params": {
     "textDocument": {
@@ -416,21 +684,6 @@ Config File Names::
     }
   }
 }
-
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts      *modified*
-    /packages/core/src/loading-indicator.ts  *deleted*
-    /packages/core/src/index.ts              *deleted*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-Open Files::
-  [/packages/babel-loader/src/index.ts] 
-    /packages/babel-loader/tsconfig.json  (default) 
-  [/packages/core/src/index.ts] *modified*
-    /packages/babel-loader/tsconfig.json  *deleted*
-    /packages/core/tsconfig.json          (default) 
 
 
 

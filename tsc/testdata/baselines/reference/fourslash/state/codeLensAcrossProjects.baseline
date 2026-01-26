@@ -162,6 +162,7 @@ Config File Names::
   "params": {
     "settings": {
       "typescript": {
+        "FormatCodeSettings": null,
         "QuotePreference": "",
         "LazyConfiguredProjectsFromExternalProject": false,
         "MaximumHoverLength": 0,
@@ -609,6 +610,35 @@ Config::
   "params": {
     "settings": {
       "typescript": {
+        "FormatCodeSettings": {
+          "BaseIndentSize": 0,
+          "IndentSize": 4,
+          "TabSize": 4,
+          "NewLineCharacter": "\n",
+          "ConvertTabsToSpaces": true,
+          "IndentStyle": 2,
+          "TrimTrailingWhitespace": true,
+          "InsertSpaceAfterCommaDelimiter": true,
+          "InsertSpaceAfterSemicolonInForStatements": true,
+          "InsertSpaceBeforeAndAfterBinaryOperators": true,
+          "InsertSpaceAfterConstructor": false,
+          "InsertSpaceAfterKeywordsInControlFlowStatements": true,
+          "InsertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+          "InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+          "InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+          "InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+          "InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces": null,
+          "InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+          "InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+          "InsertSpaceAfterTypeAssertion": null,
+          "InsertSpaceBeforeFunctionParenthesis": false,
+          "PlaceOpenBraceOnNewLineForFunctions": false,
+          "PlaceOpenBraceOnNewLineForControlBlocks": false,
+          "InsertSpaceBeforeTypeAnnotation": null,
+          "IndentMultiLineObjectLiteralBeginningOnBlankLine": null,
+          "Semicolons": "ignore",
+          "IndentSwitchCase": true
+        },
         "QuotePreference": "",
         "LazyConfiguredProjectsFromExternalProject": false,
         "MaximumHoverLength": 0,

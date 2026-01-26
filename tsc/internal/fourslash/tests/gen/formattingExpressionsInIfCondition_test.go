@@ -20,5 +20,5 @@ func TestFormattingExpressionsInIfCondition(t *testing.T) {
 	f.GoToMarker(t, "1")
 	f.Insert(t, "\n")
 	f.GoToMarker(t, "0")
-	f.VerifyCurrentLineContentIs(t, "    b === 2 ||")
+	f.VerifyCurrentLineContent(t, `    b === 2 ||`)
 }

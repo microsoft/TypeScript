@@ -22,5 +22,5 @@ func TestFormatonkey01(t *testing.T) {
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
 	f.Insert(t, "}")
-	f.VerifyCurrentLineContentIs(t, "        }")
+	f.VerifyCurrentLineContent(t, `        }`)
 }

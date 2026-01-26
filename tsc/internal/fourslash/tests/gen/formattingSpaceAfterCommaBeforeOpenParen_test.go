@@ -17,8 +17,8 @@ foo(a,(<b>c).d)/*2*/`
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "foo(a, (b));")
+	f.VerifyCurrentLineContent(t, `foo(a, (b));`)
 	f.GoToMarker(t, "2")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "foo(a, (<b>c).d);")
+	f.VerifyCurrentLineContent(t, `foo(a, (<b>c).d);`)
 }

@@ -15,5 +15,5 @@ func TestSemicolonFormattingInsideAComment(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "   //;")
+	f.VerifyCurrentLineContent(t, `   //;`)
 }

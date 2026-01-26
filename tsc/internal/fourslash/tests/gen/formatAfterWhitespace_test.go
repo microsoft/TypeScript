@@ -20,5 +20,10 @@ func TestFormatAfterWhitespace(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.InsertLine(t, "")
-	f.VerifyCurrentFileContentIs(t, "function foo()\n{\n    var bar;\n\n\n}")
+	f.VerifyCurrentFileContent(t, `function foo()
+{
+    var bar;
+
+
+}`)
 }

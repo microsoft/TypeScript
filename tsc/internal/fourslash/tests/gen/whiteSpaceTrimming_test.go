@@ -18,5 +18,8 @@ func TestWhiteSpaceTrimming(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "err")
 	f.Insert(t, "\n")
-	f.VerifyCurrentFileContentIs(t, "if (true) {     \n  //    \n\n}")
+	f.VerifyCurrentFileContent(t, `if (true) {     
+  //    
+
+}`)
 }

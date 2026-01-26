@@ -18,5 +18,5 @@ func TestFormatAnyTypeLiteral(t *testing.T) {
 	f.GoToMarker(t, "")
 	f.Insert(t, "}")
 	f.GoToMarker(t, "objLit")
-	f.VerifyCurrentLineContentIs(t, "function foo(x: {}) {")
+	f.VerifyCurrentLineContent(t, `function foo(x: {}) {`)
 }

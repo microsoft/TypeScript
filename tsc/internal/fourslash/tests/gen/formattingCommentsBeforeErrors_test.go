@@ -29,5 +29,5 @@ func TestFormattingCommentsBeforeErrors(t *testing.T) {
 	f.GoToMarker(t, "1")
 	f.Insert(t, "\n")
 	f.GoToMarker(t, "0")
-	f.VerifyCurrentLineContentIs(t, "        // d ")
+	f.VerifyCurrentLineContent(t, `        // d `)
 }

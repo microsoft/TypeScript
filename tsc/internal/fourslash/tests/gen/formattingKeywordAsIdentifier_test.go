@@ -16,5 +16,5 @@ func TestFormattingKeywordAsIdentifier(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "declare var module;")
+	f.VerifyCurrentLineContent(t, `declare var module;`)
 }

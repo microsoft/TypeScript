@@ -3,87 +3,9 @@ package format
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
-
-type IndentStyle int
-
-const (
-	IndentStyleNone IndentStyle = iota
-	IndentStyleBlock
-	IndentStyleSmart
-)
-
-type SemicolonPreference string
-
-const (
-	SemicolonPreferenceIgnore SemicolonPreference = "ignore"
-	SemicolonPreferenceInsert SemicolonPreference = "insert"
-	SemicolonPreferenceRemove SemicolonPreference = "remove"
-)
-
-type EditorSettings struct {
-	BaseIndentSize         int
-	IndentSize             int
-	TabSize                int
-	NewLineCharacter       string
-	ConvertTabsToSpaces    bool
-	IndentStyle            IndentStyle
-	TrimTrailingWhitespace bool
-}
-
-type FormatCodeSettings struct {
-	EditorSettings
-	InsertSpaceAfterCommaDelimiter                              core.Tristate
-	InsertSpaceAfterSemicolonInForStatements                    core.Tristate
-	InsertSpaceBeforeAndAfterBinaryOperators                    core.Tristate
-	InsertSpaceAfterConstructor                                 core.Tristate
-	InsertSpaceAfterKeywordsInControlFlowStatements             core.Tristate
-	InsertSpaceAfterFunctionKeywordForAnonymousFunctions        core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis  core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets     core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces       core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces          core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces core.Tristate
-	InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces  core.Tristate
-	InsertSpaceAfterTypeAssertion                               core.Tristate
-	InsertSpaceBeforeFunctionParenthesis                        core.Tristate
-	PlaceOpenBraceOnNewLineForFunctions                         core.Tristate
-	PlaceOpenBraceOnNewLineForControlBlocks                     core.Tristate
-	InsertSpaceBeforeTypeAnnotation                             core.Tristate
-	IndentMultiLineObjectLiteralBeginningOnBlankLine            core.Tristate
-	Semicolons                                                  SemicolonPreference
-	IndentSwitchCase                                            core.Tristate
-}
-
-func GetDefaultFormatCodeSettings(newLineCharacter string) *FormatCodeSettings {
-	return &FormatCodeSettings{
-		EditorSettings: EditorSettings{
-			IndentSize:             4,
-			TabSize:                4,
-			NewLineCharacter:       newLineCharacter,
-			ConvertTabsToSpaces:    true,
-			IndentStyle:            IndentStyleSmart,
-			TrimTrailingWhitespace: true,
-		},
-		InsertSpaceAfterConstructor:                                 core.TSFalse,
-		InsertSpaceAfterCommaDelimiter:                              core.TSTrue,
-		InsertSpaceAfterSemicolonInForStatements:                    core.TSTrue,
-		InsertSpaceBeforeAndAfterBinaryOperators:                    core.TSTrue,
-		InsertSpaceAfterKeywordsInControlFlowStatements:             core.TSTrue,
-		InsertSpaceAfterFunctionKeywordForAnonymousFunctions:        core.TSFalse,
-		InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis:  core.TSFalse,
-		InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets:     core.TSFalse,
-		InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces:       core.TSTrue,
-		InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: core.TSFalse,
-		InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces:  core.TSFalse,
-		InsertSpaceBeforeFunctionParenthesis:                        core.TSFalse,
-		PlaceOpenBraceOnNewLineForFunctions:                         core.TSFalse,
-		PlaceOpenBraceOnNewLineForControlBlocks:                     core.TSFalse,
-		Semicolons:                                                  SemicolonPreferenceIgnore,
-		IndentSwitchCase:                                            core.TSTrue,
-	}
-}
 
 type FormattingContext struct {
 	currentTokenSpan   TextRangeWithKind
@@ -100,12 +22,12 @@ type FormattingContext struct {
 
 	SourceFile            *ast.SourceFile
 	FormattingRequestKind FormatRequestKind
-	Options               *FormatCodeSettings
+	Options               *lsutil.FormatCodeSettings
 
 	scanner *scanner.Scanner
 }
 
-func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *FormatCodeSettings) *FormattingContext {
+func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *lsutil.FormatCodeSettings) *FormattingContext {
 	res := &FormattingContext{
 		SourceFile:            file,
 		FormattingRequestKind: kind,

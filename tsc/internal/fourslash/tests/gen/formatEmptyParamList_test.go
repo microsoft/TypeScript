@@ -16,5 +16,5 @@ func TestFormatEmptyParamList(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, "}")
-	f.VerifyCurrentLineContentIs(t, "function f(f: function) { }")
+	f.VerifyCurrentLineContent(t, `function f(f: function) { }`)
 }

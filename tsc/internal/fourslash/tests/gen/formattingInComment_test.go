@@ -19,8 +19,8 @@ function foo() {       var x;       } // /*2*/`
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "foo(              ); // ;")
+	f.VerifyCurrentLineContent(t, `foo(              ); // ;`)
 	f.GoToMarker(t, "2")
 	f.Insert(t, "}")
-	f.VerifyCurrentLineContentIs(t, "function foo() {       var x;       } // }")
+	f.VerifyCurrentLineContent(t, `function foo() {       var x;       } // }`)
 }

@@ -18,5 +18,5 @@ break/**/
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "    break;")
+	f.VerifyCurrentLineContent(t, `    break;`)
 }

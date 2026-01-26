@@ -21,5 +21,5 @@ func TestFormattingBlockInCaseClauses(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, "}")
-	f.VerifyCurrentLineContentIs(t, "        }")
+	f.VerifyCurrentLineContent(t, `        }`)
 }

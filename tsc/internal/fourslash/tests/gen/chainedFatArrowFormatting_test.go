@@ -16,5 +16,5 @@ func TestChainedFatArrowFormatting(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "var fn = () => () => null;")
+	f.VerifyCurrentLineContent(t, `var fn = () => () => null;`)
 }

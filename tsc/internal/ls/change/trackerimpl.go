@@ -112,11 +112,11 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 	return core.ApplyBulkEdits(text, changes)
 }
 
-func getFormatCodeSettingsForWriting(options *format.FormatCodeSettings, sourceFile *ast.SourceFile) *format.FormatCodeSettings {
-	shouldAutoDetectSemicolonPreference := options.Semicolons == format.SemicolonPreferenceIgnore
-	shouldRemoveSemicolons := options.Semicolons == format.SemicolonPreferenceRemove || shouldAutoDetectSemicolonPreference && !lsutil.ProbablyUsesSemicolons(sourceFile)
+func getFormatCodeSettingsForWriting(options *lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) *lsutil.FormatCodeSettings {
+	shouldAutoDetectSemicolonPreference := options.Semicolons == lsutil.SemicolonPreferenceIgnore
+	shouldRemoveSemicolons := options.Semicolons == lsutil.SemicolonPreferenceRemove || shouldAutoDetectSemicolonPreference && !lsutil.ProbablyUsesSemicolons(sourceFile)
 	if shouldRemoveSemicolons {
-		options.Semicolons = format.SemicolonPreferenceRemove
+		options.Semicolons = lsutil.SemicolonPreferenceRemove
 	}
 
 	return options

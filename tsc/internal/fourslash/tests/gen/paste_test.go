@@ -16,5 +16,5 @@ func TestPaste(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Paste(t, "x,y,z")
-	f.VerifyCurrentLineContentIs(t, "fn(x, y, z);")
+	f.VerifyCurrentLineContent(t, `fn(x, y, z);`)
 }

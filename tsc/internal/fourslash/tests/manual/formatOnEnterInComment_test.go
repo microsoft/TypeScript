@@ -17,5 +17,8 @@ func TestFormatOnEnterInComment(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.InsertLine(t, "")
-	f.VerifyCurrentFileContentIs(t, "  /**\n   * \n\n   */")
+	f.VerifyCurrentFileContent(t, `  /**
+   * 
+
+   */`)
 }

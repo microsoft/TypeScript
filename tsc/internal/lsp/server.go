@@ -272,30 +272,29 @@ func (s *Server) RefreshCodeLens(ctx context.Context) error {
 	return nil
 }
 
-func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserPreferences, error) {
+func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	if !caps.Workspace.Configuration {
-		// if no configuration request capapbility, return default preferences
-		return s.session.NewUserPreferences(), nil
+		// if no configuration request capapbility, return default config
+		return lsutil.NewUserConfig(nil), nil
 	}
 	configs, err := sendClientRequest(ctx, s, lsproto.WorkspaceConfigurationInfo, &lsproto.ConfigurationParams{
 		Items: []*lsproto.ConfigurationItem{
 			{
+				Section: ptrTo("js/ts"),
+			},
+			{
 				Section: ptrTo("typescript"),
+			},
+			{
+				Section: ptrTo("javascript"),
 			},
 		},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("configure request failed: %w", err)
+		return &lsutil.UserConfig{}, fmt.Errorf("configure request failed: %w", err)
 	}
-	s.logger.Infof("configuration: %+v, %T", configs, configs)
-	userPreferences := s.session.NewUserPreferences()
-	for _, item := range configs {
-		if parsed := userPreferences.Parse(item); parsed != nil {
-			return parsed, nil
-		}
-	}
-	return userPreferences, nil
+	return lsutil.ParseNewUserConfig(configs), nil
 }
 
 func (s *Server) Run(ctx context.Context) error {
@@ -961,7 +960,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	if err != nil {
 		return err
 	}
-	s.session.InitializeWithConfig(userPreferences)
+	s.session.InitializeWithUserConfig(userPreferences)
 
 	_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
@@ -971,8 +970,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 				RegisterOptions: &lsproto.RegisterOptions{
 					DidChangeConfiguration: &lsproto.DidChangeConfigurationRegistrationOptions{
 						Section: &lsproto.StringOrStrings{
-							// !!! Both the 'javascript' and 'js/ts' scopes need to be watched for settings as well.
-							Strings: &[]string{"typescript"},
+							Strings: &[]string{"js/ts", "typescript", "javascript"},
 						},
 					},
 				},
@@ -1004,17 +1002,15 @@ func (s *Server) handleExit(ctx context.Context, params any) error {
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
-	settings, ok := params.Settings.(map[string]any)
-	if !ok {
+	// !!! only implemented because needed for fourslash
+	if params.Settings == nil {
 		return nil
+	} else if settings, ok := params.Settings.([]any); ok {
+		s.session.Configure(lsutil.ParseNewUserConfig(settings))
+	} else if settings, ok := params.Settings.(map[string]any); ok {
+		// fourslash case
+		s.session.Configure(lsutil.ParseNewUserConfig([]any{settings["js/ts"], settings["typescript"], settings["javascript"]}))
 	}
-	// !!! Both the 'javascript' and 'js/ts' scopes need to be checked for settings as well.
-	tsSettings := settings["typescript"]
-	userPreferences := s.session.UserPreferences()
-	if parsed := userPreferences.Parse(tsSettings); parsed != nil {
-		userPreferences = parsed
-	}
-	s.session.Configure(userPreferences)
 	return nil
 }
 

@@ -23,5 +23,5 @@ return true/*1*/
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "        return true;")
+	f.VerifyCurrentLineContent(t, `        return true;`)
 }

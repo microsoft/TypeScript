@@ -19,5 +19,5 @@ func TestConstructorBraceFormatting(t *testing.T) {
 	f.GoToMarker(t, "")
 	f.Insert(t, "}")
 	f.GoToMarker(t, "target")
-	f.VerifyCurrentLineContentIs(t, "    constructor() { }")
+	f.VerifyCurrentLineContent(t, `    constructor() { }`)
 }

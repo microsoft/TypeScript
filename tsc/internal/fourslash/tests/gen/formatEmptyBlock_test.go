@@ -17,5 +17,5 @@ func TestFormatEmptyBlock(t *testing.T) {
 	f.GoToEOF(t)
 	f.Insert(t, "\n")
 	f.GoToBOF(t)
-	f.VerifyCurrentLineContentIs(t, "{ }")
+	f.VerifyCurrentLineContent(t, `{ }`)
 }

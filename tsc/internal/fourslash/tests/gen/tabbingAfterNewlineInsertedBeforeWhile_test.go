@@ -18,5 +18,5 @@ func TestTabbingAfterNewlineInsertedBeforeWhile(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.InsertLine(t, "")
-	f.VerifyCurrentLineContentIs(t, "    while (true) { }")
+	f.VerifyCurrentLineContent(t, `    while (true) { }`)
 }

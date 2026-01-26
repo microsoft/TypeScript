@@ -210,10 +210,11 @@ type Registry struct {
 	specifierCache map[tspath.Path]*collections.SyncMap[tspath.Path, string]
 }
 
-func NewRegistry(toPath func(fileName string) tspath.Path) *Registry {
+func NewRegistry(toPath func(fileName string) tspath.Path, preferences *lsutil.UserPreferences) *Registry {
 	return &Registry{
-		toPath:      toPath,
-		directories: make(map[tspath.Path]*directory),
+		toPath:          toPath,
+		userPreferences: preferences,
+		directories:     make(map[tspath.Path]*directory),
 	}
 }
 

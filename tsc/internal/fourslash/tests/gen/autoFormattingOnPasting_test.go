@@ -18,5 +18,10 @@ func TestAutoFormattingOnPasting(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Paste(t, " class TestClass{\nprivate   foo;\npublic testMethod( )\n{}\n}")
-	f.VerifyCurrentFileContentIs(t, "module TestModule {\n    class TestClass {\n        private foo;\n        public testMethod() { }\n    }\n}")
+	f.VerifyCurrentFileContent(t, `module TestModule {
+    class TestClass {
+        private foo;
+        public testMethod() { }
+    }
+}`)
 }

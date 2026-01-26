@@ -15,84 +15,87 @@ import (
 ///
 
 type (
-	optionSelector                  = func(options *FormatCodeSettings) core.Tristate
-	anyOptionSelector[T comparable] = func(options *FormatCodeSettings) T
+	optionSelector                  = func(options *lsutil.FormatCodeSettings) core.Tristate
+	anyOptionSelector[T comparable] = func(options *lsutil.FormatCodeSettings) T
 )
 
-func semicolonOption(options *FormatCodeSettings) SemicolonPreference { return options.Semicolons }
-func insertSpaceAfterCommaDelimiterOption(options *FormatCodeSettings) core.Tristate {
+func semicolonOption(options *lsutil.FormatCodeSettings) lsutil.SemicolonPreference {
+	return options.Semicolons
+}
+
+func insertSpaceAfterCommaDelimiterOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterCommaDelimiter
 }
 
-func insertSpaceAfterSemicolonInForStatementsOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterSemicolonInForStatementsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterSemicolonInForStatements
 }
 
-func insertSpaceBeforeAndAfterBinaryOperatorsOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeAndAfterBinaryOperatorsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeAndAfterBinaryOperators
 }
 
-func insertSpaceAfterConstructorOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterConstructorOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterConstructor
 }
 
-func insertSpaceAfterKeywordsInControlFlowStatementsOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterKeywordsInControlFlowStatementsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterKeywordsInControlFlowStatements
 }
 
-func insertSpaceAfterFunctionKeywordForAnonymousFunctionsOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterFunctionKeywordForAnonymousFunctionsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterFunctionKeywordForAnonymousFunctions
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesisOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesisOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracketsOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracketsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracesOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingEmptyBracesOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingEmptyBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingTemplateStringBracesOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingTemplateStringBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBracesOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces
 }
 
-func insertSpaceAfterTypeAssertionOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceAfterTypeAssertionOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterTypeAssertion
 }
 
-func insertSpaceBeforeFunctionParenthesisOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeFunctionParenthesisOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeFunctionParenthesis
 }
 
-func placeOpenBraceOnNewLineForFunctionsOption(options *FormatCodeSettings) core.Tristate {
+func placeOpenBraceOnNewLineForFunctionsOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.PlaceOpenBraceOnNewLineForFunctions
 }
 
-func placeOpenBraceOnNewLineForControlBlocksOption(options *FormatCodeSettings) core.Tristate {
+func placeOpenBraceOnNewLineForControlBlocksOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.PlaceOpenBraceOnNewLineForControlBlocks
 }
 
-func insertSpaceBeforeTypeAnnotationOption(options *FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeTypeAnnotationOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeTypeAnnotation
 }
 
-func indentMultiLineObjectLiteralBeginningOnBlankLineOption(options *FormatCodeSettings) core.Tristate {
+func indentMultiLineObjectLiteralBeginningOnBlankLineOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.IndentMultiLineObjectLiteralBeginningOnBlankLine
 }
 
-func indentSwitchCaseOption(options *FormatCodeSettings) core.Tristate {
+func indentSwitchCaseOption(options *lsutil.FormatCodeSettings) core.Tristate {
 	return options.IndentSwitchCase
 }
 

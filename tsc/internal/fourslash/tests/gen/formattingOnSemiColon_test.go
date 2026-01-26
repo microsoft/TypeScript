@@ -16,5 +16,5 @@ func TestFormattingOnSemiColon(t *testing.T) {
 	defer done()
 	f.GoToEOF(t)
 	f.Insert(t, ";")
-	f.VerifyCurrentFileContentIs(t, "var a = b + c ^ d - e * ++f;")
+	f.VerifyCurrentFileContent(t, `var a = b + c ^ d - e * ++f;`)
 }

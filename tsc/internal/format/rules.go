@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 )
 
 func getAllRules() []ruleSpec {
@@ -377,8 +378,8 @@ func getAllRules() []ruleSpec {
 		rule("SpaceBeforeTypeAnnotation", anyToken, []ast.Kind{ast.KindQuestionToken, ast.KindColonToken}, []contextPredicate{isOptionEnabled(insertSpaceBeforeTypeAnnotationOption), isNonJsxSameLineTokenContext, isTypeAnnotationContext}, ruleActionInsertSpace),
 		rule("NoSpaceBeforeTypeAnnotation", anyToken, []ast.Kind{ast.KindQuestionToken, ast.KindColonToken}, []contextPredicate{isOptionDisabledOrUndefined(insertSpaceBeforeTypeAnnotationOption), isNonJsxSameLineTokenContext, isTypeAnnotationContext}, ruleActionDeleteSpace),
 
-		rule("NoOptionalSemicolon", ast.KindSemicolonToken, anyTokenIncludingEOF, []contextPredicate{optionEquals(semicolonOption, SemicolonPreferenceRemove), isSemicolonDeletionContext}, ruleActionDeleteToken),
-		rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, []contextPredicate{optionEquals(semicolonOption, SemicolonPreferenceInsert), isSemicolonInsertionContext}, ruleActionInsertTrailingSemicolon),
+		rule("NoOptionalSemicolon", ast.KindSemicolonToken, anyTokenIncludingEOF, []contextPredicate{optionEquals(semicolonOption, lsutil.SemicolonPreferenceRemove), isSemicolonDeletionContext}, ruleActionDeleteToken),
+		rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, []contextPredicate{optionEquals(semicolonOption, lsutil.SemicolonPreferenceInsert), isSemicolonInsertionContext}, ruleActionInsertTrailingSemicolon),
 	}
 
 	// These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.

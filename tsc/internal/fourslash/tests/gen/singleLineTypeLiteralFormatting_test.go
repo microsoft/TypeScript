@@ -16,5 +16,5 @@ func TestSingleLineTypeLiteralFormatting(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "function of1(b: { r: { c: number;")
+	f.VerifyCurrentLineContent(t, `function of1(b: { r: { c: number;`)
 }

@@ -16,5 +16,5 @@ func TestFormattingOfChainedLambda(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "var fn = (x: string) => () => alert(x);")
+	f.VerifyCurrentLineContent(t, `var fn = (x: string) => () => alert(x);`)
 }

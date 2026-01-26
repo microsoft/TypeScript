@@ -8,11 +8,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
-func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	startline, startpos := scanner.GetECMALineAndCharacterOfPosition(sourceFile, scanner.GetTokenPosOfNode(n, sourceFile, false))
 	return getIndentationForNodeWorker(n, startline, startpos, ignoreActualIndentationRange /*indentationDelta*/, 0, sourceFile /*isNextChild*/, false, options)
 }
@@ -25,7 +26,7 @@ func getIndentationForNodeWorker(
 	indentationDelta int,
 	sourceFile *ast.SourceFile,
 	isNextChild bool,
-	options *FormatCodeSettings,
+	options *lsutil.FormatCodeSettings,
 ) int {
 	parent := current.Parent
 
@@ -116,7 +117,7 @@ func getIndentationForNodeWorker(
 /*
 * Function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
  */
-func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLine int, currentChar int, parentAndChildShareLine bool, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLine int, currentChar int, parentAndChildShareLine bool, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	// actual indentation is used for statements\declarations if one of cases below is true:
 	// - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
 	// - parent and child are not on the same line
@@ -138,7 +139,7 @@ func isArgumentAndStartLineOverlapsExpressionBeingCalled(parent *ast.Node, child
 	return expressionOfCallExpressionEndLine == childStartLine
 }
 
-func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile, options *FormatCodeSettings, listIndentsChild bool) int {
+func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings, listIndentsChild bool) int {
 	if node.Parent != nil && node.Parent.Kind == ast.KindVariableDeclarationList {
 		// VariableDeclarationList has no wrapping tokens
 		return -1
@@ -165,7 +166,7 @@ func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile,
 	return -1
 }
 
-func getActualIndentationForListStartLine(list *ast.NodeList, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func getActualIndentationForListStartLine(list *ast.NodeList, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	if list == nil {
 		return -1
 	}
@@ -173,7 +174,7 @@ func getActualIndentationForListStartLine(list *ast.NodeList, sourceFile *ast.So
 	return findColumnForFirstNonWhitespaceCharacterInLine(line, char, sourceFile, options)
 }
 
-func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	debug.Assert(list != nil && index >= 0 && index < len(list.Nodes))
 
 	node := list.Nodes[index]
@@ -198,12 +199,12 @@ func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *
 	return -1
 }
 
-func findColumnForFirstNonWhitespaceCharacterInLine(line int, char int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func findColumnForFirstNonWhitespaceCharacterInLine(line int, char int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	lineStart := scanner.GetECMAPositionOfLineAndCharacter(sourceFile, line, 0)
 	return FindFirstNonWhitespaceColumn(lineStart, lineStart+char, sourceFile, options)
 }
 
-func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *FormatCodeSettings) int {
+func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	_, col := findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options)
 	return col
 }
@@ -215,7 +216,7 @@ func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.Sour
 * value of 'character' for '$' is 3
 * value of 'column' for '$' is 6 (assuming that tab size is 4)
  */
-func findFirstNonWhitespaceCharacterAndColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *FormatCodeSettings) (character int, column int) {
+func findFirstNonWhitespaceCharacterAndColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) (character int, column int) {
 	character = 0
 	column = 0
 	text := sourceFile.Text()
@@ -375,7 +376,7 @@ func isControlFlowEndingStatement(kind ast.Kind, parentKind ast.Kind) bool {
 * True when the parent node should indent the given child by an explicit rule.
 * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
  */
-func ShouldIndentChildNode(settings *FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, isNextChildArg ...bool) bool {
+func ShouldIndentChildNode(settings *lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, isNextChildArg ...bool) bool {
 	isNextChild := false
 	if len(isNextChildArg) > 0 {
 		isNextChild = isNextChildArg[0]
@@ -384,7 +385,7 @@ func ShouldIndentChildNode(settings *FormatCodeSettings, parent *ast.Node, child
 	return NodeWillIndentChild(settings, parent, child, sourceFile, false) && !(isNextChild && child != nil && isControlFlowEndingStatement(child.Kind, parent.Kind))
 }
 
-func NodeWillIndentChild(settings *FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, indentByDefault bool) bool {
+func NodeWillIndentChild(settings *lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, indentByDefault bool) bool {
 	childKind := ast.KindUnknown
 	if child != nil {
 		childKind = child.Kind

@@ -16,5 +16,5 @@ func TestSemicolonFormatting(t *testing.T) {
 	defer done()
 	f.GoToEOF(t)
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "function of1(b: { r: { c: number;")
+	f.VerifyCurrentLineContent(t, `function of1(b: { r: { c: number;`)
 }

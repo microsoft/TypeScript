@@ -18,5 +18,5 @@ func TestFormattingOnEnterInStrings(t *testing.T) {
 	f.InsertLine(t, "")
 	f.InsertLine(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContentIs(t, "var x = \"unclosed string literal\\")
+	f.VerifyCurrentLineContent(t, "var x = \"unclosed string literal\\")
 }

@@ -25,5 +25,5 @@ let templateTail = ` + "`" + `/*    ${1 + 2}    /*4*/` + "`" + `;`
 	f.Insert(t, "\n")
 	f.GoToMarker(t, "4")
 	f.Insert(t, "\n")
-	f.VerifyCurrentFileContentIs(t, "let noSubTemplate = `/*    \n`;\nlet templateHead = `/*    \n${1 + 2}`;\nlet templateMiddle = `/*    ${1 + 2\n    }`;\nlet templateTail = `/*    ${1 + 2}    \n`;")
+	f.VerifyCurrentFileContent(t, "let noSubTemplate = `/*    \n`;\nlet templateHead = `/*    \n${1 + 2}`;\nlet templateMiddle = `/*    ${1 + 2\n    }`;\nlet templateTail = `/*    ${1 + 2}    \n`;")
 }

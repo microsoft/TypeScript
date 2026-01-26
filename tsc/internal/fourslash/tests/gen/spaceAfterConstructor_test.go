@@ -21,5 +21,5 @@ func TestSpaceAfterConstructor(t *testing.T) {
 	f.GoToMarker(t, "2")
 	f.Insert(t, "}")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContentIs(t, "    constructor(processId: number) {")
+	f.VerifyCurrentLineContent(t, `    constructor(processId: number) {`)
 }

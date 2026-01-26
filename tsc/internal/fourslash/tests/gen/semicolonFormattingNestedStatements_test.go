@@ -21,9 +21,9 @@ var x = 0/*innermost*/
 	defer done()
 	f.GoToMarker(t, "innermost")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "        var x = 0;")
+	f.VerifyCurrentLineContent(t, `        var x = 0;`)
 	f.GoToMarker(t, "directParent")
-	f.VerifyCurrentLineContentIs(t, "    if (true)")
+	f.VerifyCurrentLineContent(t, `    if (true)`)
 	f.GoToMarker(t, "parentOutsideBlock")
-	f.VerifyCurrentLineContentIs(t, "if (true)")
+	f.VerifyCurrentLineContent(t, `if (true)`)
 }

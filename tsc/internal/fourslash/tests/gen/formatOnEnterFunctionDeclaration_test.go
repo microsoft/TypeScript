@@ -17,5 +17,5 @@ func TestFormatOnEnterFunctionDeclaration(t *testing.T) {
 	f.GoToMarker(t, "1")
 	f.InsertLine(t, "")
 	f.GoToMarker(t, "0")
-	f.VerifyCurrentLineContentIs(t, "function listAPIFiles(path: string): string[] {")
+	f.VerifyCurrentLineContent(t, `function listAPIFiles(path: string): string[] {`)
 }

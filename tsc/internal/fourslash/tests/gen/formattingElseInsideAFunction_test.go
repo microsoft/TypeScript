@@ -22,5 +22,5 @@ func TestFormattingElseInsideAFunction(t *testing.T) {
 	f.GoToMarker(t, "2")
 	f.InsertLine(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContentIs(t, "    } else {")
+	f.VerifyCurrentLineContent(t, `    } else {`)
 }

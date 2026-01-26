@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
@@ -28,16 +29,18 @@ const (
 	formatNewlineKey
 )
 
-func WithFormatCodeSettings(ctx context.Context, options *FormatCodeSettings, newLine string) context.Context {
+func WithFormatCodeSettings(ctx context.Context, options *lsutil.FormatCodeSettings, newLine string) context.Context {
 	ctx = context.WithValue(ctx, formatOptionsKey, options)
 	ctx = context.WithValue(ctx, formatNewlineKey, newLine)
 	// In strada, the rules map was both globally cached *and* cached into the context, for some reason. We skip that here and just use the global one.
 	return ctx
 }
 
-func GetFormatCodeSettingsFromContext(ctx context.Context) *FormatCodeSettings {
-	opt := ctx.Value(formatOptionsKey).(*FormatCodeSettings)
-	return opt
+func GetFormatCodeSettingsFromContext(ctx context.Context) *lsutil.FormatCodeSettings {
+	if opt := ctx.Value(formatOptionsKey); opt != nil {
+		return opt.(*lsutil.FormatCodeSettings)
+	}
+	return nil
 }
 
 func GetNewLineOrDefaultFromContext(ctx context.Context) string { // TODO: Move into broader LS - more than just the formatter uses the newline editor setting/host new line

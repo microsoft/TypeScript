@@ -16,5 +16,5 @@ func TestSemicolonFormattingAfterArrayLiteral(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "[1, 2];")
+	f.VerifyCurrentLineContent(t, `[1, 2];`)
 }

@@ -18,5 +18,5 @@ func TestFormattingTemplatesWithNewline(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 	f.Insert(t, "\n")
-	f.VerifyCurrentLineContentIs(t, "1")
+	f.VerifyCurrentLineContent(t, `1`)
 }

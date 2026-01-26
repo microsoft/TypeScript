@@ -22,5 +22,5 @@ catch (e)
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "    var x = 1;")
+	f.VerifyCurrentLineContent(t, `    var x = 1;`)
 }

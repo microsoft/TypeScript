@@ -18,5 +18,5 @@ func TestFormattingOnCloseBrace(t *testing.T) {
 	f.GoToMarker(t, "")
 	f.Insert(t, "}")
 	f.GoToBOF(t)
-	f.VerifyCurrentLineContentIs(t, "class foo {")
+	f.VerifyCurrentLineContent(t, `class foo {`)
 }

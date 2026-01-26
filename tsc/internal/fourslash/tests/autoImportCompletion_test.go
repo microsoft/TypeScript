@@ -44,8 +44,8 @@ a/**/
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		UserPreferences: &lsutil.UserPreferences{
 			// completion autoimport preferences off; this tests if fourslash server communication correctly registers changes in user preferences
-			IncludeCompletionsForModuleExports:    core.TSUnknown,
-			IncludeCompletionsForImportStatements: core.TSUnknown,
+			IncludeCompletionsForModuleExports:    core.TSFalse,
+			IncludeCompletionsForImportStatements: core.TSFalse,
 		},
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

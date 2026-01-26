@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
-	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/locale"
 
 	// "github.com/microsoft/typescript-go/internal/ls"
@@ -55,7 +54,7 @@ type importAdder struct {
 	ctx           context.Context
 	checker       *checker.Checker
 	view          *View
-	formatOptions *format.FormatCodeSettings
+	formatOptions *lsutil.FormatCodeSettings
 	converters    *lsconv.Converters
 	preferences   *lsutil.UserPreferences
 
@@ -73,7 +72,7 @@ func NewImportAdder(
 	checker *checker.Checker,
 	file *ast.SourceFile,
 	view *View,
-	formatOptions *format.FormatCodeSettings,
+	formatOptions *lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences *lsutil.UserPreferences,
 ) ImportAdder {

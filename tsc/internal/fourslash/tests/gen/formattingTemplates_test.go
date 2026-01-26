@@ -17,8 +17,8 @@ String.call ` + "`" + `${123} ${456}` + "`" + `/*2*/`
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "String.call`${123}`;")
+	f.VerifyCurrentLineContent(t, "String.call`${123}`;")
 	f.GoToMarker(t, "2")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "String.call`${123} ${456}`;")
+	f.VerifyCurrentLineContent(t, "String.call`${123} ${456}`;")
 }

@@ -891,13 +891,13 @@ func TestSession(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 
-		session.Configure(&lsutil.UserPreferences{})
-
+		session.Configure(lsutil.NewUserConfig(nil))
 		// Change user preferences for code lens and inlay hints.
-		newPrefs := session.UserPreferences()
+		newPrefs := session.Config().TS()
 		newPrefs.CodeLens.ReferencesCodeLensEnabled = !newPrefs.CodeLens.ReferencesCodeLensEnabled
 		newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints = !newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints
-		session.Configure(newPrefs)
+
+		session.Configure(lsutil.NewUserConfig(newPrefs))
 
 		codeLensRefreshCalls := utils.Client().RefreshCodeLensCalls()
 		inlayHintsRefreshCalls := utils.Client().RefreshInlayHintsCalls()

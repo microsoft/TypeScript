@@ -16,5 +16,5 @@ func TestFormattingEqualsBeforeBracketInTypeAlias(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "1")
 	f.Insert(t, ";")
-	f.VerifyCurrentLineContentIs(t, "type X = [number];")
+	f.VerifyCurrentLineContent(t, `type X = [number];`)
 }

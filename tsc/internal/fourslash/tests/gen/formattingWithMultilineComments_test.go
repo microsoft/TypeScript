@@ -18,5 +18,5 @@ func TestFormattingWithMultilineComments(t *testing.T) {
 	f.GoToMarker(t, "1")
 	f.InsertLine(t, "")
 	f.GoToMarker(t, "2")
-	f.VerifyCurrentLineContentIs(t, "         */() => {")
+	f.VerifyCurrentLineContent(t, `         */() => {`)
 }

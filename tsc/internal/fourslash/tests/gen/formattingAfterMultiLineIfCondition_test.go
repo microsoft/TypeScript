@@ -22,5 +22,5 @@ func TestFormattingAfterMultiLineIfCondition(t *testing.T) {
 	f.GoToMarker(t, "")
 	f.Insert(t, "}")
 	f.GoToMarker(t, "comment")
-	f.VerifyCurrentLineContentIs(t, "    // This is a comment")
+	f.VerifyCurrentLineContent(t, `    // This is a comment`)
 }
