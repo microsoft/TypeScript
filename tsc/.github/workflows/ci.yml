@@ -30,7 +30,7 @@ jobs:
           docker-images: false
           swap-storage: false
           dotnet: false
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
@@ -50,7 +50,7 @@ jobs:
   extension:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
 
@@ -116,7 +116,7 @@ jobs:
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows-latest' }}
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: ${{ !matrix.config.no-submodules }}
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -211,7 +211,7 @@ jobs:
           docker-images: false
           swap-storage: false
           dotnet: false
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
@@ -234,7 +234,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
@@ -252,7 +252,7 @@ jobs:
           docker-images: false
           swap-storage: false
           dotnet: false
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: true
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -284,7 +284,7 @@ jobs:
   tidy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/setup-go
 
       - run: go mod tidy -diff
@@ -299,7 +299,7 @@ jobs:
           docker-images: false
           swap-storage: false
           dotnet: false
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: true
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -327,7 +327,7 @@ jobs:
   misc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/setup-go
 
       - run: go -C ./_tools run ./cmd/checkmodpaths $PWD
@@ -341,7 +341,7 @@ jobs:
           docker-images: false
           swap-storage: false
           dotnet: false
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: true
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
