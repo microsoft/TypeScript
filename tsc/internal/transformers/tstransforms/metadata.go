@@ -193,7 +193,9 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 		}
 		if len(originalNodes) == 0 {
 			res := tx.Factory().NewModifierList(metadata)
-			res.Loc = list.Loc
+			if list != nil {
+				res.Loc = list.Loc
+			}
 			return res
 		}
 		var modifiersArray []*ast.Node
