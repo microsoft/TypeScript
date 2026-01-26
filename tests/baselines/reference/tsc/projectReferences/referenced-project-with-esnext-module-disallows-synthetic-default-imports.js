@@ -6,14 +6,19 @@ Input::
     "composite": true,
     "declaration": true,
     "module": "esnext",
-    "moduleResolution": "bundler"
-  }
+    "moduleResolution": "bundler",
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": [
+    "src"
+  ]
 }
 
-//// [/home/src/workspaces/project/lib/utils.ts]
+//// [/home/src/workspaces/project/lib/src/utils.ts]
 export const test = () => 'test';
 
-//// [/home/src/workspaces/project/lib/utils.d.ts]
+//// [/home/src/workspaces/project/lib/dist/utils.d.ts]
 export declare const test: () => string;
 
 //// [/home/src/workspaces/project/app/tsconfig.json]
@@ -30,8 +35,11 @@ export declare const test: () => string;
 }
 
 //// [/home/src/workspaces/project/app/index.ts]
-import Test from '../lib/utils';
-console.log(Test.test());
+
+                    import TestSrc from '../lib/src/utils'; // Error
+                    import TestDecl from '../lib/dist/utils'; // Error
+                    console.log(TestSrc.test());
+                    console.log(TestDecl.test());
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
@@ -50,12 +58,15 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js --p app --pretty false
 Output::
-app/index.ts(1,8): error TS1192: Module '"/home/src/workspaces/project/lib/utils"' has no default export.
+app/index.ts(2,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/utils"' has no default export.
+app/index.ts(3,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/utils"' has no default export.
 
 
 //// [/home/src/workspaces/project/app/index.js]
-import Test from '../lib/utils';
-console.log(Test.test());
+import TestSrc from '../lib/src/utils'; // Error
+import TestDecl from '../lib/dist/utils'; // Error
+console.log(TestSrc.test());
+console.log(TestDecl.test());
 
 
 

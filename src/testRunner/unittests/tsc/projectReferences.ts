@@ -101,10 +101,13 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         declaration: true,
                         module: "esnext",
                         moduleResolution: "bundler",
+                        rootDir: "src",
+                        outDir: "dist",
                     },
+                    include: ["src"],
                 }),
-                "/home/src/workspaces/project/lib/utils.ts": "export const test = () => 'test';",
-                "/home/src/workspaces/project/lib/utils.d.ts": "export declare const test: () => string;",
+                "/home/src/workspaces/project/lib/src/utils.ts": "export const test = () => 'test';",
+                "/home/src/workspaces/project/lib/dist/utils.d.ts": "export declare const test: () => string;",
                 "/home/src/workspaces/project/app/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "esnext",
@@ -114,7 +117,11 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../lib" },
                     ],
                 }),
-                "/home/src/workspaces/project/app/index.ts": `import Test from '../lib/utils';\nconsole.log(Test.test());`,
+                "/home/src/workspaces/project/app/index.ts": `
+                    import TestSrc from '../lib/src/utils'; // Error
+                    import TestDecl from '../lib/dist/utils'; // Error
+                    console.log(TestSrc.test());
+                    console.log(TestDecl.test());`,
             }),
         commandLineArgs: ["--p", "app", "--pretty", "false"],
     });
