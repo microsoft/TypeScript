@@ -23464,22 +23464,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function getApparentMappedTypeKeys(nameType: Type, mappedType: MappedType, forSource: boolean) {
-            const modifiersType = getApparentType(getModifiersTypeFromMappedType(mappedType));
+        function getApparentTargetMappedTypeKeys(nameType: Type, targetType: MappedType) {
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(targetType));
             const mappedKeys: Type[] = [];
             forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
                 modifiersType,
                 TypeFlags.StringOrNumberLiteralOrUnique,
                 /*stringsOnly*/ false,
-                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(mappedType.mapper, getTypeParameterFromMappedType(mappedType), t))),
+                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t))),
             );
-            const apparentKeys = getUnionType(mappedKeys);
-            if (forSource && apparentKeys.flags & TypeFlags.Never) {
-                // modifiers type of mapped type is often `unknown`, `keyof unknown` is `never` and that's assignable to everything
-                // letting this through is too permissive so we use the apparent type of an index type here instead
-                return stringNumberSymbolType;
-            }
-            return apparentKeys;
+            return getUnionType(mappedKeys);
         }
 
         function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
@@ -23632,6 +23626,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return result;
                     }
                 }
+                if (sourceFlags & TypeFlags.TypeParameter && source.symbol && some(source.symbol.declarations, d => d.parent.kind === SyntaxKind.MappedType)) {
+                    const constraint = getConstraintOfTypeParameter(source);
+                    if (constraint && isRelatedTo(constraint, target, RecursionFlags.Both, /*reportErrors*/ false) === Ternary.True) {
+                        return Ternary.True;
+                    }
+                }
                 if (isTupleType(targetType)) {
                     // An index type can have a tuple type target when the tuple type contains variadic elements.
                     // Check if the source is related to the known keys of the tuple type.
@@ -23663,7 +23663,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (nameType && isMappedTypeWithKeyofConstraintDeclaration(targetType)) {
                             // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
                             // missing from the `constraintType` which will otherwise be mapped in the object
-                            const mappedKeys = getApparentMappedTypeKeys(nameType, targetType, /*forSource*/ false);
+                            const mappedKeys = getApparentTargetMappedTypeKeys(nameType, targetType);
                             // We still need to include the non-apparent (and thus still generic) keys in the target side of the comparison (in case they're in the source side)
                             targetKeys = getUnionType([mappedKeys, nameType]);
                         }
@@ -23865,12 +23865,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isDeferredMappedIndex) {
                     const mappedType = (source as IndexType).type as MappedType;
                     const nameType = getNameTypeFromMappedType(mappedType);
-                    // Unlike on the target side, on the source side we do *not* include the generic part of the `nameType`, since that comes from a
-                    // (potentially anonymous) mapped type local type parameter, so that'd never assign outside the mapped type body, but we still want to
-                    // allow assignments of index types of identical (or similar enough) mapped types.
-                    // eg, `keyof {[X in keyof A]: Obj[X]}` should be assignable to `keyof {[Y in keyof A]: Tup[Y]}` because both map over the same set of keys (`keyof A`).
-                    // Without this source-side breakdown, a `keyof {[X in keyof A]: Obj[X]}` style type won't be assignable to anything except itself, which is much too strict.
-                    const sourceMappedKeys = nameType && isMappedTypeWithKeyofConstraintDeclaration(mappedType) ? getApparentMappedTypeKeys(nameType, mappedType, /*forSource*/ true) : (nameType || getConstraintTypeFromMappedType(mappedType));
+                    const sourceMappedKeys = nameType || getConstraintTypeFromMappedType(mappedType);
                     if (result = isRelatedTo(sourceMappedKeys, target, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
@@ -24117,7 +24112,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMapper : reportUnreliableMapper);
                 if (result = isRelatedTo(targetConstraint, sourceConstraint, RecursionFlags.Both, reportErrors)) {
                     const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
-                    if (instantiateType(getNameTypeFromMappedType(source), mapper) === instantiateType(getNameTypeFromMappedType(target), mapper)) {
+                    if (isTypeIdenticalTo(instantiateType(getNameTypeFromMappedType(source), mapper) ?? unknownType, instantiateType(getNameTypeFromMappedType(target), mapper) ?? unknownType)) {
                         return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), RecursionFlags.Both, reportErrors);
                     }
                 }
