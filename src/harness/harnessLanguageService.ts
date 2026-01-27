@@ -128,9 +128,9 @@ export interface LanguageServiceAdapter {
     getLogger(): LoggerWithInMemoryLogs | undefined;
 }
 
-/** Create VFS with libs mounted at builtFolder (/.ts) */
+/** Create VFS with libs only at fourslashLibFolder */
 function createLanguageServiceVfs(): vfs.FileSystem {
-    return vfs.createFromFileSystem(IO, /*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+    return vfs.createFourslashVfs(IO, /*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
 }
 
 const sharedLibDocumentRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
