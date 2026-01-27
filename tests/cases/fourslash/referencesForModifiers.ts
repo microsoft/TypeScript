@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////[|/*declareModifier*/declare /*abstractModifier*/abstract class C1 {
 ////    [|/*staticModifier*/static a;|]
 ////    [|/*readonlyModifier*/readonly b;|]

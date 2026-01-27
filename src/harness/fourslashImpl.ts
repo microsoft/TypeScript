@@ -513,7 +513,13 @@ export class TestState {
     }
     private tryGetFileContent(fileName: string): string | undefined {
         const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
-        return script && script.content;
+        if (script) return script.content;
+        try {
+            return this.languageServiceAdapterHost.vfs.readFileSync(fileName, "utf8");
+        }
+        catch {
+            return undefined;
+        }
     }
 
     // Entry points from fourslash.ts

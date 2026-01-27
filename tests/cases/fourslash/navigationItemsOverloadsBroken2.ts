@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 ////function overload1(a: string): boolean;
 ////function overload1(b: boolean): boolean;
 ////[|function overload1(x: any, b = (function overload() { return false })): boolean {
