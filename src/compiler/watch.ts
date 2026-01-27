@@ -529,13 +529,9 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 options.outFile ? "--outFile" : "--out",
             );
         case FileIncludeKind.AutomaticTypeDirectiveFile: {
-            const messageAndArgs: DiagnosticAndArguments = options.types ?
-                reason.packageId ?
-                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
-                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
-                reason.packageId ?
-                [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
-                [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
+            const messageAndArgs: DiagnosticAndArguments = reason.packageId ?
+                [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference];
 
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }

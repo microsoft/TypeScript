@@ -400,7 +400,6 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
                     ) :
                     undefined;
             case FileIncludeKind.AutomaticTypeDirectiveFile:
-                if (!options.types) return undefined;
                 configFileNode = getOptionsSyntaxByArrayElementValue(getCompilerOptionsObjectLiteralSyntax(), "types", reason.typeReference);
                 message = Diagnostics.File_is_entry_point_of_type_library_specified_here;
                 break;
