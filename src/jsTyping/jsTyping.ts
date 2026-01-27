@@ -133,7 +133,8 @@ export function discoverTypings(
     const exclude = typeAcquisition.exclude || [];
 
     // Directories to search for package.json, bower.json and other typing information
-    if (!compilerOptions.types || compilerOptions.types?.includes("*")) {
+    if (compilerOptions.types?.includes("*")) {
+
         const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
         possibleSearchDirs.add(projectRootPath);
         possibleSearchDirs.forEach(searchDir => {
