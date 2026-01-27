@@ -61,7 +61,7 @@ type inlayHintState struct {
 }
 
 func (s *inlayHintState) visit(node *ast.Node) bool {
-	if node == nil || node.End()-node.Pos() == 0 {
+	if node == nil || node.End()-node.Pos() == 0 || node.Flags&ast.NodeFlagsReparsed != 0 {
 		return false
 	}
 
