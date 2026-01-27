@@ -52,6 +52,7 @@ import {
     removeSuffix,
     SourceFile,
     TsConfigSourceFile,
+    usesWildcardTypes,
 } from "./_namespaces/ts.js";
 
 interface FileReasonToChainCache {
@@ -400,7 +401,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
                     ) :
                     undefined;
             case FileIncludeKind.AutomaticTypeDirectiveFile:
-                if (!options.types) return undefined;
+                if (usesWildcardTypes(options)) return undefined;
                 configFileNode = getOptionsSyntaxByArrayElementValue(getCompilerOptionsObjectLiteralSyntax(), "types", reason.typeReference);
                 message = Diagnostics.File_is_entry_point_of_type_library_specified_here;
                 break;
