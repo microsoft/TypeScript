@@ -1,7 +1,7 @@
 // @strictNullChecks: true
 // @jsx: react
 // @skipLibCheck: true
-// @libFiles: lib.d.ts,react.d.ts
+// @libFiles: react.d.ts
 import * as React from "react";
 
 interface Props {

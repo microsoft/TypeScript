@@ -1,8 +1,7 @@
 // @jsx: react
 // @noUnusedLocals: true
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 // @Filename: my-component.tsx
 declare var React: any;

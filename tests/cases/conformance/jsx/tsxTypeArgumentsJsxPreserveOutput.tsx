@@ -1,8 +1,7 @@
 // @filename: foo.tsx
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 import React = require('react');
 

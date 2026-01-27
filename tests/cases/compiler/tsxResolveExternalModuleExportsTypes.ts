@@ -1,6 +1,6 @@
 // @module: ES2015
 // @jsx: preserve
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 // @Filename: /node_modules/@types/a/index.d.ts
 declare var a: a.Foo;

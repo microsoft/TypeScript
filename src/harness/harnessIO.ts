@@ -229,48 +229,6 @@ export namespace Compiler {
         return result;
     }
 
-    export const defaultLibFileName = "lib.d.ts";
-    export const es2015DefaultLibFileName = "lib.es2015.d.ts";
-
-    // Cache of lib files from "built/local"
-    export let libFileNameSourceFileMap: Map<string, { file: ts.SourceFile; stringified: string; }> | undefined;
-
-    export function getDefaultLibrarySourceFile(fileName: string = defaultLibFileName): ts.SourceFile | undefined {
-        if (!isDefaultLibraryFile(fileName)) {
-            return undefined;
-        }
-
-        if (!libFileNameSourceFileMap) {
-            const file = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest);
-            libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: { file, stringified: JSON.stringify(file.text) },
-            }));
-        }
-
-        let sourceFile = libFileNameSourceFileMap.get(fileName);
-        if (!sourceFile) {
-            const file = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest);
-            sourceFile = { file, stringified: JSON.stringify(file.text) };
-            libFileNameSourceFileMap.set(fileName, sourceFile);
-        }
-        return sourceFile.file;
-    }
-
-    export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-        switch (ts.getEmitScriptTarget(options)) {
-            case ts.ScriptTarget.ESNext:
-            case ts.ScriptTarget.ES2017:
-                return "lib.es2017.d.ts";
-            case ts.ScriptTarget.ES2016:
-                return "lib.es2016.d.ts";
-            case ts.ScriptTarget.ES2015:
-                return es2015DefaultLibFileName;
-
-            default:
-                return defaultLibFileName;
-        }
-    }
-
     // Cache these between executions so we don't have to re-parse them for every test
     export const fourslashFileName = "fourslash.ts";
     export let fourslashSourceFile: ts.SourceFile;

@@ -10,6 +10,11 @@ import * as vpath from "./_namespaces/vpath.js";
 export const builtFolder = "/.ts";
 
 /**
+ * Posix-style path to libs for fourslash server tests (mounted to same location as builtFolder)
+ */
+export const fourslashLibFolder = "/home/src/tslibs/TS/Lib";
+
+/**
  * Posix-style path to additional mountable folders (./tests/projects in this repo)
  */
 export const projectsFolder = "/.projects";
@@ -1566,6 +1571,7 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
         builtLocalCI = new FileSystem(/*ignoreCase*/ true, {
             files: {
                 [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
+                [fourslashLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                 [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                 [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
                 [srcFolder]: {},

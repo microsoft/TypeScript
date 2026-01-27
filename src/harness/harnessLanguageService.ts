@@ -1,7 +1,7 @@
 import * as collections from "./_namespaces/collections.js";
 import * as fakes from "./_namespaces/fakes.js";
 import {
-    Compiler,
+    IO,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness.js";
@@ -128,13 +128,103 @@ export interface LanguageServiceAdapter {
     getLogger(): LoggerWithInMemoryLogs | undefined;
 }
 
+/** Create VFS with libs mounted at builtFolder (/.ts) */
+function createLanguageServiceVfs(): vfs.FileSystem {
+    return vfs.createFromFileSystem(IO, /*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+}
+
+const sharedLibDocumentRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
+
+function createSelectiveDocumentRegistry(): ts.DocumentRegistry {
+    const localRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
+
+    const enableLibAstCaching = true;
+    if (!enableLibAstCaching) {
+        return localRegistry;
+    }
+
+    const libFileVersions = new Map<string, string>();
+
+    function isLibFile(fileName: string): boolean {
+        return vpath.beneath(vfs.fourslashLibFolder, fileName);
+    }
+
+    function getRegistry(fileName: string): ts.DocumentRegistry {
+        return isLibFile(fileName) ? sharedLibDocumentRegistry : localRegistry;
+    }
+
+    function checkLibFileVersion(fileName: string, version: string): void {
+        if (!isLibFile(fileName)) return;
+        const existingVersion = libFileVersions.get(fileName);
+        if (existingVersion === undefined) {
+            libFileVersions.set(fileName, version);
+        }
+        else if (existingVersion !== version) {
+            throw new Error(`Lib file "${fileName}" version changed from "${existingVersion}" to "${version}" - lib files should not be modified`);
+        }
+    }
+
+    return {
+        acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            checkLibFileVersion(fileName, version);
+            return getRegistry(fileName).acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            checkLibFileVersion(fileName, version);
+            return getRegistry(fileName).acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            checkLibFileVersion(fileName, version);
+            return getRegistry(fileName).updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            checkLibFileVersion(fileName, version);
+            return getRegistry(fileName).updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        getKeyForCompilationSettings(settings) {
+            return sharedLibDocumentRegistry.getKeyForCompilationSettings(settings);
+        },
+        getDocumentRegistryBucketKeyWithMode(key, mode) {
+            return sharedLibDocumentRegistry.getDocumentRegistryBucketKeyWithMode(key, mode);
+        },
+        releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
+            // Need to handle the overloaded signature
+            return getRegistry(fileName).releaseDocument(fileName, compilationSettings, scriptKind!, impliedNodeFormat);
+        },
+        releaseDocumentWithKey(path: ts.Path, key: ts.DocumentRegistryBucketKey, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
+            // We don't know the original file name here, so release from both registries
+            // This is safe because releaseDocument is a no-op if the document wasn't acquired
+            try {
+                localRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
+            }
+            catch {
+                // Ignore - document might be in the other registry
+            }
+            try {
+                sharedLibDocumentRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
+            }
+            catch {
+                // Ignore - document might be in the other registry
+            }
+        },
+        reportStats() {
+            return `Shared lib registry: ${sharedLibDocumentRegistry.reportStats()}\nLocal registry: ${localRegistry.reportStats()}`;
+        },
+        getBuckets() {
+            // Return local buckets - this is primarily for debugging
+            return localRegistry.getBuckets();
+        },
+    };
+}
+
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys: fakes.System = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
+    public readonly sys: fakes.System;
     public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     constructor(protected cancellationToken: DefaultHostCancellationToken = DefaultHostCancellationToken.instance, protected settings: ts.CompilerOptions = ts.getDefaultCompilerOptions()) {
+        this.sys = new fakes.System(createLanguageServiceVfs());
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
@@ -280,7 +370,7 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
     }
 
     getDefaultLibFileName(): string {
-        return Compiler.defaultLibFileName;
+        return vpath.combine(vfs.fourslashLibFolder, ts.getDefaultLibFileName(this.settings));
     }
 
     getScriptFileNames(): string[] {
@@ -289,7 +379,10 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
     getScriptSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
         const script = this.getScriptInfo(fileName);
-        return script ? new ScriptSnapshot(script) : undefined;
+        if (script) return new ScriptSnapshot(script);
+        // Fall back to reading from VFS for files not in scriptInfos (e.g., lib files)
+        const content = this.readFile(fileName);
+        return content !== undefined ? ts.ScriptSnapshot.fromString(content) : undefined;
     }
 
     getScriptKind(): ts.ScriptKind {
@@ -332,15 +425,17 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
 export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: NativeLanguageServiceHost;
+    private documentRegistry: ts.DocumentRegistry;
     getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
+        this.documentRegistry = createSelectiveDocumentRegistry();
     }
     getHost(): LanguageServiceAdapterHost {
         return this.host;
     }
     getLanguageService(): ts.LanguageService {
-        return ts.createLanguageService(this.host);
+        return ts.createLanguageService(this.host, this.documentRegistry);
     }
     getClassifier(): ts.Classifier {
         return ts.createClassifier();
@@ -394,8 +489,6 @@ interface ServerHostDirectoryWatcher {
     cb: ts.DirectoryWatcherCallback;
 }
 
-/** Default typescript and lib installs location for tests */
-export const harnessSessionLibLocation = "/home/src/tslibs/TS/Lib";
 class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
@@ -420,7 +513,9 @@ class SessionServerHost implements ts.server.ServerHost {
     readFile(fileName: string): string | undefined {
         // System FS would follow symlinks, even though snapshots are stored by original file name
         const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
-        return snapshot && ts.getSnapshotText(snapshot);
+        if (snapshot) return ts.getSnapshotText(snapshot);
+        // Fall back to reading from VFS for files not in scriptInfos (e.g., lib files)
+        return this.host.readFile(fileName);
     }
 
     realpath(path: string) {
@@ -443,7 +538,7 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     getExecutingFilePath(): string {
-        return harnessSessionLibLocation + "/tsc.js";
+        return vfs.fourslashLibFolder + "/tsc.js";
     }
 
     exit = ts.noop;

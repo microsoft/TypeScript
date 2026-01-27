@@ -1,8 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @jsx: preserve
-// @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 // @Filename: file.tsx
 //// import React = require('react');

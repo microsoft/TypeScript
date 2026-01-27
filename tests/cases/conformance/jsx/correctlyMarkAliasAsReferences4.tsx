@@ -2,7 +2,7 @@
 // @jsx: react
 // @moduleResolution: bundler
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 // @filename: declaration.d.ts
 declare module "classnames";

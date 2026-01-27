@@ -1,10 +1,9 @@
 // @filename: file.tsx
 // @jsx: react
-// @noLib: true
 // @skipLibCheck: true
 // @target: es2015
 // @moduleResolution: bundler
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 import * as React from "react";
 declare global {
     namespace JSX {

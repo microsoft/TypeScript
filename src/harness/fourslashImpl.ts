@@ -9,10 +9,7 @@ import * as vpath from "./_namespaces/vpath.js";
 import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import {
-    harnessSessionLibLocation,
-    harnessTypingInstallerCacheLocation,
-} from "./harnessLanguageService.js";
+import { harnessTypingInstallerCacheLocation } from "./harnessLanguageService.js";
 import { ensureWatchablePath } from "./watchUtils.js";
 
 export const enum FourSlashTestType {
@@ -367,11 +364,6 @@ export class TestState {
             }
         }
 
-        const libName = (name: string) =>
-            this.testType !== FourSlashTestType.Server ?
-                name :
-                `${harnessSessionLibLocation}/${name}`;
-
         let configParseResult: ts.ParsedCommandLine | undefined;
         if (configFileName) {
             const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
@@ -422,24 +414,6 @@ export class TestState {
                 const importedFilePath = this.basePath + "/" + importedFile.fileName;
                 this.addMatchedInputFile(importedFilePath, exts);
             });
-
-            this.languageServiceAdapterHost.addScript(
-                libName(Harness.Compiler.defaultLibFileName),
-                Harness.Compiler.getDefaultLibrarySourceFile()!.text,
-                /*isRootFile*/ false,
-            );
-
-            compilationOptions.lib?.forEach(fileName => {
-                const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                if (libFile) {
-                    this.languageServiceAdapterHost.addScript(
-                        libName(fileName),
-                        libFile.text,
-                        /*isRootFile*/ false,
-                    );
-                }
-            });
         }
         else {
             // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
@@ -452,24 +426,6 @@ export class TestState {
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
-
-            if (!compilationOptions.noLib) {
-                const seen = new Set<string>();
-                const addSourceFile = (fileName: string) => {
-                    if (seen.has(fileName)) return;
-                    seen.add(fileName);
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    this.languageServiceAdapterHost.addScript(libName(fileName), libFile.text, /*isRootFile*/ false);
-                    if (!ts.some(libFile.libReferenceDirectives)) return;
-                    for (const directive of libFile.libReferenceDirectives) {
-                        addSourceFile(`lib.${directive.fileName}.d.ts`);
-                    }
-                };
-
-                addSourceFile(Harness.Compiler.defaultLibFileName);
-                compilationOptions.lib?.forEach(addSourceFile);
-            }
         }
 
         for (const file of testData.files) {

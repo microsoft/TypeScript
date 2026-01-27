@@ -1,8 +1,7 @@
 // @filename: file.tsx
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 import * as React from "react";
 interface BaseProps<T> {
   initialValues: T;

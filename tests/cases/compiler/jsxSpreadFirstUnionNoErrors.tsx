@@ -1,5 +1,5 @@
 // @jsx: react
-// @libFiles: lib.d.ts,react.d.ts
+// @libFiles: react.d.ts
 // @skipLibCheck: true
 // @allowSyntheticDefaultImports: true
 import React from "react";

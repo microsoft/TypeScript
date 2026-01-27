@@ -1,5 +1,5 @@
 // @jsx: react
-// @libFiles: lib.d.ts,react.d.ts
+// @libFiles: react.d.ts
 import React = require("react");
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 class TestObject {

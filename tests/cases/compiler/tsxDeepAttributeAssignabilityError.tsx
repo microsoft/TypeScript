@@ -1,7 +1,6 @@
 // @jsx: react
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 // @Filename: my-component.tsx
 import * as React from 'react'

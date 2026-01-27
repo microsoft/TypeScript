@@ -1,7 +1,7 @@
 // @strict: true
 // @jsx: preserve
 // @skipLibCheck: true
-// @libFiles: lib.d.ts,react.d.ts
+// @libFiles: react.d.ts
 interface A { isIt: true; text: string; }
 interface B { isIt: false; value: number; }
 type C = A | B;

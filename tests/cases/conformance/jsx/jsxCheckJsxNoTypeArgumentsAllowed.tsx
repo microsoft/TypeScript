@@ -1,7 +1,6 @@
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 // @allowJs: true
 // @outDir: ./out
 // @checkJs: true

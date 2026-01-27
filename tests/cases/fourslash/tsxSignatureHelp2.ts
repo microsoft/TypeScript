@@ -2,8 +2,7 @@
 
 //@Filename: file.tsx
 // @jsx: preserve
-// @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
+// @libFiles: react.d.ts
 
 //// import React = require('react');
 //// export interface ClickableProps {
