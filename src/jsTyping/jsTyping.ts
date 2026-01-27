@@ -28,6 +28,7 @@ import {
     some,
     toFileNameLowerCase,
     TypeAcquisition,
+    typesIncludesWildcard,
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts.js";
@@ -133,8 +134,7 @@ export function discoverTypings(
     const exclude = typeAcquisition.exclude || [];
 
     // Directories to search for package.json, bower.json and other typing information
-    if (compilerOptions.types?.includes("*")) {
-
+    if (typesIncludesWildcard(compilerOptions.types)) {
         const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
         possibleSearchDirs.add(projectRootPath);
         possibleSearchDirs.forEach(searchDir => {

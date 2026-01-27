@@ -1113,6 +1113,7 @@ import {
     TypeReferenceNode,
     TypeReferenceSerializationKind,
     TypeReferenceType,
+    typesIncludesWildcard,
     TypeVariable,
     unescapeLeadingUnderscores,
     UnionOrIntersectionType,
@@ -27628,25 +27629,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "console":
                 return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom;
             case "$":
-                return compilerOptions.types?.includes("*")
+                return typesIncludesWildcard(compilerOptions.types)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig;
             case "describe":
             case "suite":
             case "it":
             case "test":
-                return compilerOptions.types?.includes("*")
+                return typesIncludesWildcard(compilerOptions.types)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig;
             case "process":
             case "require":
             case "Buffer":
             case "module":
-                return compilerOptions.types?.includes("*")
+                return typesIncludesWildcard(compilerOptions.types)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig;
             case "Bun":
-                return compilerOptions.types?.includes("*")
+                return typesIncludesWildcard(compilerOptions.types)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig;
             case "Map":

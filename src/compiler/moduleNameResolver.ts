@@ -802,6 +802,14 @@ export function resolvePackageNameToPackageJson(
 }
 
 /**
+ * Returns true if the types compiler option includes the "*" wildcard.
+ * @internal
+ */
+export function typesIncludesWildcard(types: readonly string[] | undefined): boolean {
+    return types?.includes("*") ?? false;
+}
+
+/**
  * Given a set of options, returns the set of type directive names
  *   that should be included for this program automatically.
  * This list could either come from the config file,
@@ -815,7 +823,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
         return emptyArray;
     }
 
-    if (!options.types.includes("*")) {
+    if (!typesIncludesWildcard(options.types)) {
         // No wildcard, no need to iterate anything
         return options.types;
     }
