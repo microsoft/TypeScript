@@ -1551,7 +1551,7 @@ export interface JsxNamespacedName extends Node {
 }
 
 /// The opening element of a <Tag>...</Tag> JsxElement
-export interface JsxOpeningElement extends Expression {
+export interface JsxOpeningElement extends Node {
     readonly kind: SyntaxKind.JsxOpeningElement;
     readonly parent: JsxElement;
     readonly tagName: JsxTagNameExpression;
