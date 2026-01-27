@@ -3,6 +3,8 @@
 //// [file.tsx]
 import React = require('react')
 
+declare function log(...args: any[]): void;
+
 export interface ClickableProps {
     children?: string;
     className?: string;
@@ -27,13 +29,13 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
     return this._buildMainButton(props);
 }
 
-const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
-const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+const b0 = <MainButton {...{onClick: (k) => {log(k)}}} extra />;  // k has type "left" | "right"
+const b2 = <MainButton onClick={(k)=>{log(k)}} extra />;  // k has type "left" | "right"
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
 const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
 
 export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
-const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
 
 export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
@@ -53,11 +55,11 @@ function MainButton(props) {
     }
     return this._buildMainButton(props);
 }
-var b0 = <MainButton {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type "left" | "right"
-var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
+var b0 = <MainButton {...{ onClick: function (k) { log(k); } }} extra/>; // k has type "left" | "right"
+var b2 = <MainButton onClick={function (k) { log(k); }} extra/>; // k has type "left" | "right"
 var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
 var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
 function NoOverload(buttonProps) { return undefined; }
-var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
+var c1 = <NoOverload {...{ onClick: function (k) { log(k); } }} extra/>; // k has type any
 function NoOverload1(linkProps) { return undefined; }
 var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"

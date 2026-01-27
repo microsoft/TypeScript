@@ -1,6 +1,7 @@
 // @filename: file.tsx
 // @jsx: preserve
 // @skipLibCheck: true
+// @lib: es5
 // @libFiles: react.d.ts
 // @strictNullChecks: true
 

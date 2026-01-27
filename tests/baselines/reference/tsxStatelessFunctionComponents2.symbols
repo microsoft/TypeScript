@@ -57,11 +57,11 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
 >ref : Symbol(ref, Decl(file.tsx, 22, 19))
 >x : Symbol(x, Decl(file.tsx, 22, 25))
->x.greeting.substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>x.greeting.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 >x.greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
 >x : Symbol(x, Decl(file.tsx, 22, 25))
 >greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
->substr : Symbol(String.substr, Decl(lib.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 
 // Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
@@ -93,9 +93,9 @@ let h = <div ref={x => x.innerText} />;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >ref : Symbol(ref, Decl(file.tsx, 32, 12))
 >x : Symbol(x, Decl(file.tsx, 32, 18))
->x.innerText : Symbol(HTMLElement.innerText, Decl(lib.d.ts, --, --))
+>x.innerText : Symbol(HTMLElement.innerText, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(file.tsx, 32, 18))
->innerText : Symbol(HTMLElement.innerText, Decl(lib.d.ts, --, --))
+>innerText : Symbol(HTMLElement.innerText, Decl(lib.dom.d.ts, --, --))
 
 // Error - property not on ontextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;

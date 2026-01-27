@@ -5,6 +5,12 @@ import React = require('react')
 >React : typeof React
 >      : ^^^^^^^^^^^^
 
+declare function log(...args: any[]): void;
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>args : any[]
+>     : ^^^^^
+
 export interface ClickableProps {
     children?: string;
 >children : string
@@ -224,27 +230,23 @@ const b6 = <MainButton {...obj2} />;
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
-const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
+const b7 = <MainButton {...{onClick: () => { log("hi") }}} />;
 >b7 : JSX.Element
 >   : ^^^^^^^^^^^
-><MainButton {...{onClick: () => { console.log("hi") }}} /> : JSX.Element
->                                                           : ^^^^^^^^^^^
+><MainButton {...{onClick: () => { log("hi") }}} /> : JSX.Element
+>                                                   : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
->{onClick: () => { console.log("hi") }} : { onClick: () => void; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{onClick: () => { log("hi") }} : { onClick: () => void; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
 >        : ^^^^^^^^^^
->() => { console.log("hi") } : () => void
->                            : ^^^^^^^^^^
->console.log("hi") : void
->                  : ^^^^
->console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^    
+>() => { log("hi") } : () => void
+>                    : ^^^^^^^^^^
+>log("hi") : void
+>          : ^^^^
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
 >     : ^^^^
 

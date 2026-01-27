@@ -5,6 +5,12 @@ import React = require('react')
 >React : typeof React
 >      : ^^^^^^^^^^^^
 
+declare function log(...args: any[]): void;
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>args : any[]
+>     : ^^^^^
+
 export interface ClickableProps {
     children?: string;
 >children : string
@@ -95,55 +101,47 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
+const b0 = <MainButton {...{onClick: (k) => {log(k)}}} extra />;  // k has type "left" | "right"
 >b0 : JSX.Element
 >   : ^^^^^^^^^^^
-><MainButton {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
->                                                             : ^^^^^^^^^^^
+><MainButton {...{onClick: (k) => {log(k)}}} extra /> : JSX.Element
+>                                                     : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
->{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
->                                   : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{onClick: (k) => {log(k)}} : { onClick: (k: "left" | "right") => void; }
+>                           : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(k) => {console.log(k)} : (k: "left" | "right") => void
->                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(k) => {log(k)} : (k: "left" | "right") => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
->console.log(k) : void
->               : ^^^^
->console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^    
+>log(k) : void
+>       : ^^^^
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
 >      : ^^^^
 
-const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+const b2 = <MainButton onClick={(k)=>{log(k)}} extra />;  // k has type "left" | "right"
 >b2 : JSX.Element
 >   : ^^^^^^^^^^^
-><MainButton onClick={(k)=>{console.log(k)}} extra /> : JSX.Element
->                                                     : ^^^^^^^^^^^
+><MainButton onClick={(k)=>{log(k)}} extra /> : JSX.Element
+>                                             : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(k)=>{console.log(k)} : (k: "left" | "right") => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(k)=>{log(k)} : (k: "left" | "right") => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
->console.log(k) : void
->               : ^^^^
->console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^    
+>log(k) : void
+>       : ^^^^
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
@@ -187,29 +185,25 @@ export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undef
 >undefined : undefined
 >          : ^^^^^^^^^
 
-const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
 >c1 : JSX.Element
 >   : ^^^^^^^^^^^
-><NoOverload  {...{onClick: (k) => {console.log(k)}}} extra /> : JSX.Element
->                                                              : ^^^^^^^^^^^
+><NoOverload  {...{onClick: (k) => {log(k)}}} extra /> : JSX.Element
+>                                                      : ^^^^^^^^^^^
 >NoOverload : (buttonProps: ButtonProps) => JSX.Element
 >           : ^           ^^           ^^^^^           
->{onClick: (k) => {console.log(k)}} : { onClick: (k: "left" | "right") => void; }
->                                   : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{onClick: (k) => {log(k)}} : { onClick: (k: "left" | "right") => void; }
+>                           : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(k) => {console.log(k)} : (k: "left" | "right") => void
->                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(k) => {log(k)} : (k: "left" | "right") => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
->console.log(k) : void
->               : ^^^^
->console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^    
+>log(k) : void
+>       : ^^^^
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >extra : true
