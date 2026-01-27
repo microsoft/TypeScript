@@ -5,8 +5,8 @@ parserharness.ts(19,21): error TS6053: File 'diff.ts' not found.
 parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
 parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
-parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(43,19): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+parserharness.ts(44,14): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
@@ -169,10 +169,10 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
         eval(typescriptServiceFile);
     } else if (typeof require === "function") {
                       ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
         var vm = require('vm');
                  ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
     } else {
         throw new Error('Unknown context');

@@ -66,6 +66,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package.json 2000 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/app/test.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/app/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -85,11 +93,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /home/src/projects/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/a/app/node_modules: *new*
   {"pollingInterval":500}
+/home/src/projects/project/a/app/node_modules/@types: *new*
+  {"pollingInterval":500}
 /home/src/projects/project/a/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types/node/package.json: *new*
   {"pollingInterval":2000}
@@ -108,6 +122,8 @@ FsWatches::
 
 FsWatchesRecursive::
 /home/src/projects/project/node_modules: *new*
+  {}
+/home/src/projects/project/node_modules/@types: *new*
   {}
 
 Projects::
@@ -190,10 +206,32 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/a/b/bower_components",
+        "/home/src/projects/project/a/b/node_modules",
+        "/home/src/projects/project/a/app/bower_components",
+        "/home/src/projects/project/a/app/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/home/src/projects/project/a/app/test.csproj'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/home/src/projects/project/a/app/test.csproj'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/home/src/projects/project/a/app/test.csproj",
+      "files": [
+        "/home/src/projects/project/a/b/bower_components",
+        "/home/src/projects/project/a/b/node_modules",
+        "/home/src/projects/project/a/app/bower_components",
+        "/home/src/projects/project/a/app/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/bower_components 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/bower_components 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/bower_components 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/bower_components 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/home/src/projects/project/a/app/test.csproj",
@@ -293,6 +331,46 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/app/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/app/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/a/app/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types/node/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/projects/project/a/b/app.js:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules:
+  {}
+/home/src/projects/project/node_modules/@types:
+  {}
 
 Projects::
 /home/src/projects/project/a/app/test.csproj (External) *changed*
