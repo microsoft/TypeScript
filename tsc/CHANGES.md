@@ -69,15 +69,6 @@ f.called = false;
 | Single-property access `require`              | `var readFile = require('fs').readFile`                                                                                                                                                                                                   | `var { readFile } = require('fs')`                                                                          |                                                                         |
 | Aliasing of `module.exports`                  | <pre><code>var mod = module.exports</code><br/><code>mod.x = 1</code></pre>                                                                                                                                                               | `module.exports.x = 1`                                                                                      |                                                                         |
 
-## Features yet to be implemented
-
-`Object.defineProperty` for CommonJS exports and expandos. The compiler treats this as an alternate to the usual assignment syntax:
-
-```js
-function f() {}
-Object.defineProperty(f, "p", { value: 1, writable: true });
-```
-
 # Component-Level Changes
 
 ## Scanner
@@ -113,7 +104,7 @@ Corsa no longer parses the following JSDoc tags with a specific node type. They 
 
 ### Miscellaneous
 
-#### When `"strict": false`, Corsa no longer allows omitting arguments for parameters with type `undefined`, `unknown`, or `any`:
+#### With `"strict": false`, Corsa no longer allows omitting arguments for parameters with type `undefined`, `unknown`, or `any`:
 
 ```js
 /** @param {unknown} x */
@@ -143,8 +134,7 @@ var x = { a: 1, b: 2 };
 var entries = Object.entries(x);
 ```
 
-In Strada, `entries: Array<[string, any]>`.
-In Corsa it has type `Array<[string, unknown]>`, the same as in TypeScript.
+In Strada, `entries: Array<[string, any]>`. In Corsa it has type `Array<[string, unknown]>`, the same as in TypeScript.
 
 #### Values are no longer resolved as types in JSDoc type positions.
 
@@ -240,14 +230,13 @@ This is identical to the TypeScript rule.
 
 #### Error messages on async functions that incorrectly return non-Promises now use the same error as TS.
 
-#### `@typedef` and `@callback` in a class body are no longer accessible outside the class.
+#### `@typedef` and `@callback` in a class body are hoisted outside the class.
 
-They must be moved outside the class to use them outside the class.
+This means the declarations are accessible outside the class and may conflict with similarly named declarations in the outer scope.
 
 #### `@class` or `@constructor` does not make a function into a constructor function.
 
-Corsa ignores `@class` and `@constructor`.
-This makes a difference on a function without this-property assignments or associated prototype-function assignments.
+Corsa ignores `@class` and `@constructor`. This makes a difference on a function without this-property assignments or associated prototype-function assignments.
 
 #### `@param` tags now apply to at most one function.
 
@@ -349,32 +338,13 @@ Although classes are a much better way to write this code.
 
 ### CommonJS
 
-#### Chained exports no longer work:
+#### Initializing exports to `undefined`:
+
+To accommodate the pattern of initializing CommonJS exports to `undefined` (sometimes written as `void 0`) and then subsequently assigning their intended values, when CommonJS exports have multiple assignments and an initial assignment of `undefined`, the `undefined` is ignored when determining the type of the export.
 
 ```js
-exports.x = exports.y = 12;
-```
-
-Now only exports `x`, not `y` as well.
-
-#### Exporting `void 0` is no longer ignored as a special case:
-
-```js
-exports.x = void 0;
-// several lines later...
-exports.x = theRealExport;
-```
-
-This exports `x: undefined` not `x: typeof theRealExport`.
-
-#### Property access on `require` no longer imports a single property from a module:
-
-```js
-const x = require("y").x;
-```
-
-If you can't configure your package to use ESM syntax, you can use destructuring instead:
-
-```js
-const { x } = require("y");
+exports.foo = exports.bar = void 0;
+// Later in the same file...
+exports.foo = 123  // Exported type is `123`
+exports.bar = "abc"  // Exported type is `"abc"`
 ```
