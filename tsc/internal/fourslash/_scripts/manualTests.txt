@@ -63,3 +63,4 @@ tsxCompletion12
 importNameCodeFix_uriStyleNodeCoreModules1
 importNameCodeFixDefaultExport7
 importNameCodeFixOptionalImport0
+formattingFatArrowFunctions
