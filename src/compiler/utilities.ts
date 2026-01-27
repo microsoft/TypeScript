@@ -8975,9 +8975,8 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions): b
  * @internal
  * Returns true if this option's types array includes "*"
  */
-export function usesWildcardTypes(options: CompilerOptions): boolean {
-    // will be: return some(options.types, t => t === "*");
-    return options.types === undefined;
+export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[] } {
+    return some(options.types, t => t === "*");
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
