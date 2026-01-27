@@ -148,7 +148,7 @@ function sanitizeHarnessLSException(s: string) {
 const libFileTextReplacements = ts.memoize(() => {
     const replacements: { text: string; jsonText: string; replacement: string; }[] = [];
     // Read all lib files from built/local
-    const libFiles = IO.listFiles(libFolder, /^lib\..*\.d\.ts$/);
+    const libFiles = IO.listFiles(libFolder, /^lib.*\.d\.ts$/);
     for (const libPath of libFiles) {
         const content = IO.readFile(libPath);
         if (content) {
