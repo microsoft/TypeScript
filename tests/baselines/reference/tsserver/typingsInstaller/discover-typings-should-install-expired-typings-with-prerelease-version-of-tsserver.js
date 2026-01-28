@@ -64,8 +64,5 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "node"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }

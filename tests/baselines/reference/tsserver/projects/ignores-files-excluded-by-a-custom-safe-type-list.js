@@ -173,28 +173,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "duck-types"
       ],
-      "filesToWatch": [
-        "/user/username/projects/project/a/b/bower_components",
-        "/user/username/projects/project/a/b/node_modules",
-        "/user/username/projects/project/lib/bower_components",
-        "/user/username/projects/project/lib/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "project",
-      "files": [
-        "/user/username/projects/project/a/b/bower_components",
-        "/user/username/projects/project/a/b/node_modules",
-        "/user/username/projects/project/lib/bower_components",
-        "/user/username/projects/project/lib/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project 'project'
+TI:: [hh:mm:ss:mss] No watchers are registered for project 'project'
 TI:: [hh:mm:ss:mss] Installing typings ["duck-types"]
 TI:: [hh:mm:ss:mss] 'duck-types':: Entry for package 'duck-types' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

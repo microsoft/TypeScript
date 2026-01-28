@@ -238,24 +238,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -324,28 +310,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/tsconfig.json:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project:
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
@@ -383,12 +347,8 @@ Add package.json
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/bower_components:
-  {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
 

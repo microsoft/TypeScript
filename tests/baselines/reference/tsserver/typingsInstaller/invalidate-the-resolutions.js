@@ -185,8 +185,6 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["foo"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
@@ -194,24 +192,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "foo"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Installing typings ["foo"]
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -252,40 +236,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/fooo/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules:
-  {}
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -467,23 +417,15 @@ TI:: [hh:mm:ss:mss] Got install request
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*"
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -545,8 +487,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/package.json:
   {"pollingInterval":2000}
-/home/src/projects/project/bower_components:
-  {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
@@ -650,23 +590,15 @@ TI:: [hh:mm:ss:mss] Got install request
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*"
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -840,8 +772,6 @@ TI:: [hh:mm:ss:mss] Got install request
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["bar"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
@@ -849,16 +779,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "bar"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*"
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Installing typings ["bar"]
 TI:: [hh:mm:ss:mss] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

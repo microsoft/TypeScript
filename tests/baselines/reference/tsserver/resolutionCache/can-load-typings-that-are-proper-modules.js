@@ -228,24 +228,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -309,42 +295,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/Library/Caches/typescript/node_modules/@types/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/Library/Caches/typescript/package.json:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects:
-  {}
-/user/username/projects/project:
-  {}
-
-FsWatchesRecursive::
-/home/src/Library/Caches/typescript/node_modules:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*

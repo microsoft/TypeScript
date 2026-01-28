@@ -191,33 +191,15 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/node_modules/@angular/forms/package.json' dependencies: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/node_modules/@angular/forms/bower_components",
-        "/user/username/projects/project/node_modules/@angular/forms/package.json",
-        "/user/username/projects/project/node_modules/@angular/forms/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/user/username/projects/project/node_modules/@angular/forms/bower_components",
-        "/user/username/projects/project/node_modules/@angular/forms/package.json",
-        "/user/username/projects/project/node_modules/@angular/forms/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -281,40 +263,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/forms/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/forms/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@angular/forms/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/forms/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/forms/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@angular/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@angular/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/project/node_modules/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/tsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/node_modules/@angular/forms/package.json:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -476,12 +424,8 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@angular/forms/bower_components:
-  {"pollingInterval":500}
 /user/username/projects/project/node_modules/@angular/forms/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@angular/forms/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/project/node_modules/@angular/forms/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules/@angular/forms/tsconfig.json:

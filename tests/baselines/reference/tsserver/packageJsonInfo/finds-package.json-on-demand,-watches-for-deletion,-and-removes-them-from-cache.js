@@ -249,204 +249,15 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Typing names in '/home/src/projects/project/package.json' dependencies: ["redux","webpack","typescript","react"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "redux",
-        "webpack",
-        "typescript",
-        "react"
-      ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/package.json",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/package.json",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["redux","webpack","typescript","react"]
-TI:: [hh:mm:ss:mss] 'redux':: Entry for package 'redux' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] 'webpack':: Entry for package 'webpack' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] 'typescript':: Entry for package 'typescript' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] 'react':: Entry for package 'react' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true
-      },
-      "typings": [],
-      "unresolvedImports": [],
-      "kind": "action::set"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "projectName": "/dev/null/inferredProject1*",
-        "typeAcquisition": {
-          "enable": true,
-          "include": [],
-          "exclude": []
-        },
-        "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
-          "allowNonTsExtensions": true,
-          "allowJs": true,
-          "noEmitForJsFiles": true
-        },
-        "typings": [],
-        "unresolvedImports": [],
-        "kind": "action::set"
-      }
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (0)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/tsconfig.json ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 1,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-After request
-
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/package.json: *new*
-  {}
-/home/src/projects/project/tsconfig.json:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project:
-  {}
-
-Projects::
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    autoImportProviderHost: false *changed*
-/home/src/projects/project/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
-
-getPackageJsonsVisibleToFile:: /home/src/projects/project/src/whatever/blah.ts undefined
-
-getPackageJsonsVisibleToFile:: /home/src/projects/project/src/whatever/blah.ts undefined:: Result:: [
-  {
-    "dependencies": {},
-    "devDependencies": {},
-    "optionalDependencies": {},
-    "peerDependencies": {},
-    "parseable": true,
-    "fileName": "/home/src/projects/project/package.json"
-  }
-]
-
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/package.json 2:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
-TI:: [hh:mm:ss:mss] Got install request
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
-        "/home/src/projects/project/tsconfig.json"
-      ],
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true
-      },
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "unresolvedImports": [],
-      "projectRootPath": "/home/src/projects/project",
-      "kind": "discover"
-    }
-TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -491,7 +302,74 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/package.json 2:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
+After request
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/projects/project/package.json: *new*
+  {}
+/home/src/projects/project/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project:
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
+/home/src/projects/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+getPackageJsonsVisibleToFile:: /home/src/projects/project/src/whatever/blah.ts undefined
+
+getPackageJsonsVisibleToFile:: /home/src/projects/project/src/whatever/blah.ts undefined:: Result:: [
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/home/src/projects/project/package.json"
+  }
+]
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/package.json 2:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/package.json 2:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
@@ -505,12 +383,8 @@ delete packageJson
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/bower_components:
-  {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
 

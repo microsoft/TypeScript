@@ -248,7 +248,6 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","commander"]
-TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["express"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -258,39 +257,13 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "jquery",
         "moment",
         "lodash",
-        "commander",
-        "express"
+        "commander"
       ],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/package.json",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/app/test.csproj",
-      "files": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/package.json",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["jquery","moment","lodash","commander","express"]
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] Installing typings ["jquery","moment","lodash","commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
@@ -312,8 +285,7 @@ TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: 
   "@types/jquery@tsFakeMajor.Minor",
   "@types/moment@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor",
-  "@types/commander@tsFakeMajor.Minor",
-  "@types/express@tsFakeMajor.Minor"
+  "@types/commander@tsFakeMajor.Minor"
 ]
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -370,35 +342,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/app/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/file3.d.ts:
-  {}
-/user/username/projects/project/package.json: *new*
-  {}
-
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/moment@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor",
-  "@types/commander@tsFakeMajor.Minor",
-  "@types/express@tsFakeMajor.Minor"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -411,16 +360,14 @@ Before running PendingInstalls callback:: count: 1
   "@types/jquery@tsFakeMajor.Minor",
   "@types/moment@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor",
-  "@types/commander@tsFakeMajor.Minor",
-  "@types/express@tsFakeMajor.Minor"
+  "@types/commander@tsFakeMajor.Minor"
 ]
 
 TI:: Installation #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/moment@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor",
-  "@types/commander@tsFakeMajor.Minor",
-  "@types/express@tsFakeMajor.Minor"
+  "@types/commander@tsFakeMajor.Minor"
 ] complete with success::true
 //// [/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts]
 declare const commander: { x: number }
@@ -438,8 +385,8 @@ declare const moment: { x: number }
 declare const lodash: { x: number }
 
 
-TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/app/test.csproj",
@@ -463,8 +410,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -497,8 +443,7 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
-          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-          "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -513,8 +458,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "@types/jquery@tsFakeMajor.Minor",
         "@types/moment@tsFakeMajor.Minor",
         "@types/lodash@tsFakeMajor.Minor",
-        "@types/commander@tsFakeMajor.Minor",
-        "@types/express@tsFakeMajor.Minor"
+        "@types/commander@tsFakeMajor.Minor"
       ],
       "installSuccess": true,
       "typingsInstallerVersion": "FakeVersion"
@@ -530,8 +474,7 @@ Info seq  [hh:mm:ss:mss] event:
           "@types/jquery@tsFakeMajor.Minor",
           "@types/moment@tsFakeMajor.Minor",
           "@types/lodash@tsFakeMajor.Minor",
-          "@types/commander@tsFakeMajor.Minor",
-          "@types/express@tsFakeMajor.Minor"
+          "@types/commander@tsFakeMajor.Minor"
         ],
         "success": true
       }
@@ -556,17 +499,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Cach
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/express/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/jquery/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/lodash/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/moment/package.json 2000 undefined Project: /user/username/projects/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (7)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 	/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts Text-1 "declare const commander: { x: number }"
-	/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts Text-1 "declare const express: { x: number }"
 	/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts Text-1 "declare const jquery: { x: number }"
 	/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts Text-1 "declare const lodash: { x: number }"
 	/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts Text-1 "declare const moment: { x: number }"
@@ -577,8 +518,6 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 	../project/file3.d.ts
 	  Root file specified for compilation
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts
-	  Root file specified for compilation
-	../../../../home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts
 	  Root file specified for compilation
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts
 	  Root file specified for compilation
@@ -595,7 +534,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
@@ -623,7 +561,6 @@ TI:: [hh:mm:ss:mss] Got install request
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","commander"]
-TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["express"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -632,23 +569,13 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/package.json",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/app/test.csproj"
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/app/test.csproj'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/app/test.csproj",
@@ -672,8 +599,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -705,8 +631,7 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/moment/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts",
-          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
-          "/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -718,8 +643,6 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/Library/Caches/typescript/node_modules/@types/commander/package.json: *new*
   {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/express/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/jquery/package.json: *new*
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/lodash/package.json: *new*
@@ -730,17 +653,9 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/app/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -749,8 +664,6 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
-  {}
-/user/username/projects/project/package.json:
   {}
 
 Projects::
@@ -761,10 +674,6 @@ Projects::
 
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/app/test.csproj
-/home/src/Library/Caches/typescript/node_modules/@types/express/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/test.csproj

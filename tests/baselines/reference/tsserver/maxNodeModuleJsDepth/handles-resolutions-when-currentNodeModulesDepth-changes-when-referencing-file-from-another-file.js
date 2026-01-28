@@ -210,8 +210,6 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project1/src/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["glob","minimatch","node"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
@@ -221,24 +219,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "minimatch",
         "node"
       ],
-      "filesToWatch": [
-        "/user/username/projects/project1/src/bower_components",
-        "/user/username/projects/project1/src/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/user/username/projects/project1/src/bower_components",
-        "/user/username/projects/project1/src/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Installing typings ["glob","minimatch","node"]
 TI:: [hh:mm:ss:mss] 'glob':: Entry for package 'glob' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'minimatch':: Entry for package 'minimatch' does not exist in local types registry - skipping...

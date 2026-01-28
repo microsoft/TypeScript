@@ -218,32 +218,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "lodash",
         "react"
       ],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/app/test.csproj",
-      "files": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/app/test.csproj'
 TI:: [hh:mm:ss:mss] Installing typings ["lodash","react"]
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -320,28 +298,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/user/username/projects/app/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project/file2.jsx:
-  {}
-/user/username/projects/project/file3.d.ts:
-  {}
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -533,18 +489,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "/home/src/Library/Caches/typescript/node_modules/@types/react/index.d.ts"
       ],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules",
-        "/user/username/projects/app/bower_components",
-        "/user/username/projects/app/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/app/test.csproj"
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/app/test.csproj'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/app/test.csproj",
@@ -608,17 +556,9 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/app/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::

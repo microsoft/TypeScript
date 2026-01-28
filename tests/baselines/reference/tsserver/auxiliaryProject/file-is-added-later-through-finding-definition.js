@@ -102,7 +102,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Imported via "./callback" from file 'node_modules/@types/yargs/index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
 	node_modules/@types/yargs/index.d.ts
 	  Imported via "yargs" from file 'index.ts' with packageId '@types/yargs/index.d.ts@1.0.0'
-	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
 	index.ts
 	  Root file specified for compilation
 

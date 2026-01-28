@@ -148,56 +148,61 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Typing names in '/home/src/projects/project/package.json' dependencies: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
-      "newTypingNames": [
-        "commander"
-      ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/package.json",
-        "/home/src/projects/project/node_modules"
-      ]
+      "newTypingNames": [],
+      "filesToWatch": []
     }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
-      "kind": "action::watchTypingLocations",
       "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/package.json",
-        "/home/src/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["commander"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::beginInstallTypes",
-      "eventId": 1,
-      "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/dev/null/inferredProject1*"
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
-      "event": "beginInstallTypes",
+      "event": "setTypings",
       "body": {
-        "eventId": 1
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
       }
     }
-TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
-  "@types/commander@tsFakeMajor.Minor"
-]
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -222,12 +227,8 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/bower_components: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/tsconfig.json:
@@ -239,49 +240,12 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
-PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/commander@tsFakeMajor.Minor"
-] *new*
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     autoImportProviderHost: false *changed*
 
-Before running PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/commander@tsFakeMajor.Minor"
-]
+Before running PendingInstalls callback:: count: 0
 
-TI:: Installation #1 with arguments:: [
-  "@types/commander@tsFakeMajor.Minor"
-] complete with success::false
-
-TI:: [hh:mm:ss:mss] install request failed, marking packages as missing to prevent repeated requests: ["commander"]
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::endInstallTypes",
-      "eventId": 1,
-      "projectName": "/dev/null/inferredProject1*",
-      "packagesToInstall": [
-        "@types/commander@tsFakeMajor.Minor"
-      ],
-      "installSuccess": false,
-      "typingsInstallerVersion": "FakeVersion"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "endInstallTypes",
-      "body": {
-        "eventId": 1,
-        "packages": [
-          "@types/commander@tsFakeMajor.Minor"
-        ],
-        "success": false
-      }
-    }
 After running PendingInstalls callback:: count: 0

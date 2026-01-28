@@ -210,31 +210,15 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/project/jsconfig.json",
-      "files": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/jsconfig.json'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/project/jsconfig.json'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/project/jsconfig.json",
@@ -369,42 +353,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/Library/Caches/typescript/package.json:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects:
-  {}
-/user/username/projects/project:
-  {}
-/user/username/projects/project/jsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/home/src/Library/Caches/typescript/node_modules:
-  {}
-/user/username/projects/project:
-  {}
-/user/username/projects/project/node_modules:
-  {}
 
 Projects::
 /user/username/projects/project/jsconfig.json (Configured) *changed*

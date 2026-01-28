@@ -91,12 +91,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
@@ -110,12 +104,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/node_modules/lodash/package.json SVC-1-0 "{ \"name\": \"lodash\", \"version\": \"4.17.15\", \"main\": \"./lodash.js\" }"
-	/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts Text-1 "export = _;\nexport as namespace _;\ndeclare const _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {}\n}"
 
 
 	../../../../tslibs/TS/Lib/lib.d.ts
@@ -126,12 +119,10 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
 	package.json
 	  Root file specified for compilation
-	../@types/lodash/index.d.ts
-	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.97'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -156,10 +147,6 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types/lodash/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/lodash/jsconfig.json: *new*
@@ -172,11 +159,7 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules/@types: *new*
   {}
-/home/src/workspaces/project/node_modules: *new*
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/lodash/node_modules: *new*
   {}
 /home/src/workspaces/project/node_modules/lodash/node_modules/@types: *new*
   {}
@@ -201,10 +184,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /home/src/workspaces/project/node_modules/lodash/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -224,7 +203,7 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
@@ -232,6 +211,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -254,13 +234,12 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	node_modules/@types/lodash/index.d.ts
 	  Imported via 'lodash' from file 'index.ts' with packageId '@types/lodash/index.d.ts@4.14.97'
-	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.97'
 	index.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -293,11 +272,10 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts:
+/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types/lodash/package.json:
+/home/src/workspaces/project/node_modules/@types/lodash/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/lodash/jsconfig.json:
@@ -321,14 +299,11 @@ watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules/@types:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules:
+/home/src/workspaces/project/node_modules: *new*
   {}
-  {} *new*
 /home/src/workspaces/project/node_modules/@types:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules/lodash/node_modules:
-  {}
 /home/src/workspaces/project/node_modules/lodash/node_modules/@types:
   {}
 /home/src/workspaces/project/node_modules/node_modules/@types:
@@ -363,11 +338,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
-/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts *changed*
+/home/src/workspaces/project/node_modules/@types/lodash/index.d.ts *new*
     version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /home/src/workspaces/project/node_modules/lodash/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -476,7 +450,6 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/lodash/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/lodash/jsconfig.json:
@@ -509,12 +482,9 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
   {} *new*
 /home/src/workspaces/project/node_modules/@types:
   {}
-  {}
-/home/src/workspaces/project/node_modules/lodash/node_modules:
   {}
 /home/src/workspaces/project/node_modules/lodash/node_modules/@types:
   {}
@@ -557,8 +527,7 @@ ScriptInfos::
         /dev/null/auxiliaryProject1* *new*
 /home/src/workspaces/project/node_modules/@types/lodash/index.d.ts
     version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject1*
+    containingProjects: 1
         /dev/null/inferredProject2*
 /home/src/workspaces/project/node_modules/lodash/lodash.js *new*
     version: Text-1

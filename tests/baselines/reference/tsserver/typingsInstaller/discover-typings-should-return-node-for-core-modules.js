@@ -43,10 +43,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -75,10 +72,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -107,10 +101,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -139,10 +130,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -171,10 +159,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -203,10 +188,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -235,10 +217,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -267,10 +246,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -299,10 +275,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -331,10 +304,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -363,10 +333,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -395,10 +362,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -427,10 +391,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -459,10 +420,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -491,10 +449,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -523,10 +478,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -555,10 +507,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -587,10 +536,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -619,10 +565,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -651,10 +594,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -683,10 +623,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -715,10 +652,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -747,10 +681,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -779,10 +710,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -811,10 +739,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -843,10 +768,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -875,10 +797,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -907,10 +826,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -939,10 +855,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -971,10 +884,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1003,10 +913,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1035,10 +942,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1067,10 +971,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1099,10 +1000,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1131,10 +1029,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1163,10 +1058,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1195,10 +1087,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1227,10 +1116,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1259,10 +1145,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1291,10 +1174,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1323,10 +1203,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1355,10 +1232,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1387,10 +1261,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1419,10 +1290,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1451,10 +1319,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1483,10 +1348,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1515,10 +1377,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1547,10 +1406,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1579,10 +1435,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1611,10 +1464,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1643,10 +1493,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1675,10 +1522,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1707,10 +1551,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1739,10 +1580,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1771,10 +1609,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1803,10 +1638,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1835,10 +1667,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1867,10 +1696,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1899,10 +1725,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1931,10 +1754,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1963,10 +1783,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -1995,10 +1812,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2027,10 +1841,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2059,10 +1870,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2091,10 +1899,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2123,10 +1928,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2155,10 +1957,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2187,10 +1986,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2219,10 +2015,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2251,10 +2044,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2283,10 +2073,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2315,10 +2102,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2347,10 +2131,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2379,10 +2160,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2411,10 +2189,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2443,10 +2218,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2475,10 +2247,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2507,10 +2276,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2539,10 +2305,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2571,10 +2334,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2603,10 +2363,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2635,10 +2392,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2667,10 +2421,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2699,10 +2450,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2731,10 +2479,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2763,10 +2508,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2795,10 +2537,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2827,10 +2566,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2859,10 +2595,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2891,10 +2624,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2923,10 +2653,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2955,10 +2682,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -2987,10 +2711,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3019,10 +2740,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3051,10 +2769,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3083,10 +2798,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3115,10 +2827,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3147,10 +2856,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3179,10 +2885,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3211,10 +2914,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3243,10 +2943,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3275,10 +2972,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3307,10 +3001,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3339,10 +3030,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3371,10 +3059,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3403,10 +3088,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3435,10 +3117,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3467,10 +3146,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3499,10 +3175,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3531,10 +3204,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3563,10 +3233,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3595,10 +3262,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
 
 ts.JsTyping.discoverTypings::
@@ -3627,8 +3291,5 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": [
-        "/home/src/projects/project/bower_components",
-        "/home/src/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }

@@ -187,40 +187,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "kendo-ui",
         "office"
       ],
-      "filesToWatch": [
-        "/user/username/projects/project/a/b/bower_components",
-        "/user/username/projects/project/a/b/node_modules",
-        "/user/username/projects/project/c/bower_components",
-        "/user/username/projects/project/c/node_modules",
-        "/user/username/projects/project/q/lib/kendo/bower_components",
-        "/user/username/projects/project/q/lib/kendo/node_modules",
-        "/user/username/projects/project/q/lib/kendo-ui/bower_components",
-        "/user/username/projects/project/q/lib/kendo-ui/node_modules",
-        "/user/username/projects/project/scripts/Office/1/bower_components",
-        "/user/username/projects/project/scripts/Office/1/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "project",
-      "files": [
-        "/user/username/projects/project/a/b/bower_components",
-        "/user/username/projects/project/a/b/node_modules",
-        "/user/username/projects/project/c/bower_components",
-        "/user/username/projects/project/c/node_modules",
-        "/user/username/projects/project/q/lib/kendo/bower_components",
-        "/user/username/projects/project/q/lib/kendo/node_modules",
-        "/user/username/projects/project/q/lib/kendo-ui/bower_components",
-        "/user/username/projects/project/q/lib/kendo-ui/node_modules",
-        "/user/username/projects/project/scripts/Office/1/bower_components",
-        "/user/username/projects/project/scripts/Office/1/node_modules",
-        "/home/src/Vscode/Projects/bin/bower_components",
-        "/home/src/Vscode/Projects/bin/node_modules"
-      ]
-    }
+TI:: [hh:mm:ss:mss] Closing file watchers for project 'project'
+TI:: [hh:mm:ss:mss] No watchers are registered for project 'project'
 TI:: [hh:mm:ss:mss] Installing typings ["kendo-ui","office"]
 TI:: [hh:mm:ss:mss] 'kendo-ui':: Entry for package 'kendo-ui' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'office':: Entry for package 'office' does not exist in local types registry - skipping...

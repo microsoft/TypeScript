@@ -205,24 +205,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/user/username/projects/project/jsconfig.json",
-      "files": [
-        "/user/username/projects/project/bower_components",
-        "/user/username/projects/project/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/jsconfig.json'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/project/jsconfig.json'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/project/jsconfig.json",
@@ -372,30 +358,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/project:
-  {}
-/user/username/projects/project/config.js:
-  {}
-/user/username/projects/project/jsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project:
-  {}
 
 Projects::
 /user/username/projects/project/jsconfig.json (Configured) *changed*

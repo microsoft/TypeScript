@@ -338,22 +338,10 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   },
   {
     "key": "/users/username/projects/project/node_modules/@types",
-    "count": 2
+    "count": 1
   },
   {
     "key": "/users/username/projects/node_modules/@types",
-    "count": 2
-  },
-  {
-    "key": "/users/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]
@@ -432,26 +420,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
 Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/users/username/projects/project",
-    "count": 1
-  },
-  {
-    "key": "/users/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]

@@ -140,24 +140,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/home/src/projects/project/a/b/bower_components",
-        "/home/src/projects/project/a/b/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/home/src/projects/project/a/b/project.csproj",
-      "files": [
-        "/home/src/projects/project/a/b/bower_components",
-        "/home/src/projects/project/a/b/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/bower_components 1 undefined Project: /home/src/projects/project/a/b/project.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/bower_components 1 undefined Project: /home/src/projects/project/a/b/project.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules 1 undefined Project: /home/src/projects/project/a/b/project.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules 1 undefined Project: /home/src/projects/project/a/b/project.csproj WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/home/src/projects/project/a/b/project.csproj'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/home/src/projects/project/a/b/project.csproj'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/home/src/projects/project/a/b/project.csproj",
@@ -247,26 +233,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/a/b/bower_components: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/a/b/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/a/b/f1.js:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 /home/src/projects/project/a/b/project.csproj (External) *changed*

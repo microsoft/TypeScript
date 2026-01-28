@@ -155,24 +155,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": [
-        "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/bower_components",
-        "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules"
-      ]
+      "filesToWatch": []
     }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*",
-      "files": [
-        "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/bower_components",
-        "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -238,36 +224,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/root/teams/VSCode68/Shared Documents/General/jsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/bower_components: *new*
-  {"pollingInterval":500}
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/jsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules: *new*
-  {"pollingInterval":500}
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules/@types:
-  {"pollingInterval":500}
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/Shared Documents/General/node_modules/@types:
-  {"pollingInterval":500}
-/root/teams/VSCode68/Shared Documents/General/tsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/Shared Documents/jsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/Shared Documents/node_modules/@types:
-  {"pollingInterval":500}
-/root/teams/VSCode68/Shared Documents/tsconfig.json:
-  {"pollingInterval":2000}
-/root/teams/VSCode68/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
