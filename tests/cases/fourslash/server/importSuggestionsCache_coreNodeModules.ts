@@ -8,7 +8,8 @@
 ////    "checkJs": true,
 ////    "typeRoots": [
 ////      "node_modules/@types"
-////    ]
+////    ],
+////    "types": ["*"]
 ////  },
 ////  "include": ["**/*"],
 ////  "typeAcquisition": {

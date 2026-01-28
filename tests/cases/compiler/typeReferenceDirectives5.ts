@@ -3,6 +3,7 @@
 // @traceResolution: true
 // @declaration: true
 // @typeRoots: /types
+// @types: *
 // @currentDirectory: /
 
 // @filename: /ref.d.ts

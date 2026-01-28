@@ -1,6 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
-// @module: preserve
+// @Filename: /home/src/workspaces/project/tsconfig.json
+//// { "compilerOptions": { "module": "preserve", "types": ["*"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 //// declare module "node:fs" {

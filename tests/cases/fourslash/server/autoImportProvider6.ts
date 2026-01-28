@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs", "lib": ["es2019"] } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es2019"], "types": ["*"] } }
 
 // @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "antd": "*", "react": "*" } }

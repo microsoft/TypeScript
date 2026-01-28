@@ -1,4 +1,5 @@
 // @noImplicitReferences: true
+// @types: *
 
 // @Filename: /node_modules/@types/.a/index.d.ts
 declare const a: number;
