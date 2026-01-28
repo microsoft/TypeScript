@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution16.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Address {
@@ -28,6 +30,7 @@ let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

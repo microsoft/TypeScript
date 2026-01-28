@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxUnionElementType4.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 class RC1 extends React.Component<{x : number}, {}> {
@@ -39,6 +41,7 @@ let c = <EmptyRCComp prop />;
 
 //// [file.js]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

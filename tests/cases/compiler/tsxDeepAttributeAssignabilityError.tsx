@@ -1,8 +1,8 @@
 // @jsx: react
 // @skipLibCheck: true
-// @libFiles: react.d.ts
 
 // @Filename: my-component.tsx
+/// <reference path="/.lib/react.d.ts" />
 import * as React from 'react'
 
 interface MyProps {

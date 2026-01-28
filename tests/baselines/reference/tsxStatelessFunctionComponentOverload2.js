@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload2.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 declare function OneThing(): JSX.Element;
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -35,6 +37,7 @@ const c10 = <OneThing {...obj2} yy1="boo" />;
 
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

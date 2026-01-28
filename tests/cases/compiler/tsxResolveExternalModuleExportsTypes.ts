@@ -1,6 +1,5 @@
 // @module: ES2015
 // @jsx: preserve
-// @libFiles: react.d.ts
 
 // @Filename: /node_modules/@types/a/index.d.ts
 declare var a: a.Foo;
@@ -20,5 +19,6 @@ declare module 'a' {
 }
 
 // @Filename: foo.tsx
+/// <reference path="/.lib/react.d.ts" />
 import { Test } from 'a';
 const Foo = (<h1></h1>);

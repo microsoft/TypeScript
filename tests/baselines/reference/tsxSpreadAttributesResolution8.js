@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution8.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 const obj = {};
@@ -30,6 +32,7 @@ let x1 = <OverWriteAttr {...obj1} {...obj3}  />
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

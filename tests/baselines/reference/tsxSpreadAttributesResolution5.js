@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution5.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface PoisonedProp {
@@ -37,6 +39,7 @@ let e = <EmptyProp {...o} />;
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

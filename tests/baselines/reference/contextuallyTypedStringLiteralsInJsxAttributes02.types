@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes02.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react')
 >React : typeof React
 >      : ^^^^^^^^^^^^

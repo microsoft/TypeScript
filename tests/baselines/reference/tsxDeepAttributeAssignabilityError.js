@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/tsxDeepAttributeAssignabilityError.tsx] ////
 
 //// [my-component.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from 'react'
 
 interface MyProps {
@@ -62,6 +63,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
+/// <reference path="/.lib/react.d.ts" />
 var React = __importStar(require("react"));
 function MyComponent(_props) {
     return React.createElement("span", null, "my component");

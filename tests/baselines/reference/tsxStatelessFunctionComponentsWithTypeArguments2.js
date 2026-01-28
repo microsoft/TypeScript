@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments2.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
@@ -35,6 +37,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

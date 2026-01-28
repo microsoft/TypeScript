@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxUnionTypeComponent1.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface ComponentProps {
@@ -27,6 +29,7 @@ class MyButtonComponent extends React.Component<{},{}> {
 
 //// [file.js]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

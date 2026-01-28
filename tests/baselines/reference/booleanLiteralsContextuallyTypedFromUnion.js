@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx] ////
 
 //// [booleanLiteralsContextuallyTypedFromUnion.tsx]
+/// <reference path="/.lib/react.d.ts" />
 interface A { isIt: true; text: string; }
 interface B { isIt: false; value: number; }
 type C = A | B;
@@ -28,6 +29,7 @@ let Success = () => <Funk {...attrs2} />
 
 //// [booleanLiteralsContextuallyTypedFromUnion.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var isIt = Math.random() > 0.5;
 var c = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 var cc = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution10.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface OptionProp {
@@ -27,6 +29,7 @@ let y3 = <Opt x />;
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -1,9 +1,9 @@
 // @jsx: react
 // @noUnusedLocals: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts
 
 // @Filename: my-component.tsx
+/// <reference path="/.lib/react.d.ts" />
 declare var React: any;
 
 export function MyComponent(props: any) {

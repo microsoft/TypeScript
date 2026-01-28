@@ -1,8 +1,8 @@
 // @filename: file.tsx
 // @jsx: preserve
 // @skipLibCheck: true
-// @libFiles: react.d.ts
 // @strictNullChecks: true
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react');
 

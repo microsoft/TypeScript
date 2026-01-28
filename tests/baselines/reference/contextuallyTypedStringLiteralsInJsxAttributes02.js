@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes02.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function log(...args: any[]): void;
@@ -43,6 +45,7 @@ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" |
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
 exports.NoOverload = NoOverload;

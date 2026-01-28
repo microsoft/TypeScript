@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/jsxHasLiteralType.tsx] ////
 
 //// [jsxHasLiteralType.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 
 interface Props {
@@ -61,6 +62,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="/.lib/react.d.ts" />
 var React = __importStar(require("react"));
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);

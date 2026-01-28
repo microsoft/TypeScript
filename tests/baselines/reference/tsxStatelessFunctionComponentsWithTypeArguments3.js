@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments3.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function OverloadComponent<U>(): JSX.Element;
@@ -26,6 +28,7 @@ function createLink(func: (a: number)=>void) {
 }
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

@@ -3,7 +3,7 @@
 // @strict: true
 // @skipLibCheck: true
 // @lib: es5
-// @libFiles: react.d.ts
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react');
 

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload3.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 interface Context {
     color: any;
 }
@@ -26,6 +28,7 @@ const three2 = <ThreeThing y2="Bye" />;
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 var obj2;
 // OK
 var two1 = <ZeroThingOrTwoThing />;

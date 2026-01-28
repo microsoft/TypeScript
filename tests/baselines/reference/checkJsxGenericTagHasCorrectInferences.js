@@ -1,6 +1,7 @@
 //// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 interface BaseProps<T> {
   initialValues: T;
@@ -51,6 +52,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="/.lib/react.d.ts" />
 var React = __importStar(require("react"));
 var a = <GenericComponent initialValues={{ x: "y" }} nextValues={function (a) { return a; }}/>; // No error
 var b = <GenericComponent initialValues={12} nextValues={function (a) { return a; }}/>; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)

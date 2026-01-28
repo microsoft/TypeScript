@@ -3,7 +3,7 @@
 // @skipLibCheck: true
 // @target: es2015
 // @moduleResolution: bundler
-// @libFiles: react.d.ts
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 declare global {
     namespace JSX {

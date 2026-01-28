@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
 
 //// [jsxSpreadFirstUnionNoErrors.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import React from "react";
 
 type InfoProps =
@@ -35,6 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="/.lib/react.d.ts" />
 var react_1 = __importDefault(require("react"));
 var Info = function (props) {
     return props.status === "hidden"

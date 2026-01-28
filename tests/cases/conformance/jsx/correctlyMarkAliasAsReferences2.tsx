@@ -2,12 +2,12 @@
 // @jsx: react
 // @moduleResolution: bundler
 // @skipLibCheck: true
-// @libFiles: react.d.ts
 
 // @filename: declaration.d.ts
 declare module "classnames";
 
 // @filename: 0.tsx
+/// <reference path="/.lib/react.d.ts" />
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 import * as React from "react";

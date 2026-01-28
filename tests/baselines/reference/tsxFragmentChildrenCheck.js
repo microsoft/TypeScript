@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/tsxFragmentChildrenCheck.ts] ////
 
 //// [my-component.tsx]
+/// <reference path="/.lib/react.d.ts" />
 declare var React: any;
 
 export function MyComponent(props: any) {
@@ -32,6 +33,7 @@ export default RenderString
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
+/// <reference path="/.lib/react.d.ts" />
 function MyComponent(props) {
     return React.createElement("span", null, "my component");
 }

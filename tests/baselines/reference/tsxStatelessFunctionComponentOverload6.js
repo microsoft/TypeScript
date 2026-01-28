@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload6.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function log(...args: any[]): void;
@@ -63,6 +65,7 @@ const b12 = <MainButton data-format="Hello world" />
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
 var React = require("react");

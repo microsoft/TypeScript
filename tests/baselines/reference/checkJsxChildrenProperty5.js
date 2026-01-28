@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty5.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Prop {
@@ -34,6 +36,7 @@ let k2 =
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

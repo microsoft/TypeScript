@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution6.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 type TextProps = { editable: false }
@@ -21,6 +23,7 @@ const textProps: TextProps = {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
