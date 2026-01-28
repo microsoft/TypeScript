@@ -126,7 +126,7 @@ import "react";
 { "dependencies": { "antd": "*", "react": "*" } }
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"] } }
+{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"], "types": ["*"] } }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -150,6 +150,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "lib": [
    "lib.es2019.d.ts"
   ],
+  "types": [
+   "*"
+  ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -167,6 +170,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2019.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2018.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.d.ts 500 undefined WatchType: Closed Script info
@@ -203,13 +209,13 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2019.string.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 lib.es2015.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2016.d.ts Text-1 lib.es2016.d.ts-Text
@@ -247,6 +253,7 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/index.ts Text-1 "Component"
+	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export declare function Component(): void;"
 
 
 	../../tslibs/TS/Lib/lib.es5.d.ts
@@ -332,6 +339,8 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.es5.d.ts'
 	index.ts
 	  Matched by default include pattern '**/*'
+	node_modules/@types/react/index.d.ts
+	  Entry point for implicit type library 'react'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -369,7 +378,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"commonjs\", \"lib\": [\"es2019\"] } }"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"commonjs\", \"lib\": [\"es2019\"], \"types\": [\"*\"] } }"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -384,7 +393,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -485,7 +494,16 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -493,11 +511,11 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules/@types: *new*
   {}
-  {}
 /home/src/workspaces/project: *new*
   {}
-/home/src/workspaces/project/node_modules/@types: *new*
+/home/src/workspaces/project/node_modules: *new*
   {}
+/home/src/workspaces/project/node_modules/@types: *new*
   {}
 
 Projects::
@@ -665,6 +683,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -682,7 +704,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -780,7 +802,16 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
@@ -792,11 +823,11 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules/@types:
   {}
-  {}
 /home/src/workspaces/project:
   {}
-/home/src/workspaces/project/node_modules/@types:
+/home/src/workspaces/project/node_modules:
   {}
+/home/src/workspaces/project/node_modules/@types:
   {}
 
 Projects::
@@ -965,6 +996,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1015,7 +1050,9 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1028,7 +1065,7 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 3,
       "success": true,
       "body": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1746,6 +1783,26 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Component",
+            "kind": "function",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "source": "react",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "react",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "Component",
+              "exportMapKey": "9 * Component ",
+              "moduleSpecifier": "react",
+              "fileName": "/home/src/workspaces/project/node_modules/@types/react/index.d.ts"
+            }
+          },
+          {
             "name": "escape",
             "kind": "function",
             "kindModifiers": "deprecated,declare",
@@ -1766,6 +1823,108 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.core.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.date.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.object.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.string.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.array.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.object.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.string.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/react/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/react/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":250}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules/@types:
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/@types:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1

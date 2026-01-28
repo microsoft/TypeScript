@@ -34,7 +34,8 @@ declare module 'util' {
     "checkJs": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "types": ["*"]
   },
   "include": ["**/*"],
   "typeAcquisition": {
@@ -66,6 +67,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "typeRoots": [
    "/home/src/workspaces/project/node_modules/@types"
   ],
+  "types": [
+   "*"
+  ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -83,18 +87,24 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/a.js Text-1 "\nreadF"
+	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -105,6 +115,8 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	a.js
 	  Matched by include pattern '**/*' in 'tsconfig.json'
+	node_modules/@types/node/index.d.ts
+	  Entry point for implicit type library 'node'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -147,7 +159,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ],\n    \"types\": [\"*\"]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -162,7 +174,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -195,7 +207,16 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/node/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -205,8 +226,9 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project: *new*
   {}
-/home/src/workspaces/project/node_modules/@types: *new*
+/home/src/workspaces/project/node_modules: *new*
   {}
+/home/src/workspaces/project/node_modules/@types: *new*
   {}
 
 Projects::
@@ -239,6 +261,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -256,7 +282,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/a.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a.js ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -286,7 +312,16 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/node/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
@@ -300,8 +335,9 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project:
   {}
-/home/src/workspaces/project/node_modules/@types:
+/home/src/workspaces/project/node_modules:
   {}
+/home/src/workspaces/project/node_modules/@types:
   {}
 
 Projects::
@@ -335,6 +371,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -970,7 +1010,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -1043,6 +1083,10 @@ ScriptInfos::
     version: SVC-2-1 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1091,6 +1135,10 @@ ScriptInfos::
     version: SVC-2-2 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1160,6 +1208,10 @@ ScriptInfos::
     version: SVC-2-3 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1229,6 +1281,10 @@ ScriptInfos::
     version: SVC-2-4 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1298,6 +1354,10 @@ ScriptInfos::
     version: SVC-2-5 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1367,6 +1427,10 @@ ScriptInfos::
     version: SVC-2-6 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1436,6 +1500,10 @@ ScriptInfos::
     version: SVC-2-7 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1505,6 +1573,10 @@ ScriptInfos::
     version: SVC-2-8 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1574,6 +1646,10 @@ ScriptInfos::
     version: SVC-2-9 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1643,6 +1719,10 @@ ScriptInfos::
     version: SVC-2-10 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1712,6 +1792,10 @@ ScriptInfos::
     version: SVC-2-11 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1781,6 +1865,10 @@ ScriptInfos::
     version: SVC-2-12 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1850,6 +1938,10 @@ ScriptInfos::
     version: SVC-2-13 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1919,6 +2011,10 @@ ScriptInfos::
     version: SVC-2-14 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1988,6 +2084,10 @@ ScriptInfos::
     version: SVC-2-15 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2057,6 +2157,10 @@ ScriptInfos::
     version: SVC-2-16 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2126,6 +2230,10 @@ ScriptInfos::
     version: SVC-2-17 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2195,6 +2303,10 @@ ScriptInfos::
     version: SVC-2-18 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2264,6 +2376,10 @@ ScriptInfos::
     version: SVC-2-19 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2333,6 +2449,10 @@ ScriptInfos::
     version: SVC-2-20 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2402,6 +2522,10 @@ ScriptInfos::
     version: SVC-2-21 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2471,6 +2595,10 @@ ScriptInfos::
     version: SVC-2-22 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2540,6 +2668,10 @@ ScriptInfos::
     version: SVC-2-23 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2609,6 +2741,10 @@ ScriptInfos::
     version: SVC-2-24 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2678,6 +2814,10 @@ ScriptInfos::
     version: SVC-2-25 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2747,6 +2887,10 @@ ScriptInfos::
     version: SVC-2-26 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2816,6 +2960,10 @@ ScriptInfos::
     version: SVC-2-27 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2885,6 +3033,10 @@ ScriptInfos::
     version: SVC-2-28 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2954,6 +3106,10 @@ ScriptInfos::
     version: SVC-2-29 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3023,6 +3179,10 @@ ScriptInfos::
     version: SVC-2-30 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3092,6 +3252,10 @@ ScriptInfos::
     version: SVC-2-31 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3161,6 +3325,10 @@ ScriptInfos::
     version: SVC-2-32 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3230,6 +3398,10 @@ ScriptInfos::
     version: SVC-2-33 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3299,6 +3471,10 @@ ScriptInfos::
     version: SVC-2-34 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -3357,18 +3533,16 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/a.js SVC-2-34 "import { promisify } from 'util';\nreadF"
+	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -3377,7 +3551,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 1 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -3411,9 +3585,751 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "promisify",
             "kind": "alias",
-            "kindModifiers": "",
+            "kindModifiers": "export,declare",
             "sortText": "11"
           },
+          {
+            "name": "Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "ArrayBuffer",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Boolean",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "DataView",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Date",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "decodeURI",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "decodeURIComponent",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "encodeURI",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "encodeURIComponent",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Error",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "eval",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "EvalError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Float32Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Float64Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Function",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Int16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Int32Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Intl",
+            "kind": "module",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "isFinite",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "isNaN",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "JSON",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Math",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Number",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Object",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "parseFloat",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "parseInt",
+            "kind": "function",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "RangeError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "ReferenceError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "RegExp",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "String",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "SyntaxError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "TypeError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "URIError",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readFile",
+            "kind": "function",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "source": "fs",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "fs",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "readFile",
+              "exportMapKey": "8 * readFile fs",
+              "moduleSpecifier": "fs",
+              "ambientModuleName": "fs"
+            }
+          },
+          {
+            "name": "escape",
+            "kind": "function",
+            "kindModifiers": "deprecated,declare",
+            "sortText": "z15"
+          },
+          {
+            "name": "unescape",
+            "kind": "function",
+            "kindModifiers": "deprecated,declare",
+            "sortText": "z15"
+          }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
+        ]
+      }
+    }
+After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/node/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":250}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules: *new*
+  {}
+/home/src/workspaces/node_modules/@types:
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: false
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 74,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/a.js",
+        "line": 1,
+        "offset": 1,
+        "endLine": 2,
+        "endOffset": 1,
+        "insertString": ""
+      },
+      "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 74,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+    autoImportProviderHost: false
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a.js (Open) *changed*
+    version: SVC-2-35 *changed*
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 75,
+      "type": "request",
+      "arguments": {
+        "preferences": {
+          "includeCompletionsForModuleExports": true,
+          "includeInsertTextCompletions": true
+        }
+      },
+      "command": "configure"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 75,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 76,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/a.js",
+        "line": 1,
+        "offset": 6
+      },
+      "command": "completionInfo"
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/a.js SVC-2-35 "readF"
+	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "completionInfo",
+      "request_seq": 76,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      },
+      "body": {
+        "flags": 1,
+        "isGlobalCompletion": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "optionalReplacementSpan": {
+          "start": {
+            "line": 1,
+            "offset": 1
+          },
+          "end": {
+            "line": 1,
+            "offset": 6
+          }
+        },
+        "entries": [
           {
             "name": "Array",
             "kind": "var",
@@ -3951,40 +4867,12 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After Request
-watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/package.json:
-  {"pollingInterval":250}
-  {"pollingInterval":2000} *new*
-/home/src/workspaces/project/tsconfig.json:
-  {"pollingInterval":2000}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
-/home/src/workspaces/node_modules/@types:
-  {}
-/home/src/workspaces/project:
-  {}
-/home/src/workspaces/project/node_modules: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 /home/src/workspaces/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
     dirty: false *changed*
     autoImportProviderHost: false
