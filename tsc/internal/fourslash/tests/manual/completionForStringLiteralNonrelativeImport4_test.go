@@ -9,7 +9,6 @@ import (
 )
 
 func TestCompletionForStringLiteralNonrelativeImport4(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: dir1/dir2/dir3/dir4/test0.ts
@@ -37,7 +36,7 @@ var foo7 = require("f/*require0*/
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"fake-module3",
 				"fake-module2",
 				"fake-module",

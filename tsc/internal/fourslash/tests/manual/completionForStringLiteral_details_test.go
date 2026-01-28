@@ -10,7 +10,6 @@ import (
 )
 
 func TestCompletionForStringLiteral_details(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /other.ts
@@ -40,7 +39,7 @@ o["[|/*prop*/|]"];`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "other",
-					Detail: PtrTo("other"),
+					Detail: PtrTo("other.ts"),
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
 				},
 			},

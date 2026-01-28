@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type Snapshot struct {
@@ -143,6 +144,18 @@ func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 		return "", false
 	}
 	return handle.Content(), true
+}
+
+func (s *Snapshot) DirectoryExists(path string) bool {
+	return s.fs.fs.DirectoryExists(path)
+}
+
+func (s *Snapshot) GetDirectories(path string) []string {
+	return s.fs.fs.GetAccessibleEntries(path).Directories
+}
+
+func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth *int) []string {
+	return vfs.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {

@@ -10,7 +10,6 @@ import (
 )
 
 func TestCompletionsPaths_importType(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowJs: true
@@ -20,13 +19,34 @@ file content not read
 // @Filename: /node_modules/package/index.ts
 file content not read
 // @Filename: /usage.ts
-type A = typeof import("p/*1*/");
+type A = typeof import("[|p|]/*1*/");
 type B = import(".//*2*/");
 // @Filename: /user.js
 /** @type {import("/*3*/")} */`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyCompletions(t, []string{"1", "3"}, &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "package",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "package",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
@@ -50,16 +70,8 @@ type B = import(".//*2*/");
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "lib",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "lib.decorators",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "lib.decorators.legacy",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label: "node_modules",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
 				},
 				&lsproto.CompletionItem{
 					Label: "ns",
@@ -68,10 +80,6 @@ type B = import(".//*2*/");
 				&lsproto.CompletionItem{
 					Label: "user",
 					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "node_modules",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
 				},
 			},
 		},

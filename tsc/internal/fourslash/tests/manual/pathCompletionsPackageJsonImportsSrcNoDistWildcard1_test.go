@@ -10,7 +10,6 @@ import (
 )
 
 func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
@@ -58,7 +57,7 @@ import { } from "/**/";`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "#blah",
 					Kind:  PtrTo(lsproto.CompletionItemKindFile),

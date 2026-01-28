@@ -9,28 +9,27 @@ import (
 )
 
 func TestTripleSlashRefPathCompletionAbsolutePaths(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: tests/test0.ts
+	const content = `// @Filename: /tests/cases/fourslash/tests/test0.ts
 /// <reference path="/tests/cases/f/*0*/
-// @Filename: tests/test1.ts
+// @Filename: /tests/cases/fourslash/tests/test1.ts
 /// <reference path="/tests/cases/fourslash/*1*/
-// @Filename: tests/test2.ts
+// @Filename: /tests/cases/fourslash/tests/test2.ts
 /// <reference path="/tests/cases/fourslash//*2*/
-// @Filename: f1.ts
+// @Filename: /tests/cases/fourslash/f1.ts
 /*f1*/
-// @Filename: f2.tsx
+// @Filename: /tests/cases/fourslash/f2.tsx
 /*f2*/
-// @Filename: folder/f1.ts
+// @Filename: /tests/cases/fourslash/folder/f1.ts
 /*subf1*/
-// @Filename: f3.js
+// @Filename: /tests/cases/fourslash/f3.js
 /*f3*/
-// @Filename: f4.jsx
+// @Filename: /tests/cases/fourslash/f4.jsx
 /*f4*/
-// @Filename: e1.ts
+// @Filename: /tests/cases/fourslash/e1.ts
 /*e1*/
-// @Filename: e2.js
+// @Filename: /tests/cases/fourslash/e2.js
 /*e2*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

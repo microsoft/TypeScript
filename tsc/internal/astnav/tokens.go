@@ -433,6 +433,9 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 }
 
 func isValidPrecedingNode(node *ast.Node, sourceFile *ast.SourceFile) bool {
+	if node.Kind == ast.KindEndOfFile {
+		return len(node.JSDoc(sourceFile)) > 0
+	}
 	start := GetStartOfNode(node, sourceFile, false /*includeJSDoc*/)
 	width := node.End() - start
 	return !(ast.IsWhitespaceOnlyJsxText(node) || width == 0)

@@ -178,3 +178,16 @@ func ChangeFullExtension(path string, newExtension string) string {
 	}
 	return ChangeExtension(path, newExtension)
 }
+
+func GetPossibleOriginalInputExtensionForExtension(path string) []string {
+	if FileExtensionIsOneOf(path, []string{ExtensionDmts, ExtensionMjs, ExtensionMts}) {
+		return []string{ExtensionMts, ExtensionMjs}
+	}
+	if FileExtensionIsOneOf(path, []string{ExtensionDcts, ExtensionCjs, ExtensionCts}) {
+		return []string{ExtensionCts, ExtensionCjs}
+	}
+	if FileExtensionIs(path, ".d.json.ts") {
+		return []string{ExtensionJson}
+	}
+	return []string{ExtensionTsx, ExtensionTs, ExtensionJsx, ExtensionJs}
+}

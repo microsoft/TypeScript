@@ -114,3 +114,17 @@ func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile) *au
 		l.UserPreferences().ModuleSpecifierPreferences(),
 	)
 }
+
+// Used for module specifier completions.
+func (l *LanguageService) DirectoryExists(path string) bool {
+	return l.host.DirectoryExists(path)
+}
+
+// Used for module specifier completions.
+func (l *LanguageService) ReadDirectory(path string, extensions []string, includes []string) []string {
+	return l.host.ReadDirectory(l.program.GetCurrentDirectory(), path, extensions, nil /*excludes*/, includes, nil /*depth*/)
+}
+
+func (l *LanguageService) GetDirectories(path string) []string {
+	return l.host.GetDirectories(path)
+}

@@ -9,21 +9,20 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionForStringLiteralWithDynamicImport(t *testing.T) {
-	fourslash.SkipIfFailing(t)
+func TestCompletionForStringLiteralImport1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @typeRoots: my_typings
-// @Filename: test.ts
-const a = import("./some/*0*/
-const a = import("./sub/some/*1*/");
-const a = import("[|some-/*2*/|]");
-const a = import("..//*3*/");
-// @Filename: someFile1.ts
+// @Filename: fourslash/test.ts
+import * as foo0 from  "./some/*0*/
+import * as foo1 from  "./sub/some/*1*/
+import * as foo2 from  "[|some-|]/*2*/"
+import * as foo3 from  "..//*3*/";
+// @Filename: fourslash/someFile1.ts
 /*someFile1*/
-// @Filename: sub/someFile2.ts
+// @Filename: fourslash/sub/someFile2.ts
 /*someFile2*/
-// @Filename: my_typings/some-module/index.d.ts
+// @Filename: fourslash/my_typings/some-module/index.d.ts
 export var x = 9;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -34,7 +33,7 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"someFile1",
 				"my_typings",
 				"sub",
@@ -48,7 +47,7 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"someFile2",
 			},
 		},
@@ -60,7 +59,7 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "some-module",
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
@@ -80,7 +79,7 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"fourslash",
 			},
 		},

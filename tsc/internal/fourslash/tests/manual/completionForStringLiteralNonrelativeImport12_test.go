@@ -9,7 +9,6 @@ import (
 )
 
 func TestCompletionForStringLiteralNonrelativeImport12(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: tests/test0.ts
@@ -32,7 +31,7 @@ var foo3 = require("m/*require0*/
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"module",
 				"dev-module",
 				"peer-module",

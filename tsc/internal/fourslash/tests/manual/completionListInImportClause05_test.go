@@ -9,7 +9,6 @@ import (
 )
 
 func TestCompletionListInImportClause05(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: app.ts
@@ -27,7 +26,7 @@ export declare let x: number;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"@e/f",
 				"@a/b",
 				"@c/d",

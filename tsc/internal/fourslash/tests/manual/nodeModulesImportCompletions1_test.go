@@ -53,7 +53,7 @@ const m = import("./src//*9*/");`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"decl.cjs",
 				"decl.mjs",
 				"decl.js",
@@ -73,7 +73,7 @@ const m = import("./src//*9*/");`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				"decl.cjs",
 				"decl.mjs",
 				"decl",

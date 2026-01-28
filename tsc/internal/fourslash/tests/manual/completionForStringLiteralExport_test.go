@@ -5,36 +5,37 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionForStringLiteralImport2(t *testing.T) {
-	fourslash.SkipIfFailing(t)
+func TestCompletionForStringLiteralExport(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @typeRoots: my_typings
-// @Filename: test.ts
-/// <reference path="./[|some|]/*0*/
-/// <reference types="[|some|]/*1*/
-/// <reference path="./sub/[|some|]/*2*/" />
-/// <reference types="[|some|]/*3*/" />
-// @Filename: someFile.ts
-/*someFile*/
-// @Filename: sub/someOtherFile.ts
-/*someOtherFile*/
-// @Filename: my_typings/some-module/index.d.ts
+// @Filename: fourslash/test.ts
+export * from "./some/*0*/
+export * from "./sub/some/*1*/";
+export * from "[|some-/*2*/|]";
+export * from "..//*3*/";
+export {} from ".//*4*/";
+// @Filename: fourslash/someFile1.ts
+/*someFile1*/
+// @Filename: fourslash/sub/someFile2.ts
+/*someFile2*/
+// @Filename: fourslash/my_typings/some-module/index.d.ts
 export var x = 9;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, []string{"0", "4"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				"someFile.ts",
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"someFile1",
 				"my_typings",
 				"sub",
 			},
@@ -47,8 +48,8 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				"some-module",
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"someFile2",
 			},
 		},
 	})
@@ -59,8 +60,16 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				"someOtherFile.ts",
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "some-module",
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "some-module",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
 			},
 		},
 	})
@@ -71,8 +80,8 @@ export var x = 9;`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				"some-module",
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				"fourslash",
 			},
 		},
 	})

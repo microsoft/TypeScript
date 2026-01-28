@@ -9,109 +9,108 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionsPaths_pathMapping_nonTrailingWildcard1(t *testing.T) {
-	fourslash.SkipIfFailing(t)
+func TestPathCompletionsPackageJsonImportsWildcard4(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /src/b.ts
-export const x = 0;
-// @Filename: /src/dir/x.ts
-/export const x = 0;
-// @Filename: /src/a.ts
-import {} from "foo//*0*/";
-import {} from "foo/dir//*1*/"; // invalid
-import {} from "foo/_/*2*/";
-import {} from "foo/_dir//*3*/";
-// @Filename: /tsconfig.json
+	const content = `// @module: node18
+// @Filename: /package.json
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "foo/_*/suffix": ["src/*.ts"]
-        }
-    }
-}`
+  "types": "index.d.ts",
+  "imports": {
+    "#*": "dist/*",
+    "#foo/*": "dist/*",
+    "#bar/*": "dist/*",
+    "#exact-match": "dist/index.d.ts"
+  }
+}
+// @Filename: /nope.d.ts
+export const nope = 0;
+// @Filename: /dist/index.d.ts
+export const index = 0;
+// @Filename: /dist/blah.d.ts
+export const blah = 0;
+// @Filename: /dist/foo/onlyInFooFolder.d.ts
+export const foo = 0;
+// @Filename: /dist/subfolder/one.d.ts
+export const one = 0;
+// @Filename: /a.mts
+import { } from "/**/";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "foo/_a/suffix",
+					Label: "#blah.js",
 					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 				&lsproto.CompletionItem{
-					Label: "foo/_b/suffix",
+					Label: "#index.js",
 					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 				&lsproto.CompletionItem{
-					Label: "foo/_dir/suffix",
+					Label: "#foo",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+				},
+				&lsproto.CompletionItem{
+					Label: "#subfolder",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+				},
+				&lsproto.CompletionItem{
+					Label: "#bar",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+				},
+				&lsproto.CompletionItem{
+					Label: "#exact-match",
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+				},
+			},
+		},
+	})
+	f.Insert(t, "#foo/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "blah.js",
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+				},
+				&lsproto.CompletionItem{
+					Label: "index.js",
+					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+				},
+				&lsproto.CompletionItem{
+					Label: "foo",
+					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+				},
+				&lsproto.CompletionItem{
+					Label: "subfolder",
 					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
 				},
 			},
 		},
 	})
-	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+	f.Insert(t, "foo/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
+			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "foo/_a/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "foo/_b/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "foo/_dir/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
-				},
-			},
-		},
-	})
-	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
-		IsIncomplete: false,
-		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
-			EditRange:        Ignored,
-		},
-		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{
-					Label: "a",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "b",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "dir",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
-				},
-			},
-		},
-	})
-	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
-		IsIncomplete: false,
-		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
-			EditRange:        Ignored,
-		},
-		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{
-					Label: "x",
+					Label: "onlyInFooFolder.js",
 					Kind:  PtrTo(lsproto.CompletionItemKindFile),
 				},
 			},

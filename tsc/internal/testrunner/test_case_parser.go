@@ -140,6 +140,7 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 	// Stuff related to the subfile we're parsing
 	var currentFileContent strings.Builder
 	var currentFileName string
+	hasSeenFile := false
 	if options.AllowImplicitFirstFile {
 		// For fourslash tests, initialize currentFileName to the fileName parameter
 		// so content before the first @Filename directive goes into an implicit first file
@@ -181,8 +182,9 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 			// New metadata statement after having collected some code to go with the previous metadata
 			if currentFileName != "" {
 				// Store result file - always save for regular tests, but skip empty implicit first file for fourslash
-				shouldSaveFile := currentFileContent.Len() != 0 || !options.AllowImplicitFirstFile
+				shouldSaveFile := !options.AllowImplicitFirstFile || currentFileContent.Len() != 0 || hasSeenFile
 				if shouldSaveFile {
+					hasSeenFile = true
 					newTestFile, e := parseFile(currentFileName, currentFileContent.String(), currentFileOptions)
 					if e != nil {
 						parseError = e
@@ -206,6 +208,7 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 				// we need to save it as an implicit first file before starting the new file
 				if hasContentBeforeFirstFilename && options.AllowImplicitFirstFile && currentFileName != "" {
 					// Store the implicit first file
+					hasSeenFile = true
 					newTestFile, e := parseFile(currentFileName, currentFileContent.String(), currentFileOptions)
 					if e != nil {
 						parseError = e
