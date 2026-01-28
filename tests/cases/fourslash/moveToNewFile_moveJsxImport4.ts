@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @jsx: preserve
-// @libFiles: react.d.ts,leftpad.d.ts
+// @libFiles: react.d.ts
 
 // @Filename: file.tsx
 //// import React = require('leftpad');
