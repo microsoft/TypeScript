@@ -1008,7 +1008,7 @@ export namespace Compiler {
 
     function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
         const fileName = harnessSettings.fullEmitPaths ? Utils.removeTestPathPrefixes(file.file) : ts.getBaseFileName(file.file);
-        return "//// [" + fileName + "]\r\n" + Utils.removeTestPathPrefixes(file.text);
+        return "//// [" + fileName + "]\r\n" + file.text;
     }
 
     export function collateOutputs(outputFiles: readonly documents.TextDocument[]): string {

@@ -25,7 +25,7 @@ const testErr = <ResizablePanel>
 
 //// [checkJsxChildrenCanBeTupleType.js]
 "use strict";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

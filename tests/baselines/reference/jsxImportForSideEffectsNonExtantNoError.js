@@ -45,7 +45,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var React = __importStar(require("react"));
 require("./App.css"); // doesn't actually exist
 var tag = React.createElement("div", null);

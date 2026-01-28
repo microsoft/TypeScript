@@ -201,7 +201,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var React = __importStar(require("react"));
 var Component;
 var RenderElement = function (_a) {

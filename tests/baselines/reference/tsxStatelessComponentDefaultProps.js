@@ -19,7 +19,7 @@ let a = <BackButton />
 
 //// [tsxStatelessComponentDefaultProps.js]
 "use strict";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

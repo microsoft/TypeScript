@@ -117,7 +117,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blah = Blah;
 exports.Blah2 = Blah2;
 exports.Blah3 = Blah3;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var React = __importStar(require("react"));
 function Blah(props) {
     return React.createElement(React.Fragment, null);

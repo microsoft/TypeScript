@@ -71,7 +71,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 var React = __importStar(require("react"));
 var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
@@ -86,7 +86,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "two.tsx";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 32 }, _this); };
 exports.HelloWorld = HelloWorld;
@@ -99,7 +99,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "three.tsx";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
 var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 32 }, _this); };
@@ -143,7 +143,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
 var React = __importStar(require("react"));

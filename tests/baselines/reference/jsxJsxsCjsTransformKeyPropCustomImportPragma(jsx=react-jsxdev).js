@@ -36,8 +36,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = require("preact");
 var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
-var _jsxFileName = "preact.tsx";
-/// <reference path="react16.d.ts" />
+var _jsxFileName = "/.src/preact.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
 var props = { answer: 42 };
 var a = (0, jsx_dev_runtime_1.jsxDEV)("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
@@ -59,7 +59,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "react.tsx";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");
 var props2 = { answer: 42 };

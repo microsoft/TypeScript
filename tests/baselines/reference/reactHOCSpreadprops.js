@@ -41,7 +41,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var React = require("react");
 function f(App) {
     var C = /** @class */ (function (_super) {

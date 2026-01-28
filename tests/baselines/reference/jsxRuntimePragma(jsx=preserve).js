@@ -71,7 +71,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 var React = __importStar(require("react"));
 var HelloWorld = function () { return <h1>Hello world</h1>; };
@@ -82,7 +82,7 @@ exports.selfClosing = <img src="./image.png"/>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 var HelloWorld = function () { return <h1>Hello world</h1>; };
 exports.HelloWorld = HelloWorld;
@@ -92,7 +92,7 @@ exports.selfClosing = <img src="./image.png"/>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
 var HelloWorld = function () { return <h1>Hello world</h1>; };
@@ -136,7 +136,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
 var React = __importStar(require("react"));

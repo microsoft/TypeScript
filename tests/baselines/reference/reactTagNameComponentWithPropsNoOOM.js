@@ -15,7 +15,7 @@ const children: any[] = [];
 
 //// [reactTagNameComponentWithPropsNoOOM.js]
 "use strict";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
