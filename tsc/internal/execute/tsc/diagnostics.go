@@ -44,7 +44,13 @@ func CreateDiagnosticReporter(sys System, w io.Writer, locale locale.Locale, opt
 }
 
 func defaultIsPretty(sys System) bool {
-	return sys.WriteOutputIsTTY() && sys.GetEnvironmentVariable("NO_COLOR") == ""
+	if sys.GetEnvironmentVariable("NO_COLOR") != "" {
+		return false
+	}
+	if sys.GetEnvironmentVariable("FORCE_COLOR") != "" {
+		return true
+	}
+	return sys.WriteOutputIsTTY()
 }
 
 func shouldBePretty(sys System, options *core.CompilerOptions) bool {

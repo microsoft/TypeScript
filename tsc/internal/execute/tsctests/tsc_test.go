@@ -33,6 +33,21 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
+			subScenario: "adds color when FORCE_COLOR is set",
+			env: map[string]string{
+				"FORCE_COLOR": "true",
+			},
+			commandLineArgs: nil,
+		},
+		{
+			subScenario: "does not add color when NO_COLOR is set even if FORCE_COLOR is set",
+			env: map[string]string{
+				"NO_COLOR":    "true",
+				"FORCE_COLOR": "true",
+			},
+			commandLineArgs: nil,
+		},
+		{
 			subScenario:     "when build not first argument",
 			commandLineArgs: []string{"--verbose", "--build"},
 		},
