@@ -5,7 +5,7 @@
 // bug, which, if fixed, would prevent the later crash.
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs" } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/packages/mylib/package.json
 //// { "name": "mylib", "version": "1.0.0", "main": "index.js" }

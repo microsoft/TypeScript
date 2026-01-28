@@ -1,118 +1,32 @@
 Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
 Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
 Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/TS/Lib/lib.d.ts]
-lib.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts]
-lib.es2015.collection.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.core.d.ts]
-lib.es2015.core.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts]
-lib.es2015.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts]
-lib.es2015.generator.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts]
-lib.es2015.iterable.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts]
-lib.es2015.promise.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts]
-lib.es2015.proxy.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts]
-lib.es2015.reflect.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts]
-lib.es2015.symbol.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts]
-lib.es2015.symbol.wellknown.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts]
-lib.es2016.array.include.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2016.d.ts]
-lib.es2016.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts]
-lib.es2016.intl.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts]
-lib.es2017.arraybuffer.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.d.ts]
-lib.es2017.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.date.d.ts]
-lib.es2017.date.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts]
-lib.es2017.intl.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.object.d.ts]
-lib.es2017.object.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts]
-lib.es2017.sharedmemory.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.string.d.ts]
-lib.es2017.string.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts]
-lib.es2017.typedarrays.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts]
-lib.es2018.asyncgenerator.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts]
-lib.es2018.asynciterable.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.d.ts]
-lib.es2018.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts]
-lib.es2018.intl.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts]
-lib.es2018.promise.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts]
-lib.es2018.regexp.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.array.d.ts]
-lib.es2019.array.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.d.ts]
-lib.es2019.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts]
-lib.es2019.intl.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.object.d.ts]
-lib.es2019.object.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.string.d.ts]
-lib.es2019.string.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts]
-lib.es2019.symbol.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts]
-lib.d.ts-Text
-
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "module": "commonjs",
+          "lib": [
+            "es2019"
+          ],
+          "target": "es5",
+          "newLine": "crlf",
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/home/src/workspaces/project/index.ts]
 Component
 
@@ -131,7 +45,7 @@ import "react";
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/tsconfig.json"
@@ -217,7 +131,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (38)
-	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 lib.es2015.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2016.d.ts Text-1 lib.es2016.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2017.d.ts Text-1 lib.es2017.d.ts-Text
@@ -370,7 +284,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -381,20 +294,128 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+Info seq  [hh:mm:ss:mss] 	Files (38)
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 lib.es2015.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2016.d.ts Text-1 lib.es2016.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.d.ts Text-1 lib.es2017.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.d.ts Text-1 lib.es2018.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.d.ts Text-1 lib.es2019.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.core.d.ts Text-1 lib.es2015.core.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts Text-1 lib.es2015.collection.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts Text-1 lib.es2015.generator.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts Text-1 lib.es2015.iterable.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts Text-1 lib.es2015.promise.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts Text-1 lib.es2015.proxy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts Text-1 lib.es2015.reflect.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts Text-1 lib.es2015.symbol.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts Text-1 lib.es2015.symbol.wellknown.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts Text-1 lib.es2016.array.include.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts Text-1 lib.es2016.intl.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts Text-1 lib.es2017.arraybuffer.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.date.d.ts Text-1 lib.es2017.date.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.object.d.ts Text-1 lib.es2017.object.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts Text-1 lib.es2017.sharedmemory.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.string.d.ts Text-1 lib.es2017.string.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts Text-1 lib.es2017.intl.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts Text-1 lib.es2017.typedarrays.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts Text-1 lib.es2018.asyncgenerator.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts Text-1 lib.es2018.asynciterable.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts Text-1 lib.es2018.intl.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts Text-1 lib.es2018.promise.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts Text-1 lib.es2018.regexp.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.array.d.ts Text-1 lib.es2019.array.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.object.d.ts Text-1 lib.es2019.object.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.string.d.ts Text-1 lib.es2019.string.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts Text-1 lib.es2019.symbol.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts Text-1 lib.es2019.intl.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"commonjs\", \"lib\": [\"es2019\"] } }"
 	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export declare function Component(): void;"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library referenced via 'es5' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.d.ts
+	  Library referenced via 'es2015' from file '../../tslibs/TS/Lib/lib.es2016.d.ts'
+	../../tslibs/TS/Lib/lib.es2016.d.ts
+	  Library referenced via 'es2016' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.d.ts
+	  Library referenced via 'es2017' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.d.ts
+	  Library referenced via 'es2018' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.d.ts
+	  Library 'lib.es2019.d.ts' specified in compilerOptions
+	../../tslibs/TS/Lib/lib.es2015.core.d.ts
+	  Library referenced via 'es2015.core' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.collection.d.ts
+	  Library referenced via 'es2015.collection' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.generator.d.ts
+	  Library referenced via 'es2015.generator' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.iterable.d.ts
+	  Library referenced via 'es2015.iterable' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	  Library referenced via 'es2015.iterable' from file '../../tslibs/TS/Lib/lib.es2015.generator.d.ts'
+	  Library referenced via 'es2015.iterable' from file '../../tslibs/TS/Lib/lib.es2018.asynciterable.d.ts'
+	  Library referenced via 'es2015.iterable' from file '../../tslibs/TS/Lib/lib.es2019.object.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.promise.d.ts
+	  Library referenced via 'es2015.promise' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.proxy.d.ts
+	  Library referenced via 'es2015.proxy' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.reflect.d.ts
+	  Library referenced via 'es2015.reflect' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.symbol.d.ts
+	  Library referenced via 'es2015.symbol' from file '../../tslibs/TS/Lib/lib.es2015.iterable.d.ts'
+	  Library referenced via 'es2015.symbol' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	  Library referenced via 'es2015.symbol' from file '../../tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts'
+	  Library referenced via 'es2015.symbol' from file '../../tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts'
+	  Library referenced via 'es2015.symbol' from file '../../tslibs/TS/Lib/lib.es2018.asynciterable.d.ts'
+	../../tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts
+	  Library referenced via 'es2015.symbol.wellknown' from file '../../tslibs/TS/Lib/lib.es2015.d.ts'
+	  Library referenced via 'es2015.symbol.wellknown' from file '../../tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts'
+	../../tslibs/TS/Lib/lib.es2016.array.include.d.ts
+	  Library referenced via 'es2016.array.include' from file '../../tslibs/TS/Lib/lib.es2016.d.ts'
+	../../tslibs/TS/Lib/lib.es2016.intl.d.ts
+	  Library referenced via 'es2016.intl' from file '../../tslibs/TS/Lib/lib.es2016.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts
+	  Library referenced via 'es2017.arraybuffer' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.date.d.ts
+	  Library referenced via 'es2017.date' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.object.d.ts
+	  Library referenced via 'es2017.object' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts
+	  Library referenced via 'es2017.sharedmemory' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.string.d.ts
+	  Library referenced via 'es2017.string' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.intl.d.ts
+	  Library referenced via 'es2017.intl' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.typedarrays.d.ts
+	  Library referenced via 'es2017.typedarrays' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts
+	  Library referenced via 'es2018.asyncgenerator' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.asynciterable.d.ts
+	  Library referenced via 'es2018.asynciterable' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	  Library referenced via 'es2018.asynciterable' from file '../../tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.intl.d.ts
+	  Library referenced via 'es2018.intl' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.promise.d.ts
+	  Library referenced via 'es2018.promise' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	../../tslibs/TS/Lib/lib.es2018.regexp.d.ts
+	  Library referenced via 'es2018.regexp' from file '../../tslibs/TS/Lib/lib.es2018.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.array.d.ts
+	  Library referenced via 'es2019.array' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.object.d.ts
+	  Library referenced via 'es2019.object' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.string.d.ts
+	  Library referenced via 'es2019.string' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.symbol.d.ts
+	  Library referenced via 'es2019.symbol' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
+	../../tslibs/TS/Lib/lib.es2019.intl.d.ts
+	  Library referenced via 'es2019.intl' from file '../../tslibs/TS/Lib/lib.es2019.d.ts'
 	../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.es5.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
 	node_modules/@types/react/index.d.ts
@@ -407,7 +428,7 @@ Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -418,7 +439,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -426,8 +447,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
@@ -546,10 +565,6 @@ Projects::
     noOpenRef: true
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -562,140 +577,174 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.core.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.date.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.object.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.string.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.array.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.object.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.string.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/workspaces/project/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -712,7 +761,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts"
@@ -726,7 +775,7 @@ Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -739,13 +788,11 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
@@ -866,10 +913,6 @@ Projects::
     noOpenRef: false *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 2
@@ -882,140 +925,174 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.collection.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.core.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.generator.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.iterable.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.proxy.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.reflect.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.symbol.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.date.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.object.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.string.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.intl.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2018.regexp.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.array.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.object.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.string.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es2019.symbol.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /home/src/workspaces/project/tsconfig.json
+        /dev/null/inferredProject1*
 /home/src/workspaces/project/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -1033,7 +1110,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "preferences": {
@@ -1047,7 +1124,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "configure",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true
     }
 After Request
@@ -1062,7 +1139,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 3,
+      "seq": 4,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -1088,7 +1165,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionInfo",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": {
         "flags": 9,
@@ -1850,8 +1927,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:

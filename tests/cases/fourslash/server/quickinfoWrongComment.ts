@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 //// interface I {
 ////     /** The colour */
 ////     readonly colour: string

@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
 // @moduleResolution: bundler
 // @Filename: /home/src/workspaces/project/node_modules/react/package.json
 //// { "name": "react", "version": "16.8.6", "main": "index.js" }

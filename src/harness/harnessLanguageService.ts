@@ -766,6 +766,11 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         // or edited.
         clientHost.setClient(client);
 
+        // Apply test options (e.g. @lib) to inferred projects
+        if (options) {
+            client.setCompilerOptionsForInferredProjects(ts.optionMapToObject(ts.serializeCompilerOptions(options)) as ts.server.protocol.CompilerOptions);
+        }
+
         // Set the properties
         this.client = client;
         this.host = clientHost;

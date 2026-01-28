@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
 // @module: preserve
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts

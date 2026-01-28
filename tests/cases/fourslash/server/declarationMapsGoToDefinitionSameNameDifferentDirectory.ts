@@ -21,6 +21,7 @@
 ////    "$schema": "http://json.schemastore.org/tsconfig",
 ////    "compileOnSave": true,
 ////    "compilerOptions": {
+////      "lib": ["es5"],
 ////      "strict": false,
 ////      "sourceMap": true,
 ////      "declaration": true,

@@ -102,7 +102,7 @@ const enum MetadataOptionNames {
 const fileMetadataNames = [MetadataOptionNames.fileName, MetadataOptionNames.emitThisFile, MetadataOptionNames.resolveReference, MetadataOptionNames.symlink];
 
 function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
-    const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5, newLine: ts.NewLineKind.CarriageReturnLineFeed };
+    const settings: ts.CompilerOptions = { ...ts.getDefaultCompilerOptions(), jsx: undefined, newLine: ts.NewLineKind.CarriageReturnLineFeed };
     Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
     return settings;
 }
@@ -4833,16 +4833,17 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
     }
 
     // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-    const config = ts.find(files, isConfig);
-    if (config) {
-        let directive = getNonFileNameOptionInFileList(files);
-        if (!directive) {
-            directive = getNonFileNameOptionInObject(globalOptions);
-        }
-        if (directive) {
-            throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
-        }
-    }
+    // Wrong: the inferred project may contain files other than the ones covered by a tsconfig.json.
+    // const config = ts.find(files, isConfig);
+    // if (config) {
+    //     let directive = getNonFileNameOptionInFileList(files);
+    //     if (!directive) {
+    //         directive = getNonFileNameOptionInObject(globalOptions);
+    //     }
+    //     if (directive) {
+    //         throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
+    //     }
+    // }
 
     return {
         markerPositions,

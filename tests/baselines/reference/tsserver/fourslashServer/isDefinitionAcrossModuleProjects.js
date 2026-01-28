@@ -1,16 +1,32 @@
 Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
 Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
 Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/TS/Lib/lib.d.ts]
-lib.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "composite": true,
+          "lib": [
+            "es5"
+          ],
+          "target": "es5",
+          "newLine": "crlf",
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/home/src/workspaces/project/a/index.ts]
 import { NS } from "../b";
 import { I } from "../c";
@@ -123,6 +139,7 @@ const ic: I = { FC() {} };
 {
     "compilerOptions": {
         "composite": true,
+        "lib": ["es5"],
     },
     "references": [
         { "path": "a" },
@@ -139,13 +156,14 @@ const ic: I = { FC() {} };
         "declarationMap": true,
         "module": "CommonJS",
         "emitDeclarationOnly": true,
+        "lib": ["es5"],
     }
 }
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a/index.ts"
@@ -165,6 +183,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/a/tsconfig.json : 
   "declarationMap": true,
   "module": 1,
   "emitDeclarationOnly": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/a/tsconfig.json"
  },
  "projectReferences": [
@@ -201,6 +222,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/b/tsconfig.json : 
   "declarationMap": true,
   "module": 1,
   "emitDeclarationOnly": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/b/tsconfig.json"
  }
 }
@@ -215,6 +239,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/c/tsconfig.json : 
   "declarationMap": true,
   "module": 1,
   "emitDeclarationOnly": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/c/tsconfig.json"
  }
 }
@@ -227,7 +254,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
@@ -239,7 +266,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/b/index.ts Text-1 "export namespace NS {\n    export function FB() {}\n}\n\nexport interface I {\n    FB();\n}\n\nconst ib: I = { FB() {} };"
@@ -247,12 +274,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/workspaces/project/a/index.ts SVC-1-0 "import { NS } from \"../b\";\nimport { I } from \"../c\";\n\ndeclare module \"../b\" {\n    export namespace NS {\n        export function FA();\n    }\n}\n\ndeclare module \"../c\" {\n    export interface I {\n        FA();\n    }\n}\n\nconst ia: I = {\n    FA: NS.FA,\n    FC() { },\n};"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../b/index.ts
 	  Imported via "../b" from file 'index.ts'
 	../c/index.ts
@@ -301,7 +328,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -309,11 +336,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/a/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -358,15 +385,15 @@ Projects::
     initialLoadPending: true
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/a/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/a/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/a/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/a/tsconfig.json
@@ -385,7 +412,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a/index.ts",
@@ -409,6 +436,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [],
  "options": {
   "composite": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  },
  "projectReferences": [
@@ -433,6 +463,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/a2/tsconfig.json :
   "declarationMap": true,
   "module": 1,
   "emitDeclarationOnly": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/a2/tsconfig.json"
  },
  "projectReferences": [
@@ -482,7 +515,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -575,11 +608,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts: *new*
   {"pollingInterval":2000}
@@ -633,7 +666,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a/index.ts",
@@ -665,18 +698,18 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/c/index.ts Text-1 "export namespace NS {\n    export function FC() {}\n}\n\nexport interface I {\n    FC();\n}\n\nconst ic: I = { FC() {} };"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -732,7 +765,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/a2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/b/index.ts Text-1 "export namespace NS {\n    export function FB() {}\n}\n\nexport interface I {\n    FB();\n}\n\nconst ib: I = { FB() {} };"
@@ -740,12 +773,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/workspaces/project/a2/index.ts Text-1 "import { NS } from \"../b\";\nimport { I } from \"../c\";\n\ndeclare module \"../b\" {\n    export namespace NS {\n        export function FA();\n    }\n}\n\ndeclare module \"../c\" {\n    export interface I {\n        FA();\n    }\n}\n\nconst ia: I = {\n    FA: NS.FA,\n    FC() { },\n};"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../b/index.ts
 	  Imported via "../b" from file 'index.ts'
 	../c/index.ts
@@ -783,7 +816,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1048,11 +1081,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -1127,12 +1160,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /home/src/workspaces/project/a/tsconfig.json
-        /home/src/workspaces/project/c/tsconfig.json *new*
-        /home/src/workspaces/project/a2/tsconfig.json *new*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -1140,6 +1167,12 @@ ScriptInfos::
         /home/src/workspaces/project/c/tsconfig.json *new*
         /home/src/workspaces/project/a2/tsconfig.json *new*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/a/tsconfig.json
+        /home/src/workspaces/project/c/tsconfig.json *new*
+        /home/src/workspaces/project/a2/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
         /home/src/workspaces/project/a/tsconfig.json
@@ -1167,7 +1200,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 3,
+      "seq": 4,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a/index.ts",
@@ -1182,7 +1215,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": [
         {
@@ -1284,7 +1317,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 4,
+      "seq": 5,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a2/index.ts"
@@ -1321,16 +1354,16 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -1385,12 +1418,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 3
-        /home/src/workspaces/project/a/tsconfig.json
-        /home/src/workspaces/project/c/tsconfig.json
-        /home/src/workspaces/project/a2/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
@@ -1398,6 +1425,12 @@ ScriptInfos::
         /home/src/workspaces/project/c/tsconfig.json
         /home/src/workspaces/project/a2/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /home/src/workspaces/project/a/tsconfig.json
+        /home/src/workspaces/project/c/tsconfig.json
+        /home/src/workspaces/project/a2/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/a/tsconfig.json
@@ -1426,7 +1459,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 5,
+      "seq": 6,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a2/index.ts",
@@ -1442,7 +1475,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true,
       "body": [
         {
@@ -1532,11 +1565,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -1614,7 +1647,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 6,
+      "seq": 7,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a2/index.ts",
@@ -1637,7 +1670,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "body": [
         {
@@ -1923,7 +1956,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 7,
+      "seq": 8,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/a2/index.ts",
@@ -1938,7 +1971,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true,
       "body": [
         {
@@ -2040,7 +2073,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 8,
+      "seq": 9,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/b/index.ts"
@@ -2071,19 +2104,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/b/index.ts Text-1 "export namespace NS {\n    export function FB() {}\n}\n\nexport interface I {\n    FB();\n}\n\nconst ib: I = { FB() {} };"
 	/home/src/workspaces/project/b/other.ts Text-1 "export const Other = 1;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.es5.d.ts'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 	other.ts
@@ -2144,7 +2177,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 8,
+      "request_seq": 9,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -2152,11 +2185,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -2244,13 +2277,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 4 *changed*
-        /home/src/workspaces/project/a/tsconfig.json
-        /home/src/workspaces/project/c/tsconfig.json
-        /home/src/workspaces/project/a2/tsconfig.json
-        /home/src/workspaces/project/b/tsconfig.json *new*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
     version: Text-1
     containingProjects: 4 *changed*
@@ -2259,6 +2285,13 @@ ScriptInfos::
         /home/src/workspaces/project/a2/tsconfig.json
         /home/src/workspaces/project/b/tsconfig.json *new*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
+        /home/src/workspaces/project/a/tsconfig.json
+        /home/src/workspaces/project/c/tsconfig.json
+        /home/src/workspaces/project/a2/tsconfig.json
+        /home/src/workspaces/project/b/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *changed*
     version: Text-1
     containingProjects: 4 *changed*
         /home/src/workspaces/project/a/tsconfig.json
@@ -2293,7 +2326,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 9,
+      "seq": 10,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/b/index.ts",
@@ -2311,7 +2344,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 9,
+      "request_seq": 10,
       "success": true,
       "body": [
         {
@@ -2392,11 +2425,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -2487,7 +2520,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 10,
+      "seq": 11,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/b/index.ts",
@@ -2504,7 +2537,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 10,
+      "request_seq": 11,
       "success": true,
       "body": [
         {
@@ -2566,7 +2599,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 11,
+      "seq": 12,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/b/index.ts",
@@ -2583,7 +2616,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 11,
+      "request_seq": 12,
       "success": true,
       "body": [
         {
@@ -2685,7 +2718,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 12,
+      "seq": 13,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/c/index.ts"
@@ -2730,16 +2763,16 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 12,
+      "request_seq": 13,
       "success": true
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -2800,13 +2833,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 4
-        /home/src/workspaces/project/a/tsconfig.json
-        /home/src/workspaces/project/c/tsconfig.json
-        /home/src/workspaces/project/a2/tsconfig.json
-        /home/src/workspaces/project/b/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 4
@@ -2815,6 +2841,13 @@ ScriptInfos::
         /home/src/workspaces/project/a2/tsconfig.json
         /home/src/workspaces/project/b/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 4
+        /home/src/workspaces/project/a/tsconfig.json
+        /home/src/workspaces/project/c/tsconfig.json
+        /home/src/workspaces/project/a2/tsconfig.json
+        /home/src/workspaces/project/b/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 4
         /home/src/workspaces/project/a/tsconfig.json
@@ -2849,7 +2882,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 13,
+      "seq": 14,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/c/index.ts",
@@ -2867,7 +2900,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 13,
+      "request_seq": 14,
       "success": true,
       "body": [
         {
@@ -2948,11 +2981,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/a/index.d.ts:
   {"pollingInterval":2000}
@@ -3043,7 +3076,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 14,
+      "seq": 15,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/c/index.ts",
@@ -3060,7 +3093,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 14,
+      "request_seq": 15,
       "success": true,
       "body": [
         {
@@ -3322,7 +3355,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 15,
+      "seq": 16,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/c/index.ts",
@@ -3339,7 +3372,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "references-full",
-      "request_seq": 15,
+      "request_seq": 16,
       "success": true,
       "body": [
         {

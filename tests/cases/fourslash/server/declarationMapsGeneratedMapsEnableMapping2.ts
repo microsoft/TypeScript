@@ -3,6 +3,7 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "lib": ["es5"],
 ////        "strict": false,
 ////        "outDir": "./dist",
 ////        "sourceMap": true,

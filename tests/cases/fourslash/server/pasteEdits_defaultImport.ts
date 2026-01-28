@@ -21,7 +21,7 @@
 //// }
 
 // @Filename: /home/src/workspaces/project/folder/tsconfig.json
-////{ "compilerOptions": { "module": "nodenext" }, "files": ["folder/c.ts", "a.ts", "b.mts"] }
+////{ "compilerOptions": { "lib": ["es5"], "module": "nodenext" }, "files": ["folder/c.ts", "a.ts", "b.mts"] }
 
 const range = test.ranges();
 verify.pasteEdits({
