@@ -7673,6 +7673,7 @@ export const enum ScriptTarget {
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
+    LatestStandard = ES2024,
 }
 
 export const enum LanguageVariant {

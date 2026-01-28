@@ -2558,6 +2558,7 @@ declare namespace ts {
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
+                LatestStandard = "es2024",
             }
         }
         namespace typingsInstaller {
@@ -7221,6 +7222,7 @@ declare namespace ts {
         ESNext = 99,
         JSON = 100,
         Latest = 99,
+        LatestStandard = 11,
     }
     enum LanguageVariant {
         Standard = 0,
