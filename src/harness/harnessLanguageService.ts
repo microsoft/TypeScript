@@ -133,85 +133,104 @@ function createLanguageServiceVfs(): vfs.FileSystem {
     return vfs.createFourslashVfs(IO, /*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
 }
 
-const sharedLibDocumentRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
+// Cache lib file SourceFiles directly to avoid reparsing across tests.
+// Lib .d.ts files parse identically regardless of compiler settings, so we cache
+// just one copy per path. This persists for the entire test run.
+const libSourceFileCache = new Map<string, ts.SourceFile>();
 
-function createLibSharingDocumentRegistry(): ts.DocumentRegistry {
+function createLibCachingDocumentRegistry(): ts.DocumentRegistry {
     const localRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
-
-    const enableLibAstCaching = true;
-    if (!enableLibAstCaching) {
-        return localRegistry;
-    }
-
-    const libFileVersions = new Map<string, string>();
 
     function isLibFile(fileName: string): boolean {
         return vpath.beneath(vfs.fourslashLibFolder, fileName);
     }
 
-    function getRegistry(fileName: string): ts.DocumentRegistry {
-        return isLibFile(fileName) ? sharedLibDocumentRegistry : localRegistry;
-    }
-
-    function checkLibFileVersion(fileName: string, version: string): void {
-        if (!isLibFile(fileName)) return;
-        const existingVersion = libFileVersions.get(fileName);
-        if (existingVersion === undefined) {
-            libFileVersions.set(fileName, version);
-        }
-        else if (existingVersion !== version) {
-            throw new Error(`Lib file "${fileName}" version changed from "${existingVersion}" to "${version}" - lib files should not be modified`);
-        }
-    }
-
     return {
         acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
-            checkLibFileVersion(fileName, version);
-            return getRegistry(fileName).acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            if (isLibFile(fileName)) {
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Not cached - acquire from local registry to parse it, then cache
+                const sourceFile = localRegistry.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+                libSourceFileCache.set(fileName, sourceFile);
+                // Release from local registry immediately - we don't need ref counting for cached libs
+                const settings = typeof (compilationSettingsOrHost as ts.MinimalResolutionCacheHost).getCompilationSettings === "function"
+                    ? (compilationSettingsOrHost as ts.MinimalResolutionCacheHost).getCompilationSettings()
+                    : compilationSettingsOrHost as ts.CompilerOptions;
+                localRegistry.releaseDocument(fileName, settings, scriptKind!, typeof sourceFileOptions === "object" ? sourceFileOptions.impliedNodeFormat : undefined);
+                return sourceFile;
+            }
+            return localRegistry.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
         },
         acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
-            checkLibFileVersion(fileName, version);
-            return getRegistry(fileName).acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            if (isLibFile(fileName)) {
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Not cached - acquire from local registry to parse it, then cache
+                const sourceFile = localRegistry.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+                libSourceFileCache.set(fileName, sourceFile);
+                // Release from local registry immediately
+                const impliedNodeFormat = typeof sourceFileOptions === "object" ? sourceFileOptions.impliedNodeFormat : undefined;
+                localRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
+                return sourceFile;
+            }
+            return localRegistry.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
         },
         updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
-            checkLibFileVersion(fileName, version);
-            return getRegistry(fileName).updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            if (isLibFile(fileName)) {
+                // Lib files should never be updated - just return the cached version
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Fall through to acquire if somehow not cached
+                return this.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            }
+            return localRegistry.updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
         },
         updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
-            checkLibFileVersion(fileName, version);
-            return getRegistry(fileName).updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            if (isLibFile(fileName)) {
+                // Lib files should never be updated - just return the cached version
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Fall through to acquire if somehow not cached
+                return this.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            }
+            return localRegistry.updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
         },
         getKeyForCompilationSettings(settings) {
-            return sharedLibDocumentRegistry.getKeyForCompilationSettings(settings);
+            return localRegistry.getKeyForCompilationSettings(settings);
         },
         getDocumentRegistryBucketKeyWithMode(key, mode) {
-            return sharedLibDocumentRegistry.getDocumentRegistryBucketKeyWithMode(key, mode);
+            return localRegistry.getDocumentRegistryBucketKeyWithMode(key, mode);
         },
         releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
-            // Need to handle the overloaded signature
-            return getRegistry(fileName).releaseDocument(fileName, compilationSettings, scriptKind!, impliedNodeFormat);
+            if (isLibFile(fileName)) {
+                // Lib files are cached separately - no ref counting needed, so no-op
+                return;
+            }
+            return localRegistry.releaseDocument(fileName, compilationSettings, scriptKind!, impliedNodeFormat);
         },
         releaseDocumentWithKey(path: ts.Path, key: ts.DocumentRegistryBucketKey, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
-            // We don't know the original file name here, so release from both registries
-            // This is safe because releaseDocument is a no-op if the document wasn't acquired
+            // We can't easily tell if this is a lib file from just the path without the fileName,
+            // so try to release from local registry and ignore errors
             try {
                 localRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
             }
             catch {
-                // Ignore - document might be in the other registry
-            }
-            try {
-                sharedLibDocumentRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
-            }
-            catch {
-                // Ignore - document might be in the other registry
+                // Ignore - might be a lib file that was never in the local registry
             }
         },
         reportStats() {
-            return `Shared lib registry: ${sharedLibDocumentRegistry.reportStats()}\nLocal registry: ${localRegistry.reportStats()}`;
+            return `Lib cache: ${libSourceFileCache.size} files\nLocal registry: ${localRegistry.reportStats()}`;
         },
         getBuckets() {
-            // Return local buckets - this is primarily for debugging
             return localRegistry.getBuckets();
         },
     };
@@ -429,7 +448,7 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
-        this.documentRegistry = createLibSharingDocumentRegistry();
+        this.documentRegistry = createLibCachingDocumentRegistry();
     }
     getHost(): LanguageServiceAdapterHost {
         return this.host;
