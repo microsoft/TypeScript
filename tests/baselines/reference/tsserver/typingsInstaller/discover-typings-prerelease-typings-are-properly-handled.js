@@ -85,7 +85,11 @@ ts.JsTyping.discoverTypings::
           "tsFakeMajor.Minor": "1.3.0-next.1"
         }
       },
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","commander"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -95,5 +99,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "commander"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }

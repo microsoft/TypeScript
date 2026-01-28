@@ -70,11 +70,34 @@ declare const console: { log(msg: any): void; };
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "allowJs": true,
+          "types": [
+            "*"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/home/src/projects/project/app.js"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app.js ProjectRootPath: undefined:: Result: undefined
@@ -159,10 +182,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
         "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
         "noEmitForJsFiles": true,
         "maxNodeModuleJsDepth": 2
       },
@@ -177,15 +201,97 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/home/src/projects/project/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
-      "newTypingNames": [],
-      "filesToWatch": []
+      "newTypingNames": [
+        "jquery"
+      ],
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/package.json",
+        "/home/src/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/package.json",
+        "/home/src/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
+  "@types/jquery@tsFakeMajor.Minor"
+]
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
+After request
+
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] complete with success::true
+
+TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -195,14 +301,181 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
         "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
         "noEmitForJsFiles": true,
         "maxNodeModuleJsDepth": 2
       },
-      "typings": [],
+      "typings": [
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "types": [
+            "*"
+          ],
+          "allowNonTsExtensions": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [
+          "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/dev/null/inferredProject1*",
+      "packagesToInstall": [
+        "@types/jquery@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/jquery@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: false
+
+Before running Timeout callback:: count: 2
+1: /dev/null/inferredProject1*
+2: *ensureProjectForOpenFiles*
+
+Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/jquery/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/app.js SVC-1-0 ""
+	/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts Text-1 "declare const $: { x: number }"
+
+
+	../../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../../../projects/project/app.js
+	  Root file specified for compilation
+	../../../Library/Caches/typescript/node_modules/@types/jquery/index.d.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/projects/project/app.js",
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/home/src/Vscode/Projects/bin",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/home/src/projects/project/package.json' dependencies: ["jquery"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/package.json",
+        "/home/src/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+      ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
@@ -219,49 +492,88 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
-          "allowNonTsExtensions": true,
           "allowJs": true,
+          "types": [
+            "*"
+          ],
+          "allowNonTsExtensions": true,
           "noEmitForJsFiles": true,
           "maxNodeModuleJsDepth": 2
         },
-        "typings": [],
+        "typings": [
+          "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
+        ],
         "unresolvedImports": [],
         "kind": "action::set"
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] response:
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/app.js
+Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 1,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/app.js"
+        ]
       }
     }
-After request
+After running Timeout callback:: count: 0
+
+PolledWatches::
+/home/src/Library/Caches/typescript/node_modules/@types/jquery/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/Library/Caches/typescript/package.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    autoImportProviderHost: false *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
-Before running PendingInstalls callback:: count: 0
-
-After running PendingInstalls callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
+ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/projects/project/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*

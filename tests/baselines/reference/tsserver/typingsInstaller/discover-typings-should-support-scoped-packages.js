@@ -35,12 +35,23 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
+TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: ["/home/src/projects/project/node_modules/@a/b/package.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["@a/b"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
-      "newTypingNames": [],
-      "filesToWatch": []
+      "newTypingNames": [
+        "@a/b"
+      ],
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }

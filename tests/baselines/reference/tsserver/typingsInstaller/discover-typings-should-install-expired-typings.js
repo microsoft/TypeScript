@@ -77,7 +77,11 @@ ts.JsTyping.discoverTypings::
           "ts2.7": "1.3.0"
         }
       },
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","commander"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -88,5 +92,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "commander"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }

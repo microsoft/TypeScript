@@ -41,7 +41,11 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["jquery","chroma-js"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -52,5 +56,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "jquery",
         "chroma-js"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }

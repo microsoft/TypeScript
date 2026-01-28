@@ -33,7 +33,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -43,7 +47,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -62,7 +69,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -72,7 +83,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -91,7 +105,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -101,7 +119,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -120,7 +141,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -130,7 +155,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -149,7 +177,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -159,7 +191,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -178,7 +213,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -188,7 +227,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -207,7 +249,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -217,7 +263,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -236,7 +285,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -246,7 +299,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -265,7 +321,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -275,7 +335,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -294,7 +357,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -304,7 +371,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -323,7 +393,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -333,7 +407,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -352,7 +429,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -362,7 +443,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -381,7 +465,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -391,7 +479,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -410,7 +501,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -420,7 +515,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -439,7 +537,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -449,7 +551,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -468,7 +573,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -478,7 +587,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -497,7 +609,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -507,7 +623,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -526,7 +645,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -536,7 +659,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -555,7 +681,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -565,7 +695,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -584,7 +717,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -594,7 +731,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -613,7 +753,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -623,7 +767,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -642,7 +789,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -652,7 +803,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -671,7 +825,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -681,7 +839,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -700,7 +861,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -710,7 +875,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -729,7 +897,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -739,7 +911,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -758,7 +933,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -768,7 +947,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -787,7 +969,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -797,7 +983,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -816,7 +1005,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -826,7 +1019,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -845,7 +1041,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -855,7 +1055,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -874,7 +1077,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -884,7 +1091,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -903,7 +1113,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -913,7 +1127,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -932,7 +1149,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -942,7 +1163,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -961,7 +1185,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -971,7 +1199,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -990,7 +1221,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1000,7 +1235,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1019,7 +1257,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1029,7 +1271,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1048,7 +1293,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1058,7 +1307,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1077,7 +1329,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1087,7 +1343,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1106,7 +1365,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1116,7 +1379,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1135,7 +1401,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1145,7 +1415,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1164,7 +1437,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1174,7 +1451,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1193,7 +1473,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1203,7 +1487,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1222,7 +1509,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1232,7 +1523,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1251,7 +1545,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1261,7 +1559,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1280,7 +1581,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1290,7 +1595,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1309,7 +1617,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1319,7 +1631,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1338,7 +1653,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1348,7 +1667,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1367,7 +1689,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1377,7 +1703,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1396,7 +1725,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1406,7 +1739,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1425,7 +1761,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1435,7 +1775,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1454,7 +1797,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1464,7 +1811,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1483,7 +1833,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1493,7 +1847,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1512,7 +1869,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1522,7 +1883,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1541,7 +1905,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1551,7 +1919,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1570,7 +1941,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1580,7 +1955,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1599,7 +1977,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1609,7 +1991,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1628,7 +2013,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1638,7 +2027,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1657,7 +2049,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1667,7 +2063,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1686,7 +2085,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1696,7 +2099,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1715,7 +2121,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1725,7 +2135,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1744,7 +2157,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1754,7 +2171,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1773,7 +2193,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1783,7 +2207,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1802,7 +2229,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1812,7 +2243,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1831,7 +2265,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1841,7 +2279,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1860,7 +2301,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1870,7 +2315,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1889,7 +2337,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1899,7 +2351,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1918,7 +2373,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1928,7 +2387,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1947,7 +2409,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1957,7 +2423,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -1976,7 +2445,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1986,7 +2459,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2005,7 +2481,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2015,7 +2495,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2034,7 +2517,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2044,7 +2531,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2063,7 +2553,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2073,7 +2567,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2092,7 +2589,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2102,7 +2603,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2121,7 +2625,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2131,7 +2639,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2150,7 +2661,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2160,7 +2675,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2179,7 +2697,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2189,7 +2711,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2208,7 +2733,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2218,7 +2747,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2237,7 +2769,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2247,7 +2783,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2266,7 +2805,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2276,7 +2819,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2295,7 +2841,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2305,7 +2855,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2324,7 +2877,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2334,7 +2891,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2353,7 +2913,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2363,7 +2927,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2382,7 +2949,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2392,7 +2963,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2411,7 +2985,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2421,7 +2999,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2440,7 +3021,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2450,7 +3035,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2469,7 +3057,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2479,7 +3071,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2498,7 +3093,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2508,7 +3107,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2527,7 +3129,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2537,7 +3143,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2556,7 +3165,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2566,7 +3179,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2585,7 +3201,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2595,7 +3215,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2614,7 +3237,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2624,7 +3251,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2643,7 +3273,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2653,7 +3287,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2672,7 +3309,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2682,7 +3323,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2701,7 +3345,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2711,7 +3359,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2730,7 +3381,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2740,7 +3395,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2759,7 +3417,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2769,7 +3431,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2788,7 +3453,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2798,7 +3467,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2817,7 +3489,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2827,7 +3503,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2846,7 +3525,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2856,7 +3539,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2875,7 +3561,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2885,7 +3575,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2904,7 +3597,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2914,7 +3611,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2933,7 +3633,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2943,7 +3647,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2962,7 +3669,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2972,7 +3683,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -2991,7 +3705,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3001,7 +3719,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3020,7 +3741,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3030,7 +3755,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3049,7 +3777,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3059,7 +3791,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3078,7 +3813,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3088,7 +3827,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3107,7 +3849,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3117,7 +3863,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3136,7 +3885,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3146,7 +3899,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3165,7 +3921,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3175,7 +3935,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3194,7 +3957,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3204,7 +3971,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3223,7 +3993,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3233,7 +4007,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3252,7 +4029,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3262,7 +4043,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
 
 ts.JsTyping.discoverTypings::
@@ -3281,7 +4065,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3291,5 +4079,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node",
         "somename"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }

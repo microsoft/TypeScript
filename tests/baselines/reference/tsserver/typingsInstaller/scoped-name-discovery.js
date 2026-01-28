@@ -7,7 +7,13 @@ Before request
 
 
 //// [/user/username/projects/project/jsconfig.json]
-{}
+{
+  "compilerOptions": {
+    "types": [
+      "*"
+    ]
+  }
+}
 
 //// [/user/username/projects/project/package.json]
 {
@@ -69,6 +75,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/jsconfig.json :
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": true,
   "noEmit": true,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/user/username/projects/project/jsconfig.json"
  }
 }
@@ -86,10 +95,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -104,12 +109,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -202,6 +201,9 @@ TI:: [hh:mm:ss:mss] Got install request
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -216,63 +218,58 @@ TI:: [hh:mm:ss:mss] Got install request
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
-      "newTypingNames": [],
-      "filesToWatch": []
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/jsconfig.json'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/project/jsconfig.json'
 TI:: [hh:mm:ss:mss] Sending response:
     {
+      "kind": "action::watchTypingLocations",
       "projectName": "/user/username/projects/project/jsconfig.json",
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "compilerOptions": {
-        "allowJs": true,
-        "maxNodeModuleJsDepth": 2,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
-        "noEmit": true,
-        "configFilePath": "/user/username/projects/project/jsconfig.json",
-        "allowNonTsExtensions": true
-      },
-      "typings": [],
-      "unresolvedImports": [],
-      "kind": "action::set"
+      "files": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/user/username/projects/project/jsconfig.json"
     }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
-      "event": "setTypings",
+      "event": "beginInstallTypes",
       "body": {
-        "projectName": "/user/username/projects/project/jsconfig.json",
-        "typeAcquisition": {
-          "enable": true,
-          "include": [],
-          "exclude": []
-        },
-        "compilerOptions": {
-          "allowJs": true,
-          "maxNodeModuleJsDepth": 2,
-          "allowSyntheticDefaultImports": true,
-          "skipLibCheck": true,
-          "noEmit": true,
-          "configFilePath": "/user/username/projects/project/jsconfig.json",
-          "allowNonTsExtensions": true
-        },
-        "typings": [],
-        "unresolvedImports": [],
-        "kind": "action::set"
+        "eventId": 1
       }
     }
-TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /user/username/projects/project
@@ -327,7 +324,10 @@ Info seq  [hh:mm:ss:mss] event:
             "maxNodeModuleJsDepth": 2,
             "allowSyntheticDefaultImports": true,
             "skipLibCheck": true,
-            "noEmit": true
+            "noEmit": true,
+            "types": [
+              ""
+            ]
           },
           "typeAcquisition": {
             "enable": true,
@@ -383,9 +383,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
+/user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -403,6 +401,11 @@ FsWatchesRecursive::
   {}
 /user/username/projects/project/node_modules: *new*
   {}
+
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+] *new*
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
@@ -427,10 +430,437 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 
-Before running PendingInstalls callback:: count: 0
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+]
 
+TI:: Installation #1 with arguments:: [
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+] complete with success::true
+//// [/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts]
+
+
+
+TI:: [hh:mm:ss:mss] Installed typings ["@types/zkat__cacache@tsFakeMajor.Minor"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"]
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": [
+          "*"
+        ],
+        "configFilePath": "/user/username/projects/project/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [
+        "/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/user/username/projects/project/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "types": [
+            "*"
+          ],
+          "configFilePath": "/user/username/projects/project/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [
+          "/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "packagesToInstall": [
+        "@types/zkat__cacache@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/zkat__cacache@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
 After running PendingInstalls callback:: count: 0
 
-Before running Timeout callback:: count: 0
+Timeout callback:: count: 2
+1: /user/username/projects/project/jsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
-After running Timeout callback:: count: 0
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/project/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+Before running Timeout callback:: count: 2
+1: /user/username/projects/project/jsconfig.json
+2: *ensureProjectForOpenFiles*
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/app.js SVC-1-0 ""
+	/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts Text-1 ""
+
+
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	app.js
+	  Matched by default include pattern '**/*'
+	../../../../home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "fileNames": [
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/app.js",
+        "/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": [
+          "*"
+        ],
+        "configFilePath": "/user/username/projects/project/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/project",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project/jsconfig.json"
+    }
+TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] '@zkat/cacache':: 'zkat__cacache' already has an up-to-date typing - skipping...
+TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": [
+          "*"
+        ],
+        "configFilePath": "/user/username/projects/project/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/user/username/projects/project/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "types": [
+            "*"
+          ],
+          "configFilePath": "/user/username/projects/project/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/jsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/app.js SVC-1-0 ""
+
+
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	app.js
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "fileNames": [
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": [
+          "*"
+        ],
+        "configFilePath": "/user/username/projects/project/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/project",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project/node_modules; all files: ["/user/username/projects/project/node_modules/@zkat/cacache/package.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project/jsconfig.json"
+    }
+TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] '@zkat/cacache':: 'zkat__cacache' already has an up-to-date typing - skipping...
+TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/user/username/projects/project/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": [
+          "*"
+        ],
+        "configFilePath": "/user/username/projects/project/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/user/username/projects/project/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "types": [
+            "*"
+          ],
+          "configFilePath": "/user/username/projects/project/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+After running Timeout callback:: count: 2
+
+PolledWatches::
+/user/username/projects/project/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/project/jsconfig.json:
+  {}
+/user/username/projects/project/node_modules/@zkat/cacache/package.json:
+  {}
+/user/username/projects/project/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/project:
+  {}
+/user/username/projects/project/node_modules:
+  {}
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+3: /user/username/projects/project/jsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/user/username/projects/project/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/@types/zkat__cacache/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/jsconfig.json
+/user/username/projects/project/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/project/jsconfig.json *default*
+/user/username/projects/project/node_modules/@zkat/cacache/index.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
