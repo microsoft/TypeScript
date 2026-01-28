@@ -135,7 +135,7 @@ function createLanguageServiceVfs(): vfs.FileSystem {
 
 const sharedLibDocumentRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
 
-function createSelectiveDocumentRegistry(): ts.DocumentRegistry {
+function createLibSharingDocumentRegistry(): ts.DocumentRegistry {
     const localRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
 
     const enableLibAstCaching = true;
@@ -429,7 +429,7 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
-        this.documentRegistry = createSelectiveDocumentRegistry();
+        this.documentRegistry = createLibSharingDocumentRegistry();
     }
     getHost(): LanguageServiceAdapterHost {
         return this.host;
