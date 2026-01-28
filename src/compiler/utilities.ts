@@ -8975,7 +8975,7 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions): b
  * @internal
  * Returns true if this option's types array includes "*"
  */
-export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[] } {
+export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[]; } {
     return some(options.types, t => t === "*");
 }
 

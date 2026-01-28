@@ -1121,6 +1121,7 @@ import {
     UnionType,
     UnionTypeNode,
     UniqueESSymbolType,
+    usesWildcardTypes,
     usingSingleLineStringWriter,
     VariableDeclaration,
     VariableDeclarationList,
@@ -1143,7 +1144,6 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
-    usesWildcardTypes,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
