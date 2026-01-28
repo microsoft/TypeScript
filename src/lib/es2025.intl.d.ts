@@ -3,7 +3,7 @@ declare namespace Intl {
     /**
      * Value of the `unit` property in duration objects
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format#duration).
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format#duration).
      */
     type DurationTimeFormatUnit =
         | "years"
@@ -20,7 +20,7 @@ declare namespace Intl {
     /**
      * The style of the formatted duration.
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#style).
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#style).
      */
     type DurationFormatStyle = "long" | "short" | "narrow" | "digital";
 
@@ -38,7 +38,7 @@ declare namespace Intl {
      * An object representing the relative time format in parts
      * that can be used for custom locale-aware formatting.
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/formatToParts#examples).
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/formatToParts#examples).
      */
     type DurationFormatPart =
         | {
@@ -63,7 +63,7 @@ declare namespace Intl {
     /**
      * Number of how many fractional second digits to display in the output.
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#fractionaldigits).
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#fractionaldigits).
      */
     type fractionalDigitsOption = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
@@ -124,7 +124,7 @@ declare namespace Intl {
     /**
      * The duration object to be formatted
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format#duration).
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format#duration).
      */
     type DurationType = Partial<Record<DurationTimeFormatUnit, number>>;
 
@@ -132,13 +132,13 @@ declare namespace Intl {
         /**
          * @param duration The duration object to be formatted. It should include some or all of the following properties: months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format).
          */
         format(duration: DurationType): string;
         /**
          * @param duration The duration object to be formatted. It should include some or all of the following properties: months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/formatToParts).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/formatToParts).
          */
         formatToParts(duration: DurationType): DurationFormatPart[];
         /**
@@ -157,7 +157,7 @@ declare namespace Intl {
          *
          * @param options An object for setting up a duration format.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat).
          */
         new (
             locales?: LocalesArgument,
@@ -175,7 +175,7 @@ declare namespace Intl {
          *
          * @returns An array of strings representing a subset of the given locale tags that are supported in display names without having to fall back to the runtime's default locale.
          *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/supportedLocalesOf).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/supportedLocalesOf).
          */
         supportedLocalesOf(
             locales?: LocalesArgument,
