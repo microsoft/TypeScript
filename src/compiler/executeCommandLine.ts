@@ -157,7 +157,13 @@ function updateReportDiagnostic(
 }
 
 function defaultIsPretty(sys: System) {
-    return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
+    if (sys.getEnvironmentVariable("NO_COLOR")) {
+        return false;
+    }
+    if (sys.getEnvironmentVariable("FORCE_COLOR")) {
+        return true;
+    }
+    return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
 }
 
 function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
