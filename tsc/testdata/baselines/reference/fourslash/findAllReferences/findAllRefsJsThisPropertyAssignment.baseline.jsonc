@@ -15,7 +15,10 @@
 
 // === findAllReferences ===
 // === /b.js ===
-// --- (line: 4) skipped ---
+// /**
+//  * @template T
+//  * @param {{m(): void} & ThisType<{[|x|]: number}>} o
+//  */
 // function infer(o) {}
 // infer({
 //     m() {

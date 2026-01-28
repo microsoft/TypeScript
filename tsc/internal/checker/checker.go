@@ -11768,7 +11768,7 @@ func (c *Checker) checkThisExpression(node *ast.Node) *Type {
 			// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
 		}
 	}
-	t := c.TryGetThisTypeAtEx(node, true /*includeGlobalThis*/, container)
+	t := c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, container)
 	if c.noImplicitThis {
 		globalThisType := c.getTypeOfSymbol(c.globalThisSymbol)
 		if t == globalThisType && capturedByArrowFunction {
@@ -11791,10 +11791,18 @@ func (c *Checker) checkThisExpression(node *ast.Node) *Type {
 }
 
 func (c *Checker) tryGetThisTypeAt(node *ast.Node) *Type {
-	return c.TryGetThisTypeAtEx(node, true /*includeGlobalThis*/, nil /*container*/)
+	return c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, nil /*container*/)
 }
 
 func (c *Checker) TryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
+	reparsed := ast.GetReparsedNodeForNode(node)
+	if reparsed.Flags&ast.NodeFlagsJSDoc != 0 && reparsed.Flags&ast.NodeFlagsReparsed == 0 {
+		return nil // Binder doesn't process non-reparsed JSDoc nodes
+	}
+	return c.tryGetThisTypeAtEx(reparsed, includeGlobalThis, ast.GetReparsedNodeForNode(container))
+}
+
+func (c *Checker) tryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
 	if container == nil {
 		container = c.getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 	}
@@ -30674,7 +30682,7 @@ func (c *Checker) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
 	if node.Parent == nil || node.Parent.Parent == nil {
 		return nil
 	}
-	return c.getSymbolAtLocation(node, true /*ignoreErrors*/)
+	return c.getSymbolAtLocation(ast.GetReparsedNodeForNode(node), true /*ignoreErrors*/)
 }
 
 // Returns the symbol associated with a given AST node. Do *not* use this function in the checker itself! It should
@@ -31246,7 +31254,7 @@ func (c *Checker) containsArgumentsReference(node *ast.Node) bool {
 }
 
 func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
-	return c.getTypeOfNode(node)
+	return c.getTypeOfNode(ast.GetReparsedNodeForNode(node))
 }
 
 func (c *Checker) GetEmitResolver() *EmitResolver {

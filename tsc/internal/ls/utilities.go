@@ -983,7 +983,7 @@ func symbolFlagsHaveMeaning(flags ast.SymbolFlags, meaning ast.SemanticMeaning) 
 
 func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 	// todo: check if this function needs to be changed for jsdoc updates
-	node = getAdjustedLocation(node, false /*forRename*/, nil)
+	node = getAdjustedLocation(ast.GetReparsedNodeForNode(node), false /*forRename*/, nil)
 	parent := node.Parent
 	switch {
 	case ast.IsSourceFile(node):

@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"slices"
 	"strings"
 	"sync"
 
@@ -84,6 +85,7 @@ type Parser struct {
 
 	currentParent        *ast.Node
 	setParentFromContext ast.Visitor
+	reparsedClones       []*ast.Node
 }
 
 func newParser() *Parser {
@@ -382,7 +384,8 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.TextCount = p.factory.TextCount()
 	result.IdentifierCount = p.identifierCount
 	result.SetJSDocCache(p.jsdocCache)
-
+	slices.SortFunc(p.reparsedClones, ast.CompareNodePositions)
+	result.ReparsedClones = slices.Clone(p.reparsedClones)
 	ast.SetExternalModuleIndicator(result, p.opts.ExternalModuleIndicatorOptions)
 }
 

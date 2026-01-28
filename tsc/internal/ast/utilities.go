@@ -3609,14 +3609,14 @@ func IsCallOrNewExpression(node *Node) bool {
 }
 
 func IndexOfNode(nodes []*Node, node *Node) int {
-	index, ok := slices.BinarySearchFunc(nodes, node, compareNodePositions)
+	index, ok := slices.BinarySearchFunc(nodes, node, CompareNodePositions)
 	if ok {
 		return index
 	}
 	return -1
 }
 
-func compareNodePositions(n1, n2 *Node) int {
+func CompareNodePositions(n1, n2 *Node) int {
 	return n1.Pos() - n2.Pos()
 }
 
@@ -4263,4 +4263,42 @@ func isArgumentOfElementAccessExpression(node *Node) bool {
 	return node != nil && node.Parent != nil &&
 		node.Parent.Kind == KindElementAccessExpression &&
 		node.Parent.AsElementAccessExpression().ArgumentExpression == node
+}
+
+// If the given node is part of a subtree of JSDoc nodes that have been cloned into a reparsed construct,
+// return the corresponding reparsed clone in the subtree. Otherwise, just return the node.
+func GetReparsedNodeForNode(node *Node) *Node {
+	if node != nil && node.Flags&NodeFlagsJSDoc != 0 && node.Flags&NodeFlagsReparsed == 0 {
+		if file := GetSourceFileOfNode(node); file != nil && len(file.ReparsedClones) != 0 {
+			pos, found := slices.BinarySearchFunc(file.ReparsedClones, node, CompareNodePositions)
+			if !found && pos > 0 {
+				pos--
+			}
+			candidate := file.ReparsedClones[pos]
+			if node.Loc.ContainedBy(candidate.Loc) {
+				if reparsed := findCloneInNode(candidate, node); reparsed != nil {
+					return reparsed
+				}
+			}
+		}
+	}
+	return node
+}
+
+func findCloneInNode(node *Node, original *Node) *Node {
+	for {
+		if node.Kind == original.Kind && node.Loc == original.Loc {
+			return node
+		}
+		foundContainingChild := node.ForEachChild(func(n *Node) bool {
+			if original.Loc.ContainedBy(n.Loc) {
+				node = n
+				return true
+			}
+			return false
+		})
+		if !foundContainingChild {
+			return nil
+		}
+	}
 }

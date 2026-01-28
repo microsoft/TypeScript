@@ -1,12 +1,7 @@
 // === findRenameLocations ===
 // === /foo.js ===
-// /**
-//  * @overload
-//  * @param {number} [|xRENAME|]
-//  * @returns {number}
-//  *
-//  * @overload
-//  * @param {string} [|xRENAME|]
+// --- (line: 6) skipped ---
+//  * @param {string} x
 //  * @returns {string} 
 //  *
 //  * @param {unknown} [|xRENAME|]

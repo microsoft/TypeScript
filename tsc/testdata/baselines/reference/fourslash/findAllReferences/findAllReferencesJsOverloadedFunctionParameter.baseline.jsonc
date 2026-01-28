@@ -1,12 +1,7 @@
 // === findAllReferences ===
 // === /foo.js ===
-// /**
-//  * @overload
-//  * @param {number} [|x|]
-//  * @returns {number}
-//  *
-//  * @overload
-//  * @param {string} [|x|]
+// --- (line: 6) skipped ---
+//  * @param {string} x
 //  * @returns {string} 
 //  *
 //  * @param {unknown} [|x|]

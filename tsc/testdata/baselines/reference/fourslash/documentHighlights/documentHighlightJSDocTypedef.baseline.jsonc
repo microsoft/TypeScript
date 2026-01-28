@@ -2,11 +2,16 @@
 // === /index.js ===
 // /**
 //  * @typedef {{
-//  *   /*HIGHLIGHTS*/foo: string;
+//  *   /*HIGHLIGHTS*/[|foo|]: string;
 //  *   bar: number;
 //  * }} Foo
 //  */
-// --- (line: 7) skipped ---
+// 
+// /** @type {Foo} */
+// const x = {
+//   [|foo|]: "",
+//   bar: 42,
+// };
 
 
 
@@ -15,17 +20,26 @@
 // /**
 //  * @typedef {{
 //  *   foo: string;
-//  *   /*HIGHLIGHTS*/bar: number;
+//  *   /*HIGHLIGHTS*/[|bar|]: number;
 //  * }} Foo
 //  */
 // 
-// --- (line: 8) skipped ---
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   [|bar|]: 42,
+// };
 
 
 
 // === documentHighlights ===
 // === /index.js ===
-// --- (line: 6) skipped ---
+// /**
+//  * @typedef {{
+//  *   [|foo|]: string;
+//  *   bar: number;
+//  * }} Foo
+//  */
 // 
 // /** @type {Foo} */
 // const x = {
@@ -37,7 +51,13 @@
 
 // === documentHighlights ===
 // === /index.js ===
-// --- (line: 7) skipped ---
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   [|bar|]: number;
+//  * }} Foo
+//  */
+// 
 // /** @type {Foo} */
 // const x = {
 //   foo: "",
