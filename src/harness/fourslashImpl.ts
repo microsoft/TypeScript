@@ -4832,19 +4832,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
         }
     }
 
-    // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-    // Wrong: the inferred project may contain files other than the ones covered by a tsconfig.json.
-    // const config = ts.find(files, isConfig);
-    // if (config) {
-    //     let directive = getNonFileNameOptionInFileList(files);
-    //     if (!directive) {
-    //         directive = getNonFileNameOptionInObject(globalOptions);
-    //     }
-    //     if (directive) {
-    //         throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
-    //     }
-    // }
-
     return {
         markerPositions,
         markers,
@@ -4857,24 +4844,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
 
 function isConfig(file: FourSlashFile): boolean {
     return Harness.getConfigNameFromFileName(file.fileName) !== undefined;
-}
-
-function getNonFileNameOptionInFileList(files: FourSlashFile[]): string | undefined {
-    return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
-}
-
-function getNonFileNameOptionInObject(optionObject: { [s: string]: string; }): string | undefined {
-    for (const option in optionObject) {
-        switch (option) {
-            case MetadataOptionNames.fileName:
-            case MetadataOptionNames.baselineFile:
-            case MetadataOptionNames.emitThisFile:
-                break;
-            default:
-                return option;
-        }
-    }
-    return undefined;
 }
 
 const enum State {
