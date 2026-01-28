@@ -239,7 +239,6 @@ export namespace Compiler {
 
     interface HarnessOptions {
         useCaseSensitiveFileNames?: boolean;
-        includeBuiltFile?: string;
         baselineFile?: string;
         libFiles?: string;
         noTypesAndSymbols?: boolean;
@@ -251,7 +250,6 @@ export namespace Compiler {
         { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
         { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
         { name: "baselineFile", type: "string" },
-        { name: "includeBuiltFile", type: "string" },
         { name: "fileName", type: "string" },
         { name: "libFiles", type: "string" },
         { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false },
@@ -369,12 +367,6 @@ export namespace Compiler {
         const programFileNames = inputFiles
             .map(file => options.configFile ? ts.getNormalizedAbsolutePath(file.unitName, currentDirectory) : file.unitName)
             .filter(fileName => !ts.fileExtensionIs(fileName, ts.Extension.Json));
-
-        // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
-        // Treat them as library files, so include them in build, but not in baselines.
-        if (options.includeBuiltFile) {
-            programFileNames.push(vpath.combine(vfs.builtFolder, options.includeBuiltFile));
-        }
 
         // Files from tests\lib that are requested by "@libFiles"
         if (options.libFiles) {
