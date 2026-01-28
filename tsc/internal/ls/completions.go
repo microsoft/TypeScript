@@ -5125,7 +5125,9 @@ func (l *LanguageService) getSingleLineReplacementSpanForImportCompletionNode(no
 		node = ancestor
 	}
 	sourceFile := ast.GetSourceFileOfNode(node)
-	if printer.GetLinesBetweenPositions(sourceFile, node.Pos(), node.End()) == 0 {
+	// Use token position (excluding JSDoc/trivia) instead of node.Pos() to avoid including JSDoc comments
+	tokenPos := scanner.GetTokenPosOfNode(node, sourceFile, false /*includeJSDoc*/)
+	if printer.GetLinesBetweenPositions(sourceFile, tokenPos, node.End()) == 0 {
 		return l.createLspRangeFromNode(node, sourceFile)
 	}
 
