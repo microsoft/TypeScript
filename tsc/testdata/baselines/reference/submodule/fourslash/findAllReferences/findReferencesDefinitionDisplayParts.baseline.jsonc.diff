@@ -1,0 +1,24 @@
+--- old.findReferencesDefinitionDisplayParts.baseline.jsonc
++++ new.findReferencesDefinitionDisplayParts.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     someFunction() { this;  }
+ // }
+ // 
+-// type Options = "option 1" | "option 2";
+-// let myOption: Options = "option 1";
+-// --- (line: 7) skipped ---
++// --- (line: 5) skipped ---
+
+
+
+@@= skipped -23, +21 lines =@@
+ //     someFunction() { this;  }
+ // }
+ // 
+-// type Options = "[|opt/*FIND ALL REFS*/ion 1|]" | "option 2";
+-// let myOption: Options = "[|option 1|]";
++// type Options = "opt/*FIND ALL REFS*/ion 1" | "option 2";
++// let myOption: Options = "option 1";
+ // 
+ // someLabel:
+ // break someLabel;

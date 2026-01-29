@@ -1,0 +1,50 @@
+--- old.findAllRefs_jsEnum.baseline.jsonc
++++ new.findAllRefs_jsEnum.baseline.jsonc
+@@= skipped -2, +2 lines =@@
+ // /** @enum {string} */
+ // /*FIND ALL REFS*/const [|E|] = { A: "" };
+ // [|E|]["A"];
+-// /** @type {[|E|]} */
++// /** @type {E} */
+ // const e = [|E|].A;
+
+
+@@= skipped -10, +10 lines =@@
+ // /** @enum {string} */
+ // const /*FIND ALL REFS*/[|E|] = { A: "" };
+ // [|E|]["A"];
+-// /** @type {[|E|]} */
++// /** @type {E} */
+ // const e = [|E|].A;
+
+
+@@= skipped -10, +10 lines =@@
+ // /** @enum {string} */
+ // const [|E|] = { A: "" };
+ // /*FIND ALL REFS*/[|E|]["A"];
+-// /** @type {[|E|]} */
++// /** @type {E} */
+ // const e = [|E|].A;
+
+
+@@= skipped -8, +8 lines =@@
+ // === findAllReferences ===
+ // === /a.js ===
+ // /** @enum {string} */
+-// const [|E|] = { A: "" };
+-// [|E|]["A"];
++// const E = { A: "" };
++// E["A"];
+ // /** @type {/*FIND ALL REFS*/[|E|]} */
+-// const e = [|E|].A;
++// const e = E.A;
+
+
+
+@@= skipped -12, +12 lines =@@
+ // /** @enum {string} */
+ // const [|E|] = { A: "" };
+ // [|E|]["A"];
+-// /** @type {[|E|]} */
++// /** @type {E} */
+ // const e = /*FIND ALL REFS*/[|E|].A;

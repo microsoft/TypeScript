@@ -1,0 +1,23 @@
+--- old.renameJsExports03.baseline.jsonc
++++ new.renameJsExports03.baseline.jsonc
+@@= skipped -4, +4 lines =@@
+ // }
+ // module.exports = [|A|];
+
+-// === /b.js ===
+-// const [|A|] = require("./a");
+-// new [|A|];
+-
+
+
+ // === findAllReferences ===
+@@= skipped -12, +8 lines =@@
+ //     /*FIND ALL REFS*/[|constructor|]() { }
+ // }
+ // module.exports = A;
+-
+-// === /b.js ===
+-// const A = require("./a");
+-// new [|A|];
+
+

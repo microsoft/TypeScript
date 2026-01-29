@@ -1,0 +1,25 @@
+--- old.jsxFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
++++ new.jsxFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+-// === /project/src/bal.tsx ===
+-// [||]
+-
+-// === /project/src/bam.tsx ===
+-// export default [|<script src=""/>|];
+-
+-// === /project/src/bar.tsx ===
+-// export default [|<div></div>|];
+-
+-// === /project/src/bat.tsx ===
+-// [|export const a = 1;|]
+-
+-// === /project/src/baz.tsx ===
+-// export default [|<></>|];
+-
+-// === /project/src/dir/jsx-runtime.ts ===
+-// [|export {}|]
+-
+ // === /project/src/foo.ts ===
+-// [|import * as x from /*FIND ALL REFS*/"[|@foo/dir/jsx-runtime|]";|]
++// import * as x from /*FIND ALL REFS*/"[|@foo/dir/jsx-runtime|]";

@@ -1,0 +1,17 @@
+--- old.findAllRefsJsDocTemplateTag_class.baseline.jsonc
++++ new.findAllRefsJsDocTemplateTag_class.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /findAllRefsJsDocTemplateTag_class.ts ===
+-// /** @template /*FIND ALL REFS*/[|T|] */
+-// class C<[|T|]> {}
++// /** @template /*FIND ALL REFS*/T */
++// class C<T> {}
+
+
+
+ // === findAllReferences ===
+ // === /findAllRefsJsDocTemplateTag_class.ts ===
+-// /** @template [|T|] */
++// /** @template T */
+ // class C</*FIND ALL REFS*/[|T|]> {}

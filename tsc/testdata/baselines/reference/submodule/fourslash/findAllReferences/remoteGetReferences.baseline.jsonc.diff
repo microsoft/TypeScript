@@ -1,0 +1,128 @@
+--- old.remoteGetReferences.baseline.jsonc
++++ new.remoteGetReferences.baseline.jsonc
+@@= skipped -32, +32 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -70, +69 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -208, +207 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -546, +545 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -70, +69 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -303, +302 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -132, +131 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -270, +269 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments
+@@= skipped -201, +200 lines =@@
+ // 		this.remoteclsParam++;
+ // 		remotemodTest.remotemodVar++;
+ // 	}
+-// }
+-// 
+-// function remotefoo(remotex: number) {
+-// 	//Declare
++// --- (line: 16) skipped ---
++
++// --- (line: 19) skipped ---
+ // 	var remotefnVar = 1;
+ // 
+ // 	//Increments

@@ -1,0 +1,14 @@
+--- old.findAllRefs_importType_js4.baseline.jsonc
++++ new.findAllRefs_importType_js4.baseline.jsonc
+@@= skipped --1, +0 lines =@@
++// === findAllReferences ===
++// === /a.js ===
++// /**
++//  * @callback /*FIND ALL REFS*/[|A|]
++//  * @param {unknown} response
++//  */
++// 
++// module.exports = {};
++
++// === /b.js ===
++// /** @typedef {import("./a").[|A|]} A */

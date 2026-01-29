@@ -1,0 +1,8 @@
+--- old.findAllRefsImportEquals.baseline.jsonc
++++ new.findAllRefsImportEquals.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /findAllRefsImportEquals.ts ===
+ // import j = N./*FIND ALL REFS*/[|q|];
+-// namespace N { export const [|q|] = 0; }
++// namespace N { export const q = 0; }

@@ -1,0 +1,14 @@
+--- old.indirectJsRequireRename.baseline.jsonc
++++ new.indirectJsRequireRename.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+-// === /binless.js ===
+-// require('../lib/classes/Error').[|log/*FIND ALL REFS*/Warning|](`CLI triage crashed with: ${error.stack}`);
+-
+ // === /lib/classes/Error.js ===
+ // module.exports.[|logWarning|] = message => { };
+
+-// === /lib/plugins/aws/package/compile/events/httpApi/index.js ===
+-// const { [|logWarning|] } = require('../../../../../../classes/Error');
++// === /bin/serverless.js ===
++// require('../lib/classes/Error').log/*FIND ALL REFS*/Warning(`CLI triage crashed with: ${error.stack}`);

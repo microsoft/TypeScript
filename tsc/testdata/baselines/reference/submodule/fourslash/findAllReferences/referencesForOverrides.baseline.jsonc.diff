@@ -1,0 +1,22 @@
+--- old.referencesForOverrides.baseline.jsonc
++++ new.referencesForOverrides.baseline.jsonc
+@@= skipped -10, +10 lines =@@
+ // 			}
+ // 		}
+ // 	}
+-// 
+-// --- (line: 13) skipped ---
++// --- (line: 12) skipped ---
+
+ // --- (line: 58) skipped ---
+ // 
+@@= skipped -55, +54 lines =@@
+ // 			}
+ // 		}
+ // 	}
+-// 
+-// --- (line: 32) skipped ---
++// --- (line: 31) skipped ---
+
+ // --- (line: 64) skipped ---
+ // 		y.ifoo();

@@ -1,0 +1,38 @@
+--- old.findAllRefsOnDefinition.baseline.jsonc
++++ new.findAllRefsOnDefinition.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ //         return this;
+ //     }
+ // 
+-//     public stop(){
+-//         return this;
+-//     }
+-// }
++// --- (line: 11) skipped ---
+
+ // === /findAllRefsOnDefinition.ts ===
+ // import Second = require("./findAllRefsOnDefinition-import");
+@@= skipped -24, +21 lines =@@
+ //         return this;
+ //     }
+ // 
+-//     public stop(){
+-//         return this;
+-//     }
+-// }
++// --- (line: 11) skipped ---
+
+ // === /findAllRefsOnDefinition.ts ===
+ // import Second = require("./findAllRefsOnDefinition-import");
+@@= skipped -24, +21 lines =@@
+ //         return this;
+ //     }
+ // 
+-//     public stop(){
+-//         return this;
+-//     }
+-// }
++// --- (line: 11) skipped ---
+
+ // === /findAllRefsOnDefinition.ts ===
+ // import Second = require("./findAllRefsOnDefinition-import");

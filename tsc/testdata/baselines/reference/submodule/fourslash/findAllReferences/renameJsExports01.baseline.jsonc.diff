@@ -1,0 +1,8 @@
+--- old.renameJsExports01.baseline.jsonc
++++ new.renameJsExports01.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+
+ // === /b.js ===
+ // var mod = require('./a');
+-// var t = mod./*FIND ALL REFS*/[|area|](10);
++// var t = mod./*FIND ALL REFS*/area(10);

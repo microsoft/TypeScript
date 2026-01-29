@@ -1,0 +1,51 @@
+--- old.findAllRefsNonModule.baseline.jsonc
++++ new.findAllRefsNonModule.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /import.ts ===
+-// import [|"./script/*FIND ALL REFS*/"|];
+-
+-// === /require.js ===
+-// require([|"./script"|]);
+-// console.log("./script");
+-
+-// === /tripleSlash.ts ===
+-// /// <reference path="[|script.ts|]" />
+-
+-
+-
+-// === findAllReferences ===
+-// === /import.ts ===
+-// import [|"./script"|];
+-
+-// === /require.js ===
+-// require([|"./script/*FIND ALL REFS*/"|]);
+-// console.log("./script");
+-
+-// === /tripleSlash.ts ===
+-// /// <reference path="[|script.ts|]" />
+-
+-
+-
+-// === findAllReferences ===
+-// === /require.js ===
+-// require("[|./script|]");
+-// console.log("[|./script|]/*FIND ALL REFS*/");
+-
+-// === /stringLiteral.ts ===
+-// console.log("[|./script|]");
++// import "./script/*FIND ALL REFS*/";
++
++
++
++// === findAllReferences ===
++// === /require.js ===
++// require("./script/*FIND ALL REFS*/");
++// console.log("./script");
++
++
++
++// === findAllReferences ===
++// === /require.js ===
++// require("./script");
++// console.log("./script/*FIND ALL REFS*/");

@@ -1,0 +1,31 @@
+--- old.referencesForMergedDeclarations5.baseline.jsonc
++++ new.referencesForMergedDeclarations5.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ // module Foo { export interface Bar { } }
+ // function Foo() { }
+ // 
+-// export = [|Foo|];
++// export = Foo;
+
+
+
+@@= skipped -10, +10 lines =@@
+ // module /*FIND ALL REFS*/[|Foo|] { export interface Bar { } }
+ // function Foo() { }
+ // 
+-// export = [|Foo|];
++// export = Foo;
+
+
+
+@@= skipped -16, +16 lines =@@
+
+ // === findAllReferences ===
+ // === /referencesForMergedDeclarations5.ts ===
+-// interface [|Foo|] { }
+-// module [|Foo|] { export interface Bar { } }
++// interface Foo { }
++// module Foo { export interface Bar { } }
+ // function [|Foo|]() { }
+ // 
+ // export = /*FIND ALL REFS*/[|Foo|];

@@ -1,0 +1,16 @@
+--- old.findAllRefsForStringLiteral.baseline.jsonc
++++ new.findAllRefsForStringLiteral.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /a.ts ===
+ // interface Foo {
+-//     property: /*FIND ALL REFS*/"[|foo|]";
++//     property: /*FIND ALL REFS*/"foo";
+ // }
+ // /**
+ //  * @type {{ property: "foo"}}
+-//  */
+-// const obj: Foo = {
+-//     property: "[|foo|]",
+-// }
++// --- (line: 6) skipped ---

@@ -1,0 +1,13 @@
+--- old.findAllRefsParameterPropertyDeclaration_inheritance.baseline.jsonc
++++ new.findAllRefsParameterPropertyDeclaration_inheritance.baseline.jsonc
+@@= skipped -41, +41 lines =@@
+
+ // === findAllReferences ===
+ // === /findAllRefsParameterPropertyDeclaration_inheritance.ts ===
+-// --- (line: 3) skipped ---
++// class C {
++// 	constructor(public [|x|]: string) {
++// 		[|x|];
+ // 	}
+ // }
+ // class D extends C {

@@ -1,0 +1,31 @@
+--- old.referencesForModifiers.baseline.jsonc
++++ new.referencesForModifiers.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //     static a;
+ //     readonly b;
+ //     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
++// --- (line: 5) skipped ---
+
+
+
+@@= skipped -16, +10 lines =@@
+ //     static a;
+ //     readonly b;
+ //     public c;
+-//     protected d;
+-//     private e;
+-// }
+-// const enum E {
+-// }
+-// async function fn() {}
+-// export default class C2 {}
++// --- (line: 5) skipped ---
+
+

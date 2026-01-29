@@ -1,0 +1,8 @@
+--- old.referencesForIndexProperty2.baseline.jsonc
++++ new.referencesForIndexProperty2.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /referencesForIndexProperty2.ts ===
+ // var a;
+-// a["/*FIND ALL REFS*/[|blah|]"];
++// a["/*FIND ALL REFS*/blah"];

@@ -1,0 +1,9 @@
+--- old.findAllRefsForModuleGlobal.baseline.jsonc
++++ new.findAllRefsForModuleGlobal.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /b.ts ===
+ // /// <reference types="[|foo|]" />
+-// import { x } from "/*FIND ALL REFS*/[|foo|]";
++// import { x } from "/*FIND ALL REFS*/foo";
+ // declare module "[|foo|]" {}

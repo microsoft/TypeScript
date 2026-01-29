@@ -1,0 +1,11 @@
+--- old.findAllReferencesJsRequireDestructuring.baseline.jsonc
++++ new.findAllReferencesJsRequireDestructuring.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /bar.js ===
+ // const { /*FIND ALL REFS*/[|foo|]: bar } = require('./foo');
+-
+-// === /foo.js ===
+-// module.exports = {
+-//     [|foo|]: '1'
+-// };

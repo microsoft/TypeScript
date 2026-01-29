@@ -1,0 +1,14 @@
+--- old.findAllRefsJsDocImportTag2.baseline.jsonc
++++ new.findAllRefsJsDocImportTag2.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ //   constructor() {
+ //     this.id_ = Math.random();
+ //   }
+-//   id() {
+-//     return this.id_;
+-//   }
+-// }
++// --- (line: 5) skipped ---
+
+ // === /player.js ===
+ // import [|Component|] from './component.js';

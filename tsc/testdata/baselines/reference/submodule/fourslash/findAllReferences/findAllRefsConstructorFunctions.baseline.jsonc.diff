@@ -1,0 +1,46 @@
+--- old.findAllRefsConstructorFunctions.baseline.jsonc
++++ new.findAllRefsConstructorFunctions.baseline.jsonc
+@@= skipped -12, +12 lines =@@
+ // === findAllReferences ===
+ // === /a.js ===
+ // function f() {
+-//     this./*FIND ALL REFS*/[|x|] = 0;
++//     this./*FIND ALL REFS*/x = 0;
+ // }
+ // f.prototype.setX = function() {
+-//     this.[|x|] = 1;
++//     this.x = 1;
+ // }
+-// f.prototype.useX = function() { this.[|x|]; }
++// f.prototype.useX = function() { this.x; }
+
+
+
+@@= skipped -24, +24 lines =@@
+ // === findAllReferences ===
+ // === /a.js ===
+ // function f() {
+-//     this.[|x|] = 0;
++//     this.x = 0;
+ // }
+ // f.prototype.setX = function() {
+-//     this./*FIND ALL REFS*/[|x|] = 1;
++//     this./*FIND ALL REFS*/x = 1;
+ // }
+-// f.prototype.useX = function() { this.[|x|]; }
++// f.prototype.useX = function() { this.x; }
+
+
+
+ // === findAllReferences ===
+ // === /a.js ===
+-// function f() {
+-//     this.[|x|] = 0;
+-// }
++// --- (line: 3) skipped ---
+ // f.prototype.setX = function() {
+-//     this.[|x|] = 1;
++//     this.x = 1;
+ // }
+-// f.prototype.useX = function() { this./*FIND ALL REFS*/[|x|]; }
++// f.prototype.useX = function() { this./*FIND ALL REFS*/x; }

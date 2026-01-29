@@ -1,0 +1,39 @@
+--- old.jsdocTypedefTagSemanticMeaning1.baseline.jsonc
++++ new.jsdocTypedefTagSemanticMeaning1.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // /** @typedef {number} */
+ // /*FIND ALL REFS*/const [|T|] = 1;
+-// /** @type {[|T|]} */
++// /** @type {T} */
+ // const n = [|T|];
+
+
+@@= skipped -9, +9 lines =@@
+ // === /a.js ===
+ // /** @typedef {number} */
+ // const /*FIND ALL REFS*/[|T|] = 1;
+-// /** @type {[|T|]} */
++// /** @type {T} */
+ // const n = [|T|];
+
+
+@@= skipped -8, +8 lines =@@
+ // === findAllReferences ===
+ // === /a.js ===
+ // /** @typedef {number} */
+-// const [|T|] = 1;
++// const T = 1;
+ // /** @type {/*FIND ALL REFS*/[|T|]} */
+-// const n = [|T|];
++// const n = T;
+
+
+
+@@= skipped -10, +10 lines =@@
+ // === /a.js ===
+ // /** @typedef {number} */
+ // const [|T|] = 1;
+-// /** @type {[|T|]} */
++// /** @type {T} */
+ // const n = /*FIND ALL REFS*/[|T|];

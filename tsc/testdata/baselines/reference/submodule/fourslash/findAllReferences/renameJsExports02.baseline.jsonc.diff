@@ -1,0 +1,12 @@
+--- old.renameJsExports02.baseline.jsonc
++++ new.renameJsExports02.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.js ===
+ // module.exports = class /*FIND ALL REFS*/[|A|] {}
+
+-// === /b.js ===
+-// const [|A|] = require("./a");
+-
+
+
+ // === findAllReferences ===

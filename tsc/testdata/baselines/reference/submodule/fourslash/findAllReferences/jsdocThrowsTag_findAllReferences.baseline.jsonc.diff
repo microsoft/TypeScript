@@ -1,0 +1,10 @@
+--- old.jsdocThrowsTag_findAllReferences.baseline.jsonc
++++ new.jsdocThrowsTag_findAllReferences.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /jsdocThrowsTag_findAllReferences.ts ===
+ // class /*FIND ALL REFS*/[|E|] extends Error {}
+ // /**
+-//  * @throws {[|E|]}
++//  * @throws {E}
+ //  */
+ // function f() {}

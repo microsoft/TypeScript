@@ -1,0 +1,11 @@
+--- old.findAllRefsCommonJsRequire3.baseline.jsonc
++++ new.findAllRefsCommonJsRequire3.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+-// === /a.js ===
+-// function [|f|]() { }
+-// module.exports = { [|f|] }
+-
+ // === /b.js ===
+ // const { [|f|] } = require('./a')
+ // /*FIND ALL REFS*/[|f|]

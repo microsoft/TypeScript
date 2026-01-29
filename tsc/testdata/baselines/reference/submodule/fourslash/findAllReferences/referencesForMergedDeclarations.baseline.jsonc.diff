@@ -1,0 +1,44 @@
+--- old.referencesForMergedDeclarations.baseline.jsonc
++++ new.referencesForMergedDeclarations.baseline.jsonc
+@@= skipped -3, +3 lines =@@
+ // }
+ // 
+ // module Foo {
+-//     export interface Bar { }
+-// }
+-// 
+-// function Foo(): void {
++// --- (line: 5) skipped ---
++
++// --- (line: 8) skipped ---
+ // }
+ // 
+ // var f1: Foo.Bar;
+@@= skipped -18, +17 lines =@@
+ // }
+ // 
+ // module Foo {
+-//     export interface Bar { }
+-// }
+-// 
+-// function Foo(): void {
++// --- (line: 5) skipped ---
++
++// --- (line: 8) skipped ---
+ // }
+ // 
+ // var f1: Foo.Bar;
+@@= skipped -102, +101 lines =@@
+ // }
+ // 
+ // module Foo {
+-//     export interface Bar { }
+-// }
+-// 
+-// function Foo(): void {
++// --- (line: 5) skipped ---
++
++// --- (line: 8) skipped ---
+ // }
+ // 
+ // var f1: Foo.Bar;

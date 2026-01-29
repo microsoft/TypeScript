@@ -1,0 +1,7 @@
+--- old.findAllRefsNoSubstitutionTemplateLiteralNoCrash1.baseline.jsonc
++++ new.findAllRefsNoSubstitutionTemplateLiteralNoCrash1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /findAllRefsNoSubstitutionTemplateLiteralNoCrash1.ts ===
+-// type Test = `[|T|]/*FIND ALL REFS*/`;
++// type Test = `T/*FIND ALL REFS*/`;

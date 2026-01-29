@@ -1,0 +1,13 @@
+--- old.referencesForDeclarationKeywords.baseline.jsonc
++++ new.referencesForDeclarationKeywords.baseline.jsonc
+@@= skipped -5, +5 lines =@@
+ //     get e() { return 1; }
+ //     set e(v) {}
+ // }
+-// interface I1 extends Base { }
+-// type T = { }
+-// enum E { }
+-// --- (line: 10) skipped ---
++// --- (line: 7) skipped ---
+
+

@@ -1,0 +1,17 @@
+--- old.findAllRefsJsDocTemplateTag_function.baseline.jsonc
++++ new.findAllRefsJsDocTemplateTag_function.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /findAllRefsJsDocTemplateTag_function.ts ===
+-// /** @template /*FIND ALL REFS*/[|T|] */
+-// function f<[|T|]>() {}
++// /** @template /*FIND ALL REFS*/T */
++// function f<T>() {}
+
+
+
+ // === findAllReferences ===
+ // === /findAllRefsJsDocTemplateTag_function.ts ===
+-// /** @template [|T|] */
++// /** @template T */
+ // function f</*FIND ALL REFS*/[|T|]>() {}

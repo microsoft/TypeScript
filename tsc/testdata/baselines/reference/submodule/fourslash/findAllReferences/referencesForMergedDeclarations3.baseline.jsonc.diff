@@ -1,0 +1,16 @@
+--- old.referencesForMergedDeclarations3.baseline.jsonc
++++ new.referencesForMergedDeclarations3.baseline.jsonc
+@@= skipped -25, +25 lines =@@
+ //     static staticMethod() { }
+ //     method() { }
+ // }
+-// 
+-// module testClass {
+-//     export interface Bar {
+-// 
++// --- (line: 5) skipped ---
++
++// --- (line: 8) skipped ---
+ //     }
+ // }
+ // 

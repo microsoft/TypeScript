@@ -324,6 +324,124 @@ func (f *FourslashTest) getBaselineOptions(command baselineCommand, testPath str
 				return strings.ReplaceAll(s, "bundled:///libs/", "")
 			},
 		}
+	case findAllReferencesCmd:
+		return baseline.Options{
+			Subfolder:   subfolder,
+			IsSubmodule: true,
+			DiffFixupOld: func(s string) string {
+				var commandLines []string
+				commandPrefix := regexp.MustCompile(`^// === ([a-z\sA-Z]*) ===`)
+				filePrefix := regexp.MustCompile(`^// === ([^ ]*) ===`)
+				testFilePrefix := "/tests/cases/fourslash"
+				serverTestFilePrefix := "/server"
+				contextSpanOpening := "<|"
+				contextSpanClosing := "|>"
+				replacer := strings.NewReplacer(
+					testFilePrefix, "",
+					serverTestFilePrefix, "",
+					contextSpanOpening, "",
+					contextSpanClosing, "",
+				)
+				// Match location data like {| isWriteAccess: true, isDefinition: true |}
+				objectRangeRegex := regexp.MustCompile(`{\| [^|]* \|}`)
+				definitionsStr := "// === Definitions ==="
+				detailsStr := "// === Details ==="
+				lines := strings.Split(s, "\n")
+				var isInCommand bool
+				var isInDetails bool
+				var isInDefinitions bool
+
+				// Track file sections for sorting
+				type fileSection struct {
+					fileName string
+					lines    []string
+				}
+				var fileSections []fileSection
+				var currentFileName string
+				var currentFileLines []string
+
+				for _, line := range lines {
+					matches := commandPrefix.FindStringSubmatch(line)
+					if len(matches) > 0 {
+						isInDetails = false
+						isInDefinitions = false
+						commandName := matches[1]
+						if commandName == string(findAllReferencesCmd) {
+							isInCommand = true
+							// Starting a new findAllReferences command block
+							if currentFileName != "" {
+								fileSections = append(fileSections, fileSection{fileName: currentFileName, lines: currentFileLines})
+							}
+							currentFileName = ""
+							currentFileLines = nil
+							slices.SortFunc(fileSections, func(a, b fileSection) int {
+								return strings.Compare(a.fileName, b.fileName)
+							})
+							for _, section := range fileSections {
+								section.lines = dropTrailingEmptyLines(section.lines)
+								commandLines = append(commandLines, section.lines...)
+								commandLines = append(commandLines, "")
+							}
+							fileSections = nil
+							if len(commandLines) > 0 {
+								commandLines = append(commandLines, "", "")
+							}
+							commandLines = append(commandLines, replacer.Replace(line))
+							continue
+						} else {
+							isInCommand = false
+						}
+					}
+					if isInCommand {
+						if strings.Contains(line, definitionsStr) || strings.Contains(line, detailsStr) {
+							isInDefinitions = strings.Contains(line, definitionsStr)
+							isInDetails = strings.Contains(line, detailsStr)
+							// Drop blank line before definitions/details
+							if len(currentFileLines) > 0 && currentFileLines[len(currentFileLines)-1] == "" {
+								currentFileLines = currentFileLines[:len(currentFileLines)-1]
+							}
+						}
+						// We don't diff the definitions or details sections
+						if !(isInDefinitions || isInDetails) {
+							fixedLine := replacer.Replace(line)
+							fixedLine = objectRangeRegex.ReplaceAllString(fixedLine, "")
+
+							fileMatches := filePrefix.FindStringSubmatch(fixedLine)
+							if len(fileMatches) > 0 {
+								if currentFileName != "" {
+									fileSections = append(fileSections, fileSection{fileName: currentFileName, lines: currentFileLines})
+								}
+								currentFileName = fileMatches[1]
+								currentFileLines = []string{fixedLine}
+							} else {
+								currentFileLines = append(currentFileLines, fixedLine)
+							}
+						} else if isInDetails && line == "  ]" {
+							isInDetails = false
+						}
+					}
+				}
+
+				// Save any remaining file section
+				if currentFileName != "" {
+					fileSections = append(fileSections, fileSection{fileName: currentFileName, lines: currentFileLines})
+				}
+
+				// Sort and add remaining file sections
+				if len(fileSections) > 0 {
+					slices.SortFunc(fileSections, func(a, b fileSection) int {
+						return strings.Compare(a.fileName, b.fileName)
+					})
+					for _, section := range fileSections {
+						section.lines = dropTrailingEmptyLines(section.lines)
+						commandLines = append(commandLines, section.lines...)
+						commandLines = append(commandLines, "")
+					}
+				}
+
+				return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
+			},
+		}
 	default:
 		return baseline.Options{
 			Subfolder: subfolder,

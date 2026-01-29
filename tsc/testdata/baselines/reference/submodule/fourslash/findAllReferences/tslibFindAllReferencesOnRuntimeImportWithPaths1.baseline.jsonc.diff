@@ -1,0 +1,13 @@
+--- old.tslibFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
++++ new.tslibFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+-// === /project/src/bal.ts ===
+-// [||]
+-
+-// === /project/src/bar.ts ===
+-// [|export default "";|]
+-
+ // === /project/src/foo.ts ===
+-// [|import * as x from /*FIND ALL REFS*/"[|tslib|]";|]
++// import * as x from /*FIND ALL REFS*/"[|tslib|]";

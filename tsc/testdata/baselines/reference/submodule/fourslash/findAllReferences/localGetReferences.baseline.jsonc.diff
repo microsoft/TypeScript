@@ -1,0 +1,170 @@
+--- old.localGetReferences.baseline.jsonc
++++ new.localGetReferences.baseline.jsonc
+@@= skipped -507, +507 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -69, +57 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -445, +433 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -69, +57 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -203, +191 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -141, +129 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -491, +479 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;
+@@= skipped -69, +57 lines =@@
+ //     // References to a variable declared in a function.
+ //     var fnVar = 1;
+ // 
+-//     //Increments
+-//     fooCls.clsSVar++;
+-//     globalVar++;
+-//     modTest.modVar++;
+-//     fnVar++;
+-// 
+-//     //Return
+-//     return x++;
+-// }
+-// 
+-// module modTest {
+-//     //Declare
+-// --- (line: 39) skipped ---
++// --- (line: 27) skipped ---
+
+ // --- (line: 43) skipped ---
+ //     modVar++;

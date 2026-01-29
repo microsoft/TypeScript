@@ -1,0 +1,32 @@
+--- old.referencesForStaticsAndMembersWithSameNames.baseline.jsonc
++++ new.referencesForStaticsAndMembersWithSameNames.baseline.jsonc
+@@= skipped -122, +122 lines =@@
+ // 			}
+ // 		}
+ // 	}
+-// 
+-// --- (line: 14) skipped ---
++// --- (line: 13) skipped ---
+
+ // --- (line: 17) skipped ---
+ // 		x.bar;
+@@= skipped -24, +23 lines =@@
+ // 			}
+ // 		}
+ // 	}
+-// 
+-// --- (line: 14) skipped ---
++// --- (line: 13) skipped ---
+
+ // --- (line: 17) skipped ---
+ // 		x.bar;
+@@= skipped -71, +70 lines =@@
+ // 			}
+ // 		}
+ // 	}
+-// 
+-// --- (line: 14) skipped ---
++// --- (line: 13) skipped ---
+
+ // --- (line: 17) skipped ---
+ // 		x.bar;

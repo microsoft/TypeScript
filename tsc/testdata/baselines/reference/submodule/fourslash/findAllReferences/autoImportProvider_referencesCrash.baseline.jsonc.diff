@@ -1,0 +1,10 @@
+--- old.autoImportProvider_referencesCrash.baseline.jsonc
++++ new.autoImportProvider_referencesCrash.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
++// === /home/src/workspaces/project/a/index.ts ===
++// class A {}[||]
++
+ // === /home/src/workspaces/project/b/b.ts ===
+ // /// <reference path="../a/index.d.ts" />
+ // new [|A|]/*FIND ALL REFS*/();

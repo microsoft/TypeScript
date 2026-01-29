@@ -1,0 +1,14 @@
+--- old.findAllReferencesFromLinkTagReference2.baseline.jsonc
++++ new.findAllReferencesFromLinkTagReference2.baseline.jsonc
+@@= skipped -1, +1 lines =@@
+ // === /a.ts ===
+ // enum E {
+ //     /** {@link /*FIND ALL REFS*/[|Foo|]} */
+-//     Foo
++//     [|Foo|]
+ // }
+-// interface [|Foo|] {
+-//     foo: E.Foo;
++// interface Foo {
++//     foo: E.[|Foo|];
+ // }

@@ -1,0 +1,23 @@
+--- old.findAllReferencesLinkTag1.baseline.jsonc
++++ new.findAllReferencesLinkTag1.baseline.jsonc
+@@= skipped -174, +174 lines =@@
+ //      */
+ //     r() { }
+ // }
+-// 
+-// interface I {
+-//     a()
+-// --- (line: 38) skipped ---
++// --- (line: 35) skipped ---
+
+
+
+@@= skipped -33, +30 lines =@@
+ //      */
+ //     d()
+ // }
+-// 
+-// function nestor() {
+-//     /** {@link r2} */
+-// --- (line: 59) skipped ---
++// --- (line: 56) skipped ---

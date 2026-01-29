@@ -1,0 +1,8 @@
+--- old.findAllReferencesJSDocFunctionNew.baseline.jsonc
++++ new.findAllReferencesJSDocFunctionNew.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findAllReferences ===
+ // === /Foo.js ===
+-// /** @type {function (/*FIND ALL REFS*/[|new|]: string, string): string} */
++// /** @type {function (/*FIND ALL REFS*/new: string, string): string} */
+ // var f;
