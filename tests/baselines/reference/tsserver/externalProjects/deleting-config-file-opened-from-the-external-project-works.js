@@ -422,10 +422,30 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/someuser/projects/project/js/bower_components",
+        "/user/someuser/projects/project/js/node_modules",
+        "/user/someuser/projects/project/bower_components",
+        "/user/someuser/projects/project/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/someuser/projects/project/WebApplication6.csproj'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/someuser/projects/project/WebApplication6.csproj'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
+      "files": [
+        "/user/someuser/projects/project/js/bower_components",
+        "/user/someuser/projects/project/js/node_modules",
+        "/user/someuser/projects/project/bower_components",
+        "/user/someuser/projects/project/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/bower_components 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/bower_components 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
@@ -537,6 +557,10 @@ After request
 PolledWatches::
 /user/someuser/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/someuser/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/user/someuser/projects/project/node_modules: *new*
+  {"pollingInterval":500}
 /user/someuser/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
@@ -548,6 +572,10 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/someuser/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/someuser/projects/project/js: *new*
   {}
 
 FsWatchesRecursive *deleted*::

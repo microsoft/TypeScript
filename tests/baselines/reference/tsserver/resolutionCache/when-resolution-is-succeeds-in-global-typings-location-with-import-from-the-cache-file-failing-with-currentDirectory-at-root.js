@@ -226,10 +226,20 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "undici-types"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Installing typings ["undici-types"]
 TI:: [hh:mm:ss:mss] 'undici-types':: Entry for package 'undici-types' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

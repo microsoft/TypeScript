@@ -314,10 +314,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "e:/solution/myproject/src/bower_components",
+        "e:/solution/myproject/src/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "e:/solution/myproject/src/bower_components",
+        "e:/solution/myproject/src/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -384,6 +398,52 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+e:/solution/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+e:/solution/myproject/src/bower_components: *new*
+  {"pollingInterval":500}
+e:/solution/myproject/src/jsconfig.json:
+  {"pollingInterval":2000}
+e:/solution/myproject/src/node_modules:
+  {"pollingInterval":500}
+e:/solution/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+e:/solution/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+e:/solution/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+e:/solution/node_modules:
+  {"pollingInterval":500}
+e:/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+c:/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+c:/typescript/node_modules/@types/react-router-dom/package.json:
+  {}
+c:/typescript/node_modules/@types/react/package.json:
+  {}
+e:/solution/myproject/node_modules/@types/prop-types/package.json:
+  {}
+e:/solution/myproject/node_modules/@types/react/package.json:
+  {}
+e:/solution/myproject/node_modules/react-router-dom/package.json:
+  {}
+e:/solution/myproject/package.json:
+  {}
+e:/solution/myproject/src:
+  {}
+
+FsWatchesRecursive::
+c:/typescript/node_modules:
+  {}
+e:/solution/myproject/node_modules:
+  {}
+e:/solution/myproject/node_modules/@types:
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*

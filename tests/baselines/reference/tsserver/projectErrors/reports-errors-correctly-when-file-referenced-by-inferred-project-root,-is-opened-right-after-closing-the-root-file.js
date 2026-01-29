@@ -153,10 +153,30 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -222,6 +242,36 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+/user/username/projects/myproject/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/client/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/client/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src: *new*
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -301,10 +351,34 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/src/server/bower_components",
+        "/user/username/projects/myproject/src/server/node_modules",
+        "/user/username/projects/myproject/test/backend/bower_components",
+        "/user/username/projects/myproject/test/backend/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/src/server/bower_components",
+        "/user/username/projects/myproject/src/server/node_modules",
+        "/user/username/projects/myproject/test/backend/bower_components",
+        "/user/username/projects/myproject/test/backend/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -374,8 +448,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/bower_components:
+  {"pollingInterval":500}
 /user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/client/jsconfig.json:
@@ -406,7 +484,9 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src: *new*
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/test: *new*
   {}
 
 Projects::
@@ -617,8 +697,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/bower_components:
+  {"pollingInterval":500}
 /user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/client/jsconfig.json:
@@ -654,6 +738,8 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/test:
   {}
 
 Projects::
@@ -741,10 +827,26 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -841,10 +943,28 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/src/server/bower_components",
+        "/user/username/projects/myproject/src/server/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/myproject/src/client/bower_components",
+        "/user/username/projects/myproject/src/client/node_modules",
+        "/user/username/projects/myproject/src/server/bower_components",
+        "/user/username/projects/myproject/src/server/node_modules",
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -915,8 +1035,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/bower_components:
+  {"pollingInterval":500}
 /user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/client/jsconfig.json:
@@ -946,8 +1070,12 @@ FsWatches *deleted*::
 /user/username/projects/myproject/test/backend/index.js:
   {}
 
-FsWatchesRecursive *deleted*::
+FsWatchesRecursive::
 /user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/test:
   {}
 
 Projects::

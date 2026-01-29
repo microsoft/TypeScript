@@ -180,10 +180,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "hunter2",
         "hunter3"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/home/src/projects/project/jsconfig.json'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/home/src/projects/project/jsconfig.json'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/home/src/projects/project/jsconfig.json",
+      "files": [
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/bower_components 1 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["hunter2","hunter3"]
 TI:: [hh:mm:ss:mss] 'hunter2':: Entry for package 'hunter2' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'hunter3':: Entry for package 'hunter3' does not exist in local types registry - skipping...
@@ -327,6 +341,26 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/projects/project/jsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project:
+  {}
 
 Projects::
 /home/src/projects/project/jsconfig.json (Configured) *changed*

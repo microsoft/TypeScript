@@ -154,10 +154,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project 'proj1'
-TI:: [hh:mm:ss:mss] No watchers are registered for project 'proj1'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "proj1",
+      "files": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "proj1",
@@ -330,10 +344,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project 'proj2'
-TI:: [hh:mm:ss:mss] No watchers are registered for project 'proj2'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "proj2",
+      "files": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "proj2",

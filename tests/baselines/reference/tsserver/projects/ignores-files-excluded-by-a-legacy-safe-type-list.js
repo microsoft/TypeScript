@@ -180,10 +180,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "blissfuljs"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project 'project'
-TI:: [hh:mm:ss:mss] No watchers are registered for project 'project'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "project",
+      "files": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Installing typings ["blissfuljs"]
 TI:: [hh:mm:ss:mss] 'blissfuljs':: Entry for package 'blissfuljs' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

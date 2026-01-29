@@ -154,10 +154,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "jquery"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/app/test.csproj'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/user/username/projects/app/test.csproj'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/app/test.csproj",
+      "files": [
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -230,6 +244,22 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+/user/username/projects/app/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/app/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/project/app.ts:
+  {}
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [

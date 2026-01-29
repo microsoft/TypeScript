@@ -208,10 +208,24 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "newTypingNames": [
         "commander"
       ],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/a/b/bower_components",
+        "/user/username/projects/a/b/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/a/b/bower_components",
+        "/user/username/projects/a/b/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -252,6 +266,48 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+
+PolledWatches::
+/user/username/projects/a/b/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/a/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/commander/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects:
+  {}
+/user/username/projects/a:
+  {}
+/user/username/projects/a/b:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/node_modules:
+  {}
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -433,10 +489,16 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
       "newTypingNames": [],
-      "filesToWatch": []
+      "filesToWatch": [
+        "/user/username/projects/a/b/bower_components",
+        "/user/username/projects/a/b/node_modules"
+      ]
     }
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject1*'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/dev/null/inferredProject1*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -494,6 +556,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/package.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/a/b/bower_components:
+  {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/a/b/node_modules:
