@@ -272,7 +272,7 @@ declare module "fs" {
     verifyTscWatch({
         scenario,
         subScenario: "works when included file with ambient module changes",
-        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts", "-types", "node"],
+        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts"],
         sys: () => {
             const root = {
                 path: "/users/username/projects/project/foo.ts",
@@ -565,7 +565,7 @@ declare namespace NodeJS {
                 };
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{ \"compilerOptions\": { \"types\": [\"node\"] } }",
+                    content: "{ \"compilerOptions\": { \"types\": [\"*\"] } }",
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return TestServerHost.createWatchedSystem(
