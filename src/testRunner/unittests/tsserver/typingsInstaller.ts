@@ -2495,6 +2495,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
             host,
             installAction: typingFiles,
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.ModuleKind.CommonJS }, session);
         openFilesForSession([app], session);
 
         const proj = session.getProjectService().inferredProjects[0];
