@@ -9,6 +9,9 @@ export const theNum: TheNum = "type1";
     "composite": true,
     "typeRoots": [
       "./typeroot1"
+    ],
+    "types": [
+      "*"
     ]
   },
   "files": [
@@ -28,6 +31,9 @@ export const theNum: TheNum2 = "type2";
     "composite": true,
     "typeRoots": [
       "./typeroot2"
+    ],
+    "types": [
+      "*"
     ]
   },
   "files": [
@@ -63,23 +69,24 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/packages/pkg1.tsconfig.json'...
 
-[96mpackages/pkg1_index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TheNum'.
-
-[7m1[0m export const theNum: TheNum = "type1";
-[7m [0m [91m                     ~~~~~~[0m
-
+======== Resolving type reference directive 'sometype', containing file '/home/src/workspaces/project/packages/__inferred type names__.ts', root directory '/home/src/workspaces/project/packages/typeroot1'. ========
+Resolving with primary search path '/home/src/workspaces/project/packages/typeroot1'.
+File '/home/src/workspaces/project/packages/typeroot1/sometype.d.ts' does not exist.
+File '/home/src/workspaces/project/packages/typeroot1/sometype/package.json' does not exist.
+File '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts', result '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts'.
+======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts', primary: true. ========
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg2.tsconfig.json' is out of date because output file 'packages/pkg2.tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/packages/pkg2.tsconfig.json'...
 
-[96mpackages/pkg2_index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TheNum2'.
-
-[7m1[0m export const theNum: TheNum2 = "type2";
-[7m [0m [91m                     ~~~~~~~[0m
-
-
-Found 2 errors.
-
+======== Resolving type reference directive 'sometype', containing file '/home/src/workspaces/project/packages/__inferred type names__.ts', root directory '/home/src/workspaces/project/packages/typeroot2'. ========
+Resolving with primary search path '/home/src/workspaces/project/packages/typeroot2'.
+File '/home/src/workspaces/project/packages/typeroot2/sometype.d.ts' does not exist.
+File '/home/src/workspaces/project/packages/typeroot2/sometype/package.json' does not exist.
+File '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts', result '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts'.
+======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts', primary: true. ========
 
 
 //// [/home/src/workspaces/project/packages/pkg1_index.js]
@@ -94,13 +101,14 @@ export declare const theNum: TheNum;
 
 
 //// [/home/src/workspaces/project/packages/pkg1.tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./pkg1_index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":21,"length":6,"messageText":"Cannot find name 'TheNum'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./pkg1_index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg1_index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/pkg1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
     "../../../tslibs/ts/lib/lib.d.ts",
-    "./pkg1_index.ts"
+    "./pkg1_index.ts",
+    "./typeroot1/sometype/index.d.ts"
   ],
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.d.ts": {
@@ -119,6 +127,15 @@ export declare const theNum: TheNum;
       },
       "version": "-9601687719-export const theNum: TheNum = \"type1\";",
       "signature": "-11475605505-export declare const theNum: TheNum;\n"
+    },
+    "./typeroot1/sometype/index.d.ts": {
+      "original": {
+        "version": "-4557394441-declare type TheNum = \"type1\";",
+        "affectsGlobalScope": true
+      },
+      "version": "-4557394441-declare type TheNum = \"type1\";",
+      "signature": "-4557394441-declare type TheNum = \"type1\";",
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -130,23 +147,9 @@ export declare const theNum: TheNum;
   "options": {
     "composite": true
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./pkg1_index.ts",
-      [
-        {
-          "start": 21,
-          "length": 6,
-          "messageText": "Cannot find name 'TheNum'.",
-          "category": 1,
-          "code": 2304
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "./pkg1_index.d.ts",
   "version": "FakeTSVersion",
-  "size": 891
+  "size": 881
 }
 
 //// [/home/src/workspaces/project/packages/pkg2_index.js]
@@ -161,13 +164,14 @@ export declare const theNum: TheNum2;
 
 
 //// [/home/src/workspaces/project/packages/pkg2.tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./pkg2_index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":21,"length":7,"messageText":"Cannot find name 'TheNum2'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./pkg2_index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg2_index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
     "../../../tslibs/ts/lib/lib.d.ts",
-    "./pkg2_index.ts"
+    "./pkg2_index.ts",
+    "./typeroot2/sometype/index.d.ts"
   ],
   "fileInfos": {
     "../../../tslibs/ts/lib/lib.d.ts": {
@@ -186,6 +190,15 @@ export declare const theNum: TheNum2;
       },
       "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
       "signature": "-13622769679-export declare const theNum: TheNum2;\n"
+    },
+    "./typeroot2/sometype/index.d.ts": {
+      "original": {
+        "version": "-980425686-declare type TheNum2 = \"type2\";",
+        "affectsGlobalScope": true
+      },
+      "version": "-980425686-declare type TheNum2 = \"type2\";",
+      "signature": "-980425686-declare type TheNum2 = \"type2\";",
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -197,24 +210,10 @@ export declare const theNum: TheNum2;
   "options": {
     "composite": true
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./pkg2_index.ts",
-      [
-        {
-          "start": 21,
-          "length": 7,
-          "messageText": "Cannot find name 'TheNum2'.",
-          "category": 1,
-          "code": 2304
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "./pkg2_index.d.ts",
   "version": "FakeTSVersion",
-  "size": 895
+  "size": 884
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success

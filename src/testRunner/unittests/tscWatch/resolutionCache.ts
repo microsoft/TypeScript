@@ -236,7 +236,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
     verifyTscWatch({
         scenario,
         subScenario: "works when module resolution changes to ambient module",
-        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts", "-types", "node"],
         sys: () =>
             TestServerHost.createWatchedSystem([{
                 path: "/users/username/projects/project/foo.ts",
@@ -272,7 +272,7 @@ declare module "fs" {
     verifyTscWatch({
         scenario,
         subScenario: "works when included file with ambient module changes",
-        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts"],
+        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts", "-types", "node"],
         sys: () => {
             const root = {
                 path: "/users/username/projects/project/foo.ts",
@@ -565,7 +565,7 @@ declare namespace NodeJS {
                 };
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{}",
+                    content: "{ \"compilerOptions\": { \"types\": [\"node\"] } }",
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return TestServerHost.createWatchedSystem(

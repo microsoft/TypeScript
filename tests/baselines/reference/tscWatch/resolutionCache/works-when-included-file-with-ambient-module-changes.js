@@ -30,15 +30,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/TS/Lib/tsc.js --w /users/username/projects/project/foo.ts /users/username/projects/project/bar.d.ts
+/home/src/tslibs/TS/Lib/tsc.js --w /users/username/projects/project/foo.ts /users/username/projects/project/bar.d.ts -types node
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mfoo.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
-
-[7m2[0m import * as fs from "fs";
-[7m [0m [91m                    ~~~~[0m
+[91merror[0m[90m TS2688: [0mCannot find type definition file for 'node'.
+  The file is in the program because:
+    Entry point of type library 'node' specified in compilerOptions
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -53,11 +52,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -77,7 +72,10 @@ Program root files: [
   "/users/username/projects/project/bar.d.ts"
 ]
 Program options: {
-  "watch": true
+  "watch": true,
+  "types": [
+    "node"
+  ]
 }
 Program structureReused: Not
 Program files::
@@ -85,10 +83,7 @@ Program files::
 /users/username/projects/project/foo.ts
 /users/username/projects/project/bar.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/users/username/projects/project/foo.ts
-/users/username/projects/project/bar.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
@@ -128,7 +123,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2688: [0mCannot find type definition file for 'node'.
+  The file is in the program because:
+    Entry point of type library 'node' specified in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -140,7 +139,10 @@ Program root files: [
   "/users/username/projects/project/bar.d.ts"
 ]
 Program options: {
-  "watch": true
+  "watch": true,
+  "types": [
+    "node"
+  ]
 }
 Program structureReused: Completely
 Program files::
@@ -148,9 +150,7 @@ Program files::
 /users/username/projects/project/foo.ts
 /users/username/projects/project/bar.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/foo.ts
-/users/username/projects/project/bar.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)

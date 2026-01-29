@@ -7,7 +7,10 @@ Input::
 {
   "compilerOptions": {
     "strict": true
-  }
+  },
+  "types": [
+    "*"
+  ]
 }
 
 //// [/home/src/workspaces/project/b/src/index.ts]

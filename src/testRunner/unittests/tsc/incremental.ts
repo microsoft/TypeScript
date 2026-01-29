@@ -188,7 +188,7 @@ declare global {
                     "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react", types: ["react"] } }),
                 }),
             commandLineArgs: ts.emptyArray,
         });
@@ -201,7 +201,7 @@ declare global {
                     "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react", types: ["react"] } }),
                 }),
             commandLineArgs: ["--strict"],
         });
