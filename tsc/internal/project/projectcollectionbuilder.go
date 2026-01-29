@@ -365,6 +365,9 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, logge
 			if result.Value() != nil {
 				if hasChanges {
 					b.cleanupInferredProject(logger)
+					if b.inferredProject.Value() != nil {
+						b.updateProgram(b.inferredProject, logger)
+					}
 				}
 				return
 			}
