@@ -15,8 +15,11 @@ declare namespace debugger {} // still an error
 
 
 //// [ambientModuleDeclarationWithReservedIdentifierInDottedPath.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/7840
-export const tabId = chrome.debugger.tabId;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tabId = void 0;
+exports.tabId = chrome.debugger.tabId;
 declare;
 namespace;
 debugger;

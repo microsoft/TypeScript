@@ -11,4 +11,5 @@ export const a2: number;
 import { a2 } from "phaser";
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

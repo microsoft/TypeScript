@@ -27,22 +27,25 @@ export const h = null;
 
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 /** @type {?} */
-export const a = null;
+exports.a = null;
 /** @type {*} */
-export const b = null;
+exports.b = null;
 /** @type {string?} */
-export const c = null;
+exports.c = null;
 /** @type {string=} */
-export const d = null;
+exports.d = null;
 /** @type {string!} */
-export const e = null;
+exports.e = null;
 /** @type {function(string, number): object} */
-export const f = null;
+exports.f = null;
 /** @type {function(new: object, string, number)} */
-export const g = null;
+exports.g = null;
 /** @type {Object.<string, number>} */
-export const h = null;
+exports.h = null;
 
 
 //// [index.d.ts]

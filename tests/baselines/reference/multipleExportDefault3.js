@@ -10,8 +10,11 @@ export default class C { }
 
 
 //// [multipleExportDefault3.js]
-export default {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     uhoh: "another default",
 };
-export default class C {
+class C {
 }
+exports.default = C;

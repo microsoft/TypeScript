@@ -5,5 +5,8 @@ export default class Object {}
 
 
 //// [exportDefaultClassNameWithObject.js]
-export default class Object {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Object {
 }
+exports.default = Object;

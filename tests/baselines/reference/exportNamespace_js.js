@@ -12,12 +12,19 @@ A;
 
 
 //// [a.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
 }
+exports.A = A;
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
-import { A } from './b';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const b_1 = require("./b");
 A;
 
 

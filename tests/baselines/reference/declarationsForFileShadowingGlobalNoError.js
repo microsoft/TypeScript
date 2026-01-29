@@ -17,15 +17,21 @@ export const mixin = (Base: Constructor) => {
 }
 
 //// [dom.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [custom.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
-export const mixin = (Base) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mixin = void 0;
+const mixin = (Base) => {
     return class extends Base {
         get(domNode) { }
     };
 };
+exports.mixin = mixin;
 
 
 //// [dom.d.ts]

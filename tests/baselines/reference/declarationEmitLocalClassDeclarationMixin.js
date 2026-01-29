@@ -33,6 +33,9 @@ export class FilteredThing extends Filter(Unmixed) {
 
 
 //// [declarationEmitLocalClassDeclarationMixin.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
 function mixin(Base) {
     class PrivateMixed extends Base {
         constructor() {
@@ -42,12 +45,13 @@ function mixin(Base) {
     }
     return PrivateMixed;
 }
-export class Unmixed {
+class Unmixed {
     constructor() {
         this.foo = 1;
     }
 }
-export const Mixed = mixin(Unmixed);
+exports.Unmixed = Unmixed;
+exports.Mixed = mixin(Unmixed);
 function Filter(ctor) {
     class FilterMixin extends ctor {
         constructor() {
@@ -58,11 +62,12 @@ function Filter(ctor) {
     }
     return FilterMixin;
 }
-export class FilteredThing extends Filter(Unmixed) {
+class FilteredThing extends Filter(Unmixed) {
     match(path) {
         return false;
     }
 }
+exports.FilteredThing = FilteredThing;
 
 
 //// [declarationEmitLocalClassDeclarationMixin.d.ts]

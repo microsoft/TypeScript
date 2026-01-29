@@ -18,13 +18,21 @@ export const obj = {
 };
 
 //// [other.js]
-export default createExperiment({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = createExperiment({
     name: "foo"
 });
 //// [main.js]
-import other from "./other";
-export const obj = {
-    [other.name]: 1,
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.obj = void 0;
+const other_1 = __importDefault(require("./other"));
+exports.obj = {
+    [other_1.default.name]: 1,
 };
 
 

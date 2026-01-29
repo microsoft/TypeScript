@@ -13,4 +13,5 @@ import foo from "foo";
 
 
 //// [user.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

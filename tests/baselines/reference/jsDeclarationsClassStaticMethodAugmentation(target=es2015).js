@@ -8,9 +8,13 @@ export class Clazz {
 Clazz.method.prop = 5;
 
 //// [source.js]
-export class Clazz {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Clazz = void 0;
+class Clazz {
     static method() { }
 }
+exports.Clazz = Clazz;
 Clazz.method.prop = 5;
 
 

@@ -11,10 +11,14 @@ let b = { A };
 
 
 //// [a.js]
-export default class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class A {
 }
+exports.default = A;
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 let a = { a: '' };
 let b = { A };
-export {};

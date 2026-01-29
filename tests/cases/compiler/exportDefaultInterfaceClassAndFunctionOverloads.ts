@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 export default function foo(value: number): number
 export default function foo(value: string): string

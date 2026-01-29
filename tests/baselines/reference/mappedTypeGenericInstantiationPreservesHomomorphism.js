@@ -11,10 +11,15 @@ export const mappedUnionWithPrivateType = <T extends unknown[]>(...args: T) => u
 
 
 //// [internal.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [api.js]
-import { usePrivateType } from './internal';
-export const mappedUnionWithPrivateType = (...args) => usePrivateType(...args);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mappedUnionWithPrivateType = void 0;
+const internal_1 = require("./internal");
+const mappedUnionWithPrivateType = (...args) => (0, internal_1.usePrivateType)(...args);
+exports.mappedUnionWithPrivateType = mappedUnionWithPrivateType;
 
 
 //// [internal.d.ts]

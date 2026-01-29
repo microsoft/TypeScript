@@ -78,55 +78,71 @@ function Component() { return null; }
 
 
 //// [preacty.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
-import { h, Fragment } from "./renderer";
-h(Fragment, null,
-    h("div", null));
+const renderer_1 = require("./renderer");
+(0, renderer_1.h)(renderer_1.Fragment, null,
+    (0, renderer_1.h)("div", null));
 //// [snabbdomy.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* @jsx jsx */
 /* @jsxfrag null */
-import { jsx } from "./renderer";
-jsx(null, null,
-    jsx("span", null));
+const renderer_1 = require("./renderer");
+(0, renderer_1.jsx)(null, null,
+    (0, renderer_1.jsx)("span", null));
 //// [preacty-only-fragment.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
-import { Fragment } from "./renderer";
-h(Fragment, null);
+const renderer_1 = require("./renderer");
+(0, renderer_1.h)(renderer_1.Fragment, null);
 //// [snabbdomy-only-fragment.js]
-jsx(null, null);
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+(0, renderer_1.jsx)(null, null);
 //// [preacty-only-fragment-no-jsx.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
-import { Fragment } from "./renderer";
-h(Fragment, null);
+const renderer_1 = require("./renderer");
+h(renderer_1.Fragment, null);
 //// [snabbdomy-only-fragment-no-jsx.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 jsx(null, null);
-export {};
 //// [preacty-no-fragment.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jsx h
  * @jsxFrag Fragment
  */
-import { h } from "./renderer";
-h("div", null);
+const renderer_1 = require("./renderer");
+(0, renderer_1.h)("div", null);
 //// [snabbdomy-no-fragment.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* @jsx jsx */
 /* @jsxfrag null */
-import { jsx } from "./renderer";
-jsx("div", null);
+const renderer_1 = require("./renderer");
+(0, renderer_1.jsx)("div", null);
 //// [preacty-only-component.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jsx h
  */
-import { h } from "./renderer";
+const renderer_1 = require("./renderer");
 function Component() { return null; }
-h(Component, null);
+(0, renderer_1.h)(Component, null);

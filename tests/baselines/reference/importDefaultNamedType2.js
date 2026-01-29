@@ -8,7 +8,11 @@ import type from from './a';
 
 
 //// [a.js]
-export default class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class A {
 }
+exports.default = A;
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

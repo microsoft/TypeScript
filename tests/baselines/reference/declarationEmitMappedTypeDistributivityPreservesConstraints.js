@@ -18,13 +18,20 @@ import test from "./types";
 export default { test };
 
 //// [types.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function fn(sliceIndex) {
     return null;
 }
-export default { fn };
+exports.default = { fn };
 //// [reexport.js]
-import test from "./types";
-export default { test };
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const types_1 = __importDefault(require("./types"));
+exports.default = { test: types_1.default };
 
 
 //// [types.d.ts]

@@ -33,15 +33,22 @@ export class Api<SecurityDataType = unknown> {
 }
 
 //// [http-client.js]
-export class HttpClient {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HttpClient = void 0;
+class HttpClient {
     constructor() {
         this.request = () => {
             return '';
         };
     }
 }
+exports.HttpClient = HttpClient;
 //// [Api.js]
-export class Api {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Api = void 0;
+class Api {
     constructor(http) {
         this.http = http;
         this.abc1 = () => this.http.request();
@@ -49,6 +56,7 @@ export class Api {
         this.abc3 = () => this.http.request();
     }
 }
+exports.Api = Api;
 
 
 //// [http-client.d.ts]

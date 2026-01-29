@@ -1,3 +1,4 @@
+// @module: commonjs
 // @allowJs: true
 // @checkJs: true
 // @target: es5, es2015

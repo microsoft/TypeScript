@@ -24,13 +24,16 @@ export class Wrapper {
 }
 
 //// [declarationEmitOverloadedPrivateInference.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Wrapper = void 0;
 function noArgs() {
     return null;
 }
 function oneArg(input) {
     return null;
 }
-export class Wrapper {
+class Wrapper {
     constructor() {
         this.Proxies = {
             Failure: this.proxy(noArgs, true),
@@ -41,6 +44,7 @@ export class Wrapper {
         return null;
     }
 }
+exports.Wrapper = Wrapper;
 
 
 //// [declarationEmitOverloadedPrivateInference.d.ts]

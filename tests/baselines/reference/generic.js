@@ -13,11 +13,16 @@ let c: A<boolean> = {};
 let d: B = { a: "" };
 
 //// [a.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
 }
+exports.A = A;
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let a = { a: "" };
 let b = { a: 3 };
 let c = {};
 let d = { a: "" };
-export {};

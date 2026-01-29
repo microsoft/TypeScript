@@ -19,6 +19,11 @@ const p = new C(1, 2);
 
 
 //// [index.js]
-import Point from "./point";
-const C = Point;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const point_1 = __importDefault(require("./point"));
+const C = point_1.default;
 const p = new C(1, 2);

@@ -21,12 +21,19 @@ import d from "./file1"
 
 
 //// [file1.js]
-export class Calculator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Calculator = void 0;
+exports.test = test;
+exports.default = test2;
+class Calculator {
     handleChar() { }
 }
-export function test() {
+exports.Calculator = Calculator;
+function test() {
 }
-export default function test2() {
+function test2() {
 }
 //// [file2.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

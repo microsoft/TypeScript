@@ -19,16 +19,24 @@ export type PublicKeys1<T> = T extends `_${string}` ? never : T;
 type PublicKeys2<T>        = T extends `_${string}` ? never : T;
 
 //// [internal.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [api.js]
-import { excludePrivateKeys1, excludePrivateKeys2 } from './internal';
-export const dropPrivateProps1 = (obj) => excludePrivateKeys1(obj);
-export const dropPrivateProps2 = (obj) => excludePrivateKeys2(obj);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dropPrivateProps2 = exports.dropPrivateProps1 = void 0;
+const internal_1 = require("./internal");
+const dropPrivateProps1 = (obj) => (0, internal_1.excludePrivateKeys1)(obj);
+exports.dropPrivateProps1 = dropPrivateProps1;
+const dropPrivateProps2 = (obj) => (0, internal_1.excludePrivateKeys2)(obj);
+exports.dropPrivateProps2 = dropPrivateProps2;
 //// [test.js]
-import { dropPrivateProps1, dropPrivateProps2 } from './api';
-const a = dropPrivateProps1({ foo: 42, _bar: 'secret' }); // type is {foo: number}
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const api_1 = require("./api");
+const a = (0, api_1.dropPrivateProps1)({ foo: 42, _bar: 'secret' }); // type is {foo: number}
 //a._bar                                                // error: _bar does not exist           <===== as expected
-const b = dropPrivateProps2({ foo: 42, _bar: 'secret' }); // type is {foo: number, _bar: string}
+const b = (0, api_1.dropPrivateProps2)({ foo: 42, _bar: 'secret' }); // type is {foo: number, _bar: string}
 //b._bar                                                // no error, type of b._bar is string   <===== NOT expected
 
 

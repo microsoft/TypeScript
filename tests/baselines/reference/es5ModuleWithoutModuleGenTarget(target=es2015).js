@@ -14,10 +14,14 @@ export class A
 }
 
 //// [es5ModuleWithoutModuleGenTarget.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
     constructor() {
     }
     B() {
         return 42;
     }
 }
+exports.A = A;

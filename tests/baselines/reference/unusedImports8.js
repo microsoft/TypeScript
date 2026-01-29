@@ -21,15 +21,23 @@ x.handleChar();
 t1();
 
 //// [file1.js]
-export class Calculator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Calculator = void 0;
+exports.test = test;
+exports.test2 = test2;
+class Calculator {
     handleChar() { }
 }
-export function test() {
+exports.Calculator = Calculator;
+function test() {
 }
-export function test2() {
+function test2() {
 }
 //// [file2.js]
-import { Calculator as calc, test as t1 } from "./file1";
-var x = new calc();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const file1_1 = require("./file1");
+var x = new file1_1.Calculator();
 x.handleChar();
-t1();
+(0, file1_1.test)();

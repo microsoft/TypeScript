@@ -11,4 +11,6 @@ import "normalize.css";
 
 
 //// [a.js]
-import "normalize.css";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("normalize.css");

@@ -39,10 +39,13 @@ var Instantiated;
     Instantiated.x = 1;
 })(Instantiated || (Instantiated = {}));
 //// [module-namespaces.js]
-export var Instantiated;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Instantiated = void 0;
+var Instantiated;
 (function (Instantiated) {
     Instantiated.x = 1;
-})(Instantiated || (Instantiated = {}));
+})(Instantiated || (exports.Instantiated = Instantiated = {}));
 //// [enum1.js]
 var Enum;
 (function (Enum) {

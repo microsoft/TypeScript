@@ -27,10 +27,14 @@ export class XmlElement2 extends Mixin(
 
 
 //// [declarationEmitClassMixinLocalClassDeclaration.js]
-export const Mixin = null;
-export class Base {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.XmlElement2 = exports.Base = exports.Mixin = void 0;
+exports.Mixin = null;
+class Base {
 }
-export class XmlElement2 extends Mixin([Base], (base) => {
+exports.Base = Base;
+class XmlElement2 extends (0, exports.Mixin)([Base], (base) => {
     class XmlElement2 extends base {
         constructor() {
             super(...arguments);
@@ -40,6 +44,7 @@ export class XmlElement2 extends Mixin([Base], (base) => {
     return XmlElement2;
 }) {
 }
+exports.XmlElement2 = XmlElement2;
 
 
 //// [declarationEmitClassMixinLocalClassDeclaration.d.ts]

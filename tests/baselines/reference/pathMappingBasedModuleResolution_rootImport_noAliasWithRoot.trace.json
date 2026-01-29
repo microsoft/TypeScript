@@ -1,7 +1,7 @@
 [
     "======== Resolving module '/foo' from '/root/a.ts'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/foo'.",
     "'paths' option is specified, looking for a pattern to match module name '/foo'.",
     "Module name '/foo', matched pattern '*'.",
@@ -11,7 +11,7 @@
     "======== Module name '/foo' was successfully resolved to '/root/src/foo.ts'. ========",
     "======== Resolving module '/bar' from '/root/a.ts'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/bar'.",
     "'paths' option is specified, looking for a pattern to match module name '/bar'.",
     "Module name '/bar', matched pattern '*'.",

@@ -15,10 +15,16 @@ A;
 
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
 const A = 0;
-export { A };
+exports.A = A;
 //// [c.js]
-import { A } from "./b";
-A;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const b_1 = require("./b");
+b_1.A;

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // When symlinked files are in node_modules, they are resolved with realpath;
 // so a linked file does not create a duplicate SourceFile of the real one.

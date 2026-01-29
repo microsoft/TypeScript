@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 declare global {
     interface Function {

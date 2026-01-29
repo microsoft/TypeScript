@@ -13,6 +13,13 @@ export class A extends Foo { }
 
 
 //// [a.js]
-import Foo from "foo";
-export class A extends Foo {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+const foo_1 = __importDefault(require("foo"));
+class A extends foo_1.default {
 }
+exports.A = A;

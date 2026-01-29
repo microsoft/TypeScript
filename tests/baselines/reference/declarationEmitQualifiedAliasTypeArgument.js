@@ -28,9 +28,12 @@ export const fun2 = create<Q>();
 
 
 //// [index.js]
-import { create } from "./bbb";
-export const fun = create();
-export const fun2 = create();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fun2 = exports.fun = void 0;
+const bbb_1 = require("./bbb");
+exports.fun = (0, bbb_1.create)();
+exports.fun2 = (0, bbb_1.create)();
 
 
 //// [index.d.ts]

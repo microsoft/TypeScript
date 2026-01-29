@@ -13,16 +13,21 @@ export default class Base extends A {
 }
 
 //// [index.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
     /** @returns {this} */
     method() {
         return this;
     }
 }
-export default class Base extends A {
+exports.A = A;
+class Base extends A {
     // This method is required to reproduce #35932
     verify() { }
 }
+exports.default = Base;
 
 
 //// [index.d.ts]

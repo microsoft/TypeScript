@@ -19,5 +19,7 @@ import {Clone} from "./enum";
 Clone.clone("ok");
 
 //// [usage.js]
-import { Clone } from "./enum";
-Clone.clone("ok");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const enum_1 = require("./enum");
+enum_1.Clone.clone("ok");

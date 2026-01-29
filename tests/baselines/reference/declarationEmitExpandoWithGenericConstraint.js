@@ -17,9 +17,14 @@ export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
 Point.zero = (): Point => Point(0, 0);
 
 //// [declarationEmitExpandoWithGenericConstraint.js]
-export const Point = (x, y) => ({ x, y });
-export const Rect = (a, b) => ({ a, b });
-Point.zero = () => Point(0, 0);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Rect = exports.Point = void 0;
+const Point = (x, y) => ({ x, y });
+exports.Point = Point;
+const Rect = (a, b) => ({ a, b });
+exports.Rect = Rect;
+exports.Point.zero = () => (0, exports.Point)(0, 0);
 
 
 //// [declarationEmitExpandoWithGenericConstraint.d.ts]

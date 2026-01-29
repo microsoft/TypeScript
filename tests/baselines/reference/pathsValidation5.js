@@ -4,4 +4,6 @@
 import 'someModule';
 
 //// [main.js]
-import 'someModule';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("someModule");

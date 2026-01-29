@@ -24,4 +24,5 @@ import { x as xb } from "b";
 
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

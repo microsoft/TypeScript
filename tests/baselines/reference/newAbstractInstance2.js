@@ -9,8 +9,16 @@ new A();
 
 
 //// [a.js]
-export default class {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class default_1 {
 }
+exports.default = default_1;
 //// [b.js]
-import A from "./a";
-new A();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const a_1 = __importDefault(require("./a"));
+new a_1.default();

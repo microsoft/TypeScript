@@ -8,4 +8,7 @@ type manyprops = `${props}${props}`;
 export const c = [null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}}][0];
 
 //// [hugeDeclarationOutputGetsTruncatedWithError.js]
-export const c = [null][0];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+exports.c = [null][0];

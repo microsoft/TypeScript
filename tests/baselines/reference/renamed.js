@@ -13,11 +13,14 @@ const d: D = {};
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class A {
 }
-export {};
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const d = {};
-export {};

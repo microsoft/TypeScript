@@ -30,17 +30,23 @@ import { Test } from "./test";
 new Test().print();
 
 //// [translation.js]
-export var Translation;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Translation = void 0;
+var Translation;
 (function (Translation) {
     Translation.TranslationKeyEnum = {
         Translation1: 'translation1',
         Translation2: 'translation2',
     };
-})(Translation || (Translation = {}));
+})(Translation || (exports.Translation = Translation = {}));
 //// [test.js]
-import { Translation } from "./translation";
-var TranslationKeyEnum = Translation.TranslationKeyEnum;
-export class Test {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = void 0;
+const translation_1 = require("./translation");
+var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
+class Test {
     constructor() {
         this.TranslationKeyEnum = TranslationKeyEnum;
     }
@@ -48,9 +54,12 @@ export class Test {
         console.log(TranslationKeyEnum.Translation1);
     }
 }
+exports.Test = Test;
 //// [index.js]
-import { Test } from "./test";
-new Test().print();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const test_1 = require("./test");
+new test_1.Test().print();
 
 
 //// [translation.d.ts]

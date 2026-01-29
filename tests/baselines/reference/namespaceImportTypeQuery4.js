@@ -15,12 +15,17 @@ let t: typeof types = {
 
 
 //// [a.js]
-export class B {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = void 0;
+class B {
 }
+exports.B = B;
 ;
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let t = {
     A: undefined, // error
     B: undefined,
 };
-export {};

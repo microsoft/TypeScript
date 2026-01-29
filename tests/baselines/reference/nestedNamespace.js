@@ -11,11 +11,15 @@ interface B extends a.types.A {}
 
 
 //// [a.js]
-export var types;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.types = void 0;
+var types;
 (function (types) {
     class A {
     }
     types.A = A;
-})(types || (types = {}));
+})(types || (exports.types = types = {}));
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

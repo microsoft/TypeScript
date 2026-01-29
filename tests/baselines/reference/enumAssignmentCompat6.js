@@ -123,14 +123,16 @@ function i(x, y) {
     y = x;
 }
 //// [f.js]
-export var DiagnosticCategory;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.DiagnosticCategory = void 0;
+var DiagnosticCategory;
 (function (DiagnosticCategory) {
     DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";
     DiagnosticCategory[DiagnosticCategory["Error"] = 1] = "Error";
     DiagnosticCategory[DiagnosticCategory["Suggestion"] = 2] = "Suggestion";
     DiagnosticCategory[DiagnosticCategory["Message"] = 3] = "Message";
-})(DiagnosticCategory || (DiagnosticCategory = {}));
-export let x;
+})(DiagnosticCategory || (exports.DiagnosticCategory = DiagnosticCategory = {}));
 (() => {
     let DiagnosticCategory;
     (function (DiagnosticCategory) {
@@ -140,7 +142,7 @@ export let x;
         DiagnosticCategory["Message"] = "Message";
     })(DiagnosticCategory || (DiagnosticCategory = {}));
     function f(y) {
-        x = y;
-        y = x;
+        exports.x = y;
+        y = exports.x;
     }
 })();

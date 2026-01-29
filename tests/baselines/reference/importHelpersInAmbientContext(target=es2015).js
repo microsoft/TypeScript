@@ -57,4 +57,5 @@ export declare function __generator(thisArg: any, body: Function): any;
 export declare function __exportStar(m: any, exports: any): void;
 
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

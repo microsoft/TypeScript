@@ -42,9 +42,14 @@ enum E {
 
 
 //// [helpers.js]
-export const foo = 2;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+exports.foo = 2;
 //// [bad.js]
-import { foo } from "./helpers";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A[A["a"] = 2] = "a";
@@ -54,7 +59,9 @@ var A;
     A[A["e"] = void 0] = "e";
 })(A || (A = {}));
 //// [good.js]
-import { foo } from "./helpers";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A[A["a"] = 2] = "a";

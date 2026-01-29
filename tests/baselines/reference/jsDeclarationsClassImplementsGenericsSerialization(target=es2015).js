@@ -25,13 +25,17 @@ export class Encoder {
  */
 
 //// [interface.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [lib.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Encoder = void 0;
 /**
  * @template T
  * @implements {IEncoder<T>}
  */
-export class Encoder {
+class Encoder {
     /**
      * @param {T} value
      */
@@ -39,6 +43,7 @@ export class Encoder {
         return new Uint8Array(0);
     }
 }
+exports.Encoder = Encoder;
 /**
  * @template T
  * @typedef {import('./interface').Encoder<T>} IEncoder

@@ -8,10 +8,16 @@ export const globalThis = variable;
 export const variable = globalThis;
 
 //// [variable.js]
-export const variable = globalThis;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.variable = void 0;
+exports.variable = globalThis;
 //// [index.js]
-import { variable } from "./variable";
-export const globalThis = variable;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.globalThis = void 0;
+const variable_1 = require("./variable");
+exports.globalThis = variable_1.variable;
 
 
 //// [variable.d.ts]

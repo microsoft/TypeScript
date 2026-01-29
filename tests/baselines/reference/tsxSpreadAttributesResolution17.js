@@ -22,10 +22,14 @@ let unionedSpread = <Empty {...obj} />;
 
 
 //// [file.jsx]
-export class Empty extends React.Component {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Empty = void 0;
+class Empty extends React.Component {
     render() {
         return <div>Hello</div>;
     }
 }
+exports.Empty = Empty;
 // OK
 let unionedSpread = <Empty {...obj}/>;

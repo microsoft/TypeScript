@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @filename: /node_modules/A/index.d.ts
 declare module "ext" {

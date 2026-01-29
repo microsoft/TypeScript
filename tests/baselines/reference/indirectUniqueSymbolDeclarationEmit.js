@@ -9,10 +9,14 @@ export function f() {
 }
 
 //// [indirectUniqueSymbolDeclarationEmit.js]
-export const x = Symbol();
-export const y = Symbol();
-export function f() {
-    return rand() ? x : y;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = exports.x = void 0;
+exports.f = f;
+exports.x = Symbol();
+exports.y = Symbol();
+function f() {
+    return rand() ? exports.x : exports.y;
 }
 
 

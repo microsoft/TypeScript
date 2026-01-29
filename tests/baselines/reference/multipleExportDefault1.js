@@ -11,8 +11,11 @@ export default {
 
 
 //// [multipleExportDefault1.js]
-export default function Foo() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Foo;
+function Foo() {
 }
-export default {
+exports.default = {
     uhoh: "another default",
 };

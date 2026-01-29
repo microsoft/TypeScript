@@ -33,26 +33,34 @@ test.tags();
 
 
 //// [emitClassExpressionInDeclarationFile.js]
-export var simpleExample = class {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
+exports.WithTags = WithTags;
+var simpleExample = class {
     static getTags() { }
     tags() { }
 };
-export var circularReference = class C {
+exports.simpleExample = simpleExample;
+var circularReference = class C {
     static getTags(c) { return c; }
     tags(c) { return c; }
 };
+exports.circularReference = circularReference;
 // repro from #15066
-export class FooItem {
+class FooItem {
     foo() { }
 }
-export function WithTags(Base) {
+exports.FooItem = FooItem;
+function WithTags(Base) {
     return class extends Base {
         static getTags() { }
         tags() { }
     };
 }
-export class Test extends WithTags(FooItem) {
+class Test extends WithTags(FooItem) {
 }
+exports.Test = Test;
 const test = new Test();
 Test.getTags();
 test.tags();

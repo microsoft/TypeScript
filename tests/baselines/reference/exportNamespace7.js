@@ -26,24 +26,38 @@ let ___: C = new C(); // Error
 
 
 //// [a.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = exports.B = exports.A = void 0;
+class A {
 }
-export class B {
+exports.A = A;
+class B {
 }
-export class C {
+exports.B = B;
+class C {
 }
+exports.C = C;
 //// [b.js]
-export class C {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+class C {
 }
+exports.C = C;
 //// [c.js]
-import { C } from "./b";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const b_1 = require("./b");
 let _ = new A(); // Error
 let __ = new B(); // Error
-let ___ = new C(); // Ok
+let ___ = new b_1.C(); // Ok
 //// [d.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [e.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let _ = new A(); // Error
 let __ = new B(); // Error
 let ___ = new C(); // Error
-export {};

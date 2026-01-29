@@ -20,7 +20,10 @@ export class Bar2 {
 }
 
 //// [file1.js]
-export class Bar {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = void 0;
+class Bar {
     constructor() {
         this.c = [2];
         this.c3 = 1;
@@ -28,16 +31,23 @@ export class Bar {
         this.f = 2;
     }
 }
+exports.Bar = Bar;
 //// [file2.js]
-export function foo(p = (ip = 10, v) => { }) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar2 = void 0;
+exports.foo = foo;
+exports.foo2 = foo2;
+function foo(p = (ip = 10, v) => { }) {
 }
-export function foo2(p = (ip = 10, v) => { }) { }
-export class Bar2 {
+function foo2(p = (ip = 10, v) => { }) { }
+class Bar2 {
     constructor() {
         this.r = 1;
         this.f = 2;
     }
 }
+exports.Bar2 = Bar2;
 
 
 //// [file1.d.ts]

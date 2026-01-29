@@ -10,6 +10,9 @@ import { bar } from "./a";
 
 
 //// [a.js]
-export { foo };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

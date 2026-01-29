@@ -40,6 +40,8 @@ fooLength + 1;
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
     class B {
@@ -50,17 +52,24 @@ var A;
         B.b = 0;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-export default A.B;
+exports.default = A.B;
 //// [b.js]
-export default "foo".length;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = "foo".length;
 //// [index.js]
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-import fooBar from "foobar";
-var X = fooBar.X;
-import X2 from "foobarx";
+const foobar_1 = __importDefault(require("foobar"));
+var X = foobar_1.default.X;
+const foobarx_1 = __importDefault(require("foobarx"));
 const x = X;
-const x2 = X2;
-import B from "./a";
-const b = new B(B.b);
-import fooLength from "./b";
-fooLength + 1;
+const x2 = foobarx_1.default;
+const a_1 = __importDefault(require("./a"));
+const b = new a_1.default(a_1.default.b);
+const b_1 = __importDefault(require("./b"));
+b_1.default + 1;

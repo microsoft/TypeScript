@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @filename: file1.ts
 export namespace Library {

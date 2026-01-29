@@ -11,8 +11,13 @@ export default { a: true }
 export type X = typeof default; // expect error
 
 //// [a.js]
-export default function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
+function default_1() {
     return true;
 }
 //// [b.js]
-export default { a: true };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = { a: true };

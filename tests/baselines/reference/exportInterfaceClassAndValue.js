@@ -7,4 +7,7 @@ export interface foo {}
 
 
 //// [exportInterfaceClassAndValue.js]
-export const foo = 1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+exports.foo = 1;

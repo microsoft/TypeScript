@@ -23,6 +23,8 @@ export type AliasType3 = typeof c
 
 
 //// [test.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function getFoo() {
     return { foo: { test: 42 } };
 }
@@ -32,7 +34,6 @@ function getNested() {
     return { a: { b: { c: 'd' } } };
 }
 const { a: { b: { c } } } = getNested();
-export {};
 
 
 //// [test.d.ts]

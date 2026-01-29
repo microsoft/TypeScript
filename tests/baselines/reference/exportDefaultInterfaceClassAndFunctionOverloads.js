@@ -12,7 +12,10 @@ export default interface Bar {}
 
 
 //// [exportDefaultInterfaceClassAndFunctionOverloads.js]
-export default function foo(value) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = foo;
+function foo(value) {
     return 1;
 }
-export default Foo;
+exports.default = Foo;

@@ -35,6 +35,9 @@ export class CKind extends ClassFactory(Kinds.C) {
 }
 
 //// [declarationNoDanglingGenerics.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CKind = exports.BKind = exports.AKind = void 0;
 const kindCache = {};
 function register(kind) {
     if (kindCache[kind]) {
@@ -58,12 +61,15 @@ class Kinds {
 Kinds.A = "A";
 Kinds.B = "B";
 Kinds.C = "C";
-export class AKind extends ClassFactory(Kinds.A) {
+class AKind extends ClassFactory(Kinds.A) {
 }
-export class BKind extends ClassFactory(Kinds.B) {
+exports.AKind = AKind;
+class BKind extends ClassFactory(Kinds.B) {
 }
-export class CKind extends ClassFactory(Kinds.C) {
+exports.BKind = BKind;
+class CKind extends ClassFactory(Kinds.C) {
 }
+exports.CKind = CKind;
 
 
 //// [declarationNoDanglingGenerics.d.ts]

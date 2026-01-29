@@ -19,18 +19,26 @@ ns.A;
 
 
 //// [a.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
 }
+exports.A = A;
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [d.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 A;
-export {};
 //// [e.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 ns.A;
-export {};
 
 
 //// [a.d.ts]

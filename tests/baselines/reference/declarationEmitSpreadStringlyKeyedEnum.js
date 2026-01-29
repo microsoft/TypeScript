@@ -5,6 +5,9 @@ enum AgeGroups { "0-17" , "18-22" , "23-27" , "28-34" , "35-44" , "45-59" , "60-
 export const SpotifyAgeGroupEnum = { ...AgeGroups };
 
 //// [declarationEmitSpreadStringlyKeyedEnum.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpotifyAgeGroupEnum = void 0;
 var AgeGroups;
 (function (AgeGroups) {
     AgeGroups[AgeGroups["0-17"] = 0] = "0-17";
@@ -15,7 +18,7 @@ var AgeGroups;
     AgeGroups[AgeGroups["45-59"] = 5] = "45-59";
     AgeGroups[AgeGroups["60-150"] = 6] = "60-150";
 })(AgeGroups || (AgeGroups = {}));
-export const SpotifyAgeGroupEnum = Object.assign({}, AgeGroups);
+exports.SpotifyAgeGroupEnum = Object.assign({}, AgeGroups);
 
 
 //// [declarationEmitSpreadStringlyKeyedEnum.d.ts]

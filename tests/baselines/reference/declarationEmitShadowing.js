@@ -15,14 +15,19 @@ export function needsRenameForShadowing<T>() {
 
 
 //// [declarationEmitShadowing.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+exports.needsRenameForShadowing = needsRenameForShadowing;
+class A {
     constructor() {
         this.ShadowedButDoesNotRequireRenaming = () => {
             return null;
         };
     }
 }
-export function needsRenameForShadowing() {
+exports.A = A;
+function needsRenameForShadowing() {
     return function O(t, t2) {
     };
 }

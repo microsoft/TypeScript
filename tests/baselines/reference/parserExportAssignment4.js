@@ -4,4 +4,5 @@
 export = ;
 
 //// [parserExportAssignment4.js]
-export {};
+"use strict";
+module.exports = ;

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @filename: b.ts
 export const zzz = 123;

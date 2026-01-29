@@ -6,5 +6,8 @@ export default function() {}
 
 
 //// [duplicateDefaultExport.js]
-export default 0;
-export default function () { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
+exports.default = 0;
+function default_1() { }

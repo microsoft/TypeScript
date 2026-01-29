@@ -13,7 +13,8 @@ function foo() {
 export {}
 
 //// [unusedLocalsAndParametersTypeAliases2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
     foo();
 }
-export {};

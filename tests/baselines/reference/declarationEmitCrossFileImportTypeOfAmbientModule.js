@@ -13,8 +13,11 @@ export const reeexported = item;
 
 
 //// [index.js]
-import { item } from "../somepackage";
-export const reeexported = item;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reeexported = void 0;
+const somepackage_1 = require("../somepackage");
+exports.reeexported = somepackage_1.item;
 
 
 //// [index.d.ts]

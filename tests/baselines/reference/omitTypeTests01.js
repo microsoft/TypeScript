@@ -21,10 +21,14 @@ export function getBazA(baz: Baz) {
 
 
 //// [omitTypeTests01.js]
-export function getBarA(bar) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getBarA = getBarA;
+exports.getBazA = getBazA;
+function getBarA(bar) {
     return bar.a;
 }
-export function getBazA(baz) {
+function getBazA(baz) {
     return baz.a;
 }
 

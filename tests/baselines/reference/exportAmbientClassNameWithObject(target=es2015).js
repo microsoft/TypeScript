@@ -5,4 +5,5 @@ export declare class Object {}
 
 
 //// [exportAmbientClassNameWithObject.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -25,13 +25,19 @@ export const NotificationScenario = test(
 );
 
 //// [NotificationAPIUtils.js]
-export function getNotification() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getNotification = getNotification;
+function getNotification() {
     return {};
 }
 //// [NotificationStore.js]
-import { test } from "search/lib/index";
-import { getNotification } from "../API/NotificationAPIUtils";
-export const NotificationScenario = test(getNotification);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NotificationScenario = void 0;
+const index_1 = require("search/lib/index");
+const NotificationAPIUtils_1 = require("../API/NotificationAPIUtils");
+exports.NotificationScenario = (0, index_1.test)(NotificationAPIUtils_1.getNotification);
 
 
 //// [NotificationAPIUtils.d.ts]

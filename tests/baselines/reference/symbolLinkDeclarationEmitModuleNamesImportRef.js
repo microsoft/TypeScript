@@ -21,9 +21,12 @@ export function getStyles() {
 
 
 //// [index.js]
-import { styles } from "package-a";
-export function getStyles() {
-    return styles;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getStyles = getStyles;
+const package_a_1 = require("package-a");
+function getStyles() {
+    return package_a_1.styles;
 }
 
 

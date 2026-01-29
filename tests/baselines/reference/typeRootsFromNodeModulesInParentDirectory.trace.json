@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'xyz' from '/src/a.ts'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "File '/src/package.json' does not exist.",
     "File '/package.json' does not exist.",
     "Loading module 'xyz' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",

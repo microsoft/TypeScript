@@ -61,10 +61,24 @@ export function j() {}
 
 
 //// [index.js]
-export function a() { }
-export function b() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = a;
+exports.b = b;
+exports.c = c;
+exports.d = d;
+exports.e = e;
+exports.f = f;
+exports.g = g;
+exports.h = hh;
+exports.i = i;
+exports.ii = i;
+exports.j = j;
+exports.jj = j;
+function a() { }
+function b() { }
 b.cat = "cat";
-export function c() { }
+function c() { }
 c.Cls = class {
 };
 /**
@@ -72,19 +86,19 @@ c.Cls = class {
  * @param {number} b
  * @return {string}
  */
-export function d(a, b) { return /** @type {*} */ (null); }
+function d(a, b) { return /** @type {*} */ (null); }
 /**
  * @template T,U
  * @param {T} a
  * @param {U} b
  * @return {T & U}
  */
-export function e(a, b) { return /** @type {*} */ (null); }
+function e(a, b) { return /** @type {*} */ (null); }
 /**
  * @template T
  * @param {T} a
  */
-export function f(a) {
+function f(a) {
     return a;
 }
 f.self = f;
@@ -95,7 +109,6 @@ f.self = f;
 function g(a, b) {
     return a.x && b.y();
 }
-export { g };
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
@@ -103,11 +116,8 @@ export { g };
 function hh(a, b) {
     return a.x && b.y();
 }
-export { hh as h };
-export function i() { }
-export { i as ii };
-export { j as jj };
-export function j() { }
+function i() { }
+function j() { }
 
 
 //// [index.d.ts]

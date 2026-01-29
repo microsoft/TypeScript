@@ -26,7 +26,11 @@ export namespace N {}
 
 
 //// [mergedDeclarationExports.js]
-export const b = 1;
-export const t = 0;
-export class d {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.d = exports.t = exports.b = void 0;
+exports.b = 1;
+exports.t = 0;
+class d {
 }
+exports.d = d;

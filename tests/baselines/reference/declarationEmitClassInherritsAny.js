@@ -5,10 +5,14 @@ const anyThing = class {} as any;
 export class Foo extends anyThing {}
 
 //// [declarationEmitClassInherritsAny.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 const anyThing = class {
 };
-export class Foo extends anyThing {
+class Foo extends anyThing {
 }
+exports.Foo = Foo;
 
 
 //// [declarationEmitClassInherritsAny.d.ts]

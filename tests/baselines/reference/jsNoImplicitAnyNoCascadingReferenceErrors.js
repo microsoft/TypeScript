@@ -16,8 +16,10 @@ class MyFoo extends Foo {
 
 
 //// [index.js]
-import { Foo } from "./somelib";
-class MyFoo extends Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const somelib_1 = require("./somelib");
+class MyFoo extends somelib_1.Foo {
     constructor() {
         super();
         this.prop.alpha = 12;

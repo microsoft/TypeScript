@@ -17,6 +17,8 @@ console.log(globalThis.test.split("-"));
 
 
 //// [index.js]
-import "./extention";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("./extention");
 globalThis.tests = "a-b";
 console.log(globalThis.test.split("-"));

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @filename: ConstEnum.d.ts
 export const enum MyConstEnum {

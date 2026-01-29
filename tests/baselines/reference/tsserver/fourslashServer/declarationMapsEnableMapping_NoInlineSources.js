@@ -7,6 +7,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "options": {
+          "module": "commonjs",
           "lib": [
             "es5"
           ],
@@ -95,6 +96,7 @@ instance.methodName({member: 12});
 //// [/home/src/workspaces/project/tsconfig.json]
 {
     "compilerOptions": {
+        "module": "commonjs",
         "lib": ["es5"],
         "strict": false,
         "outDir": "./dist",
@@ -125,6 +127,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "/home/src/workspaces/project/index.ts"
  ],
  "options": {
+  "module": 1,
   "lib": [
    "lib.es5.d.ts"
   ],
@@ -210,7 +213,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"inlineSourceMap\": true,\n        \"inlineSources\": true,\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"module\": \"commonjs\",\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"inlineSourceMap\": true,\n        \"inlineSources\": true,\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
 
 
 	../../tslibs/TS/Lib/lib.es5.d.ts

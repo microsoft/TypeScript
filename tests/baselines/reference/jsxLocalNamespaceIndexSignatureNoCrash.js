@@ -20,11 +20,15 @@ function A() {
 }
 
 //// [index.js]
-export class X {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.X = void 0;
+class X {
     static jsx() {
         return document.createElement('p');
     }
 }
+exports.X = X;
 function A() {
     return (X.jsx("p", null, "Hello"));
 }

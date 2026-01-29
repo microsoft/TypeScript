@@ -21,9 +21,14 @@ export class Class2 {
 }
 
 //// [Class1.js]
-export class Class1 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Class1 = void 0;
+class Class1 {
 }
+exports.Class1 = Class1;
 //// [Class2.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -33,10 +38,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Class1 } from './Class1';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Class2 = void 0;
+const Class1_1 = require("./Class1");
 function decorate(target, propertyKey) {
 }
-export class Class2 {
+class Class2 {
     get maybeProp() {
         return undefined;
     }
@@ -44,13 +51,14 @@ export class Class2 {
         return undefined;
     }
 }
+exports.Class2 = Class2;
 __decorate([
     decorate,
-    __metadata("design:type", Class1),
+    __metadata("design:type", Class1_1.Class1),
     __metadata("design:paramtypes", [])
 ], Class2.prototype, "maybeProp", null);
 __decorate([
     decorate,
-    __metadata("design:type", Class1),
+    __metadata("design:type", Class1_1.Class1),
     __metadata("design:paramtypes", [])
 ], Class2.prototype, "prop", null);

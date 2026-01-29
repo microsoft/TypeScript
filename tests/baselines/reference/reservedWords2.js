@@ -16,7 +16,9 @@ class C { m(null: string) {} }
 
 
 //// [reservedWords2.js]
-import ;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require();
 while ( = require("dfdf"))
     ;
 while (from)

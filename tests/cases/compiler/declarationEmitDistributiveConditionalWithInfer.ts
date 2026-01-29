@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @declaration: true
 // @lib: es2020

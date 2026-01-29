@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @currentDirectory: /monorepo/core
 // @filename: /monorepo/context/src/value-promise.d.ts

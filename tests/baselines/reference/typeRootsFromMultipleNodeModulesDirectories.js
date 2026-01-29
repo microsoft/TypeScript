@@ -23,7 +23,9 @@ x + y + z;
 
 
 //// [a.js]
-import { x } from "xyz";
-import { y } from "pdq";
-import { z } from "abc";
-x + y + z;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const xyz_1 = require("xyz");
+const pdq_1 = require("pdq");
+const abc_1 = require("abc");
+xyz_1.x + pdq_1.y + abc_1.z;

@@ -43,9 +43,12 @@ void p3.result.three;
 
 
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js]
+"use strict";
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.
-export const updateIfChanged = (t) => {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.testRecFun = exports.updateIfChanged = void 0;
+const updateIfChanged = (t) => {
     const reduce = (u, update) => {
         const set = (newU) => Object.is(u, newU) ? t : update(newU);
         return Object.assign((key) => reduce(u[key], (v) => {
@@ -54,14 +57,16 @@ export const updateIfChanged = (t) => {
     };
     return reduce(t, (t) => t);
 };
+exports.updateIfChanged = updateIfChanged;
 // example from https://github.com/microsoft/TypeScript/issues/31605
-export const testRecFun = (parent) => {
+const testRecFun = (parent) => {
     return {
         result: parent,
-        deeper: (child) => testRecFun(Object.assign(Object.assign({}, parent), child))
+        deeper: (child) => (0, exports.testRecFun)(Object.assign(Object.assign({}, parent), child))
     };
 };
-let p1 = testRecFun({ one: '1' });
+exports.testRecFun = testRecFun;
+let p1 = (0, exports.testRecFun)({ one: '1' });
 void p1.result.one;
 let p2 = p1.deeper({ two: '2' });
 void p2.result.one;

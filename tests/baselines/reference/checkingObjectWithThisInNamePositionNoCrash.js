@@ -10,7 +10,10 @@ export const thing = {
 }
 
 //// [checkingObjectWithThisInNamePositionNoCrash.js]
-export const thing = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = void 0;
+exports.thing = {
     doit() {
         return {
             [this.a]: "", // should refer to the outer object with the doit method, notably not present

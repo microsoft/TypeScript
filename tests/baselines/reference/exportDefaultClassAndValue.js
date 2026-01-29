@@ -7,7 +7,10 @@ export default class Foo {}
 
 
 //// [exportDefaultClassAndValue.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const foo = 1;
-export default foo;
-export default class Foo {
+exports.default = foo;
+class Foo {
 }
+exports.default = Foo;

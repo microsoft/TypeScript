@@ -32,7 +32,10 @@ export class B extends A {
 }
 
 //// [class.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+class A {
     getA() {
         return {
             ["123123" /* TestEnum.Test1 */]: '123',
@@ -40,13 +43,18 @@ export class A {
         };
     }
 }
+exports.A = A;
 //// [index.js]
-import { A } from './class';
-export class B extends A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = void 0;
+const class_1 = require("./class");
+class B extends class_1.A {
     getA() {
         return Object.assign(Object.assign({}, super.getA()), { a: '123' });
     }
 }
+exports.B = B;
 
 
 //// [class.d.ts]

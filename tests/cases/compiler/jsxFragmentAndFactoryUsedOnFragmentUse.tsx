@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @jsx: react
 // @jsxFactory: element

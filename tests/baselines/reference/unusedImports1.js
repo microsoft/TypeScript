@@ -9,7 +9,12 @@ export class Calculator {
 import {Calculator} from "./file1"
 
 //// [file1.js]
-export class Calculator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Calculator = void 0;
+class Calculator {
 }
+exports.Calculator = Calculator;
 //// [file2.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // OK -- one is type, one is value
 interface b {}

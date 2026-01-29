@@ -32,10 +32,13 @@ export const out2 = t2.pipe(s => parseInt(s))
 
 
 //// [inferredReturnTypeIncorrectReuse1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.out2 = exports.out = void 0;
 /** Type<(In: string) => number> */
-export const out = t.pipe(s => parseInt(s));
+exports.out = t.pipe(s => parseInt(s));
 /** Type<(In: string) => number> */
-export const out2 = t2.pipe(s => parseInt(s));
+exports.out2 = t2.pipe(s => parseInt(s));
 
 
 //// [inferredReturnTypeIncorrectReuse1.d.ts]

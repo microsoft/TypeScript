@@ -54,45 +54,33 @@ export namespace foo {
 export var r13: typeof foo;
 
 //// [typeofAnExportedType.js]
-export var x = 1;
-export var r1;
-export var y = { foo: '' };
-export var r2;
-export class C {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.r13 = exports.r12 = exports.r11 = exports.r10 = exports.E = exports.r9 = exports.r8 = exports.Z = exports.r7 = exports.r6 = exports.M = exports.r5 = exports.i = exports.r4b = exports.r4 = exports.r3 = exports.c = exports.C = exports.r2 = exports.y = exports.r1 = exports.x = void 0;
+exports.foo = foo;
+exports.x = 1;
+exports.y = { foo: '' };
+class C {
 }
-export var c;
+exports.C = C;
 var c2;
-export var r3;
-export var r4;
-export var r4b;
-export var i;
 var i2;
-export var r5;
-export var r5;
-export var M;
+var M;
 (function (M) {
     M.foo = '';
     class C {
     }
     M.C = C;
-})(M || (M = {}));
-export var r6;
-export var r7;
-export var Z = M;
-export var r8;
-export var r9;
-export var E;
+})(M || (exports.M = M = {}));
+exports.Z = M;
+var E;
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
-export var r10;
-export var r11;
-export var r12;
-export function foo() { }
+})(E || (exports.E = E = {}));
+function foo() { }
 (function (foo) {
     foo.y = 1;
     class C {
     }
     foo.C = C;
-})(foo || (foo = {}));
-export var r13;
+})(foo || (exports.foo = foo = {}));

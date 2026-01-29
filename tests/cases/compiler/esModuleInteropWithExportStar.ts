@@ -1,5 +1,6 @@
-// @esModuleInterop: true
+// @module: commonjs
 // @target: es5, es2015
+// @esModuleInterop: true
 // @filename: fs.d.ts
 export const x: number;
 // @filename: mjts.ts

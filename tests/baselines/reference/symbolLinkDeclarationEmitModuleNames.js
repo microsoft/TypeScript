@@ -25,21 +25,46 @@ export * from "./src/bindingkey";
 
 
 //// [value-promise.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [bindingkey.js]
-export class BindingKey {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BindingKey = void 0;
+class BindingKey {
     static create(ctor) {
         return new BindingKey();
     }
 }
+exports.BindingKey = BindingKey;
 //// [index.js]
-export * from "./src/value-promise";
-export * from "./src/bindingkey";
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./src/value-promise"), exports);
+__exportStar(require("./src/bindingkey"), exports);
 //// [application.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [usage.js]
-import { BindingKey } from '@loopback/context';
-export const CONTROLLER_CLASS = BindingKey.create(null); // line in question
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CONTROLLER_CLASS = void 0;
+const context_1 = require("@loopback/context");
+exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
 
 //// [value-promise.d.ts]

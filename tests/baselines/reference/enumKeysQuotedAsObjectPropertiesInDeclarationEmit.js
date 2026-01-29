@@ -20,7 +20,10 @@ export const DOMMouseButton = {
 };
 
 //// [enumKeysQuotedAsObjectPropertiesInDeclarationEmit.js]
-export var MouseButton;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DOMMouseButton = exports.MouseButton = void 0;
+var MouseButton;
 (function (MouseButton) {
     MouseButton[MouseButton["LEFT_BUTTON"] = 1] = "LEFT_BUTTON";
     MouseButton[MouseButton["RIGHT_BUTTON"] = 2] = "RIGHT_BUTTON";
@@ -28,8 +31,8 @@ export var MouseButton;
     MouseButton[MouseButton["XBUTTON1_BUTTON"] = 5] = "XBUTTON1_BUTTON";
     MouseButton[MouseButton["XBUTTON2_BUTTON"] = 6] = "XBUTTON2_BUTTON";
     MouseButton[MouseButton["NO_BUTTON"] = 0] = "NO_BUTTON";
-})(MouseButton || (MouseButton = {}));
-export const DOMMouseButton = {
+})(MouseButton || (exports.MouseButton = MouseButton = {}));
+exports.DOMMouseButton = {
     '-1': MouseButton.NO_BUTTON,
     "0": MouseButton.LEFT_BUTTON,
     "1": MouseButton.MIDDLE_BUTTON,

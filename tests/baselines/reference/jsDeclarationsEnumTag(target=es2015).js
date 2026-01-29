@@ -51,8 +51,13 @@ export function ff(s) {
 
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Fs = exports.Second = exports.Target = void 0;
+exports.consume = consume;
+exports.ff = ff;
 /** @enum {string} */
-export const Target = {
+exports.Target = {
     START: "start",
     MIDDLE: "middle",
     END: "end",
@@ -60,13 +65,13 @@ export const Target = {
     OK_I_GUESS: 2
 };
 /** @enum number */
-export const Second = {
+exports.Second = {
     OK: 1,
     /** @type {number} */
     FINE: 2,
 };
 /** @enum {function(number): number} */
-export const Fs = {
+exports.Fs = {
     ADD1: n => n + 1,
     ID: n => n,
     SUB1: n => n - 1
@@ -76,7 +81,7 @@ export const Fs = {
  * @param {Second} s
  * @param {Fs} f
  */
-export function consume(t, s, f) {
+function consume(t, s, f) {
     /** @type {string} */
     var str = t;
     /** @type {number} */
@@ -84,17 +89,17 @@ export function consume(t, s, f) {
     /** @type {(n: number) => number} */
     var fun = f;
     /** @type {Target} */
-    var v = Target.START;
+    var v = exports.Target.START;
     v = 'something else'; // allowed, like Typescript's classic enums and unlike its string enums
 }
 /** @param {string} s */
-export function ff(s) {
+function ff(s) {
     // element access with arbitrary string is an error only with noImplicitAny
-    if (!Target[s]) {
+    if (!exports.Target[s]) {
         return null;
     }
     else {
-        return Target[s];
+        return exports.Target[s];
     }
 }
 

@@ -12,4 +12,7 @@ export declare const theme: { a: string }
 export const a: import("./test1").T<typeof import("./test2").theme> = null as any;
 
 //// [test3.js]
-export const a = null;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = null;

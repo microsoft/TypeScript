@@ -7,4 +7,5 @@ export default B;
 
 
 //// [exportDefaultAlias_excludesEverything.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

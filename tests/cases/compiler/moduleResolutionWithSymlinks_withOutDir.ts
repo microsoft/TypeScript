@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // Same as moduleResolutionWithSymlinks.ts, but with outDir
 // @noImplicitReferences: true

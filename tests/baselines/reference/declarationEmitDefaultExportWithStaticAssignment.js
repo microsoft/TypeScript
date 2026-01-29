@@ -33,26 +33,45 @@ C.A = A;
 C.B = B;
 
 //// [foo.js]
-export class Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+class Foo {
 }
+exports.Foo = Foo;
 //// [index1.js]
-import { Foo } from './foo';
-export default function Example() { }
-Example.Foo = Foo;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Example;
+const foo_1 = require("./foo");
+function Example() { }
+Example.Foo = foo_1.Foo;
 //// [index2.js]
-import { Foo } from './foo';
-export { Foo };
-export default function Example() { }
-Example.Foo = Foo;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+exports.default = Example;
+const foo_1 = require("./foo");
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
+function Example() { }
+Example.Foo = foo_1.Foo;
 //// [index3.js]
-export class Bar {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = void 0;
+exports.default = Example;
+class Bar {
 }
-export default function Example() { }
+exports.Bar = Bar;
+function Example() { }
 Example.Bar = Bar;
 //// [index4.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = C;
 function A() { }
 function B() { }
-export function C() {
+function C() {
     return null;
 }
 C.A = A;

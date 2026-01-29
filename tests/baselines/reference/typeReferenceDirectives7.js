@@ -13,10 +13,13 @@ export let x: typeof $;
 export let y = () => x
 
 //// [app.js]
+"use strict";
 /// <reference types="lib"/>
-export let $ = 1;
-export let x;
-export let y = () => x;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = exports.x = exports.$ = void 0;
+exports.$ = 1;
+let y = () => exports.x;
+exports.y = y;
 
 
 //// [app.d.ts]

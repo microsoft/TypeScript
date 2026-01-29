@@ -13,13 +13,17 @@ export class WithData {
 export const a = (new WithData())["ahahahaahah"]!();
 
 //// [declarationEmitComputedNameWithQuestionToken.js]
-export const dataSomething = `data-${something}`;
-export class WithData {
-    [dataSomething]() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = exports.WithData = exports.dataSomething = void 0;
+exports.dataSomething = `data-${something}`;
+class WithData {
+    [exports.dataSomething]() {
         return "something";
     }
 }
-export const a = (new WithData())["ahahahaahah"]();
+exports.WithData = WithData;
+exports.a = (new WithData())["ahahahaahah"]();
 
 
 //// [declarationEmitComputedNameWithQuestionToken.d.ts]

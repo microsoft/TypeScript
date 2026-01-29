@@ -8,6 +8,8 @@ import { IEventSourcedEntity } from "./bar";
 export type DomainEntityConstructor<TEntity extends IEventSourcedEntity> = { new(): TEntity; };
 
 //// [bar.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

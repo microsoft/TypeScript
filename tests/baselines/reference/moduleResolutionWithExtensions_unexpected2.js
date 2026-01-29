@@ -11,4 +11,6 @@ import "foo";
 
 
 //// [a.js]
-import "foo";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("foo");

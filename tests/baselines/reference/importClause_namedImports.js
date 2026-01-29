@@ -15,11 +15,16 @@ const c = { A };
 
 
 //// [abc.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = exports.A = void 0;
+class A {
 }
-export const C = "";
+exports.A = A;
+exports.C = "";
 //// [d.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 b.b;
 const c = { A };
-export {};

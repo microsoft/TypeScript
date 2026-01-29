@@ -15,13 +15,19 @@ import { func } from "./reexporter";
 export const c = func();
 
 //// [reexporter.js]
-import { CustomHtmlRepresentationThing } from "./foo.html";
-export function func() {
-    return new CustomHtmlRepresentationThing();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.func = func;
+const foo_html_1 = require("./foo.html");
+function func() {
+    return new foo_html_1.CustomHtmlRepresentationThing();
 }
 //// [index.js]
-import { func } from "./reexporter";
-export const c = func();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+const reexporter_1 = require("./reexporter");
+exports.c = (0, reexporter_1.func)();
 
 
 //// [reexporter.d.ts]

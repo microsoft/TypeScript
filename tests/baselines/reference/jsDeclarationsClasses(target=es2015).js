@@ -197,26 +197,33 @@ export class ExtendsStatics extends HasStatics {
 
 
 //// [index.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O = exports.N = exports.M = exports.L = exports.K = exports.J = exports.JJ = exports.II = exports.I = exports.H = exports.G = exports.F = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
+class A {
 }
-export class B {
+exports.A = A;
+class B {
 }
+exports.B = B;
 B.cat = "cat";
-export class C {
+class C {
 }
+exports.C = C;
 C.Cls = class {
 };
-export class D {
+class D {
     /**
      * @param {number} a
      * @param {number} b
      */
     constructor(a, b) { }
 }
+exports.D = D;
 /**
  * @template T,U
  */
-export class E {
+class E {
     /**
      * @return {U}
      */
@@ -257,11 +264,12 @@ export class E {
      */
     static set s3(_p) { }
 }
+exports.E = E;
 E.staticInitializedField = 12;
 /**
  * @template T,U
  */
-export class F {
+class F {
     /**
      * @param {T} a
      * @param {U} b
@@ -274,19 +282,22 @@ export class F {
      */
     static create(a, b) { return new F(a, b); }
 }
+exports.F = F;
 class G {
 }
-export { G };
+exports.G = G;
 class HH {
 }
-export { HH as H };
-export class I {
+exports.H = HH;
+class I {
 }
-export { I as II };
-export { J as JJ };
-export class J {
+exports.I = I;
+exports.II = I;
+class J {
 }
-export class K {
+exports.J = J;
+exports.JJ = J;
+class K {
     constructor() {
         this.p1 = 12;
         this.p2 = "ok";
@@ -295,17 +306,20 @@ export class K {
         return this.p1;
     }
 }
-export class L extends K {
+exports.K = K;
+class L extends K {
 }
-export class M extends null {
+exports.L = L;
+class M extends null {
     constructor() {
         this.prop = 12;
     }
 }
+exports.M = M;
 /**
  * @template T
  */
-export class N extends L {
+class N extends L {
     /**
      * @param {T} param
      */
@@ -314,11 +328,12 @@ export class N extends L {
         this.another = param;
     }
 }
+exports.N = N;
 /**
  * @template U
  * @extends {N<U>}
  */
-export class O extends N {
+class O extends N {
     /**
      * @param {U} param
      */
@@ -327,15 +342,19 @@ export class O extends N {
         this.another2 = param;
     }
 }
+exports.O = O;
 var x = /** @type {*} */ (null);
-export class VariableBase extends x {
+class VariableBase extends x {
 }
-export class HasStatics {
+exports.VariableBase = VariableBase;
+class HasStatics {
     static staticMethod() { }
 }
-export class ExtendsStatics extends HasStatics {
+exports.HasStatics = HasStatics;
+class ExtendsStatics extends HasStatics {
     static also() { }
 }
+exports.ExtendsStatics = ExtendsStatics;
 
 
 //// [index.d.ts]

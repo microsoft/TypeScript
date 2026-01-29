@@ -20,8 +20,10 @@ const element = (
 )
 
 //// [jsxEmptyExpressionNotCountedAsChild.js]
-import { jsx as _jsx } from "react/jsx-runtime";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
 function Wrapper(props) {
-    return _jsx("div", { children: props.children });
+    return (0, jsx_runtime_1.jsx)("div", { children: props.children });
 }
-const element = (_jsx(Wrapper, { children: _jsx("div", { children: "Hello" }) }));
+const element = ((0, jsx_runtime_1.jsx)(Wrapper, { children: (0, jsx_runtime_1.jsx)("div", { children: "Hello" }) }));

@@ -8,4 +8,5 @@ import foobar from "foo/bar/foobar.json";
 
 
 //// [/bin/a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

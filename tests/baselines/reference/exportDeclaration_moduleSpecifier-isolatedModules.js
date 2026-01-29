@@ -8,6 +8,8 @@ export type { A } from './a'; // should not error, but would without `type`
 
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -29,13 +29,17 @@ export {};
 
 
 //// [jsx-dev-runtime.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
-import { jsxDEV as _jsxDEV } from "/jsx/jsx-dev-runtime";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_dev_runtime_1 = require("/jsx/jsx-dev-runtime");
 const _jsxFileName = "/test.tsx";
-const Title = (props) => _jsxDEV("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 47 }, this);
-_jsxDEV(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 74 }, this);
-const Wrong = (props) => _jsxDEV("h1", { children: props.offspring }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 48 }, this);
-_jsxDEV(Wrong, { children: "Byebye, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 76 }, this);
+const Title = (props) => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 47 }, this);
+(0, jsx_dev_runtime_1.jsxDEV)(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 74 }, this);
+const Wrong = (props) => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.offspring }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 48 }, this);
+(0, jsx_dev_runtime_1.jsxDEV)(Wrong, { children: "Byebye, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 76 }, this);
 //// [jsx-runtime.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

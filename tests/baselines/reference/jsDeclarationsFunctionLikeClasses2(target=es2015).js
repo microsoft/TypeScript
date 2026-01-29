@@ -77,10 +77,14 @@ export const origin = new Point2D(0, 0);
 
 
 //// [source.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Vec = Vec;
+exports.Point2D = Point2D;
 /**
  * @param {number} len
  */
-export function Vec(len) {
+function Vec(len) {
     /**
      * @type {number[]}
      */
@@ -112,7 +116,7 @@ Vec.prototype = {
  * @param {number} x
  * @param {number} y
  */
-export function Point2D(x, y) {
+function Point2D(x, y) {
     if (!(this instanceof Point2D)) {
         return new Point2D(x, y);
     }
@@ -142,8 +146,11 @@ Point2D.prototype = {
     }
 };
 //// [referencer.js]
-import { Point2D } from "./source";
-export const origin = new Point2D(0, 0);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.origin = void 0;
+const source_1 = require("./source");
+exports.origin = new source_1.Point2D(0, 0);
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 
 

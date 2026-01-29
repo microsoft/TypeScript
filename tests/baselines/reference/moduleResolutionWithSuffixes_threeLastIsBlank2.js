@@ -9,8 +9,15 @@ export function base() {}
 
 
 //// [foo__native.js]
-export function native() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.native = native;
+function native() { }
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [foo.js]
-export function base() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.base = base;
+function base() { }

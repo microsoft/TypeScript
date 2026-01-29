@@ -21,15 +21,22 @@ export const spread = {
 }
 
 //// [bug.js]
-export const SYMBOL = Symbol();
-export function createInstance() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SYMBOL = void 0;
+exports.createInstance = createInstance;
+exports.SYMBOL = Symbol();
+function createInstance() {
     return {
-        [SYMBOL]: ''
+        [exports.SYMBOL]: ''
     };
 }
 //// [index.js]
-import { createInstance } from './bug';
-export const spread = Object.assign({}, createInstance());
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.spread = void 0;
+const bug_1 = require("./bug");
+exports.spread = Object.assign({}, (0, bug_1.createInstance)());
 
 
 //// [bug.d.ts]

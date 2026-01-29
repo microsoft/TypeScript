@@ -11,6 +11,8 @@ class C extends Component { }
 
 
 //// [crash.js]
-import { Component } from './first';
-class C extends Component {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const first_1 = require("./first");
+class C extends first_1.Component {
 }

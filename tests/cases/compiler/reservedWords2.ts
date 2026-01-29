@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @module: commonjs
+// @target: es2015
 import while = require("dfdf");
 import * as  while from "foo"
 

@@ -16,18 +16,23 @@ export class Sub extends Super {
 }
 
 //// [index.js]
-export class Super {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sub = exports.Super = void 0;
+class Super {
     /**
      * @param {string} firstArg
      * @param {string} secondArg
      */
     constructor(firstArg, secondArg) { }
 }
-export class Sub extends Super {
+exports.Super = Super;
+class Sub extends Super {
     constructor() {
         super('first', 'second');
     }
 }
+exports.Sub = Sub;
 
 
 //// [index.d.ts]

@@ -18,20 +18,37 @@ export class Test {
 }
 
 //// [ThingA.js]
-export class ThingA {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ThingA = void 0;
+class ThingA {
 }
+exports.ThingA = ThingA;
 //// [ThingB.js]
-export class ThingB {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ThingB = void 0;
+class ThingB {
 }
+exports.ThingB = ThingB;
 //// [Things.js]
-export { ThingA } from "./ThingA";
-export { ThingB } from "./ThingB";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ThingB = exports.ThingA = void 0;
+var ThingA_1 = require("./ThingA");
+Object.defineProperty(exports, "ThingA", { enumerable: true, get: function () { return ThingA_1.ThingA; } });
+var ThingB_1 = require("./ThingB");
+Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { return ThingB_1.ThingB; } });
 //// [Test.js]
-export class Test {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = void 0;
+class Test {
     constructor() {
         this.method = (input) => { };
     }
 }
+exports.Test = Test;
 
 
 //// [ThingA.d.ts]

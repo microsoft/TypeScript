@@ -6,7 +6,11 @@ export type Foo<Y> = Bar<any, Y>;
 export const y = (x: Foo<string>) => 1
 
 //// [declarationEmitTypeAliasWithTypeParameters1.js]
-export const y = (x) => 1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+const y = (x) => 1;
+exports.y = y;
 
 
 //// [declarationEmitTypeAliasWithTypeParameters1.d.ts]

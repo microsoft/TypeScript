@@ -13,10 +13,12 @@ var a: A;
 a.value.toExponential();
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var a;
 a.value.toExponential();
-export {};
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var a;
 a.value.toExponential();
-export {};

@@ -5,6 +5,10 @@ export default function bar() { }
 export default class C {}
 
 //// [multipleExportDefault5.js]
-export default function bar() { }
-export default class C {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = bar;
+function bar() { }
+class C {
 }
+exports.default = C;

@@ -10,6 +10,7 @@ Info seq  [hh:mm:ss:mss] request:
           "lib": [
             "es5"
           ],
+          "module": "commonjs",
           "target": "es5",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
@@ -46,7 +47,7 @@ declare namespace React {
 }
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "compilerOptions": { "lib": ["es5"] }, "files": ["folder/c.jsx", "react.d.ts", "b.jsx"] }
+{ "compilerOptions": { "lib": ["es5"], "module": "commonjs" }, "files": ["folder/c.jsx", "react.d.ts", "b.jsx"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -71,6 +72,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "lib": [
    "lib.es5.d.ts"
   ],
+  "module": 1,
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }

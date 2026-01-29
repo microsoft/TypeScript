@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @declaration: true
 // @filename: node_modules/react/index.d.ts

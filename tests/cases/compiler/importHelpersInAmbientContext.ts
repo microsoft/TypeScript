@@ -1,5 +1,6 @@
-// @importHelpers: true
+// @module: commonjs
 // @target: es5, es2015
+// @importHelpers: true
 
 // @filename: a.d.ts
 export { };

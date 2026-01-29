@@ -30,7 +30,10 @@ export namespace A {
 
 
 //// [part1.js]
-export var A;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+var A;
 (function (A) {
     let Utils;
     (function (Utils) {
@@ -40,9 +43,12 @@ export var A;
         Utils.mirror = mirror;
     })(Utils = A.Utils || (A.Utils = {}));
     A.Origin = { x: 0, y: 0 };
-})(A || (A = {}));
+})(A || (exports.A = A = {}));
 //// [part2.js]
-export var A;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+var A;
 (function (A) {
     // collision with 'Origin' var in other part of merged module
     A.Origin = { x: 0, y: 0 };
@@ -56,4 +62,4 @@ export var A;
         }
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
-})(A || (A = {}));
+})(A || (exports.A = A = {}));

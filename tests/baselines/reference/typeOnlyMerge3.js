@@ -19,16 +19,21 @@ A();
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function A() { }
-export {};
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
 var A;
 (function (A) {
     A.displayName = "A";
-})(A || (A = {}));
-export { A };
+})(A || (exports.A = A = {}));
 //// [c.js]
-import { A } from "./b";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const b_1 = require("./b");
 A;
 A.displayName;
 A();

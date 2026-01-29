@@ -32,12 +32,16 @@ test.tags();
 
 
 //// [emitClassExpressionInDeclarationFile2.js]
+"use strict";
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a;
-export var noPrivates = (_a = class {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test = exports.FooItem = exports.noPrivates = void 0;
+exports.WithTags = WithTags;
+exports.noPrivates = (_a = class {
         constructor() {
             this.p = 12;
         }
@@ -48,20 +52,22 @@ export var noPrivates = (_a = class {
     _a.ps = -1,
     _a);
 // altered repro from #15066 to add private property
-export class FooItem {
+class FooItem {
     constructor() {
         this.property = "capitalism";
     }
     foo() { }
 }
-export function WithTags(Base) {
+exports.FooItem = FooItem;
+function WithTags(Base) {
     return class extends Base {
         static getTags() { }
         tags() { }
     };
 }
-export class Test extends WithTags(FooItem) {
+class Test extends WithTags(FooItem) {
 }
+exports.Test = Test;
 const test = new Test();
 Test.getTags();
 test.tags();

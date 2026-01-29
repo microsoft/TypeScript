@@ -32,4 +32,5 @@ import { mangledAtTypesCache } from "@mangled/attypescache";
 
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

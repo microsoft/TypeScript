@@ -13,10 +13,13 @@ export { x }
 
 
 //// [ch.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = {
     grey: {}
 };
-export { x };
+exports.x = x;
 //// [main.js]
 "use strict";
 const x = require('./ch').x;

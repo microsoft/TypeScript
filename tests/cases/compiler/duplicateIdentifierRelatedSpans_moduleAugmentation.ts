@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @Filename: /dir/a.ts
 export const x = 0;

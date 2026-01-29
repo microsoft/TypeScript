@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'someModule' from '/.src/src/main.ts'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "'baseUrl' option is set to '/.src/src', using this value to resolve non-relative module name 'someModule'.",
     "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
     "'baseUrl' option is set to '/.src/src', using this value to resolve non-relative module name 'someModule'.",

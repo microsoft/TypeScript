@@ -9,9 +9,11 @@ export type RowToColumns<TColumns> = {
 }
 
 //// [Helpers.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [FromFactor.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [Helpers.d.ts]

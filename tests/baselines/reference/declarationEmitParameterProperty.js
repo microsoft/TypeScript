@@ -8,11 +8,15 @@ export class Foo {
 
 
 //// [declarationEmitParameterProperty.js]
-export class Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+class Foo {
     constructor(bar) {
         this.bar = bar;
     }
 }
+exports.Foo = Foo;
 
 
 //// [declarationEmitParameterProperty.d.ts]

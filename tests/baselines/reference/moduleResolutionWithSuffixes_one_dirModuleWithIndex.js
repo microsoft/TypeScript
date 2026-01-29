@@ -8,8 +8,15 @@ export function ios() {}
 export function base() {}
 
 //// [index.ios.js]
-export function ios() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ios = ios;
+function ios() { }
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
-export function base() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.base = base;
+function base() { }

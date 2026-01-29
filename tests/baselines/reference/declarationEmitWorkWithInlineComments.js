@@ -37,7 +37,10 @@ export class Baz {
 }
 
 //// [declarationEmitWorkWithInlineComments.js]
-export class Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Baz = exports.Bar = exports.Foo = void 0;
+class Foo {
     constructor(
     /** @internal */
     isInternal1, 
@@ -70,16 +73,19 @@ export class Foo {
         this.notInternal3 = notInternal3;
     }
 }
-export class Bar {
+exports.Foo = Foo;
+class Bar {
     constructor(/* @internal */ isInternal1) {
         this.isInternal1 = isInternal1;
     }
 }
-export class Baz {
+exports.Bar = Bar;
+class Baz {
     constructor(/* @internal */ isInternal) {
         this.isInternal = isInternal;
     }
 }
+exports.Baz = Baz;
 
 
 //// [declarationEmitWorkWithInlineComments.d.ts]

@@ -20,6 +20,8 @@ let s: x = { s: "" };
 void s.s;
 
 //// [importAliasInModuleAugmentation.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
     A.y = 34;
@@ -27,4 +29,3 @@ var A;
 const m = x;
 let s = { s: "" };
 void s.s;
-export {};

@@ -13,12 +13,17 @@ import { styled }  from "./file1";
 export const A = styled();
 
 //// [color.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [file1.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [file2.js]
-import { styled } from "./file1";
-export const A = styled();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
+const file1_1 = require("./file1");
+exports.A = (0, file1_1.styled)();
 
 
 //// [color.d.ts]

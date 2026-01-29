@@ -10,12 +10,17 @@ export function y() {
 }
 
 //// [anonymousClassDeclarationDoesntPrintWithReadonly.js]
-export class X {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.X = void 0;
+exports.y = y;
+class X {
     constructor(a) {
         this.a = a;
     }
 }
-export function y() {
+exports.X = X;
+function y() {
     return class extends X {
     };
 }

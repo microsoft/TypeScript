@@ -34,9 +34,12 @@ function doSome(arg1: string,
 }
 
 //// [b.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
-export { doSome };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.doSome = doSome;
 const MAP = {
     a: "a"
 };

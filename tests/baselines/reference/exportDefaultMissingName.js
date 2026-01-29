@@ -4,4 +4,6 @@
 export default xyzzy;
 
 //// [exportDefaultMissingName.js]
-export default xyzzy;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = xyzzy;

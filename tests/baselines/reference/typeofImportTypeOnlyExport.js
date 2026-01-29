@@ -19,15 +19,22 @@ export const classMap = directive(ClassMapDirective);
 
 
 //// [lit.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.classMap = exports.directive = void 0;
 class ClassMapDirective {
 }
-export const directive = (class_) => () => ({
+const directive = (class_) => () => ({
     directive: class_,
 });
-export const classMap = directive(ClassMapDirective);
+exports.directive = directive;
+exports.classMap = (0, exports.directive)(ClassMapDirective);
 //// [button.js]
-import { classMap } from './lit.js';
-export const c = classMap();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+const lit_js_1 = require("./lit.js");
+exports.c = (0, lit_js_1.classMap)();
 
 
 //// [lit.d.ts]

@@ -29,12 +29,16 @@ export {};
 
 
 //// [jsx-runtime.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
-import { jsx as _jsx } from "/jsx/jsx-runtime";
-const Title = (props) => _jsx("h1", { children: props.children });
-_jsx(Title, { children: "Hello, world!" });
-const Wrong = (props) => _jsx("h1", { children: props.offspring });
-_jsx(Wrong, { children: "Byebye, world!" });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("/jsx/jsx-runtime");
+const Title = (props) => (0, jsx_runtime_1.jsx)("h1", { children: props.children });
+(0, jsx_runtime_1.jsx)(Title, { children: "Hello, world!" });
+const Wrong = (props) => (0, jsx_runtime_1.jsx)("h1", { children: props.offspring });
+(0, jsx_runtime_1.jsx)(Wrong, { children: "Byebye, world!" });
 //// [jsx-dev-runtime.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

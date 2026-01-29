@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @module: commonjs
+// @target: es2015
 export default class C { }
 
 export default {

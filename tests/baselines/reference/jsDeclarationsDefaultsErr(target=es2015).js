@@ -28,6 +28,8 @@ export {x as default};
 
 
 //// [index1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and alias (should error, see #32367)
 class Cls {
     constructor() {
@@ -35,22 +37,28 @@ class Cls {
     }
 }
 Cls.y = "ok";
-export default Cls;
+exports.default = Cls;
 /**
  * @typedef {string | number} default
  */
 //// [index2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and class (error message improvement needed, see #32368)
-export default class C {
+class C {
 }
+exports.default = C;
 ;
 /**
  * @typedef {string | number} default
  */
 //// [index3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
 // merge type alias and variable (behavior is borked, see #32366)
 const x = 12;
-export { x as default };
+exports.default = x;
 /**
  * @typedef {string | number} default
  */

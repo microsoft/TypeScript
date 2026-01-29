@@ -16,16 +16,20 @@ enum MyEnum {
 }
 
 //// [enum.js]
-export var MyEnum;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyEnum = void 0;
+var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["a"] = 0] = "a";
     MyEnum[MyEnum["b"] = 1] = "b";
     MyEnum[MyEnum["c"] = 2] = "c";
     MyEnum[MyEnum["d"] = 3] = "d";
-})(MyEnum || (MyEnum = {}));
+})(MyEnum || (exports.MyEnum = MyEnum = {}));
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["a"] = 0] = "a";
 })(MyEnum || (MyEnum = {}));
-export {};

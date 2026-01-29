@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @module: commonjs
+// @target: es2015
 type ObjType1 = { x: number; y: string; z: boolean }
 type TupleType1 = [ObjType1, number, string]
 

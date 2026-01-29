@@ -11,9 +11,12 @@ export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (cto
 }
 
 //// [file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ignoreExtraVariables = ignoreExtraVariables;
 const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported
-export function ignoreExtraVariables(ctor) {
+function ignoreExtraVariables(ctor) {
     var _a, _b;
     return _b = class extends ctor {
             constructor() {

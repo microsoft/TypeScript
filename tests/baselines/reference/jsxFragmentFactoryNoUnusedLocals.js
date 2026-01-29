@@ -17,11 +17,14 @@ export function Counter({ count = 0 }: CounterProps) {
 }
 
 //// [jsxFragmentFactoryNoUnusedLocals.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Counter = Counter;
 /// <reference path="/.lib/react16.d.ts" />
-import { Fragment, createElement } from "react";
-export function Counter({ count = 0 }) {
+const react_1 = require("react");
+function Counter({ count = 0 }) {
     const [cnt, setCnt] = null;
-    return createElement(Fragment, null,
-        createElement("p", null, cnt),
-        createElement("button", { onClick: () => setCnt((prev) => prev + 1), type: "button" }, "Update"));
+    return (0, react_1.createElement)(react_1.Fragment, null,
+        (0, react_1.createElement)("p", null, cnt),
+        (0, react_1.createElement)("button", { onClick: () => setCnt((prev) => prev + 1), type: "button" }, "Update"));
 }

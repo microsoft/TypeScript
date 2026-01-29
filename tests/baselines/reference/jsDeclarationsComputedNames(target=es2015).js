@@ -40,10 +40,13 @@ module.exports = {
     }
 };
 //// [index2.js]
+"use strict";
 var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyClass = void 0;
 const TopLevelSym = Symbol();
 const InnerSym = Symbol();
-export class MyClass {
+class MyClass {
     /**
      * @param {typeof TopLevelSym | typeof InnerSym} _p
      */
@@ -52,6 +55,7 @@ export class MyClass {
         // switch on _p
     }
 }
+exports.MyClass = MyClass;
 _a = TopLevelSym, _b = InnerSym;
 MyClass[_a] = 12;
 

@@ -11,8 +11,11 @@ import { f } from "./thing";
 export const thing = f();
 
 //// [index.js]
-import { f } from "./thing";
-export const thing = f();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = void 0;
+const thing_1 = require("./thing");
+exports.thing = (0, thing_1.f)();
 
 
 //// [index.d.ts]

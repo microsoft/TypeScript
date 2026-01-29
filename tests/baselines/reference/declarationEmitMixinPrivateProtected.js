@@ -35,6 +35,9 @@ export default class extends mix(DisposableMixin) {
 }
 
 //// [first.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Monitor = void 0;
 const DisposableMixin = class {
     _onDispose() {
         this._assertIsStripped();
@@ -43,12 +46,15 @@ const DisposableMixin = class {
     }
 };
 // No error, but definition is wrong. 
-export default mix(DisposableMixin);
-export class Monitor extends mix(DisposableMixin) {
+exports.default = mix(DisposableMixin);
+class Monitor extends mix(DisposableMixin) {
     _onDispose() {
     }
 }
+exports.Monitor = Monitor;
 //// [another.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const DisposableMixin = class {
     _onDispose() {
         this._assertIsStripped();
@@ -56,7 +62,8 @@ const DisposableMixin = class {
     _assertIsStripped() {
     }
 };
-export default class extends mix(DisposableMixin) {
+class default_1 extends mix(DisposableMixin) {
     _onDispose() {
     }
 }
+exports.default = default_1;

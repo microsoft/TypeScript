@@ -17,7 +17,10 @@ module.exports = {
 
 
 //// [something.js]
-export const o = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.o = void 0;
+exports.o = {
     a: 1,
     m: 1
 };

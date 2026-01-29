@@ -22,8 +22,15 @@ import { y } from '../tests/index'
 
 
 //// [index.js]
-export var x = 1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 1;
 //// [index.js]
-export var y = 2;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 2;
 //// [bug25410.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

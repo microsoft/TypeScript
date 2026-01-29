@@ -26,12 +26,19 @@ export class TypedFoo extends MyFoo {
 }
 
 //// [component.js]
-import { Foo } from "./library";
-export class MyFoo extends Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyFoo = void 0;
+const library_1 = require("./library");
+class MyFoo extends library_1.Foo {
 }
+exports.MyFoo = MyFoo;
 //// [typed_component.js]
-import { MyFoo } from "./component";
-export class TypedFoo extends MyFoo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TypedFoo = void 0;
+const component_1 = require("./component");
+class TypedFoo extends component_1.MyFoo {
     constructor() {
         super({ x: "string", y: 42 }, { value: undefined });
         this.props.x;
@@ -40,3 +47,4 @@ export class TypedFoo extends MyFoo {
         this.member;
     }
 }
+exports.TypedFoo = TypedFoo;

@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'someModule' from '/.src/src/main.ts'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
     "File '/.src/src/package.json' does not exist.",
     "File '/.src/package.json' does not exist.",

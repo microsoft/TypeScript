@@ -9,12 +9,19 @@ export const instance = getSomething();
 
 
 //// [root.js]
-export function getSomething() { return null; }
-export default class Something {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSomething = getSomething;
+function getSomething() { return null; }
+class Something {
 }
+exports.default = Something;
 //// [main.js]
-import { getSomething } from "./root";
-export const instance = getSomething();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.instance = void 0;
+const root_1 = require("./root");
+exports.instance = (0, root_1.getSomething)();
 
 
 //// [root.d.ts]

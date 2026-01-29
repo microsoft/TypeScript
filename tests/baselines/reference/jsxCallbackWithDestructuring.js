@@ -29,6 +29,10 @@ export class MyComponent<T extends RouteProps = RouteProps> extends Component<T>
 <MyComponent children={({ x }) => {}}/>
 
 //// [jsxCallbackWithDestructuring.jsx]
-export class MyComponent extends Component {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyComponent = void 0;
+class MyComponent extends Component {
 }
+exports.MyComponent = MyComponent;
 <MyComponent children={({ x }) => { }}/>;

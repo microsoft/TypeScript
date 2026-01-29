@@ -40,15 +40,28 @@ export class ClassA {
 }
 
 //// [aux.js]
-export class SomeClass {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SomeClass = void 0;
+class SomeClass {
 }
+exports.SomeClass = SomeClass;
 //// [aux1.js]
-export class SomeClass1 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SomeClass1 = void 0;
+class SomeClass1 {
 }
+exports.SomeClass1 = SomeClass1;
 //// [aux2.js]
-export class SomeClass2 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SomeClass2 = void 0;
+class SomeClass2 {
 }
+exports.SomeClass2 = SomeClass2;
 //// [main.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,8 +71,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { SomeClass } from './aux';
-import { SomeClass1 } from './aux1';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClassA = void 0;
+const aux_1 = require("./aux");
+const aux1_1 = require("./aux1");
 function annotation() {
     return (target) => { };
 }
@@ -73,14 +88,14 @@ let ClassA = class ClassA {
     foo(...args) {
     }
 };
+exports.ClassA = ClassA;
 __decorate([
     annotation1(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SomeClass1]),
+    __metadata("design:paramtypes", [aux1_1.SomeClass1]),
     __metadata("design:returntype", void 0)
 ], ClassA.prototype, "foo", null);
-ClassA = __decorate([
+exports.ClassA = ClassA = __decorate([
     annotation(),
-    __metadata("design:paramtypes", [SomeClass])
+    __metadata("design:paramtypes", [aux_1.SomeClass])
 ], ClassA);
-export { ClassA };

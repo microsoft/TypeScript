@@ -16,9 +16,14 @@ export class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping3_0.js]
-export var field1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.field1 = void 0;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
-export class Test1 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Test1 = void 0;
+class Test1 {
     constructor(field1) {
         this.field1 = field1;
         this.messageHandler = () => {
@@ -26,3 +31,4 @@ export class Test1 {
         };
     }
 }
+exports.Test1 = Test1;

@@ -57,8 +57,11 @@ export const router = trpc.router;
 export const publicProcedure = trpc.procedure;
 
 //// [index.js]
-import { initTRPC } from "@trpc/server";
-const trpc = initTRPC.create();
-export const middleware = trpc.middleware;
-export const router = trpc.router;
-export const publicProcedure = trpc.procedure;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.publicProcedure = exports.router = exports.middleware = void 0;
+const server_1 = require("@trpc/server");
+const trpc = server_1.initTRPC.create();
+exports.middleware = trpc.middleware;
+exports.router = trpc.router;
+exports.publicProcedure = trpc.procedure;

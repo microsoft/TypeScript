@@ -19,4 +19,5 @@ export declare enum Position {
 import { ISpinButton } from "troublesome-lib";
 
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

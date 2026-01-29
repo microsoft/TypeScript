@@ -33,15 +33,18 @@ export const outputExample = validatorFunc({
 
 
 //// [reverseMappedTypeDeepDeclarationEmit.js]
-export const test = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.outputExample = exports.validatorFunc = exports.test = void 0;
+exports.test = {
     Test: {
         Test1: {
-            Test2: SimpleStringValidator
+            Test2: exports.SimpleStringValidator
         },
     }
 };
-export const validatorFunc = ObjValidator(test);
-export const outputExample = validatorFunc({
+exports.validatorFunc = (0, exports.ObjValidator)(exports.test);
+exports.outputExample = (0, exports.validatorFunc)({
     Test: {
         Test1: {
             Test2: "hi"

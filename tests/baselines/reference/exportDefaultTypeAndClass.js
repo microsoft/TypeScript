@@ -7,5 +7,8 @@ export default Bar
 
 
 //// [exportDefaultTypeAndClass.js]
-export default class Foo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Foo {
 }
+exports.default = Foo;

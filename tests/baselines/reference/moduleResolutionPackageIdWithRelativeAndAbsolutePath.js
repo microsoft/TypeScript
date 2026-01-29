@@ -40,4 +40,5 @@ import { makeSharedOption } from "@shared/lib/app"; // Includes option as module
 
 
 //// [/project/src/app.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

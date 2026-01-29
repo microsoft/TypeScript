@@ -6,4 +6,6 @@ export type { number };
 
 
 //// [exportNonLocalDeclarations.js]
-export { string };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.string = void 0;

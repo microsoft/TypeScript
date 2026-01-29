@@ -27,7 +27,10 @@ let k2 =
     </Comp>;
 
 //// [file.jsx]
+"use strict";
 /// <reference path="/.lib/react.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function Comp(p) {
     return <div>{p.b}</div>;
 }
@@ -39,4 +42,3 @@ let k1 = <Comp a={10} b="hi">
 let k2 = <Comp a={10} b="hi">
         <div>hi hi hi!</div>
     </Comp>;
-export {};

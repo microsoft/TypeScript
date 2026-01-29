@@ -12,6 +12,10 @@ import { bar } from "/bar";
 
 
 //// [foo.js]
-export function foo() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
+function foo() { }
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

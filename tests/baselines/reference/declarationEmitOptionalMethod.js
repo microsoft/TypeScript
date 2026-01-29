@@ -10,7 +10,11 @@ export const Foo = (opts: {
 } => ({  });
 
 //// [declarationEmitOptionalMethod.js]
-export const Foo = (opts) => ({});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+const Foo = (opts) => ({});
+exports.Foo = Foo;
 
 
 //// [declarationEmitOptionalMethod.d.ts]

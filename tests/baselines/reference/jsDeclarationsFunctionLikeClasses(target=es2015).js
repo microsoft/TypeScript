@@ -25,11 +25,14 @@ export function magnitude(p) {
 
 
 //// [source.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Point = Point;
 /**
  * @param {number} x
  * @param {number} y
  */
-export function Point(x, y) {
+function Point(x, y) {
     if (!(this instanceof Point)) {
         return new Point(x, y);
     }
@@ -37,11 +40,14 @@ export function Point(x, y) {
     this.y = y;
 }
 //// [referencer.js]
-import { Point } from "./source";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.magnitude = magnitude;
+const source_1 = require("./source");
 /**
  * @param {Point} p
  */
-export function magnitude(p) {
+function magnitude(p) {
     return Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
 }
 

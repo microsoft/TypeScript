@@ -8,8 +8,12 @@ export const fun = (
 
 
 //// [declarationEmitDistributiveConditionalWithInfer.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fun = void 0;
 // This function's type is changed on declaration
-export const fun = (subFun) => { };
+const fun = (subFun) => { };
+exports.fun = fun;
 
 
 //// [declarationEmitDistributiveConditionalWithInfer.d.ts]

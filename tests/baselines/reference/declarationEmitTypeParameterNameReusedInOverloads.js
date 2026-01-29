@@ -18,12 +18,18 @@ export type Foo = {
 
 
 //// [declarationEmitTypeParameterNameReusedInOverloads.js]
-export class Base {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Derived2 = exports.Derived = exports.Base = void 0;
+class Base {
 }
-export class Derived extends Base {
+exports.Base = Base;
+class Derived extends Base {
 }
-export class Derived2 extends Derived {
+exports.Derived = Derived;
+class Derived2 extends Derived {
 }
+exports.Derived2 = Derived2;
 
 
 //// [declarationEmitTypeParameterNameReusedInOverloads.d.ts]

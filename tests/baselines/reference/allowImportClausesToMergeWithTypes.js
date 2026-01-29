@@ -28,17 +28,31 @@ originalZZZ;
 const y: originalZZZ = x;
 
 //// [b.js]
-export const zzz = 123;
-export default zzz;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.zzz = void 0;
+exports.zzz = 123;
+exports.default = exports.zzz;
 //// [a.js]
-import zzz from "./b";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
+const b_1 = __importDefault(require("./b"));
+exports.default = b_1.default;
 const x = { x: "" };
-zzz;
-export { zzz as default };
+b_1.default;
 //// [index.js]
-import zzz from "./a";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const a_1 = __importDefault(require("./a"));
 const x = { x: "" };
-zzz;
-import originalZZZ from "./b";
-originalZZZ;
+a_1.default;
+const b_1 = __importDefault(require("./b"));
+b_1.default;
 const y = x;

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es5, es2015
 namespace Foo {
 

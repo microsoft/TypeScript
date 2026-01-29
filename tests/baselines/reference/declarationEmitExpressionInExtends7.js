@@ -5,8 +5,11 @@ export default class extends SomeUndefinedFunction {}
 
 
 //// [declarationEmitExpressionInExtends7.js]
-export default class extends SomeUndefinedFunction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class default_1 extends SomeUndefinedFunction {
 }
+exports.default = default_1;
 
 
 //// [declarationEmitExpressionInExtends7.d.ts]

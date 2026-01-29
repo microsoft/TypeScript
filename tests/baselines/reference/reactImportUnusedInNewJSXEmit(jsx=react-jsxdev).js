@@ -14,11 +14,14 @@ export function Foo() {
 }
 
 //// [index.js]
-import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = Foo;
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "index.tsx";
 function Bar() {
-    return _jsxDEV("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);
+    return (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);
 }
-export function Foo() {
-    return _jsxDEV(Bar, {}, void 0, false, { fileName: _jsxFileName, lineNumber: 10, columnNumber: 9 }, this);
+function Foo() {
+    return (0, jsx_dev_runtime_1.jsxDEV)(Bar, {}, void 0, false, { fileName: _jsxFileName, lineNumber: 10, columnNumber: 9 }, this);
 }

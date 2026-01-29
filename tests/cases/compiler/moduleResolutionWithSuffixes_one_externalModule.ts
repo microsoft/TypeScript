@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // moduleSuffixes has one entry and there's a matching package.
 // @fullEmitPaths: true

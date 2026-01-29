@@ -25,9 +25,13 @@ export const toBoundedInteger =
 
 
 //// [declarationEmitArrowFunctionNoRenaming.js]
-export const toBoundedInteger = (bounds) => (n) => 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.toBoundedInteger = void 0;
+const toBoundedInteger = (bounds) => (n) => 
 // Implementation doesn't matter here
 ({});
+exports.toBoundedInteger = toBoundedInteger;
 
 
 //// [declarationEmitArrowFunctionNoRenaming.d.ts]

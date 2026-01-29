@@ -8,11 +8,15 @@ export const g = (v: "outer") => {
 }
 
 //// [a.js]
-export const g = (v) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.g = void 0;
+const g = (v) => {
     const f = (v) => () => null;
     const r = f(null);
     return r;
 };
+exports.g = g;
 
 
 //// [a.d.ts]

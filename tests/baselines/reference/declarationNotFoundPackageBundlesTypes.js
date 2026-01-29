@@ -22,4 +22,5 @@ import * as Foo from "foo";
 import * as Other from "foo/other"/*1*/;
 
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -3,6 +3,7 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "module": "commonjs",
 ////        "lib": ["es5"],
 ////        "strict": false,
 ////        "outDir": "./dist",

@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @strict: false
 // @Filename: missingFunctionImplementation2_a.ts

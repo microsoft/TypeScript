@@ -12,5 +12,7 @@ x;
 
 
 //// [a.js]
-import { x } from "foo";
-x;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo_1 = require("foo");
+foo_1.x;

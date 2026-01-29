@@ -9,7 +9,10 @@ someFunc.someProp = 'yo';
 
 
 //// [exportDefaultNamespace.js]
-export default function someFunc() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = someFunc;
+function someFunc() {
     return 'hello!';
 }
 someFunc.someProp = 'yo';

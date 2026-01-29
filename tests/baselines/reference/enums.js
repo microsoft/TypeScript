@@ -32,18 +32,21 @@ const flags: TypeFlag = SymbolFlags.Type;
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SyntaxKind;
 (function (SyntaxKind) {
     SyntaxKind[SyntaxKind["ImportClause"] = 0] = "ImportClause";
     SyntaxKind[SyntaxKind["ExportDeclaration"] = 1] = "ExportDeclaration";
 })(SyntaxKind || (SyntaxKind = {}));
-export {};
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 SyntaxKind.ImportClause;
 "Type" /* SymbolFlags.Type */;
 let kind;
 let flags;
-export {};
 //// [c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const flags = "Type" /* SymbolFlags.Type */;
-export {};

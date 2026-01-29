@@ -45,8 +45,12 @@ export class MyClass4 extends getExportedClass<LocalInterface>(undefined)<Export
 
 
 //// [declarationEmitExpressionInExtends3.js]
-export class ExportedClass {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyClass4 = exports.MyClass3 = exports.MyClass2 = exports.MyClass = exports.ExportedClass = void 0;
+class ExportedClass {
 }
+exports.ExportedClass = ExportedClass;
 class LocalClass {
 }
 function getLocalClass(c) {
@@ -55,14 +59,18 @@ function getLocalClass(c) {
 function getExportedClass(c) {
     return ExportedClass;
 }
-export class MyClass extends getLocalClass(undefined) {
+class MyClass extends getLocalClass(undefined) {
 }
-export class MyClass2 extends getExportedClass(undefined) {
+exports.MyClass = MyClass;
+class MyClass2 extends getExportedClass(undefined) {
 }
-export class MyClass3 extends getExportedClass(undefined) {
+exports.MyClass2 = MyClass2;
+class MyClass3 extends getExportedClass(undefined) {
 }
-export class MyClass4 extends getExportedClass(undefined) {
+exports.MyClass3 = MyClass3;
+class MyClass4 extends getExportedClass(undefined) {
 }
+exports.MyClass4 = MyClass4;
 
 
 //// [declarationEmitExpressionInExtends3.d.ts]

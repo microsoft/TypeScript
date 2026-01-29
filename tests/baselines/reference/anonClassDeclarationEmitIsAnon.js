@@ -35,14 +35,18 @@ export class TimestampedUser extends Timestamped(User) {
 }
 
 //// [wrapClass.js]
-export function wrapClass(param) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.wrapClass = wrapClass;
+exports.Timestamped = Timestamped;
+function wrapClass(param) {
     return class Wrapped {
         foo() {
             return param;
         }
     };
 }
-export function Timestamped(Base) {
+function Timestamped(Base) {
     return class extends Base {
         constructor() {
             super(...arguments);
@@ -51,20 +55,25 @@ export function Timestamped(Base) {
     };
 }
 //// [index.js]
-import { wrapClass, Timestamped } from "./wrapClass";
-export default wrapClass(0);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TimestampedUser = exports.User = void 0;
+const wrapClass_1 = require("./wrapClass");
+exports.default = (0, wrapClass_1.wrapClass)(0);
 // Simple class
-export class User {
+class User {
     constructor() {
         this.name = '';
     }
 }
+exports.User = User;
 // User that is Timestamped
-export class TimestampedUser extends Timestamped(User) {
+class TimestampedUser extends (0, wrapClass_1.Timestamped)(User) {
     constructor() {
         super();
     }
 }
+exports.TimestampedUser = TimestampedUser;
 
 
 //// [wrapClass.d.ts]

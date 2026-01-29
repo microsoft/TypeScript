@@ -38,16 +38,20 @@ export const c = 12;
 
 
 //// [source.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = exports.Aleph = void 0;
+exports.foo = foo;
 /**
  * Foos a bar together using an `a` and a `b`
  * @param {number} a
  * @param {string} b
  */
-export function foo(a, b) { }
+function foo(a, b) { }
 /**
  * Legacy - DO NOT USE
  */
-export class Aleph {
+class Aleph {
     /**
      * Impossible to construct.
      * @param {Aleph} a
@@ -65,10 +69,11 @@ export class Aleph {
      */
     doIt() { }
 }
+exports.Aleph = Aleph;
 /**
  * Not the speed of light
  */
-export const c = 12;
+exports.c = 12;
 
 
 //// [source.d.ts]

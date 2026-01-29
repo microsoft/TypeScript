@@ -21,11 +21,14 @@ export const Infinity = "oops";
 
 
 //// [fakeInfinity3.js]
-export var Foo;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Infinity = exports.m = exports.Foo = void 0;
+var Foo;
 (function (Foo) {
     Foo[Foo["A"] = Infinity] = "A";
     Foo[Foo["B"] = -Infinity] = "B";
-})(Foo || (Foo = {}));
+})(Foo || (exports.Foo = Foo = {}));
 var X;
 (function (X) {
     function f() {
@@ -33,8 +36,8 @@ var X;
     }
     X.f = f;
 })(X || (X = {}));
-export const m = X.f();
-export const Infinity = "oops";
+exports.m = X.f();
+exports.Infinity = "oops";
 
 
 //// [fakeInfinity3.d.ts]

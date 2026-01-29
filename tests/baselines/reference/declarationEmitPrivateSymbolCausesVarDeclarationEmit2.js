@@ -20,27 +20,38 @@ export class D extends C {
 
 
 //// [a.js]
-export const x = Symbol();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = Symbol();
 //// [b.js]
+"use strict";
 var _a;
-import { x } from "./a";
-export class C {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+const a_1 = require("./a");
+class C {
     constructor() {
         this[_a] = 1;
     }
 }
-_a = x;
+exports.C = C;
+_a = a_1.x;
 //// [c.js]
+"use strict";
 var _a;
-import { x } from "./a";
-import { C } from "./b";
-export class D extends C {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.D = void 0;
+const a_1 = require("./a");
+const b_1 = require("./b");
+class D extends b_1.C {
     constructor() {
         super(...arguments);
         this[_a] = 12;
     }
 }
-_a = x;
+exports.D = D;
+_a = a_1.x;
 
 
 //// [a.d.ts]

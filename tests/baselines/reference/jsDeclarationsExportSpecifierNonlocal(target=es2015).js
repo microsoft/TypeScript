@@ -8,12 +8,22 @@ export { Thing, OtherThing as default } from "./source";
 
 
 //// [source.js]
-export class Thing {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OtherThing = exports.Thing = void 0;
+class Thing {
 }
-export class OtherThing {
+exports.Thing = Thing;
+class OtherThing {
 }
+exports.OtherThing = OtherThing;
 //// [index.js]
-export { Thing, OtherThing as default } from "./source";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = exports.Thing = void 0;
+var source_1 = require("./source");
+Object.defineProperty(exports, "Thing", { enumerable: true, get: function () { return source_1.Thing; } });
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return source_1.OtherThing; } });
 
 
 //// [source.d.ts]

@@ -6,5 +6,8 @@ export { toString };
 
 
 //// [exportToString.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.toString = void 0;
 const toString = 0;
-export { toString };
+exports.toString = toString;

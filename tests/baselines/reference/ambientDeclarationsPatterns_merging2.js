@@ -20,6 +20,8 @@ declare module "a.foo" {
 
 //// [types.js]
 //// [testA.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [testB.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

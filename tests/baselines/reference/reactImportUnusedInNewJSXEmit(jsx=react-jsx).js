@@ -14,10 +14,13 @@ export function Foo() {
 }
 
 //// [index.js]
-import { jsx as _jsx } from "react/jsx-runtime";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = Foo;
+const jsx_runtime_1 = require("react/jsx-runtime");
 function Bar() {
-    return _jsx("div", {});
+    return (0, jsx_runtime_1.jsx)("div", {});
 }
-export function Foo() {
-    return _jsx(Bar, {});
+function Foo() {
+    return (0, jsx_runtime_1.jsx)(Bar, {});
 }

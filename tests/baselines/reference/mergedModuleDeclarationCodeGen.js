@@ -18,7 +18,10 @@ export namespace X {
 }
 
 //// [mergedModuleDeclarationCodeGen.js]
-export var X;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.X = void 0;
+var X;
 (function (X) {
     let Y;
     (function (Y_1) {
@@ -28,7 +31,7 @@ export var X;
             }
         }
     })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+})(X || (exports.X = X = {}));
 (function (X) {
     let Y;
     (function (Y) {
@@ -36,4 +39,4 @@ export var X;
         }
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+})(X || (exports.X = X = {}));

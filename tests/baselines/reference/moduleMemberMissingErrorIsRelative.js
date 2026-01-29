@@ -6,6 +6,8 @@ export {};
 import {nosuch} from './foo';
 
 //// [foo.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [bar.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

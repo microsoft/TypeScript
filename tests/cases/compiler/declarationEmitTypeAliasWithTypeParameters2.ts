@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @module: commonjs
+// @target: es2015
 // @declaration: true
 
 export type Bar<X, Y, Z> = () => [X, Y, Z];

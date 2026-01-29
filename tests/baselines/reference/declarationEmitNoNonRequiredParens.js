@@ -10,13 +10,16 @@ export type TestType = typeof Test;
 export const bar = null! as TestType[Extract<keyof TestType, string>][] satisfies any;
 
 //// [declarationEmitNoNonRequiredParens.js]
-export var Test;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = exports.Test = void 0;
+var Test;
 (function (Test) {
     Test[Test["A"] = 0] = "A";
     Test[Test["B"] = 1] = "B";
     Test[Test["C"] = 2] = "C";
-})(Test || (Test = {}));
-export const bar = null;
+})(Test || (exports.Test = Test = {}));
+exports.bar = null;
 
 
 //// [declarationEmitNoNonRequiredParens.d.ts]

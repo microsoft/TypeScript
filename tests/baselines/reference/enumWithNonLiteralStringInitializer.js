@@ -21,16 +21,23 @@ enum A {
 
 
 //// [helpers.js]
-export const foo = 2;
-export const bar = "bar";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = exports.foo = void 0;
+exports.foo = 2;
+exports.bar = "bar";
 //// [bad.js]
-import { bar } from "./helpers";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A["a"] = "bar";
 })(A || (A = {}));
 //// [good.js]
-import { foo } from "./helpers";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A["a"] = "2";

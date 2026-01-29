@@ -16,9 +16,12 @@ export function b(text: string) {
 }
 
 //// [index.js]
-import { a } from "@ts-bug/a";
-export function b(text) {
-    return a(text);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = b;
+const a_1 = require("@ts-bug/a");
+function b(text) {
+    return (0, a_1.a)(text);
 }
 
 

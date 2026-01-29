@@ -4,4 +4,5 @@
 import * as f from "./first" with {
 
 //// [importAttributes5.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

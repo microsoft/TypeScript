@@ -8,11 +8,15 @@ export class Z {
 }
 
 //// [bar.js]
-export class Z {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Z = void 0;
+class Z {
     f(x = 1, y) {
         return [x, y];
     }
 }
+exports.Z = Z;
 
 
 //// [bar.d.ts]

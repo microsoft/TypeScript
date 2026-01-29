@@ -11,6 +11,7 @@ export class C {
 
 
 //// [parameterDecoratorsEmitCrash.js]
+"use strict";
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -45,6 +46,8 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     }
     return useValue ? value : void 0;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
 let C = (() => {
     var _a;
     let _x_decorators;
@@ -64,4 +67,4 @@ let C = (() => {
         })(),
         _a;
 })();
-export { C };
+exports.C = C;

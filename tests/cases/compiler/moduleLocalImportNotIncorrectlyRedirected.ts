@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // @noImplicitReferences: true
 // @filename: node_modules/troublesome-lib/package.json

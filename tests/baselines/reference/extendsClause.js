@@ -22,13 +22,19 @@ class V extends types.C {} // Error
 
 
 //// [types.js]
-export class C {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+class C {
 }
+exports.C = C;
 //// [ns.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class U extends C {
 } // Error
 class V extends types.C {
 } // Error
-export {};

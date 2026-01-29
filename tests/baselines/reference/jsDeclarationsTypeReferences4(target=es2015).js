@@ -20,10 +20,13 @@ export namespace A {
 
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = exports.Something = void 0;
 /// <reference types="node" />
-export const Something = 2; // to show conflict that can occur
+exports.Something = 2; // to show conflict that can occur
 // @ts-ignore
-export var A;
+var A;
 (function (A) {
     // @ts-ignore
     let B;
@@ -31,7 +34,7 @@ export var A;
         const Something = require("fs").Something;
         const thing = new Something();
     })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+})(A || (exports.A = A = {}));
 
 
 //// [index.d.ts]

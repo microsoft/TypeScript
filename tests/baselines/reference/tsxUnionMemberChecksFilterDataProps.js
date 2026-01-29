@@ -12,7 +12,12 @@ const RootHappy = () => (<Happy data-testid="my-test-id" />);
 
 
 //// [tsxUnionMemberChecksFilterDataProps.js]
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react16.d.ts" />
-import React from "react";
-const RootNotHappy = () => (React.createElement(NotHappy, { "data-testid": "my-test-id" }));
-const RootHappy = () => (React.createElement(Happy, { "data-testid": "my-test-id" }));
+const react_1 = __importDefault(require("react"));
+const RootNotHappy = () => (react_1.default.createElement(NotHappy, { "data-testid": "my-test-id" }));
+const RootHappy = () => (react_1.default.createElement(Happy, { "data-testid": "my-test-id" }));

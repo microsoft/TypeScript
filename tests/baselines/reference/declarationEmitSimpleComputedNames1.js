@@ -34,16 +34,19 @@ export const instanceLookup = (new Holder())["some" + "thing"];
 
 
 //// [declarationEmitSimpleComputedNames1.js]
-export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
-export const conatainer = {
-    [fieldName]() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.instanceLookup = exports.staticLookup = exports.Holder = exports.conatainer = exports.fieldName = void 0;
+exports.fieldName = Math.random() > 0.5 ? "f1" : "f2";
+exports.conatainer = {
+    [exports.fieldName]() {
         return "result";
     }
 };
 const classFieldName = Math.random() > 0.5 ? "g1" : "g2";
 const otherField = classFieldName === "g1" ? "g2" : "g1";
 const staticField = Math.random() > 0.5 ? "s1" : "s2";
-export class Holder {
+class Holder {
     [classFieldName]() {
         return "value";
     }
@@ -57,11 +60,12 @@ export class Holder {
         return { static: "sometimes" };
     }
 }
+exports.Holder = Holder;
 /**
  * Could be `"prototype"`, so all static string indexers include the instance type
  */
-export const staticLookup = Holder["some" + "thing"];
-export const instanceLookup = (new Holder())["some" + "thing"];
+exports.staticLookup = Holder["some" + "thing"];
+exports.instanceLookup = (new Holder())["some" + "thing"];
 
 
 //// [declarationEmitSimpleComputedNames1.d.ts]

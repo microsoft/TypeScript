@@ -5,4 +5,5 @@ export export interface I {
 }
 
 //// [parserInterfaceDeclaration6.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

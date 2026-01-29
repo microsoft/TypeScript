@@ -7,7 +7,8 @@ export interface Test {
 
 
 //// [declarationEmitIndexTypeNotFound.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [declarationEmitIndexTypeNotFound.d.ts]

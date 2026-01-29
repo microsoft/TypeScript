@@ -26,9 +26,13 @@ export const getLocales = <T extends LocaleData>({
 
 
 //// [declarationEmitBindingPatternWithReservedWord.js]
-export const getLocales = ({ app, name, default: defaultLocalesConfig, config: userLocalesConfig = {}, }) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getLocales = void 0;
+const getLocales = ({ app, name, default: defaultLocalesConfig, config: userLocalesConfig = {}, }) => {
     return defaultLocalesConfig;
 };
+exports.getLocales = getLocales;
 
 
 //// [declarationEmitBindingPatternWithReservedWord.d.ts]

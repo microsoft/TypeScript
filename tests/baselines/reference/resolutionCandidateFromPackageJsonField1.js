@@ -14,6 +14,9 @@ import "@angular/core";
 
 
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
-import "@angular/core";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("@angular/core");

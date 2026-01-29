@@ -1,5 +1,6 @@
-// @declaration: true
+// @module: commonjs
 // @target: es5, es2015
+// @declaration: true
 
 // @filename: other.ts
 type Experiment<Name> = {

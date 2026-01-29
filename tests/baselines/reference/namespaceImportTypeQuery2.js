@@ -19,16 +19,22 @@ let t: typeof types = {
 
 
 //// [z.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = exports.A = void 0;
 const A = 0;
-export { A };
-export class B {
+exports.A = A;
+class B {
 }
+exports.B = B;
 ;
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let t = {
     A: undefined, // ok
     B: undefined,
 };
-export {};

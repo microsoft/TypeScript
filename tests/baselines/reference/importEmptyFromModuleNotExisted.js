@@ -5,4 +5,5 @@ import {} from 'module-not-existed'
 
 
 //// [importEmptyFromModuleNotExisted.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

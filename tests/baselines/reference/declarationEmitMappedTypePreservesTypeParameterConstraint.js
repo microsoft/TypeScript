@@ -61,9 +61,14 @@ export const entriesOf = <o extends object>(o: o) =>
 
 
 //// [declarationEmitMappedTypePreservesTypeParameterConstraint.js]
+"use strict";
 // repro from https://github.com/microsoft/TypeScript/issues/54560
-export const buildSchema = (version) => ({});
-export const entriesOf = (o) => Object.entries(o);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.entriesOf = exports.buildSchema = void 0;
+const buildSchema = (version) => ({});
+exports.buildSchema = buildSchema;
+const entriesOf = (o) => Object.entries(o);
+exports.entriesOf = entriesOf;
 
 
 //// [declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts]

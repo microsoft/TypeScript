@@ -19,12 +19,18 @@ let t: typeof types = {
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = void 0;
 class A {
 }
-export class B {
+class B {
 }
+exports.B = B;
 ;
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let A;
 let B;
 let t = {
@@ -33,4 +39,3 @@ let t = {
     A: undefined,
     B: undefined,
 };
-export {};

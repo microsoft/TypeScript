@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/8612
 // @declaration: true

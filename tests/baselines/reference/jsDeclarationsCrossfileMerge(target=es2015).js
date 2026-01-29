@@ -13,8 +13,10 @@ export default validate;
 
 
 //// [exporter.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function validate() { }
-export default validate;
+exports.default = validate;
 //// [index.js]
 const m = require("./exporter");
 module.exports = m.default;

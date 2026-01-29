@@ -11,8 +11,15 @@ export function element() {}
 export function fragment() {}
 
 //// [jsx.js]
-export function element() { }
-export function fragment() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.element = element;
+exports.fragment = fragment;
+function element() { }
+function fragment() { }
 //// [index.js]
-import { fragment } from "./jsx";
-export const a = element(fragment, null, "fragment text");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+const jsx_1 = require("./jsx");
+exports.a = (0, jsx_1.element)(jsx_1.fragment, null, "fragment text");

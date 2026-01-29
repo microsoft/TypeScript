@@ -11,7 +11,10 @@ export type Color = typeof Color
 export type Colors = Color[keyof Color]
 
 //// [declarationEmitMergedAliasWithConst.js]
-export const Color = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Color = void 0;
+exports.Color = {
     Red: "Red",
     Green: "Green",
     Blue: "Blue"

@@ -13,4 +13,5 @@ import js from "./js"; // OK because it's an untyped module.
 
 
 //// [a.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

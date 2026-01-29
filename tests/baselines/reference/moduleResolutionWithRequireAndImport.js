@@ -13,7 +13,10 @@ function foo() {
 
 
 //// [other.js]
-export const other = 123;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.other = void 0;
+exports.other = 123;
 //// [index.js]
 const a = null;
 function foo() {

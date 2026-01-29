@@ -8,7 +8,8 @@ export default Foo;
 
 
 //// [/foo/out/test.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/foo/out/test.d.ts]

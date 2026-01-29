@@ -1,3 +1,4 @@
+// @module: commonjs
 // @target: es2015
 
 // @filename: /node_modules/@types/foo-bar/index.d.ts

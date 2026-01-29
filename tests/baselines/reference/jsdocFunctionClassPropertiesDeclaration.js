@@ -15,11 +15,14 @@ export function Foo(x, y) {
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = Foo;
 /**
  * @param {number | undefined} x
  * @param {number | undefined} y
  */
-export function Foo(x, y) {
+function Foo(x, y) {
     if (!(this instanceof Foo)) {
         return new Foo(x, y);
     }

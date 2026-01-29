@@ -7,7 +7,11 @@ export type Baa<Y> = Baz<boolean, Y>;
 export const y = (x: Baa<number>) => 1
 
 //// [declarationEmitTypeAliasWithTypeParameters2.js]
-export const y = (x) => 1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+const y = (x) => 1;
+exports.y = y;
 
 
 //// [declarationEmitTypeAliasWithTypeParameters2.d.ts]

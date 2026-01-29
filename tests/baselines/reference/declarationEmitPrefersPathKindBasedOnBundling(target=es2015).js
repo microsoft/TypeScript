@@ -20,14 +20,19 @@ export default {
 
 
 //// [scalar.js]
-export function scalar(value) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.scalar = scalar;
+function scalar(value) {
     return null;
 }
 //// [spacing.js]
-import { scalar } from '../lib/operators/scalar';
-export default {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const scalar_1 = require("../lib/operators/scalar");
+exports.default = {
     get xs() {
-        return scalar("14px");
+        return (0, scalar_1.scalar)("14px");
     }
 };
 

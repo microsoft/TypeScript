@@ -23,14 +23,17 @@ export default class extends getGreeterBase() {
 
 
 //// [declarationEmitForDefaultExportClassExtendingExpression01.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class A {
     getGreeting() {
         return 'hello';
     }
 }
 const getGreeterBase = () => A;
-export default class extends getGreeterBase() {
+class default_1 extends getGreeterBase() {
 }
+exports.default = default_1;
 
 
 //// [declarationEmitForDefaultExportClassExtendingExpression01.d.ts]

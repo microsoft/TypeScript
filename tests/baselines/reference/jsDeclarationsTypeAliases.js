@@ -52,7 +52,8 @@ class LocalThing {
 
 
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {string | number | symbol} PropName
  */

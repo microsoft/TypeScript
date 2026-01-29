@@ -18,12 +18,19 @@ const d = { types };
 
 
 //// [a.js]
-export class A {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Value = exports.B = exports.A = void 0;
+class A {
 }
-export class B {
+exports.A = A;
+class B {
 }
-export const Value = {};
+exports.B = B;
+exports.Value = {};
 //// [b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 types;
 types.Value;
 let v;
@@ -31,4 +38,3 @@ const a = {};
 const b = {};
 const c = "";
 const d = { types };
-export {};
