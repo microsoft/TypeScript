@@ -41,12 +41,6 @@ var x = 10;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -113,12 +107,6 @@ Output::
 //// [/user/username/projects/myproject/other2.vue.js]
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

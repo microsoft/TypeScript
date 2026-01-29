@@ -179,16 +179,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 [96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
@@ -213,23 +203,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -583,16 +563,6 @@ src/index.ts
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:
@@ -913,23 +883,13 @@ src/index.ts
 //// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1241,16 +1201,6 @@ src/index.ts
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

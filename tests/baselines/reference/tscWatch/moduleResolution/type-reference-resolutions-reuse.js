@@ -175,8 +175,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
@@ -200,8 +198,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/node_modules/@types: *new*
   {}
 
 Program root files: [

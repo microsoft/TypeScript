@@ -306,14 +306,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -687,14 +679,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -873,14 +857,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -1035,14 +1011,6 @@ c/index.ts
 
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -1199,14 +1167,6 @@ c/index.ts
 
 
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -1350,14 +1310,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/b/index.js] file written with same contents
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -1508,14 +1460,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -1660,14 +1604,6 @@ c/index.ts
 
 //// [/user/username/projects/transitiveReferences/a/index.js] file written with same contents
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -1811,14 +1747,6 @@ c/index.ts
 
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

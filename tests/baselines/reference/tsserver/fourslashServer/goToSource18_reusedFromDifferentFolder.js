@@ -71,16 +71,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -138,18 +128,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json: *new*
   {"pollingInterval":2000}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types: *new*
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -209,12 +187,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/folder 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/folder/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/folder/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
@@ -316,27 +288,13 @@ watchedDirectories::
   {}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {} *new*
 /home/src/workspaces/project/folder: *new*
   {}
 /home/src/workspaces/project/folder/node_modules: *new*
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {} *new*
-/home/src/workspaces/project/node_modules/@types/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types:
-  {}
 /home/src/workspaces/project/some/node_modules: *new*
-  {}
-/home/src/workspaces/project/some/node_modules/@types: *new*
   {}
 
 Projects::
@@ -527,9 +485,6 @@ watchedDirectories::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
 /home/src/workspaces/project/folder:
   {}
   {} *new*
@@ -539,20 +494,9 @@ watchedDirectoriesRecursive::
 /home/src/workspaces/project/node_modules:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-/home/src/workspaces/project/node_modules/@types/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types:
-  {}
 /home/src/workspaces/project/some/node_modules:
   {}
   {} *new*
-/home/src/workspaces/project/some/node_modules/@types:
-  {}
 
 Projects::
 /dev/null/auxiliaryProject1* (Auxiliary) *new*

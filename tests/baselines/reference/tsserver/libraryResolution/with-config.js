@@ -177,8 +177,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
@@ -335,8 +333,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /home/src/workspace/projects/project1: *new*
-  {}
-/home/src/workspace/projects/project1/typeroot1: *new*
   {}
 
 Projects::
@@ -914,8 +910,6 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -987,8 +981,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspace/projects/project1/typeroot2: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
@@ -1016,8 +1008,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules: *new*
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Projects::
@@ -1142,8 +1132,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/pr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -1217,10 +1205,6 @@ PolledWatches::
 /home/src/workspace/projects/project1/node_modules:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/home/src/workspace/projects/project1/typeroot2:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
@@ -1247,8 +1231,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules:
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Timeout callback:: count: 1
@@ -1538,8 +1520,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules:
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Projects::
@@ -1845,8 +1825,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules:
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Projects::

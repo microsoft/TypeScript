@@ -98,16 +98,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages 0 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages 0 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -223,18 +213,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/users/username/projects/myproject/javascript/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -470,21 +448,11 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /users/username/projects/myproject/javascript/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/myproject/javascript/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/myproject/javascript/packages/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -766,18 +734,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
-
-PolledWatches::
-/users/username/projects/myproject/javascript/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/myproject/javascript/node_modules:

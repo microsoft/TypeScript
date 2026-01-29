@@ -56,14 +56,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
-PolledWatches::
-/user/username/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspaces/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspaces/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

@@ -123,12 +123,6 @@ var x = data_json_1.default;
 }
 
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/data.d.json.ts: *new*
   {}

@@ -99,12 +99,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/proje
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -157,14 +151,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/node_modules: *new*
   {"pollingInterval":500}
-/user/users/projects/myproject/some/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/users/projects/myproject/some/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/users/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -186,8 +176,6 @@ FsWatchesRecursive::
 /user/users/projects/myproject/folder: *new*
   {}
 /user/users/projects/myproject/node_modules: *new*
-  {}
-/user/users/projects/myproject/node_modules/@types: *new*
   {}
 
 Projects::
@@ -309,15 +297,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/node_modules:
   {"pollingInterval":500}
-/user/users/projects/myproject/some/node_modules/@types:
-  {"pollingInterval":500}
 /user/users/projects/myproject/some/tsconfig.json:
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/users/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/users/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -340,8 +324,6 @@ FsWatchesRecursive::
 /user/users/projects/myproject/folder:
   {}
 /user/users/projects/myproject/node_modules:
-  {}
-/user/users/projects/myproject/node_modules/@types:
   {}
 
 Projects::

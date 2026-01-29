@@ -37,15 +37,7 @@ Output::
 
 
 PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/project/app: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/workspace/solution/projects/project/something: *new*
   {"pollingInterval":500}

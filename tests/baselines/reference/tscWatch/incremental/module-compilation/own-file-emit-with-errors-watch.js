@@ -123,12 +123,6 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -178,12 +172,6 @@ Input::
 //// [/users/username/projects/project/file1.ts]
 export const z = 10;
 
-
-PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -285,12 +273,6 @@ define(["require", "exports"], function (require, exports) {
   "size": 903
 }
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

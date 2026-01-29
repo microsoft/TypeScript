@@ -75,6 +75,7 @@ import {
     trace,
     updateResolutionField,
     WatchDirectoryFlags,
+    usesWildcardTypes,
 } from "./_namespaces/ts.js";
 
 /** @internal */
@@ -1667,7 +1668,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
      */
     function updateTypeRootsWatch() {
         const options = resolutionHost.getCompilationSettings();
-        if (options.types) {
+        if (!usesWildcardTypes(options)) {
             // No need to do any watch since resolution cache is going to handle the failed lookups
             // for the types added by this
             closeTypeRootsWatch();

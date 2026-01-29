@@ -39,12 +39,6 @@ var a = 10;
 
 
 
-PolledWatches::
-/home/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

@@ -95,12 +95,6 @@ var y = 20;
 }
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

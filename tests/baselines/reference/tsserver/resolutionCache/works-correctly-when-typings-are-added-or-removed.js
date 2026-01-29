@@ -66,10 +66,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -164,10 +160,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -176,8 +168,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules/@types: *new*
   {}
 
 Projects::
@@ -196,164 +186,23 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json *default*
 
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib1/index.d.ts :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib1/index.d.ts :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /users/username/projects/project/tsconfig.json Detected excluded file: /users/username/projects/project/node_modules/@types/lib1/index.d.ts
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Before running Timeout callback:: count: 3
-1: /users/username/projects/project/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 0
 //// [/users/username/projects/project/node_modules/@types/lib1/index.d.ts] deleted
 
-Timeout callback:: count: 3
-1: /users/username/projects/project/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
-3: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
-
-Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-    autoImportProviderHost: false
-
-Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/users/username/projects/project/app.ts SVC-1-0 "let x = 1;"
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/app.ts
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/users/username/projects/project/app.ts"
-        ]
-      }
-    }
 After running Timeout callback:: count: 0
 
-Timeout callback:: count: 0
-3: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-
-Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false
-
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2 :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2 :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2 :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /users/username/projects/project/tsconfig.json Detected excluded file: /users/username/projects/project/node_modules/@types/lib2
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2 :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2/index.d.ts :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2/index.d.ts :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /users/username/projects/project/tsconfig.json Detected excluded file: /users/username/projects/project/node_modules/@types/lib2/index.d.ts
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Before running Timeout callback:: count: 3
-7: /users/username/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
-9: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 0
 //// [/users/username/projects/project/node_modules/@types/lib2/index.d.ts]
 export let b: number
 
 
-Timeout callback:: count: 3
-7: /users/username/projects/project/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
-9: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
-
-Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 2
-    dirty: true *changed*
-    autoImportProviderHost: false
-
-Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/users/username/projects/project/app.ts SVC-1-0 "let x = 1;"
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/app.ts
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/users/username/projects/project/app.ts"
-        ]
-      }
-    }
 After running Timeout callback:: count: 0
-
-Timeout callback:: count: 0
-9: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-
-Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 3 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false

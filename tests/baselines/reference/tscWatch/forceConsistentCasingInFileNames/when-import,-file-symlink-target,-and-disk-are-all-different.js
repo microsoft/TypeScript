@@ -52,10 +52,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/XY.ts 250 und
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/xY.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
     Matched by default include pattern '**/*'
@@ -105,12 +101,6 @@ xY_1.a;
 link_1.b;
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

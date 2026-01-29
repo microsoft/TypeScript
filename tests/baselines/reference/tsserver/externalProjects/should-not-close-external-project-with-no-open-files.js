@@ -47,12 +47,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'externalproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -121,14 +115,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/home/src/Vscode/Projects/bin/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/a/b/f1.ts: *new*
   {}
@@ -185,14 +171,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/a/b/f2.ts:
   {}
@@ -245,14 +223,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/a/b/f1.ts: *new*
   {}
@@ -303,12 +273,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: externalproject WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -316,22 +280,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-PolledWatches *deleted*::
-/home/src/Vscode/Projects/bin/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/Projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/Vscode/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/a/b/f1.ts:
-  {}
-/home/src/projects/project/a/b/f2.ts:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 externalproject (External) *deleted*

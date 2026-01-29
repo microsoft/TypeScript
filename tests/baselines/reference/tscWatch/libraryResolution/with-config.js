@@ -138,8 +138,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -342,8 +340,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /home/src/workspace/projects/project1: *new*
-  {}
-/home/src/workspace/projects/project1/typeroot1: *new*
   {}
 
 Program root files: [
@@ -848,8 +844,6 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/workspace/projects/project1:
   {}
-/home/src/workspace/projects/project1/typeroot1:
-  {}
 
 
 Program root files: [
@@ -1077,8 +1071,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -1108,8 +1100,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/workspace/projects/project1/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspace/projects/project1/typeroot2: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts:
@@ -1137,8 +1127,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules: *new*
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Before running Timeout callback:: count: 0
@@ -1271,8 +1259,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@type
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/typeroot2 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -1427,10 +1413,6 @@ PolledWatches::
 /home/src/workspace/projects/project1/node_modules:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/home/src/workspace/projects/project1/typeroot2:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
@@ -1461,8 +1443,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules:
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Timeout callback:: count: 0
@@ -1808,8 +1788,6 @@ FsWatchesRecursive::
   {}
 /home/src/workspace/projects/project1:
   {}
-/home/src/workspace/projects/project1/typeroot1:
-  {}
 
 
 Program root files: [
@@ -2146,8 +2124,6 @@ FsWatchesRecursive::
 /home/src/workspace/projects/node_modules:
   {}
 /home/src/workspace/projects/project1:
-  {}
-/home/src/workspace/projects/project1/typeroot1:
   {}
 
 Timeout callback:: count: 0

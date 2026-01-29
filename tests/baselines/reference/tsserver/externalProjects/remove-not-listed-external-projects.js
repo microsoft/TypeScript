@@ -59,12 +59,6 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/app.ts.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -118,12 +112,6 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/b/app.ts.csproj, currentDirectory: /home/src/projects/project/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/b/app.ts.csproj
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/b/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/b/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -192,16 +180,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/a/app.ts: *new*
@@ -273,12 +251,6 @@ Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/c/app.ts.csproj, currentDirectory: /home/src/projects/project/c
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/c/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/c/app.ts.csproj
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/c/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/c/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/c/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/c/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -342,12 +314,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -366,20 +332,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/c/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/home/src/projects/project/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/a/app.ts:
@@ -447,12 +399,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/c/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -466,12 +412,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/c/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/c/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/c/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -479,26 +419,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-PolledWatches *deleted*::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/c/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/a/app.ts:
-  {}
-/home/src/projects/project/b/app.ts:
-  {}
-/home/src/projects/project/c/app.ts:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 /home/src/projects/project/a/app.ts.csproj (External) *deleted*
@@ -554,12 +474,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/b/app.ts.csproj, currentDirectory: /home/src/projects/project/b
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/b/app.ts.csproj
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/app.ts.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/b/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/b/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -587,24 +501,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/project/a/app.ts:
-  {}
-/home/src/projects/project/b/app.ts:
-  {}
-/home/src/projects/project/c/app.ts:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 /home/src/projects/project/b/app.ts.csproj (External) *new*

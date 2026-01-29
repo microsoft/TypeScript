@@ -95,12 +95,6 @@ console.log(Config.value);
 }
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -146,12 +140,6 @@ Change::
 
 Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
-
-PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -235,12 +223,6 @@ Output::
   "size": 791
 }
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

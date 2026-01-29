@@ -75,12 +75,6 @@ exports.x = 10;
 }
 
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/main.ts: *new*
   {}

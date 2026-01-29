@@ -118,12 +118,6 @@ var y = 20;
 }
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -171,12 +165,6 @@ Input::
 //// [/users/username/projects/project/file1.ts]
 const z = 10;
 
-
-PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -279,12 +267,6 @@ var z = 10;
   "size": 968
 }
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

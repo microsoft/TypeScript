@@ -50,12 +50,6 @@ var v = 1 /* E2.V */;
 
 
 
-PolledWatches::
-/user/someone/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/someone/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

@@ -117,8 +117,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/Users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /Users/name/projects/package.json: *new*
   {"pollingInterval":2000}
 /Users/name/projects/web/package.json: *new*
@@ -152,8 +150,6 @@ FsWatchesRecursive::
 /Users/name/projects/web: *new*
   {}
 /Users/name/projects/web/node_modules: *new*
-  {}
-/Users/name/projects/web/node_modules/@types: *new*
   {}
 /Users/name/projects/web/src: *new*
   {}

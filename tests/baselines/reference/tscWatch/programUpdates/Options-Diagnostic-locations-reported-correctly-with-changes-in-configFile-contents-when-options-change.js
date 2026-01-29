@@ -58,16 +58,6 @@ var x = 10;
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYXBwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQSJ9
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

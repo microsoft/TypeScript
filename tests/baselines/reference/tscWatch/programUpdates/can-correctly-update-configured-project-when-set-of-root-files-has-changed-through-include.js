@@ -43,14 +43,6 @@ exports.x = 10;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/Project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -120,14 +112,6 @@ exports.y = void 0;
 exports.y = 10;
 
 
-
-PolledWatches::
-/user/username/projects/myproject/Project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

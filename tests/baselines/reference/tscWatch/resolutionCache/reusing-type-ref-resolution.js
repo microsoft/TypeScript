@@ -159,10 +159,6 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /users/username/projects/project/outDir :: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/outDir :: WatchInfo: /users/username/projects/project 0 undefined Failed Lookup Locations
 [96mfileWithImports.ts[0m:[93m2[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
@@ -344,12 +340,8 @@ export {};
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/pkg0/package.json: *new*
@@ -688,12 +680,8 @@ fileWithTypeRefs.ts
 PolledWatches::
 /users/username/projects/node_modules:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/package.json:
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/package.json:
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/pkg0/package.json:
@@ -1050,12 +1038,8 @@ fileWithTypeRefs.ts
 PolledWatches::
 /users/username/projects/node_modules:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/package.json:
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/package.json:
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/pkg0/package.json:

@@ -66,8 +66,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 

@@ -112,12 +112,6 @@ Output::
 }
 
 
-PolledWatches::
-/user/username/projects/noEmitOnError/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

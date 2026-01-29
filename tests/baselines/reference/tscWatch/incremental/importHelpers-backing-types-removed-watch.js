@@ -52,12 +52,6 @@ exports.x = tslib_1.__assign({});
 
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -112,12 +106,6 @@ Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
 
-PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -157,10 +145,6 @@ Output::
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

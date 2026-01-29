@@ -50,14 +50,6 @@ exports.y = 1;
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -123,14 +115,6 @@ __exportStar(require("../projectc/f2"), exports);
 __exportStar(require("../projectd/f3"), exports);
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

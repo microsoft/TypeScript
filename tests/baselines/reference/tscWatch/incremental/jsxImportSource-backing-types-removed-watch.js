@@ -127,10 +127,6 @@ exports.App = App;
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/react/jsx-runtime/package.json: *new*
   {"pollingInterval":2000}
 
@@ -195,10 +191,6 @@ Input::
 //// [/users/username/projects/project/node_modules/react/package.json] deleted
 
 PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/react/jsx-runtime/package.json:
   {"pollingInterval":2000}
 
@@ -301,10 +293,6 @@ Output::
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

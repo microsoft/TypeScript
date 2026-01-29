@@ -53,10 +53,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/main.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
@@ -81,12 +77,6 @@ var generated_1 = require("./app/services/generated");
 var x = generated_1.y;
 
 
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -201,12 +191,6 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/g
 
 
 //// [/home/src/workspaces/project/src/main.js] file written with same contents
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -330,12 +314,6 @@ exports.y = void 0;
 exports.y = 10;
 
 
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

@@ -144,10 +144,6 @@ export declare function thing(): void;
 
 
 PolledWatches::
-/Users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/Users/name/projects/web/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/package.json: *new*
   {"pollingInterval":2000}
 /home/src/tslibs/TS/package.json: *new*
