@@ -1,6 +1,6 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
-// @target: es5
+// @target: es5, es2015
 // @skipLibCheck: true
 
 // @filename: event.ts

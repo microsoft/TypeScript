@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 //@module: amd
 export namespace m1 {
     export class C1_public {

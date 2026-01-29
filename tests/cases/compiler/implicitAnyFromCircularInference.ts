@@ -1,5 +1,5 @@
 // @noimplicitany: true
-// @target: es5
+// @target: es5, es2015
 
 // Error expected
 var a: typeof a;

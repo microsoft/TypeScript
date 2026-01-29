@@ -1,5 +1,5 @@
 // @module: es6
-// @target: es5
+// @target: es5, es2015
 // @emitDecoratorMetadata: true
 // @experimentalDecorators: true
 // @filename: deps.ts

@@ -1,0 +1,10 @@
+parserES5ComputedPropertyName4.ts(1,15): error TS2378: A 'get' accessor must return a value.
+parserES5ComputedPropertyName4.ts(1,16): error TS2304: Cannot find name 'e'.
+
+
+==== parserES5ComputedPropertyName4.ts (2 errors) ====
+    var v = { get [e]() { } };
+                  ~~~
+!!! error TS2378: A 'get' accessor must return a value.
+                   ~
+!!! error TS2304: Cannot find name 'e'.

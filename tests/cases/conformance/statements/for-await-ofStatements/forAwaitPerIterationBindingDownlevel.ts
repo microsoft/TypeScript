@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: esnext, dom
 // @downlevelIteration: true
 // @noTypesAndSymbols: true

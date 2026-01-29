@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/metadataReferencedWithinFilteredUnion.ts] ////
+
+//// [Class1.ts]
+export class Class1 {
+}
+//// [Class2.ts]
+import { Class1 } from './Class1';
+
+function decorate(target: any, propertyKey: string) {
+}
+
+export class Class2 {
+    @decorate
+    get maybeProp(): Class1 | undefined {
+        return undefined;
+    }
+    @decorate
+    get prop(): Class1 {
+        return undefined;
+    }
+}
+
+//// [Class1.js]
+export class Class1 {
+}
+//// [Class2.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { Class1 } from './Class1';
+function decorate(target, propertyKey) {
+}
+export class Class2 {
+    get maybeProp() {
+        return undefined;
+    }
+    get prop() {
+        return undefined;
+    }
+}
+__decorate([
+    decorate,
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [])
+], Class2.prototype, "maybeProp", null);
+__decorate([
+    decorate,
+    __metadata("design:type", Class1),
+    __metadata("design:paramtypes", [])
+], Class2.prototype, "prop", null);

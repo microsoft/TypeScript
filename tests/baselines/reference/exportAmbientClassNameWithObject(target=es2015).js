@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/externalModules/exportAmbientClassNameWithObject.ts] ////
+
+//// [exportAmbientClassNameWithObject.ts]
+export declare class Object {}
+
+
+//// [exportAmbientClassNameWithObject.js]
+export {};

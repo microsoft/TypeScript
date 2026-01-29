@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/es5-asyncFunction.ts] ////
+
+//// [es5-asyncFunction.ts]
+declare var x;
+
+async function empty() {
+}
+
+async function singleAwait() {
+    await x;
+}
+
+//// [es5-asyncFunction.js]
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+function empty() {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
+}
+function singleAwait() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x;
+    });
+}

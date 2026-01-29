@@ -1,5 +1,5 @@
 // @esModuleInterop: true
-// @target: es5
+// @target: es5, es2015
 // @filename: fs.d.ts
 export const x: number;
 // @filename: mjts.ts

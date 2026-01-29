@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @lib: es5,es6
 // @filename: main.ts
 // https://github.com/Microsoft/TypeScript/issues/11177

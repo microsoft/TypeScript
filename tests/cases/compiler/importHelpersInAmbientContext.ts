@@ -1,5 +1,5 @@
 // @importHelpers: true
-// @target: es5
+// @target: es5, es2015
 
 // @filename: a.d.ts
 export { };

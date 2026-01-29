@@ -1,5 +1,5 @@
 // @strict: true
-// @target: ES5
+// @target: ES5, ES2015
 
 class A {
     public static "\""() {}

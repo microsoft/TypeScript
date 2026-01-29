@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 var globalCounter = 0;
 function foo() {
     globalCounter += 1;

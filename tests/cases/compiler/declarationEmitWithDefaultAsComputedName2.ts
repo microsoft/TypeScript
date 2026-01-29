@@ -1,5 +1,5 @@
 // @declaration: true
-// @target: es5
+// @target: es5, es2015
 
 // @filename: other.ts
 type Experiment<Name> = {
