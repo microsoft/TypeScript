@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: monorepo/core/src/application.ts
 import { Constructor } from "@loopback/context";

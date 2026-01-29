@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 
 // @Filename: /src/index.ts

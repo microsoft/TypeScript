@@ -1,3 +1,4 @@
+// @target: es2015
 //@sourcemap: true
 //@downlevelIteration: true
 for (var v of ['a', 'b', 'c']) {

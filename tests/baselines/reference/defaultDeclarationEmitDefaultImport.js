@@ -9,22 +9,12 @@ export const instance = getSomething();
 
 
 //// [root.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSomething = getSomething;
-function getSomething() { return null; }
-var Something = /** @class */ (function () {
-    function Something() {
-    }
-    return Something;
-}());
-exports.default = Something;
+export function getSomething() { return null; }
+export default class Something {
+}
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.instance = void 0;
-var root_1 = require("./root");
-exports.instance = (0, root_1.getSomething)();
+import { getSomething } from "./root";
+export const instance = getSomething();
 
 
 //// [root.d.ts]

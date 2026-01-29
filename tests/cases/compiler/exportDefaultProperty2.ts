@@ -1,3 +1,4 @@
+// @target: es2015
 // This test is just like exportEqualsProperty2, but with `export default`.
 
 // @Filename: a.ts

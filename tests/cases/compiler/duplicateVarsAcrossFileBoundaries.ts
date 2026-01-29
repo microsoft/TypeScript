@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: duplicateVarsAcrossFileBoundaries_0.ts
 var x = 3;
 var y = "";

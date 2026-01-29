@@ -15,24 +15,13 @@ export const context: Context = {
 export const withContext = ({ [Key]: value }: Context) => value;
 
 //// [context.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Key = void 0;
-exports.Key = Symbol();
+export const Key = Symbol();
 //// [index.js]
-"use strict";
-var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.withContext = exports.context = void 0;
-var context_1 = require("./context");
-exports.context = (_a = {},
-    _a[context_1.Key] = 'bar',
-    _a);
-var withContext = function (_a) {
-    var _b = context_1.Key, value = _a[_b];
-    return value;
+import { Key } from "./context";
+export const context = {
+    [Key]: 'bar',
 };
-exports.withContext = withContext;
+export const withContext = ({ [Key]: value }) => value;
 
 
 //// [context.d.ts]

@@ -20,18 +20,18 @@ let k = abc === xyz;
 let l = abc != xyz;
 
 //// [stringLiteralTypesWithVariousOperators02.js]
-var a = abcOrXyzOrNumber + 100;
-var b = 100 + abcOrXyzOrNumber;
-var c = abcOrXyzOrNumber + abcOrXyzOrNumber;
-var d = abcOrXyzOrNumber + true;
-var e = false + abcOrXyzOrNumber;
-var f = abcOrXyzOrNumber++;
-var g = --abcOrXyzOrNumber;
-var h = abcOrXyzOrNumber ^ 10;
-var i = abcOrXyzOrNumber | 10;
-var j = abc < xyz;
-var k = abc === xyz;
-var l = abc != xyz;
+let a = abcOrXyzOrNumber + 100;
+let b = 100 + abcOrXyzOrNumber;
+let c = abcOrXyzOrNumber + abcOrXyzOrNumber;
+let d = abcOrXyzOrNumber + true;
+let e = false + abcOrXyzOrNumber;
+let f = abcOrXyzOrNumber++;
+let g = --abcOrXyzOrNumber;
+let h = abcOrXyzOrNumber ^ 10;
+let i = abcOrXyzOrNumber | 10;
+let j = abc < xyz;
+let k = abc === xyz;
+let l = abc != xyz;
 
 
 //// [stringLiteralTypesWithVariousOperators02.d.ts]

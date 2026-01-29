@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: bbb.d.ts
 export interface INode<T> {

@@ -1,3 +1,4 @@
+// @target: es2015
 class Base { foo: string; }
 class Derived extends Base { bar: string; }
 class Derived2 extends Derived { baz: string; }

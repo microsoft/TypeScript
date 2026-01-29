@@ -1,3 +1,4 @@
+// @target: es2015
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 // @filename: types.d.ts

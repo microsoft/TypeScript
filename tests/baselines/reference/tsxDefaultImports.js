@@ -14,24 +14,14 @@ let a = Def.E.one;
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
 })(SomeEnum || (SomeEnum = {}));
-var SomeClass = /** @class */ (function () {
-    function SomeClass() {
-    }
-    SomeClass.E = SomeEnum;
-    return SomeClass;
-}());
-exports.default = SomeClass;
+class SomeClass {
+}
+SomeClass.E = SomeEnum;
+export default SomeClass;
 //// [b.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = __importDefault(require("./a"));
-var a = a_1.default.E.one;
+import { default as Def } from "./a";
+let a = Def.E.one;

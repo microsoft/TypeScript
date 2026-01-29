@@ -8,8 +8,5 @@ namespace A {
 
 
 //// [moduleRedifinitionErrors.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}

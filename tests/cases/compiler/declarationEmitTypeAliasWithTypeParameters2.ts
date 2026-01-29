@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 export type Bar<X, Y, Z> = () => [X, Y, Z];
 export type Baz<M, N> = Bar<M, string, N>;

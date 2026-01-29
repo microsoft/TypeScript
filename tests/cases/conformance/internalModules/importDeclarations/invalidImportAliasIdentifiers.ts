@@ -1,3 +1,4 @@
+// @target: es2015
 // none of these should work, since non are actually modules
 
 var V = 12;

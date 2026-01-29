@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: react
 // @jsxFactory: p
 // @filename: renderer.d.ts

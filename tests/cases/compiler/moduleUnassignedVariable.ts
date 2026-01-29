@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 namespace Bar {
     export var a = 1;

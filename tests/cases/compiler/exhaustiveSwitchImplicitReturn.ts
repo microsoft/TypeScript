@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReturns: true
 
 function foo1(bar: "a"): number {

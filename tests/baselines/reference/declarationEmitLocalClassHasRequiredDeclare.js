@@ -18,27 +18,13 @@ export declare namespace Y {
 export class Y { }
 
 //// [declarationEmitLocalClassHasRequiredDeclare.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Y = exports.A = void 0;
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.X = X;
-    return A;
-}());
-exports.A = A;
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    return Y;
-}());
-exports.Y = Y;
+class X {
+}
+export class A {
+}
+A.X = X;
+export class Y {
+}
 
 
 //// [declarationEmitLocalClassHasRequiredDeclare.d.ts]

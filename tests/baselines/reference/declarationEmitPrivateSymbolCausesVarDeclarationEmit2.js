@@ -20,57 +20,27 @@ export class D extends C {
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = Symbol();
+export const x = Symbol();
 //// [b.js]
-"use strict";
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var a_1 = require("./a");
-var C = /** @class */ (function () {
-    function C() {
+import { x } from "./a";
+export class C {
+    constructor() {
         this[_a] = 1;
     }
-    return C;
-}());
-exports.C = C;
-_a = a_1.x;
+}
+_a = x;
 //// [c.js]
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.D = void 0;
-var a_1 = require("./a");
-var b_1 = require("./b");
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this[_a] = 12;
-        return _this;
+import { x } from "./a";
+import { C } from "./b";
+export class D extends C {
+    constructor() {
+        super(...arguments);
+        this[_a] = 12;
     }
-    return D;
-}(b_1.C));
-exports.D = D;
-_a = a_1.x;
+}
+_a = x;
 
 
 //// [a.d.ts]

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
 
     interface X { m1:number; }

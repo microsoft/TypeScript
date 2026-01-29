@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(...b:number[]){}
 foo(); // ok
 function foo2(a:string, ...b:number[]){}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: aliasUsageInGenericFunction_backbone.ts
 export class Model {

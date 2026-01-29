@@ -46,5 +46,4 @@ type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
 type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

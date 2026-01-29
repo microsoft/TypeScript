@@ -10,8 +10,6 @@ declare module "./missingFunctionImplementation2_b" {
 export function f(a?, b?);
 
 //// [missingFunctionImplementation2_a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [missingFunctionImplementation2_b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -21,8 +21,6 @@ export declare const value3: {
 
 
 //// [types.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /z.ts
 interface A {}
 export type { A };

@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.ts
 class A { a!: string }
 export type { A as default };

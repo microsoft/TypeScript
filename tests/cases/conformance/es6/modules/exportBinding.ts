@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: exportConsts.ts
 // @strict: true
 export { x }

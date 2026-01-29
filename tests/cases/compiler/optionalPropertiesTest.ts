@@ -1,3 +1,4 @@
+// @target: es2015
 var x: {p1:number; p2?:string; p3?:{():number;};};
 
 interface IFoo

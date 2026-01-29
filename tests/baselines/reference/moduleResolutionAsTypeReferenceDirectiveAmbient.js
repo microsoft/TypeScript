@@ -13,5 +13,4 @@ declare module "phaser" {
 import { a2 } from "phaser";
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

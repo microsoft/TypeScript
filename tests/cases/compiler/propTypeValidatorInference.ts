@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @filename: node_modules/prop-types/index.d.ts
 export const nominalTypeHack: unique symbol;

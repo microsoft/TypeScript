@@ -1,3 +1,4 @@
+// @target: es2015
 class G<T> {
     x: G<G<T>>; // infinitely expanding type reference
 }

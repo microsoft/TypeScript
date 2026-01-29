@@ -1,4 +1,5 @@
-﻿import while = require("dfdf");
+﻿// @target: es2015
+import while = require("dfdf");
 import * as  while from "foo"
 
 var typeof = 10;

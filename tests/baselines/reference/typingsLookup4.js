@@ -33,10 +33,8 @@ j + k + l + m;
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var jquery_1 = require("jquery");
-var kquery_1 = require("kquery");
-var lquery_1 = require("lquery");
-var mquery_1 = require("mquery");
-jquery_1.j + kquery_1.k + lquery_1.l + mquery_1.m;
+import { j } from "jquery";
+import { k } from "kquery";
+import { l } from "lquery";
+import { m } from "mquery";
+j + k + l + m;

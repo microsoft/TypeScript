@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.d.ts
 declare class Foo {}
 

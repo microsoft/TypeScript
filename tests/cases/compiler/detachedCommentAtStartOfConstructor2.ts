@@ -1,3 +1,4 @@
+// @target: es2015
 class TestFile {
     public message: string;
     public name: string;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 // @strictNullChecks: true
 // @jsx: preserve

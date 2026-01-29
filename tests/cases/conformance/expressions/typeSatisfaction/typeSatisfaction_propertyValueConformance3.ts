@@ -1,3 +1,4 @@
+// @target: es2015
 export type Color = { r: number, g: number, b: number };
 
 // All of these should be Colors, but I only use some of them here.

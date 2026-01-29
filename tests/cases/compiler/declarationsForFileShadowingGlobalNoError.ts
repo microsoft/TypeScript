@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @lib: dom,es6
 // @filename: dom.ts

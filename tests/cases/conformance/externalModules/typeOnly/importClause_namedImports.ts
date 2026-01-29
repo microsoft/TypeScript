@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /abc.ts
 export class A {}
 export type B  = { b: string };

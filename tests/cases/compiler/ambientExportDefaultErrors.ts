@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: foo.d.ts
 // @noUncheckedSideEffectImports: false
 

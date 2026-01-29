@@ -12,16 +12,13 @@ var x = "hi" || 5;
 export default x;
 
 //// [0.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 {
-    var obj = true;
+    let obj = true;
 }
+export {};
 //// [1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var x = "hi" || 5;
-exports.default = x;
+export default x;
 
 
 //// [0.d.ts]

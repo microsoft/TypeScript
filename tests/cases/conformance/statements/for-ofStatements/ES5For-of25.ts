@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 //@sourcemap: true
 var a = [1, 2, 3];

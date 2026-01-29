@@ -9,7 +9,7 @@ const array = [
 ];
 
 //// [commentOnArrayElement2.js]
-var array = [
+const array = [
     /* element 1*/
     1 /* end of element 1 */,
     2

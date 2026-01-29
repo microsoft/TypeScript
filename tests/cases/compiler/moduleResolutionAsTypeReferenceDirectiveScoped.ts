@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @typeRoots: /a/types,/a/node_modules,/a/node_modules/@types
 // @types: dummy

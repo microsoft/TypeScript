@@ -39,14 +39,11 @@ export const v = makeV();
 
 
 //// [declarationEmitGenericTypeParamerSerialization2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.v = exports.x = void 0;
-exports.x = (function () { return null; })();
+export const x = (() => null)();
 function makeV() {
     return null;
 }
-exports.v = makeV();
+export const v = makeV();
 
 
 //// [declarationEmitGenericTypeParamerSerialization2.d.ts]

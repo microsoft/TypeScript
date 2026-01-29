@@ -54,39 +54,44 @@ namespace foo {
 export var r13: typeof foo;
 
 //// [typeofANonExportedType.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.r13 = exports.r12 = exports.r11 = exports.r10 = exports.r9 = exports.r8 = exports.r7 = exports.r6 = exports.r5 = exports.i = exports.r4b = exports.r4 = exports.r3 = exports.c = exports.r2 = exports.r1 = void 0;
 var x = 1;
+export var r1;
 var y = { foo: '' };
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+export var r2;
+class C {
+}
+export var c;
 var c2;
+export var r3;
+export var r4;
+export var r4b;
+export var i;
 var i2;
+export var r5;
+export var r5;
 var M;
 (function (M) {
     M.foo = '';
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
 })(M || (M = {}));
+export var r6;
+export var r7;
+export var r8;
+export var r9;
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
+export var r10;
+export var r11;
+export var r12;
 function foo() { }
 (function (foo) {
     foo.y = 1;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     foo.C = C;
 })(foo || (foo = {}));
+export var r13;

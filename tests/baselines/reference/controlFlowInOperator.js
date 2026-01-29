@@ -69,9 +69,9 @@ function uniqueID_54790_3(id: string | number, seenIDs: object) {
 
 
 //// [controlFlowInOperator.js]
-var a = 'a';
-var b = 'b';
-var d = 'd';
+const a = 'a';
+const b = 'b';
+const d = 'd';
 if ('a' in c) {
     c; // A
     c['a']; // number;
@@ -94,8 +94,8 @@ function uniqueID_54790(id, seenIDs) {
     if (!(id in seenIDs)) {
         return id;
     }
-    for (var i = 1; i < Number.MAX_VALUE; i++) {
-        var newID = "".concat(id, "-").concat(i);
+    for (let i = 1; i < Number.MAX_VALUE; i++) {
+        const newID = `${id}-${i}`;
         if (!(newID in seenIDs)) {
             return newID;
         }
@@ -104,16 +104,16 @@ function uniqueID_54790(id, seenIDs) {
 }
 function uniqueID_54790_2(id, seenIDs) {
     id = "a";
-    for (var i = 1; i < 3; i++) {
-        var newID = "".concat(id);
+    for (let i = 1; i < 3; i++) {
+        const newID = `${id}`;
         if (newID in seenIDs) {
         }
     }
 }
 function uniqueID_54790_3(id, seenIDs) {
     id = "a";
-    for (var i = 1; i < 3; i++) {
-        var newID = id;
+    for (let i = 1; i < 3; i++) {
+        const newID = id;
         if (newID in seenIDs) {
         }
     }

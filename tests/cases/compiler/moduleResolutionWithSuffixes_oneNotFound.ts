@@ -1,3 +1,4 @@
+// @target: es2015
 // moduleSuffixes has one entry but there isn't a matching file. Module resolution should fail.
 
 // @filename: /tsconfig.json

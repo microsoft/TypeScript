@@ -1,3 +1,4 @@
+// @target: es2015
 // technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
 // functionally only possible when your class is otherwise devoid of members so of little consequence in practice
 

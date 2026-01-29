@@ -14,19 +14,10 @@ let b: B;
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-exports.B = B;
+export class B {
+}
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b;
+let b;
+export {};

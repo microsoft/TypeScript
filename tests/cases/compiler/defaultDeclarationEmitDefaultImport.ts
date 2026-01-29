@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: root.ts
 export function getSomething(): Something { return null as any }

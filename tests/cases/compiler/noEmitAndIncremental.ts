@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.ts
 const x = 10;
 

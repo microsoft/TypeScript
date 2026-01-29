@@ -9,10 +9,9 @@ class A {
 
 
 //// [unusedParameterProperty1.js]
-var A = /** @class */ (function () {
-    function A(used) {
+class A {
+    constructor(used) {
         this.used = used;
-        var foge = used;
+        let foge = used;
     }
-    return A;
-}());
+}

@@ -29,11 +29,9 @@ import "indirect2";
 import "foo2";
 
 //// [consumer.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./indirection.d.ts" />
 /// <reference path="./indirection2.d.ts" />
-require("indirect");
-require("foo");
-require("indirect2");
-require("foo2");
+import "indirect";
+import "foo";
+import "indirect2";
+import "foo2";

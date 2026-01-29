@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.ts
 interface I {}
 export default I;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @traceResolution: true
 // @libReplacement: true
 

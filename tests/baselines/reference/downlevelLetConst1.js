@@ -4,4 +4,4 @@
 const
 
 //// [downlevelLetConst1.js]
-var ;
+const ;

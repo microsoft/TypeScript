@@ -17,11 +17,8 @@ import {e} from "../projC";
 export const d = {e};
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.d = void 0;
-var projC_1 = require("../projC");
-exports.d = { e: projC_1.e };
+import { e } from "../projC";
+export const d = { e };
 
 
 //// [index.d.ts]

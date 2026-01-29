@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: example.ts
 export default function add(a: number, b: number) {
     return a + b;

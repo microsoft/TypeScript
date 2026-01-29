@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @declaration: true
 // @filename: node_modules/whatever/index.d.ts

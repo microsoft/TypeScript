@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 type LocaleData = Record<string, never>
 type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<

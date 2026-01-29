@@ -8,5 +8,4 @@ import { x } from "../node_modules/foo";
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -11,17 +11,10 @@ export const g = f;
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-var f = function (x) { return x; };
-exports.f = f;
+export const f = (x) => x;
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.g = void 0;
-var a_1 = require("./a");
-exports.g = a_1.f;
+import { f } from "./a";
+export const g = f;
 
 
 //// [a.d.ts]

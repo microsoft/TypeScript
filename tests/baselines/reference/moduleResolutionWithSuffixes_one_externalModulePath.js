@@ -20,5 +20,4 @@ import { iosfoo } from "some-library/foo";
 
 
 //// [/bin/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -29,31 +29,23 @@ MyConstEnum.Foo;
 
 
 //// [ConstEnum.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 ;
+export {};
 //// [ImportExport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [ImportExportDefault.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [ReExportDefault.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [ReExport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [Usage1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* MyConstEnum1.Foo */;
 0 /* MyConstEnum2.Foo */;
+export {};
 //// [Usage2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* MyConstEnum.Foo */;
+export {};
 //// [Usage3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* MyConstEnum.Foo */;
+export {};

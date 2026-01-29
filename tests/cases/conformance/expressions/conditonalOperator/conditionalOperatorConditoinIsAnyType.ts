@@ -1,3 +1,4 @@
+// @target: es2015
 //Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
 declare var condAny: any;
 declare var x: any;

@@ -1,0 +1,108 @@
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(29,28): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(32,28): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(35,28): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(38,70): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(41,70): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(44,70): error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(49,43): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(52,43): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(55,43): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(58,82): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(61,82): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringForOfObjectBindingPattern.ts(64,82): error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== sourceMapValidationDestructuringForOfObjectBindingPattern.ts (12 errors) ====
+    declare var console: {
+        log(msg: any): void;
+    }
+    interface Robot {
+        name: string;
+        skill: string;
+    }
+    
+    interface MultiRobot {
+        name: string;
+        skills: {
+            primary: string;
+            secondary: string;
+        };
+    }
+    
+    let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
+    let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+        { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
+    
+    function getRobots() {
+        return robots;
+    }
+    
+    function getMultiRobots() {
+        return multiRobots;
+    }
+    
+    for (let {name: nameA } of robots) {
+                               ~~~~~~
+!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA } of getRobots()) {
+                               ~~~~~~~~~~~
+!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let { skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+                                                                         ~~~~~~~~~~~
+!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(primaryA);
+    }
+    for (let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+                                                                         ~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(primaryA);
+    }
+    for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(primaryA);
+    }
+    
+    for (let {name: nameA, skill: skillA } of robots) {
+                                              ~~~~~~
+!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA, skill: skillA } of getRobots()) {
+                                              ~~~~~~~~~~~
+!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+                                                                                     ~~~~~~~~~~~
+!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+                                                                                     ~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }
+    for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameA);
+    }

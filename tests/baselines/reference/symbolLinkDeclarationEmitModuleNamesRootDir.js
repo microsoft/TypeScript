@@ -25,14 +25,10 @@ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any);
 
 
 //// [application.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [usage.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CONTROLLER_CLASS = void 0;
-var context_1 = require("@loopback/context");
-exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
+import { BindingKey } from '@loopback/context';
+export const CONTROLLER_CLASS = BindingKey.create(null); // line in question
 
 
 //// [application.d.ts]

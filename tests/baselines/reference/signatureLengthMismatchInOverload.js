@@ -10,4 +10,4 @@ f((arg: number, arg2: number) => {});
 
 //// [signatureLengthMismatchInOverload.js]
 function f(callback) { }
-f(function (arg, arg2) { });
+f((arg, arg2) => { });

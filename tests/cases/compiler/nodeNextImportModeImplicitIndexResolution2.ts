@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: nodenext
 
 // @Filename: /node_modules/@types/dedent/package.json

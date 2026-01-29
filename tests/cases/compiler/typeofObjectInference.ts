@@ -1,3 +1,4 @@
+// @target: es2015
 let val = 1
 
 function decorateA<O extends any>(fn: (first: {value: typeof val}) => O) {

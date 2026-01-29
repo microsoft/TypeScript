@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @noImplicitAny: true
 // @strictNullChecks: true

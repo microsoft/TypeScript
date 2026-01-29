@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: foo.ts
 export const x = 3;
 export const y = 5;

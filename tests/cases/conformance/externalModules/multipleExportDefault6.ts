@@ -1,4 +1,5 @@
-﻿export default {
+﻿// @target: es2015
+export default {
     lol: 1
 }
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 let a: Date[];
 let b: boolean[];

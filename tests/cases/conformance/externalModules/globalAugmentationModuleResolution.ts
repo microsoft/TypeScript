@@ -1,4 +1,5 @@
-﻿// @traceResolution: true
+﻿// @target: es2015
+// @traceResolution: true
 
 // @fileName: a.ts
 export { };

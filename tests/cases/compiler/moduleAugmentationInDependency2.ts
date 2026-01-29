@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: /node_modules/A/index.ts
 declare module "ext" {
 }

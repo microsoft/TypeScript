@@ -12,5 +12,4 @@ import { NotFound } from './errors'
 
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @outDir: ./built
 // @filename: library.d.ts

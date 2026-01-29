@@ -35,157 +35,43 @@ export * as three from "./three.js";
 export * as four from "./four.js";
 
 //// [one.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
-var React = __importStar(require("react"));
-var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
-exports.HelloWorld = HelloWorld;
-exports.frag = React.createElement(React.Fragment, null,
+import * as React from "react";
+export const HelloWorld = () => React.createElement("h1", null, "Hello world");
+export const frag = React.createElement(React.Fragment, null,
     React.createElement("div", null));
-exports.selfClosing = React.createElement("img", { src: "./image.png" });
+export const selfClosing = React.createElement("img", { src: "./image.png" });
 //// [two.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
+import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_runtime_1.jsx)("h1", { children: "Hello world" }); };
-exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)("div", {}) });
-exports.selfClosing = (0, jsx_runtime_1.jsx)("img", { src: "./image.png" });
+export const HelloWorld = () => _jsx("h1", { children: "Hello world" });
+export const frag = _jsx(_Fragment, { children: _jsx("div", {}) });
+export const selfClosing = _jsx("img", { src: "./image.png" });
 //// [three.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
+import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_runtime_1.jsx)("h1", { children: "Hello world" }); };
-exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)("div", {}) });
-exports.selfClosing = (0, jsx_runtime_1.jsx)("img", { src: "./image.png" });
+export const HelloWorld = () => _jsx("h1", { children: "Hello world" });
+export const frag = _jsx(_Fragment, { children: _jsx("div", {}) });
+export const selfClosing = _jsx("img", { src: "./image.png" });
 //// [four.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
-var React = __importStar(require("react"));
-var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
-exports.HelloWorld = HelloWorld;
-exports.frag = React.createElement(React.Fragment, null,
+import * as React from "react";
+export const HelloWorld = () => React.createElement("h1", null, "Hello world");
+export const frag = React.createElement(React.Fragment, null,
     React.createElement("div", null));
-exports.selfClosing = React.createElement("img", { src: "./image.png" });
+export const selfClosing = React.createElement("img", { src: "./image.png" });
 //// [index.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.four = exports.three = exports.two = exports.one = void 0;
-exports.one = __importStar(require("./one.js"));
-exports.two = __importStar(require("./two.js"));
-exports.three = __importStar(require("./three.js"));
-exports.four = __importStar(require("./four.js"));
+import * as one_1 from "./one.js";
+export { one_1 as one };
+import * as two_1 from "./two.js";
+export { two_1 as two };
+import * as three_1 from "./three.js";
+export { three_1 as three };
+import * as four_1 from "./four.js";
+export { four_1 as four };

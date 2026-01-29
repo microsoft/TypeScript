@@ -22,5 +22,4 @@ import { ios as ios3 } from "some-library/index.js";
 
 
 //// [/bin/test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

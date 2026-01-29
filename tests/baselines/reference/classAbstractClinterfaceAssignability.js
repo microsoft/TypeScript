@@ -26,10 +26,7 @@ declare var AAA: typeof I;
 AAA = A;
 
 //// [classAbstractClinterfaceAssignability.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 AA = I;
 AAA = A;

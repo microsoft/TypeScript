@@ -23,11 +23,8 @@ export const baddts = foo()
 
 
 //// [declarationEmitExactOptionalPropertyTypesNodeNotReused.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.baddts = void 0;
-var foo = function () { return function (x) { return null; }; };
-exports.baddts = foo();
+const foo = () => (x) => null;
+export const baddts = foo();
 
 
 //// [declarationEmitExactOptionalPropertyTypesNodeNotReused.d.ts]

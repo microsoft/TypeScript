@@ -31,11 +31,11 @@ TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test la
 
 
 //// [deepExcessPropertyCheckingWhenTargetIsIntersection.js]
-var TestComponent = function (props) {
+const TestComponent = (props) => {
     return null;
 };
 TestComponent({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });
-var TestComponent2 = function (props) {
+const TestComponent2 = (props) => {
     return null;
 };
 TestComponent2({ icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } });

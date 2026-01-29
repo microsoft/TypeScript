@@ -23,16 +23,15 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react.d.ts" />
-var React = require("react");
-var TestObject = /** @class */ (function () {
-    function TestObject() {
+const React = require("react");
+class TestObject {
+    constructor() {
         this.a = '';
         this.b = 1;
-        this.c = function () { };
+        this.c = () => { };
     }
-    return TestObject;
-}());
+}
 function Test(props) { return React.createElement(React.Fragment, null); }
-var model = new TestObject();
-var el1 = React.createElement(Test, { model: model, foo: "c" });
-var el2 = React.createElement(Test, { model: model, foo: "c" });
+const model = new TestObject();
+const el1 = React.createElement(Test, { model: model, foo: "c" });
+const el2 = React.createElement(Test, { model: model, foo: "c" });

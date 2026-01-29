@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: node_modules/umd.d.ts
 export as namespace UMD;

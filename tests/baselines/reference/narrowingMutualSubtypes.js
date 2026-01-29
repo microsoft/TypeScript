@@ -147,17 +147,17 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 //// [narrowingMutualSubtypes.js]
 "use strict";
 // Check that `any` is a strict supertype of `unknown`
-var a1a = [ru1, ra1]; // { [x: string]: any }[]
-var a1b = [ra1, ru1]; // { [x: string]: any }[]
-var a2a = [ru2, ra2]; // { [x: string]: any }[]
-var a2b = [ra2, ru2]; // { [x: string]: any }[]
+const a1a = [ru1, ra1]; // { [x: string]: any }[]
+const a1b = [ra1, ru1]; // { [x: string]: any }[]
+const a2a = [ru2, ra2]; // { [x: string]: any }[]
+const a2b = [ra2, ru2]; // { [x: string]: any }[]
 // Check that `{}` is strict supertype of any non-empty object
-var c3 = {};
-var a3a = [c3, r3]; // {}[]
-var a3b = [r3, c3]; // {}[]
-var c4 = {};
-var a4a = [c4, r4]; // {}[]
-var a4b = [r4, c4]; // {}[]
+const c3 = {};
+const a3a = [c3, r3]; // {}[]
+const a3b = [r3, c3]; // {}[]
+const c4 = {};
+const a4a = [c4, r4]; // {}[]
+const a4b = [r4, c4]; // {}[]
 function gg1(x) {
     if (isObject1(x)) {
         x; // Record<string, unknown>
@@ -211,7 +211,7 @@ function example(x) {
 function checksArrayOrObject1(obj) {
     // "accidentally" guards the first branch on the length
     if (Array.isArray(obj) && obj.length) {
-        for (var key in obj) {
+        for (let key in obj) {
             if (obj[key] !== undefined) {
                 console.log(obj[key]);
             }
@@ -219,7 +219,7 @@ function checksArrayOrObject1(obj) {
     }
     else {
         // 'obj' should probably not include an array type here.
-        for (var key in obj) {
+        for (let key in obj) {
             if (obj[key] !== undefined) {
                 console.log(obj[key]);
             }
@@ -229,7 +229,7 @@ function checksArrayOrObject1(obj) {
 function checksArrayOrObject2(obj) {
     if (Array.isArray(obj)) {
         // obj should only be an array type here
-        for (var key in obj) {
+        for (let key in obj) {
             if (obj[key] !== undefined) {
                 console.log(obj[key]);
             }
@@ -237,7 +237,7 @@ function checksArrayOrObject2(obj) {
     }
     else {
         // 'obj' should probably not include an array type here.
-        for (var key in obj) {
+        for (let key in obj) {
             if (obj[key] !== undefined) {
                 console.log(obj[key]);
             }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: child1.ts
 import { ParentThing } from './parent';

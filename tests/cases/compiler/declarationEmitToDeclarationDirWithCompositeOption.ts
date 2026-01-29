@@ -1,3 +1,4 @@
+// @target: es2015
 // @composite: true
 // @filename: /foo/tsconfig.json
 {

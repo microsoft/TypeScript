@@ -14,11 +14,8 @@ function bar() {
 }
 
 //// [a.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 //// [c.js]
 function bar() {
 }

@@ -11,5 +11,4 @@ import * as foo from "./node_modules/foo";
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

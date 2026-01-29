@@ -12,4 +12,4 @@ var v = f([x => x]);
 function f(p) {
     return p;
 }
-var v = f([function (x) { return x; }]);
+var v = f([x => x]);

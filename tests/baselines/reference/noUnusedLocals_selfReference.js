@@ -31,20 +31,15 @@ class D { m() { g; } }
 
 
 //// [noUnusedLocals_selfReference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
     f;
     function g() {
         g;
     }
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () { C; };
-    return C;
-}());
+class C {
+    m() { C; }
+}
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -55,18 +50,13 @@ var N;
 (function (N) {
     N;
 })(N || (N = {}));
-var P = /** @class */ (function () {
-    function P() {
-    }
-    P.prototype.m = function () { this.m; };
-    return P;
-}());
+class P {
+    m() { this.m; }
+}
 P;
 // Does not detect mutual recursion.
 function g() { D; }
-var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.m = function () { g; };
-    return D;
-}());
+class D {
+    m() { g; }
+}
+export {};

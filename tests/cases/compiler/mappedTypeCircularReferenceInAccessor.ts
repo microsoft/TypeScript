@@ -1,3 +1,4 @@
+// @target: es2015
 interface User {
   firstName: string,
   level: number,

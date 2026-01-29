@@ -1,4 +1,6 @@
-﻿// @filename: file.tsx
+﻿// @target: es2015
+// @module: commonjs
+// @filename: file.tsx
 // @jsx: react
 // @skipLibCheck: true
 /// <reference path="/.lib/react.d.ts" />

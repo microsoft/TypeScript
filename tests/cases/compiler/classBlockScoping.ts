@@ -1,3 +1,4 @@
+// @target: es2015
 function f(b: boolean) {
   let Foo: any;
   if (b) {

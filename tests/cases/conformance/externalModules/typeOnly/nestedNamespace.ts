@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: a.ts
 export namespace types {
   export class A {}

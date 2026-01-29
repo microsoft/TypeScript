@@ -15,21 +15,16 @@ function bar () {
 export { v, bar }
 
 //// [0.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 {
-    var obj = true;
+    let obj = true;
 }
+export {};
 //// [1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.v = void 0;
-exports.bar = bar;
-var v = "str" || true;
-exports.v = v;
+let v = "str" || true;
 function bar() {
     return v;
 }
+export { v, bar };
 
 
 //// [0.d.ts]

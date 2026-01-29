@@ -7,8 +7,5 @@ class Foo {
 }
 
 //// [staticIndexSignatureAndNormalIndexSignature.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}

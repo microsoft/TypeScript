@@ -1,3 +1,4 @@
+// @target: es2015
 //@sourcemap: true
 function foo() {
     return { x: 0 };

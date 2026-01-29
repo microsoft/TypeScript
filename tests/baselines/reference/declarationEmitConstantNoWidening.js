@@ -7,17 +7,12 @@ export class Bar {
 }
 
 //// [declarationEmitConstantNoWidening.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bar = exports.FOO = void 0;
-exports.FOO = 'FOO';
-var Bar = /** @class */ (function () {
-    function Bar() {
-        this.type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
+export const FOO = 'FOO';
+export class Bar {
+    constructor() {
+        this.type = FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
     }
-    return Bar;
-}());
-exports.Bar = Bar;
+}
 
 
 //// [declarationEmitConstantNoWidening.d.ts]

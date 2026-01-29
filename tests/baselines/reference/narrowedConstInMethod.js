@@ -24,21 +24,18 @@ function f2() {
 //// [narrowedConstInMethod.js]
 // Fixes #10501, possibly null 'x'
 function f() {
-    var x = {};
+    const x = {};
     if (x !== null) {
         return {
-            bar: function () { return x.length; } // ok
+            bar() { return x.length; } // ok
         };
     }
 }
 function f2() {
-    var x = {};
+    const x = {};
     if (x !== null) {
-        return /** @class */ (function () {
-            function class_1() {
-            }
-            class_1.prototype.bar = function () { return x.length; }; // ok
-            return class_1;
-        }());
+        return class {
+            bar() { return x.length; } // ok
+        };
     }
 }

@@ -9,15 +9,7 @@ export class Calculator {
 import {Calculator} from "./file1"
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Calculator = void 0;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    return Calculator;
-}());
-exports.Calculator = Calculator;
+export class Calculator {
+}
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

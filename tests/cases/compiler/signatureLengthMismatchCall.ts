@@ -1,3 +1,4 @@
+// @target: es2015
 function takesCallback(fn: (a: number) => void) {
   // ...
 }

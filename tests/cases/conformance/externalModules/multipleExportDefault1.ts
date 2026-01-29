@@ -1,4 +1,5 @@
-﻿export default function Foo (){
+﻿// @target: es2015
+export default function Foo (){
     
 }
 

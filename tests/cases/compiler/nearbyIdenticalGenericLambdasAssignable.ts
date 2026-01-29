@@ -1,3 +1,4 @@
+// @target: es2015
 declare const fA: <T>() => { v: T };
 const fB = <T>() => {
     return { v: '' as any as T };

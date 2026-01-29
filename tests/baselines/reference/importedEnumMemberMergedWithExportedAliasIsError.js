@@ -14,14 +14,10 @@ export type EnumA = [string] | [string, number];
 
 
 //// [enum.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Enum = void 0;
-var Enum;
+export var Enum;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
     Enum[Enum["B"] = 1] = "B";
-})(Enum || (exports.Enum = Enum = {}));
+})(Enum || (Enum = {}));
 //// [alias.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

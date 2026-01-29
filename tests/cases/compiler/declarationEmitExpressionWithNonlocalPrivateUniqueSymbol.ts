@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: a.ts
 type AX = { readonly A: unique symbol };

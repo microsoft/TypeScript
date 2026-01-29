@@ -11,17 +11,10 @@ export function fn({ [a]: value }: any): string {
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = Symbol();
+export const a = Symbol();
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn = fn;
-var a_1 = require("./a");
-function fn(_a) {
-    var _b = a_1.a, value = _a[_b];
+import { a } from "./a";
+export function fn({ [a]: value }) {
     return value;
 }
 

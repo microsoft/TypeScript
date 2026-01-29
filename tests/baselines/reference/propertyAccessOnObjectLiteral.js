@@ -11,12 +11,9 @@ class A { }
 
 
 //// [propertyAccessOnObjectLiteral.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 ({}.toString());
-(function () {
+(() => {
     ({}.toString());
 })();

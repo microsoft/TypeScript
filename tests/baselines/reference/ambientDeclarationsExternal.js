@@ -29,6 +29,6 @@ var n: number;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Ambient external module members are always exported with or without export keyword when module lacks export assignment
-var imp3 = require("equ2");
+const imp3 = require("equ2");
 var n = imp3.x;
 var n;

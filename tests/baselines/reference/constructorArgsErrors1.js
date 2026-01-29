@@ -7,8 +7,7 @@ class foo {
 }
 
 //// [constructorArgsErrors1.js]
-var foo = /** @class */ (function () {
-    function foo(a) {
+class foo {
+    constructor(a) {
     }
-    return foo;
-}());
+}

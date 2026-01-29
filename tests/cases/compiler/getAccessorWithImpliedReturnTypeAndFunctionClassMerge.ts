@@ -1,3 +1,4 @@
+// @target: es2015
 declare function _<T>(value: Array<T>): _<T>;
 declare function _<T>(value: T): _<T>;
 

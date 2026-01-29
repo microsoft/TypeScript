@@ -1,3 +1,4 @@
+// @target: es2015
 var x = { one: 1 };
 declare var y: { [index: string]: any };
 declare var z: { [index: number]: any };

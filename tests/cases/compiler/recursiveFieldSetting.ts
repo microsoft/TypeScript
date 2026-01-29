@@ -1,3 +1,4 @@
+// @target: es2015
 // #32721
 
 class Recursive1 {

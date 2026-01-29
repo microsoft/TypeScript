@@ -21,21 +21,15 @@ export function test() {
 }
 
 //// [types.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.symb = void 0;
-exports.symb = Symbol();
+export const symb = Symbol();
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = test;
-var types_1 = require("./types");
+import { symb } from "./types";
 /**
  * @returns {import("./types").TestSymb}
  */
-function test() {
+export function test() {
     function inner() { }
-    inner[types_1.symb] = true;
+    inner[symb] = true;
     return inner;
 }
 

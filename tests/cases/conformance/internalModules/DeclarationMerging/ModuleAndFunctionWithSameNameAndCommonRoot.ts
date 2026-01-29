@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: module.ts
 namespace A {
     export namespace Point {

@@ -14,6 +14,4 @@ declare global {
 }
 
 //// [mine.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("mod");
+import "mod";

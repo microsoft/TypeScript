@@ -9,16 +9,9 @@ export class User {
 
 
 //// [declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-var _data = Symbol('data');
-var User = /** @class */ (function () {
-    function User() {
-    }
-    return User;
-}());
-exports.User = User;
+const _data = Symbol('data');
+export class User {
+}
 ;
 
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 const kindCache: { [kind: string]: boolean } = {};
 

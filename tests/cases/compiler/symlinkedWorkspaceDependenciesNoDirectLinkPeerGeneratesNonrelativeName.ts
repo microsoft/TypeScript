@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: workspace/packageA/index.d.ts
 export declare class Foo {

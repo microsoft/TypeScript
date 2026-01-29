@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @noImplicitReferences: true
 // This tests that augmenting an untyped module is forbidden even in an ambient context. Contrast with `moduleAugmentationInDependency.ts`.

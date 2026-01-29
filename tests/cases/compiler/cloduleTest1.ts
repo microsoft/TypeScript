@@ -1,3 +1,4 @@
+// @target: es2015
   declare function $(selector: string): $;  
   interface $ {
       addClass(className: string): $;

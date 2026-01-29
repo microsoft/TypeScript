@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 type Foo = { bar: string };

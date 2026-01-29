@@ -1,3 +1,4 @@
+// @target: es2015
 var x: number;
 x = 3; // OK
 (x) = 3; // OK

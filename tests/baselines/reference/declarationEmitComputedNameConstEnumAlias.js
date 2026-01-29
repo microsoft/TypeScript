@@ -15,24 +15,16 @@ export default {
 };
 
 //// [EnumExample.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var EnumExample;
 (function (EnumExample) {
     EnumExample["TEST"] = "TEST";
 })(EnumExample || (EnumExample = {}));
-exports.default = EnumExample;
+export default EnumExample;
 //// [index.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+import EnumExample from './EnumExample';
+export default {
+    [EnumExample.TEST]: {},
 };
-var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-var EnumExample_1 = __importDefault(require("./EnumExample"));
-exports.default = (_a = {},
-    _a[EnumExample_1.default.TEST] = {},
-    _a);
 
 
 //// [EnumExample.d.ts]

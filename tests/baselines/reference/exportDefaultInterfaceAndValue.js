@@ -7,7 +7,4 @@ declare var x: A;
 
 
 //// [exportDefaultInterfaceAndValue.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
-function default_1() { return 1; }
+export default function () { return 1; }

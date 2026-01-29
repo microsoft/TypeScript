@@ -17,15 +17,10 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 
 
 //// [genericInferenceDefaultTypeParameterJsxReact.js]
-"use strict";
 /// <reference path="/.lib/react16.d.ts" />
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // Repro from #50858
-var react_1 = __importDefault(require("react"));
+import React from 'react';
 function Component(props) {
-    return react_1.default.createElement(react_1.default.Fragment, null);
+    return React.createElement(React.Fragment, null);
 }
-var v1 = react_1.default.createElement(Component, { onClick: function (e) { return e.preventDefault(); } });
+const v1 = React.createElement(Component, { onClick: e => e.preventDefault() });

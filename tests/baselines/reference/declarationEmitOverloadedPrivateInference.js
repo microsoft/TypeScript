@@ -24,28 +24,23 @@ export class Wrapper {
 }
 
 //// [declarationEmitOverloadedPrivateInference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Wrapper = void 0;
 function noArgs() {
     return null;
 }
 function oneArg(input) {
     return null;
 }
-var Wrapper = /** @class */ (function () {
-    function Wrapper() {
+export class Wrapper {
+    constructor() {
         this.Proxies = {
             Failure: this.proxy(noArgs, true),
             Success: this.proxy(oneArg),
         };
     }
-    Wrapper.prototype.proxy = function (fn) {
+    proxy(fn) {
         return null;
-    };
-    return Wrapper;
-}());
-exports.Wrapper = Wrapper;
+    }
+}
 
 
 //// [declarationEmitOverloadedPrivateInference.d.ts]

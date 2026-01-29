@@ -11,20 +11,10 @@ export function base() {}
 
 
 //// [foo-ios.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ios = ios;
-function ios() { }
+export function ios() { }
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [foo__native.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.native = native;
-function native() { }
+export function native() { }
 //// [foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.base = base;
-function base() { }
+export function base() { }

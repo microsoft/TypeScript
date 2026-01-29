@@ -26,50 +26,24 @@ let ___: C = new C(); // Error
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = exports.B = exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-exports.B = B;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
+export class A {
+}
+export class B {
+}
+export class C {
+}
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+}
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var _ = new A(); // Error
-var __ = new B(); // Error
-var ___ = new b_1.C(); // Ok
+import { C } from "./b";
+let _ = new A(); // Error
+let __ = new B(); // Error
+let ___ = new C(); // Ok
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var _ = new A(); // Error
-var __ = new B(); // Error
-var ___ = new C(); // Error
+let _ = new A(); // Error
+let __ = new B(); // Error
+let ___ = new C(); // Error
+export {};

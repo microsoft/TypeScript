@@ -10,18 +10,13 @@ export class Test {
 }
 
 //// [declarationEmitMultipleComputedNamesSameDomain.js]
-"use strict";
 var _a, _b;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = void 0;
-var Test = /** @class */ (function () {
-    function Test() {
+export class Test {
+    constructor() {
         this[_a] = 10;
         this[_b] = 10;
     }
-    return Test;
-}());
-exports.Test = Test;
+}
 _a = x, _b = y;
 
 

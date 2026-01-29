@@ -37,28 +37,17 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 
 
 //// [/src/library-a/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyClass = void 0;
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    return MyClass;
-}());
-exports.MyClass = MyClass;
+export class MyClass {
+}
 //// [/src/library-b/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyClass2 = void 0;
-var library_a_1 = require("library-a");
-Object.defineProperty(exports, "MyClass2", { enumerable: true, get: function () { return library_a_1.MyClass; } });
+import { MyClass } from "library-a";
+export { MyClass as MyClass2 };
 //// [/src/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var x;
-var y;
+let x;
+let y;
 x = y;
 y = x;
+export {};
 /*
 # To reproduce in a real project:
 

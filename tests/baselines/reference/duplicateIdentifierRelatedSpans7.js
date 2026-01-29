@@ -35,6 +35,5 @@ export {};
 
 //// [file1.js]
 //// [file2.js]
-"use strict";
 /// <reference path="./file1" />
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

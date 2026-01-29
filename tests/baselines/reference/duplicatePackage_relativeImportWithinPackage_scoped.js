@@ -38,8 +38,6 @@ use(o);
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var use_1 = require("@foo/bar/use");
-var a_1 = require("a");
-(0, use_1.use)(a_1.o);
+import { use } from "@foo/bar/use";
+import { o } from "a";
+use(o);

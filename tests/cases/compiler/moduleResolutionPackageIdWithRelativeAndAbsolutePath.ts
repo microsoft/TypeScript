@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @fullEmitPaths: true
 // @traceResolution: true

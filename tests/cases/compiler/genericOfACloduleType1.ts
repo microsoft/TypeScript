@@ -1,3 +1,4 @@
+// @target: es2015
 class G<T>{ bar(x: T) { return x; } }
 namespace M {
     export class C { foo() { } }

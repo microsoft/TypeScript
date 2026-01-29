@@ -29,19 +29,10 @@ declare var a: A;
 var r = a.x; // error
 
 //// [mergedInterfacesWithInheritedPrivates.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E() {
-    }
-    return E;
-}());
+class C {
+}
+class D {
+}
+class E {
+}
 var r = a.x; // error

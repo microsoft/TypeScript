@@ -1,4 +1,5 @@
-﻿var x = 10;
+﻿// @target: es2015
+var x = 10;
 
 // C++-style comment
 

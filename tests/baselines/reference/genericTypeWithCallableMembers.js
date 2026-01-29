@@ -15,14 +15,13 @@ class C<T extends Constructable> {
 
 
 //// [genericTypeWithCallableMembers.js]
-var C = /** @class */ (function () {
-    function C(data, data2) {
+class C {
+    constructor(data, data2) {
         this.data = data;
         this.data2 = data2;
     }
-    C.prototype.create = function () {
+    create() {
         var x = new this.data(); // no error
         var x2 = new this.data2(); // was error, shouldn't be
-    };
-    return C;
-}());
+    }
+}

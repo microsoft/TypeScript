@@ -15,8 +15,5 @@ type T2 = typeof import('./input.js').myFunction<any, { slug: 'hello' }>;
 
 
 //// [input.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.myFunction = myFunction;
-function myFunction(arg) { return (arg.params || {}); }
+export function myFunction(arg) { return (arg.params || {}); }
 //// [main.js]

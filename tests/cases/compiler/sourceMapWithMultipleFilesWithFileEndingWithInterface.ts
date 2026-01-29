@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: fooResult.js
 // @sourcemap: true
 // @Filename: a.ts

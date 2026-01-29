@@ -35,20 +35,20 @@ export {};
 
 
 //// [a.js]
-export var _ = 0;
+export const _ = 0;
 //// [b.mjs]
-export var _ = 0;
+export const _ = 0;
 //// [c.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._ = void 0;
 exports._ = 0;
 //// [d.js]
-export var _ = 0;
+export const _ = 0;
 //// [e.mjs]
-export var _ = 0;
+export const _ = 0;
 //// [f.mjs]
-export var _ = 0;
+export const _ = 0;
 //// [g.js]
 export {};
 //// [h.mjs]

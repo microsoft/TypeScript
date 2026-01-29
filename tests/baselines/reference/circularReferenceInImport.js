@@ -15,10 +15,7 @@ export function foo() {
 }
 
 //// [app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
-function foo() {
+export function foo() {
     return new Object();
 }
 

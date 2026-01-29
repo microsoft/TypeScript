@@ -14,11 +14,8 @@ export const thing = makeThing();
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thing = void 0;
-var umd_1 = require("umd");
-exports.thing = (0, umd_1.makeThing)();
+import { makeThing } from "umd";
+export const thing = makeThing();
 
 
 //// [index.d.ts]

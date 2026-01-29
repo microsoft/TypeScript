@@ -1,3 +1,4 @@
+// @target: es2015
 // moduleSuffixes has one entry and there's a matching file.
 
 // @filename: /tsconfig.json

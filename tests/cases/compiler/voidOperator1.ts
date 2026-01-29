@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var x: any = void 1;
 var y: void = void 1;

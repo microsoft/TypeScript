@@ -24,25 +24,15 @@ export default unresolved;
 
 
 //// [type.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [test1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var T = 0; // Error as of #56354
-exports.default = T; // Ok
+const T = 0; // Error as of #56354
+export default T; // Ok
 //// [test2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [test3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [test4.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-expect-error
-var doesntexist_1 = __importDefault(require("./doesntexist"));
-exports.default = doesntexist_1.default;
+import unresolved from "./doesntexist";
+export default unresolved;

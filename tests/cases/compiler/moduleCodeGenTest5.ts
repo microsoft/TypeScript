@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export var x = 0;
 var y = 0;

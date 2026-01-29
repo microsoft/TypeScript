@@ -22,9 +22,6 @@ export {}
 
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("./file1");
+import "./file1";

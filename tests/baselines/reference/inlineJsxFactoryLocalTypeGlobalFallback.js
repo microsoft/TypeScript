@@ -46,19 +46,12 @@ elem = <h></h>; // Expect assignability error here
 
 
 //// [component.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx predom */
-var renderer2_1 = require("./renderer2");
-exports.default = (0, renderer2_1.predom)("h", null);
+import { predom } from "./renderer2";
+export default predom("h", null);
 //// [index.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
-var renderer_1 = require("./renderer");
-var component_1 = __importDefault(require("./component"));
-var elem = component_1.default;
-elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
+import { dom } from "./renderer";
+import prerendered from "./component";
+let elem = prerendered;
+elem = dom("h", null); // Expect assignability error here

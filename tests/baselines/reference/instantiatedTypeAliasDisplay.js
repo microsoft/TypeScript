@@ -19,8 +19,8 @@ const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
 
 //// [instantiatedTypeAliasDisplay.js]
 // Repros from #12066
-var x1 = f1(); // Z<string, number>
-var x2 = f2({}, {}, {}, {}); // Z<{}, string[]>
+const x1 = f1(); // Z<string, number>
+const x2 = f2({}, {}, {}, {}); // Z<{}, string[]>
 
 
 //// [instantiatedTypeAliasDisplay.d.ts]

@@ -50,26 +50,14 @@ var x2: typeof viInstance.x; // x2: string
 
 
 //// [typeofProperty.js]
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var ValidClass = /** @class */ (function () {
-    function ValidClass() {
-    }
-    return ValidClass;
-}());
+class C1 {
+}
+class C2 {
+}
+class C3 {
+}
+class ValidClass {
+}
 var vcInstance = new ValidClass();
 var viInstance = vcInstance;
 var x1; // x1: string

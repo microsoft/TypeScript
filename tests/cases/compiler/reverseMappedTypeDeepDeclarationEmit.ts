@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
 

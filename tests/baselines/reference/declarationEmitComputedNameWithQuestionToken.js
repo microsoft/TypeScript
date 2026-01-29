@@ -13,20 +13,13 @@ export class WithData {
 export const a = (new WithData())["ahahahaahah"]!();
 
 //// [declarationEmitComputedNameWithQuestionToken.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = exports.WithData = exports.dataSomething = void 0;
-exports.dataSomething = "data-".concat(something);
-var WithData = /** @class */ (function () {
-    function WithData() {
-    }
-    WithData.prototype[exports.dataSomething] = function () {
+export const dataSomething = `data-${something}`;
+export class WithData {
+    [dataSomething]() {
         return "something";
-    };
-    return WithData;
-}());
-exports.WithData = WithData;
-exports.a = (new WithData())["ahahahaahah"]();
+    }
+}
+export const a = (new WithData())["ahahahaahah"]();
 
 
 //// [declarationEmitComputedNameWithQuestionToken.d.ts]

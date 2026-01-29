@@ -1,3 +1,4 @@
+// @target: es2015
 // undefined type guard adds no new type information
 function test1(a: any) {
     if (typeof a !== "undefined") {

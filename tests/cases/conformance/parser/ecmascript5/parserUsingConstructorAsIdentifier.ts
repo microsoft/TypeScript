@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
         function define(constructor, instanceMembers, staticMembers) {
             constructor = constructor || function () { };

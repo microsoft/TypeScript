@@ -1,3 +1,4 @@
+// @target: es2015
 // class then module
 class c5 { public foo() { } }
 namespace c5 { } // should be ok

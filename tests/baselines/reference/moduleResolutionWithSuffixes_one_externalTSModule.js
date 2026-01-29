@@ -9,5 +9,4 @@ import { ios } from "some-library";
 
 
 //// [/bin/test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

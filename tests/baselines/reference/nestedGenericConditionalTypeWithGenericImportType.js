@@ -10,6 +10,5 @@ type T<X> = any extends ((any extends any ? any : string) extends any ? import("
 
 
 //// [name.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 /*1*/Array/*2*/./*3*/toString/*4*/
 

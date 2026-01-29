@@ -1,4 +1,5 @@
-﻿/*
+﻿// @target: es2015
+/*
     1
 */
 interface i1 {

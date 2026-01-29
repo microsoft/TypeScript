@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: module.ts
 import * as i from "./index";

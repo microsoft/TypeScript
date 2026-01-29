@@ -1,3 +1,4 @@
+// @target: es2015
 // @isolatedModules: false, true
 // @verbatimModuleSyntax: false, true
 // @noEmit: true

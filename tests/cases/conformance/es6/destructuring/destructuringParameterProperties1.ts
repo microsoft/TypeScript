@@ -1,4 +1,5 @@
-﻿class C1 {
+﻿// @target: es2015
+class C1 {
     constructor(public [x, y, z]: string[]) {
     }
 }

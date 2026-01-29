@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @isolatedDeclarations: true
 // @filename: node_modules/@trpc/server/internals/config.d.ts

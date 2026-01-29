@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class C {
     public static p1;

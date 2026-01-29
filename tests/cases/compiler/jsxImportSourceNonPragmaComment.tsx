@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 /* eslint-disable react/react-in-jsx-scope -- Unaware of @jsxImportSource */
 /** @jsxImportSource @emotion/react */

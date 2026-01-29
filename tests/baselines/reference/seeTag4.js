@@ -22,4 +22,4 @@ let foo;
  * @see {@linkcode A}
  * @see {@linkplain A}
  */
-var foo;
+let foo;

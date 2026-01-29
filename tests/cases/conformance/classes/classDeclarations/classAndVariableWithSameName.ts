@@ -1,3 +1,4 @@
+// @target: es2015
 class C { foo: string; } // error
 var C = ''; // error
 

@@ -130,7 +130,7 @@ else {
     nonNull;
 }
 // Repro from #50567
-var foo = function (value) {
+const foo = (value) => {
     if (!value) {
         return 'foo';
     }

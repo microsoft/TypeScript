@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: declarations1.d.ts
 declare module "foo";
 

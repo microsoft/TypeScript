@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: b.ts
 export interface Named {}

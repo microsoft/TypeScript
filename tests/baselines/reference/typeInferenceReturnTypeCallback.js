@@ -24,24 +24,18 @@ class Cons<T> implements IList<T>{
 }
 
 //// [typeInferenceReturnTypeCallback.js]
-var Nil = /** @class */ (function () {
-    function Nil() {
-    }
-    Nil.prototype.map = function (f) {
+class Nil {
+    map(f) {
         return null;
-    };
-    return Nil;
-}());
-var Cons = /** @class */ (function () {
-    function Cons() {
     }
-    Cons.prototype.map = function (f) {
-        return this.foldRight(new Nil(), function (t, acc) {
+}
+class Cons {
+    map(f) {
+        return this.foldRight(new Nil(), (t, acc) => {
             return new Cons();
         });
-    };
-    Cons.prototype.foldRight = function (z, f) {
+    }
+    foldRight(z, f) {
         return null;
-    };
-    return Cons;
-}());
+    }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: input.ts
 export type Foo<T = string> = {};
 

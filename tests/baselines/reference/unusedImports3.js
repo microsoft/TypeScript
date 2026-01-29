@@ -20,25 +20,14 @@ test();
 test2();
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Calculator = void 0;
-exports.test = test;
-exports.test2 = test2;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
-exports.Calculator = Calculator;
-function test() {
+export class Calculator {
+    handleChar() { }
 }
-function test2() {
+export function test() {
+}
+export function test2() {
 }
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var file1_1 = require("./file1");
-(0, file1_1.test)();
-(0, file1_1.test2)();
+import { test, test2 } from "./file1";
+test();
+test2();

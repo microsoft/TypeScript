@@ -10,11 +10,8 @@ class greeter<typeparameter1, typeparameter2> {
 }
 
 //// [unusedTypeParameters2.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
-    }
-    greeter.prototype.function1 = function () {
+class greeter {
+    function1() {
         this.x;
-    };
-    return greeter;
-}());
+    }
+}

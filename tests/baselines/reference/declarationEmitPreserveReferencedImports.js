@@ -15,20 +15,12 @@ import { Evt }  from './utils'
 export const f = { o: o({ v: null! as Evt}) };
 
 //// [utils.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [decl.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.o = void 0;
-var o = function (o) { return function () { return null; }; };
-exports.o = o;
+export const o = (o) => () => null;
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-var decl_1 = require("./decl");
-exports.f = { o: (0, decl_1.o)({ v: null }) };
+import { o } from './decl';
+export const f = { o: o({ v: null }) };
 
 
 //// [utils.d.ts]

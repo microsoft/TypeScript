@@ -1,3 +1,4 @@
+// @target: es2015
 // these are all permitted with the current rules, since we do not do contextual signature instantiation
 
 class Base { foo: string; }

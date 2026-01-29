@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @noImplicitAny: true
 // This tests that `--noImplicitAny` disables untyped modules.

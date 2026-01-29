@@ -1,3 +1,4 @@
+// @target: es2015
 // moduleSuffixes has one entry and there's a matching file. module name explicitly includes JS file extension.
 // @fullEmitPaths: true
 // @filename: /tsconfig.json

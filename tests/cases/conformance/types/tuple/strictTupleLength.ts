@@ -1,3 +1,4 @@
+// @target: es2015
 declare var t0: [];
 declare var t1: [number];
 declare var t2: [number, number];

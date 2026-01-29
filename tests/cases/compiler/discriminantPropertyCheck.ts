@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type Item = Item1 | Item2;

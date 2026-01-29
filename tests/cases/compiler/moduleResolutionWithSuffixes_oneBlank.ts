@@ -1,3 +1,4 @@
+// @target: es2015
 // moduleSuffixes has one blank entry. Normal module resolution should occur.
 
 // @filename: /tsconfig.json

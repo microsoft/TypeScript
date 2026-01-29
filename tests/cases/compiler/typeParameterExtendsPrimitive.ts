@@ -1,3 +1,4 @@
+// @target: es2015
 // #14473
 function f<T extends number>() {
     var t: T;

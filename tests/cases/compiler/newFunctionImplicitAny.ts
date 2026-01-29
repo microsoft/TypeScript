@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 // No implicit any error given when newing a function (up for debate)
 

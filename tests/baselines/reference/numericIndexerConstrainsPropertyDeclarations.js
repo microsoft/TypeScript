@@ -101,37 +101,26 @@ var b: { [x: number]: string; } = {
 
 //// [numericIndexerConstrainsPropertyDeclarations.js]
 // String indexer types constrain the types of named properties in their containing type
-var C = /** @class */ (function () {
-    function C() {
-    } // ok
-    Object.defineProperty(C.prototype, "X", {
-        get: function () {
-            return '';
-        },
-        set: function (v) { } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.foo = function () {
+class C {
+    constructor() { } // ok
+    get X() {
         return '';
-    };
-    C.foo = function () { }; // ok
-    Object.defineProperty(C, "X", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    }
+    set X(v) { } // ok
+    foo() {
+        return '';
+    }
+    static foo() { } // ok
+    static get X() {
+        return 1;
+    }
+}
 var a;
 // error
 var b = {
     a: '',
     b: 1,
-    c: function () { },
+    c: () => { },
     "d": '',
     "e": 1,
     1.0: '',
@@ -143,7 +132,7 @@ var b = {
         return '';
     },
     set X(v) { },
-    foo: function () {
+    foo() {
         return '';
     }
 };

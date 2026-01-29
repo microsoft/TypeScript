@@ -29,7 +29,7 @@ let x = mergeStyleSets(
 //       a: Style;
 //       b: Style;
 //   }
-var x = mergeStyleSets({}, {
+let x = mergeStyleSets({}, {
     a: { flashy: true },
 }, {
     b: { flashy: true },

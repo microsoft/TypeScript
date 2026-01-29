@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 namespace M {
   export namespace N {

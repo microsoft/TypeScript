@@ -26,18 +26,13 @@ export const useCsvParser = () => {
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.useCsvParser = void 0;
-exports.useRef = useRef;
-function useRef(current) {
-    return { current: current };
+export function useRef(current) {
+    return { current };
 }
-var useCsvParser = function () {
-    var parserRef = useRef(null);
+export const useCsvParser = () => {
+    const parserRef = useRef(null);
     return parserRef;
 };
-exports.useCsvParser = useCsvParser;
 
 
 //// [index.d.ts]

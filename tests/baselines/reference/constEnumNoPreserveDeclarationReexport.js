@@ -21,8 +21,7 @@ StillEnum.Foo;
 
 
 //// [usages.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 0 /* MyConstEnum.Foo */;
 0 /* AlsoEnum.Foo */;
 0 /* StillEnum.Foo */;
+export {};

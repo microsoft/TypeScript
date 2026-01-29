@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: file1.ts
 export namespace Library {
     export type Bar = { a: number };

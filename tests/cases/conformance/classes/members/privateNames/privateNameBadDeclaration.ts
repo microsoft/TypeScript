@@ -1,3 +1,4 @@
+// @target: es5, es2015
 function A() { }
 A.prototype = {
   #x: 1,         // Error

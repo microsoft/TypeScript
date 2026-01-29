@@ -1,3 +1,4 @@
+// @target: es2015
 // @isolatedModules: true
 
 // @Filename: /a.ts

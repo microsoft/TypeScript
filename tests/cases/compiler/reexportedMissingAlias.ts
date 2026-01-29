@@ -1,3 +1,4 @@
+// @target: es2015
 // Fixes #15094
 // @Filename: second.d.ts
 export import Component = CompletelyMissing;

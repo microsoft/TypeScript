@@ -17,22 +17,16 @@ export const m = {
 export const x = { p: fn }; 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn = void 0;
-exports.fn = { o: function (a) { } };
+export const fn = { o: (a) => { } };
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.m = void 0;
-var a_1 = require("./a");
-exports.m = {
+import { fn } from "./a";
+export const m = {
     /**
     * leading doc for prop
     */
     prop: 1
 };
-exports.x = { p: a_1.fn };
+export const x = { p: fn };
 
 
 //// [a.d.ts]

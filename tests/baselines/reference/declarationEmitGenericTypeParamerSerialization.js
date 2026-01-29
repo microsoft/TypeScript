@@ -12,16 +12,13 @@ export const w = wrapper(0)
 
 
 //// [declarationEmitGenericTypeParamerSerialization.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.w = void 0;
 function wrapper(value) {
     return {
-        m: function () { return value; },
+        m() { return value; },
         get g() { return value; },
     };
 }
-exports.w = wrapper(0);
+export const w = wrapper(0);
 
 
 //// [declarationEmitGenericTypeParamerSerialization.d.ts]

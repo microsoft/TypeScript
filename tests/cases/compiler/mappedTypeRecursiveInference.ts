@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6, dom
 interface A { a: A }
 declare let a: A;

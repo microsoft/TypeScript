@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /ns.ts
 namespace ns {
   export type Type = string;

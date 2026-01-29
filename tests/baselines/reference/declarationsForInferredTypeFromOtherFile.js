@@ -14,29 +14,16 @@ export function bar() {
 
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-exports.Foo = Foo;
+export class Foo {
+}
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
-function foo() {
+export function foo() {
     return null;
 }
 //// [file3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-var file2_1 = require("./file2");
-function bar() {
-    return (0, file2_1.foo)();
+import { foo } from "./file2";
+export function bar() {
+    return foo();
 }
 
 

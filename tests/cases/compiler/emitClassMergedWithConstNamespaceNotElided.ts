@@ -1,3 +1,4 @@
+// @target: es2015
 // @esModuleInterop: true
 // @filename: enum.d.ts
 export namespace Clone {

@@ -26,65 +26,26 @@ let __: B = new B();  // Ok
 let ___: X = new X(); // Ok
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.X = exports.B = exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-exports.A = A;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-exports.B = B;
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
-exports.X = X;
+export class A {
+}
+export class B {
+}
+export class X {
+}
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.X = void 0;
-var a_1 = require("./a");
-Object.defineProperty(exports, "X", { enumerable: true, get: function () { return a_1.X; } });
+export { X } from "./a";
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var _ = new A(); // Error
-var __ = new C(); // Error
-var ___ = new b_1.X(); // Ok
+import { X } from "./b";
+let _ = new A(); // Error
+let __ = new C(); // Error
+let ___ = new X(); // Ok
 //// [d.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./a"), exports);
+export * from "./a";
 //// [e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var d_1 = require("./d");
-var _ = new d_1.A(); // Ok
-var __ = new d_1.B(); // Ok
-var ___ = new d_1.X(); // Ok
+import { A, B, X } from "./d";
+let _ = new A(); // Ok
+let __ = new B(); // Ok
+let ___ = new X(); // Ok
 
 
 //// [a.d.ts]

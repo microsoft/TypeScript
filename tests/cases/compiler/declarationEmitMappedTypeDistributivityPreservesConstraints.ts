@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: types.ts
 type Fns = Record<string, (...params: unknown[]) => unknown>

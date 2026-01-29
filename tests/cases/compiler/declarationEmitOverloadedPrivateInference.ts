@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 function noArgs(): string {
     return null as any;

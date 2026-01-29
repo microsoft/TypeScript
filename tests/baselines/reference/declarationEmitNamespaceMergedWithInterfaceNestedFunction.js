@@ -16,8 +16,6 @@ namespace Bar {
 }
 
 //// [declarationEmitNamespaceMergedWithInterfaceNestedFunction.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var Bar;
 (function (Bar) {
     function biz() {
@@ -25,6 +23,7 @@ var Bar;
     }
     Bar.biz = biz;
 })(Bar || (Bar = {}));
+export {};
 
 
 //// [declarationEmitNamespaceMergedWithInterfaceNestedFunction.d.ts]

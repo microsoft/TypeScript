@@ -43,10 +43,8 @@ a(c); // Error, these are from different versions of the library.
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("a");
-var b_1 = require("b");
-var c_1 = require("c");
-(0, a_1.a)(b_1.b); // Works
-(0, a_1.a)(c_1.c); // Error, these are from different versions of the library.
+import { a } from "a";
+import { b } from "b";
+import { c } from "c";
+a(b); // Works
+a(c); // Error, these are from different versions of the library.

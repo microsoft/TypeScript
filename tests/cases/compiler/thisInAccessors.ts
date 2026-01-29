@@ -1,3 +1,4 @@
+// @target: es2015
 // this capture only in getter
 class GetterOnly {
     get Value() {

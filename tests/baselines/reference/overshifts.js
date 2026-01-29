@@ -115,7 +115,7 @@ enum Three {
 4294967295 >>> -32; // backwards overshift
 4294967295 >>> -123;
 4294967295 >>> -1024;
-var x = 1;
+let x = 1;
 x <<= 1; // ok
 x <<= 32; // overshift
 x <<= 123;

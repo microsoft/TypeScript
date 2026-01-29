@@ -25,10 +25,7 @@ export const y = bar();
 
 
 //// [entry.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = exports.x = void 0;
-var foo_1 = require("foo");
-var root_1 = require("root");
-exports.x = (0, foo_1.foo)();
-exports.y = (0, root_1.bar)();
+import { foo } from "foo";
+import { bar } from "root";
+export const x = foo();
+export const y = bar();

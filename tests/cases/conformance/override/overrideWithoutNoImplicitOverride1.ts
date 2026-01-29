@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitOverride: false
 
 export declare class AmbientClass {

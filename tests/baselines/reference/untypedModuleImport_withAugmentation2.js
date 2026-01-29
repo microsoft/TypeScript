@@ -14,5 +14,4 @@ import { } from "augmenter";
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

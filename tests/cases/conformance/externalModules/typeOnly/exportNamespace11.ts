@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: main.ts
 import * as intermediate from './intermediate'
 const ghost: intermediate.Ghost = new intermediate.Ghost()

@@ -19,22 +19,12 @@ import * as n from "./file1"
 
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Calculator = void 0;
-exports.test = test;
-exports.default = test2;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
-exports.Calculator = Calculator;
-function test() {
+export class Calculator {
+    handleChar() { }
 }
-function test2() {
+export function test() {
+}
+export default function test2() {
 }
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

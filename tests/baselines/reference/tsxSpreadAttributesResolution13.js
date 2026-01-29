@@ -37,9 +37,9 @@ function ChildComponent({ property1 }: AnotherComponentProps) {
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Component;
-var React = require("react");
+const React = require("react");
 function Component(props) {
-    var condition1;
+    let condition1;
     if (condition1) {
         return (<ChildComponent {...props}/>);
     }
@@ -47,7 +47,6 @@ function Component(props) {
         return (<ChildComponent {...props} property1="NewString"/>);
     }
 }
-function ChildComponent(_a) {
-    var property1 = _a.property1;
+function ChildComponent({ property1 }) {
     return (<span>{property1}</span>);
 }

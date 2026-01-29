@@ -13,18 +13,12 @@ export const Value = createNamed();
 
 
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNamed = createNamed;
-function createNamed() {
+export function createNamed() {
     return {};
 }
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Value = void 0;
-var b_1 = require("./b");
-exports.Value = (0, b_1.createNamed)();
+import { createNamed } from "./b";
+export const Value = createNamed();
 
 
 //// [b.d.ts]

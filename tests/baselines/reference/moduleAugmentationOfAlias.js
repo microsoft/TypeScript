@@ -18,14 +18,11 @@ function f(i: I) {
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function f(i) {
     i.x;
 }
+export {};

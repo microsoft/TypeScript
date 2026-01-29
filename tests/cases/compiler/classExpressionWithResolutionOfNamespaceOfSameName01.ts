@@ -1,4 +1,5 @@
-﻿namespace C {
+﻿// @target: es2015
+namespace C {
     export interface type {
     }
 }

@@ -20,8 +20,7 @@ exports.__esModule = true;
 function ios() { }
 exports.ios = ios;
 //// [/bin/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [/bin/foo.js]
 "use strict";
 exports.__esModule = true;

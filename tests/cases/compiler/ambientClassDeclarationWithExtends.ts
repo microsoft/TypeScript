@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @Filename: ambientClassDeclarationExtends_singleFile.ts
 declare class A { }

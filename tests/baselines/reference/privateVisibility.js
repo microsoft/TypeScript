@@ -29,15 +29,14 @@ c.priv; // should not work
 
 
 //// [privateVisibility.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.pubProp = 0;
         this.privProp = 0;
     }
-    Foo.prototype.pubMeth = function () { this.privMeth(); };
-    Foo.prototype.privMeth = function () { };
-    return Foo;
-}());
+    pubMeth() { this.privMeth(); }
+    privMeth() { }
+}
 var f = new Foo();
 f.privMeth(); // should not work
 f.privProp; // should not work
@@ -45,13 +44,12 @@ f.pubMeth(); // should work
 f.pubProp; // should work
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.pub = 0;
             this.priv = 1;
         }
-        return C;
-    }());
+    }
     M.C = C;
     M.V = 0;
 })(M || (M = {}));

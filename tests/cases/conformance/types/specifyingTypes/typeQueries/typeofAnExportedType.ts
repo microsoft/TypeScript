@@ -1,3 +1,4 @@
+// @target: es2015
 export var x = 1;
 export var r1: typeof x;
 export var y = { foo: '' };

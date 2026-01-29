@@ -1,3 +1,4 @@
+// @target: es2015
 // @outdir: out/
 // @fullEmitPaths: true
 // @resolveJsonModule: true

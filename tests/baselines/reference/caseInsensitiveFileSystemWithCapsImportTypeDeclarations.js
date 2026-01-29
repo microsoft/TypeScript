@@ -24,27 +24,17 @@ export type Merge<T, U> = T & U;
 
 
 //// [types.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [type-a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [type-b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Broken = void 0;
-var Broken = /** @class */ (function () {
-    function Broken() {
-    }
-    Broken.prototype.method = function () {
+export class Broken {
+    method() {
         return {};
-    };
-    return Broken;
-}());
-exports.Broken = Broken;
+    }
+}
 
 
 //// [types.d.ts]

@@ -1,3 +1,4 @@
+// @target: es2015
 class EventAggregator
 {
     publish(event: string, data?: any): void;

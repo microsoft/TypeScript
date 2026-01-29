@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @typeRoots: /typings
 // @types: phaser

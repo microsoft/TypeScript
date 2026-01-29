@@ -20,14 +20,10 @@ export {};
 export {};
 
 //// [jsx-runtime.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var jsx_runtime_1 = require("/jsx/jsx-runtime");
-var Title = function (props) { return (0, jsx_runtime_1.jsx)("h1", { children: props.children }); };
-var element = (0, jsx_runtime_1.jsx)(Title, { children: "Hello, world!" });
+import { jsx as _jsx } from "/jsx/jsx-runtime";
+const Title = (props) => _jsx("h1", { children: props.children });
+const element = _jsx(Title, { children: "Hello, world!" });
 //// [jsx-dev-runtime.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

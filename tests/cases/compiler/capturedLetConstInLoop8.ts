@@ -1,3 +1,4 @@
+// @target: es2015
 function foo() {
     l0:
     for (let z = 0; z < 1; ++z) {

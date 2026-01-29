@@ -1,3 +1,4 @@
+// @target: es2015
 enum Foo {
     "__a" = 1,
     "(Anonymous function)" = 2,

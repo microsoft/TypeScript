@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @useCaseSensitiveFileNames: false
 // @filename: Uppercased_Dir/src/index.ts

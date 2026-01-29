@@ -134,11 +134,11 @@ function foo<T>(t: T) {
 //// [arithmeticOperatorWithTypeParameter.js]
 // type parameter type is not valid for arithmetic operand
 function foo(t) {
-    var a;
-    var b;
-    var c;
-    var d;
-    var e;
+    let a;
+    let b;
+    let c;
+    let d;
+    let e;
     var r1a1 = a * t;
     var r1a2 = a / t;
     var r1a3 = a % t;

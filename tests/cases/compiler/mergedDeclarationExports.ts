@@ -1,3 +1,4 @@
+// @target: es2015
 // OK -- one is type, one is value
 interface b {}
 export const b = 1;

@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 // @skipDefaultLibCheck: true
 
 // @Filename: 0.ts

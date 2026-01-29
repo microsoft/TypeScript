@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowSyntheticDefaultImports: false
 // @module: system
 // @Filename: a.ts

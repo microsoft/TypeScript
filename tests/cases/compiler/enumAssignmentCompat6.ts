@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: a.ts
 namespace numerics {
     export enum DiagnosticCategory {

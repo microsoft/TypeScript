@@ -1,3 +1,4 @@
+// @target: es2015
 // @useCaseSensitiveFileNames: false
 // @filename: C:/foo/bar/Baz/src/utils.ts
 export function exist() {}

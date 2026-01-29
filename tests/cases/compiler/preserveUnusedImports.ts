@@ -1,3 +1,4 @@
+// @target: es2015
 // @importsNotUsedAsValues: preserve
 
 // @Filename: a.ts

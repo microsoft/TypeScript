@@ -13,20 +13,10 @@ function Choice<T>(...v_args: T[]): A<T> {
 }
 
 //// [overloadGenericFunctionWithRestArgs.js]
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-function Choice() {
-    var v_args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        v_args[_i] = arguments[_i];
-    }
+class B {
+}
+class A {
+}
+function Choice(...v_args) {
     return new A();
 }

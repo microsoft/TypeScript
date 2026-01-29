@@ -1,3 +1,4 @@
+// @target: es2015
 // moduleSuffixes has one entry and there's a matching package with TS files.
 // @fullEmitPaths: true
 // @filename: /tsconfig.json

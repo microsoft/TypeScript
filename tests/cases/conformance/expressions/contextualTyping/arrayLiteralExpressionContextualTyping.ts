@@ -1,4 +1,5 @@
-﻿// In a contextually typed array literal expression containing no spread elements, an element expression at index N is contextually typed by
+﻿// @target: es2015
+// In a contextually typed array literal expression containing no spread elements, an element expression at index N is contextually typed by
 //      the type of the property with the numeric name N in the contextual type, if any, or otherwise
 //      the numeric index type of the contextual type, if any.
 var array = [1, 2, 3];

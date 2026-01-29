@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: collisionExportsRequireAndAlias_file1.ts
 export function bar() {

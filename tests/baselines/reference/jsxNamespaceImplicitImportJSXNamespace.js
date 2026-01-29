@@ -102,9 +102,5 @@ export import JSX = JSXInternal;
 export const Comp = () => <div></div>;
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Comp = void 0;
-var jsx_runtime_1 = require("preact/jsx-runtime");
-var Comp = function () { return (0, jsx_runtime_1.jsx)("div", {}); };
-exports.Comp = Comp;
+import { jsx as _jsx } from "preact/jsx-runtime";
+export const Comp = () => _jsx("div", {});

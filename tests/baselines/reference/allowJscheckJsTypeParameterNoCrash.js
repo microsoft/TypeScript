@@ -20,21 +20,15 @@ export var a = vextend({
 });
 
 //// [func.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.vextend = void 0;
-exports.vextend = extend;
+export var vextend = extend;
 //// [app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-var func_1 = require("./func");
+import { vextend } from './func';
 // hover on vextend
-exports.a = (0, func_1.vextend)({
+export var a = vextend({
     watch: {
-        data1: function (val) {
+        data1(val) {
             this.data2 = 1;
         },
-        data2: function (val) { },
+        data2(val) { },
     }
 });

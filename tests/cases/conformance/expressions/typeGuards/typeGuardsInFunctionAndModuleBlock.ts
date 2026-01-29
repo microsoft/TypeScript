@@ -1,3 +1,4 @@
+// @target: es2015
 // typeguards are scoped in function/module block
 
 function foo(x: number | string | boolean) {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function x3(a: number, cb: (x: number) => number);
 function x3(a: string, cb: (x: number) => number);

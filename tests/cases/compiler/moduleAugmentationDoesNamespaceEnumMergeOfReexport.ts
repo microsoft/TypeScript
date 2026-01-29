@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: file.ts
 export namespace Root {
     // type-only NS

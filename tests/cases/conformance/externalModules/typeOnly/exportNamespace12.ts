@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: main.ts
 import { c } from './types'
 import * as types from './types'

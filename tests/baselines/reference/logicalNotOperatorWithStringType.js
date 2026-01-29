@@ -49,12 +49,9 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 //// [logicalNotOperatorWithStringType.js]
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -65,7 +62,7 @@ var ResultIsBoolean2 = !STRING1;
 // string type literal
 var ResultIsBoolean3 = !"";
 var ResultIsBoolean4 = !{ x: "", y: "" };
-var ResultIsBoolean5 = !{ x: "", y: function (s) { return s; } };
+var ResultIsBoolean5 = !{ x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

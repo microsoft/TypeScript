@@ -11,4 +11,4 @@ declare namespace foo {
 let foo: foo.Bar; 
 
 //// [resolveModuleNameWithSameLetDeclarationName1.js]
-var foo;
+let foo;

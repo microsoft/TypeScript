@@ -12,11 +12,10 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters5.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
     return {};
 }
+export {};
 
 
 //// [declarationEmitTypeAliasWithTypeParameters5.d.ts]

@@ -10,10 +10,6 @@ export const a: import("./test") = null;
 
 
 //// [test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = null;
+export const a = null;

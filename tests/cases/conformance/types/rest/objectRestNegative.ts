@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 let o = { a: 1, b: 'no' };
 var { ...mustBeLast, a } = o;

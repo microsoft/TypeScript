@@ -24,5 +24,5 @@ module.exports = server;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='localAliasExportAssignment_0.ts'/>
-var connect = require("./localAliasExportAssignment_0");
+const connect = require("./localAliasExportAssignment_0");
 connect();

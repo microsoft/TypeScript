@@ -1,3 +1,4 @@
+// @target: es2015
 ///<style eqeqeq="on" strict="on" /> 
 
 var x = 1;

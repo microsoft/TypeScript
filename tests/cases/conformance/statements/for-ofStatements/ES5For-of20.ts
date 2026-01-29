@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 for (let v of []) {
     let v;

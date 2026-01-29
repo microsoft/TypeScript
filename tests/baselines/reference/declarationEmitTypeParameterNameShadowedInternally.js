@@ -8,14 +8,10 @@ export const foo = <T,>(x: T) => {
 
 
 //// [declarationEmitTypeParameterNameShadowedInternally.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-var foo = function (x) {
-    var inner = function (y) { return [x, y]; };
+export const foo = (x) => {
+    const inner = (y) => [x, y];
     return inner;
 };
-exports.foo = foo;
 
 
 //// [declarationEmitTypeParameterNameShadowedInternally.d.ts]

@@ -117,59 +117,53 @@ function D7() {
 
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
 function A() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = arguments;
         }
-        return T;
-    }());
+    };
 }
 function A1() {
-    return new /** @class */ (function () {
-        function T() {
+    return new class T {
+        constructor() {
             this.a = arguments;
         }
-        return T;
-    }());
+    };
 }
 function B() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = { b: arguments };
         }
-        return T;
-    }());
+    };
 }
 function B1() {
-    return new /** @class */ (function () {
-        function T() {
+    return new class T {
+        constructor() {
             this.a = { b: arguments };
         }
-        return T;
-    }());
+    };
 }
 function C() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = function () { arguments; };
         }
-        return T;
-    }());
+    };
 }
 function D() {
-    return /** @class */ (function () {
-        function T() {
-            this.a = function () { return arguments; }; // should error
+    return class T {
+        constructor() {
+            this.a = () => arguments; // should error
         }
-        return T;
-    }());
+    };
 }
 function D1() {
-    return /** @class */ (function () {
-        function T() {
-            this.a = function () {
+    return class T {
+        constructor() {
+            this.a = () => {
                 arguments; // should error
-                var b = function () {
+                const b = () => {
                     return arguments; // should error
                 };
                 function f() {
@@ -177,41 +171,32 @@ function D1() {
                 }
             };
         }
-        return T;
-    }());
+    };
 }
 function D2() {
-    return /** @class */ (function () {
-        function class_1() {
+    return class {
+        constructor() {
             arguments; // ok
         }
-        Object.defineProperty(class_1.prototype, "foo", {
-            get: function () {
-                return arguments; // ok
-            },
-            set: function (foo) {
-                arguments; // ok
-            },
-            enumerable: false,
-            configurable: true
-        });
-        class_1.prototype.bar = function () {
+        get foo() {
+            return arguments; // ok
+        }
+        set foo(foo) {
             arguments; // ok
-        };
-        class_1.prototype[Symbol.iterator] = function () {
+        }
+        bar() {
             arguments; // ok
-        };
-        return class_1;
-    }());
+        }
+        [Symbol.iterator]() {
+            arguments; // ok
+        }
+    };
 }
 function D3() {
     var _a;
-    return _a = /** @class */ (function () {
-            function T() {
-            }
-            return T;
-        }()),
-        (function () {
+    return _a = class T {
+        },
+        (() => {
             arguments; // should error
             while (1) {
                 arguments; // should error
@@ -221,12 +206,9 @@ function D3() {
 }
 function D4() {
     var _a;
-    return _a = /** @class */ (function () {
-            function T() {
-            }
-            return T;
-        }()),
-        (function () {
+    return _a = class T {
+        },
+        (() => {
             function f() {
                 arguments; // ok
             }
@@ -234,30 +216,22 @@ function D4() {
         _a;
 }
 function D5() {
-    return /** @class */ (function () {
-        function T() {
-            this.a = (function () { return arguments; })(); // should error
+    return class T {
+        constructor() {
+            this.a = (() => { return arguments; })(); // should error
         }
-        return T;
-    }());
+    };
 }
 function D6() {
-    return /** @class */ (function () {
-        function T() {
-            this.a = function (x) {
-                if (x === void 0) { x = arguments; }
-            }; // should error
+    return class T {
+        constructor() {
+            this.a = (x = arguments) => { }; // should error
         }
-        return T;
-    }());
+    };
 }
 function D7() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        a(x = arguments) {
         }
-        T.prototype.a = function (x) {
-            if (x === void 0) { x = arguments; }
-        };
-        return T;
-    }());
+    };
 }

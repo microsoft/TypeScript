@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @esModuleInterop: true
 // @filename: mod.ts
 declare function fun(): void;

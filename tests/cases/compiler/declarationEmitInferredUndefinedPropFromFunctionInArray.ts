@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 // repro from https://github.com/microsoft/TypeScript/issues/53914

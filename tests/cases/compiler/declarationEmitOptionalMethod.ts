@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @strictNullChecks: true
 export const Foo = (opts: {

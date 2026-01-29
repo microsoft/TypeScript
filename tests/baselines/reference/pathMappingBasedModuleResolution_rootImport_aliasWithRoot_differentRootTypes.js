@@ -28,15 +28,8 @@ import { bar as bar9 } from "http://server/bar";
 
 
 //// [foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
-function foo() { }
+export function foo() { }
 //// [bar.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-function bar() { }
+export function bar() { }
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

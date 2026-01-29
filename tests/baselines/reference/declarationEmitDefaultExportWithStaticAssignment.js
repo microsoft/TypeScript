@@ -33,51 +33,26 @@ C.A = A;
 C.B = B;
 
 //// [foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-exports.Foo = Foo;
+export class Foo {
+}
 //// [index1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Example;
-var foo_1 = require("./foo");
-function Example() { }
-Example.Foo = foo_1.Foo;
+import { Foo } from './foo';
+export default function Example() { }
+Example.Foo = Foo;
 //// [index2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-exports.default = Example;
-var foo_1 = require("./foo");
-Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
-function Example() { }
-Example.Foo = foo_1.Foo;
+import { Foo } from './foo';
+export { Foo };
+export default function Example() { }
+Example.Foo = Foo;
 //// [index3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bar = void 0;
-exports.default = Example;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
-exports.Bar = Bar;
-function Example() { }
+export class Bar {
+}
+export default function Example() { }
 Example.Bar = Bar;
 //// [index4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = C;
 function A() { }
 function B() { }
-function C() {
+export function C() {
     return null;
 }
 C.A = A;

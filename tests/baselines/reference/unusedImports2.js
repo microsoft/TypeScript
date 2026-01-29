@@ -17,22 +17,12 @@ var x = new Calculator();
 x.handleChar();
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Calculator = void 0;
-exports.test = test;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
-exports.Calculator = Calculator;
-function test() {
+export class Calculator {
+    handleChar() { }
+}
+export function test() {
 }
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var file1_1 = require("./file1");
-var x = new file1_1.Calculator();
+import { Calculator } from "./file1";
+var x = new Calculator();
 x.handleChar();

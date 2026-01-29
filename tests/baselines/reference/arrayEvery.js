@@ -11,8 +11,8 @@ if (foo.every(isString)) {
 
 
 //// [arrayEvery.js]
-var foo = ['aaa'];
-var isString = function (x) { return typeof x === 'string'; };
+const foo = ['aaa'];
+const isString = (x) => typeof x === 'string';
 if (foo.every(isString)) {
     foo[0].slice(0);
 }

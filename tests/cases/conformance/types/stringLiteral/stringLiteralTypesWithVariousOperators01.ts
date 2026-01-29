@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 declare let abc: "ABC";
 declare let xyz: "XYZ";

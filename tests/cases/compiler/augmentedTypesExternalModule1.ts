@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 export var a = 1;
 class c5 { public foo() { } }

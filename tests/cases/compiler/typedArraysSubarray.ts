@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function int8ArraySubarray() {
     var arr = new Int8Array(10);

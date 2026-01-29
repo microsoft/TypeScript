@@ -1,3 +1,4 @@
+// @target: es2015
 // @noTypesAndSymbols: true
 // @filename: tsconfig.json
 {

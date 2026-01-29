@@ -1,3 +1,4 @@
+// @target: es2015
 class A { foo(): number { return 1; } }
 class C implements A {
     foo() {

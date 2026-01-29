@@ -9,8 +9,8 @@ declarationsAndAssignments.ts(62,13): error TS2493: Tuple type '[]' of length '0
 declarationsAndAssignments.ts(62,16): error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
 declarationsAndAssignments.ts(63,13): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
 declarationsAndAssignments.ts(63,16): error TS2493: Tuple type '[number]' of length '1' has no element at index '2'.
-declarationsAndAssignments.ts(67,9): error TS2461: Type '{}' is not an array type.
-declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
+declarationsAndAssignments.ts(67,9): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+declarationsAndAssignments.ts(68,9): error TS2488: Type '{ 0: number; 1: number; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 declarationsAndAssignments.ts(73,11): error TS2339: Property 'a' does not exist on type '{}'.
 declarationsAndAssignments.ts(73,14): error TS2339: Property 'b' does not exist on type '{}'.
 declarationsAndAssignments.ts(74,11): error TS2339: Property 'a' does not exist on type 'undefined[]'.
@@ -112,10 +112,10 @@ declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assigna
     function f9() {
         var [a, b] = {};                // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{}' is not an array type.
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
         var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
+!!! error TS2488: Type '{ 0: number; 1: number; }' must have a '[Symbol.iterator]()' method that returns an iterator.
         var [e, f] = [10, 20];
     }
     

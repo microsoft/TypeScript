@@ -1,4 +1,5 @@
-﻿interface ContextualType<T> {
+﻿// @target: es2015
+interface ContextualType<T> {
     method(parameter: T): void;
 }
 

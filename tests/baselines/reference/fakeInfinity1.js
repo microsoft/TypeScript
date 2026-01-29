@@ -26,15 +26,12 @@ export const oops = 123456789123456789123456789123456789123456789123456789;
 
 
 //// [fakeInfinity1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.oops = void 0;
 a = b;
 b = a;
 a = Infinity;
 a = 1e999;
 a = 1e9999;
-exports.oops = 123456789123456789123456789123456789123456789123456789;
+export const oops = 123456789123456789123456789123456789123456789123456789;
 
 
 //// [fakeInfinity1.d.ts]

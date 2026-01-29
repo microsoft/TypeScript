@@ -18,8 +18,6 @@ import { everywhere, onlyInA } from "b.foo"; // Error
 
 //// [types.js]
 //// [testA.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [testB.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

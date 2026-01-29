@@ -1,3 +1,4 @@
+// @target: es2015
 // These used to be indexers, now they are computed properties
 interface I {
     [x = '']: string;

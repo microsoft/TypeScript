@@ -25,14 +25,11 @@ a = b
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 if (a === b) {
 }
 a = b;
+export {};

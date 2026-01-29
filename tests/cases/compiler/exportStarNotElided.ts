@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: register.ts
 const r: any[] = [];
 export function register(data: any) {

@@ -19,11 +19,8 @@ var a = Color.namedColors["pale blue"]; // should not error
 
 
 //// [propertyNamesWithStringLiteral.js]
-var _Color = /** @class */ (function () {
-    function _Color() {
-    }
-    return _Color;
-}());
+class _Color {
+}
 var Color;
 (function (Color) {
 })(Color || (Color = {}));

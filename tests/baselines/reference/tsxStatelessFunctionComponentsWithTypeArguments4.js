@@ -19,9 +19,9 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 "use strict";
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 // Error
 function Baz(arg1, arg2) {
-    var a0 = <OverloadComponent a={arg1.b}/>;
-    var a2 = <OverloadComponent {...arg1} ignore-prop/>; // missing a
+    let a0 = <OverloadComponent a={arg1.b}/>;
+    let a2 = <OverloadComponent {...arg1} ignore-prop/>; // missing a
 }

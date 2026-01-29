@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: foo.ts
 const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };

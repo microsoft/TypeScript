@@ -17,18 +17,16 @@ class D2 implements I {
 } 
 
 //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 1;
     }
-    C.prototype.foo = function (x) { return x; };
-    return C;
-}());
-var D2 = /** @class */ (function () {
-    function D2() {
+    foo(x) { return x; }
+}
+class D2 {
+    constructor() {
         this.x = 3;
     }
-    D2.prototype.foo = function (x) { return x; };
-    D2.prototype.other = function (x) { return x; };
-    return D2;
-}());
+    foo(x) { return x; }
+    other(x) { return x; }
+}

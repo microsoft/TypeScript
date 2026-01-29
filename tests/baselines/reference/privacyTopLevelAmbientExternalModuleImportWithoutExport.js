@@ -54,21 +54,15 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c_public = void 0;
 // Public elements
-var c_public = /** @class */ (function () {
-    function c_public() {
-    }
-    return c_public;
-}());
+class c_public {
+}
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c_public = void 0;
-var c_public = /** @class */ (function () {
-    function c_public() {
-    }
-    return c_public;
-}());
+class c_public {
+}
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 "use strict";
@@ -77,9 +71,9 @@ exports.publicUse_im_private_mi_public = exports.publicUse_im_private_mu_private
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
 // Privacy errors - importing private elements
-var im_private_mi_private = require("m");
-var im_private_mu_private = require("m2");
-var im_private_mi_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
+const im_private_mi_private = require("m");
+const im_private_mu_private = require("m2");
+const im_private_mi_public = require("./privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
 // Usage of privacy error imports
 var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
 exports.publicUse_im_private_mi_private = new im_private_mi_private.c_private();

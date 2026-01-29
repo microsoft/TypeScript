@@ -16,21 +16,12 @@ class D implements nestedNamespace.types.Component {}
 
 
 //// [types.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [ns.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
+export {};

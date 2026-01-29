@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: code.ts
 class C { static x = 0; };
 export default C.x;

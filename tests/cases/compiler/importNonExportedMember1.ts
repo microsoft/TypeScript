@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: a.ts
 declare function foo(): any
 declare function bar(): any;

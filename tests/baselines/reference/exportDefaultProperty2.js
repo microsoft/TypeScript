@@ -16,19 +16,9 @@ const x: B = { c: B };
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.default = C.B;
+class C {
+}
+export default C.B;
 //// [b.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = __importDefault(require("./a"));
-var x = { c: a_1.default };
+import B from "./a";
+const x = { c: B };

@@ -1,3 +1,4 @@
+// @target: es2015
 declare var a27: { prop: number } | { prop: T27 };
 type T27 = typeof a27;
 

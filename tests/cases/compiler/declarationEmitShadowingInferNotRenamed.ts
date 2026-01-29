@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // Any instance type
 type Client = string

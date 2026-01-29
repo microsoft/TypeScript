@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: ConstEnum.ts
 export const enum MyConstEnum {
     Foo,

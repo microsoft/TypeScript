@@ -20,21 +20,14 @@ const d: D = {};
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
+export {};
 //// [b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 new D();
-var d = {};
+const d = {};
+export {};

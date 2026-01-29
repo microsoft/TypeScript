@@ -1,4 +1,5 @@
-﻿interface public { }
+﻿// @target: es2015
+interface public { }
 
 class Foo {
     constructor(private, public, static) {

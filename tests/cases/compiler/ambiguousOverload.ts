@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function foof(bar: string, y): number;
 function foof(bar: string, x): string;

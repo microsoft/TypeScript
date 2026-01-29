@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.ts
 export class A {}
 export class B {}

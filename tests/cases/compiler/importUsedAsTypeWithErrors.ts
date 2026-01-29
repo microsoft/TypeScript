@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: test.ts
 export interface T {
     value: string

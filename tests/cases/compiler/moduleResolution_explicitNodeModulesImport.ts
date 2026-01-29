@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @noImplicitReferences: true
 // @maxNodeModuleJsDepth: 1

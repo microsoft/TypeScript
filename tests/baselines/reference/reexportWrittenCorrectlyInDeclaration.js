@@ -18,44 +18,20 @@ export class Test {
 }
 
 //// [ThingA.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ThingA = void 0;
-var ThingA = /** @class */ (function () {
-    function ThingA() {
-    }
-    return ThingA;
-}());
-exports.ThingA = ThingA;
+export class ThingA {
+}
 //// [ThingB.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ThingB = void 0;
-var ThingB = /** @class */ (function () {
-    function ThingB() {
-    }
-    return ThingB;
-}());
-exports.ThingB = ThingB;
+export class ThingB {
+}
 //// [Things.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ThingB = exports.ThingA = void 0;
-var ThingA_1 = require("./ThingA");
-Object.defineProperty(exports, "ThingA", { enumerable: true, get: function () { return ThingA_1.ThingA; } });
-var ThingB_1 = require("./ThingB");
-Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { return ThingB_1.ThingB; } });
+export { ThingA } from "./ThingA";
+export { ThingB } from "./ThingB";
 //// [Test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = void 0;
-var Test = /** @class */ (function () {
-    function Test() {
-        this.method = function (input) { };
+export class Test {
+    constructor() {
+        this.method = (input) => { };
     }
-    return Test;
-}());
-exports.Test = Test;
+}
 
 
 //// [ThingA.d.ts]

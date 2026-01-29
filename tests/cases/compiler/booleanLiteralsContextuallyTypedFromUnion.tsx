@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @jsx: preserve
 // @skipLibCheck: true

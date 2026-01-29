@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @filename: types.ts
 declare module "*.foo" {

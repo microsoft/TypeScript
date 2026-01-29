@@ -42,10 +42,8 @@ g = f1; // OK
 g = f2; // Error
 g = f3; // Error
 g = f4; // Error
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+class C {
+    constructor(x) { }
+}
 var d;
 d = C; // Error

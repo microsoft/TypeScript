@@ -6,12 +6,6 @@ export var x = 1;
 export var y = 1;
 
 //// [file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 1;
+export var x = 1;
 //// [file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 1;
+export var y = 1;

@@ -16,9 +16,7 @@ class C { m(null: string) {} }
 
 
 //// [reservedWords2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require();
+import ;
 while ( = require("dfdf"))
     ;
 while (from)
@@ -27,12 +25,12 @@ var ;
 typeof ;
 10;
 function () { }
-throw function () { };
+throw () => { };
 namespace;
 void {};
-var _a = { while: 1, return: 2 },  = _a.while,  = _a.return;
-var _b = { this: 1, switch: { continue: 2 } },  = _b.this,  = _b.switch.continue;
-var _c = void 0;
+var { while: , return:  } = { while: 1, return: 2 };
+var { this: , switch: { continue:  } } = { this: 1, switch: { continue: 2 } };
+var [];
 debugger;
 if ()
     ;
@@ -41,9 +39,6 @@ if ()
 })( || ( = {}));
 void {};
 function f() { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function (, string) { };
-    return C;
-}());
+class C {
+    m(, string) { }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: this.ts
 import * as me from "./this";

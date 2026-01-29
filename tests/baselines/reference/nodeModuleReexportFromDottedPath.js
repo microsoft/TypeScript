@@ -20,11 +20,9 @@ export default new EnhancedPrisma();
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var client_1 = require("@prisma/client");
-var EnhancedPrisma = enhancePrisma(client_1.PrismaClient);
-exports.default = new EnhancedPrisma();
+import { PrismaClient } from "@prisma/client";
+const EnhancedPrisma = enhancePrisma(PrismaClient);
+export default new EnhancedPrisma();
 
 
 //// [index.d.ts]

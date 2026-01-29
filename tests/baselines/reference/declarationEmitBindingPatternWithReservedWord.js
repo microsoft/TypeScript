@@ -26,14 +26,9 @@ export const getLocales = <T extends LocaleData>({
 
 
 //// [declarationEmitBindingPatternWithReservedWord.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocales = void 0;
-var getLocales = function (_a) {
-    var app = _a.app, name = _a.name, defaultLocalesConfig = _a.default, _b = _a.config, userLocalesConfig = _b === void 0 ? {} : _b;
+export const getLocales = ({ app, name, default: defaultLocalesConfig, config: userLocalesConfig = {}, }) => {
     return defaultLocalesConfig;
 };
-exports.getLocales = getLocales;
 
 
 //// [declarationEmitBindingPatternWithReservedWord.d.ts]

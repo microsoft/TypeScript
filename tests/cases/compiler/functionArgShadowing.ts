@@ -1,3 +1,4 @@
+// @target: es2015
 class A { foo() { } }
 class B { bar() { } }
 function foo(x: A) {

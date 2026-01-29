@@ -1,3 +1,4 @@
+// @target: es2015
 interface Array<T> {}
 
 declare var f : { <T>(x:T): T; }

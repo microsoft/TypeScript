@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Generic call with no parameters
 interface NoParams {

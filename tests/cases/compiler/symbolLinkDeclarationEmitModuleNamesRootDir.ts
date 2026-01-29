@@ -1,3 +1,4 @@
+// @target: es2015
 // @currentDirectory: /monorepo/core
 // @filename: /monorepo/context/src/value-promise.d.ts
 export type Constructor<T> = (...args: any[]) => T;

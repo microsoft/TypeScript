@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /a.d.ts
 export as namespace a;
 export const x = 0;

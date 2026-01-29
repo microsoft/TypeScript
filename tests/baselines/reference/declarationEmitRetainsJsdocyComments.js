@@ -47,44 +47,37 @@ declare global {
 
 
 //// [declarationEmitRetainsJsdocyComments.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.someMethod = exports.Foo = exports.foo = void 0;
 /**
  * comment1
  * @param p
  */
-var foo = function (p) {
+export const foo = (p) => {
     return {
         /**
          * comment2
          * @param s
          */
-        bar: function (s) { },
+        bar: (s) => { },
         /**
          * comment3
          * @param s
          */
-        bar2: function (s) { },
+        bar2(s) { },
     };
 };
-exports.foo = foo;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+export class Foo {
     /**
      * comment4
      * @param s
      */
-    Foo.prototype.bar = function (s) {
-    };
-    return Foo;
-}());
-exports.Foo = Foo;
+    bar(s) {
+    }
+}
+export let { 
 /**
 * comment5
 */
-exports.someMethod = null.someMethod;
+someMethod } = null;
 
 
 //// [declarationEmitRetainsJsdocyComments.d.ts]

@@ -9,9 +9,6 @@ export {};
 import "A"
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("A");
+import "A";

@@ -1,3 +1,4 @@
+// @target: es2015
 interface D3SvgPath {
     (data: any, index?: number): string;
 

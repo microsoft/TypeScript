@@ -1,3 +1,4 @@
+// @target: es2015
 // @esModuleInterop: true
 // @filename: mod.d.ts
 export = modObj;

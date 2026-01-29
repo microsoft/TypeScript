@@ -20,10 +20,7 @@ export function f() {
 
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = f;
-function f() {
+export function f() {
     return {};
 }
 

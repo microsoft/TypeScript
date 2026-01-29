@@ -1,3 +1,4 @@
+// @target: es2015
 // @noTypesAndSymbols: true
 
 declare const o1: ((...args: any[]) => number);

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 export const fieldName = Math.random() > 0.5 ? "f1" : "f2";

@@ -49,11 +49,8 @@ module.exports = x;
 //// [foo2.js]
 "use strict";
 var x = 10;
-var y = /** @class */ (function () {
-    function y() {
-    }
-    return y;
-}());
+class y {
+}
 ;
 module.exports = x;
 //// [foo3.js]
@@ -62,11 +59,8 @@ var x;
 (function (x_1) {
     x_1.x = 10;
 })(x || (x = {}));
-var y = /** @class */ (function () {
-    function y() {
-    }
-    return y;
-}());
+class y {
+}
 module.exports = x;
 //// [foo4.js]
 "use strict";

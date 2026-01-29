@@ -39,13 +39,10 @@ var Instantiated;
     Instantiated.x = 1;
 })(Instantiated || (Instantiated = {}));
 //// [module-namespaces.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Instantiated = void 0;
-var Instantiated;
+export var Instantiated;
 (function (Instantiated) {
     Instantiated.x = 1;
-})(Instantiated || (exports.Instantiated = Instantiated = {}));
+})(Instantiated || (Instantiated = {}));
 //// [enum1.js]
 var Enum;
 (function (Enum) {
@@ -53,7 +50,7 @@ var Enum;
     Enum[Enum["B"] = 1] = "B";
     Enum[Enum["C"] = 2] = "C";
 })(Enum || (Enum = {}));
-var d = 'd';
+const d = 'd';
 //// [enum2.js]
 var Enum;
 (function (Enum) {

@@ -1,3 +1,4 @@
+// @target: es2015
 // Enum with constant, computed, constant members split across 3 declarations with the same root module
 namespace M {
     export enum E1 { A = 0 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: localAliasExportAssignment_0.ts
 var server: {
