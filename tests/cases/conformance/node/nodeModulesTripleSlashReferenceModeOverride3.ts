@@ -1,3 +1,4 @@
+// @target: es2022
 // @noImplicitReferences: true
 // @module: node16,node18,node20,nodenext
 // @outDir: out

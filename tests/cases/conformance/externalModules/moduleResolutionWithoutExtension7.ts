@@ -1,3 +1,4 @@
+// @target: es2022
 // @moduleResolution: node16
 // @module: node16
 
