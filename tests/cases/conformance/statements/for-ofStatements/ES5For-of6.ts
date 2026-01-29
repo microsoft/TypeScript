@@ -1,4 +1,4 @@
-// @target: es2015
+// @target: es5, es2015
 // @strict: false
 for (var w of []) {
     for (var v of []) {
