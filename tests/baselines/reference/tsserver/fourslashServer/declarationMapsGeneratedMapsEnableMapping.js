@@ -8,6 +8,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "module": "commonjs",
+          "target": "es6",
           "lib": [
             "es5"
           ],
@@ -16,7 +17,6 @@ Info seq  [hh:mm:ss:mss] request:
           "declaration": true,
           "declarationMap": true,
           "newLine": "lf",
-          "target": "es5",
           "skipDefaultLibCheck": true
         }
       },
@@ -55,18 +55,15 @@ export interface SomeType {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.methodName = function (propName) { return propName; };
-    Foo.prototype.otherMethod = function () {
+class Foo {
+    methodName(propName) { return propName; }
+    otherMethod() {
         if (Math.random() > 0.5) {
             return { x: 42 };
         }
         return { y: "yes" };
-    };
-    return Foo;
-}());
+    }
+}
 exports.Foo = Foo;
 
 
@@ -95,6 +92,7 @@ instance.methodName({member: 12});
 {
     "compilerOptions": {
         "module": "commonjs",
+        "target": "es2015",
         "lib": ["es5"],
         "strict": false,
         "outDir": "./dist",
@@ -124,6 +122,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ],
  "options": {
   "module": 1,
+  "target": 2,
   "lib": [
    "lib.es5.d.ts"
   ],
@@ -207,7 +206,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"module\": \"commonjs\",\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"module\": \"commonjs\",\n        \"target\": \"es2015\",\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
 
 
 	../../tslibs/TS/Lib/lib.es5.d.ts
@@ -414,7 +413,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/home/src/workspaces/project/dist/index.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nvar Foo = /** @class */ (function () {\n    function Foo() {\n    }\n    Foo.prototype.methodName = function (propName) { return propName; };\n    Foo.prototype.otherMethod = function () {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    };\n    return Foo;\n}());\nexports.Foo = Foo;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nclass Foo {\n    methodName(propName) { return propName; }\n    otherMethod() {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    }\n}\nexports.Foo = Foo;\n"
           },
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts.map",
