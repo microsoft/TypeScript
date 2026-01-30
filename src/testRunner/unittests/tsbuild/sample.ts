@@ -1,5 +1,6 @@
 import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     fakeTsVersion,
@@ -241,7 +242,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifySystem: sys => {
-                sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
+                sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es2015" } }));
                 sys.replaceFileText("tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{
@@ -511,6 +512,15 @@ class someClass2 { }`,
                     `/// <reference lib="esnext" />`,
                 );
                 sys.writeFile(
+                    "core/index.ts",
+                    dedent`
+                        export const someString: string = "HELLO WORLD";
+                        export function leftPad(s: string, n: number) { return s + n; }
+                        export function multiply(a: number, b: number) { return a * b; }
+                        export function exponentiate(a: number, b: number) { return a ** b; }
+                    `,
+                );
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: {
@@ -524,7 +534,7 @@ class someClass2 { }`,
             },
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: sys => sys.replaceFileText("core/tsconfig.json", "esnext", "es5"),
+                edit: sys => sys.replaceFileText("core/tsconfig.json", "esnext", "es2015"),
             }],
         });
 

@@ -52,7 +52,7 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
@@ -86,8 +86,8 @@ Output::
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
 pkg1/dist/index.d.ts
@@ -106,11 +106,13 @@ Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/pkg3/dist/keys.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ADMIN = void 0;
-var pkg2_1 = require("@raymondfeng/pkg2");
+const pkg2_1 = require("@raymondfeng/pkg2");
 exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 
 

@@ -243,7 +243,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                 content: jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         declaration: true,
                         emitDeclarationOnly: true,
