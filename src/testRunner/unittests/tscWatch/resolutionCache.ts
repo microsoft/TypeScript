@@ -382,7 +382,10 @@ declare module "fs" {
         edits: [
             {
                 caption: "npm install",
-                edit: sys => sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
+                edit: sys => {
+                    sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`);
+                    sys.runQueuedTimeoutCallbacks();
+                },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
