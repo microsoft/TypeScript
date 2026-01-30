@@ -7033,6 +7033,7 @@ declare namespace ts {
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
         disableReferencedProjectLoad?: boolean;
+        /** @deprecated */
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;

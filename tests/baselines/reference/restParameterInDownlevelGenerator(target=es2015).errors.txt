@@ -1,14 +1,9 @@
 error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-ES5For-of34.ts(4,6): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 !!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== ES5For-of34.ts (1 errors) ====
-    function foo() {
-        return { x: 0 };
-    }
-    for (foo().x of ['a', 'b', 'c']) {
-         ~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-        var p = foo().x;
+==== restParameterInDownlevelGenerator.ts (0 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/30653
+    function * mergeStringLists(...strings: string[]) {
+        for (var str of strings);
     }
