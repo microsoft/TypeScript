@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/typeUsedAsValueError3.ts] ////
+
+=== typeUsedAsValueError3.ts ===
+class baz<B> {}
+>baz : Symbol(baz, Decl(typeUsedAsValueError3.ts, 0, 0))
+>B : Symbol(B, Decl(typeUsedAsValueError3.ts, 0, 10))
+
+interface foo<A> {
+>foo : Symbol(foo, Decl(typeUsedAsValueError3.ts, 0, 15))
+>A : Symbol(A, Decl(typeUsedAsValueError3.ts, 1, 14))
+
+  new (): typeof baz
+>baz : Symbol(baz, Decl(typeUsedAsValueError3.ts, 0, 0))
+}
+
+const bar = (foo<string>)<number>
+>bar : Symbol(bar, Decl(typeUsedAsValueError3.ts, 5, 5))
+

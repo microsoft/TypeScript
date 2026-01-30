@@ -1,0 +1,13 @@
+typeUsedAsValueError3.ts(6,14): error TS2693: 'foo' only refers to a type, but is being used as a value here.
+
+
+==== typeUsedAsValueError3.ts (1 errors) ====
+    class baz<B> {}
+    interface foo<A> {
+      new (): typeof baz
+    }
+    
+    const bar = (foo<string>)<number>
+                 ~~~
+!!! error TS2693: 'foo' only refers to a type, but is being used as a value here.
+    

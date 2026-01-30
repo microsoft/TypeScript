@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/typeUsedAsValueError3.ts] ////
+
+=== typeUsedAsValueError3.ts ===
+class baz<B> {}
+>baz : baz<B>
+>    : ^^^^^^
+
+interface foo<A> {
+  new (): typeof baz
+>baz : typeof baz
+>    : ^^^^^^^^^^
+}
+
+const bar = (foo<string>)<number>
+>bar : any
+>    : ^^^
+>(foo<string>)<number> : any
+>                      : ^^^
+>(foo<string>) : any
+>              : ^^^
+>foo<string> : any
+>            : ^^^
+>foo : any
+>    : ^^^
+

@@ -3445,8 +3445,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression:
                 return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
             case SyntaxKind.ExpressionWithTypeArguments:
-                if (isEntityNameExpression((node as ExpressionWithTypeArguments).expression)) {
-                    return (node as ExpressionWithTypeArguments).expression as EntityNameExpression;
+                if (isExpressionWithTypeArgumentsInClassExtendsClause(node) && isEntityNameExpression(node.expression)) {
+                    return node.expression;
                 }
                 // falls through
             default:
