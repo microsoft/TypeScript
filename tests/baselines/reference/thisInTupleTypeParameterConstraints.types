@@ -19,14 +19,14 @@ interface Array<T> {
 >    : ^^^^
 
     reduceRight<U>(arg: this): void;
->reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; <U>(arg: this): void; }
->            : ^^^          ^^                                                                          ^^^ ^^^          ^^                                                                          ^^            ^^ ^^^ ^^^^^^^^          ^^                                                                              ^^            ^^   ^^^   ^^^ ^^   ^^    ^^^    ^^^
+>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(arg: this): void; }
+>            : ^^^          ^^                                                                          ^^^ ^^^^^^^^          ^^                                                                              ^^            ^^   ^^^   ^^^          ^^                                                                          ^^            ^^ ^^^ ^^^ ^^   ^^    ^^^    ^^^
 >arg : this
 >    : ^^^^
 
     reduce<U>(arg: this): void;
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; <U>(arg: this): void; }
->       : ^^^          ^^                                                                          ^^^ ^^^          ^^                                                                          ^^            ^^ ^^^ ^^^^^^^^          ^^                                                                              ^^            ^^   ^^^   ^^^ ^^   ^^    ^^^    ^^^
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(arg: this): void; }
+>       : ^^^          ^^                                                                          ^^^ ^^^^^^^^          ^^                                                                              ^^            ^^   ^^^   ^^^          ^^                                                                          ^^            ^^ ^^^ ^^^ ^^   ^^    ^^^    ^^^
 >arg : this
 >    : ^^^^
 

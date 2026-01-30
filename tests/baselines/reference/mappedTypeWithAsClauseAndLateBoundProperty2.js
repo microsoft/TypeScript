@@ -47,13 +47,13 @@ export declare const thing: {
     };
     reduce: {
         (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number;
-        (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number;
         <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U;
+        (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number;
     };
     reduceRight: {
         (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number;
-        (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number;
         <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U;
+        (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number;
     };
     find: {
         <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S;
