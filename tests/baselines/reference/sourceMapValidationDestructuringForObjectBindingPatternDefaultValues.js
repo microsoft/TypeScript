@@ -100,6 +100,7 @@ for (let {
 }
 
 //// [sourceMapValidationDestructuringForObjectBindingPatternDefaultValues.js]
+"use strict";
 var robot = { name: "mower", skill: "mowing" };
 var multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {

@@ -122,6 +122,7 @@ interface glo_C3_public extends glo_i_public {
 
 
 //// [privacyGloInterface.js]
+"use strict";
 var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {

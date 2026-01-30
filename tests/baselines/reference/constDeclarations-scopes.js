@@ -149,6 +149,7 @@ var o = {
 }
 
 //// [constDeclarations-scopes.js]
+"use strict";
 // global
 const c = "string";
 var n;

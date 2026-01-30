@@ -127,6 +127,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 var a = "hello";
 
 
@@ -205,6 +206,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 var a = /** @class */ (function () {
     function class_1() {
         this.p = 10;

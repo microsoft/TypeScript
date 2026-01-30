@@ -10,6 +10,7 @@ for (var let of [1,2,3]) {}
 
 
 //// [letInVarDeclOfForOf_ES5.js]
+"use strict";
 // should not be an error
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var let = _a[_i];

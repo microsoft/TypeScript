@@ -8,6 +8,7 @@ class C {
 }
 
 //// [defaultValueInConstructorOverload1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
         if (x === void 0) { x = ''; }

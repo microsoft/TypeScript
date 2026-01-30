@@ -25,6 +25,7 @@ class Main {
 new Main();
 
 //// [capturedLetConstInLoop13.js]
+"use strict";
 var Main = /** @class */ (function () {
     function Main() {
         this.register("a", "b", "c");

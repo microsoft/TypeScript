@@ -5,4 +5,5 @@ var undefined = null;
 
 
 //// [undefinedTypeAssignment3.js]
+"use strict";
 var undefined = null;

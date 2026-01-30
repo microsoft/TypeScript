@@ -24,6 +24,7 @@ p = c;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
+"use strict";
 var Module = /** @class */ (function () {
     function Module() {
     }

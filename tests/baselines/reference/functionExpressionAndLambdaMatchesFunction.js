@@ -12,6 +12,7 @@ class CDoc {
 
 
 //// [functionExpressionAndLambdaMatchesFunction.js]
+"use strict";
 var CDoc = /** @class */ (function () {
     function CDoc() {
         function doSomething(a) {

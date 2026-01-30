@@ -43,6 +43,7 @@ class ClassWithThreeMembers {
 
 
 //// [asiPublicPrivateProtected.js]
+"use strict";
 public;
 var NonPublicClass = /** @class */ (function () {
     function NonPublicClass() {

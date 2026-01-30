@@ -12,6 +12,7 @@ var k: (() => c) | string = (() => new c()) || "";
 var l = (() => new c()) || "";
 
 //// [declFileTypeAnnotationParenType.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

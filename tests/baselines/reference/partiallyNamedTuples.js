@@ -62,6 +62,7 @@ const output = test(input);
 
 
 //// [partiallyNamedTuples.js]
+"use strict";
 function fa1() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {

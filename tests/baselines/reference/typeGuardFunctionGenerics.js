@@ -35,6 +35,7 @@ if (funD(isC, a)) {
 let test3: B = funE(isB, 1);
 
 //// [typeGuardFunctionGenerics.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

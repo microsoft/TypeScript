@@ -8,6 +8,7 @@ var octal = 0o81010;
 var octal = 0O91010;
 
 //// [invalidBinaryIntegerLiteralAndOctalIntegerLiteral.js]
+"use strict";
 // Error
 var binary = 0;
 21010;

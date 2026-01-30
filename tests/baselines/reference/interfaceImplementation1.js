@@ -49,6 +49,7 @@ c["foo"];
 
 
 //// [interfaceImplementation1.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

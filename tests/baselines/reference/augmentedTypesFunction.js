@@ -41,6 +41,7 @@ namespace y5c { export interface I { foo(): void } } // should be an error
 //import y6 = require('');
 
 //// [augmentedTypesFunction.js]
+"use strict";
 // function then var
 function y1() { } // error
 var y1 = 1; // error

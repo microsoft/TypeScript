@@ -12,6 +12,7 @@ module.exports.MyClass.prototype = {
 
 
 //// [jsDeclarationsExportAssignedConstructorFunction.js]
+"use strict";
 /** @constructor */
 module.exports.MyClass = function () {
     this.x = 1;

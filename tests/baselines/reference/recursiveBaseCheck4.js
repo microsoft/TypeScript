@@ -5,6 +5,7 @@ class M<T> extends M<string> { }
 (new M).blah;
 
 //// [recursiveBaseCheck4.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

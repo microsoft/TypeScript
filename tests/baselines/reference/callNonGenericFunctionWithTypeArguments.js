@@ -46,6 +46,7 @@ declare var a2: any;
 var r8 = a2<number>();
 
 //// [callNonGenericFunctionWithTypeArguments.js]
+"use strict";
 // it is always illegal to provide type arguments to a non-generic function
 // all invocations here are illegal
 function f(x) { return null; }

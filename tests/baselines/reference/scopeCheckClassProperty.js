@@ -13,6 +13,7 @@ class A {
 
 
 //// [scopeCheckClassProperty.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = new A().p; // should also be ok

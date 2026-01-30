@@ -12,6 +12,7 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass4.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter() {
     }

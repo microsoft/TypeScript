@@ -8,6 +8,7 @@ var x = {
 
 
 //// [objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js]
+"use strict";
 var x = {
     x: x, // OK
     undefinedVariable: undefinedVariable // Error

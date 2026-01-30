@@ -744,6 +744,7 @@ namespace Formatting {
 
 
 //// [parserindenter.js]
+"use strict";
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 

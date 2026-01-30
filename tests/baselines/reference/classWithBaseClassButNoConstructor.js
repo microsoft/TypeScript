@@ -43,6 +43,7 @@ var d5 = new D(); // error
 var d6 = new D(1); // ok
 
 //// [classWithBaseClassButNoConstructor.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

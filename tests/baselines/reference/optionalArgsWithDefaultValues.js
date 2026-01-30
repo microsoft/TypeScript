@@ -12,6 +12,7 @@ var a = (x?=0) => { return 1; };
 var b = (x, y?:number = 2) => { x; };
 
 //// [optionalArgsWithDefaultValues.js]
+"use strict";
 function foo(x, y, z) {
     if (y === void 0) { y = false; }
     if (z === void 0) { z = 0; }

@@ -9,6 +9,7 @@ f.privProp;
 
 
 //// [propertyAccessibility1.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.privProp = 0;

@@ -47,6 +47,7 @@ class a {
 }
 
 //// [duplicateClassElements.js]
+"use strict";
 var a = /** @class */ (function () {
     function a() {
     }

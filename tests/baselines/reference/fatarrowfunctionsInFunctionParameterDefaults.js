@@ -12,6 +12,7 @@ fn.call(4); // Should be 4
 
 
 //// [fatarrowfunctionsInFunctionParameterDefaults.js]
+"use strict";
 function fn(x, y) {
     var _this = this;
     if (x === void 0) { x = function () { return _this; }; }

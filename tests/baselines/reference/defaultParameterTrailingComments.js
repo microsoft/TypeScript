@@ -8,6 +8,7 @@ class C {
 function foo(defaultParam = 10 /*emit only once*/) {}
 
 //// [defaultParameterTrailingComments.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(defaultParam /* Emit only once*/) {
         if (defaultParam === void 0) { defaultParam = false; }

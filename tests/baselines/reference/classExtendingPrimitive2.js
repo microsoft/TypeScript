@@ -7,6 +7,7 @@ class C4a extends void {}
 class C5a extends null { }
 
 //// [classExtendingPrimitive2.js]
+"use strict";
 // classes cannot extend primitives
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

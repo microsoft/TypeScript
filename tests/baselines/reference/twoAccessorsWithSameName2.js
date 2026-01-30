@@ -19,6 +19,7 @@ class E {
 }
 
 //// [twoAccessorsWithSameName2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

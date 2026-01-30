@@ -25,6 +25,7 @@ class B<T extends A> {
 
 
 //// [thisTypeAndConstraints.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

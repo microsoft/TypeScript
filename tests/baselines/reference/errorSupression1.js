@@ -10,6 +10,7 @@ baz.concat("y");
   // So we don't want an error on 'concat'.
 
 //// [errorSupression1.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

@@ -144,6 +144,7 @@ function bar<T extends CA | CB>(x: T & CA) {
 
 
 //// [intersectionReduction.js]
+"use strict";
 ab.kind; // Error
 var a = x;
 var r1 = f10(a1); // unknown

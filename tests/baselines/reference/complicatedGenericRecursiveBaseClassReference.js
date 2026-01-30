@@ -8,6 +8,7 @@ class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 
 
 //// [complicatedGenericRecursiveBaseClassReference.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

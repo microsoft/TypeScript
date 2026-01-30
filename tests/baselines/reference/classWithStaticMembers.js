@@ -22,6 +22,7 @@ var r2 = r.x;
 var r3 = r.foo;
 
 //// [classWithStaticMembers.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

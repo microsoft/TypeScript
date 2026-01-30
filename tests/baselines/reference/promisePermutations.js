@@ -170,6 +170,7 @@ var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
 
 //// [promisePermutations.js]
+"use strict";
 var r1a = r1.then(testFunction, testFunction, testFunction);
 var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, testFunction, testFunction);
 var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);

@@ -40,6 +40,7 @@ class D {
 }
 
 //// [doNotEmitDetachedCommentsAtStartOfConstructor.js]
+"use strict";
 var A = (function () {
     function A() {
         var x = 10;

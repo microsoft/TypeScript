@@ -8,6 +8,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInMethodDeclaration.js]
+"use strict";
 var Dummy = /** @class */ (function () {
     function Dummy() {
     }

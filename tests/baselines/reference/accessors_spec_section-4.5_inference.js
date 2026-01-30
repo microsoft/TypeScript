@@ -27,6 +27,7 @@ class LanguageSpec_section_4_5_inference {
 }
 
 //// [accessors_spec_section-4.5_inference.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

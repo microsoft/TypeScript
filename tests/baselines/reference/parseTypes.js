@@ -15,6 +15,7 @@ z=g;
 
 
 //// [parseTypes.js]
+"use strict";
 var x = null;
 var y = null;
 var z = null;

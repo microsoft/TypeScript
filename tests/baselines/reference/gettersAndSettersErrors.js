@@ -19,6 +19,7 @@ class E {
 
 
 //// [gettersAndSettersErrors.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed

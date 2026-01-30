@@ -11,6 +11,7 @@ let e: "foo" | "bar" = d;
 
 
 //// [stringLiteralTypesAndLogicalOrExpressions01.js]
+"use strict";
 var a = "foo";
 var b = a || "foo";
 var c = b;

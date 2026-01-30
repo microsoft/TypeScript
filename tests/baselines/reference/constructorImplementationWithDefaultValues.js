@@ -23,6 +23,7 @@ class E<T extends Date> {
 }
 
 //// [constructorImplementationWithDefaultValues.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
         if (x === void 0) { x = 1; }

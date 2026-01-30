@@ -58,6 +58,7 @@ b.b(1);
 
 
 //// [callSignatureWithOptionalParameterAndInitializer.js]
+"use strict";
 // Optional parameters cannot also have initializer expressions, these are all errors
 function foo(x) {
     if (x === void 0) { x = 1; }

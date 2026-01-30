@@ -22,6 +22,7 @@ class test {
 }
 
 //// [commentsOnStaticMembers.js]
+"use strict";
 var test = /** @class */ (function () {
     function test() {
     }

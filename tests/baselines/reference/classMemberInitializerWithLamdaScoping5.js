@@ -14,6 +14,7 @@ class Greeter {
 }
 
 //// [classMemberInitializerWithLamdaScoping5.js]
+"use strict";
 var Greeter = /** @class */ (function () {
     function Greeter(message) {
         this.messageHandler = function (message) {

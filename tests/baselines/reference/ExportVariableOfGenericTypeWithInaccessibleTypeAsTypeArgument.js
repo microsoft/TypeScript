@@ -11,6 +11,7 @@ namespace A {
 }
 
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js]
+"use strict";
 var A;
 (function (A) {
     var B = /** @class */ (function () {

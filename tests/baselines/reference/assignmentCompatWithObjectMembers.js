@@ -88,6 +88,7 @@ namespace ObjectTypes {
 }
 
 //// [assignmentCompatWithObjectMembers.js]
+"use strict";
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // no errors expected
 var SimpleTypes;

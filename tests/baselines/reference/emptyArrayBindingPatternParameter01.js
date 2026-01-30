@@ -6,6 +6,7 @@ function f([]) {
 }
 
 //// [emptyArrayBindingPatternParameter01.js]
+"use strict";
 function f(_a) {
     var x, y, z;
 }

@@ -9,6 +9,7 @@ function direct(@dec this: C) { return this.n; }
 function called(@dec() this: C) { return this.n; }
 
 //// [decoratorOnFunctionParameter.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.n = true;

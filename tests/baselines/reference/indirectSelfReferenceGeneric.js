@@ -5,6 +5,7 @@ class a<T> extends b<T> { }
 class b<T> extends a<T> { }
 
 //// [indirectSelfReferenceGeneric.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -25,6 +25,7 @@ namespace A {
 }
 
 //// [ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.js]
+"use strict";
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;

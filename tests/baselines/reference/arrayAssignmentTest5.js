@@ -36,6 +36,7 @@ namespace Test {
 
 
 //// [arrayAssignmentTest5.js]
+"use strict";
 var Test;
 (function (Test) {
     var Bug = /** @class */ (function () {

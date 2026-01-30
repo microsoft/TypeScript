@@ -19,6 +19,7 @@ namespace Editor {
 }
 
 //// [staticMethodReferencingTypeArgument1.js]
+"use strict";
 var Editor;
 (function (Editor) {
     var List = /** @class */ (function () {

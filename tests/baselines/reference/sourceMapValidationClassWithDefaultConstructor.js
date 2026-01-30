@@ -7,6 +7,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructor.js]
+"use strict";
 var Greeter = /** @class */ (function () {
     function Greeter() {
         this.a = 10;

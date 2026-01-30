@@ -38,6 +38,7 @@ namespace Foo.Bar {
 }
 
 //// [sourceMapSample.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var Bar;

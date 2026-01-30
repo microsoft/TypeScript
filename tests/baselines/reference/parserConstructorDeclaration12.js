@@ -13,6 +13,7 @@ class C {
 }
 
 //// [parserConstructorDeclaration12.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

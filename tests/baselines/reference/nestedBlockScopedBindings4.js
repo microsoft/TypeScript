@@ -43,6 +43,7 @@ function a3() {
 }
 
 //// [nestedBlockScopedBindings4.js]
+"use strict";
 function a0() {
     for (var x = void 0; x < 1;) {
         x = x + 1;

@@ -7,5 +7,6 @@ const a = 1;
 const b = 1;
 
 //// [dist.js]
+"use strict";
 var a = 1;
 var b = 1;

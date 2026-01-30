@@ -7,9 +7,11 @@ class C<T> { a: T; }
 interface C<T> { }
 
 //// [a.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 //// [b.js]
+"use strict";

@@ -57,6 +57,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 
 
 //// [enumErrors.js]
+"use strict";
 // Enum named with PredefinedTypes
 var any;
 (function (any) {

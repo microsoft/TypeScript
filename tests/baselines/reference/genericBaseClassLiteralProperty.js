@@ -15,6 +15,7 @@ class SubClass extends BaseClass<number> {
 }
 
 //// [genericBaseClassLiteralProperty.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

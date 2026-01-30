@@ -6,6 +6,7 @@ function foo() {
 }
 
 //// [superCallFromFunction1.js]
+"use strict";
 function foo() {
     _this = _super.call(this, function (value) { return String(value); }) || this;
 }

@@ -72,6 +72,7 @@ declare var a5: (x?: number, y?: number) => number;
     a5 = b.a6; // ok, same number of params
 
 //// [assignmentCompatWithCallSignaturesWithOptionalParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the base type
 a = function () { return 1; }; // ok, same number of required params
 a = function (x) { return 1; }; // ok, same number of required params

@@ -42,4 +42,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var pkg_1 = require("pkg");
 pkg_1.x;
 //// [real-imports.mjs]
+"use strict";
 export {};

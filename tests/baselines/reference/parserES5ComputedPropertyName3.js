@@ -4,5 +4,6 @@
 var v = { [e]() { } };
 
 //// [parserES5ComputedPropertyName3.js]
+"use strict";
 var _a;
 var v = (_a = {}, _a[e] = function () { }, _a);

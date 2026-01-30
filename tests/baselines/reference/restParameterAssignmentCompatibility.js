@@ -29,6 +29,7 @@ var t1: T1;
 t1 = s; // Similar to above, but optionality does not matter here.
 
 //// [restParameterAssignmentCompatibility.js]
+"use strict";
 var T = /** @class */ (function () {
     function T() {
     }

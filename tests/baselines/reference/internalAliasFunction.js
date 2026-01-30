@@ -15,6 +15,7 @@ namespace c {
 
 
 //// [internalAliasFunction.js]
+"use strict";
 var a;
 (function (a) {
     function foo(x) {

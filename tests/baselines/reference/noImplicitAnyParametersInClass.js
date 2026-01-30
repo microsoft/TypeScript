@@ -94,6 +94,7 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         // No implicit-'any' errors.

@@ -15,4 +15,5 @@ import {x} from "foo";
 
 
 //// [app.js]
+"use strict";
 export {};

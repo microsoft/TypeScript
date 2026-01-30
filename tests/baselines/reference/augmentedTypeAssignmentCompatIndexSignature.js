@@ -24,6 +24,7 @@ var v2: {
 } = f; // Should be allowed
 
 //// [augmentedTypeAssignmentCompatIndexSignature.js]
+"use strict";
 var o = {};
 var f = function () { };
 var v1 = o; // Should be allowed

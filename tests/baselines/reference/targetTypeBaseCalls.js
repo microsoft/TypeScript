@@ -21,6 +21,7 @@ class Bar extends Foo { constructor() { super(function(s) { s = 5 }) } }  // err
 
 
 //// [targetTypeBaseCalls.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

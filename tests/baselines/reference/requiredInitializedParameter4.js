@@ -6,6 +6,7 @@ class C1 {
 }
 
 //// [requiredInitializedParameter4.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

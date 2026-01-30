@@ -34,6 +34,7 @@ class SomeClass2 {
 }
 
 //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js]
+"use strict";
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }

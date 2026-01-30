@@ -20,6 +20,7 @@ Foo({
 
 
 //// [tsxAttributeQuickinfoTypesSameAsObjectLiteral.jsx]
+"use strict";
 var Foo = function (props) { return <span>{props.foo}</span>; };
 Foo({
     foo: "B"

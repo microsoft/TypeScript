@@ -33,6 +33,7 @@ let n: number = f(2).a;
 
 
 //// [indirectTypeParameterReferences.js]
+"use strict";
 // Repro from #19043
 var flowtypes = function (b) {
     var combined = function (fn) { return null; };

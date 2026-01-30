@@ -73,6 +73,7 @@ instance.returnThis().fn();
 
 
 //// [superPropertyAccessNoError.js]
+"use strict";
 //super.publicInstanceMemberFunction in constructor of derived class
 //super.publicInstanceMemberFunction in instance member function of derived class
 //super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class

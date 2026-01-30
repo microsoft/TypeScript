@@ -11,6 +11,7 @@ let x = class B implements A {
 };
 
 //// [classExpressions.js]
+"use strict";
 var x = /** @class */ (function () {
     function B() {
         this.func = function () {

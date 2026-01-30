@@ -9,6 +9,7 @@ function foo3(a?:string, ...b:number[]){}
 foo3(); // error but shouldn't be
 
 //// [restParamsWithNonRestParams.js]
+"use strict";
 function foo() {
     var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {

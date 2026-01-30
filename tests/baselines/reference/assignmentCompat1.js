@@ -15,6 +15,7 @@ z = false; // Error
 
 
 //// [assignmentCompat1.js]
+"use strict";
 var x = { one: 1 };
 x = y; // Error
 y = x; // Ok because index signature type is any

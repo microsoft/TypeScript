@@ -5,6 +5,7 @@ class C<T extends number> {
 }
 
 //// [parserGenericConstraint1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -7,6 +7,7 @@ const a1: A = { ...extra1 }; // spread should not give excess property errors
 
 
 //// [spreadExcessProperty.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

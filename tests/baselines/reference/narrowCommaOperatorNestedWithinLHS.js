@@ -19,6 +19,7 @@ if (isNumber((otherValue(), value).inner)) {
 }
 
 //// [narrowCommaOperatorNestedWithinLHS.js]
+"use strict";
 var otherValue = function () { return true; };
 var value = null;
 function isNumber(obj) {

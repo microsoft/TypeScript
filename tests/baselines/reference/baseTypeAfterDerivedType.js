@@ -19,6 +19,7 @@ interface Base2 {
 
 
 //// [baseTypeAfterDerivedType.js]
+"use strict";
 var Derived2 = /** @class */ (function () {
     function Derived2() {
     }

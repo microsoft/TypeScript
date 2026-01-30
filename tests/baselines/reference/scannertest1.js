@@ -27,6 +27,7 @@ class CharacterInfo {
 
 
 //// [scannertest1.js]
+"use strict";
 ///<reference path='References.ts' />
 var CharacterInfo = /** @class */ (function () {
     function CharacterInfo() {

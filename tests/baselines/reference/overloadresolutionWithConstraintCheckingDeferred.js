@@ -25,6 +25,7 @@ var result3: string = foo(x => { // x has type D
 
 
 //// [overloadresolutionWithConstraintCheckingDeferred.js]
+"use strict";
 var G = /** @class */ (function () {
     function G(x) {
     }

@@ -98,6 +98,7 @@ function f21(x: Item) {
 }
 
 //// [booleanLiteralTypes1.js]
+"use strict";
 function f1() {
     var a;
     var a;

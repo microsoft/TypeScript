@@ -17,6 +17,7 @@ class greeter {
 }
 
 //// [unusedPrivateMethodInClass4.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter() {
     }

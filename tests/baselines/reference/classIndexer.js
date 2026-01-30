@@ -8,6 +8,7 @@ class C123 {
 }
 
 //// [classIndexer.js]
+"use strict";
 var C123 = /** @class */ (function () {
     function C123() {
     }

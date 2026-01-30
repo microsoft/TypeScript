@@ -6,4 +6,5 @@ var x: {
 }
 
 //// [parserES5SymbolProperty8.js]
+"use strict";
 var x;

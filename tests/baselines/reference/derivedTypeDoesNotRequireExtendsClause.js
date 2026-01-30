@@ -23,6 +23,7 @@ b = d2;
 var r: Base[] = [d1, d2];
 
 //// [derivedTypeDoesNotRequireExtendsClause.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

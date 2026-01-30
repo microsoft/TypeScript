@@ -6,6 +6,7 @@ class Foo {
 }
 
 //// [parameterPropertyInitializerInInitializers.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(x, y) {
         if (y === void 0) { y = x; }

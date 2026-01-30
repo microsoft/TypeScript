@@ -15,6 +15,7 @@ namespace M {
 
 
 //// [structural1.js]
+"use strict";
 var M;
 (function (M) {
     function f(i) {

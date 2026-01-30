@@ -14,6 +14,7 @@ class C {
 
 
 //// [noUnusedLocals_writeOnlyProperty_dynamicNames.js]
+"use strict";
 var x = Symbol("x");
 var y = Symbol("y");
 var C = /** @class */ (function () {

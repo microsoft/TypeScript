@@ -26,6 +26,7 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsProtected.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -19,6 +19,7 @@ var r3: string = d.bar();
 var r4: number = d.bar();
 
 //// [extendAndImplementTheSameBaseType2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

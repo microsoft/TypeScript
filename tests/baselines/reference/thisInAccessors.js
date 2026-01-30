@@ -33,6 +33,7 @@ class GetterAndSetter {
 }
 
 //// [thisInAccessors.js]
+"use strict";
 // this capture only in getter
 var GetterOnly = /** @class */ (function () {
     function GetterOnly() {

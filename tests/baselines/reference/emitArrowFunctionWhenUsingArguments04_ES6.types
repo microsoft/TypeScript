@@ -7,6 +7,7 @@ function f() {
 
     var arguments;
 >arguments : any
+>          : ^^^
 
     var a = () => arguments;
 >a : () => any
@@ -14,4 +15,5 @@ function f() {
 >() => arguments : () => any
 >                : ^^^^^^^^^
 >arguments : any
+>          : ^^^
 }

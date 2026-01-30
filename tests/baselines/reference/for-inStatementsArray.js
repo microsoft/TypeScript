@@ -42,6 +42,7 @@ for (s in a) {
 
 
 //// [for-inStatementsArray.js]
+"use strict";
 var a;
 var b;
 for (var x in a) {

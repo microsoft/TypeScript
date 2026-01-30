@@ -47,6 +47,7 @@ var b = {
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
 
 //// [propertyAccessOnTypeParameterWithConstraints5.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

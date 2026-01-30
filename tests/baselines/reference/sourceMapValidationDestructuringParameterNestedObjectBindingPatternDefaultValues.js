@@ -47,6 +47,7 @@ foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 
 
 //// [sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.js]
+"use strict";
 var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function foo1(_a) {
     var _b = _a === void 0 ? robotA : _a, _c = _b.skills, _d = _c === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _c, _e = _d.primary, primaryA = _e === void 0 ? "primary" : _e, _f = _d.secondary, secondaryA = _f === void 0 ? "secondary" : _f;

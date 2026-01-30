@@ -25,6 +25,7 @@ namespace O {
 }
 
 //// [classExtendsItselfIndirectly2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

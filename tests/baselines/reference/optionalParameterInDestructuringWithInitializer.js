@@ -62,6 +62,7 @@ performFoo2();
 
 
 //// [optionalParameterInDestructuringWithInitializer.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/17080
 function func1(_a) {
     var _b = _a === void 0 ? { a: 1, b: 2 } : _a, a = _b.a, b = _b.b;

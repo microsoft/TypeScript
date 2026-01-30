@@ -26,6 +26,7 @@ if (typeof b === 'object') {
 
 
 //// [nonPrimitiveNarrow.js]
+"use strict";
 var Narrow = /** @class */ (function () {
     function Narrow() {
     }

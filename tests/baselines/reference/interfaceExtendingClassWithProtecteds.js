@@ -18,6 +18,7 @@ var r = i.y;
 var r2 = i.x; // error
 
 //// [interfaceExtendingClassWithProtecteds.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

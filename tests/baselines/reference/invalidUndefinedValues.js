@@ -34,6 +34,7 @@ x = E;
 x = E.A;
 
 //// [invalidUndefinedValues.js]
+"use strict";
 var x;
 x = 1;
 x = '';

@@ -57,6 +57,7 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedBooleanType.js]
+"use strict";
 function foo() { return true; }
 var A = /** @class */ (function () {
     function A() {

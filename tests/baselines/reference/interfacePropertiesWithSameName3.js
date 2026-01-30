@@ -11,6 +11,7 @@ interface F2 extends E2, D2 { } // error
 
 
 //// [interfacePropertiesWithSameName3.js]
+"use strict";
 var D2 = /** @class */ (function () {
     function D2() {
     }

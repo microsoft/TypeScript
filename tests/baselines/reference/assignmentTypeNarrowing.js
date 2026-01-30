@@ -38,6 +38,7 @@ arr.push({ x: "ok" });
 
 
 //// [assignmentTypeNarrowing.js]
+"use strict";
 var _a, _b, _c;
 var x;
 x = "";

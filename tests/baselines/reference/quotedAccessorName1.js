@@ -6,6 +6,7 @@ class C {
 }
 
 //// [quotedAccessorName1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

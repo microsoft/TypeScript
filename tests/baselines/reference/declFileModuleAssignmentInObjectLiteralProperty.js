@@ -11,6 +11,7 @@ var d = {
 };
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.js]
+"use strict";
 var m1;
 (function (m1) {
     var c = /** @class */ (function () {

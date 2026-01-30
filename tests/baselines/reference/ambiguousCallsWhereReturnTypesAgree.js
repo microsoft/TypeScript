@@ -31,6 +31,7 @@ class TestClass2 {
 
 
 //// [ambiguousCallsWhereReturnTypesAgree.js]
+"use strict";
 var TestClass = /** @class */ (function () {
     function TestClass() {
     }

@@ -9,6 +9,7 @@ const f3 = ([_]) => { };
 f3([10]);
 
 //// [unusedDestructuringParameters.js]
+"use strict";
 var f = function (_a) {
     var a = _a[0];
 };

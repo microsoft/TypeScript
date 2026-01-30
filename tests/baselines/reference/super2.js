@@ -53,6 +53,7 @@ results1.x() + results1.y() + results2.y();
 
 
 //// [super2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -19,6 +19,7 @@ class D2<T> extends C2<T> { bar: T; }
 class E2<T> extends D2<T> { baz: T; }
 
 //// [classExtendsItselfIndirectly_file1.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -42,6 +43,7 @@ var C = /** @class */ (function (_super) {
     return C;
 }(E)); // error
 //// [classExtendsItselfIndirectly_file2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -65,6 +67,7 @@ var D = /** @class */ (function (_super) {
     return D;
 }(C));
 //// [classExtendsItselfIndirectly_file3.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -88,6 +91,7 @@ var E = /** @class */ (function (_super) {
     return E;
 }(D));
 //// [classExtendsItselfIndirectly_file4.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -111,6 +115,7 @@ var C2 = /** @class */ (function (_super) {
     return C2;
 }(E2)); // error
 //// [classExtendsItselfIndirectly_file5.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -134,6 +139,7 @@ var D2 = /** @class */ (function (_super) {
     return D2;
 }(C2));
 //// [classExtendsItselfIndirectly_file6.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

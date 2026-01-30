@@ -38,6 +38,7 @@ var p: IPoint = new Shapes.Point(3, 4);
 var dist = p.getDist();
 
 //// [sourceMap-FileWithComments.js]
+"use strict";
 // Module
 var Shapes;
 (function (Shapes) {

@@ -15,6 +15,7 @@ namespace Clod {
 
 
 //// [cloduleStaticMembers.js]
+"use strict";
 var Clod = /** @class */ (function () {
     function Clod() {
     }

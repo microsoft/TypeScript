@@ -40,6 +40,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 
 
 //// [computedPropertiesInDestructuring1.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
 // destructuring in variable declarations
 var foo = "bar";

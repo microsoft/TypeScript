@@ -6,6 +6,7 @@ let xx: { a, b }  = { a: 1, ...x, z: 3 } // error for 'z', no error for 'extra'
 
 
 //// [objectLiteralFreshnessWithSpread.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

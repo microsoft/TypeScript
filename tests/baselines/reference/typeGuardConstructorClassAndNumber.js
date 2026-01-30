@@ -133,6 +133,7 @@ function foo(instance: Function | object) {
 
 
 //// [typeGuardConstructorClassAndNumber.js]
+"use strict";
 // Typical case
 var C1 = /** @class */ (function () {
     function C1() {

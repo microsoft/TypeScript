@@ -7,6 +7,7 @@ function f() {}
 f.prototype;
 
 //// [prototypes.js]
+"use strict";
 Object.prototype; // ok
 new Object().prototype; // error
 function f() { }

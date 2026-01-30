@@ -9,6 +9,7 @@ class C  {
 }
 
 //// [parserErrorRecovery_Block3.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

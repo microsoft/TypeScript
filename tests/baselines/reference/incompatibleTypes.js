@@ -78,6 +78,7 @@ var fp1: () =>any = a => 0;
 
 
 //// [incompatibleTypes.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

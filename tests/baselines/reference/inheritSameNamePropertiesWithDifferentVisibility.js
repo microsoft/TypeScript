@@ -14,6 +14,7 @@ interface A extends C, C2 { // error
 }
 
 //// [inheritSameNamePropertiesWithDifferentVisibility.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

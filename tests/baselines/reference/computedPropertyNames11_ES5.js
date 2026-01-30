@@ -19,6 +19,7 @@ var v = {
 }
 
 //// [computedPropertyNames11_ES5.js]
+"use strict";
 var _a;
 var s;
 var n;

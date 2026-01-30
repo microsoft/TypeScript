@@ -21,6 +21,7 @@ var c = c3;
 var d = c4;
 
 //// [staticPrototypePropertyOnClass.js]
+"use strict";
 var c1 = /** @class */ (function () {
     function c1() {
     }

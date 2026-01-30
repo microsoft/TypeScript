@@ -9,6 +9,7 @@ class C<T> {
 }
 
 //// [inOperatorWithGeneric.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

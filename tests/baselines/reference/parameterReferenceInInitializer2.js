@@ -6,6 +6,7 @@ function Example(x = function(x: any) { return x; }) { // Error: parameter 'x' c
 }
 
 //// [parameterReferenceInInitializer2.js]
+"use strict";
 function Example(x) {
     if (x === void 0) { x = function (x) { return x; }; }
     // referenced in its initializer

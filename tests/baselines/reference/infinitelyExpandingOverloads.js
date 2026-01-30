@@ -29,6 +29,7 @@ class Widget<TValue> {
 }
 
 //// [infinitelyExpandingOverloads.js]
+"use strict";
 var Validator2 = /** @class */ (function () {
     function Validator2() {
     }

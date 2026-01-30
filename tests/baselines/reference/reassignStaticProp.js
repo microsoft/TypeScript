@@ -14,6 +14,7 @@ class foo {
 
 
 //// [reassignStaticProp.js]
+"use strict";
 var foo = /** @class */ (function () {
     function foo() {
     }

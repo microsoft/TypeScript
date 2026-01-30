@@ -19,6 +19,7 @@ class B {
 }
 
 //// [constructorParametersInVariableDeclarations.js]
+"use strict";
 var A = /** @class */ (function () {
     function A(x) {
         this.a = x;

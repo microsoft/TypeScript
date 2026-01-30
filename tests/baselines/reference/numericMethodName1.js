@@ -7,6 +7,7 @@ class C {
 
 
 //// [numericMethodName1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this[1] = 2;

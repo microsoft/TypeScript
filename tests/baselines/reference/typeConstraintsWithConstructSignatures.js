@@ -15,6 +15,7 @@ class C<T extends Constructable> {
 
 
 //// [typeConstraintsWithConstructSignatures.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(data, data2) {
         this.data = data;

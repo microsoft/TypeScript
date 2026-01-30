@@ -15,6 +15,7 @@ class Foo3 {
 
 
 //// [varArgConstructorMemberParameter.js]
+"use strict";
 var Foo1 = /** @class */ (function () {
     function Foo1() {
         var args = [];

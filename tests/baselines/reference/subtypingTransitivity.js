@@ -22,6 +22,7 @@ b.x = 1; // assigned number to string
 
 
 //// [subtypingTransitivity.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

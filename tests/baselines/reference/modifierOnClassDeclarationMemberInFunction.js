@@ -10,6 +10,7 @@ function f() {
 }
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
+"use strict";
 function f() {
     var C = /** @class */ (function () {
         function C() {

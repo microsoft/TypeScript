@@ -15,6 +15,7 @@ namespace M2 {
 }
 
 //// [classImplementsImportedInterface.js]
+"use strict";
 var M2;
 (function (M2) {
     var C = /** @class */ (function () {

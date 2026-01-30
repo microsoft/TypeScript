@@ -5,6 +5,7 @@ var {x} = { x: 20 };
 var { a, b } = { a: 30, b: 40 };
 
 //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js]
+"use strict";
 var x = { x: 20 }.x;
 var _a = { a: 30, b: 40 }, a = _a.a, b = _a.b;
 //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js.map

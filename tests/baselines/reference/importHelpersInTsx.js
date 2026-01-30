@@ -26,6 +26,7 @@ exports.x = void 0;
 var tslib_1 = require("tslib");
 exports.x = React.createElement("span", tslib_1.__assign({}, o));
 //// [script.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

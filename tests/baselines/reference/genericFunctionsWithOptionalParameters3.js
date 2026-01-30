@@ -18,6 +18,7 @@ var r5 = utils.mapReduce(c, f1, f2);
 
 
 //// [genericFunctionsWithOptionalParameters3.js]
+"use strict";
 var Collection = /** @class */ (function () {
     function Collection() {
     }

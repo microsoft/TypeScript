@@ -14,6 +14,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfLambdaFunction2.js]
+"use strict";
 var TestFile = /** @class */ (function () {
     function TestFile() {
     }

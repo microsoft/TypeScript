@@ -11,6 +11,7 @@ function f<T, T>() { }
 function f2<T, U, T>() { }
 
 //// [typesWithDuplicateTypeParameters.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

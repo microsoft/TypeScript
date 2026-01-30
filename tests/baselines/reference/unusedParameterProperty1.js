@@ -9,6 +9,7 @@ class A {
 
 
 //// [unusedParameterProperty1.js]
+"use strict";
 var A = /** @class */ (function () {
     function A(used) {
         this.used = used;

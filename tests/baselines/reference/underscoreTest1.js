@@ -903,7 +903,9 @@ template2({ name: "Mustache" });
 _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
 
 //// [underscoreTest1_underscore.js]
+"use strict";
 //// [underscoreTest1_underscoreTests.js]
+"use strict";
 /// <reference path="underscoreTest1_underscore.ts" />
 _.each([1, 2, 3], function (num) { return alert(num.toString()); });
 _.each({ one: 1, two: 2, three: 3 }, function (value, key) { return alert(value.toString()); });

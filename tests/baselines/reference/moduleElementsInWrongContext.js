@@ -33,6 +33,7 @@
 
 
 //// [moduleElementsInWrongContext.js]
+"use strict";
 {
     export = M;
     var v;

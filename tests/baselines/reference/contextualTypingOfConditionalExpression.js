@@ -17,6 +17,7 @@ var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
 
 
 //// [contextualTypingOfConditionalExpression.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -8,6 +8,7 @@ namespace A {
 var a: A; // no error
 
 //// [moduleWithValuesAsType.js]
+"use strict";
 var A;
 (function (A) {
     var b = 1;

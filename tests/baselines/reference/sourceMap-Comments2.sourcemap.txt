@@ -8,6 +8,7 @@ sources: sourceMap-Comments2.ts
 emittedFile:sourceMap-Comments2.js
 sourceFile:sourceMap-Comments2.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>function foo(str, num) {
 1 >
 2 >^^^^^^^^^
@@ -23,13 +24,13 @@ sourceFile:sourceMap-Comments2.ts
 5 >             str: string
 6 >                , 
 7 >                  num: number
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
-3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
-5 >Emitted(1, 17) Source(1, 25) + SourceIndex(0)
-6 >Emitted(1, 19) Source(1, 27) + SourceIndex(0)
-7 >Emitted(1, 22) Source(1, 38) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(2, 13) Source(1, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(1, 25) + SourceIndex(0)
+6 >Emitted(2, 19) Source(1, 27) + SourceIndex(0)
+7 >Emitted(2, 22) Source(1, 38) + SourceIndex(0)
 ---
 >>>    return;
 1 >^^^^
@@ -37,8 +38,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >): void {
   >    
 2 >    return;
-1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 12) Source(2, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -47,8 +48,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >
   >
 2 >}
-1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+1 >Emitted(4, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>/**
 1->
@@ -56,7 +57,7 @@ sourceFile:sourceMap-Comments2.ts
 1->
   >
   >
-1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
+1->Emitted(5, 1) Source(5, 1) + SourceIndex(0)
 ---
 >>> * some sort of block quote
 >>> */
@@ -65,7 +66,7 @@ sourceFile:sourceMap-Comments2.ts
 1->/**
   > * some sort of block quote
   > */
-1->Emitted(6, 4) Source(7, 4) + SourceIndex(0)
+1->Emitted(7, 4) Source(7, 4) + SourceIndex(0)
 ---
 >>>function bar(str, num) {
 1->
@@ -83,13 +84,13 @@ sourceFile:sourceMap-Comments2.ts
 5 >             str: string
 6 >                , 
 7 >                  num: number
-1->Emitted(7, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(7, 10) Source(8, 10) + SourceIndex(0)
-3 >Emitted(7, 13) Source(8, 13) + SourceIndex(0)
-4 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
-5 >Emitted(7, 17) Source(8, 25) + SourceIndex(0)
-6 >Emitted(7, 19) Source(8, 27) + SourceIndex(0)
-7 >Emitted(7, 22) Source(8, 38) + SourceIndex(0)
+1->Emitted(8, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(8, 10) Source(8, 10) + SourceIndex(0)
+3 >Emitted(8, 13) Source(8, 13) + SourceIndex(0)
+4 >Emitted(8, 14) Source(8, 14) + SourceIndex(0)
+5 >Emitted(8, 17) Source(8, 25) + SourceIndex(0)
+6 >Emitted(8, 19) Source(8, 27) + SourceIndex(0)
+7 >Emitted(8, 22) Source(8, 38) + SourceIndex(0)
 ---
 >>>    return;
 1 >^^^^
@@ -97,8 +98,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >): void {
   >    
 2 >    return;
-1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
-2 >Emitted(8, 12) Source(9, 12) + SourceIndex(0)
+1 >Emitted(9, 5) Source(9, 5) + SourceIndex(0)
+2 >Emitted(9, 12) Source(9, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -107,8 +108,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >
   >
 2 >}
-1 >Emitted(9, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
+1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(10, 2) + SourceIndex(0)
 ---
 >>>// some sort of comment
 1->
@@ -118,8 +119,8 @@ sourceFile:sourceMap-Comments2.ts
   >
   >
 2 >// some sort of comment
-1->Emitted(10, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(10, 24) Source(12, 24) + SourceIndex(0)
+1->Emitted(11, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(11, 24) Source(12, 24) + SourceIndex(0)
 ---
 >>>function baz(str, num) {
 1->
@@ -137,13 +138,13 @@ sourceFile:sourceMap-Comments2.ts
 5 >             str: string
 6 >                , 
 7 >                  num: number
-1->Emitted(11, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(11, 10) Source(13, 10) + SourceIndex(0)
-3 >Emitted(11, 13) Source(13, 13) + SourceIndex(0)
-4 >Emitted(11, 14) Source(13, 14) + SourceIndex(0)
-5 >Emitted(11, 17) Source(13, 25) + SourceIndex(0)
-6 >Emitted(11, 19) Source(13, 27) + SourceIndex(0)
-7 >Emitted(11, 22) Source(13, 38) + SourceIndex(0)
+1->Emitted(12, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(12, 10) Source(13, 10) + SourceIndex(0)
+3 >Emitted(12, 13) Source(13, 13) + SourceIndex(0)
+4 >Emitted(12, 14) Source(13, 14) + SourceIndex(0)
+5 >Emitted(12, 17) Source(13, 25) + SourceIndex(0)
+6 >Emitted(12, 19) Source(13, 27) + SourceIndex(0)
+7 >Emitted(12, 22) Source(13, 38) + SourceIndex(0)
 ---
 >>>    return;
 1 >^^^^
@@ -151,8 +152,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >): void {
   >    
 2 >    return;
-1 >Emitted(12, 5) Source(14, 5) + SourceIndex(0)
-2 >Emitted(12, 12) Source(14, 12) + SourceIndex(0)
+1 >Emitted(13, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(13, 12) Source(14, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -161,8 +162,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >
   >
 2 >}
-1 >Emitted(13, 1) Source(15, 1) + SourceIndex(0)
-2 >Emitted(13, 2) Source(15, 2) + SourceIndex(0)
+1 >Emitted(14, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(15, 2) + SourceIndex(0)
 ---
 >>>function qat(str, num) {
 1->
@@ -181,13 +182,13 @@ sourceFile:sourceMap-Comments2.ts
 5 >             str: string
 6 >                , 
 7 >                  num: number
-1->Emitted(14, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(14, 10) Source(17, 10) + SourceIndex(0)
-3 >Emitted(14, 13) Source(17, 13) + SourceIndex(0)
-4 >Emitted(14, 14) Source(17, 14) + SourceIndex(0)
-5 >Emitted(14, 17) Source(17, 25) + SourceIndex(0)
-6 >Emitted(14, 19) Source(17, 27) + SourceIndex(0)
-7 >Emitted(14, 22) Source(17, 38) + SourceIndex(0)
+1->Emitted(15, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(15, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(15, 13) Source(17, 13) + SourceIndex(0)
+4 >Emitted(15, 14) Source(17, 14) + SourceIndex(0)
+5 >Emitted(15, 17) Source(17, 25) + SourceIndex(0)
+6 >Emitted(15, 19) Source(17, 27) + SourceIndex(0)
+7 >Emitted(15, 22) Source(17, 38) + SourceIndex(0)
 ---
 >>>    return;
 1 >^^^^
@@ -195,8 +196,8 @@ sourceFile:sourceMap-Comments2.ts
 1 >): void {
   >    
 2 >    return;
-1 >Emitted(15, 5) Source(18, 5) + SourceIndex(0)
-2 >Emitted(15, 12) Source(18, 12) + SourceIndex(0)
+1 >Emitted(16, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(16, 12) Source(18, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -205,7 +206,7 @@ sourceFile:sourceMap-Comments2.ts
 1 >
   >
 2 >}
-1 >Emitted(16, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(16, 2) Source(19, 2) + SourceIndex(0)
+1 >Emitted(17, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(19, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-Comments2.js.map

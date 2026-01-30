@@ -5,6 +5,7 @@ class C { foo: number }
 class D implements C extends C { }
 
 //// [implementClausePrecedingExtends.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

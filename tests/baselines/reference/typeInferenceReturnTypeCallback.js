@@ -24,6 +24,7 @@ class Cons<T> implements IList<T>{
 }
 
 //// [typeInferenceReturnTypeCallback.js]
+"use strict";
 var Nil = /** @class */ (function () {
     function Nil() {
     }

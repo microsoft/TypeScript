@@ -122,6 +122,7 @@ l\u0061bel4:
     } 
 
 //// [escapedIdentifiers.js]
+"use strict";
 /*
     0 .. \u0030
     9 .. \u0039

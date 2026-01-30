@@ -79,6 +79,7 @@ declare var a: {
 
 
 //// [returnTypeTypeArguments.js]
+"use strict";
 var One = /** @class */ (function () {
     function One() {
     }

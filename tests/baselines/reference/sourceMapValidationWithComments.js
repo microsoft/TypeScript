@@ -24,6 +24,7 @@ class DebugClass {
 }
 
 //// [sourceMapValidationWithComments.js]
+"use strict";
 var DebugClass = /** @class */ (function () {
     function DebugClass() {
     }

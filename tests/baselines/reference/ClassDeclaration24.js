@@ -5,6 +5,7 @@ class any {
 }
 
 //// [ClassDeclaration24.js]
+"use strict";
 var any = /** @class */ (function () {
     function any() {
     }

@@ -121,6 +121,7 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
+"use strict";
 var x = 1;
 
 
@@ -129,6 +130,7 @@ declare let x: number;
 
 
 //// [/user/username/projects/project/commonFile2.js]
+"use strict";
 var y = 1;
 
 
@@ -196,6 +198,7 @@ declare let y: number;
 }
 
 //// [/user/username/projects/project/other.js]
+"use strict";
 var z = 0;
 
 
@@ -248,6 +251,7 @@ declare let z: number;
 }
 
 //// [/user/username/projects/project/other2.js]
+"use strict";
 var k = 0;
 
 
@@ -393,16 +397,6 @@ Output::
 
 
 
-//// [/user/username/projects/project/commonFile1.js]
-"use strict";
-var x = 1;
-
-
-//// [/user/username/projects/project/commonFile2.js]
-"use strict";
-var y = 1;
-
-
 //// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
 {"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"latestChangedDtsFile":"./commonFile2.d.ts","version":"FakeTSVersion"}
 
@@ -512,11 +506,6 @@ Output::
 
 
 
-//// [/user/username/projects/project/other.js]
-"use strict";
-var z = 0;
-
-
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
 {"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
@@ -619,10 +608,6 @@ Output::
 
 
 
-//// [/user/username/projects/project/other.js]
-var z = 0;
-
-
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
 {"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
@@ -714,7 +699,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'other2.js' is older than input 'project2.tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project2.tsconfig.json'...
 
@@ -724,11 +709,7 @@ Output::
 
 //// [/user/username/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/projects/project/commonFile2.js] file written with same contents
-//// [/user/username/projects/project/other.js]
-"use strict";
-var z = 0;
-
-
+//// [/user/username/projects/project/other.js] file written with same contents
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
 {"root":["./commonfile1.ts","./commonfile2.ts","./other.ts","./other2.ts"],"version":"FakeTSVersion"}
 
@@ -744,11 +725,7 @@ var z = 0;
   "size": 101
 }
 
-//// [/user/username/projects/project/other2.js]
-"use strict";
-var k = 0;
-
-
+//// [/user/username/projects/project/other2.js] file written with same contents
 
 FsWatches::
 /user/username/projects/project/alpha.tsconfig.json:
@@ -841,14 +818,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project1.tsconfig.json'...
 
-
-
-//// [/user/username/projects/project/commonFile1.js]
-var x = 1;
-
-
-//// [/user/username/projects/project/commonFile2.js]
-var y = 1;
 
 
 //// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
@@ -954,22 +923,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project2.tsconfig.json'...
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/project/project2.tsconfig.json'...
+
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/project/commonFile1.js] file written with same contents
-//// [/user/username/projects/project/commonFile2.js] file written with same contents
-//// [/user/username/projects/project/other.js]
-var z = 0;
-
-
+//// [/user/username/projects/project/commonFile1.js] file changed its modified time
+//// [/user/username/projects/project/commonFile2.js] file changed its modified time
+//// [/user/username/projects/project/other.js] file changed its modified time
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/user/username/projects/project/other2.js]
-var k = 0;
-
-
+//// [/user/username/projects/project/other2.js] file changed its modified time
 
 
 Program root files: [

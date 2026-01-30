@@ -29,6 +29,7 @@ var x = <MyComponent bar='world' />;
 
 
 //// [file.jsx]
+"use strict";
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }

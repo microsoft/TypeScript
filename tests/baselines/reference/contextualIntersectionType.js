@@ -9,6 +9,7 @@ x = {
 
 
 //// [contextualIntersectionType.js]
+"use strict";
 var x;
 x = {
     a: function (s) { return s; },

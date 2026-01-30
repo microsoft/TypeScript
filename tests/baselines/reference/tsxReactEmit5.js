@@ -20,6 +20,7 @@ var spread1 = <div x='' {...foo} y='' />;
 
 
 //// [file.js]
+"use strict";
 //// [react-consumer.js]
 "use strict";
 var __assign = (this && this.__assign) || function () {

@@ -10,6 +10,7 @@ trans(({a, b = 10}) => a);
 
 
 //// [fallbackToBindingPatternForTypeInference.js]
+"use strict";
 trans(function (_a) {
     var a = _a.a;
     return a;

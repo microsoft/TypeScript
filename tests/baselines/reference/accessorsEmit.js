@@ -18,6 +18,7 @@ class Test2 {
 }
 
 //// [accessorsEmit.js]
+"use strict";
 var Result = /** @class */ (function () {
     function Result() {
     }

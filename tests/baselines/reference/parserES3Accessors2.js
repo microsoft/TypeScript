@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserES3Accessors2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

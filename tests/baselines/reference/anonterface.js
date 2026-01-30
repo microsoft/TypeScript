@@ -17,6 +17,7 @@ c.m(function(n) { return "hello: "+n; },18);
 
 
 //// [anonterface.js]
+"use strict";
 var M;
 (function (M) {
     var C = /** @class */ (function () {

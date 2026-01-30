@@ -30,6 +30,7 @@ result+=(M.origin.move(1,1));
 
 
 //// [topLevel.js]
+"use strict";
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;

@@ -15,6 +15,7 @@ class C {
 }
 
 //// [staticMemberWithStringAndNumberNames.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = C['foo'];

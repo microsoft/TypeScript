@@ -19,6 +19,7 @@ fn(MySubClass);
 
 
 //// [mappedTypePartialConstraints.js]
+"use strict";
 // Repro from #16985
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

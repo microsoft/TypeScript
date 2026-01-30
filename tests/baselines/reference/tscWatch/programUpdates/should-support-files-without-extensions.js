@@ -28,6 +28,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/compile.js]
+"use strict";
 var x = 1;
 
 

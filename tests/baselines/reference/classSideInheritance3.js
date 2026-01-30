@@ -21,6 +21,7 @@ var r2: new (x: string) => A = B; // error
 var r3: typeof A = C; // ok
 
 //// [classSideInheritance3.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

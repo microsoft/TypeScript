@@ -11,6 +11,7 @@ if (foo.every(isString)) {
 
 
 //// [arrayEvery.js]
+"use strict";
 var foo = ['aaa'];
 var isString = function (x) { return typeof x === 'string'; };
 if (foo.every(isString)) {

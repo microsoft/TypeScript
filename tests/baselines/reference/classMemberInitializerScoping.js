@@ -23,6 +23,7 @@ class CCCC {
 
 
 //// [classMemberInitializerScoping.js]
+"use strict";
 var aaa = 1;
 var CCC = /** @class */ (function () {
     function CCC(aaa) {

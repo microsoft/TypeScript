@@ -18,6 +18,7 @@ class C2 {
 }
 
 //// [indexSignatureMustHaveTypeAnnotation.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

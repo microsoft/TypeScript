@@ -31,3 +31,4 @@ interface i3 {
 }
 
 //// [collisionArgumentsInterfaceMembers.js]
+"use strict";

@@ -8,6 +8,7 @@ namespace m {
 }
 
 //// [declarationEmitDestructuringPrivacyError.js]
+"use strict";
 var m;
 (function (m) {
     var _a;

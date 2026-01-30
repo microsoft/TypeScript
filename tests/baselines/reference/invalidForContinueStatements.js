@@ -40,6 +40,7 @@ for(;;) {
 }
 
 //// [invalidForContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;

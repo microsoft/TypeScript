@@ -18,6 +18,7 @@ var genericX = genericC;
 
 
 //// [declFileTypeofClass.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

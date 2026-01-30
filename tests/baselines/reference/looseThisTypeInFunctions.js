@@ -51,6 +51,7 @@ i.explicitThis = function(m) {
 
 
 //// [looseThisTypeInFunctions.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

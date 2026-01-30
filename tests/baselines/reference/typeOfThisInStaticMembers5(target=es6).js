@@ -11,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
+"use strict";
 var _a;
 class C {
     constructor(foo) {

@@ -103,6 +103,7 @@ define(["require", "exports"], function (require, exports) {
     })(m2 || (m2 = {}));
 });
 //// [collisionExportsRequireAndEnum_globalFile.js]
+"use strict";
 var require;
 (function (require) {
     require[require["_thisVal1"] = 0] = "_thisVal1";

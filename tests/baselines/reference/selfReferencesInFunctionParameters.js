@@ -16,6 +16,7 @@ class C {
 }
 
 //// [selfReferencesInFunctionParameters.js]
+"use strict";
 function foo(x) {
     if (x === void 0) { x = x; }
 }

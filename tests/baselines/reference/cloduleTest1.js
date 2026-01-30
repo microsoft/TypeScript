@@ -14,6 +14,7 @@
 
 
 //// [cloduleTest1.js]
+"use strict";
 var $;
 (function ($) {
     function ajax(options) { }

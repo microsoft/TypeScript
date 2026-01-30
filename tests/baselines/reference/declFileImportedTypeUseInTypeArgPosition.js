@@ -16,6 +16,7 @@ declare module 'moo' {
 
 
 //// [declFileImportedTypeUseInTypeArgPosition.js]
+"use strict";
 var List = /** @class */ (function () {
     function List() {
     }

@@ -20,6 +20,7 @@ module.exports = {
 };
 
 //// [errors.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -46,6 +47,7 @@ module.exports = {
     FancyError: FancyError
 };
 //// [index.js]
+"use strict";
 // issue arises here on compilation
 var errors = require("./errors");
 module.exports = {

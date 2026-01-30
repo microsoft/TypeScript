@@ -12,6 +12,7 @@ class UI {
 }
 
 //// [parameterReferencesOtherParameter1.js]
+"use strict";
 var Model = /** @class */ (function () {
     function Model() {
     }

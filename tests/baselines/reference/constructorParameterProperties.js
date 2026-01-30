@@ -24,6 +24,7 @@ var r4 = d.z; // error
 
 
 //// [constructorParameterProperties.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x, z) {
         this.x = x;

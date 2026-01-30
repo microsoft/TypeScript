@@ -111,6 +111,7 @@ var hc = `2${ 3 & 4 }5` & 6;
 
 
 //// [templateStringBinaryOperationsInvalid.js]
+"use strict";
 var a = 1 - "".concat(3);
 var b = 1 - "2".concat(3);
 var c = 1 - "".concat(3, "4");

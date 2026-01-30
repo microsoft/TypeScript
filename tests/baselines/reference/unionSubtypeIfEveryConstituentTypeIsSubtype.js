@@ -146,6 +146,7 @@ interface I20 {
 }
 
 //// [unionSubtypeIfEveryConstituentTypeIsSubtype.js]
+"use strict";
 var e;
 (function (e) {
     e[e["e1"] = 0] = "e1";

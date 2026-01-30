@@ -18,6 +18,7 @@ namespace X.Y.base.Z {
 }
 
 //// [declarationEmitNameConflicts2.js]
+"use strict";
 var X;
 (function (X) {
     var Y;

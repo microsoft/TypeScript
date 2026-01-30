@@ -26,6 +26,7 @@ y = {
 
 
 //// [objectLitIndexerContextualType.js]
+"use strict";
 var x;
 var y;
 x = {

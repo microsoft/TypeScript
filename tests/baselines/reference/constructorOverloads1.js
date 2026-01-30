@@ -24,6 +24,7 @@ f1.bar2();
 
 
 //// [constructorOverloads1.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(x) {
     }

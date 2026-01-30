@@ -10,6 +10,7 @@ var o2: { a: number, b: string, c: boolean };
 var o2 = { ...intersection, c: false };
 
 //// [spreadIntersection.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

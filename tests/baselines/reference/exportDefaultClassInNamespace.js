@@ -11,6 +11,7 @@ namespace ns_abstract_class {
 
 
 //// [exportDefaultClassInNamespace.js]
+"use strict";
 var ns_class;
 (function (ns_class) {
     var default_1 = /** @class */ (function () {

@@ -34,6 +34,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 foo().hello;
 
 
@@ -167,6 +168,10 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+foo().hello;
+
+
 
 
 Program root files: [
@@ -215,6 +220,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+foo().hello;
 
 
 

@@ -16,6 +16,7 @@ var f2NoError = () => {
 }
 
 //// [collisionRestParameterArrowFunctions.js]
+"use strict";
 var f1 = function (_i) {
     var restParameters = [];
     for (var _a = 1; _a < arguments.length; _a++) {

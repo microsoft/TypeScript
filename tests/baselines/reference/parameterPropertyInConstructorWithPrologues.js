@@ -85,6 +85,7 @@ class Foo9 extends C {
 
 
 //// [parameterPropertyInConstructorWithPrologues.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/48671
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

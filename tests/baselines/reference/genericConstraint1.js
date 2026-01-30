@@ -11,6 +11,7 @@ var x = new C<number>();
 x.bar2<string>(2, "");
 
 //// [genericConstraint1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

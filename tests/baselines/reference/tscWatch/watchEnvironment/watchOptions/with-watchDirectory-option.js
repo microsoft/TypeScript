@@ -38,10 +38,12 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js] Inode:: 114
+"use strict";
 var x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js] Inode:: 115
+"use strict";
 var y = 1;
 
 

@@ -7,6 +7,7 @@ class c3 { public bar() { } } // error
 
 
 //// [augmentedTypesClass4.js]
+"use strict";
 //// class then class
 var c3 = /** @class */ (function () {
     function c3() {

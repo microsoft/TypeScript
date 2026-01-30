@@ -59,6 +59,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
 
 //// [spreadInvalidArgumentType.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

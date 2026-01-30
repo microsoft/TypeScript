@@ -18,6 +18,7 @@ class Foo2 {
 
 
 //// [es6MemberScoping.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(store) {
         this._store = store; // should be an error.

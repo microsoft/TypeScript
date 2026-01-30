@@ -39,6 +39,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/b.js]
+"use strict";
 var b = 10;
 
 

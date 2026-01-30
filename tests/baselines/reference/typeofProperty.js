@@ -50,6 +50,7 @@ var x2: typeof viInstance.x; // x2: string
 
 
 //// [typeofProperty.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

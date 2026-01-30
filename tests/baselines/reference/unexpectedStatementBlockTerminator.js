@@ -10,6 +10,7 @@ function Goo() {return {a:1,b:2};}
 
 
 //// [unexpectedStatementBlockTerminator.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

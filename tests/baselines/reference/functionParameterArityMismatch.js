@@ -19,6 +19,7 @@ f2(1, 2, 3, 4, 5, ...[6, 7]);
 
 
 //// [functionParameterArityMismatch.js]
+"use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {

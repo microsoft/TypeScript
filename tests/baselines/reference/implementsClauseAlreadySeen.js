@@ -9,6 +9,7 @@ class D implements C implements C {
 }
 
 //// [implementsClauseAlreadySeen.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

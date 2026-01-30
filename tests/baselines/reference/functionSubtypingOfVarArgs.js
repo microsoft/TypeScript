@@ -17,6 +17,7 @@ class StringEvent extends EventBase { // should work
 
 
 //// [functionSubtypingOfVarArgs.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

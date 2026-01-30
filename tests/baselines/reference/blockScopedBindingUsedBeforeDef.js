@@ -11,6 +11,7 @@ for (let {[a]: a} = { }; false; ) continue;
 let {[b]: b} = { };
 
 //// [blockScopedBindingUsedBeforeDef.js]
+"use strict";
 // 1:
 for (var _i = 0, _a = [{}]; _i < _a.length; _i++) {
     var _b = a, a = _a[_i][_b];

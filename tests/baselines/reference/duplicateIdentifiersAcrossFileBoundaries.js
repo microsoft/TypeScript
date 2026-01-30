@@ -34,6 +34,7 @@ declare namespace N {
 
 
 //// [file1.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -59,6 +60,7 @@ var N;
     })(F = N.F || (N.F = {}));
 })(N || (N = {}));
 //// [file2.js]
+"use strict";
 var I = /** @class */ (function () {
     function I() {
     }

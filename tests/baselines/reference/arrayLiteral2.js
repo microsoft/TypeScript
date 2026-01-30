@@ -4,4 +4,5 @@
 var v30 = [1, 2], v31;
 
 //// [arrayLiteral2.js]
+"use strict";
 var v30 = [1, 2], v31;

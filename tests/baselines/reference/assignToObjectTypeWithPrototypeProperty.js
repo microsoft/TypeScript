@@ -6,6 +6,7 @@ var p: XEvent = XEvent.prototype;
 var x: {prototype: XEvent} = XEvent;
 
 //// [assignToObjectTypeWithPrototypeProperty.js]
+"use strict";
 var XEvent = /** @class */ (function () {
     function XEvent() {
     }

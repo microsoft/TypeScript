@@ -9,6 +9,7 @@ class c {
 
 
 //// [out.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

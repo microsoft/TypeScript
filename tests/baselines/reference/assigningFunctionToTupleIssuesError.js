@@ -5,4 +5,5 @@ declare let a: () => void;
 let b: [string] = a;
 
 //// [assigningFunctionToTupleIssuesError.js]
+"use strict";
 var b = a;

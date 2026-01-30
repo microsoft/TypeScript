@@ -17,6 +17,7 @@ class Foo<__proto__> { }
 var foo: (__proto__: number) => void;
 
 //// [intrinsics.js]
+"use strict";
 var hasOwnProperty; // Error
 var m1;
 (function (m1) {

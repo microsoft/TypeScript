@@ -41,6 +41,7 @@ class c3 {
 }
 
 //// [collisionRestParameterClassMethod.js]
+"use strict";
 var c1 = /** @class */ (function () {
     function c1() {
     }

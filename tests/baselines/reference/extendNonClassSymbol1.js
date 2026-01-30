@@ -6,6 +6,7 @@ var x = A;
 class C extends x { } // error, could not find symbol xs
 
 //// [extendNonClassSymbol1.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

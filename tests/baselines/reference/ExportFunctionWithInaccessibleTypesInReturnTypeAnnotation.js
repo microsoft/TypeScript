@@ -18,6 +18,7 @@ namespace A {
 }
 
 //// [ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js]
+"use strict";
 var A;
 (function (A) {
     var Point = /** @class */ (function () {

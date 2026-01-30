@@ -40,6 +40,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/class1.js]
+"use strict";
 var a = 1;
 console.log(a);
 

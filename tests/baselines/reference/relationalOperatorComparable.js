@@ -19,6 +19,7 @@ function f(onethree: 1 | 3, two: 2) {
 
 
 //// [relationalOperatorComparable.js]
+"use strict";
 function f(onethree, two) {
     var t = true;
     var f = false;

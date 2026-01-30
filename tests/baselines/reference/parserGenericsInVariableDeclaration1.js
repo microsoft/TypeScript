@@ -11,6 +11,7 @@ var v : Foo<Bar<Quux<T>>> = 1;
 var v : Foo<Bar<Quux<T>>>= 1;
 
 //// [parserGenericsInVariableDeclaration1.js]
+"use strict";
 var v = 1;
 var v = 1;
 var v = 1;

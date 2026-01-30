@@ -8,6 +8,7 @@ if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 }
 
 //// [typeGuardNarrowByUntypedField.js]
+"use strict";
 if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
     var x = arrayLikeOrIterable.length;
 }

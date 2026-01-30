@@ -13,6 +13,7 @@ class C234 {
 }
 
 //// [setterWithReturn.js]
+"use strict";
 var C234 = /** @class */ (function () {
     function C234() {
     }

@@ -15,6 +15,7 @@ const a7 = rest[1000]
 
 
 //// [tupleLengthCheck.js]
+"use strict";
 var a1 = a[1];
 var a2 = a[2];
 var a3 = a[1000];

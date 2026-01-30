@@ -37,6 +37,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/src/app.js]
+"use strict";
 var x = 1;
 
 

@@ -39,6 +39,7 @@ str = isD1(c2Ord1) && c2Ord1.p1; // D1
 var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 
 //// [typeGuardOfFormIsType.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

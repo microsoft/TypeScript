@@ -42,6 +42,7 @@ var r2: Derived2 = new i('bye');
 var r3: Base = new a('hm');
 
 //// [typesWithSpecializedConstructSignatures.js]
+"use strict";
 // basic uses of specialized signatures without errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

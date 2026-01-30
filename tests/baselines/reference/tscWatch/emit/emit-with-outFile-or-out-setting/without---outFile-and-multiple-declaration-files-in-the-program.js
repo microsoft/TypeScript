@@ -57,6 +57,7 @@ Output::
 
 
 //// [/home/src/projects/a/b/output/src/main.js]
+"use strict";
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -65,6 +66,7 @@ var Main;
 
 
 //// [/home/src/projects/a/b/output/src/main2.js]
+"use strict";
 var main;
 (function (main) {
     var file4;

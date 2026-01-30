@@ -102,6 +102,7 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithCallSignatures3.js]
+"use strict";
 // these are all permitted with the current rules, since we do not do contextual signature instantiation
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

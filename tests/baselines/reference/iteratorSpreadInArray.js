@@ -18,6 +18,7 @@ var array = [...new SymbolIterator];
 
 
 //// [iteratorSpreadInArray.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

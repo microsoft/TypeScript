@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parserParameterList17.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(a, b) {
     }

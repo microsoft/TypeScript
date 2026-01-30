@@ -71,6 +71,7 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAlias.js]
+"use strict";
 // expect no errors here
 var A;
 (function (A) {

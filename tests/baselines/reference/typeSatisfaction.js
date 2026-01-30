@@ -28,6 +28,7 @@ let t8 = { a: 'test', b: 'test' } satisfies A;
 
 
 //// [typeSatisfaction.js]
+"use strict";
 var t1 = { a: 1 }; // Ok
 var t2 = { a: 1, b: 1 }; // Error
 var t3 = {}; // Error

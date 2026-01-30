@@ -17,6 +17,7 @@ var n3 = new N.D2(); // no error, D2<any>
 
 
 //// [inheritanceOfGenericConstructorMethod2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

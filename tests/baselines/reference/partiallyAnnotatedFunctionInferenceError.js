@@ -18,6 +18,7 @@ testError((t1, t2, t3: D) => {})
 
 
 //// [partiallyAnnotatedFunctionInferenceError.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

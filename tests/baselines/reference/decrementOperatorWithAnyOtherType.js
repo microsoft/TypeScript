@@ -51,6 +51,7 @@ objA.a--;
 M.n--;
 
 //// [decrementOperatorWithAnyOtherType.js]
+"use strict";
 // -- operator on any type
 var ANY;
 var ANY1;

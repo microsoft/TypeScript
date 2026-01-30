@@ -19,6 +19,7 @@ class Bar {
 
 
 //// [es6DeclOrdering.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar(store) {
         this._store = store; // this is an error for some reason? Unresolved symbol store

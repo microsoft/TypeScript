@@ -21,6 +21,7 @@ M.f();
 M.f.hello;
 
 //// [mergedDeclarations4.js]
+"use strict";
 var M;
 (function (M) {
     function f() { }

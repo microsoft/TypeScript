@@ -13,6 +13,7 @@ var v = <T>(a, b);
 var v = <T>(a = 1, b = 2);
 
 //// [parserCastVersusArrowFunction1.js]
+"use strict";
 var v = function () { return 1; };
 var v = a;
 var v = function (a) { return 1; };

@@ -96,6 +96,7 @@ declare function f4(_this: number); // no code gen - no error
 declare function f4(_this: string); // no code gen - no error
 
 //// [collisionThisExpressionAndParameter.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

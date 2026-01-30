@@ -15,6 +15,7 @@ function foo() {
 
 
 //// [argumentsAsPropertyName2.js]
+"use strict";
 // target: es5
 function foo() {
     var _loop_1 = function (x) {

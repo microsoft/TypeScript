@@ -34,6 +34,7 @@ a.baz();
 
 
 //// [autoLift2.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         this.foo;

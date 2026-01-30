@@ -18,6 +18,7 @@ class e {
 }
 
 //// [functionOverloadsOutOfOrder.js]
+"use strict";
 var d = /** @class */ (function () {
     function d() {
     }

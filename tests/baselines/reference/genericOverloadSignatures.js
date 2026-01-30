@@ -33,6 +33,7 @@ interface D {
 }
 
 //// [genericOverloadSignatures.js]
+"use strict";
 function f(a) { }
 var C2 = /** @class */ (function () {
     function C2() {

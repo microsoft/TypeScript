@@ -84,6 +84,7 @@ else {
 
 
 //// [typeGuardOfFormTypeOfOther.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

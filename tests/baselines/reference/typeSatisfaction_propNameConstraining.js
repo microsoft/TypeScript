@@ -17,6 +17,7 @@ let d = p.d;
 
 
 //// [typeSatisfaction_propNameConstraining.js]
+"use strict";
 var p = {
     a: 0,
     b: "hello",

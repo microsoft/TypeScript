@@ -13,6 +13,7 @@ function bar() {
 }
 
 //// [a.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }
@@ -20,6 +21,7 @@ var c = /** @class */ (function () {
 }());
 //# sourceMappingURL=a.js.map
 //// [b.js]
+"use strict";
 function bar() {
 }
 //# sourceMappingURL=b.js.map

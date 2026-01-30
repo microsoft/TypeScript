@@ -19,4 +19,5 @@ declare var v2: C<B>; // should not work
 var y = v1.x.a; // 'a' should be of type 'number'
 
 //// [constraints0.js]
+"use strict";
 var y = v1.x.a; // 'a' should be of type 'number'

@@ -38,6 +38,7 @@ var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number
 
 
 //// [arrayLiterals3.js]
+"use strict";
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
 //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,

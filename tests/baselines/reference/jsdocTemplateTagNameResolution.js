@@ -13,6 +13,7 @@ const x = { a: 1 };
 const y = "a";
 
 //// [file.js]
+"use strict";
 /**
  * @template T
  * @template {keyof T} K

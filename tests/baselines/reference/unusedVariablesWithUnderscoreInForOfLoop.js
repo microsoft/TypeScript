@@ -32,6 +32,7 @@ function t3() {
 
 
 //// [unusedVariablesWithUnderscoreInForOfLoop.js]
+"use strict";
 function t1() {
     for (var _i = 0, _c = [['key', 1]]; _i < _c.length; _i++) {
         var _d = _c[_i], _a = _d[0], b = _d[1];

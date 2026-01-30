@@ -4,5 +4,6 @@
 // Comment
 
 //// [sourceMap-Comment1.js]
+"use strict";
 // Comment
 //# sourceMappingURL=sourceMap-Comment1.js.map

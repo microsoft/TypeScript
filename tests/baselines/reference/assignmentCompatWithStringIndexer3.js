@@ -26,6 +26,7 @@ namespace Generics {
 }
 
 //// [assignmentCompatWithStringIndexer3.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer
 a = b1; // error
 b1 = a; // error

@@ -159,6 +159,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 var a = "hello";
 
 
@@ -270,6 +271,7 @@ Found 1 error in a.ts[90m:1[0m
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 var a = /** @class */ (function () {
     function class_1() {
         this.p = 10;

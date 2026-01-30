@@ -50,6 +50,7 @@ var rb10 = x in undefined;
 var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

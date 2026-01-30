@@ -20,6 +20,7 @@ new Builder()
     .method("a");
 
 //// [methodChainError.js]
+"use strict";
 var Builder = /** @class */ (function () {
     function Builder() {
     }

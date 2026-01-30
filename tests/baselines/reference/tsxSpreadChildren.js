@@ -29,6 +29,7 @@ let x: TodoListProps;
 
 
 //// [tsxSpreadChildren.jsx]
+"use strict";
 function Todo(prop) {
     return <div>{prop.key.toString() + prop.todo}</div>;
 }

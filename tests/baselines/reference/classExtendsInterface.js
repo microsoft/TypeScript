@@ -11,6 +11,7 @@ class B2<T> implements Comparable2<T> {}
 
 
 //// [classExtendsInterface.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

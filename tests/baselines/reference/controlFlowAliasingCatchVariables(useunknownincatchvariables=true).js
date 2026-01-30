@@ -30,6 +30,7 @@ catch (e) {
 
 
 //// [controlFlowAliasingCatchVariables.js]
+"use strict";
 try { }
 catch (e) {
     var isString = typeof e === 'string';

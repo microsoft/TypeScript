@@ -34,6 +34,7 @@ class C {
 }
 
 //// [duplicateVariablesByScope.js]
+"use strict";
 // duplicate local variables are only reported at global scope
 var M;
 (function (M) {

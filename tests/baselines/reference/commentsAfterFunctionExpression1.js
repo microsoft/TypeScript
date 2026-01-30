@@ -9,6 +9,7 @@ var v = {
 
 
 //// [commentsAfterFunctionExpression1.js]
+"use strict";
 var v = {
     f: function (a) { return 0; } /*t1*/,
     g: (function (a) { return 0; }) /*t2*/,

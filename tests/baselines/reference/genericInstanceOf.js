@@ -14,6 +14,7 @@ class C<T> {
 }
 
 //// [genericInstanceOf.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(a, b) {
         this.a = a;

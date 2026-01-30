@@ -21,6 +21,7 @@ var f2 = new Foo2();
 
 
 //// [varAsID.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = 1;

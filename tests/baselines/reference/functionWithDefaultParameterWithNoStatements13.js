@@ -9,6 +9,7 @@ function bar(a = [1 + 1]) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements13.js]
+"use strict";
 var v;
 function foo(a) {
     if (a === void 0) { a = [1 + 1]; }

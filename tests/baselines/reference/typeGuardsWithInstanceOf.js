@@ -44,6 +44,7 @@ function foo() {
 
 
 //// [typeGuardsWithInstanceOf.js]
+"use strict";
 var result;
 var result2;
 if (!(result instanceof RegExp)) {

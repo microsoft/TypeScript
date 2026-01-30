@@ -7,6 +7,7 @@ var a: { one: number; } = { one: 1 };
 x = a;
 
 //// [numericIndexerConstraint2.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

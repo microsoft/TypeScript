@@ -315,6 +315,7 @@ function negative(t: Something) {
 
 
 //// [inferTypePredicates.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/16069
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

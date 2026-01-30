@@ -14,6 +14,7 @@ class D2<T> extends C2<T> { bar: T; }
 class E2<T> extends D2<T> { baz: T; }
 
 //// [classExtendsItselfIndirectly.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -27,6 +27,7 @@ var x = {
 }
 
 //// [computedPropertyNames50_ES5.js]
+"use strict";
 var _a;
 var x = (_a = {
         p1: 10,

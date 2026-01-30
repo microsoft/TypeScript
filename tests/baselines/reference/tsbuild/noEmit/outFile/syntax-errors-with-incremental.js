@@ -325,6 +325,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = "hello";
 
 
@@ -531,6 +532,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = "hello;
 
 

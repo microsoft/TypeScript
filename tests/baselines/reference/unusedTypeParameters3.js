@@ -10,6 +10,7 @@ class greeter<typeparameter1, typeparameter2, typeparameter3> {
 }
 
 //// [unusedTypeParameters3.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter() {
     }

@@ -12,6 +12,7 @@ function f() {
 }
 
 //// [classDeclarationBlockScoping2.js]
+"use strict";
 function f() {
     var C = /** @class */ (function () {
         function C() {

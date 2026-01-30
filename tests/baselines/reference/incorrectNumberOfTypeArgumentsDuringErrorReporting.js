@@ -25,6 +25,7 @@ fn<MyObjA>({
 
 
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.js]
+"use strict";
 var fn = function (opts) { return 'Z'; };
 fn({
     a: { x: 'X', y: 'Y' },

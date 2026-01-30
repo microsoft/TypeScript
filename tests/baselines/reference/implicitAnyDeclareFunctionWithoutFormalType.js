@@ -14,6 +14,7 @@ function noError2(x: number, y: string) { };
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType.js]
+"use strict";
 // these should be errors
 function foo(x) { }
 ;

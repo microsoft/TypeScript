@@ -493,6 +493,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/tests/index.js]
+"use strict";
 var m = 10;
 
 
@@ -715,6 +716,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib*
 
 //// [/user/username/projects/sample1/tests/index.js]
+"use strict";
 const m = 10;
 
 

@@ -30,3 +30,4 @@ declare namespace M {
 }
 
 //// [ambientWithStatements.js]
+"use strict";

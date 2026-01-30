@@ -9,6 +9,7 @@ class C65 {
 }
 
 //// [functionAndPropertyNameConflict.js]
+"use strict";
 var C65 = /** @class */ (function () {
     function C65() {
     }

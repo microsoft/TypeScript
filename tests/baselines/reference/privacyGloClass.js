@@ -63,6 +63,7 @@ class glo_C11_public extends glo_c_public implements glo_i_public {
 
 
 //// [privacyGloClass.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

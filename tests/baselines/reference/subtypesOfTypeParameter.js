@@ -108,6 +108,7 @@ function f2<T, U>(x: T, y: U) {
 }
 
 //// [subtypesOfTypeParameter.js]
+"use strict";
 // checking whether other types are subtypes of type parameters
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

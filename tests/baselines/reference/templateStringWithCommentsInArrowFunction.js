@@ -16,6 +16,7 @@ const f2 = () =>
 
 
 //// [templateStringWithCommentsInArrowFunction.js]
+"use strict";
 var a = 1;
 var f1 = function () {
     return "".concat(

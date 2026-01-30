@@ -10,6 +10,7 @@ namespace Test {
 
 
 //// [missingReturnStatement.js]
+"use strict";
 var Test;
 (function (Test) {
     var Bug = /** @class */ (function () {

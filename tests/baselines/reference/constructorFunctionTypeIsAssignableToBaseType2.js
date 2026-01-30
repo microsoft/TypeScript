@@ -35,6 +35,7 @@ class Derived2 extends Base {
 }
 
 //// [constructorFunctionTypeIsAssignableToBaseType2.js]
+"use strict";
 // the constructor function itself does not need to be a subtype of the base type constructor function
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

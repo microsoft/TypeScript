@@ -118,6 +118,7 @@ class B3 extends A3 {
 
 
 //// [protectedMembers.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -6,6 +6,7 @@ class Test1 {
 }
 
 //// [quotedFunctionName1.js]
+"use strict";
 var Test1 = /** @class */ (function () {
     function Test1() {
     }

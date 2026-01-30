@@ -24,6 +24,7 @@ var b = new ComparableString("b");
 var c = compare<ComparableString>(a, b);
 
 //// [genericConstraint2.js]
+"use strict";
 function compare(x, y) {
     if (x == null)
         return y == null ? 0 : -1;

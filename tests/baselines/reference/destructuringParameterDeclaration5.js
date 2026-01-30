@@ -53,6 +53,7 @@ d3({ y: 1 });
 d3({ y: "world" });
 
 //// [destructuringParameterDeclaration5.js]
+"use strict";
 // Parameter Declaration with generic
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

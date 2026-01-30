@@ -13,6 +13,7 @@ class C extends B {
 
 
 //// [accessorsOverrideProperty5.js]
+"use strict";
 class B {
 }
 class C extends B {

@@ -83,6 +83,7 @@ else {
 
 
 //// [discriminantsAndPrimitives.js]
+"use strict";
 // Repro from #10257 plus other tests
 function f1(x) {
     if (typeof x !== 'string') {

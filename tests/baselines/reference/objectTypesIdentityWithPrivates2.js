@@ -41,6 +41,7 @@ function foo6(x: any): any { }
 
 
 //// [objectTypesIdentityWithPrivates2.js]
+"use strict";
 // object types are identical structurally
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

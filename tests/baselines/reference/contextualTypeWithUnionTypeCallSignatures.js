@@ -39,6 +39,7 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any*/ a.toString();
 
 //// [contextualTypeWithUnionTypeCallSignatures.js]
+"use strict";
 //When used as a contextual type, a union type U has those members that are present in any of 
 // its constituent types, with types that are unions of the respective members in the constituent types. 
 // With no call signature | callSignatures

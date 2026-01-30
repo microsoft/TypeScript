@@ -102,6 +102,7 @@ function tryCatchFn() {
 
 
 //// [arrowFunctionExpressions.js]
+"use strict";
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = function (p) { return p.length; };
 var a = function (p) { return p.length; };

@@ -27,6 +27,7 @@ declare var b: B<Date, Date>;
 var c: A<Date, Date> = <A<Date, Date>>b;
 
 //// [genericTypeAssertions6.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

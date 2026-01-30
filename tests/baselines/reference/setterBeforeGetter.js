@@ -15,6 +15,7 @@ class Foo {
 
 
 //// [setterBeforeGetter.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

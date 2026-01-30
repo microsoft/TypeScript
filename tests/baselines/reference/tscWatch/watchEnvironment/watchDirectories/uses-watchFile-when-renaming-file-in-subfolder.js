@@ -35,6 +35,7 @@ Output::
 
 
 //// [/a/username/projects/project/src/file1.js] Inode:: 114
+"use strict";
 
 
 
@@ -129,6 +130,7 @@ Output::
 
 
 //// [/a/username/projects/project/src/file2.js] Inode:: 116
+"use strict";
 
 
 

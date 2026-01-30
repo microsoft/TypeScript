@@ -10,6 +10,7 @@ declare let foo2: Foo;
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 
 //// [spreadBooleanRespectsFreshness.js]
+"use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {

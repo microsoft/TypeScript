@@ -26,6 +26,7 @@ class Derived2 extends Base2 {
 }
 
 //// [derivedClassOverridesWithoutSubtype.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

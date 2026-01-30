@@ -8,6 +8,7 @@ var c: C<I>;
 
 
 //// [genericInterfacesWithoutTypeArguments.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

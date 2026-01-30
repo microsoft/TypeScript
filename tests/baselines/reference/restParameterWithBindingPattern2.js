@@ -4,6 +4,7 @@
 function a(...[a, b]) { }
 
 //// [restParameterWithBindingPattern2.js]
+"use strict";
 function a() {
     var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {

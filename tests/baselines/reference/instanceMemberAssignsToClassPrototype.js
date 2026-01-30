@@ -15,6 +15,7 @@ class C {
 }
 
 //// [instanceMemberAssignsToClassPrototype.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

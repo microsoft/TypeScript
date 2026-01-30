@@ -83,6 +83,7 @@ function a5() {
 }
 
 //// [nestedBlockScopedBindings5.js]
+"use strict";
 function a0() {
     for (var x in []) {
         x = x + 1;

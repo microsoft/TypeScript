@@ -15,6 +15,7 @@ var b: A.B;
 A.B(1);
 
 //// [genericFunduleInModule2.js]
+"use strict";
 var A;
 (function (A) {
     function B(x) { return x; }

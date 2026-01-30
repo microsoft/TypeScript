@@ -52,10 +52,12 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 var x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 var y = 1;
 
 
@@ -137,16 +139,6 @@ Output::
 
 
 
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-"use strict";
-var x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-"use strict";
-var y = 1;
-
-
 
 PolledWatches::
 /user/username/workspace/node_modules/@types:
@@ -223,14 +215,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
 
 
 

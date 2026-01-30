@@ -83,6 +83,7 @@ const z7 = z && n;
 const z8 = z && z;
 
 //// [logicalAndOperatorStrictMode.js]
+"use strict";
 var a = [0];
 var s = "";
 var x = 0;

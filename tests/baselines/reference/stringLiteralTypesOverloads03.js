@@ -47,6 +47,7 @@ let gResult2 = g(world);
 let gResult3 = g(helloOrWorld);
 
 //// [stringLiteralTypesOverloads03.js]
+"use strict";
 var hello;
 var world;
 var helloOrWorld;

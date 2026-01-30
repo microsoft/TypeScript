@@ -7,6 +7,7 @@ function bar(a = console.log) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements9.js]
+"use strict";
 function foo(a) {
     if (a === void 0) { a = console.log; }
 }

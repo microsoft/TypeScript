@@ -22,6 +22,7 @@ var c = new B.a.C();
 
 
 //// [circularImportAlias.js]
+"use strict";
 // expected no error
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

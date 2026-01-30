@@ -23,6 +23,7 @@ var r = c.foo('', '');
 var r2 = e.foo('', 1);
 
 //// [derivedClassTransitivity3.js]
+"use strict";
 // subclassing is not transitive when you can remove required parameters and add optional parameters
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

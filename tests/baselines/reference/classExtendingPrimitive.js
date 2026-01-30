@@ -26,6 +26,7 @@ const C14 = class C extends boolean { }
 
 
 //// [classExtendingPrimitive.js]
+"use strict";
 // classes cannot extend primitives
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

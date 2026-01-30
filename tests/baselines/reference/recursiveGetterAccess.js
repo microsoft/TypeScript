@@ -8,6 +8,7 @@ get testProp() { return this.testProp; }
 
 
 //// [recursiveGetterAccess.js]
+"use strict";
 var MyClass = /** @class */ (function () {
     function MyClass() {
     }

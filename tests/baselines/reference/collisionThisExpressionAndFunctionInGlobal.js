@@ -7,6 +7,7 @@ function _this() { //Error
 var f = () => this;
 
 //// [collisionThisExpressionAndFunctionInGlobal.js]
+"use strict";
 var _this_1 = this;
 function _this() {
     return 10;

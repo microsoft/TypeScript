@@ -42,6 +42,7 @@ function foo<T extends Foo | T["hello"]>() {
 
 
 //// [circularIndexedAccessErrors.js]
+"use strict";
 var x2x = x2.x;
 var C1 = /** @class */ (function () {
     function C1() {

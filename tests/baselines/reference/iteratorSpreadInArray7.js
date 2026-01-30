@@ -18,6 +18,7 @@ var array: symbol[];
 array.concat([...new SymbolIterator]);
 
 //// [iteratorSpreadInArray7.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

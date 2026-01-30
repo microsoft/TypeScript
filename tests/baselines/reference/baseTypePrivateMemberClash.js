@@ -11,6 +11,7 @@ class Y {
 interface Z extends X, Y { }
 
 //// [baseTypePrivateMemberClash.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

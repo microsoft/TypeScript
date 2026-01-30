@@ -37,6 +37,7 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+"use strict";
 // OK
 <test1 x={0}/>; // OK
 <test1 />; // OK

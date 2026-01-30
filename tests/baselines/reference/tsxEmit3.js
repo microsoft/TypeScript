@@ -43,6 +43,7 @@ namespace M {
 
 
 //// [file.jsx]
+"use strict";
 var M;
 (function (M) {
     var Foo = /** @class */ (function () {

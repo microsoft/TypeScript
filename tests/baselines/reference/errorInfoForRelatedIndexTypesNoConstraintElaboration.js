@@ -11,6 +11,7 @@ class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicEl
 }
 
 //// [errorInfoForRelatedIndexTypesNoConstraintElaboration.js]
+"use strict";
 /// <reference path="react16.d.ts" />
 var I = /** @class */ (function () {
     function I() {

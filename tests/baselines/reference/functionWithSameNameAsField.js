@@ -11,6 +11,7 @@ class TestProgressBar {
 
 
 //// [functionWithSameNameAsField.js]
+"use strict";
 var TestProgressBar = /** @class */ (function () {
     function TestProgressBar() {
     }

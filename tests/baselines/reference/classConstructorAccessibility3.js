@@ -36,6 +36,7 @@ c = Bar;
 c = Baz;
 
 //// [classConstructorAccessibility3.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(x) {
         this.x = x;

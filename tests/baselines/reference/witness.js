@@ -139,6 +139,7 @@ var qq: any;
 
 
 //// [witness.js]
+"use strict";
 // Initializers
 var varInit = varInit; // any
 var pInit;

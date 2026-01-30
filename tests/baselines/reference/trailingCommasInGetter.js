@@ -7,6 +7,7 @@ class X {
 
 
 //// [trailingCommasInGetter.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

@@ -14,6 +14,7 @@ fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally wou
 
 
 //// [typeArgInferenceWithNull.js]
+"use strict";
 // All legal
 function fn4(n) { }
 fn4(null);

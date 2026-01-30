@@ -128,6 +128,7 @@ var rf9 = null || undefined;       // null      || undefined is any
 var rf10 = undefined || undefined; // undefined || undefined is any
 
 //// [logicalOrOperatorWithEveryType.js]
+"use strict";
 // The || operator permits the operands to be of any type.
 // If the || expression is not contextually typed, the right operand is contextually typed
 // by the type of the left operand and the result is of the best common type of the two

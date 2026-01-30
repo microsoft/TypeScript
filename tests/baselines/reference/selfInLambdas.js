@@ -49,6 +49,7 @@ class X {
 
 
 //// [selfInLambdas.js]
+"use strict";
 var o = {
     counter: 0,
     start: function () {

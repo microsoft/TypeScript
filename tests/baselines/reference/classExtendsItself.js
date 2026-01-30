@@ -8,6 +8,7 @@ class D<T> extends D<T> { } // error
 class E<T> extends E<string> { } // error
 
 //// [classExtendsItself.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

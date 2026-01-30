@@ -88,6 +88,7 @@ throw new D<number>();
 
 
 //// [throwStatements.js]
+"use strict";
 // all legal
 var C = /** @class */ (function () {
     function C() {

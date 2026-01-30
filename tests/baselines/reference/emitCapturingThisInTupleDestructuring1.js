@@ -7,6 +7,7 @@ wrapper((array: [any]) => {
 });
 
 //// [emitCapturingThisInTupleDestructuring1.js]
+"use strict";
 var _this = this;
 wrapper(function (array) {
     _this.test = array[0], _this.test1 = array[1], _this.test2 = array[2]; // even though there is a compiler error, we should still emit lexical capture for "this"

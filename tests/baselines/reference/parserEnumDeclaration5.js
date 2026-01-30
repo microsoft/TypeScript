@@ -9,6 +9,7 @@ enum E {
 }
 
 //// [parserEnumDeclaration5.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 1] = "A";

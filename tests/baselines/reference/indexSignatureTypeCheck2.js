@@ -17,6 +17,7 @@ interface indexErrors {
 }
 
 //// [indexSignatureTypeCheck2.js]
+"use strict";
 var IPropertySet = /** @class */ (function () {
     function IPropertySet() {
     }

@@ -53,6 +53,7 @@ class C5 {
 
 
 //// [thisTypeInClasses.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

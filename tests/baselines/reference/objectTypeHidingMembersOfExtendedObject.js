@@ -57,6 +57,7 @@ declare var b: {
 var r4: void = b.valueOf();
 
 //// [objectTypeHidingMembersOfExtendedObject.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

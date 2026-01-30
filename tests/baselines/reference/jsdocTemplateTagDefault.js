@@ -69,6 +69,7 @@ function f3(a, b) {}
 
 
 //// [file.js]
+"use strict";
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A

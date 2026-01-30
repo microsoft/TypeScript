@@ -11,6 +11,7 @@ const t3: T3 = "strong";
 
 
 //// [didYouMeanStringLiteral.js]
+"use strict";
 var t1 = "strong";
 var t2 = "strong";
 var t3 = "strong";

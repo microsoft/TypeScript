@@ -12,6 +12,7 @@ class C {
 
 
 //// [implicitAnyDeclareMemberWithoutType2.js]
+"use strict";
 // this should be an error
 var C = /** @class */ (function () {
     function C(c1, c2, c3) {

@@ -14,6 +14,7 @@ c.P(1,2,3);
 
 
 //// [argsInScope.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -12,6 +12,7 @@ class C {
 
 
 //// [noRepeatedPropertyNames.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/46815
 var first = { a: 1, a: 2 };
 var C = /** @class */ (function () {

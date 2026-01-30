@@ -75,6 +75,7 @@ function foo14(x: typeof b); // ok
 function foo14(x: any) { }
 
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames.js]
+"use strict";
 // object types are identical structurally
 var B = /** @class */ (function () {
     function B(x) {

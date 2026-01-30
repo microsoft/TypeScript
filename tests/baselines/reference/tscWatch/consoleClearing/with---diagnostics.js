@@ -32,6 +32,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 
 
 
@@ -102,6 +103,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 //
 
 

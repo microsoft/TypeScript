@@ -33,6 +33,7 @@ Output::
 
 
 //// [/users/username/projects/project/index.js]
+"use strict";
 console.log(Config.value);
 
 

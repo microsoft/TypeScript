@@ -5,6 +5,7 @@ class S18<A> extends S18<{ S19: A; }>{ }
 (new S18()).blah;
 
 //// [recursiveBaseCheck6.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

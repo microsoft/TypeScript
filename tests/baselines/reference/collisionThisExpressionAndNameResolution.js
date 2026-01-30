@@ -15,6 +15,7 @@ class Foo {
 }
 
 //// [collisionThisExpressionAndNameResolution.js]
+"use strict";
 var console;
 var Foo = /** @class */ (function () {
     function Foo() {

@@ -177,6 +177,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop2.js]
+"use strict";
 // ========let
 function foo0(x) {
     var _loop_1 = function (x_1) {

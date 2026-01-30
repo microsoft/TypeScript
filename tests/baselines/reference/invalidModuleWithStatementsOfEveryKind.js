@@ -81,6 +81,7 @@ namespace YYY4 {
 
 
 //// [invalidModuleWithStatementsOfEveryKind.js]
+"use strict";
 // All of these should be an error
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

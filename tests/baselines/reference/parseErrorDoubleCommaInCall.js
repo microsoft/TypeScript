@@ -7,6 +7,7 @@ Boolean({
 
 
 //// [parseErrorDoubleCommaInCall.js]
+"use strict";
 Boolean({
     x: 0,
 });

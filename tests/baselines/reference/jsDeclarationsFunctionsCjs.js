@@ -62,6 +62,7 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
+"use strict";
 module.exports.a = function a() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";

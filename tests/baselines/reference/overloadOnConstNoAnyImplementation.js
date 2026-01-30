@@ -18,6 +18,7 @@ x1(1, (x: 'hi') => 1); // error
 x1(1, (x: string) => 1);
 
 //// [overloadOnConstNoAnyImplementation.js]
+"use strict";
 function x1(a, cb) {
     cb('hi');
     cb('bye');

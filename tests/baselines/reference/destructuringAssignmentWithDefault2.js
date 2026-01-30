@@ -28,6 +28,7 @@ let value;
 ({ done: done = false, value } = r.next());
 
 //// [destructuringAssignmentWithDefault2.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 var a = {};
 var x;

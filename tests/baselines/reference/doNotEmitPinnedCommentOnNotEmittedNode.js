@@ -13,6 +13,7 @@ var x = 10;
 declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNode.js]
+"use strict";
 var C = (function () {
     function C() {
     }

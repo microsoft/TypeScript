@@ -30,6 +30,7 @@ var r2 = i.x; // error
 var r3 = i.y; // error
 
 //// [interfaceExtendingClassWithPrivates2.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

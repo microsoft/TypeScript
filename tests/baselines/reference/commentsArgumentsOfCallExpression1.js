@@ -18,6 +18,7 @@ foo(
     /*c8*/() => { });
 
 //// [commentsArgumentsOfCallExpression1.js]
+"use strict";
 function foo(/*c1*/ x) { }
 foo(/*c2*/ 1);
 foo(/*c3*/ function () { });

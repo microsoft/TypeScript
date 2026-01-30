@@ -17,6 +17,7 @@ o.test!!!();
 
 
 //// [thisTypeSyntacticContext.js]
+"use strict";
 function f() {
 }
 var o = { n: 1 };

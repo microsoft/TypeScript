@@ -10,6 +10,7 @@ declare var b: C<Y>;
 a = b; // Not ok - return types of "f" are different
 
 //// [generics4.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

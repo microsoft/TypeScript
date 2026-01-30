@@ -56,6 +56,7 @@ simple({
 
 
 //// [thisTypeInFunctions2.js]
+"use strict";
 extend1({
     init: function () {
         this; // this: IndexedWithThis because of contextual typing.

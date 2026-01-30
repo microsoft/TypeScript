@@ -10,12 +10,14 @@ namespace D {
 D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
+"use strict";
 var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
 //// [cloduleSplitAcrossFiles_module.js]
+"use strict";
 var D;
 (function (D) {
     D.y = "hi";

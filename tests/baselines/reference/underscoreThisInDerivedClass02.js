@@ -21,6 +21,7 @@ class D extends C {
 }
 
 //// [underscoreThisInDerivedClass02.js]
+"use strict";
 // @target es5
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

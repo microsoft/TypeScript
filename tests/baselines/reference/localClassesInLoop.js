@@ -14,6 +14,7 @@ use(data[0]() === data[1]());
 
 //// [localClassesInLoop.js]
 "use strict";
+"use strict";
 var data = [];
 var _loop_1 = function (x) {
     var C = /** @class */ (function () {

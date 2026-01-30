@@ -15,6 +15,7 @@ class Foo {
 }
 
 //// [staticClassMemberError.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -15,6 +15,7 @@ function bar<K extends "foo">(key: K) {
 
 
 //// [assignmentGenericLookupTypeNarrowing.js]
+"use strict";
 // Repro from #26130
 var mappedObject = { foo: { x: "hello" } };
 function bar(key) {

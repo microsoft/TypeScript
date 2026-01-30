@@ -19,6 +19,7 @@ class C3 {
 }
 
 //// [declarationEmitDestructuringParameterProperties.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1(_a) {
         var x = _a[0], y = _a[1], z = _a[2];

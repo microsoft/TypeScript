@@ -22,6 +22,7 @@ class C extends B {
 
 
 //// [protectedClassPropertyAccessibleWithinSubclass.js]
+"use strict";
 // no errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

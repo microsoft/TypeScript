@@ -10,6 +10,7 @@ var c1 = new C1(0);
 
 
 //// [raiseErrorOnParameterProperty.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1(x) {
         this.x = x;

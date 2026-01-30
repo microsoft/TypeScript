@@ -16,6 +16,7 @@ function foo() {
 }
 
 //// [capturedLetConstInLoop11.js]
+"use strict";
 var _loop_1 = function () {
     var x = 1;
     (function () { return x; });

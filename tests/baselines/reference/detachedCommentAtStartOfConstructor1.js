@@ -13,6 +13,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfConstructor1.js]
+"use strict";
 var TestFile = /** @class */ (function () {
     function TestFile(message) {
         var _this = this;

@@ -13,6 +13,7 @@ A.a();
 
 
 //// [qualifiedModuleLocals.js]
+"use strict";
 var A;
 (function (A) {
     function b() { }

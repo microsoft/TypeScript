@@ -35,6 +35,7 @@ namespace X {
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.js]
+"use strict";
 var A;
 (function (A) {
     var Point = /** @class */ (function () {

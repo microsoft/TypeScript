@@ -8,6 +8,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 //// [capturedVarInLoop.js]
+"use strict";
 var _loop_1 = function () {
     str = 'x', len = str.length;
     var lambda1 = function (y) { };

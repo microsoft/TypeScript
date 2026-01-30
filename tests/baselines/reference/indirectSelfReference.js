@@ -5,6 +5,7 @@ class a extends b{ }
 class b extends a{ }
 
 //// [indirectSelfReference.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

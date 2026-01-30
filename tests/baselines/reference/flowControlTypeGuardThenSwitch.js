@@ -39,6 +39,7 @@ if (isBoth(foo)) {
 
 
 //// [flowControlTypeGuardThenSwitch.js]
+"use strict";
 var Kind;
 (function (Kind) {
     Kind[Kind["A"] = 0] = "A";

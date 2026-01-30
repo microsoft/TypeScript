@@ -12,6 +12,7 @@ for (let y; false; ) {
 }
 
 //// [nestedBlockScopedBindings8.js]
+"use strict";
 var x;
 var _loop_1 = function (x_1) {
     (function () { return x_1; });

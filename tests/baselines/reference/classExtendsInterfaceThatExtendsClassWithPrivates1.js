@@ -17,6 +17,7 @@ class D2 implements I {
 } 
 
 //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = 1;

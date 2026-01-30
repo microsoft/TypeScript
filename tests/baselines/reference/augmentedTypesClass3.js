@@ -16,6 +16,7 @@ class c5c { public foo() { } }
 //import c5c = require('');
 
 //// [augmentedTypesClass3.js]
+"use strict";
 // class then module
 var c5 = /** @class */ (function () {
     function c5() {

@@ -46,6 +46,7 @@ Derived2.x;     // Error, neither within their declaring class nor classes deriv
 Derived3.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedStaticClassPropertyAccessibleWithinSubclass.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -146,6 +146,7 @@ function nonExportedFooWithOverloads(a) {
     return a;
 }
 //// [declFileFunctions_1.js]
+"use strict";
 /** This comment should appear for foo*/
 function globalfoo() {
 }

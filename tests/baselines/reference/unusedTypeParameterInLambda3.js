@@ -9,6 +9,7 @@ var y: new <T,U>(a:T)=>void;
 
 
 //// [unusedTypeParameterInLambda3.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -10,6 +10,7 @@ class MyClass1<T> {
 
 
 //// [thisExpressionOfGenericObject.js]
+"use strict";
 var MyClass1 = /** @class */ (function () {
     function MyClass1() {
         var _this = this;

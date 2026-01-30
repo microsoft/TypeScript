@@ -15,6 +15,7 @@ function M() {
 }
 
 //// [classExpressionTest1.js]
+"use strict";
 function M() {
     var C = /** @class */ (function () {
         function C() {

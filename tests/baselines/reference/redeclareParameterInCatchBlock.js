@@ -35,6 +35,7 @@ try {
 
 
 //// [redeclareParameterInCatchBlock.js]
+"use strict";
 try {
 }
 catch (e) {

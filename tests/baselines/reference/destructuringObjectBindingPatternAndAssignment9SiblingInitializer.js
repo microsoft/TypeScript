@@ -28,6 +28,7 @@ function f4() {
 
 
 //// [destructuringObjectBindingPatternAndAssignment9SiblingInitializer.js]
+"use strict";
 // To be inferred as `number`
 function f1() {
     var _a = { a1: 1 }, a1 = _a.a1, _b = _a.b1, b1 = _b === void 0 ? a1 : _b;

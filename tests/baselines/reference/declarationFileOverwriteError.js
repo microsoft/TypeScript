@@ -9,6 +9,7 @@ class d {
 }
 
 //// [a.js]
+"use strict";
 var d = /** @class */ (function () {
     function d() {
     }

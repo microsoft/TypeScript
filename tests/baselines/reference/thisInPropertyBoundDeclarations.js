@@ -70,6 +70,7 @@ class B {
 }
 
 //// [thisInPropertyBoundDeclarations.js]
+"use strict";
 var Bug = /** @class */ (function () {
     function Bug() {
     }

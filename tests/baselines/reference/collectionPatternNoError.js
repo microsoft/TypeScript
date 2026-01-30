@@ -40,6 +40,7 @@ function f<
 
 
 //// [collectionPatternNoError.js]
+"use strict";
 var Message = /** @class */ (function () {
     function Message() {
     }

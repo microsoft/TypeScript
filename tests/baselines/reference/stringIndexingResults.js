@@ -38,6 +38,7 @@ var r12 = b[1];
 
 
 //// [stringIndexingResults.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.y = '';

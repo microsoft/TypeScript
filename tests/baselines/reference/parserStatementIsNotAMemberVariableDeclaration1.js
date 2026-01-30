@@ -13,6 +13,7 @@ return {
 };
 
 //// [parserStatementIsNotAMemberVariableDeclaration1.js]
+"use strict";
 return {
     "set": function (key, value) {
         // 'private' should not be considered a member variable here.

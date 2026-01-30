@@ -27,6 +27,7 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
+"use strict";
 var foundFirst = /** @class */ (function () {
     function foundFirst() {
     }

@@ -18,6 +18,7 @@ class C236 {
 
 
 //// [numericClassMembers1.js]
+"use strict";
 var C234 = /** @class */ (function () {
     function C234() {
         this[0] = 1;

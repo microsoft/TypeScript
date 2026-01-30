@@ -53,6 +53,7 @@ function a4() {
 
 
 //// [nestedBlockScopedBindings1.js]
+"use strict";
 function a0() {
     {
         var x = 1;

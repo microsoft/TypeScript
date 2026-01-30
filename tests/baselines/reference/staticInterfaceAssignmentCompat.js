@@ -15,6 +15,7 @@ var x: ShapeFactory = Shape;
 
 
 //// [staticInterfaceAssignmentCompat.js]
+"use strict";
 var Shape = /** @class */ (function () {
     function Shape() {
     }

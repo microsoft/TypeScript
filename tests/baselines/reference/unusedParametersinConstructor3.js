@@ -8,6 +8,7 @@ class greeter {
 }
 
 //// [unusedParametersinConstructor3.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter(param1, param2, param3) {
         param2 = param2 + "dummy value";

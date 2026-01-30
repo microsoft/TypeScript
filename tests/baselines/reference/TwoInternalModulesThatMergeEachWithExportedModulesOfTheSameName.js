@@ -37,6 +37,7 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js]
+"use strict";
 var A;
 (function (A) {
     var B;

@@ -56,6 +56,7 @@ for(var m: typeof M;;){}
 for( var m = M.A;;){}
 
 //// [forStatementsMultipleInvalidDecl.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

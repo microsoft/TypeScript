@@ -47,6 +47,7 @@ const enum NaNOrInfinity {
 }
 
 //// [constEnumErrors.js]
+"use strict";
 var E;
 (function (E) {
     var x = 1;

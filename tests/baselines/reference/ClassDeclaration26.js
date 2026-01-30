@@ -8,6 +8,7 @@ class C {
 }
 
 //// [ClassDeclaration26.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.foo = 10;

@@ -48,3 +48,4 @@ declare namespace D_M {
 }
 
 //// [noImplicitAnyParametersInAmbientModule.js]
+"use strict";

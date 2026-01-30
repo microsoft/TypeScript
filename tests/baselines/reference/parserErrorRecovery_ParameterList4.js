@@ -5,5 +5,6 @@ function f(a,¬) {
 }
 
 //// [parserErrorRecovery_ParameterList4.js]
+"use strict";
 function f(a) {
 }

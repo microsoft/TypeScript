@@ -9,6 +9,7 @@ f(y => {
 })
 
 //// [stringLiteralTypesOverloads04.js]
+"use strict";
 f(function (y) {
     var z = y = "foo";
     return z;

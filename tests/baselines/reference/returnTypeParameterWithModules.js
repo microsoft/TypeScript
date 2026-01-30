@@ -17,6 +17,7 @@ namespace M2 {
 };
 
 //// [returnTypeParameterWithModules.js]
+"use strict";
 var M1;
 (function (M1) {
     function reduce(ar, f, e) {

@@ -31,6 +31,7 @@ TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test la
 
 
 //// [deepExcessPropertyCheckingWhenTargetIsIntersection.js]
+"use strict";
 var TestComponent = function (props) {
     return null;
 };

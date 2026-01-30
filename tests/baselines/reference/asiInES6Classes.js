@@ -25,6 +25,7 @@ class Foo {
 
 
 //// [asiInES6Classes.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.defaults = {

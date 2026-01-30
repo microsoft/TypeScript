@@ -6,6 +6,7 @@ class C2 extends { foo: string; } { } // error
 class C6 extends []{ } // error
 
 //// [classExtendsEveryObjectType2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

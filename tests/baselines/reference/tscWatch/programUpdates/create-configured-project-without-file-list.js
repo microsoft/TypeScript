@@ -43,10 +43,12 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/c/f1.js]
+"use strict";
 var x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/d/f2.js]
+"use strict";
 var y = 1;
 
 

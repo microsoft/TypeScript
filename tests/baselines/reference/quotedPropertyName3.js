@@ -10,6 +10,7 @@ class Test {
 }
 
 //// [quotedPropertyName3.js]
+"use strict";
 var Test = /** @class */ (function () {
     function Test() {
     }

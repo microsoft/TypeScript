@@ -23,6 +23,7 @@ namespace A {
 }
 
 //// [augmentedTypesEnum3.js]
+"use strict";
 var E;
 (function (E) {
     var t;

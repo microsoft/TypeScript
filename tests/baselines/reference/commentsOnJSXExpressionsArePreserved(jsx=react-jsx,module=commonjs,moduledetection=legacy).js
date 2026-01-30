@@ -23,6 +23,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
 var Component = /** @class */ (function () {
     function Component() {
     }

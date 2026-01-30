@@ -6,6 +6,7 @@ let b = <unknown 123;
 let c = <unknown
 
 //// [index.js]
+"use strict";
 var a = function foo() { };
 var b = 123;
 var c = ;

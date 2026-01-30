@@ -9,6 +9,7 @@ class C {
 
 
 //// [optionalParamterAndVariableDeclaration.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(options) {
         var options = (options || 0);

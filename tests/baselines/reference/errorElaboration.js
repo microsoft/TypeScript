@@ -27,6 +27,7 @@ const x = ({ [foo.bar]: c }) => undefined;
 
 
 //// [errorElaboration.js]
+"use strict";
 // Repro for #5712
 foo(a);
 // Repro for #25498

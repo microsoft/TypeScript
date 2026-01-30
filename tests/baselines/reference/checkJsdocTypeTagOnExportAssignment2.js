@@ -18,6 +18,7 @@ b;
 
 
 //// [checkJsdocTypeTagOnExportAssignment2.js]
+"use strict";
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

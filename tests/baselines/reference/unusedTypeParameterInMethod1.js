@@ -11,6 +11,7 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod1.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

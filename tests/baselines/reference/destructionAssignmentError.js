@@ -15,6 +15,7 @@ fn());
 = fn();
 
 //// [destructionAssignmentError.js]
+"use strict";
 var _a, _b;
 var a;
 var b;

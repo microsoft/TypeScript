@@ -5,6 +5,7 @@ function bar(): string;
 class bar {}
 
 //// [classOverloadForFunction2.js]
+"use strict";
 var bar = /** @class */ (function () {
     function bar() {
     }

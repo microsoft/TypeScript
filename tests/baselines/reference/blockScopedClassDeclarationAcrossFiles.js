@@ -7,6 +7,7 @@ class C { }
 
 
 //// [foo.js]
+"use strict";
 var foo;
 var C = /** @class */ (function () {
     function C() {

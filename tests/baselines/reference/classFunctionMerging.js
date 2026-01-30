@@ -15,5 +15,6 @@ const a = new Foo("");
 const b = Foo(12);
 
 //// [classFunctionMerging.js]
+"use strict";
 var a = new Foo("");
 var b = Foo(12);

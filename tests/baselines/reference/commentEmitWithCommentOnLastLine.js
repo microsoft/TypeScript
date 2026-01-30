@@ -7,6 +7,7 @@ var bar;
 */
 
 //// [commentEmitWithCommentOnLastLine.js]
+"use strict";
 var x;
 /*
 var bar;

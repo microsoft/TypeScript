@@ -15,6 +15,7 @@ function f<T extends Cat | Dog>(a: T) {
 }
 
 //// [typeParameterExtendingUnion2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

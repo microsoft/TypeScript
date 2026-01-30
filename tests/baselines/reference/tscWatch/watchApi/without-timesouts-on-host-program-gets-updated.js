@@ -31,6 +31,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/main.js]
+"use strict";
 var x = 10;
 
 
@@ -88,6 +89,7 @@ Output::
 
 //// [/user/username/projects/myproject/main.js] file written with same contents
 //// [/user/username/projects/myproject/bar.js]
+"use strict";
 var y = 10;
 
 

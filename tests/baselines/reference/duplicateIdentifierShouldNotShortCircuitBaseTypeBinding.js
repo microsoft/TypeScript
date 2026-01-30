@@ -35,6 +35,7 @@ define(["require", "exports"], function (require, exports) {
     })(Shapes || (exports.Shapes = Shapes = {}));
 });
 //// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_1.js]
+"use strict";
 //var x = new Shapes.Point();
 //interface IPoint {}
 //namespace Shapes {

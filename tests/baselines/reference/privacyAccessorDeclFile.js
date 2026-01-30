@@ -2500,6 +2500,7 @@ var privateModule;
     }());
 })(privateModule || (privateModule = {}));
 //// [privacyAccessorDeclFile_GlobalFile.js]
+"use strict";
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
     }

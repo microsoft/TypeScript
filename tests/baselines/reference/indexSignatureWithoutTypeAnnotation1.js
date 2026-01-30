@@ -6,6 +6,7 @@ class C {
 }
 
 //// [indexSignatureWithoutTypeAnnotation1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

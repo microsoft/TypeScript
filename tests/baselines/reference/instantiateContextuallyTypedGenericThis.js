@@ -15,6 +15,7 @@ $.each(lines, function(dit) {
 
 
 //// [instantiateContextuallyTypedGenericThis.js]
+"use strict";
 var $;
 var lines;
 $.each(lines, function (dit) {

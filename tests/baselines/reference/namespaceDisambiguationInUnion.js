@@ -17,6 +17,7 @@ const val2: [Foo.Yep, Bar.Yep] = y;
 
 
 //// [namespaceDisambiguationInUnion.js]
+"use strict";
 var x = { type: "wat.nup" };
 var val1 = x;
 var y = [{ type: "a" }, { type: "b" }];

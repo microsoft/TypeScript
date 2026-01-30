@@ -245,7 +245,7 @@ System.register("xY/a", [], function (exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {// some comment
+        execute: function () {
             exports_1("a", a = 1);
             exports_1("b", b = 2);
         }
@@ -258,7 +258,7 @@ System.register("link/a", [], function (exports_2, context_2) {
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [],
-        execute: function () {// some comment
+        execute: function () {
             exports_2("a", a = 1);
             exports_2("b", b = 2);
         }

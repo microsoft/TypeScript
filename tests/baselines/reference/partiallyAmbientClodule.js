@@ -7,6 +7,7 @@ declare namespace foo {
 class foo { } // Legal, because module is ambient
 
 //// [partiallyAmbientClodule.js]
+"use strict";
 var foo = /** @class */ (function () {
     function foo() {
     }

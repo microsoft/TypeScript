@@ -37,6 +37,7 @@ function foo() {
 }
 
 //// [collisionArgumentsFunctionExpressions.js]
+"use strict";
 function foo() {
     function f1(arguments) {
         var restParameters = [];

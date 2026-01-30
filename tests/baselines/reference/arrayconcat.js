@@ -31,6 +31,7 @@ class parser {
 }
 
 //// [arrayconcat.js]
+"use strict";
 var parser = /** @class */ (function () {
     function parser() {
     }

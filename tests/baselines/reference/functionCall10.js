@@ -9,6 +9,7 @@ foo(1, 'bar');
 
 
 //// [functionCall10.js]
+"use strict";
 function foo() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {

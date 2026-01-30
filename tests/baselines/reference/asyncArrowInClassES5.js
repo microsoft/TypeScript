@@ -10,6 +10,7 @@ class Test {
 
 
 //// [asyncArrowInClassES5.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/16924
 // Should capture `this`
 var Test = /** @class */ (function () {
@@ -17,7 +18,7 @@ var Test = /** @class */ (function () {
     }
     var _a;
     _a = Test;
-    Test.member = function (x) { return __awaiter(_a, void 0, void 0, function () { return __generator(_a, function (_b) {
+    Test.member = function (x) { return __awaiter(void 0, void 0, void 0, function () { return __generator(_a, function (_b) {
         return [2 /*return*/];
     }); }); };
     return Test;

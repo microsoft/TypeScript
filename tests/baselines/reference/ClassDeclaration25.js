@@ -12,6 +12,7 @@ class List<U> implements IList<U> {
 
 
 //// [ClassDeclaration25.js]
+"use strict";
 var List = /** @class */ (function () {
     function List() {
     }

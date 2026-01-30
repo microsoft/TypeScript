@@ -63,6 +63,7 @@ void objA.a;
 void M.n;
 
 //// [voidOperatorWithAnyOtherType.js]
+"use strict";
 // void  operator on any type
 var ANY2 = ["", ""];
 var obj1 = { x: "", y: 1 };

@@ -10,6 +10,7 @@ class f {
 
 
 //// [returnValueInSetter.js]
+"use strict";
 var f = /** @class */ (function () {
     function f() {
     }

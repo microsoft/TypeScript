@@ -15,6 +15,7 @@ class  bigClass {
 
 
 //// [es6ClassTest5.js]
+"use strict";
 var C1T5 = /** @class */ (function () {
     function C1T5() {
         this.foo = function (i) {

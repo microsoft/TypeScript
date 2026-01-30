@@ -8,6 +8,7 @@ class Bar {
 }
 
 //// [overloadResolutionOnDefaultConstructor1.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar() {
     }

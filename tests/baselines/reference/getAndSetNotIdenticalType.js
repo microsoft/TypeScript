@@ -9,6 +9,7 @@ class C {
 }
 
 //// [getAndSetNotIdenticalType.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

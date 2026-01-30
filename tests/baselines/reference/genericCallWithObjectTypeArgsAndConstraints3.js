@@ -40,6 +40,7 @@ var r6 = f3(x => x, null);
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints3.js]
+"use strict";
 // Generic call with constraints infering type parameter from object member properties
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

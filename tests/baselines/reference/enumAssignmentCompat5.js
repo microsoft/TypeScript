@@ -27,6 +27,7 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 
 
 //// [enumAssignmentCompat5.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

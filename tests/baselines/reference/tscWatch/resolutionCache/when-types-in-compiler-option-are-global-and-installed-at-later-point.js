@@ -52,6 +52,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/lib/app.js]
+"use strict";
 myapp.component("hello");
 
 

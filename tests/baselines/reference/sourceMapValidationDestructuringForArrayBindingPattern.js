@@ -95,6 +95,7 @@ for (let [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]], i = 0; i < 
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPattern.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;

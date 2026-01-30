@@ -7,6 +7,7 @@ var v = {
 
 
 //// [commentsBeforeFunctionExpression1.js]
+"use strict";
 var v = {
     f: /**own f*/ function (a) { return 0; }
 };

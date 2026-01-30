@@ -7,6 +7,7 @@ class C {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = 10;

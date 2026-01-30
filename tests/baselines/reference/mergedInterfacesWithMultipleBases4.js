@@ -37,6 +37,7 @@ class D implements A<boolean> {
 }
 
 //// [mergedInterfacesWithMultipleBases4.js]
+"use strict";
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 var C = /** @class */ (function () {
     function C() {

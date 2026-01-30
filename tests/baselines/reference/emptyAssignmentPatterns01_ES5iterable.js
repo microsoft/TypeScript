@@ -7,6 +7,7 @@ var a: any;
 ([] = a);
 
 //// [emptyAssignmentPatterns01_ES5iterable.js]
+"use strict";
 var a;
 (a);
 (a);

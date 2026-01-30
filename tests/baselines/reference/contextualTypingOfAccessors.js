@@ -16,6 +16,7 @@ x = {
 
 
 //// [contextualTypingOfAccessors.js]
+"use strict";
 // not contextually typing accessors
 var x;
 x = {

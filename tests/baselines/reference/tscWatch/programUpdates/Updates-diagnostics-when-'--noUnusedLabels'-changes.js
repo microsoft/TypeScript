@@ -35,6 +35,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/a.js]
+"use strict";
 label: while (1) { }
 
 

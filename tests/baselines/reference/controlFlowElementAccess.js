@@ -13,6 +13,7 @@ if (y[0] === 0) {
 
 
 //// [controlFlowElementAccess.js]
+"use strict";
 var x = { o: false };
 if (x['o'] === false) {
     x['o'] = true;

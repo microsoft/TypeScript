@@ -9,6 +9,7 @@ class Beta extends Alpha.x {
 }
 
 //// [qualifiedName_entity-name-resolution-does-not-affect-class-heritage.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

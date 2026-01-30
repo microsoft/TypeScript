@@ -9,6 +9,7 @@ class Vector {
 }
 
 //// [unqualifiedCallToClassStatic1.js]
+"use strict";
 var Vector = /** @class */ (function () {
     function Vector() {
     }

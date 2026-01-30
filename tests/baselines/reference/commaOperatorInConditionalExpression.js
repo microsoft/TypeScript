@@ -8,6 +8,7 @@ function f (m: string) {
 }
 
 //// [commaOperatorInConditionalExpression.js]
+"use strict";
 function f(m) {
     [1, 2, 3].map(function (i) {
         var _a, _b;

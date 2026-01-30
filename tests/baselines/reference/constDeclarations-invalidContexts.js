@@ -35,6 +35,7 @@ while (false)
 
 
 //// [constDeclarations-invalidContexts.js]
+"use strict";
 // Errors, const must be defined inside a block
 if (true)
     const c1 = 0;

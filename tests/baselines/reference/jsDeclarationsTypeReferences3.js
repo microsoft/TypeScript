@@ -15,6 +15,7 @@ module.exports.A.B = {
 
 
 //// [index.js]
+"use strict";
 /// <reference types="node" />
 var Something = require("fs").Something;
 module.exports.A = {};

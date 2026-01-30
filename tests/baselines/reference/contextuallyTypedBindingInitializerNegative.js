@@ -30,6 +30,7 @@ function h({ prop = "baz" }: StringUnion) {}
 
 
 //// [contextuallyTypedBindingInitializerNegative.js]
+"use strict";
 function f(_a) {
     var _b = _a.show, showRename = _b === void 0 ? function (v) { return v; } : _b;
 }

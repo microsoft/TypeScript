@@ -11,6 +11,7 @@ class List<T extends {}>{
 
 
 //// [genericConstraintDeclaration.js]
+"use strict";
 var List = /** @class */ (function () {
     function List() {
     }

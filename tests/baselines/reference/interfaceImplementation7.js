@@ -13,6 +13,7 @@ class C1 implements i4 {
 
 
 //// [interfaceImplementation7.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

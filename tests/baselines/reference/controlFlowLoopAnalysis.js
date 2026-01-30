@@ -52,6 +52,7 @@ function mapUntilCant<a, b>(
 
 
 //// [controlFlowLoopAnalysis.js]
+"use strict";
 // Repro from #8418
 var cond;
 function foo(x) { return 1; }

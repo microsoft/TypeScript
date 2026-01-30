@@ -4,6 +4,7 @@
 (...arg?) => 102;
 
 //// [parserParameterList11.js]
+"use strict";
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {

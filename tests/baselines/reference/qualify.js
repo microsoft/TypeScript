@@ -63,6 +63,7 @@ var x:T.I=y;
 
 
 //// [qualify.js]
+"use strict";
 var M;
 (function (M) {
     M.m = 0;

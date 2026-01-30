@@ -9,6 +9,7 @@ var a: X<boolean>;
 
 
 //// [specializedLambdaTypeArguments.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

@@ -8,6 +8,7 @@ var bar;
 
 
 //// [parserInvalidIdentifiersInVariableStatements1.js]
+"use strict";
 var ;
 var foo;
 var ;

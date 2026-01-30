@@ -61,6 +61,7 @@ function flatMap(array, iterable = identity) {
 
 
 //// [jsFileFunctionOverloads.js]
+"use strict";
 /**
  * @overload
  * @param {number} x

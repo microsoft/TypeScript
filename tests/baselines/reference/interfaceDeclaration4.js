@@ -43,6 +43,7 @@ interface Foo.I1 { }
 
 
 //// [interfaceDeclaration4.js]
+"use strict";
 // Import this module when test harness supports external modules. Also remove the internal module below.
 // import Foo = require("interfaceDeclaration5")
 var Foo;

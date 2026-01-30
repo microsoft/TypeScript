@@ -15,6 +15,7 @@ async function f() {
 }
 
 //// [awaitUnion_es5.js]
+"use strict";
 function f() {
     return __awaiter(this, void 0, void 0, function () {
         var await_a, await_b, await_c, await_d, await_e;

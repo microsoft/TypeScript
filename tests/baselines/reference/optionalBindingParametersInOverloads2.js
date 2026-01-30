@@ -11,6 +11,7 @@ foo({ x: "", y: 0, z: false });
 foo({ x: false, y: 0, z: "" });
 
 //// [optionalBindingParametersInOverloads2.js]
+"use strict";
 function foo() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {

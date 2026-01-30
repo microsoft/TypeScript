@@ -18,6 +18,7 @@ var x = foo<void>();
 
 
 //// [localTypes5.js]
+"use strict";
 function foo() {
     var X = /** @class */ (function () {
         function X() {

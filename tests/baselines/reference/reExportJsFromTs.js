@@ -10,6 +10,7 @@ import * as tsConstants from "../lib/constants";
 export { tsConstants };
 
 //// [constants.js]
+"use strict";
 module.exports = {
     str: 'x',
 };

@@ -1,4 +1,5 @@
 // [source.js]
+"use strict";
 /*@before*/
 function f1() { }
 var c = /** @class */ (function () {

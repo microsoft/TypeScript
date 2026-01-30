@@ -18,6 +18,7 @@ class C3<T extends Date> {
 }
 
 //// [staticMembersUsingClassTypeParameter.js]
+"use strict";
 // BUG 745747
 var C = /** @class */ (function () {
     function C() {

@@ -38,6 +38,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 var a = "Hello";
 
 
@@ -109,6 +110,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 var a = "Hello World";
 
 
@@ -195,6 +197,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 
 
 

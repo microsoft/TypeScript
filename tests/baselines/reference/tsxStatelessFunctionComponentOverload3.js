@@ -26,6 +26,7 @@ const three2 = <ThreeThing y2="Bye" />;
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through
 
 //// [file.jsx]
+"use strict";
 var obj2;
 // OK
 var two1 = <ZeroThingOrTwoThing />;

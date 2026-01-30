@@ -14,6 +14,7 @@ namespace A4 {
 
 
 //// [reachabilityChecks2.js]
+"use strict";
 while (true) { }
 var A4;
 (function (A4) {

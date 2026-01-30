@@ -37,6 +37,7 @@ var r7 = new t2('');
 
 
 //// [typeOfThisInStaticMembers.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
     }

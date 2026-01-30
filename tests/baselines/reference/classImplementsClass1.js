@@ -5,6 +5,7 @@ class A { }
 class C implements A { }
 
 //// [classImplementsClass1.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

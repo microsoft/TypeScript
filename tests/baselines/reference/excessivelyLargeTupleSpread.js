@@ -42,6 +42,7 @@ const a14 = [...a13, ...a13] as const; // 2^14 > 10,000
 
 
 //// [excessivelyLargeTupleSpread.js]
+"use strict";
 // #41771
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

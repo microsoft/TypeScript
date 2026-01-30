@@ -46,6 +46,7 @@ class Form<T> {
 
 
 //// [mappedTypesAndObjects.js]
+"use strict";
 function f1(x, y) {
     var obj;
     obj = x;

@@ -9,6 +9,7 @@ class D {
 }
 
 //// [parserErrorRecovery_ClassElement1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

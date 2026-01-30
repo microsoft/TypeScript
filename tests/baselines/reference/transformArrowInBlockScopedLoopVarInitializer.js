@@ -9,6 +9,7 @@ while (true)
 }
 
 //// [transformArrowInBlockScopedLoopVarInitializer.js]
+"use strict";
 var _loop_1 = function () {
     var local = null;
     a = function () { return local; }; // <-- Lambda should be converted to function()

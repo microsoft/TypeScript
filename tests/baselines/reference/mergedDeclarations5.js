@@ -12,6 +12,7 @@ class B extends A {
 }
 
 //// [a.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }
@@ -19,6 +20,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 //// [b.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

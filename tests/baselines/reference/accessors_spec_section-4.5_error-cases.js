@@ -16,6 +16,7 @@ class LanguageSpec_section_4_5_error_cases {
 }
 
 //// [accessors_spec_section-4.5_error-cases.js]
+"use strict";
 var LanguageSpec_section_4_5_error_cases = /** @class */ (function () {
     function LanguageSpec_section_4_5_error_cases() {
     }

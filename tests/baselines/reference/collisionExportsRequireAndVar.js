@@ -47,6 +47,7 @@ define(["require", "exports"], function (require, exports) {
     })(m2 || (m2 = {}));
 });
 //// [collisionExportsRequireAndVar_globalFile.js]
+"use strict";
 var exports = 0;
 var require = "require";
 var m3;

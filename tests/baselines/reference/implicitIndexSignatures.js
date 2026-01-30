@@ -61,6 +61,7 @@ function f5() {
 
 
 //// [implicitIndexSignatures.js]
+"use strict";
 var empty1 = {};
 var empty2;
 var names1 = { a: "foo", b: "bar" };

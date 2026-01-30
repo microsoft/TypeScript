@@ -11,6 +11,7 @@ bar = foo;
 
 
 //// [mutuallyRecursiveCallbacks.js]
+"use strict";
 // Repro from #18277
 ;
 bar = foo;

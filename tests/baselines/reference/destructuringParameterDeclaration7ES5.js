@@ -16,6 +16,7 @@ function two([], [a, b, c]: number[]) {}
 
 
 //// [destructuringParameterDeclaration7ES5.js]
+"use strict";
 function foo(_a, _b) {
     var foo = _b.foo, bar = _b.bar;
 }

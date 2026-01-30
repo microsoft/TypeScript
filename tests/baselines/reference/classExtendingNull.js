@@ -7,6 +7,7 @@ class C3 extends null { x = 1; }
 class C4 extends (null) { x = 1; }
 
 //// [classExtendingNull.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

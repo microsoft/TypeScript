@@ -7,6 +7,7 @@ class Foo3 {
 }
 
 //// [parser509668.js]
+"use strict";
 var Foo3 = /** @class */ (function () {
     // Doesn't work, but should
     function Foo3() {

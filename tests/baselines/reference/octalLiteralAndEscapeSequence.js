@@ -122,6 +122,7 @@
 
 
 //// [octalLiteralAndEscapeSequence.js]
+"use strict";
 0;
 5;
 0;

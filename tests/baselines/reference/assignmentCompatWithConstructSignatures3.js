@@ -102,6 +102,7 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithConstructSignatures3.js]
+"use strict";
 // checking assignment compatibility relations for function types. All of these are valid.
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

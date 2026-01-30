@@ -123,6 +123,7 @@ function foo15() {
 var r15 = foo15();
 
 //// [callSignatureWithoutReturnTypeAnnotationInference.js]
+"use strict";
 // Call signatures without a return type should infer one from the function body (if present)
 // Simple types
 function foo(x) {

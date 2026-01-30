@@ -11,6 +11,7 @@ var one = new Bar({}); // Error
  
 
 //// [noErrorsInCallback.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar(foo) {
         this.foo = foo;

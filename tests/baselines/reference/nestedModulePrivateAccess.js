@@ -9,6 +9,7 @@ namespace a{
 }
 
 //// [nestedModulePrivateAccess.js]
+"use strict";
 var a;
 (function (a) {
     var x;

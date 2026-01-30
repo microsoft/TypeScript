@@ -576,6 +576,7 @@ var privateModule;
     var privateVarWithPrivateModulePropertyTypes;
 })(privateModule || (privateModule = {}));
 //// [privacyVarDeclFile_GlobalFile.js]
+"use strict";
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
     }

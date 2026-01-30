@@ -224,6 +224,7 @@ var r8b9 = b9 !== a9;
 //var r8b10 = b10 !== a10;
 
 //// [comparisonOperatorWithSubtypeObjectOnConstructorSignature.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

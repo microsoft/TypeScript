@@ -10,6 +10,7 @@ g<A, B>(7) // the parameter list is fixed, so this should not error
 
 
 //// [genericCallWithFixedArguments.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

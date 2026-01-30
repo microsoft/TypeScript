@@ -17,6 +17,7 @@ class C {
 
 
 //// [classStaticBlock20.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -35,6 +35,7 @@ class Derived4<T> extends Base2<T> {
 }
 
 //// [derivedClassConstructorWithoutSuperCall.js]
+"use strict";
 // derived class constructors must contain a super call
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

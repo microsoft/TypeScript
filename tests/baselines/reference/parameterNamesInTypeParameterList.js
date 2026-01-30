@@ -26,6 +26,7 @@ class A {
 }
 
 //// [parameterNamesInTypeParameterList.js]
+"use strict";
 function f0(a) {
     a.b;
 }

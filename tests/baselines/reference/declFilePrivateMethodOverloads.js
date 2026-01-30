@@ -25,6 +25,7 @@ declare class c2 {
 }
 
 //// [declFilePrivateMethodOverloads.js]
+"use strict";
 var c1 = /** @class */ (function () {
     function c1() {
     }

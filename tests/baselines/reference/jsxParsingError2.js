@@ -29,19 +29,25 @@ let x5 = <div><span>
 
 
 //// [file.jsx]
+"use strict";
 //// [Error1.jsx]
+"use strict";
 // Issue error about missing span closing tag, not missing div closing tag
 var x1 = <div><span></></div>;
 //// [Error2.jsx]
+"use strict";
 var x2 = <div></span>;
 //// [Error3.jsx]
+"use strict";
 var x3 = <div>;
 
 </>;
 //// [Error4.jsx]
+"use strict";
 var x4 = <div><div></span>;
 </>;
 //// [Error5.jsx]
+"use strict";
 var x5 = <div><span>
 
 </></>;

@@ -15,6 +15,7 @@ class MyClass
 }
 
 //// [properties.js]
+"use strict";
 var MyClass = /** @class */ (function () {
     function MyClass() {
     }

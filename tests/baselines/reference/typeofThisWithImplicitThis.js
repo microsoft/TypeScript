@@ -7,6 +7,7 @@ function Test1() {
 
 
 //// [typeofThisWithImplicitThis.js]
+"use strict";
 function Test1() {
     var x = 1;
 }

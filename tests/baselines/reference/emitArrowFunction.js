@@ -10,6 +10,7 @@ foo(() => true);
 foo(() => { return false; });
 
 //// [emitArrowFunction.js]
+"use strict";
 var f1 = function () { };
 var f2 = function (x, y) { };
 var f3 = function (x, y) {

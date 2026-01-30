@@ -21,6 +21,7 @@ class I4 {
 
 
 //// [circularTypeAliasForUnionWithClass.js]
+"use strict";
 var v0;
 var I0 = /** @class */ (function () {
     function I0() {

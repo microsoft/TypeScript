@@ -14,6 +14,7 @@ class D<T> {
 }
 
 //// [superCallInConstructorWithNoBaseType.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         return _super.call(this) || this; // error

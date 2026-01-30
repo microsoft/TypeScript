@@ -34,6 +34,7 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
         this.x = this;

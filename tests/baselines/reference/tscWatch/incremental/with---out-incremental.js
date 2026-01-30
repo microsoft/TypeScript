@@ -42,6 +42,7 @@ Found 1 error in tsconfig.json[90m:4[0m
 
 
 //// [/users/username/projects/project/out.js]
+"use strict";
 var x = 10;
 var y = 20;
 

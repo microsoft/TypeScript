@@ -18,6 +18,7 @@ x2(1, (x: 'hi') => 1); // error
 x2(1, (x: string) => 1);
 
 //// [overloadOnConstNoStringImplementation.js]
+"use strict";
 function x2(a, cb) {
     cb('hi');
     cb('bye');

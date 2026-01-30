@@ -15,6 +15,7 @@ const items = [{x: 12}];
 module.exports = items;
 
 //// [out.js]
+"use strict";
 /**
  * @typedef {{x: number}} Item
  */

@@ -19,6 +19,7 @@ var t3: A; // should not error
 
 
 //// [overloadOnGenericClassAndNonGenericClass.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

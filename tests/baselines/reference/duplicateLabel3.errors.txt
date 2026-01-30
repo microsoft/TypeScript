@@ -1,0 +1,14 @@
+duplicateLabel3.ts(3,12): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+
+
+==== duplicateLabel3.ts (1 errors) ====
+    target:
+    while (true) {
+      function f() {
+               ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+        target:
+        while (true) {
+        }
+      }
+    }

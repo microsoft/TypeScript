@@ -20,6 +20,7 @@ f1.bar1();
 Foo();
 
 //// [callOverloads1.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(x) {
         // WScript.Echo("Constructor function has executed");

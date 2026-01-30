@@ -8,6 +8,7 @@ class C {
 
 
 //// [overloadOnConstNoNonSpecializedSignature.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

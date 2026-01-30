@@ -9,6 +9,7 @@ class Foo {
 
 
 //// [missingReturnStatement1.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

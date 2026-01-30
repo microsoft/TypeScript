@@ -6,6 +6,7 @@ class B { }
 class C extends A,B { }
 
 //// [classExtendsMultipleBaseClasses.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -26,6 +26,7 @@ c = new B;
 
 
 //// [classAbstractInstantiations1.js]
+"use strict";
 //
 // Calling new with (non)abstract classes.
 //

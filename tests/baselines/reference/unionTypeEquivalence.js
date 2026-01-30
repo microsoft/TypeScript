@@ -22,6 +22,7 @@ var z1: string | typeof BC;
 
 
 //// [unionTypeEquivalence.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

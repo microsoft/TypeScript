@@ -10,6 +10,7 @@ x = y && (a => {
 });
 
 //// [contextuallyTypeLogicalAnd02.js]
+"use strict";
 var x;
 var y = true;
 x = y && (function (a) {

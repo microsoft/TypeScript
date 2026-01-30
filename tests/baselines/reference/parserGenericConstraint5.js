@@ -5,6 +5,7 @@ class C<T extends List<List<T>> > {
 }
 
 //// [parserGenericConstraint5.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

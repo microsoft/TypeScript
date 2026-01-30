@@ -17,6 +17,7 @@ function b2<B,>(x: B) { return x }
 
 
 //// [declarationEmitTypeParameterNameInOuterScope.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

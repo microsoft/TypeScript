@@ -34,6 +34,7 @@ enhancer4.onChange(null);
 
 
 //// [genericFunctionInference2.js]
+"use strict";
 // Repro from #30685
 var myReducer1 = combineReducers({
     combined: combineReducers({ foo: foo }),

@@ -62,6 +62,7 @@ interface I extends A {
 }
 
 //// [constructSignatureAssignabilityInInheritance4.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

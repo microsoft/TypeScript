@@ -8,6 +8,7 @@ class baz {
 
 
 //// [functionOverloads5.js]
+"use strict";
 var baz = /** @class */ (function () {
     function baz() {
     }

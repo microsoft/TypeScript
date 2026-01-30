@@ -35,6 +35,7 @@ var b: {
 }
 
 //// [constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js]
+"use strict";
 // Error for construct signature overloads to differ only by return type
 var C = /** @class */ (function () {
     function C(x) {

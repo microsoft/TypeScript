@@ -25,6 +25,7 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyIsPublicByDefault.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

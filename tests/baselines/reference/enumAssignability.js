@@ -57,6 +57,7 @@ namespace Others {
 }
 
 //// [enumAssignability.js]
+"use strict";
 // enums assignable to number, any, Object, errors unless otherwise noted
 var E;
 (function (E) {

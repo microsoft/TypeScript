@@ -4,4 +4,5 @@
 for (var let of []) {}
 
 //// [for-of56.js]
+"use strict";
 for (var let of []) { }

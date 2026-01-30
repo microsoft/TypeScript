@@ -38,6 +38,7 @@ enum E {
 }
 
 //// [duplicateIdentifierEnum_A.js]
+"use strict";
 var A;
 (function (A) {
     A[A["bar"] = 0] = "bar";
@@ -61,6 +62,7 @@ var E = /** @class */ (function () {
 }());
 // also make sure the error appears when trying to merge an enum in a separate file.
 //// [duplicateIdentifierEnum_B.js]
+"use strict";
 function D() {
     return 0;
 }

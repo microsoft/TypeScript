@@ -32,6 +32,7 @@ x = E.A;
 x = { f() { } }
 
 //// [invalidVoidAssignments.js]
+"use strict";
 var x;
 var a = x;
 var b = x;

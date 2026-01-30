@@ -90,6 +90,7 @@ class Foo {
 
 
 //// [truthinessCallExpressionCoercion1.js]
+"use strict";
 function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
     // error
     required ? console.log('required') : undefined;

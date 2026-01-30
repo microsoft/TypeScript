@@ -41,6 +41,7 @@ class C {
 
 
 //// [privateInstanceVisibility.js]
+"use strict";
 var Test;
 (function (Test) {
     var Example = /** @class */ (function () {

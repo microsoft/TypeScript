@@ -6,6 +6,7 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticProperties.js]
+"use strict";
 var foo = /** @class */ (function () {
     function foo() {
     }

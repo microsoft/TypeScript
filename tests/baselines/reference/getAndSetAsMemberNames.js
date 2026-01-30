@@ -24,6 +24,7 @@ class C5 {
 
 
 //// [getAndSetAsMemberNames.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
         this.get = 1;

@@ -14,6 +14,7 @@ i(a); // OK
 
 
 //// [inferTypeArgumentsInSignatureWithRestParameters.js]
+"use strict";
 function f(array) {
     var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {

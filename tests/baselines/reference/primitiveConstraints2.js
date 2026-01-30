@@ -12,6 +12,7 @@ x.bar2(2, ""); // should error
 x.bar2<string>(2, ""); // should error
 
 //// [primitiveConstraints2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -69,6 +69,7 @@ if (let4.constructor === C8) {
 
 
 //// [typeGuardConstructorDerivedClass.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -18,6 +18,7 @@ o1 = { x: b, 0: c }; // both indexers are any
 o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
 
 //// [objectLiteralIndexers.js]
+"use strict";
 var a;
 var b;
 var c;

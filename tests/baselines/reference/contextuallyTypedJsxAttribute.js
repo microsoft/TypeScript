@@ -26,6 +26,7 @@ Test({
 
 
 //// [index.jsx]
+"use strict";
 <Test as="bar" callback={function (value) { }}/>;
 Test({
     as: "bar",

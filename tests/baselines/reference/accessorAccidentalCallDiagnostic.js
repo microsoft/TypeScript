@@ -11,6 +11,7 @@ function test24554(x: Test24554) {
 
 
 //// [accessorAccidentalCallDiagnostic.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/24554
 var Test24554 = /** @class */ (function () {
     function Test24554() {

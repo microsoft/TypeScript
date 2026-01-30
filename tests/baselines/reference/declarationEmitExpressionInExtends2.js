@@ -14,6 +14,7 @@ class MyClass extends getClass(2) <string, number> {
 }
 
 //// [declarationEmitExpressionInExtends2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

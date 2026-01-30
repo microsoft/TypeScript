@@ -50,6 +50,7 @@ namespace M2 {
 }
 
 //// [mergeTwoInterfaces2.js]
+"use strict";
 // two interfaces with the same root module should merge
 // root module now multiple module declarations
 var M2;

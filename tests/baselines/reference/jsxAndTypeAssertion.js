@@ -24,6 +24,7 @@ x = <foo>x</foo>, x = <foo/>;
 
 
 //// [jsxAndTypeAssertion.jsx]
+"use strict";
 var foo = /** @class */ (function () {
     function foo() {
     }

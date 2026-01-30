@@ -14,6 +14,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfConstructor2.js]
+"use strict";
 var TestFile = /** @class */ (function () {
     function TestFile(message) {
         /// <summary>Test summary</summary>

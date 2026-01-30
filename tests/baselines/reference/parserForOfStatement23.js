@@ -8,6 +8,7 @@ async function foo(x: any) {
 
 
 //// [parserForOfStatement23.js]
+"use strict";
 async function foo(x) {
     var async;
     for await (async of x) { }

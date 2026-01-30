@@ -20,6 +20,7 @@ const { constructor } = async () => {};
 
 
 //// [destructuringControlFlowNoCrash.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -56,7 +57,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 // legal JS, if nonsensical, which also triggers the issue
 var date = function (inspectedElement) { return 0; }.date;
 date.toISOString();
@@ -64,6 +64,6 @@ date.toISOString();
 var date2 = function (inspectedElement) { return ; }.date2, props;
 date2.toISOString();
 // It could also be an async function
-var constructor = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+var constructor = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); }.constructor;

@@ -8,6 +8,7 @@ function f<T extends [(p1: number) => number]>(p: T): T {
 var v = f([x => x]);
 
 //// [inferringAnyFunctionType2.js]
+"use strict";
 function f(p) {
     return p;
 }

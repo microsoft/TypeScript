@@ -17,6 +17,7 @@ class Foo{
 
 
 //// [namedFunctionExpressionAssignedToClassProperty.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.a = function bar() {

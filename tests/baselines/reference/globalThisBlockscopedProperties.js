@@ -20,6 +20,7 @@ declare let themAll: keyof typeof globalThis
 
 
 //// [globalThisBlockscopedProperties.js]
+"use strict";
 var x = 1;
 var y = 2;
 var z = 3;

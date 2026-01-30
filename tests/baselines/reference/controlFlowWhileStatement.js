@@ -110,6 +110,7 @@ function h3() {
 
 
 //// [controlFlowWhileStatement.js]
+"use strict";
 var cond;
 function a() {
     var x;

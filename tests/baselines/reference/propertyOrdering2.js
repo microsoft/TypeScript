@@ -11,6 +11,7 @@ class Foo {
 
 
 //// [propertyOrdering2.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo(x, y) {
         this.x = x;

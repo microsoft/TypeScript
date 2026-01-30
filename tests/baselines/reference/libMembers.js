@@ -18,6 +18,7 @@ namespace M {
 
 
 //// [libMembers.js]
+"use strict";
 var s = "hello";
 s.substring(0);
 s.substring(3, 4);

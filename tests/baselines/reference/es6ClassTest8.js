@@ -43,6 +43,7 @@ class Camera {
 
 
 //// [es6ClassTest8.js]
+"use strict";
 function f1(x) { return x; }
 var C = /** @class */ (function () {
     function C() {

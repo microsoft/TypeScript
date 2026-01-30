@@ -23,6 +23,7 @@ function f2<T>(a: Item[]) {
 
 
 //// [objectInstantiationFromUnionSpread.js]
+"use strict";
 // #40995
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {

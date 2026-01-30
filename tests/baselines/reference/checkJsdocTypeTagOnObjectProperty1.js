@@ -27,6 +27,7 @@ obj.bar1 = "42";
 obj.arrowFunc(0);
 
 //// [0.js]
+"use strict";
 var _a;
 // @ts-check
 var lol = "hello Lol";

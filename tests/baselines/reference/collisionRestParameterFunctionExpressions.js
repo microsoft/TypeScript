@@ -27,6 +27,7 @@ function foo() {
 }
 
 //// [collisionRestParameterFunctionExpressions.js]
+"use strict";
 function foo() {
     function f1(_i) {
         var restParameters = [];

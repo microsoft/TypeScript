@@ -62,6 +62,7 @@ function removeNothing(y = cond ? true : undefined) {
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.js]
+"use strict";
 function f(addUndefined1, addUndefined2) {
     if (addUndefined1 === void 0) { addUndefined1 = "J"; }
     return addUndefined1.length + (addUndefined2 || 0);

@@ -27,6 +27,7 @@ type Values<T> = T[keyof T];
 type ValuesOfObj = Values<typeof obj>;
 
 //// [keyofDoesntContainSymbols.js]
+"use strict";
 var _a;
 var sym = Symbol();
 var num = 0;

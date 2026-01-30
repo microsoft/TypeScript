@@ -10,6 +10,7 @@ class BestLanguage {
 }
 
 //// [controlFlowPropertyInitializer.js]
+"use strict";
 // Repro from #8967
 var LANG = "Turbo Pascal";
 var BestLanguage = /** @class */ (function () {

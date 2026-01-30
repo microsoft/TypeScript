@@ -18,6 +18,7 @@ var d = new D();
 var d2 = new D(null); // error
 
 //// [classWithoutExplicitConstructor.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = 1;

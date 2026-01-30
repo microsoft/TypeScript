@@ -126,6 +126,7 @@ fnOpt2(1, [2, 3], [1], true);
 
 
 //// [optionalParamArgsTest.js]
+"use strict";
 // Optional parameter and default argument tests
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

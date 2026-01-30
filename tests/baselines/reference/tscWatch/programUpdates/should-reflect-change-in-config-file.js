@@ -43,10 +43,12 @@ commonFile2.ts
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 var x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 var y = 1;
 
 
@@ -129,6 +131,7 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 var y = 1;
 var xy = 10;
 

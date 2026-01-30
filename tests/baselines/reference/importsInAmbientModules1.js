@@ -9,3 +9,4 @@ declare module "M" {
 }
 
 //// [main.js]
+"use strict";

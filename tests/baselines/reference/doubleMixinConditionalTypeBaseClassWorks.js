@@ -11,6 +11,7 @@ const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
 class C extends Mixin2(Mixin1(Object)) {}
 
 //// [doubleMixinConditionalTypeBaseClassWorks.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

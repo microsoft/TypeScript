@@ -25,6 +25,7 @@ function func3() {
 
 
 //// [inferStringLiteralUnionForBindingElement.js]
+"use strict";
 function func1() {
     var firstKey = func({ keys: ["aa", "bb"] }).firstKey;
     var a = firstKey;

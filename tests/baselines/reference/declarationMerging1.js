@@ -12,6 +12,7 @@ interface A {
 }
 
 //// [file1.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }
@@ -19,3 +20,4 @@ var A = /** @class */ (function () {
     return A;
 }());
 //// [file2.js]
+"use strict";

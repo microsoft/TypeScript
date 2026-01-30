@@ -73,6 +73,7 @@ function goo(x: A) {
 
 
 //// [instanceofWithStructurallyIdenticalTypes.js]
+"use strict";
 // Repro from #7271
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

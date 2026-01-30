@@ -10,6 +10,7 @@ foo('foo', 1, 3);
 
 
 //// [functionCall14.js]
+"use strict";
 function foo(a) {
     var b = [];
     for (var _i = 1; _i < arguments.length; _i++) {

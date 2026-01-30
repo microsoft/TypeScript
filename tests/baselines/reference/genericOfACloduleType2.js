@@ -18,6 +18,7 @@ namespace N {
 }
 
 //// [genericOfACloduleType2.js]
+"use strict";
 var G = /** @class */ (function () {
     function G() {
     }

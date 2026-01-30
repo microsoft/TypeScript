@@ -8,6 +8,7 @@ class abstract {
 new abstract;
 
 //// [classAbstractAsIdentifier.js]
+"use strict";
 var abstract = /** @class */ (function () {
     function abstract() {
     }

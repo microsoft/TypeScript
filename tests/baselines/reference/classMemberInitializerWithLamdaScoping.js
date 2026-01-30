@@ -33,6 +33,7 @@ class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping.js]
+"use strict";
 var Test = /** @class */ (function () {
     function Test(field) {
         var _this = this;

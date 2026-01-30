@@ -7,6 +7,7 @@ class T {
 }
 
 //// [staticAndMemberFunctions.js]
+"use strict";
 var T = /** @class */ (function () {
     function T() {
     }

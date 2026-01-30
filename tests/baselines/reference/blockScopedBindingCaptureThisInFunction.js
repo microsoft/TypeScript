@@ -10,6 +10,7 @@
 };
 
 //// [blockScopedBindingCaptureThisInFunction.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/11038
 (function () { return function () {
     var _loop_1 = function (someKey) {

@@ -19,6 +19,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 }
 
 //// [thisTypeInFunctions4.js]
+"use strict";
 function problemFunction() {
     var _this = this;
     //check type

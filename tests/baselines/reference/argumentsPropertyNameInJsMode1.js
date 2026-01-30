@@ -13,6 +13,7 @@ f2(1, 2, 3);
 
 
 //// [a.js]
+"use strict";
 var foo = {
     f1: function (params) { }
 };

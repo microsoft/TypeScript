@@ -51,6 +51,7 @@ v15.member;
 
 
 //// [unionTypePropertyAccessibility.js]
+"use strict";
 var Default = /** @class */ (function () {
     function Default() {
     }

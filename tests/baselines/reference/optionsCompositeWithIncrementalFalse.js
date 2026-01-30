@@ -5,6 +5,7 @@ const x = "Hello World";
 
 
 //// [optionsCompositeWithIncrementalFalse.js]
+"use strict";
 var x = "Hello World";
 
 

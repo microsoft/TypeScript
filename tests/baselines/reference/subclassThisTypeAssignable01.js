@@ -31,6 +31,7 @@ const test9 = new C();
 
 
 //// [tile1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }
@@ -39,5 +40,6 @@ var C = /** @class */ (function () {
 }());
 var test8 = new C();
 //// [file1.js]
+"use strict";
 /** @type {ClassComponent<any>} */
 var test9 = new C();

@@ -16,6 +16,7 @@ class C3 implements I1 {
 
 
 //// [interfaceImplementation2.js]
+"use strict";
 var C3 = /** @class */ (function () {
     function C3() {
     }

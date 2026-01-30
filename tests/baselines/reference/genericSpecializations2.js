@@ -22,6 +22,7 @@ class StringFoo3 implements IFoo<string> {
 
 
 //// [genericSpecializations2.js]
+"use strict";
 var IFoo = /** @class */ (function () {
     function IFoo() {
     }

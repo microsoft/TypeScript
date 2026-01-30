@@ -303,6 +303,7 @@ Found 2 errors.
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = /** @class */ (function () {
     function class_1() {
         this.p = 10;

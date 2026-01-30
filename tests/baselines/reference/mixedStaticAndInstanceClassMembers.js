@@ -18,6 +18,7 @@ class B {
 }
 
 //// [mixedStaticAndInstanceClassMembers.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

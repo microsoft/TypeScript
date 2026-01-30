@@ -8,6 +8,7 @@ function f({} = a, [] = a, { p: {} = a} = a) {
 }
 
 //// [declarationEmitBindingPatterns.js]
+"use strict";
 var k = function (_a) {
     var _b = _a.x, z = _b === void 0 ? 'y' : _b;
 };

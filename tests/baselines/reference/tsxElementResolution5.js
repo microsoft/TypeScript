@@ -10,5 +10,6 @@ declare namespace JSX {
 
 
 //// [file1.jsx]
+"use strict";
 // OK, but implicit any
 <div n='x'/>;

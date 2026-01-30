@@ -30,6 +30,7 @@ var e: E = bar("bye", []); // E
 var f: C = bar("um", []); // C
 
 //// [overloadingOnConstants2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

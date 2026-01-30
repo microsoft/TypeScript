@@ -29,6 +29,7 @@ class B {
 
 
 //// [thisInGenericStaticMembers.js]
+"use strict";
 // this.call in static generic method not resolved correctly
 var A = /** @class */ (function () {
     function A() {

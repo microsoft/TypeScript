@@ -15,12 +15,14 @@ function bar() {
 }
 
 //// [a.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }
     return c;
 }());
 //// [b.js]
+"use strict";
 /// <reference path="c.js"/>
 // no error on above reference path since not emitting declarations
 function foo() {

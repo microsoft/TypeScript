@@ -162,6 +162,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 
 
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.js]
+"use strict";
 //// [privacyFunctionReturnTypeDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

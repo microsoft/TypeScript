@@ -31,6 +31,7 @@ foo({
 
 
 //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar() {
     }

@@ -10,6 +10,7 @@ for (let i = 0; i < 10; ++i) {
 
 
 //// [classExpressionLoop.js]
+"use strict";
 var arr = [];
 var _loop_1 = function (i) {
     arr.push(/** @class */ (function () {

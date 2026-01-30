@@ -15,6 +15,7 @@ new B;
 new C;
 
 //// [classAbstractSingleLineDecl.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -49,6 +49,7 @@ namespace TypeScript.Syntax {
 
 
 //// [moduleMemberWithoutTypeAnnotation1.js]
+"use strict";
 var TypeScript;
 (function (TypeScript) {
     var Parser;

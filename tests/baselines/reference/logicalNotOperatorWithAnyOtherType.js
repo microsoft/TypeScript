@@ -62,6 +62,7 @@ var ResultIsBoolean21 = !!!(ANY + ANY1);
 !M.n;
 
 //// [logicalNotOperatorWithAnyOtherType.js]
+"use strict";
 // ! operator on any type
 var ANY;
 var ANY1;

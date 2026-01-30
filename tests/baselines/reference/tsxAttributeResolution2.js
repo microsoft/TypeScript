@@ -21,6 +21,7 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+"use strict";
 // OK
 <test1 c1={function (x) { return x.length; }}/>; // OK
 <test1 data-c1={function (x) { return x.leng; }}/>; // OK

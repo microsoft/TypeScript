@@ -62,6 +62,7 @@ Object.defineProperty(module.exports, "j", { value: function j() {} });
 
 
 //// [index.js]
+"use strict";
 Object.defineProperty(module.exports, "a", { value: function a() { } });
 Object.defineProperty(module.exports, "b", { value: function b() { } });
 Object.defineProperty(module.exports.b, "cat", { value: "cat" });

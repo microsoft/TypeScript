@@ -10,6 +10,7 @@ var x: (...y: string[]) => void = function (.../*3*/y) {
 };
 
 //// [contextuallyTypingRestParameters.js]
+"use strict";
 var x = function () {
     var y = [];
     for (var _i = 0; _i < arguments.length; _i++) {

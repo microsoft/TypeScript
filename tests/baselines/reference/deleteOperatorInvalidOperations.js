@@ -18,6 +18,7 @@ class testADelx {
 }
 
 //// [deleteOperatorInvalidOperations.js]
+"use strict";
 // Unary operator delete
 var ANY;
 // operand before delete operator

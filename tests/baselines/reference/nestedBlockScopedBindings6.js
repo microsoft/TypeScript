@@ -91,6 +91,7 @@ function a7() {
 }
 
 //// [nestedBlockScopedBindings6.js]
+"use strict";
 function a0() {
     for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
         var x = _a[_i];

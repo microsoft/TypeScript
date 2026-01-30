@@ -15,6 +15,7 @@ namespace M{
 
 
 //// [unexportedInstanceClassVariables.js]
+"use strict";
 var M;
 (function (M) {
     var A = /** @class */ (function () {

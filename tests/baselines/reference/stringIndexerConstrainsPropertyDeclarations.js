@@ -100,6 +100,7 @@ var b: { [x: string]: string; } = {
 }
 
 //// [stringIndexerConstrainsPropertyDeclarations.js]
+"use strict";
 // String indexer types constrain the types of named properties in their containing type
 var C = /** @class */ (function () {
     function C() {

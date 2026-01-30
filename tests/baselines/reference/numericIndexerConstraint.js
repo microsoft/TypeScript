@@ -7,6 +7,7 @@ class C {
 }
 
 //// [numericIndexerConstraint.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

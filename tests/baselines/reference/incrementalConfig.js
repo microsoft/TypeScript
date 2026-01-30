@@ -5,4 +5,5 @@ const x = 10;
 
 
 //// [a.js]
+"use strict";
 var x = 10;

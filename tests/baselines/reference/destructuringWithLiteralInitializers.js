@@ -69,6 +69,7 @@ g5([1, 1]);
 
 
 //// [destructuringWithLiteralInitializers.js]
+"use strict";
 // (arg: { x: any, y: any }) => void
 function f1(_a) {
     var x = _a.x, y = _a.y;

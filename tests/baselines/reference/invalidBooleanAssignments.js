@@ -29,6 +29,7 @@ function i<T>(a: T) {
 i = x;
 
 //// [invalidBooleanAssignments.js]
+"use strict";
 var x = true;
 var a = x;
 var b = x;

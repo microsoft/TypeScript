@@ -41,6 +41,7 @@ function f4() {
 
 
 //// [localTypes4.js]
+"use strict";
 function f1() {
     // Type parameters are in scope in parameters and return types
     function f(x) {

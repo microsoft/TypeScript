@@ -9,6 +9,7 @@ class ErrClass {
 
 
 //// [typeOfThisInConstructorParamList.js]
+"use strict";
 //type of 'this' in constructor param list is the class instance type (error)
 var ErrClass = /** @class */ (function () {
     // Should be an error

@@ -5,6 +5,7 @@ let x = [] as [];
 let y = x[0];
 
 //// [emptyTuplesTypeAssertion02.js]
+"use strict";
 var x = [];
 var y = x[0];
 

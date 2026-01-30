@@ -19,6 +19,7 @@ Biz(new Foo());
 
 
 //// [assignmentCompatInterfaceWithStringIndexSignature.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

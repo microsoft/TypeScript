@@ -26,6 +26,7 @@ var b = {
 var r4 = b["a b"];
 
 //// [stringNamedPropertyAccess.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

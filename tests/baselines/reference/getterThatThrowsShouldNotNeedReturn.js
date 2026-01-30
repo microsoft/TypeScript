@@ -12,6 +12,7 @@ class Greeter {
 
 
 //// [getterThatThrowsShouldNotNeedReturn.js]
+"use strict";
 var Greeter = /** @class */ (function () {
     function Greeter() {
     }

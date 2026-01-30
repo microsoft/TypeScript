@@ -9,5 +9,6 @@ const y = inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two);
 
 
 //// [inferObjectTypeFromStringLiteralToKeyof.js]
+"use strict";
 var x = inference1(two);
 var y = inference2({ a: 1, b: 2, c: 3, d: function (n) { return n; } }, two);

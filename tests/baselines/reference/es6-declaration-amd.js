@@ -15,6 +15,7 @@ class A
 }
 
 //// [es6-declaration-amd.js]
+"use strict";
 class A {
     constructor() {
     }

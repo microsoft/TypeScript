@@ -12,6 +12,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfFunctionBody2.js]
+"use strict";
 var TestFile = /** @class */ (function () {
     function TestFile() {
     }

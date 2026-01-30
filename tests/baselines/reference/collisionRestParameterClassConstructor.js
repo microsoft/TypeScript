@@ -69,6 +69,7 @@ declare class c6NoError {
 }
 
 //// [collisionRestParameterClassConstructor.js]
+"use strict";
 // Constructors
 var c1 = /** @class */ (function () {
     function c1(_i) {

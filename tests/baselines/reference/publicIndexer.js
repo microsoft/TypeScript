@@ -16,6 +16,7 @@ class E<T> {
 }
 
 //// [publicIndexer.js]
+"use strict";
 // public indexers not allowed
 var C = /** @class */ (function () {
     function C() {

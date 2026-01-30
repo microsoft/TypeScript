@@ -24,6 +24,7 @@ const x: Foo = (void 0, {
 
 
 //// [slightlyIndirectedDeepObjectLiteralElaborations.js]
+"use strict";
 var q;
 var x = (void 0, {
     a: q = {

@@ -17,6 +17,7 @@ function f() {
 >(arguments) => () => _arguments : (arguments: any) => () => number
 >                                : ^         ^^^^^^^^^^^^^^^^^^^^^^
 >arguments : any
+>          : ^^^
 >() => _arguments : () => number
 >                 : ^^^^^^^^^^^^
 >_arguments : number

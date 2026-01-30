@@ -27,6 +27,7 @@ const partial: Partial<Properties> = {
 
 
 //// [doubleUnderscoreMappedTypes.js]
+"use strict";
 // As expected, I can make an object satisfying this interface
 var ok = {
     property1: "",

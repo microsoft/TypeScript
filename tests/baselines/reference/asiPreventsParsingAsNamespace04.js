@@ -5,5 +5,6 @@ let module = 10;
 module in {}
 
 //// [asiPreventsParsingAsNamespace04.js]
+"use strict";
 var module = 10;
 module in {};

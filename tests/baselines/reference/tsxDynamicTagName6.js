@@ -12,5 +12,6 @@ const t = {tag:'h1'}
 const foo = <t.tag/>  // No error
 
 //// [tsxDynamicTagName6.jsx]
+"use strict";
 var t = { tag: 'h1' };
 var foo = <t.tag />; // No error

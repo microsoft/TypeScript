@@ -10,6 +10,7 @@ function append<a, b extends a>(result: a[], value: b): a[] {
 
 
 //// [declarationEmitFBoundedTypeParams.js]
+"use strict";
 // Repro from #6040
 function append(result, value) {
     result.push(value);

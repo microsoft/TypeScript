@@ -43,6 +43,7 @@ class D<T> {
 }
 
 //// [memberFunctionsWithPublicOverloads.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -11,6 +11,7 @@ return null;
 
 
 //// [overloadEquivalenceWithStatics.js]
+"use strict";
 var A1 = /** @class */ (function () {
     function A1() {
     }

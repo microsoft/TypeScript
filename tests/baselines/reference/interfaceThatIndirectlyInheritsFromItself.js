@@ -28,3 +28,4 @@ namespace Generic {
 }
 
 //// [interfaceThatIndirectlyInheritsFromItself.js]
+"use strict";

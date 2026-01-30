@@ -8,6 +8,7 @@
 
 
 //// [parser.numericSeparators.octal.js]
+"use strict";
 9;
 1;
 2359305;

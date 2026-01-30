@@ -43,6 +43,7 @@ Output::
 
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 var x = 1;
 var y = 1;
 
@@ -119,6 +120,7 @@ Output::
 
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 var x = 11;
 var y = 1;
 
@@ -176,6 +178,7 @@ Output::
 
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 var xy = 11;
 var y = 1;
 

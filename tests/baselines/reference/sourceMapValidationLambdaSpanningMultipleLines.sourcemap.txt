@@ -8,6 +8,7 @@ sources: sourceMapValidationLambdaSpanningMultipleLines.ts
 emittedFile:sourceMapValidationLambdaSpanningMultipleLines.js
 sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>(function (item) {
 1 >
 2 >^
@@ -18,10 +19,10 @@ sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
 2 >(
 3 > (
 4 >           item: string
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 2) Source(1, 2) + SourceIndex(0)
-3 >Emitted(1, 12) Source(1, 3) + SourceIndex(0)
-4 >Emitted(1, 16) Source(1, 15) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(1, 2) + SourceIndex(0)
+3 >Emitted(2, 12) Source(1, 3) + SourceIndex(0)
+4 >Emitted(2, 16) Source(1, 15) + SourceIndex(0)
 ---
 >>>    return item;
 1->^^^^
@@ -31,9 +32,9 @@ sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
   >    
 2 >    
 3 >           item
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 12) Source(2, 5) + SourceIndex(0)
-3 >Emitted(2, 16) Source(2, 9) + SourceIndex(0)
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 12) Source(2, 5) + SourceIndex(0)
+3 >Emitted(3, 16) Source(2, 9) + SourceIndex(0)
 ---
 >>>});
 1 >
@@ -46,9 +47,9 @@ sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
 3 > 
   > )
 4 >  
-1 >Emitted(3, 1) Source(2, 5) + SourceIndex(0)
-2 >Emitted(3, 2) Source(2, 9) + SourceIndex(0)
-3 >Emitted(3, 3) Source(3, 2) + SourceIndex(0)
-4 >Emitted(3, 4) Source(3, 2) + SourceIndex(0)
+1 >Emitted(4, 1) Source(2, 5) + SourceIndex(0)
+2 >Emitted(4, 2) Source(2, 9) + SourceIndex(0)
+3 >Emitted(4, 3) Source(3, 2) + SourceIndex(0)
+4 >Emitted(4, 4) Source(3, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

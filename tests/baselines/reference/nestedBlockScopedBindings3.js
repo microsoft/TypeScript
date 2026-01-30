@@ -71,6 +71,7 @@ function a5() {
 }
 
 //// [nestedBlockScopedBindings3.js]
+"use strict";
 function a0() {
     {
         var _loop_1 = function (x) {

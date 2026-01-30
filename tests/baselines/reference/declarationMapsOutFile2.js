@@ -17,6 +17,7 @@ let x = c.doThing({a: 12});
 
 
 //// [bundle.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

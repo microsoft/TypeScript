@@ -10,6 +10,7 @@ var obj2 = {
 
 
 //// [emitDefaultParametersFunctionProperty.js]
+"use strict";
 var obj2 = {
     func1: function (y) {
         if (y === void 0) { y = 10; }

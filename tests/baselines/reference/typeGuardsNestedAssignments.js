@@ -48,6 +48,7 @@ while ((match = re.exec("xxx")) != null) {
 }
 
 //// [typeGuardsNestedAssignments.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = "";

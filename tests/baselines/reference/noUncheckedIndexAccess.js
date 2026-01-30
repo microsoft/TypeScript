@@ -30,6 +30,7 @@ enum Meat {
   const value3 = A[B.x];
 
 //// [noUncheckedIndexAccess.js]
+"use strict";
 var Meat;
 (function (Meat) {
     Meat[Meat["Sausage"] = 0] = "Sausage";

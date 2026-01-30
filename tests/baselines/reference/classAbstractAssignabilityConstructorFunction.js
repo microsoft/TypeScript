@@ -11,6 +11,7 @@ AAA = A; // error.
 AAA = "asdf";
 
 //// [classAbstractAssignabilityConstructorFunction.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -13,6 +13,7 @@ let Foo = class {
 }
 
 //// [functionsInClassExpressions.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function class_1() {
         var _this = this;

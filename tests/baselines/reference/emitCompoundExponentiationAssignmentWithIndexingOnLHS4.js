@@ -17,6 +17,7 @@ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 
 array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2;
 
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS4.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h;
 var globalCounter = 0;
 function incrementIdx(max) {

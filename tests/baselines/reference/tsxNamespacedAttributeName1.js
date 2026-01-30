@@ -6,5 +6,6 @@ const b = <svg : path a:b={1}></svg : path>;
 
 
 //// [a.jsx]
+"use strict";
 var a = <svg:path a:b={1}></svg:path>;
 var b = <svg:path a:b={1}></svg:path>;

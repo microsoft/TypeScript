@@ -65,6 +65,7 @@ var n = new nested();
 
 
 //// [newOperatorConformance.js]
+"use strict";
 var C0 = /** @class */ (function () {
     function C0() {
     }

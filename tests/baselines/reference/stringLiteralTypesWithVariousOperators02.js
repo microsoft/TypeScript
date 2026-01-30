@@ -20,6 +20,7 @@ let k = abc === xyz;
 let l = abc != xyz;
 
 //// [stringLiteralTypesWithVariousOperators02.js]
+"use strict";
 var a = abcOrXyzOrNumber + 100;
 var b = 100 + abcOrXyzOrNumber;
 var c = abcOrXyzOrNumber + abcOrXyzOrNumber;

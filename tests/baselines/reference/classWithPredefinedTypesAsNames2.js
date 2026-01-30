@@ -6,6 +6,7 @@
 class void {}
 
 //// [classWithPredefinedTypesAsNames2.js]
+"use strict";
 // classes cannot use predefined types as names
 var default_1 = /** @class */ (function () {
     function default_1() {

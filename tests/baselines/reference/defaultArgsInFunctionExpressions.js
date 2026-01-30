@@ -34,6 +34,7 @@ var f7 = (t = U) => { return t; };
 f7().x;
 
 //// [defaultArgsInFunctionExpressions.js]
+"use strict";
 var f = function (a) {
     if (a === void 0) { a = 3; }
     return a;

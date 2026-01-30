@@ -64,6 +64,7 @@ Output::
 
 
 //// [/home/src/projects/project/app.js]
+"use strict";
 var x;
 
 

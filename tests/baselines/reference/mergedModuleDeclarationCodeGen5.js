@@ -21,6 +21,7 @@ namespace M.buz.plop {
 }
 
 //// [mergedModuleDeclarationCodeGen5.js]
+"use strict";
 var M;
 (function (M_1) {
     var buz;

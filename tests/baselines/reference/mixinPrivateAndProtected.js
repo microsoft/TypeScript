@@ -92,6 +92,7 @@ class Customer extends PersonMixin(Person) {
 
 
 //// [mixinPrivateAndProtected.js]
+"use strict";
 // Repro from #13830
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

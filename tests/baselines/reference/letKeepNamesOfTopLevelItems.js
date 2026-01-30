@@ -11,6 +11,7 @@ namespace A {
 }
 
 //// [letKeepNamesOfTopLevelItems.js]
+"use strict";
 var x;
 function foo() {
     var x;

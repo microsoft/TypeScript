@@ -39,6 +39,7 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 
 
 //// [arrayLiterals.js]
+"use strict";
 // Empty array literal with no contextual type has type Undefined[]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

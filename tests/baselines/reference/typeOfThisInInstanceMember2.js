@@ -38,6 +38,7 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
         this.x = this;

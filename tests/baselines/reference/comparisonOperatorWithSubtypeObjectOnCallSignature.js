@@ -262,6 +262,7 @@ var r8b11 = b11 !== a11;
 //var r8b12 = b12 !== a12;
 
 //// [comparisonOperatorWithSubtypeObjectOnCallSignature.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

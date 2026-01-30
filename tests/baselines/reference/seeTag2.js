@@ -24,6 +24,7 @@ const g = ""
 
 
 //// [seeTag2.js]
+"use strict";
 /** @see {} empty*/
 var a = "";
 /** @see {aaaaaa} unknown name*/

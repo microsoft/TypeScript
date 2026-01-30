@@ -6,3 +6,4 @@ namespace A {
 }
 
 //// [unusedModuleInModule.js]
+"use strict";

@@ -56,6 +56,7 @@ var ResultIsNumber15 = -(ANY - ANY1);
 -M.n;
 
 //// [negateOperatorWithAnyOtherType.js]
+"use strict";
 // - operator on any type
 var ANY;
 var ANY1;

@@ -39,6 +39,7 @@ var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
 
 
 //// [typeArgumentInferenceWithObjectLiteral.js]
+"use strict";
 function foo(x) { }
 var s;
 // Calls below should infer string for T and then assign that type to the value parameter

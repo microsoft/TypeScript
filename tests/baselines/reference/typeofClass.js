@@ -14,6 +14,7 @@ k2.foo;
 k2.bar;
 
 //// [typeofClass.js]
+"use strict";
 var K = /** @class */ (function () {
     function K() {
     }

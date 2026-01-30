@@ -168,9 +168,10 @@ Found 3 errors.
 
 
 //// [/home/src/workspaces/solution/first/first_PART1.js.map]
-{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
+{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_PART1.js]
+"use strict";
 var s = "Hello, world";
 console.log(s);
 //# sourceMappingURL=first_PART1.js.map
@@ -189,9 +190,10 @@ interface NoJsForHereEither {
 //# sourceMappingURL=first_PART1.d.ts.map
 
 //// [/home/src/workspaces/solution/first/first_part2.js.map]
-{"version":3,"file":"first_part2.js","sourceRoot":"","sources":["first_part2.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC"}
+{"version":3,"file":"first_part2.js","sourceRoot":"","sources":["first_part2.ts"],"names":[],"mappings":";AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_part2.js]
+"use strict";
 console.log(f());
 //# sourceMappingURL=first_part2.js.map
 
@@ -202,9 +204,10 @@ console.log(f());
 //# sourceMappingURL=first_part2.d.ts.map
 
 //// [/home/src/workspaces/solution/first/first_part3.js.map]
-{"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":"AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":";AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_part3.js]
+"use strict";
 function f() {
     return "JS does hoists";
 }
@@ -316,9 +319,10 @@ declare function f(): string;
 }
 
 //// [/home/src/workspaces/solution/second/second_part1.js.map]
-{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
+{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":";AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
 
 //// [/home/src/workspaces/solution/second/second_part1.js]
+"use strict";
 var N;
 (function (N) {
     function f() {
@@ -339,9 +343,10 @@ declare namespace N {
 //# sourceMappingURL=second_part1.d.ts.map
 
 //// [/home/src/workspaces/solution/second/second_part2.js.map]
-{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":";AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/home/src/workspaces/solution/second/second_part2.js]
+"use strict";
 var C = (function () {
     function C() {
     }
@@ -443,9 +448,10 @@ declare class C {
 }
 
 //// [/home/src/workspaces/solution/third/third_part1.js.map]
-{"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+{"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":";AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/home/src/workspaces/solution/third/third_part1.js]
+"use strict";
 var c = new C();
 c.doSomething();
 //# sourceMappingURL=third_part1.js.map

@@ -220,6 +220,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop3.js]
+"use strict";
 function foo0(x) {
     var _loop_1 = function (x_1) {
         v = x_1;

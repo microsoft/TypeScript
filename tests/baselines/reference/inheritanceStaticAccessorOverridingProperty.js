@@ -15,6 +15,7 @@ class b extends a {
 }
 
 //// [inheritanceStaticAccessorOverridingProperty.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

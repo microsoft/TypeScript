@@ -19,6 +19,7 @@ var r2 = D;
 
 
 //// [classWithNoConstructorOrBaseClass.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

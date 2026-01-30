@@ -89,6 +89,7 @@ var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
 
 
 //// [typeFromPropertyAssignment29.js]
+"use strict";
 function ExpandoDecl(n) {
     return n.toString();
 }

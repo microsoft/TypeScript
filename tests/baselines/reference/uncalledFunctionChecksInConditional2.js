@@ -75,6 +75,7 @@ function isMobile() {
 
 
 //// [uncalledFunctionChecksInConditional2.js]
+"use strict";
 var _a;
 {
     var perf = window.performance;

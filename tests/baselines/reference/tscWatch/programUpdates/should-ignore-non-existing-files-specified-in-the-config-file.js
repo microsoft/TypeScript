@@ -49,6 +49,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 var x = 1;
 
 

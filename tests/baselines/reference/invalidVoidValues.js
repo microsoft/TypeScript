@@ -29,6 +29,7 @@ function f<T>(a: T) {
 x = f;
 
 //// [invalidVoidValues.js]
+"use strict";
 var x;
 x = 1;
 x = '';

@@ -98,6 +98,7 @@ const t2 = testSet.transform(
 
 
 //// [inferFromGenericFunctionReturnTypes2.js]
+"use strict";
 var f1 = function (s) { return s.length; };
 var f2 = wrap(function (s) { return s.length; });
 var f3 = arrayize(wrap(function (s) { return s.length; }));

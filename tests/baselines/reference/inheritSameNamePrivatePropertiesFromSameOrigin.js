@@ -13,6 +13,7 @@ interface A extends C, C2 { // ok
 }
 
 //// [inheritSameNamePrivatePropertiesFromSameOrigin.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

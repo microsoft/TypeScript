@@ -22,6 +22,7 @@ else {
 }
 
 //// [sourceMapValidationDestructuringVariableStatement.js]
+"use strict";
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
 var robotB = { name: "trimmer", skill: "trimming" };

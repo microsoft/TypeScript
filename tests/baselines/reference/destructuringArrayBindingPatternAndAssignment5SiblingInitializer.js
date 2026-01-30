@@ -28,6 +28,7 @@ function f4() {
 
 
 //// [destructuringArrayBindingPatternAndAssignment5SiblingInitializer.js]
+"use strict";
 // To be inferred as `number`
 function f1() {
     var _a = [1], a1 = _a[0], _b = _a[1], b1 = _b === void 0 ? a1 : _b;

@@ -29,6 +29,7 @@ class Thenable<T> {
 }
 
 //// [awaitedTypeNoLib.js]
+"use strict";
 var Thenable = /** @class */ (function () {
     function Thenable() {
     }

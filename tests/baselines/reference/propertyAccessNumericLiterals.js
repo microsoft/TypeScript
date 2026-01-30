@@ -16,6 +16,7 @@
 8_8e4.toString();
 
 //// [propertyAccessNumericLiterals.js]
+"use strict";
 0xffffffff.toString();
 668..toString();
 109..toString();

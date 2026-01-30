@@ -37,6 +37,7 @@ var impl: I = mutuallyRecursive;
 
 
 //// [thisTypeInObjectLiterals.js]
+"use strict";
 var o = {
     d: "bar",
     m: function () {

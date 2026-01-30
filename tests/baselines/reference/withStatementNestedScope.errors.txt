@@ -1,12 +1,18 @@
+withStatementNestedScope.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
 withStatementNestedScope.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatementNestedScope.ts(3,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 
 
-==== withStatementNestedScope.ts (1 errors) ====
+==== withStatementNestedScope.ts (3 errors) ====
     var x = 1;
     with (x) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         function f(a: number) {
+                 ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
             return 1;
         }
         // should be any

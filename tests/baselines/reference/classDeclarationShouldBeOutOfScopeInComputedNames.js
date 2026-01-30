@@ -13,6 +13,7 @@ class A {
 
 
 //// [classDeclarationShouldBeOutOfScopeInComputedNames.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         this[_b] = 0;

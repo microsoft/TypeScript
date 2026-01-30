@@ -47,6 +47,7 @@
 
 
 //// [jsFileMethodOverloads2.js]
+"use strict";
 // Also works if all @overload tags are combined in one comment.
 /**
  * @template T

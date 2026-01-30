@@ -38,6 +38,7 @@ y.mistake();
 
 
 //// [output.js]
+"use strict";
 function C() {
     this.m = null;
 }

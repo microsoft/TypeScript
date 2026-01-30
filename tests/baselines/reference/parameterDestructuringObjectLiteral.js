@@ -11,6 +11,7 @@ fn2({ headers: { foo: 1 } });
 
 
 //// [parameterDestructuringObjectLiteral.js]
+"use strict";
 // Repro from #22644
 var fn1 = function (options) { };
 fn1({ headers: { foo: 1 } });

@@ -50,6 +50,7 @@ function func(): { value: Union[] } {
 
 
 //// [neverTypeErrors1.js]
+"use strict";
 function f1() {
     var x;
     x = 1;

@@ -11,6 +11,7 @@ let e = fooOrBar as "baz";
 let f = "baz" as typeof fooOrBar;
 
 //// [stringLiteralsWithTypeAssertions01.js]
+"use strict";
 var fooOrBar;
 var a = "foo";
 var b = "bar";

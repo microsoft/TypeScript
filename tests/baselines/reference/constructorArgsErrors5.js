@@ -8,6 +8,7 @@ class foo {
 
 
 //// [constructorArgsErrors5.js]
+"use strict";
 var foo = /** @class */ (function () {
     function foo(a) {
     }

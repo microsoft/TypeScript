@@ -34,6 +34,7 @@ namespace P {
 }
 
 //// [moduleElementsInWrongContext3.js]
+"use strict";
 var P;
 (function (P) {
     {

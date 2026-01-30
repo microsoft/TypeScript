@@ -41,6 +41,7 @@ function foo<T, U>(t: T, u: U) {
 }
 
 //// [additionOperatorWithTypeParameter.js]
+"use strict";
 // type parameter type is not a valid operand of addition operator
 var E;
 (function (E) {

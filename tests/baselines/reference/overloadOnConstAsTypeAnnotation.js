@@ -4,4 +4,5 @@
 var f: (x: 'hi') => number = (x: 'hi') => { return 1; };
 
 //// [overloadOnConstAsTypeAnnotation.js]
+"use strict";
 var f = function (x) { return 1; };

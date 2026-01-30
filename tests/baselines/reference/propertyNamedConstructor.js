@@ -11,6 +11,7 @@ class X2 {
 
 
 //// [propertyNamedConstructor.js]
+"use strict";
 var X1 = /** @class */ (function () {
     function X1() {
         this["constructor"] = 3; // Error

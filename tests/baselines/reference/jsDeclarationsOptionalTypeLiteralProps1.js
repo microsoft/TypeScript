@@ -17,6 +17,7 @@ function foo({ a, b, c }) {
 
 
 //// [foo.js]
+"use strict";
 /**
  * foo
  *

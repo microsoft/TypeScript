@@ -1,3 +1,4 @@
+"use strict";
 /// <reference path="li'b/class'A.ts" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

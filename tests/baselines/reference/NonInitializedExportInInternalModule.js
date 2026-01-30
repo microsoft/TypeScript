@@ -37,6 +37,7 @@ namespace Inner {
 }
 
 //// [NonInitializedExportInInternalModule.js]
+"use strict";
 var Inner;
 (function (Inner) {
     var ;

@@ -11,6 +11,7 @@ class A {
 }
 
 //// [unusedTypeParameterInLambda2.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -10,6 +10,7 @@ let x = (new C).foo();
 
 
 //// [classExpression4.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

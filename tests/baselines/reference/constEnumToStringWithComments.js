@@ -25,6 +25,7 @@ let c1 = Foo["C"].toString();
 
 
 //// [constEnumToStringWithComments.js]
+"use strict";
 var x0 = 100 /* Foo.X */.toString();
 var x1 = 100 /* Foo["X"] */.toString();
 var y0 = 0.5 /* Foo.Y */.toString();

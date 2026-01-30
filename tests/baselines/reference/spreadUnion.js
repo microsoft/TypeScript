@@ -13,6 +13,7 @@ var o5: { a: number } | { b: string } | { a: number, b: string };
 var o5 =  { ...union, ...union };
 
 //// [spreadUnion.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

@@ -7,6 +7,7 @@ function h([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]){ }
 function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
 
 //// [declarationEmitDestructuring2.js]
+"use strict";
 function f(_a) {
     var _b = _a === void 0 ? { x: 10, y: [2, 4, 6, 8] } : _a, _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, _e = _d === void 0 ? [1, 2, 3, 4] : _d, a = _e[0], b = _e[1], c = _e[2], d = _e[3];
 }

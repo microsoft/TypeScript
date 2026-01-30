@@ -20,6 +20,7 @@ function f2() {
 
 
 //// [equalityWithtNullishCoalescingAssignment.js]
+"use strict";
 function f1(a) {
     a !== null && a !== void 0 ? a : (a = true);
     if (a === false) {

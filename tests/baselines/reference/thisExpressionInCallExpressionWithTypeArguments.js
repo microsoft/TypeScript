@@ -7,6 +7,7 @@ class C {
 
 
 //// [thisExpressionInCallExpressionWithTypeArguments.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

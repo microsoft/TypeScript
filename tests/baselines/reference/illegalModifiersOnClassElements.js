@@ -7,6 +7,7 @@ class C {
 }
 
 //// [illegalModifiersOnClassElements.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.bar = 1;

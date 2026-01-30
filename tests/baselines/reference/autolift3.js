@@ -33,6 +33,7 @@ b.foo();
 
 
 //// [autolift3.js]
+"use strict";
 var B = /** @class */ (function () {
     function B() {
         function foo() { }

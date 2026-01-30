@@ -8,6 +8,7 @@ function f1 () {
 }
 
 //// [unusedVariablesinForLoop2.js]
+"use strict";
 function f1() {
     for (var elem in ["a", "b", "c"]) {
     }

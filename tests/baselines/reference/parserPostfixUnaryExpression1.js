@@ -4,5 +4,6 @@
 foo ++ ++;
 
 //// [parserPostfixUnaryExpression1.js]
+"use strict";
 foo++;
 ++;

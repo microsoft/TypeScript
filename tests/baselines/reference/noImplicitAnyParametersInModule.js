@@ -48,6 +48,7 @@ namespace M {
 }
 
 //// [noImplicitAnyParametersInModule.js]
+"use strict";
 var M;
 (function (M) {
     // No implicit-'any' errors.

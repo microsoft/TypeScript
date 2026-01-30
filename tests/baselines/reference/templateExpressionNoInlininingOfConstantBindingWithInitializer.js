@@ -18,6 +18,7 @@ function example2(parameters: Params) {
 
 
 //// [templateExpressionNoInlininingOfConstantBindingWithInitializer.js]
+"use strict";
 function example(parameters) {
     var _a = parameters.value, value = _a === void 0 ? '123' : _a;
     return "".concat(value) === '345';

@@ -8,6 +8,7 @@ var x = new Foo(); // legal, considered a constructor function
 class C extends Foo {} // error, could not find symbol Foo
 
 //// [extendNonClassSymbol2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

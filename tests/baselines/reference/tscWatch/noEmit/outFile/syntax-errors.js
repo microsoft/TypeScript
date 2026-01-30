@@ -162,6 +162,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = "hello";
 
 
@@ -324,6 +325,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = "hello;
 
 

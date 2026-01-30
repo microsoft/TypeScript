@@ -86,6 +86,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 //// [/user/username/projects/myproject/projects/project2/class2.js]
+"use strict";
 var class2 = /** @class */ (function () {
     function class2() {
     }

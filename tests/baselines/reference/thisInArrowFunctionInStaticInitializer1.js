@@ -11,6 +11,7 @@ class Vector {
 }
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
+"use strict";
 function log(a) { }
 var Vector = /** @class */ (function () {
     function Vector() {

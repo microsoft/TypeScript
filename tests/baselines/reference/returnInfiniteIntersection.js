@@ -10,6 +10,7 @@ let result = recursive()(1)
 
 
 //// [returnInfiniteIntersection.js]
+"use strict";
 function recursive() {
     var x = function (subkey) { return recursive(); };
     return x;

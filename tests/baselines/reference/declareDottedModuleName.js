@@ -13,6 +13,7 @@ namespace T.U { // This needs to be emitted
 }
 
 //// [declareDottedModuleName.js]
+"use strict";
 
 
 //// [declareDottedModuleName.d.ts]

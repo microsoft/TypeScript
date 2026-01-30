@@ -16,6 +16,7 @@ function doThing() {
 doThing();
 
 //// [doubleUnderscoreLabels.js]
+"use strict";
 function doThing() {
     __call: while (true) {
         aLabel: for (var i = 0; i < 10; i++) {

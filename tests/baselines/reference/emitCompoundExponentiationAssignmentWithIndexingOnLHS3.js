@@ -15,6 +15,7 @@ object[0] **= object[0] **= 2;
 object[0] **= object[0] ** 2;
 
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS3.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h;
 var object = {
     _0: 2,

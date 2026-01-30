@@ -103,6 +103,7 @@ function foo15(x: C<number, B<string, string>, B<number, string>>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.js]
+"use strict";
 // object types are identical structurally
 var A = /** @class */ (function () {
     function A() {

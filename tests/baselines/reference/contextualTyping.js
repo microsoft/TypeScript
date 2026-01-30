@@ -227,6 +227,7 @@ var x: B = { };
 
 
 //// [contextualTyping.js]
+"use strict";
 // CONTEXT: Class property declaration
 var C1T5 = /** @class */ (function () {
     function C1T5() {

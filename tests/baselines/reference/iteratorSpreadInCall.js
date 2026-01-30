@@ -18,6 +18,7 @@ class SymbolIterator {
 foo(...new SymbolIterator);
 
 //// [iteratorSpreadInCall.js]
+"use strict";
 function foo(s) { }
 class SymbolIterator {
     next() {

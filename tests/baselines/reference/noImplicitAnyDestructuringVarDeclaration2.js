@@ -15,6 +15,7 @@ let {x4} = { x4: <any>undefined }, {y4} = { y4: <any>null }; // no error
 
 
 //// [noImplicitAnyDestructuringVarDeclaration2.js]
+"use strict";
 var _a = [1, 2, 3], a = _a[0], b = _a[1], c = _a[2]; // no error
 var _b = [1, 2, 3], _c = _b[0], a1 = _c === void 0 ? 10 : _c, _d = _b[1], b1 = _d === void 0 ? 10 : _d, _e = _b[2], c1 = _e === void 0 ? 10 : _e; // no error
 var _f = [1, 2, 3], _g = _f[0], a2 = _g === void 0 ? undefined : _g, _h = _f[1], b2 = _h === void 0 ? undefined : _h, _j = _f[2], c2 = _j === void 0 ? undefined : _j; // no error

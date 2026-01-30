@@ -122,6 +122,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
     }];
 
 //// [contextualTypeWithUnionTypeMembers.js]
+"use strict";
 // Let S be the set of types in U that has a property P.
 // If S is not empty, U has a property P of a union type of the types of P from each type in S.
 var i1;

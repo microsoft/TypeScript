@@ -9,6 +9,7 @@ f((input): string => {
  
 
 //// [untypedArgumentInLambdaExpression.js]
+"use strict";
 f(function (input) {
     return "." + input;
 });

@@ -40,6 +40,7 @@ var j = <C>null;
 var k = <M.E>null;
 
 //// [genericTypeReferenceWithoutTypeArgument.js]
+"use strict";
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 var __extends = (this && this.__extends) || (function () {

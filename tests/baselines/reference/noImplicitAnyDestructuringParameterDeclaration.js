@@ -13,6 +13,7 @@ function f5([a1] = [undefined], {b1} = { b1: null }, c1 = undefined, d1 = null) 
 }
 
 //// [noImplicitAnyDestructuringParameterDeclaration.js]
+"use strict";
 function f1(_a, _b, c, d) {
     var a = _a[0];
     var b = _b.b;

@@ -5,6 +5,7 @@ class C<T,> {
 }
 
 //// [typeParameterListWithTrailingComma1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

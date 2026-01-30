@@ -15,6 +15,7 @@ var x3 = (a:number) {};
 var x4= (...a: any[]) { };
 
 //// [fatarrowfunctionsErrors.js]
+"use strict";
 foo(function () {
     var Far = [];
     for (var _i = 0; _i < arguments.length; _i++) {

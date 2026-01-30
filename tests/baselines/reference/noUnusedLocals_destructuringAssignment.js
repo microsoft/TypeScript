@@ -19,6 +19,7 @@ class C {
 
 
 //// [noUnusedLocals_destructuringAssignment.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = 0;

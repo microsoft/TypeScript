@@ -10,6 +10,7 @@ class C1 implements I1 {
 }
 
 //// [requiredInitializedParameter3.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

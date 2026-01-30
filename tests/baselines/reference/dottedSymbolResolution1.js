@@ -28,6 +28,7 @@ function _setBarAndText(): void {
 }
 
 //// [dottedSymbolResolution1.js]
+"use strict";
 var Base = /** @class */ (function () {
     function Base() {
     }

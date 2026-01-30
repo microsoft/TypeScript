@@ -15,6 +15,7 @@ class C {
 }
 
 //// [anyIdenticalToItself.js]
+"use strict";
 function foo(x, y) { }
 var C = /** @class */ (function () {
     function C() {

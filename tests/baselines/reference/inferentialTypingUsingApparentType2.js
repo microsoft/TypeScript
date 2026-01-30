@@ -8,6 +8,7 @@ function foo<T extends { m(p: string): number }>(x: T): T {
 foo({ m(x) { return x.length } });
 
 //// [inferentialTypingUsingApparentType2.js]
+"use strict";
 function foo(x) {
     return undefined;
 }

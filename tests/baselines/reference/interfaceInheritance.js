@@ -43,6 +43,7 @@ i5 = i4; // should be an error
 
 
 //// [interfaceInheritance.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

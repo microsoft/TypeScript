@@ -97,6 +97,7 @@ class Derived10<T> extends Base2<T> {
 }
 
 //// [derivedClassParameterProperties.js]
+"use strict";
 // ordering of super calls in derived constructors matters depending on other class contents
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

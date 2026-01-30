@@ -20,6 +20,7 @@ var r2 = f2.ofC4;
 
 
 //// [recursiveTypeParameterReferenceError1.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

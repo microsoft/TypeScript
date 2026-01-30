@@ -15,6 +15,7 @@ const obj2 = { [hundredNum]: "bar" };
 
 
 //// [declarationEmitPropertyNumericStringKey.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/55292
 var _a, _b, _c;
 var STATUS = (_a = {},

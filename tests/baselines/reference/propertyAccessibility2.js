@@ -8,6 +8,7 @@ var c = C.x;
 
 
 //// [propertyAccessibility2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

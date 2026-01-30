@@ -7,6 +7,7 @@ class C {
 }
 
 //// [staticModifierAlreadySeen.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.foo = 1;

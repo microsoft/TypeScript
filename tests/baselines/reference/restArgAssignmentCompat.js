@@ -12,6 +12,7 @@ n([4], 'foo');
 
 
 //// [restArgAssignmentCompat.js]
+"use strict";
 function f() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {

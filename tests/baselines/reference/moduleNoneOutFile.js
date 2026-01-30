@@ -6,6 +6,7 @@ class Foo {}
 class Bar extends Foo {}
 
 //// [bundle.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

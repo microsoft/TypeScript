@@ -124,6 +124,7 @@ var o = {
 }
 
 //// [constDeclarations-validContexts.js]
+"use strict";
 // Control flow statements with blocks
 if (true) {
     const c1 = 0;

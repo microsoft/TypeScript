@@ -15,6 +15,7 @@ type Z<T extends A & B> = T["a"];
 
 
 //// [indexedAccessPrivateMemberOfGenericConstraint.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

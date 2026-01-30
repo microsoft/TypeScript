@@ -296,6 +296,7 @@ var publicClassExtendingFromPrivateModuleClass = /** @class */ (function (_super
 }(privateModule.publicClassInPrivateModule));
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

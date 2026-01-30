@@ -25,6 +25,7 @@
     );
 
 //// [fatarrowfunctionsOptionalArgsErrors4.js]
+"use strict";
 false ? function (arg) {
     if (arg === void 0) { arg = 0; }
     return 47;

@@ -97,6 +97,7 @@ d3.x;                   // Error, neither within their declaring class nor class
 d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedClassPropertyAccessibleWithinSubclass2.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

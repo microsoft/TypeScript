@@ -36,6 +36,7 @@ namespace Editor {
 }
 
 //// [classTypeParametersInStatics.js]
+"use strict";
 var Editor;
 (function (Editor) {
     var List = /** @class */ (function () {

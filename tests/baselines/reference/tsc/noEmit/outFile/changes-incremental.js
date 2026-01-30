@@ -75,6 +75,7 @@ Found 3 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -585,6 +586,7 @@ Found 3 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -929,6 +931,7 @@ Found 3 errors in the same file, starting at: tsconfig.json[90m:4[0m
 
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

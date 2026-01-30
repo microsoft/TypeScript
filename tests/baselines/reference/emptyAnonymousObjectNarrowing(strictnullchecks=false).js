@@ -77,6 +77,7 @@ const foo = (value: unknown): string => {
 
 
 //// [emptyAnonymousObjectNarrowing.js]
+"use strict";
 if (nonNull === "foo") {
     nonNull;
 }

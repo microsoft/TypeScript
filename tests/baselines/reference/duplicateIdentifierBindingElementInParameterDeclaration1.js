@@ -11,6 +11,7 @@ function f6([f, ...f]) { }
 function f7(a, func = (a) => { return 1 }) { }  // not error
 
 //// [duplicateIdentifierBindingElementInParameterDeclaration1.js]
+"use strict";
 function f0(a, _a, _b) {
     var a = _a[0], b = _a[1][0];
     var b = _b.b;

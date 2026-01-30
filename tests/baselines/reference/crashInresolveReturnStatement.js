@@ -21,6 +21,7 @@ class WITDialogs {
 
 
 //// [crashInresolveReturnStatement.js]
+"use strict";
 var WorkItemToolbar = /** @class */ (function () {
     function WorkItemToolbar() {
     }

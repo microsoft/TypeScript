@@ -11,6 +11,7 @@ var x: B;
 var t: number = f(x, x); // Not an error
 
 //// [ambiguousOverloadResolution.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

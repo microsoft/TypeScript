@@ -49,6 +49,7 @@ for (var i = 0; i < 30; i++) {
 var b5 = 10;
 
 //// [multivar.js]
+"use strict";
 var a, b, c;
 var x = 1, y = 2, z = 3;
 var m2;

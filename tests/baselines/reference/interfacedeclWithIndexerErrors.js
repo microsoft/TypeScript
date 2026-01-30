@@ -56,6 +56,7 @@ class c1 implements a {
 var instance2 = new c1();
 
 //// [interfacedeclWithIndexerErrors.js]
+"use strict";
 var c1 = /** @class */ (function () {
     function c1() {
     }

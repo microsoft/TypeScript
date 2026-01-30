@@ -33,6 +33,7 @@ const [blah2, blah2] = [333, 444];
 
 
 //// [destructuringSameNames.js]
+"use strict";
 // Valid cases
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 var _p = { foo: 1 }, foo = _p.foo, bar = _p.foo;

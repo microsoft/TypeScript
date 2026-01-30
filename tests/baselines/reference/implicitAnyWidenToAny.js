@@ -30,6 +30,7 @@ var obj1 = anyReturnFunc();
 
 
 //// [implicitAnyWidenToAny.js]
+"use strict";
 // these should be errors
 var x = null; // error at "x"
 var x1 = undefined; // error at "x1"

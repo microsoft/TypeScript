@@ -17,6 +17,7 @@ const nameO = "o";
 
 
 //// [destructuringAssignment_private.js]
+"use strict";
 var _a, _b, _c, _d;
 var C = /** @class */ (function () {
     function C() {

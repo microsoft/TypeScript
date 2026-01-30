@@ -24,6 +24,7 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 var y = new g<string>() || new m.g<number>() || (() => new c());
 
 //// [declFileTypeAnnotationUnionType.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

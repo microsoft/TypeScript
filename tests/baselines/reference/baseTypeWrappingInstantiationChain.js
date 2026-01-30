@@ -30,6 +30,7 @@ class C<T1> extends CBase<T1> {
 
 
 //// [baseTypeWrappingInstantiationChain.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

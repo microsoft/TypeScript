@@ -25,6 +25,7 @@ c1 = c2 = c3; // Should be error
 
 
 //// [chainedAssignmentChecking.js]
+"use strict";
 var X = /** @class */ (function () {
     function X(z) {
         this.z = z;

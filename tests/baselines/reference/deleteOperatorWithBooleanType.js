@@ -41,6 +41,7 @@ delete objA.a;
 delete M.n;
 
 //// [deleteOperatorWithBooleanType.js]
+"use strict";
 function foo() { return true; }
 var A = /** @class */ (function () {
     function A() {

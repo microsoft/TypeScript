@@ -8,6 +8,7 @@ function foo<T>(x = class { prop: T }): T {
 foo(class { prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression3.js]
+"use strict";
 function foo(x) {
     if (x === void 0) { x = /** @class */ (function () {
         function class_1() {

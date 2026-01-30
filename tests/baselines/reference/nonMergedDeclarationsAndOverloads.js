@@ -11,6 +11,7 @@ class A {
 }
 
 //// [nonMergedDeclarationsAndOverloads.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

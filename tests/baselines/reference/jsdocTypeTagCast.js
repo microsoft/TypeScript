@@ -80,8 +80,10 @@ var asConst2 = /** @type {const} */({
 });
 
 //// [a.js]
+"use strict";
 var W;
 //// [b.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

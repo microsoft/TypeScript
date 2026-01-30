@@ -33,6 +33,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/file.js]
+"use strict";
 function one() { }
 function two() {
     return function three() {

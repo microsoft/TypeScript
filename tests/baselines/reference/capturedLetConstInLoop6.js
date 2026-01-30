@@ -241,6 +241,7 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop6.js]
+"use strict";
 var _loop_1 = function (x) {
     (function () { return x; });
     (function () { return x; });

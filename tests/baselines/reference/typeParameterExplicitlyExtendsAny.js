@@ -36,6 +36,7 @@ class MyClass {
 
 
 //// [typeParameterExplicitlyExtendsAny.js]
+"use strict";
 function fee() {
     var t;
     t.blah; // Error

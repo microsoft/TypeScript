@@ -39,6 +39,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 var y;
 
 
@@ -102,6 +103,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 var x;
 var y;
 
@@ -167,6 +169,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 var y;
 
 

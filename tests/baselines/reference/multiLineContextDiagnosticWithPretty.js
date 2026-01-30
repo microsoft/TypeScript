@@ -9,6 +9,7 @@ const x: {c: string} = {
 
 
 //// [multiLineContextDiagnosticWithPretty.js]
+"use strict";
 var x = {
     a: {
         b: '',

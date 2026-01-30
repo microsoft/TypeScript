@@ -10,6 +10,7 @@ a = 10;
 
 
 //// [out.js]
+"use strict";
 var a = 10;
 b = 30;
 var b = 30;

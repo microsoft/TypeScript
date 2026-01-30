@@ -21,6 +21,7 @@ const invalid3 = <ns:element ns:invalid="nope" />;
 
 
 //// [jsxNamespacePrefixIntrinsics.jsx]
+"use strict";
 var valid = <ns:element ns:attribute="yep"/>;
 var validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
 var validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;

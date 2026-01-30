@@ -5,6 +5,7 @@ class C<K,V> {
 }
 
 //// [parserGenericClass2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -8,6 +8,7 @@ class C99 {
 
 
 //// [gettersAndSettersAccessibility.js]
+"use strict";
 var C99 = /** @class */ (function () {
     function C99() {
     }

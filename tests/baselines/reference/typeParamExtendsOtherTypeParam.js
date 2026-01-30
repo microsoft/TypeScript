@@ -33,6 +33,7 @@ var x8: B<I2, I1>;
 
 
 //// [typeParamExtendsOtherTypeParam.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

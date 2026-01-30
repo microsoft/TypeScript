@@ -36,6 +36,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembersAccessibility.js]
+"use strict";
 // Derived member is private, base member is not causes errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

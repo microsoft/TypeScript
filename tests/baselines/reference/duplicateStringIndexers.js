@@ -37,6 +37,7 @@ namespace test {
 
 
 //// [duplicateStringIndexers.js]
+"use strict";
 // it is an error to have duplicate index signatures of the same kind in a type
 var test;
 (function (test) {

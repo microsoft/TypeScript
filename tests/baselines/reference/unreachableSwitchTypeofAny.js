@@ -16,6 +16,7 @@ const unreachable = (x: any): number => {
 }
 
 //// [unreachable.js]
+"use strict";
 var unreachable = function (x) {
     switch (typeof x) {
         case 'string': return 0;

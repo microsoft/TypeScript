@@ -7,6 +7,7 @@ var x: number[];
 
 
 //// [restElementWithInitializer2.js]
+"use strict";
 var _a;
 var x;
 _a = a.slice(0), x = _a === void 0 ? a : _a; // Error, rest element cannot have initializer

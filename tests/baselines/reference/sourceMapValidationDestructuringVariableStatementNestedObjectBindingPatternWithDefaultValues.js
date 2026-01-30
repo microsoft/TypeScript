@@ -43,6 +43,7 @@ else {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js]
+"use strict";
 var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 var robotB = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
 var _a = robotA.skills, _b = _a === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _a, _c = _b.primary, primaryA = _c === void 0 ? "noSkill" : _c, _d = _b.secondary, secondaryA = _d === void 0 ? "noSkill" : _d;

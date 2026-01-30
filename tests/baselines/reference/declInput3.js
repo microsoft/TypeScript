@@ -13,6 +13,7 @@ class bar {
 
 
 //// [declInput3.js]
+"use strict";
 var bar = /** @class */ (function () {
     function bar() {
     }

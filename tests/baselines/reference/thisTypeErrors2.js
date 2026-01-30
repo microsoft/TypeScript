@@ -17,6 +17,7 @@ class Derived {
 
 
 //// [thisTypeErrors2.js]
+"use strict";
 var Base = /** @class */ (function () {
     function Base(a) {
     }

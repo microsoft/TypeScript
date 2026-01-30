@@ -45,6 +45,7 @@ namespace M {
 }
 
 //// [collisionCodeGenModuleWithModuleChildren.js]
+"use strict";
 var M;
 (function (M_1) {
     M_1.x = 3;

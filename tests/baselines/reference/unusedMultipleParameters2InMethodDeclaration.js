@@ -9,6 +9,7 @@ class Dummy {
 }
 
 //// [unusedMultipleParameters2InMethodDeclaration.js]
+"use strict";
 var Dummy = /** @class */ (function () {
     function Dummy() {
     }

@@ -5,4 +5,5 @@ const file = Bun.file("/a.ts");
 
 
 //// [a.js]
+"use strict";
 var file = Bun.file("/a.ts");

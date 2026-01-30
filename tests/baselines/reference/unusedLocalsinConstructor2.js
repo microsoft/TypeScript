@@ -10,6 +10,7 @@ class greeter {
 }
 
 //// [unusedLocalsinConstructor2.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter() {
         var unused = 20;

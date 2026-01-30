@@ -13,6 +13,7 @@ function saySize(message: Message | Message[]) {
 
 
 //// [TypeGuardWithArrayUnion.js]
+"use strict";
 var Message = /** @class */ (function () {
     function Message() {
     }

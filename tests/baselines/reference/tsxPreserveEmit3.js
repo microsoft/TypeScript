@@ -17,6 +17,7 @@ import {React} from "./test";
 
 
 //// [file.jsx]
+"use strict";
 //// [react-consumer.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";

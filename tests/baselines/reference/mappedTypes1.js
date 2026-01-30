@@ -42,6 +42,7 @@ let x3 = f3();
 let x4 = f4();
 
 //// [mappedTypes1.js]
+"use strict";
 var x1 = f1();
 var x2 = f2();
 var x3 = f3();

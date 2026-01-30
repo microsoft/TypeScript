@@ -8,6 +8,7 @@ const d = <a:foo></a:foo>;
 
 
 //// [a.jsx]
+"use strict";
 var a = <svg:path></svg:path>;
 var b = <svg:path></svg:path>;
 var c = <A:foo></A:foo>;

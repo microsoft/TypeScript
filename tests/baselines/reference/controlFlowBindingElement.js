@@ -92,6 +92,7 @@
 
 
 //// [controlFlowBindingElement.js]
+"use strict";
 {
     var data = { param: 'value' };
     var _a = data.param, param = _a === void 0 ? (function () { throw new Error('param is not defined'); })() : _a;

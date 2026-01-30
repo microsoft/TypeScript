@@ -9,6 +9,7 @@ function foo(a) {
 
 
 //// [out.js]
+"use strict";
 function foo(a) {
     for (var a_1 = 0; a_1 < 10; a_1++) {
         // do something

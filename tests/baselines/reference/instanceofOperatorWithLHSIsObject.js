@@ -18,6 +18,7 @@ var r4 = d instanceof x1;
 
 
 //// [instanceofOperatorWithLHSIsObject.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

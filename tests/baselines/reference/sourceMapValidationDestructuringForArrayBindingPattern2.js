@@ -101,6 +101,7 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPattern2.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
 var robotA = [1, "mower", "mowing"];
 function getRobot() {

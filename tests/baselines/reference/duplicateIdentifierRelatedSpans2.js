@@ -23,6 +23,7 @@ class I { }
 
 
 //// [file1.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }
@@ -69,6 +70,7 @@ var I = /** @class */ (function () {
     return I;
 }());
 //// [file2.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

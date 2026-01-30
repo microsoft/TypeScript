@@ -18,6 +18,7 @@ class foo {
 
 
 //// [overloadCallTest.js]
+"use strict";
 var foo = /** @class */ (function () {
     function foo() {
         function bar(foo) { return "foo"; }

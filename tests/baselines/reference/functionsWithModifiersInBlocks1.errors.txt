@@ -1,18 +1,23 @@
 functionsWithModifiersInBlocks1.ts(2,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(2,21): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 functionsWithModifiersInBlocks1.ts(2,21): error TS2393: Duplicate function implementation.
 functionsWithModifiersInBlocks1.ts(2,25): error TS1183: An implementation cannot be declared in ambient contexts.
 functionsWithModifiersInBlocks1.ts(3,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(3,20): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 functionsWithModifiersInBlocks1.ts(3,20): error TS2393: Duplicate function implementation.
 functionsWithModifiersInBlocks1.ts(4,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(4,28): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 functionsWithModifiersInBlocks1.ts(4,28): error TS2393: Duplicate function implementation.
 functionsWithModifiersInBlocks1.ts(4,32): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== functionsWithModifiersInBlocks1.ts (8 errors) ====
+==== functionsWithModifiersInBlocks1.ts (11 errors) ====
     {
        declare function f() { }
        ~~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
+                        ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
                         ~
 !!! error TS2393: Duplicate function implementation.
                             ~
@@ -21,10 +26,14 @@ functionsWithModifiersInBlocks1.ts(4,32): error TS1183: An implementation cannot
        ~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
                        ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+                       ~
 !!! error TS2393: Duplicate function implementation.
        declare export function f() { }
        ~~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
+                               ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
                                ~
 !!! error TS2393: Duplicate function implementation.
                                    ~

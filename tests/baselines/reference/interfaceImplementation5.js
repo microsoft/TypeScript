@@ -34,6 +34,7 @@ class C6 implements I1 {
 
 
 //// [interfaceImplementation5.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

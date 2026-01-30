@@ -26,6 +26,7 @@ acceptsSomeType(someType);
 acceptsSomeType(someTypeNotFound);
 
 //// [typeUsedAsValueError.js]
+"use strict";
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }

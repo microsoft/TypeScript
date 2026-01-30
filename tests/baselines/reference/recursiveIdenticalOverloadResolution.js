@@ -19,6 +19,7 @@ namespace M {
 
 
 //// [recursiveIdenticalOverloadResolution.js]
+"use strict";
 var M;
 (function (M) {
     function f(p) { return f; }

@@ -10,6 +10,7 @@ function x() {
 }
 
 //// [noCollisionThisExpressionInFunctionAndVarInGlobal.js]
+"use strict";
 var console;
 var _this = 5;
 function x() {

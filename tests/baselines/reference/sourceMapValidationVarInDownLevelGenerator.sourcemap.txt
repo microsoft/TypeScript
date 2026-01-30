@@ -8,6 +8,7 @@ sources: sourceMapValidationVarInDownLevelGenerator.ts
 emittedFile:sourceMapValidationVarInDownLevelGenerator.js
 sourceFile:sourceMapValidationVarInDownLevelGenerator.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>function f() {
 1 >
 2 >^^^^^^^^^
@@ -16,9 +17,9 @@ sourceFile:sourceMapValidationVarInDownLevelGenerator.ts
 1 >
 2 >function * 
 3 >         f
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 10) Source(1, 12) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 10) Source(1, 12) + SourceIndex(0)
+3 >Emitted(2, 11) Source(1, 13) + SourceIndex(0)
 ---
 >>>    var x, y;
 >>>    return __generator(this, function (_a) {
@@ -35,11 +36,11 @@ sourceFile:sourceMapValidationVarInDownLevelGenerator.ts
 3 >          = 
 4 >            1
 5 >             , y;
-1->Emitted(4, 9) Source(2, 9) + SourceIndex(0)
-2 >Emitted(4, 10) Source(2, 10) + SourceIndex(0)
-3 >Emitted(4, 13) Source(2, 13) + SourceIndex(0)
-4 >Emitted(4, 14) Source(2, 14) + SourceIndex(0)
-5 >Emitted(4, 15) Source(2, 18) + SourceIndex(0)
+1->Emitted(5, 9) Source(2, 9) + SourceIndex(0)
+2 >Emitted(5, 10) Source(2, 10) + SourceIndex(0)
+3 >Emitted(5, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(5, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(5, 15) Source(2, 18) + SourceIndex(0)
 ---
 >>>        return [2 /*return*/];
 >>>    });
@@ -48,6 +49,6 @@ sourceFile:sourceMapValidationVarInDownLevelGenerator.ts
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >}
-1->Emitted(7, 2) Source(3, 2) + SourceIndex(0)
+1->Emitted(8, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationVarInDownLevelGenerator.js.map

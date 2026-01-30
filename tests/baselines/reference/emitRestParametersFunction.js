@@ -5,6 +5,7 @@ function bar(...rest) { }
 function foo(x: number, y: string, ...rest) { }
 
 //// [emitRestParametersFunction.js]
+"use strict";
 function bar() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {

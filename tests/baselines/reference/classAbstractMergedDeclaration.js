@@ -43,6 +43,7 @@ new DCC1;
 new DCC2;
 
 //// [classAbstractMergedDeclaration.js]
+"use strict";
 var CM = /** @class */ (function () {
     function CM() {
     }

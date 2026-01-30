@@ -19,6 +19,7 @@ var p2 = point.origin;
 var b = point.equals(p1, p2);
 
 //// [mergedDeclarations1.js]
+"use strict";
 function point(x, y) {
     return { x: x, y: y };
 }

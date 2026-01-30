@@ -8,6 +8,7 @@ sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.
 emittedFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.js
 sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var _a = { x: 20, y: "hi" }, _b = _a.x, x = _b === void 0 ? 500 : _b, y = _a.y;
 1 >
 2 >^^^^
@@ -58,28 +59,28 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 21>                                                                      y
 22>                                                                       } = { x: 20, y: "hi" }
 23>                                                                              ;
-1 >Emitted(1, 1) Source(1, 5) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-3 >Emitted(1, 10) Source(2, 11) + SourceIndex(0)
-4 >Emitted(1, 12) Source(2, 13) + SourceIndex(0)
-5 >Emitted(1, 13) Source(2, 14) + SourceIndex(0)
-6 >Emitted(1, 15) Source(2, 16) + SourceIndex(0)
-7 >Emitted(1, 17) Source(2, 18) + SourceIndex(0)
-8 >Emitted(1, 19) Source(2, 20) + SourceIndex(0)
-9 >Emitted(1, 20) Source(2, 21) + SourceIndex(0)
-10>Emitted(1, 22) Source(2, 23) + SourceIndex(0)
-11>Emitted(1, 26) Source(2, 27) + SourceIndex(0)
-12>Emitted(1, 28) Source(2, 29) + SourceIndex(0)
-13>Emitted(1, 30) Source(1, 6) + SourceIndex(0)
-14>Emitted(1, 39) Source(1, 13) + SourceIndex(0)
-15>Emitted(1, 41) Source(1, 6) + SourceIndex(0)
-16>Emitted(1, 42) Source(1, 7) + SourceIndex(0)
-17>Emitted(1, 61) Source(1, 10) + SourceIndex(0)
-18>Emitted(1, 64) Source(1, 13) + SourceIndex(0)
-19>Emitted(1, 69) Source(1, 13) + SourceIndex(0)
-20>Emitted(1, 71) Source(2, 6) + SourceIndex(0)
-21>Emitted(1, 72) Source(2, 7) + SourceIndex(0)
-22>Emitted(1, 79) Source(2, 29) + SourceIndex(0)
-23>Emitted(1, 80) Source(2, 30) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 5) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 11) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 13) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 14) + SourceIndex(0)
+6 >Emitted(2, 15) Source(2, 16) + SourceIndex(0)
+7 >Emitted(2, 17) Source(2, 18) + SourceIndex(0)
+8 >Emitted(2, 19) Source(2, 20) + SourceIndex(0)
+9 >Emitted(2, 20) Source(2, 21) + SourceIndex(0)
+10>Emitted(2, 22) Source(2, 23) + SourceIndex(0)
+11>Emitted(2, 26) Source(2, 27) + SourceIndex(0)
+12>Emitted(2, 28) Source(2, 29) + SourceIndex(0)
+13>Emitted(2, 30) Source(1, 6) + SourceIndex(0)
+14>Emitted(2, 39) Source(1, 13) + SourceIndex(0)
+15>Emitted(2, 41) Source(1, 6) + SourceIndex(0)
+16>Emitted(2, 42) Source(1, 7) + SourceIndex(0)
+17>Emitted(2, 61) Source(1, 10) + SourceIndex(0)
+18>Emitted(2, 64) Source(1, 13) + SourceIndex(0)
+19>Emitted(2, 69) Source(1, 13) + SourceIndex(0)
+20>Emitted(2, 71) Source(2, 6) + SourceIndex(0)
+21>Emitted(2, 72) Source(2, 7) + SourceIndex(0)
+22>Emitted(2, 79) Source(2, 29) + SourceIndex(0)
+23>Emitted(2, 80) Source(2, 30) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.js.map

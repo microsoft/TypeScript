@@ -15,6 +15,7 @@ middle${
 tail`;
 
 //// [templateStringWithEmbeddedComments.js]
+"use strict";
 "head".concat(// single line comment
 10, "\nmiddle").concat(
 /* Multi-

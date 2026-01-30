@@ -28,6 +28,7 @@ var d = new D(); // error
 var d2 = new D(new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

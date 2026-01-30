@@ -59,6 +59,7 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
         var _this = this;

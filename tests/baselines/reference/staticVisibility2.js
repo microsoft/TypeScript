@@ -9,6 +9,7 @@ class Square {
 }
 
 //// [staticVisibility2.js]
+"use strict";
 var Square = /** @class */ (function () {
     function Square(sideLength) {
         this.sideLength = sideLength;

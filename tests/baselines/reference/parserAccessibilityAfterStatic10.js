@@ -8,6 +8,7 @@ static public intI<T>() {}
 
 
 //// [parserAccessibilityAfterStatic10.js]
+"use strict";
 var Outer = /** @class */ (function () {
     function Outer() {
     }

@@ -44,6 +44,7 @@ var r2: Derived2 = c.foo('bye');
 var r3: Base = c.foo('hm');
 
 //// [typesWithSpecializedCallSignatures.js]
+"use strict";
 // basic uses of specialized signatures without errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

@@ -7,6 +7,7 @@ class C {
 }
 
 //// [asyncSetter_es6.js]
+"use strict";
 class C {
     set foo(value) {
     }

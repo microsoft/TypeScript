@@ -14,6 +14,7 @@ class Bar implements Foo<Bar, string> {
 
 
 //// [instantiatedBaseTypeConstraints.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar() {
     }

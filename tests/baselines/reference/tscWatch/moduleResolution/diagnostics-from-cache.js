@@ -81,6 +81,7 @@ File '/package.json' does not exist.
 
 
 //// [/user/username/projects/myproject/dist/index.js]
+"use strict";
 import * as me from "@this/package";
 me.thing();
 export function thing() { }
@@ -91,6 +92,7 @@ export declare function thing(): void;
 
 
 //// [/user/username/projects/myproject/dist/index2.js]
+"use strict";
 export function thing() { }
 
 

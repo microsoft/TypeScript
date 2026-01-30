@@ -10,6 +10,7 @@ class C {
 }
 
 //// [selfInCallback.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.p1 = 0;

@@ -59,6 +59,7 @@ bar.workaround("a", "1", true); // ok - true is not allowed
 
 
 //// [deepKeysIndexing.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar() {
     }

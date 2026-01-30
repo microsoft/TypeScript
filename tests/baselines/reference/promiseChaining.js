@@ -14,6 +14,7 @@ class Chain<T> {
 
 
 //// [promiseChaining.js]
+"use strict";
 var Chain = /** @class */ (function () {
     function Chain(value) {
         this.value = value;

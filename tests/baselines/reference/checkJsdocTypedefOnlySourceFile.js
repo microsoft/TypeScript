@@ -15,6 +15,7 @@ const myString = 'str';
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 var exports = {};
 /**

@@ -114,6 +114,7 @@ var r18arg: new (x: new <T>(a: T) => T) => any[];
 var r18 = foo18(r18arg);
 
 //// [subtypingWithConstructSignatures4.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

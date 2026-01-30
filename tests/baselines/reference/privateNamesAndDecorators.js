@@ -12,6 +12,7 @@ class A {
 
 
 //// [privateNamesAndDecorators.js]
+"use strict";
 var _A_instances, _A_foo, _A_bar;
 var A = /** @class */ (function () {
     function A() {

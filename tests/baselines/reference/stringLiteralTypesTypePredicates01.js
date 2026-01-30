@@ -26,6 +26,7 @@ else {
 }
 
 //// [stringLiteralTypesTypePredicates01.js]
+"use strict";
 function kindIs(kind, is) {
     return kind === is;
 }

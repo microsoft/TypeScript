@@ -8,6 +8,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInContructor.js]
+"use strict";
 var Dummy = /** @class */ (function () {
     function Dummy(person) {
         var unused = 20;

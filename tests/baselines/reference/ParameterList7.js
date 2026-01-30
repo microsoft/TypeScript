@@ -8,6 +8,7 @@ class C1 {
 }
 
 //// [ParameterList7.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1(p3) {
         this.p3 = p3;

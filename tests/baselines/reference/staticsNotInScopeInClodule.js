@@ -10,6 +10,7 @@ namespace Clod {
 }
 
 //// [staticsNotInScopeInClodule.js]
+"use strict";
 var Clod = /** @class */ (function () {
     function Clod() {
     }

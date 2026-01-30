@@ -8,6 +8,7 @@ class C {
 }
 
 //// [incorrectClassOverloadChain.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = 1;

@@ -6,6 +6,7 @@ enum X { MyVal }
 
 
 //// [enumGenericTypeClash.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

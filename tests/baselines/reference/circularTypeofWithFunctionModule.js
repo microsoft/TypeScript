@@ -15,6 +15,7 @@ namespace maker {
 
 
 //// [circularTypeofWithFunctionModule.js]
+"use strict";
 // Repro from #6072
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

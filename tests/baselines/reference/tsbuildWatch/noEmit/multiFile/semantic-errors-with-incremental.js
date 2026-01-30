@@ -313,6 +313,7 @@ Output::
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 var a = "hello";
 
 

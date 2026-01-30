@@ -14,6 +14,7 @@ function baz4({} = { x: 10 }) { }
 
 
 //// [declarationEmitDestructuring4.js]
+"use strict";
 // For an array binding pattern with empty elements,
 // we will not make any modification and will emit
 // the similar binding pattern users' have written

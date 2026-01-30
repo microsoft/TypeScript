@@ -12,6 +12,7 @@ class Rule {
 }
 
 //// [constDeclarationShadowedByVarDeclaration3.js]
+"use strict";
 // Ensure only checking for const declarations shadowed by vars
 var Rule = /** @class */ (function () {
     function Rule(name) {

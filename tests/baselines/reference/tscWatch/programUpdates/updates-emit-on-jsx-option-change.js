@@ -36,6 +36,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.jsx]
+"use strict";
 var d = <div />;
 
 
@@ -105,6 +106,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 var d = React.createElement("div", null);
 
 

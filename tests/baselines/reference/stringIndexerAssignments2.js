@@ -23,6 +23,7 @@ x = a;
 x = b;
 
 //// [stringIndexerAssignments2.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

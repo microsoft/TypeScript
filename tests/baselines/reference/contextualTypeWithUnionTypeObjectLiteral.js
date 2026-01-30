@@ -62,6 +62,7 @@ var i11Ori21: I11 | I21 = { // Like i1 and i2 both
 };
 
 //// [contextualTypeWithUnionTypeObjectLiteral.js]
+"use strict";
 var strOrNumber = str || num;
 var objStrOrNum1 = objStr || objNum;
 var objStrOrNum2 = objStr || objNum;

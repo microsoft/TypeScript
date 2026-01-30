@@ -24,6 +24,7 @@ class class2 {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInConstructor.js]
+"use strict";
 var class1 = /** @class */ (function () {
     function class1() {
         var x2 = {

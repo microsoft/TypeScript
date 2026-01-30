@@ -12,6 +12,7 @@ var v = {
 }
 
 //// [computedPropertyNames5_ES6.js]
+"use strict";
 var v = {
     [b]: 0,
     [true]: 1,

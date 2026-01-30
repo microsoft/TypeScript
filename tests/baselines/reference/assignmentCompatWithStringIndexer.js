@@ -57,6 +57,7 @@ namespace Generics {
 
 
 //// [assignmentCompatWithStringIndexer.js]
+"use strict";
 // index signatures must be compatible in assignments
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

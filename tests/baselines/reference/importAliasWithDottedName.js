@@ -15,6 +15,7 @@ namespace A {
 }
 
 //// [importAliasWithDottedName.js]
+"use strict";
 var M;
 (function (M) {
     M.x = 1;

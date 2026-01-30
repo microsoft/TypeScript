@@ -128,6 +128,7 @@ class FileService {
 }
 
 //// [variableDeclaratorResolvedDuringContextualTyping.js]
+"use strict";
 var WinJS;
 (function (WinJS) {
 })(WinJS || (WinJS = {}));

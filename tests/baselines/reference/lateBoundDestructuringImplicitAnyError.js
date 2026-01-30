@@ -31,6 +31,7 @@ let {[symed2]: prop9} = strIndexed;
 void prop9;
 
 //// [lateBoundDestructuringImplicitAnyError.js]
+"use strict";
 var named = "foo";
 var _a = { prop: "foo" }, _b = named, prop = _a[_b];
 void prop;

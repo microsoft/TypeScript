@@ -1,3 +1,4 @@
+"use strict";
 var test;
 (function (test) {
     var ClassA = /** @class */ (function () {

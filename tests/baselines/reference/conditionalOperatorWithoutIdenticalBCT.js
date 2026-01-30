@@ -26,6 +26,7 @@ var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.p
 
 
 //// [conditionalOperatorWithoutIdenticalBCT.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

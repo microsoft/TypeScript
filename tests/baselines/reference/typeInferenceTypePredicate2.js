@@ -7,6 +7,7 @@
 
 
 //// [typeInferenceTypePredicate2.js]
+"use strict";
 [true, true, false, null]
     .filter(function (thing) { return thing !== null; })
     .map(function (thing) { return thing.toString(); });

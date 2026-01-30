@@ -68,6 +68,7 @@ c.someMethodThatCallsAnOuterMethod();
 
 
 //// [moduleVisibilityTest1.js]
+"use strict";
 var OuterMod;
 (function (OuterMod) {
     function someExportedOuterFunc() { return -1; }

@@ -14,6 +14,7 @@ module.exports = Foo;
 module.exports.Strings = Strings;
 
 //// [bar.js]
+"use strict";
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -21,6 +22,7 @@ var Bar = /** @class */ (function () {
 }());
 module.exports = Bar;
 //// [cls.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

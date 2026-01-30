@@ -9,6 +9,7 @@ b = 30;
 
 
 //// [out.js]
+"use strict";
 var b = 30;
 a = 10;
 var a = 10;

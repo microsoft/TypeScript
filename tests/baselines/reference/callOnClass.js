@@ -7,6 +7,7 @@ var c = C();
 
 
 //// [callOnClass.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

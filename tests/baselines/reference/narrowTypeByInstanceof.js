@@ -28,6 +28,7 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
 
 //// [narrowTypeByInstanceof.js]
+"use strict";
 var Match = /** @class */ (function () {
     function Match() {
     }

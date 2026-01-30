@@ -15,6 +15,7 @@ class Linq {
 
 
 //// [unknownSymbolInGenericReturnType.js]
+"use strict";
 var Linq = /** @class */ (function () {
     function Linq() {
     }

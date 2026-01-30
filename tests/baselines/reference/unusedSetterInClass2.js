@@ -11,6 +11,7 @@ class Employee {
 }
 
 //// [unusedSetterInClass2.js]
+"use strict";
 // Unlike everything else, a setter without a getter is used by a write access.
 var Employee = /** @class */ (function () {
     function Employee() {

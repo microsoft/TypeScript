@@ -10,6 +10,7 @@ var c = () => ({ name: "foo", message: "bar" });
 var d = () => ((<Error>({ name: "foo", message: "bar" })));
 
 //// [arrowFunctionWithObjectLiteralBody5.js]
+"use strict";
 var a = function () { return ({ name: "foo", message: "bar" }); };
 var b = function () { return ({ name: "foo", message: "bar" }); };
 var c = function () { return ({ name: "foo", message: "bar" }); };

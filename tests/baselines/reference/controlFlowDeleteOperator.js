@@ -19,6 +19,7 @@ function f() {
 }
 
 //// [controlFlowDeleteOperator.js]
+"use strict";
 function f() {
     var x = { b: 1 };
     x.a;

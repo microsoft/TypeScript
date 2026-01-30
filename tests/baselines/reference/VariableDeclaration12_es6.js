@@ -5,4 +5,5 @@ let
 x
 
 //// [VariableDeclaration12_es6.js]
+"use strict";
 let x;

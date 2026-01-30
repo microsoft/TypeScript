@@ -57,6 +57,7 @@ class C23 extends Constructor<Identifiable<T1 & { b: number}>>() { x: string }
 
 
 //// [interfaceExtendsObjectIntersection.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -19,6 +19,7 @@ namespace m1 {
 
 
 //// [fooResult.js]
+"use strict";
 var M;
 (function (M) {
     M.X = 1;

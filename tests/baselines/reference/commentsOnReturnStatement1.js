@@ -12,6 +12,7 @@ class DebugClass {
 }
 
 //// [commentsOnReturnStatement1.js]
+"use strict";
 var DebugClass = /** @class */ (function () {
     function DebugClass() {
     }

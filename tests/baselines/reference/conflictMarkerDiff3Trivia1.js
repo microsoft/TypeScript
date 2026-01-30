@@ -12,6 +12,7 @@ class C {
 }
 
 //// [conflictMarkerDiff3Trivia1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.v = 1;

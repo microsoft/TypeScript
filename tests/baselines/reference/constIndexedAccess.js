@@ -32,6 +32,7 @@ let n3 = test[numbersNotConst.one];
 
 
 //// [constIndexedAccess.js]
+"use strict";
 var test;
 var s = test[0];
 var n = test[1];

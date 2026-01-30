@@ -16,6 +16,7 @@ class B {
 }
 
 //// [constructorParametersThatShadowExternalNamesInVariableDeclarations.js]
+"use strict";
 var x = 1;
 var A = /** @class */ (function () {
     function A(x) {

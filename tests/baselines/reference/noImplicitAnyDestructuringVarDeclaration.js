@@ -14,6 +14,7 @@ var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 var [a5 = undefined] = []; // error
 
 //// [noImplicitAnyDestructuringVarDeclaration.js]
+"use strict";
 var a = (void 0)[0], b = (void 0).b, c, d; // error
 var _a = (void 0)[0], a1 = _a === void 0 ? undefined : _a, _b = (void 0).b1, b1 = _b === void 0 ? null : _b, c1 = undefined, d1 = null; // error
 var a2 = (void 0)[0], b2 = (void 0).b2, c2, d2;

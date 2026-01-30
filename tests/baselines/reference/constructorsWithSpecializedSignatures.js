@@ -46,6 +46,7 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+"use strict";
 // errors
 var D = /** @class */ (function () {
     function D(x) {

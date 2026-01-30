@@ -18,6 +18,7 @@ class Board {
 }
 
 //// [2dArrays.js]
+"use strict";
 var Cell = /** @class */ (function () {
     function Cell() {
     }

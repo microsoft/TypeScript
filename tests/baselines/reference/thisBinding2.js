@@ -24,6 +24,7 @@ var messenger = {
 
 
 //// [thisBinding2.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         var _this = this;

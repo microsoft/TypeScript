@@ -32,6 +32,7 @@ function f2() {
 
 
 //// [blockScopedBindingsReassignedInLoop6.js]
+"use strict";
 function f1() {
     var _loop_1 = function (x, y) {
         var a = function () { return x++ + y++; };

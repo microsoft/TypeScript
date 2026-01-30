@@ -13,6 +13,7 @@ class Foo {
 
 
 //// [parserErrorRecoveryIfStatement6.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

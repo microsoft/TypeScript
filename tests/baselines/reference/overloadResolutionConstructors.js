@@ -105,6 +105,7 @@ var s = new fn5((n) => n.substr(0));
 
 
 //// [overloadResolutionConstructors.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

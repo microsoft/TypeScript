@@ -21,6 +21,7 @@ class DatasourceCommandWidgetElement {
 }
 
 //// [controlFlowForCompoundAssignmentToThisMember.js]
+"use strict";
 var DatasourceCommandWidgetElement = /** @class */ (function () {
     function DatasourceCommandWidgetElement(target) {
         if (target instanceof DatasourceCommandWidgetElement) {

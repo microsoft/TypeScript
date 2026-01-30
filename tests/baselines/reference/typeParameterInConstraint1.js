@@ -5,6 +5,7 @@ class C<T, U extends T> {
 }
 
 //// [typeParameterInConstraint1.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

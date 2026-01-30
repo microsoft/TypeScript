@@ -6,6 +6,7 @@
 )
 
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
+"use strict";
 (function (item) {
     return item;
 });

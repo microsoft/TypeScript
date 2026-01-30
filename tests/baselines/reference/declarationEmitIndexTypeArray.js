@@ -9,6 +9,7 @@ const utilityFunctions = {
 
 
 //// [declarationEmitIndexTypeArray.js]
+"use strict";
 function doSomethingWithKeys() {
     var keys = [];
     for (var _i = 0; _i < arguments.length; _i++) {

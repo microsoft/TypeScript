@@ -37,6 +37,7 @@ function foo(idx: number): F {
 var [c4, c5, c6] = foo(1);  // Error
 
 //// [destructuringArrayBindingPatternAndAssignment2.js]
+"use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {

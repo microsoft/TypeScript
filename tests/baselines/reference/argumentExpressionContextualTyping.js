@@ -21,6 +21,7 @@ baz(["string", 1, true, ...array]);  // Error
 foo(o);                              // Error because x has an array type namely (string|number)[]
 
 //// [argumentExpressionContextualTyping.js]
+"use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {

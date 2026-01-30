@@ -34,6 +34,7 @@ void (<Comp cb={n => n.toFixed()} />);
 
 
 //// [tsxDiscriminantPropertyInference.jsx]
+"use strict";
 // simple inference
 void (<Comp disc cb={function (s) { return parseInt(s); }}/>);
 // simple inference

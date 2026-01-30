@@ -69,6 +69,7 @@ namespace M6 {
 
 
 //// [enumMerging.js]
+"use strict";
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 var M1;

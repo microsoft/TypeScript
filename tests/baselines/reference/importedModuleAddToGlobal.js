@@ -19,6 +19,7 @@ namespace C {
 }
 
 //// [importedModuleAddToGlobal.js]
+"use strict";
 var B;
 (function (B_1) {
     var B = /** @class */ (function () {

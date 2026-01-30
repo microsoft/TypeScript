@@ -24,6 +24,7 @@ c.data = c.foo();
 
 
 //// [typeParametersAvailableInNestedScope.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         this.x = function (a) {

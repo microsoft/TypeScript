@@ -72,6 +72,7 @@ module.exports = Context;
 
 
 //// [timer.js]
+"use strict";
 /**
  * @param {number} timeout
  */
@@ -80,6 +81,7 @@ function Timer(timeout) {
 }
 module.exports = Timer;
 //// [context.js]
+"use strict";
 /**
  * Imports
  *
@@ -126,6 +128,7 @@ Context.prototype = {
 };
 module.exports = Context;
 //// [hook.js]
+"use strict";
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
  */

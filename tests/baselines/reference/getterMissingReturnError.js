@@ -9,6 +9,7 @@ class test {
 
 
 //// [getterMissingReturnError.js]
+"use strict";
 var test = /** @class */ (function () {
     function test() {
     }

@@ -7,3 +7,4 @@ interface I {
 }
 
 //// [stringIndexerAndConstructor1.js]
+"use strict";

@@ -9,6 +9,7 @@ const obj = {
 
 
 //// [privateNameInObjectLiteral-2.js]
+"use strict";
 var obj = {
     : function () {
     }

@@ -18,6 +18,7 @@ class Test
 
 
 //// [forwardRefInClassProperties.js]
+"use strict";
 var Test = /** @class */ (function () {
     function Test() {
         this._b = this._a; // undefined, no error/warning

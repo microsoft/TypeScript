@@ -27,6 +27,7 @@ arr_any = c3; // should be an error - is
 
 
 //// [arrayAssignmentTest4.js]
+"use strict";
 var C3 = /** @class */ (function () {
     function C3() {
     }

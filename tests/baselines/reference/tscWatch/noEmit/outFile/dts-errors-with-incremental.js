@@ -269,6 +269,7 @@ Output::
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = "hello";
 
 
@@ -545,6 +546,7 @@ Output::
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 var a = /** @class */ (function () {
     function class_1() {
         this.p = 10;

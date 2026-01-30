@@ -34,6 +34,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 
 
 
@@ -102,6 +103,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 //
 
 

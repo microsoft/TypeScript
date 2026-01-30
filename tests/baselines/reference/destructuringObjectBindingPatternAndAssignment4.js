@@ -12,6 +12,7 @@ const {
 
 
 //// [destructuringObjectBindingPatternAndAssignment4.js]
+"use strict";
 var _a = {}, _b = _a.a, a = _b === void 0 ? 1 : _b, _c = _a.b, b = _c === void 0 ? 2 : _c, _d = _a.c, c = _d === void 0 ? b : _d, // ok
 _e = _a.d, // ok
 d = _e === void 0 ? a : _e, // ok

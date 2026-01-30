@@ -44,6 +44,7 @@ class Bar8 extends Foo implements I {
 
 
 //// [implementingAnInterfaceExtendingClassWithProtecteds.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

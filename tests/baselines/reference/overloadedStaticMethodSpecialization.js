@@ -11,6 +11,7 @@ class A<T> {
 
 
 //// [overloadedStaticMethodSpecialization.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

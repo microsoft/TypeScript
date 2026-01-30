@@ -101,6 +101,7 @@ namespace Errors {
 }
 
 //// [assignmentCompatWithConstructSignatures4.js]
+"use strict";
 // checking assignment compatibility relations for function types.
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

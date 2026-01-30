@@ -88,6 +88,7 @@ function f2(x: A | B) {
 }
 
 //// [narrowingByDiscriminantInLoop.js]
+"use strict";
 // Repro from #9977
 function insertInterface(callbackType) {
     for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {

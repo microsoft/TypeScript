@@ -9,6 +9,7 @@ namespace m3a { var y = 2; }
 class m3a { foo() { } } // error, class isn't ambient or declared before the module
 
 //// [augmentedTypesModules3.js]
+"use strict";
 var m3 = /** @class */ (function () {
     function m3() {
     }

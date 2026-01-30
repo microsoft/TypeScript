@@ -18,6 +18,7 @@ var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
 
 
 //// [arrayLiteralExpressionContextualTyping.js]
+"use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {

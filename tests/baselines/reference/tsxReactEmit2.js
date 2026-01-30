@@ -18,6 +18,7 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 
 
 //// [file.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

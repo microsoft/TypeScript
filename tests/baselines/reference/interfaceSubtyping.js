@@ -12,6 +12,7 @@ class Camera implements iface{
 
 
 //// [interfaceSubtyping.js]
+"use strict";
 var Camera = /** @class */ (function () {
     function Camera(str) {
         this.str = str;

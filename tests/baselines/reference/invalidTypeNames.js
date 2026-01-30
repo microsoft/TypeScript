@@ -7,6 +7,7 @@ class illegal_name_here {
 
 
 //// [invalidTypeNames.js]
+"use strict";
 // Refer to calling code - a real illegal name is subbed in here
 var illegal_name_here = /** @class */ (function () {
     function illegal_name_here() {

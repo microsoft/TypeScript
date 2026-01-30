@@ -21,6 +21,7 @@ namespace Namespace {
 
 
 //// [classStaticInitializersUsePropertiesBeforeDeclaration.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

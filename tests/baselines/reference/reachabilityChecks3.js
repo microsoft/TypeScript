@@ -17,6 +17,7 @@ loop: while (true) {
 var y = () => { f: 1 }
 
 //// [reachabilityChecks3.js]
+"use strict";
 var x = 1;
 loop: while (true) {
     if (x == 100) {

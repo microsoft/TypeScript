@@ -5,5 +5,6 @@ function f(await = await) {
 }
 
 //// [asyncArrowFunction3_es2017.js]
+"use strict";
 function f(await = await) {
 }

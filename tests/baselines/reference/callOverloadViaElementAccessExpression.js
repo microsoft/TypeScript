@@ -14,6 +14,7 @@ var r: string = c['foo'](1);
 var r2: number = c['foo']('');
 
 //// [callOverloadViaElementAccessExpression.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -22,6 +22,7 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInProperty.js]
+"use strict";
 var class1 = /** @class */ (function () {
     function class1() {
         var _this_1 = this;

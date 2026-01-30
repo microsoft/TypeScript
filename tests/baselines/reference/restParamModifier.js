@@ -6,6 +6,7 @@ class C {
 }
 
 //// [restParamModifier.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(rest) {
     }

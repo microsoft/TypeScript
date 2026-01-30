@@ -12,6 +12,7 @@ j = '';
 
 
 //// [asOperator1.js]
+"use strict";
 var as = 43;
 var x = undefined;
 var y = null.length;

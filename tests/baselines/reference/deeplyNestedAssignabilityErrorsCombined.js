@@ -18,6 +18,7 @@ let y2 = { a: { b: { c: { d: { e: { f: Ctor2 } } } } } };
 x2 = y2;
 
 //// [deeplyNestedAssignabilityErrorsCombined.js]
+"use strict";
 var x = { a: { b: { c: { d: { e: { f: function () { return { g: "hello" }; } } } } } } };
 var y = { a: { b: { c: { d: { e: { f: function () { return { g: 12345 }; } } } } } } };
 x = y;

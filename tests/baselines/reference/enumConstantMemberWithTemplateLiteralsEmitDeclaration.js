@@ -43,6 +43,7 @@ declare enum T7 {
 
 
 //// [enumConstantMemberWithTemplateLiteralsEmitDeclaration.js]
+"use strict";
 var T1;
 (function (T1) {
     T1["a"] = "1";

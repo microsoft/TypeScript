@@ -9,6 +9,7 @@ function f1 () {
 }
 
 //// [unusedVariablesinBlocks1.js]
+"use strict";
 function f1() {
     var x = 10;
     {

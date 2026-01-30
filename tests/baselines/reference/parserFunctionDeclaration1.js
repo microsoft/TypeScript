@@ -6,3 +6,4 @@ declare namespace M {
 }
 
 //// [parserFunctionDeclaration1.js]
+"use strict";

@@ -82,6 +82,7 @@ namespace m1 {
 }
 
 //// [typeGuardsInFunctionAndModuleBlock.js]
+"use strict";
 // typeguards are scoped in function/module block
 function foo(x) {
     return typeof x === "string"

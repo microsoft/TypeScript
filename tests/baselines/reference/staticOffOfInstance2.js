@@ -11,6 +11,7 @@ class List<T> {
 
 
 //// [staticOffOfInstance2.js]
+"use strict";
 var List = /** @class */ (function () {
     function List() {
     }

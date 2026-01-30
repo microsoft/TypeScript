@@ -13,6 +13,7 @@ var d = new D<number>();
 
 
 //// [constructorInvocationWithTooFewTypeArgs.js]
+"use strict";
 var D = /** @class */ (function () {
     function D() {
     }

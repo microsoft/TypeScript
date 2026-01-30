@@ -129,6 +129,7 @@ function foo_c() {
 
 
 //// [capturedLetConstInLoop8.js]
+"use strict";
 function foo() {
     l0: for (var z = 0; z < 1; ++z) {
         var _loop_1 = function (x) {

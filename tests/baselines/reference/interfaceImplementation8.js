@@ -43,6 +43,7 @@ class C8 extends C7 implements i2{
 
 
 //// [interfaceImplementation8.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

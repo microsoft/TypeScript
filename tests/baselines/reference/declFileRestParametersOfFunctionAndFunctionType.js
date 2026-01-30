@@ -12,6 +12,7 @@ var f6 = () => { return [<any>10]; }
 
 
 //// [declFileRestParametersOfFunctionAndFunctionType.js]
+"use strict";
 function f1() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {

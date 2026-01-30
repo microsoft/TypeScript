@@ -15,6 +15,7 @@ namespace m2 {
 }
 
 //// [declFileInternalAliases.js]
+"use strict";
 var m;
 (function (m) {
     var c = /** @class */ (function () {

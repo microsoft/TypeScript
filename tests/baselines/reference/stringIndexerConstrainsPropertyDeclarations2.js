@@ -42,6 +42,7 @@ var b: { [x: string]: A } = {
 }
 
 //// [stringIndexerConstrainsPropertyDeclarations2.js]
+"use strict";
 // String indexer providing a constraint of a user defined type
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

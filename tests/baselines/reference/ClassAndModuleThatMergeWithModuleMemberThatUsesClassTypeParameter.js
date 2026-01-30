@@ -52,6 +52,7 @@ namespace clodule4 {
 
 
 //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js]
+"use strict";
 // all expected to be errors
 var clodule1 = /** @class */ (function () {
     function clodule1() {

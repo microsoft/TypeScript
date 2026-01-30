@@ -10,6 +10,7 @@ class Foo {
 
 
 //// [declarationEmitPrivateReadonlyLiterals.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.B = "b";

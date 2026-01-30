@@ -4,4 +4,5 @@
 var { x } = <any><any>foo();
 
 //// [destructuringTypeAssertionsES5_4.js]
+"use strict";
 var x = foo().x;

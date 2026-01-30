@@ -7,6 +7,7 @@ var x = `abc${0}abc` === `abc` ||
         "abc0abc" !== `abc${0}abc`;
 
 //// [templateStringInEqualityChecks.js]
+"use strict";
 var x = "abc".concat(0, "abc") === "abc" ||
     "abc" !== "abc".concat(0, "abc") &&
         "abc".concat(0, "abc") == "abc0abc" &&

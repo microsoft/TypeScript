@@ -103,6 +103,7 @@ m.prop['a'];
 
 
 //// [noImplicitAnyStringIndexerOnObject.js]
+"use strict";
 var a = {}["hello"];
 var b = { '': 'foo' }[''];
 var c = {

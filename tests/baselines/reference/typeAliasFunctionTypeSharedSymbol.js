@@ -16,6 +16,7 @@ type Crashes = number & Mixin;
 
 
 //// [typeAliasFunctionTypeSharedSymbol.js]
+"use strict";
 // Repro from comment in #21496
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

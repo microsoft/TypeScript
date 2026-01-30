@@ -27,6 +27,7 @@ class F<T> {
 }
 
 //// [constructorWithExpressionLessReturn.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         return;

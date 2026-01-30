@@ -9,6 +9,7 @@ namespace M {
 }
 
 //// [classDoesNotDependOnPrivateMember.js]
+"use strict";
 var M;
 (function (M) {
     var C = /** @class */ (function () {

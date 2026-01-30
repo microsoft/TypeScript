@@ -14,6 +14,7 @@ class P {
 }
 
 //// [thisInConstructorParameter2.js]
+"use strict";
 var P = /** @class */ (function () {
     function P(z, zz, zzz) {
         if (z === void 0) { z = this; }

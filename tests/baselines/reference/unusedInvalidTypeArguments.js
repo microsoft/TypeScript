@@ -94,6 +94,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var unkown_1 = require("unkown");
 new unkown_1.Foo();
 //// [callAny.js]
+"use strict";
 g();
 g(); // Should get error for type argument
 //// [super.js]

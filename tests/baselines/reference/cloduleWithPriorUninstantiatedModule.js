@@ -18,6 +18,7 @@ namespace Moclodule {
 }
 
 //// [cloduleWithPriorUninstantiatedModule.js]
+"use strict";
 var Moclodule = /** @class */ (function () {
     function Moclodule() {
     }

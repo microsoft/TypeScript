@@ -89,6 +89,7 @@ else {
 
 
 //// [typeGuardOfFormTypeOfBoolean.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

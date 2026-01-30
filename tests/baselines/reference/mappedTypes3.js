@@ -41,6 +41,7 @@ function f3(bb: BoxifiedBacon) {
 }
 
 //// [mappedTypes3.js]
+"use strict";
 var Box = /** @class */ (function () {
     function Box() {
     }

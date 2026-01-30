@@ -42,6 +42,7 @@ namespace Generics {
 }
 
 //// [subtypingWithNumericIndexer.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

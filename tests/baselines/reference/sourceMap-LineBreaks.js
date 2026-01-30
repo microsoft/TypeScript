@@ -15,6 +15,7 @@ var stringLiteralWithCarriageReturn = "line 1\line 2";
 var stringLiteralWithLineSeparator = "line 1\ line 2"; var stringLiteralWithParagraphSeparator = "line 1\ line 2"; var stringLiteralWithNextLine = "line 1\line 2";
 
 //// [sourceMap-LineBreaks.js]
+"use strict";
 var endsWithlineSeparator = 10;
 var endsWithParagraphSeparator = 10;
 var endsWithNextLine = 1;

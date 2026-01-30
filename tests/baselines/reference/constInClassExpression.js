@@ -7,6 +7,7 @@ let C = class {
 
 
 //// [constInClassExpression.js]
+"use strict";
 var C = /** @class */ (function () {
     function class_1() {
         this.a = 4;

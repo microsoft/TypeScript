@@ -13,6 +13,7 @@ x; // string | number
 
 
 //// [controlFlowBinaryAndExpression.js]
+"use strict";
 var x;
 var cond;
 (x = "") && (x = 0);

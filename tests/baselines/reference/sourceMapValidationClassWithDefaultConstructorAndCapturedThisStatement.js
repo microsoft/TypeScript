@@ -7,6 +7,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
+"use strict";
 var Greeter = /** @class */ (function () {
     function Greeter() {
         var _this = this;

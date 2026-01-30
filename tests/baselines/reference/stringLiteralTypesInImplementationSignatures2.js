@@ -32,6 +32,7 @@ var b = {
 
 
 //// [stringLiteralTypesInImplementationSignatures2.js]
+"use strict";
 // String literal types are only valid in overload signatures
 function foo(x) { }
 var C = /** @class */ (function () {

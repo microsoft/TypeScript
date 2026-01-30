@@ -19,6 +19,7 @@ var y: { x: number; y: number };
 var y = new enumdule.Point(0, 0);
 
 //// [EnumAndModuleWithSameNameAndCommonRoot.js]
+"use strict";
 var enumdule;
 (function (enumdule) {
     enumdule[enumdule["Red"] = 0] = "Red";

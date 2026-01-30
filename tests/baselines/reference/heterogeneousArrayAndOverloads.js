@@ -14,6 +14,7 @@ class arrTest {
 }
 
 //// [heterogeneousArrayAndOverloads.js]
+"use strict";
 var arrTest = /** @class */ (function () {
     function arrTest() {
     }

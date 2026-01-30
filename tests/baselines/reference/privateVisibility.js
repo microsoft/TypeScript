@@ -29,6 +29,7 @@ c.priv; // should not work
 
 
 //// [privateVisibility.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.pubProp = 0;

@@ -74,6 +74,7 @@ C = undefined; // Error
 
 
 //// [assignmentToParenthesizedIdentifiers.js]
+"use strict";
 var x;
 x = 3; // OK
 (x) = 3; // OK

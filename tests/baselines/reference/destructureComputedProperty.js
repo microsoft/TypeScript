@@ -14,6 +14,7 @@ const { p: p3 } = new C();
 
 
 //// [destructureComputedProperty.js]
+"use strict";
 var nameN = "n";
 var _a = ab, _b = nameN, n = _a[_b];
 var C = /** @class */ (function () {

@@ -8,6 +8,7 @@ class greeter {
 }
 
 //// [unusedLocalsInMethod2.js]
+"use strict";
 var greeter = /** @class */ (function () {
     function greeter() {
     }

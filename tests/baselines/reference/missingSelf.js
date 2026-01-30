@@ -21,6 +21,7 @@ c2.b();
 
 
 //// [missingSelf.js]
+"use strict";
 var CalcButton = /** @class */ (function () {
     function CalcButton() {
     }

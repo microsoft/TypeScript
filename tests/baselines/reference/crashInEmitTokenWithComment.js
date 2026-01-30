@@ -8,6 +8,7 @@ const foo = {bar: 'a'};
 fn(({[foo.bar]: c}) => undefined);
 
 //// [crashInEmitTokenWithComment.js]
+"use strict";
 // GH#32358
 var fn = function (param) { return undefined; };
 var foo = { bar: 'a' };

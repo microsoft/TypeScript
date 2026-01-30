@@ -1,3 +1,4 @@
+strictModeReservedWordInClassDeclaration.ts(1,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWordInClassDeclaration.ts(4,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 strictModeReservedWordInClassDeclaration.ts(4,26): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 strictModeReservedWordInClassDeclaration.ts(4,34): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -25,8 +26,10 @@ strictModeReservedWordInClassDeclaration.ts(28,17): error TS1213: Identifier exp
 strictModeReservedWordInClassDeclaration.ts(28,17): error TS2304: Cannot find name 'package'.
 
 
-==== strictModeReservedWordInClassDeclaration.ts (25 errors) ====
+==== strictModeReservedWordInClassDeclaration.ts (26 errors) ====
     interface public { }
+              ~~~~~~
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
     
     class Foo {
         constructor(private, public, static) {

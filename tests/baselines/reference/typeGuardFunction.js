@@ -85,6 +85,7 @@ let union2: C | B;
 let union3: boolean | B = isA(union2) || union2;
 
 //// [typeGuardFunction.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

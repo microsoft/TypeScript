@@ -12,6 +12,7 @@ new D(7); // ok
 
 
 //// [literalTypesWidenInParameterPosition.js]
+"use strict";
 var D = /** @class */ (function () {
     function D(widen) {
         if (widen === void 0) { widen = 2; }

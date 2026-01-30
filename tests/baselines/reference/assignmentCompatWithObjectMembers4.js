@@ -94,6 +94,7 @@ namespace WithBase {
 }
 
 //// [assignmentCompatWithObjectMembers4.js]
+"use strict";
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

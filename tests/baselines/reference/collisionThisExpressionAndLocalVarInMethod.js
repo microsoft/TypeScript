@@ -21,6 +21,7 @@ class a {
 }
 
 //// [collisionThisExpressionAndLocalVarInMethod.js]
+"use strict";
 var a = /** @class */ (function () {
     function a() {
     }

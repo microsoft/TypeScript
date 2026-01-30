@@ -37,6 +37,7 @@ testRest((t2, ...t3: D[]) => {})
 
 
 //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

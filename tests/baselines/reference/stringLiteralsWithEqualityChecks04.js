@@ -33,6 +33,7 @@ b = "bar" != y;
 
 
 //// [stringLiteralsWithEqualityChecks04.js]
+"use strict";
 var b;
 b = x == y;
 b = "foo" == y;

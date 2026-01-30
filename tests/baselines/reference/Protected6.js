@@ -6,6 +6,7 @@ class C {
 }
 
 //// [Protected6.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

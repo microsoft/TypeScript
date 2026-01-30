@@ -20,6 +20,7 @@ class C3 implements ifoo {
 }
 
 //// [optionalPropertiesInClasses.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1() {
     }

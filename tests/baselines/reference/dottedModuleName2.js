@@ -46,6 +46,7 @@ namespace M
 
 
 //// [dottedModuleName2.js]
+"use strict";
 var A;
 (function (A) {
     var B;

@@ -13,6 +13,7 @@ var [a3, b3] = [[x13, y13], { x: x13, y: y13 }];
 
 
 //// [declarationEmitDestructuringArrayPattern2.js]
+"use strict";
 var _a = [1, ["hello", [true]]], x10 = _a[0], _b = _a[1], y10 = _b[0], z10 = _b[1][0];
 var _c = [1, "hello"], _d = _c[0], x11 = _d === void 0 ? 0 : _d, _e = _c[1], y11 = _e === void 0 ? "" : _e;
 var _f = [], a11 = _f[0], b11 = _f[1], c11 = _f[2];

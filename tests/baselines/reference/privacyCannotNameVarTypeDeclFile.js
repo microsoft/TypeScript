@@ -99,6 +99,7 @@ var privateVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2();
 var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
 
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.js]
+"use strict";
 //// [privacyCannotNameVarTypeDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -13,6 +13,7 @@ var e: E = new E(1);
 
 
 //// [extendConstructSignatureInInterface.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

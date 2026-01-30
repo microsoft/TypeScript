@@ -9,6 +9,7 @@ function f() {
 }
 
 //// [functionDeclarationWithResolutionOfTypeNamedArguments01.js]
+"use strict";
 function f() {
     arguments;
 }

@@ -39,6 +39,7 @@ class Class4<T> extends Class3<T>
 
 
 //// [baseTypeOrderChecking.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -9,6 +9,7 @@ module.exports = Bar;
 
 
 //// [index.js]
+"use strict";
 var tslib_1 = require("tslib");
 var Foo = /** @class */ (function () {
     function Foo() {

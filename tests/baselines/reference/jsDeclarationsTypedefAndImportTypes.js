@@ -35,6 +35,7 @@ module.exports = {
 
 
 //// [conn.js]
+"use strict";
 /**
  * @typedef {string | number} Whatever
  */
@@ -47,6 +48,7 @@ var Conn = /** @class */ (function () {
 }());
 module.exports = Conn;
 //// [usage.js]
+"use strict";
 /**
  * @typedef {import("./conn")} Conn
  */

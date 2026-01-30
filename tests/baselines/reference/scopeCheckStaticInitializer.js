@@ -18,6 +18,7 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
     }

@@ -13,6 +13,7 @@ class derived extends base { }
 
 
 //// [errorForwardReferenceForwadingConstructor.js]
+"use strict";
 // Error forward referencing derived class with forwarding constructor
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

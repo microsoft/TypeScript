@@ -29,6 +29,7 @@ b = a;      // should be no error
 c = d;
 
 //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         this.x = 'A';

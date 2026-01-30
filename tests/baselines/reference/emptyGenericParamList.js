@@ -5,6 +5,7 @@ class I<T> {}
 var x: I<>;
 
 //// [emptyGenericParamList.js]
+"use strict";
 var I = /** @class */ (function () {
     function I() {
     }

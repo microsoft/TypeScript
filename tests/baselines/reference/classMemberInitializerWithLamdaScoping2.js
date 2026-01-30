@@ -18,8 +18,10 @@ class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping2_0.js]
+"use strict";
 var field1;
 //// [classMemberInitializerWithLamdaScoping2_1.js]
+"use strict";
 var Test1 = /** @class */ (function () {
     function Test1(field1) {
         this.field1 = field1;

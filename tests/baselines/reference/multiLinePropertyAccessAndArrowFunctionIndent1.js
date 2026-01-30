@@ -8,6 +8,7 @@ return this.edit(role)
 
 
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.js]
+"use strict";
 var _this = this;
 return this.edit(role)
     .then(function (role) {

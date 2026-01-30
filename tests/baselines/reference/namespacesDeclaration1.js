@@ -10,6 +10,7 @@ namespace M {
 }
 
 //// [namespacesDeclaration1.js]
+"use strict";
 
 
 //// [namespacesDeclaration1.d.ts]

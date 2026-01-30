@@ -24,6 +24,7 @@ sequence(
 
 
 //// [varArgParamTypeCheck.js]
+"use strict";
 function sequence() {
     var sequences = [];
     for (var _i = 0; _i < arguments.length; _i++) {

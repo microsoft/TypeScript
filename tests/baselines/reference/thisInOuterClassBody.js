@@ -23,6 +23,7 @@ class Foo {
 }
 
 //// [thisInOuterClassBody.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
         this.x = this;

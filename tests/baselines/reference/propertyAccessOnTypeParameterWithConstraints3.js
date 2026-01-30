@@ -59,6 +59,7 @@ var b = {
 var r4 = b.foo(new B()); // valid call to an invalid function
 
 //// [propertyAccessOnTypeParameterWithConstraints3.js]
+"use strict";
 // generic types should behave as if they have properties of their constraint type
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

@@ -164,6 +164,7 @@ var ConstructorWithParameterInitializer = /** @class */ (function () {
 }());
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
+"use strict";
 var GlobalSimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
     function GlobalSimpleConstructor() {

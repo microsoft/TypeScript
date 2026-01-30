@@ -34,6 +34,7 @@ async function withStatement3() {
 }
 
 //// [es5-asyncFunctionWithStatements.js]
+"use strict";
 function withStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

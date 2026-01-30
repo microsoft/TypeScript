@@ -50,6 +50,7 @@ class C4 {
 
 
 //// [declarationFiles.js]
+"use strict";
 var C1 = /** @class */ (function () {
     function C1(x) {
     }

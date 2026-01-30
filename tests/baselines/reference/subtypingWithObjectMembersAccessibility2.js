@@ -64,6 +64,7 @@ namespace ImplicitPublic {
 }
 
 //// [subtypingWithObjectMembersAccessibility2.js]
+"use strict";
 // Derived member is private, base member is not causes errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

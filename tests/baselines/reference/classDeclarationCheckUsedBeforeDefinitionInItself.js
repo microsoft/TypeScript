@@ -6,6 +6,7 @@ class C3 {
 }
 
 //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
+"use strict";
 class C3 {
 }
 C3.intance = new C3(); // ok

@@ -7,6 +7,7 @@ var v = {
 }
 
 //// [computedPropertyNames1_ES5.js]
+"use strict";
 var _a;
 var v = (_a = {},
     Object.defineProperty(_a, 0 + 1, {

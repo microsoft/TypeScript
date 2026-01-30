@@ -19,6 +19,7 @@ var f2NoError = () => {
 }
 
 //// [collisionArgumentsArrowFunctions.js]
+"use strict";
 var f1 = function (i) {
     var arguments = [];
     for (var _i = 1; _i < arguments.length; _i++) {

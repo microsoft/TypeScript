@@ -35,6 +35,7 @@ var r6 = Derived.a; // error
 Derived.a = 2; // error
 
 //// [derivedClassWithPrivateInstanceShadowingPublicInstance.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

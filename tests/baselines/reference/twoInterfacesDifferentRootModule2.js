@@ -40,6 +40,7 @@ namespace M {
 }
 
 //// [twoInterfacesDifferentRootModule2.js]
+"use strict";
 // two interfaces with different root modules should not merge
 var M;
 (function (M) {

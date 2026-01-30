@@ -8,6 +8,7 @@ namespace A {
 
 
 //// [moduleRedifinitionErrors.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

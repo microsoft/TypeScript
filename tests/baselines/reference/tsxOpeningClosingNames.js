@@ -13,4 +13,5 @@ declare namespace A.B.C {
 
 
 //// [file.jsx]
+"use strict";
 <A.B.C.D>foo</A.B.C.D>;

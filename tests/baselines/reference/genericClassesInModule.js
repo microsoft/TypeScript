@@ -11,6 +11,7 @@ namespace Foo {
 var a = new Foo.B<Foo.A>();
 
 //// [genericClassesInModule.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var B = /** @class */ (function () {

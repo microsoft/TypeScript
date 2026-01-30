@@ -10,6 +10,7 @@ namespace m1 {
 var foo = new m1.m2();
 
 //// [collisionCodeGenModuleWithMemberInterfaceConflict.js]
+"use strict";
 var m1;
 (function (m1) {
     var m2 = /** @class */ (function () {

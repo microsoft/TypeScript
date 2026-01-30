@@ -7,6 +7,7 @@ class A {
 
 
 //// [crashOnMethodSignatures.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

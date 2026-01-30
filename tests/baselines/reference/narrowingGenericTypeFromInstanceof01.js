@@ -30,6 +30,7 @@ function test<T>(x: A<T> | B<T>) {
 }
 
 //// [narrowingGenericTypeFromInstanceof01.js]
+"use strict";
 var A = /** @class */ (function () {
     function A(a) {
         this.a = a;

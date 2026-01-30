@@ -9,6 +9,7 @@ function test({c, d = c}: Record<string, number>) {}
 
 
 //// [useBeforeDeclaration_destructuring.js]
+"use strict";
 a;
 var _a = { a: '', b: 1 }, a = _a.a, _b = _a.b, b = _b === void 0 ? a : _b;
 b;

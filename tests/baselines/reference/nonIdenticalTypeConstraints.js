@@ -41,6 +41,7 @@ interface Quux<U> {
 }
 
 //// [nonIdenticalTypeConstraints.js]
+"use strict";
 var Different = /** @class */ (function () {
     function Different() {
     }

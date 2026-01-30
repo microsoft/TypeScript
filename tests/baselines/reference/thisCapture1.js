@@ -12,6 +12,7 @@ class X {
 }
 
 //// [thisCapture1.js]
+"use strict";
 var X = /** @class */ (function () {
     function X() {
         this.y = 0;

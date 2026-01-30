@@ -36,6 +36,7 @@ function f4(
 
 
 //// [controlFlowParameter.js]
+"use strict";
 function f1(required) {
     if (required === void 0) { required = (function () {
         throw new Error("bad");

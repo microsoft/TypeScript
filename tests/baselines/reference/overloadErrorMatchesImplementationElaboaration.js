@@ -11,6 +11,7 @@ declare var ea: EventAggregator;
 ea.publish([1,2,3]);
 
 //// [overloadErrorMatchesImplementationElaboaration.js]
+"use strict";
 var EventAggregator = /** @class */ (function () {
     function EventAggregator() {
     }

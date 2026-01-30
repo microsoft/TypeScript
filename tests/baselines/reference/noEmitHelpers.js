@@ -6,6 +6,7 @@ class B extends A { }
 
 
 //// [noEmitHelpers.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -10,6 +10,7 @@ class c4 { public foo() { } }
 enum c4 { One } // error
 
 //// [augmentedTypesClass.js]
+"use strict";
 //// class then var
 var c1 = /** @class */ (function () {
     function c1() {

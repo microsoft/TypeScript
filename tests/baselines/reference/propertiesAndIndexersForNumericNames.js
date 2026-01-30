@@ -45,6 +45,7 @@ class C {
 
 
 //// [propertiesAndIndexersForNumericNames.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
         // These all have numeric names; they should error

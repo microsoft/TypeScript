@@ -15,6 +15,7 @@ class Animal {
 
 
 //// [unusedLocalProperty.js]
+"use strict";
 var Animal = /** @class */ (function () {
     function Animal(species) {
         this.species = species;

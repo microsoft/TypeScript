@@ -16,6 +16,7 @@ var c: C;
 var r = c.x(''); // string
 
 //// [accessorsAreNotContextuallyTyped.js]
+"use strict";
 // accessors are not contextually typed
 var C = /** @class */ (function () {
     function C() {

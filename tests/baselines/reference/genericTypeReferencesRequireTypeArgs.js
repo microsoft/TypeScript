@@ -14,6 +14,7 @@ var i2: I<C>; // should be an error
 
 
 //// [genericTypeReferencesRequireTypeArgs.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

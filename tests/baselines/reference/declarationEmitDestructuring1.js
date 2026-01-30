@@ -8,6 +8,7 @@ function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }
 
 
 //// [declarationEmitDestructuring1.js]
+"use strict";
 function foo(_a) {
     var a = _a[0], b = _a[1], c = _a[2];
 }

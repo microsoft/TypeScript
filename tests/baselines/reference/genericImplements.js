@@ -23,6 +23,7 @@ class Z implements I {
 } // { f: <T>() => T } 
 
 //// [genericImplements.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

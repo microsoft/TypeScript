@@ -18,6 +18,7 @@ class C3 {
 
 
 //// [asiAbstract.js]
+"use strict";
 abstract;
 var NonAbstractClass = /** @class */ (function () {
     function NonAbstractClass() {

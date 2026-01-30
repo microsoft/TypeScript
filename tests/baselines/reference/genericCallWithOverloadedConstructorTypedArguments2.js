@@ -43,6 +43,7 @@ namespace GenericParameter {
 }
 
 //// [genericCallWithOverloadedConstructorTypedArguments2.js]
+"use strict";
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 var NonGenericParameter;

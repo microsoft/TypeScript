@@ -29,6 +29,7 @@ enum E { A }
 var j: E = x;
 
 //// [invalidStringAssignments.js]
+"use strict";
 var x = '';
 var a = x;
 var b = x;

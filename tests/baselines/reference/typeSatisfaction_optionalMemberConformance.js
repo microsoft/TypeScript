@@ -11,6 +11,7 @@ let p = a.y;
 
 
 //// [typeSatisfaction_optionalMemberConformance.js]
+"use strict";
 // Undesirable behavior today with type annotation
 var a = { x: 10 };
 // Should OK

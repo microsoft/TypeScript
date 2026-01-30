@@ -6,5 +6,6 @@ const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
 
 
 //// [typeSatisfaction_vacuousIntersectionOfContextualTypes.js]
+"use strict";
 var a = "foo";
 var b = { xyz: "foo" };

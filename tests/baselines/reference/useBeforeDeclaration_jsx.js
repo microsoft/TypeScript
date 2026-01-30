@@ -18,6 +18,7 @@ class C {
 
 
 //// [useBeforeDeclaration_jsx.jsx]
+"use strict";
 class C {
 }
 C.a = <C.z></C.z>;
