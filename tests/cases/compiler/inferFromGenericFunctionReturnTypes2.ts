@@ -1,3 +1,4 @@
+// @target: es2015
 type Mapper<T, U> = (x: T) => U;
 
 declare function wrap<T, U>(cb: Mapper<T, U>): Mapper<T, U>;

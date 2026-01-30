@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 interface A {
     unused?: string;

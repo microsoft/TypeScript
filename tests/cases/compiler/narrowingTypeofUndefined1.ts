@@ -1,3 +1,4 @@
+// @target: es2015
 declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
 
 if (typeof a.error === 'undefined') {

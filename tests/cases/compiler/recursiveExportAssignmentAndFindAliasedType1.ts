@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts
 declare module "moduleC" {

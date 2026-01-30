@@ -1,3 +1,4 @@
+// @target: es2015
 // @noErrorTruncation: false
 
 declare var x: {

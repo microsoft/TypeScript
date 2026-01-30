@@ -1,3 +1,4 @@
+// @target: es2015
 async function test1() {
     let i = 0
     let limit = 10

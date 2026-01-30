@@ -1,4 +1,5 @@
-﻿// Parameter Declaration with generic
+﻿// @target: es2015
+// Parameter Declaration with generic
 
 interface F { }
 class Class implements F {

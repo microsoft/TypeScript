@@ -7,9 +7,8 @@ class C {
 }
 
 //// [readonlyReadonly.js]
-var C = /** @class */ (function () {
-    function C(y) {
+class C {
+    constructor(y) {
         this.y = y;
     }
-    return C;
-}());
+}

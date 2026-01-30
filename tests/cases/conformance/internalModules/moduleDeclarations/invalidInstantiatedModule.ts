@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
     export class Point { x: number; y: number }
     export var Point = 1;  // Error

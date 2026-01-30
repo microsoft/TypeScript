@@ -1,3 +1,4 @@
+// @target: es2015
 // All legal
 
 function fn4<T extends string>(n: T) { }

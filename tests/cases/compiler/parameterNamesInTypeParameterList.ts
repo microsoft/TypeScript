@@ -1,3 +1,4 @@
+// @target: es2015
 function f0<T extends typeof a>(a: T) {
 	a.b;
 }

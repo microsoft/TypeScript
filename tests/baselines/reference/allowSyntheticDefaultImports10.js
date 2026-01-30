@@ -13,6 +13,6 @@ Foo.default.default.foo();
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = require("./b");
+const Foo = require("./b");
 Foo.default.bar();
 Foo.default.default.foo();

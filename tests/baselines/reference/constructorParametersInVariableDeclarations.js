@@ -19,20 +19,18 @@ class B {
 }
 
 //// [constructorParametersInVariableDeclarations.js]
-var A = /** @class */ (function () {
-    function A(x) {
+class A {
+    constructor(x) {
         this.a = x;
         this.b = { p: x };
-        this.c = function () { return x; };
+        this.c = () => x;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.a = x;
         this.b = { p: x };
-        this.c = function () { return x; };
+        this.c = () => x;
         var x = 1;
     }
-    return B;
-}());
+}

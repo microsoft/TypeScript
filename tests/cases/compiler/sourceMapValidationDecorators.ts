@@ -1,5 +1,5 @@
 // @sourcemap: true
-// @target: es5
+// @target: es5, es2015
 // @experimentaldecorators: true
 declare function ClassDecorator1(target: Function): void;
 declare function ClassDecorator2(x: number): (target: Function) => void;

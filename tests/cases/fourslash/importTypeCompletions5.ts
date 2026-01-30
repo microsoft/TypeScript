@@ -2,6 +2,7 @@
 
 // @allowSyntheticDefaultImports: false
 // @esModuleInterop: false
+// @module: commonjs
 
 // @Filename: /foo.ts
 ////interface Foo { };

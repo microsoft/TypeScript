@@ -30,8 +30,8 @@ var v6: { a: string, b: string | undefined };
 
 //// [inferenceOptionalPropertiesStrict.js]
 "use strict";
-var y1 = test(x1);
-var y2 = test(x2);
+const y1 = test(x1);
+const y2 = test(x2);
 var v1;
 var v1;
 var v2;

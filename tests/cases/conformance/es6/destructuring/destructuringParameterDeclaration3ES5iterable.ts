@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 // @downlevelIteration: true
 
 // If the parameter is a rest parameter, the parameter type is any[]

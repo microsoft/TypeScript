@@ -1,4 +1,5 @@
-﻿interface I {
+﻿// @target: es2015
+interface I {
     (strs: TemplateStringsArray, ...subs: number[]): I;
     member: {
         new (s: string): {

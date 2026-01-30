@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @module: commonjs
 export namespace C { export interface I { } }

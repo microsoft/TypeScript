@@ -1,3 +1,4 @@
+// @target: es2015
 interface BinaryTuple<T, S> {
     first: T
     second: S

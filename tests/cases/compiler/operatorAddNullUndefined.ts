@@ -1,3 +1,4 @@
+// @target: es2015
 enum E { x }
 var x1 = null + null;
 var x2 = null + undefined;

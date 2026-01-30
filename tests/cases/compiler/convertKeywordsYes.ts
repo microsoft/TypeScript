@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // reserved ES5 future in strict mode
 

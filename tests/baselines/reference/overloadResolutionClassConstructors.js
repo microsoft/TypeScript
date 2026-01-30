@@ -104,62 +104,25 @@ new fn5((n) => n.blah); // Error
 
 
 //// [overloadResolutionClassConstructors.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var SomeBase = /** @class */ (function () {
-    function SomeBase() {
-    }
-    return SomeBase;
-}());
-var SomeDerived1 = /** @class */ (function (_super) {
-    __extends(SomeDerived1, _super);
-    function SomeDerived1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived1;
-}(SomeBase));
-var SomeDerived2 = /** @class */ (function (_super) {
-    __extends(SomeDerived2, _super);
-    function SomeDerived2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived2;
-}(SomeBase));
-var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);
-    function SomeDerived3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived3;
-}(SomeBase));
+class SomeBase {
+}
+class SomeDerived1 extends SomeBase {
+}
+class SomeDerived2 extends SomeBase {
+}
+class SomeDerived3 extends SomeBase {
+}
 // Ambiguous call picks the first overload in declaration order
-var fn1 = /** @class */ (function () {
-    function fn1() {
-    }
-    return fn1;
-}());
+class fn1 {
+    constructor() { }
+}
 new fn1(undefined);
 // No candidate overloads found
 new fn1({}); // Error
 // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
-var fn2 = /** @class */ (function () {
-    function fn2() {
-    }
-    return fn2;
-}());
+class fn2 {
+    constructor() { }
+}
 var d = new fn2(0, undefined);
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = new fn2(0, '');
@@ -168,11 +131,9 @@ new fn2('', 0); // OK
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 new fn2('', 0); // OK
 // Generic overloads with differing arity called without type arguments
-var fn3 = /** @class */ (function () {
-    function fn3() {
-    }
-    return fn3;
-}());
+class fn3 {
+    constructor() { }
+}
 new fn3(3);
 new fn3('', 3, '');
 new fn3(5, 5, 5);
@@ -183,11 +144,9 @@ new fn3('', '', 3);
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 new fn3(); // Error
 // Generic overloads with constraints called with type arguments that satisfy the constraints
-var fn4 = /** @class */ (function () {
-    function fn4() {
-    }
-    return fn4;
-}());
+class fn4 {
+    constructor() { }
+}
 new fn4('', 3);
 new fn4(3, ''); // Error
 new fn4('', 3); // Error
@@ -203,12 +162,9 @@ new fn4(null, null); // Error
 new fn4(true, null); // Error
 new fn4(null, true); // Error
 // Non - generic overloads where contextual typing of function arguments has errors
-var fn5 = /** @class */ (function () {
-    function fn5() {
-        return undefined;
-    }
-    return fn5;
-}());
-new fn5(function (n) { return n.toFixed(); });
-new fn5(function (n) { return n.substr(0); });
-new fn5(function (n) { return n.blah; }); // Error
+class fn5 {
+    constructor() { return undefined; }
+}
+new fn5((n) => n.toFixed());
+new fn5((n) => n.substr(0));
+new fn5((n) => n.blah); // Error

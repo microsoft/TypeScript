@@ -27,6 +27,6 @@ const matches = x.get(id1);
 
 //// [partiallyNamedTuples2.js]
 "use strict";
-var x = null;
-var id1 = "abc";
-var matches = x.get(id1);
+const x = null;
+const id1 = "abc";
+const matches = x.get(id1);

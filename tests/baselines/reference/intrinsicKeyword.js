@@ -25,14 +25,14 @@ function f3() {
 
 //// [intrinsicKeyword.js]
 "use strict";
-var e1;
-var e2;
+let e1;
+let e2;
 function f1() {
-    var intrinsic;
+    let intrinsic;
 }
 function f2(intrinsic) {
     return intrinsic;
 }
 function f3() {
-    var s1 = 'ok';
+    let s1 = 'ok';
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // tricky interface
 interface Settable<T, V> {
     set(value: V): T;

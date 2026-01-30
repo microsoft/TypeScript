@@ -40,28 +40,24 @@ function f<
 
 
 //// [collectionPatternNoError.js]
-var Message = /** @class */ (function () {
-    function Message() {
-    }
-    Message.prototype.clone = function () {
+class Message {
+    clone() {
         return this;
-    };
-    return Message;
-}());
+    }
+}
 function fetchMsg(protoCtor) {
     return null;
 }
-var DataProvider = /** @class */ (function () {
-    function DataProvider(message, messageList) {
+class DataProvider {
+    constructor(message, messageList) {
         this.message = message;
         this.messageList = messageList;
     }
-    DataProvider.prototype.fetch = function () {
-        var messageList = fetchMsg(this.messageList);
+    fetch() {
+        const messageList = fetchMsg(this.messageList);
         messageList.methodOnMessageList();
-    };
-    return DataProvider;
-}());
+    }
+}
 // The same bug as the above but using indexed accesses
 // (won't surface directly unless unsound indexed access assignments are forbidden)
 function f(message, messageList) {

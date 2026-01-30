@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M.buz.plop {
     export function doom() { }
     export function M() { }

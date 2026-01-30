@@ -1,5 +1,5 @@
 // @sourcemap: true
-// @target: es5
+// @target: es5, es2015
 class Greeter {
     constructor(public greeting: string, ...b: string[]) {
     }

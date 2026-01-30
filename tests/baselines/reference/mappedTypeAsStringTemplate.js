@@ -13,5 +13,5 @@ foo(c);
 //// [mappedTypeAsStringTemplate.js]
 // Repro from #44220
 function foo(foox) { }
-var c = { x: 1 };
+const c = { x: 1 };
 foo(c);

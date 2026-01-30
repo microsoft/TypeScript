@@ -17,16 +17,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var a;
 (function (a) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     a.c = c;
 })(a || (exports.a = a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
 "use strict";
-var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
+const es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
 var x = es6ImportNamedImportInIndirectExportAssignment_0_1.a;
 module.exports = x;
 

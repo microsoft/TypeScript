@@ -1,3 +1,4 @@
+// @target: es2015
 class ConcreteA {}
 class ConcreteB {}
 abstract class AbstractA { a: string; }

@@ -1,3 +1,4 @@
+// @target: es2015
 interface IPropertySet {
 
     [index: string]: any;

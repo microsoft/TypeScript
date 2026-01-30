@@ -7,7 +7,7 @@
 ////var t = '10';
 
 // @Filename: tsconfig.json
-////{ "files": ["test.ts", "test1.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["test.ts", "test1.ts"] }
 
 var overridingContent = "var t = 10; t.";
 goTo.file("test.ts", overridingContent);

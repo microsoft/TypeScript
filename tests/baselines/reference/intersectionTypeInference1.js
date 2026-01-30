@@ -11,11 +11,8 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 
 
 //// [intersectionTypeInference1.js]
-"use strict";
 // Repro from #8801
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Form3 = void 0;
 function alert(s) { }
-var parameterFn = function (props) { return alert(props.store); };
-var brokenFunction = function (f) { return function (o) { return o; }; };
-exports.Form3 = brokenFunction(parameterFn)({ store: "hello" });
+const parameterFn = (props) => alert(props.store);
+const brokenFunction = (f) => (o) => o;
+export const Form3 = brokenFunction(parameterFn)({ store: "hello" });

@@ -61,20 +61,17 @@ var ResultIsNumber19 = +(undefined + undefined);
 //// [plusOperatorWithAnyOtherType.js]
 // + operator on any type
 var ANY2 = ["", ""];
-var obj1 = { x: function (s) { }, y: function (s1) { } };
+var obj1 = { x: (s) => { }, y: (s1) => { } };
 function foo() {
     var a = undefined;
     return a;
 }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () {
+class A {
+    static foo() {
         var a = undefined;
         return a;
-    };
-    return A;
-}());
+    }
+}
 var M;
 (function (M) {
     M.n = undefined;

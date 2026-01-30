@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @allowjs: true
 // @outDir: dist
 // @Filename: c.js

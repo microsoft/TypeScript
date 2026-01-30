@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 for (var i = 0; i < 10; i++) { // ok

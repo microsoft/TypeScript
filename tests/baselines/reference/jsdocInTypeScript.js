@@ -93,11 +93,8 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var T = /** @class */ (function () {
-    function T() {
-    }
-    return T;
-}());
+class T {
+}
 x.prop;
 // @param type has no effect.
 /**
@@ -110,21 +107,21 @@ f(1);
 f(true).length;
 // @type has no effect either.
 /** @type {{ x?: number }} */
-var z = {};
+const z = {};
 z.x = 1; // Error
 /** @template T */
 function tem(t) { return {}; }
-var i; // Should succeed thanks to type parameter default
+let i; // Should succeed thanks to type parameter default
 /** @typedef {string} N.Str */
 var M = N; // Error: @typedef does not create namespaces in TypeScript code.
 // Not legal JSDoc, but that shouldn't matter in TypeScript.
 /**
  * @type {{foo: (function(string, string): string)}}
  */
-var obj = { foo: function (a, b) { return a + b; } };
+const obj = { foo: (a, b) => a + b };
 /** @enum {string} */
 var E = {};
 E[""];
 // make sure import types in JSDoc are not resolved
 /** @type {import("should-not-be-resolved").Type} */
-var v = Promise.resolve("".concat(String())).then(function (s) { return __importStar(require(s)); });
+var v = Promise.resolve(`${String()}`).then(s => __importStar(require(s)));

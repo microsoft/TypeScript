@@ -1,3 +1,4 @@
+// @target: es2015
 // some complex cases of assignment compat of generic signatures.
 
 interface I2<T> {

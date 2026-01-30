@@ -1,3 +1,4 @@
+// @target: es2015
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {
     let a!: any;

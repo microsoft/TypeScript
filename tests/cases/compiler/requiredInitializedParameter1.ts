@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function f1(a, b = 0, c) { }
 function f2(a, b = 0, c = 0) { }

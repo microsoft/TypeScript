@@ -1,3 +1,4 @@
+// @target: es2015
 class SomeBase {
     static GetNumber() {
         return 2;

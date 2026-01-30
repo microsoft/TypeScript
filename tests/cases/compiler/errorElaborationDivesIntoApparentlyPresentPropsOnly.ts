@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function foo<T extends { a: string }>(x: T) {
     x = { a: "abc", b: 20, c: 30 };

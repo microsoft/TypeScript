@@ -1,3 +1,4 @@
+// @target: es2015
 let data = {
 	public foo: 'hey',
 	private bar: 'nay',

@@ -9,7 +9,7 @@
 /////** empty */
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-///// { "compilerOptions": { "newLine": "lf" } }
+///// { "compilerOptions": { "newLine": "lf", "lib": ["es5"] } }
 
 verify.moveToFile({
     newFileContents: {

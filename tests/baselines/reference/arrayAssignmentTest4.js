@@ -27,12 +27,9 @@ arr_any = c3; // should be an error - is
 
 
 //// [arrayAssignmentTest4.js]
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    C3.prototype.CM3M1 = function () { return 3; };
-    return C3;
-}());
+class C3 {
+    CM3M1() { return 3; }
+}
 /*
 
 This behaves unexpectedly with teh following types:

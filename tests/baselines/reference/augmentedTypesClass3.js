@@ -17,35 +17,23 @@ class c5c { public foo() { } }
 
 //// [augmentedTypesClass3.js]
 // class then module
-var c5 = /** @class */ (function () {
-    function c5() {
-    }
-    c5.prototype.foo = function () { };
-    return c5;
-}());
-var c5a = /** @class */ (function () {
-    function c5a() {
-    }
-    c5a.prototype.foo = function () { };
-    return c5a;
-}());
+class c5 {
+    foo() { }
+}
+class c5a {
+    foo() { }
+}
 (function (c5a) {
     var y = 2;
 })(c5a || (c5a = {})); // should be ok
-var c5b = /** @class */ (function () {
-    function c5b() {
-    }
-    c5b.prototype.foo = function () { };
-    return c5b;
-}());
+class c5b {
+    foo() { }
+}
 (function (c5b) {
     c5b.y = 2;
 })(c5b || (c5b = {})); // should be ok
 //// class then import
-var c5c = /** @class */ (function () {
-    function c5c() {
-    }
-    c5c.prototype.foo = function () { };
-    return c5c;
-}());
+class c5c {
+    foo() { }
+}
 //import c5c = require('');

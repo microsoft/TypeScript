@@ -22,9 +22,9 @@ function foo(v) {
     function c(v) {
         function a(a) { return a; }
         function b() { return v; }
-        return { a: a, b: b };
+        return { a, b };
     }
-    return { a: a, b: b, c: c };
+    return { a, b, c };
 }
 
 

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace X {
     export namespace Y {
         export interface Z { }

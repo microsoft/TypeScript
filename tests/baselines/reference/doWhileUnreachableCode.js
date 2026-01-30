@@ -16,7 +16,7 @@ function test() {
 
 //// [doWhileUnreachableCode.js]
 function test() {
-    var foo = 0;
+    let foo = 0;
     testLoop: do {
         foo++;
         continue testLoop;

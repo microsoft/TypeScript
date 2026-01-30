@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es2021
 
 new Intl.DateTimeFormat().formatRange(new Date(0), new Date());

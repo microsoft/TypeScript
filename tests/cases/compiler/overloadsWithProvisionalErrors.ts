@@ -1,3 +1,4 @@
+// @target: es2015
 declare var func: {
     (s: string): number;
     (lambda: (s: string) => { a: number; b: number }): string;

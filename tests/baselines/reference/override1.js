@@ -47,80 +47,38 @@ function ff () {
 }
 
 //// [override1.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var B = /** @class */ (function () {
-    function B() {
-    }
-    B.prototype.foo = function (v) { };
-    B.prototype.fooo = function (v) { };
-    return B;
-}());
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D.prototype.foo = function (v) { };
-    D.prototype.fooo = function (v) { };
-    D.prototype.bar = function (v) { };
-    return D;
-}(B));
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (v) { };
-    return C;
-}());
-function f() {
-    return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        class_1.prototype.foo = function (v) { };
-        class_1.prototype.fooo = function (v) { };
-        class_1.prototype.bar = function (v) { };
-        return class_1;
-    }(B));
+class B {
+    foo(v) { }
+    fooo(v) { }
 }
-var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    E.prototype.foo = function () { };
-    E.prototype.bar = function () { };
-    E.prototype.baz = function () { };
-    E.prototype.bazz = function () { };
-    return E;
-}((/** @class */ (function () {
-    function class_2() {
-    }
-    class_2.prototype.foo = function () { };
-    class_2.prototype.bar = function () { };
-    return class_2;
-}()))));
+class D extends B {
+    foo(v) { }
+    fooo(v) { }
+    bar(v) { }
+}
+class C {
+    foo(v) { }
+}
+function f() {
+    return class extends B {
+        foo(v) { }
+        fooo(v) { }
+        bar(v) { }
+    };
+}
+class E extends (class {
+    foo() { }
+    bar() { }
+}) {
+    foo() { }
+    bar() { }
+    baz() { }
+    bazz() { }
+}
 function ff() {
-    return /** @class */ (function () {
-        function class_3() {
-        }
-        class_3.prototype.foo = function () { };
-        return class_3;
-    }());
+    return class {
+        foo() { }
+    };
 }
 
 

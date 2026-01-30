@@ -1,3 +1,4 @@
+// @target: es2015
 class A<T> { foo: T; }
 
 class C<T> {

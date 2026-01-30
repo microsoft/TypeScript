@@ -16,17 +16,16 @@ class Point {
 
 //// [instanceAndStaticDeclarations1.js]
 // from spec
-var Point = /** @class */ (function () {
-    function Point(x, y) {
+class Point {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.distance = function (p) {
+    distance(p) {
         var dx = this.x - p.x;
         var dy = this.y - p.y;
         return Math.sqrt(dx * dx + dy * dy);
-    };
-    Point.distance = function (p1, p2) { return p1.distance(p2); };
-    Point.origin = new Point(0, 0);
-    return Point;
-}());
+    }
+    static distance(p1, p2) { return p1.distance(p2); }
+}
+Point.origin = new Point(0, 0);

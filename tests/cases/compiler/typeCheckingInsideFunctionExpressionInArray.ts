@@ -1,3 +1,4 @@
+// @target: es2015
 var functions = [function () {
   var k: string = 10;
     k = new Object();

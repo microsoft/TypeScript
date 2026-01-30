@@ -134,22 +134,13 @@ function level(h: HTMLHeadingElement): number {
 
 //// [recursiveTypeReferences1.js]
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-var a0 = 1;
-var a1 = [1, [2, 3], [4, [5, [6, 7]]]];
-var hypertextNode = ["div", { id: "parent" },
+const a0 = 1;
+const a1 = [1, [2, 3], [4, [5, [6, 7]]]];
+const hypertextNode = ["div", { id: "parent" },
     ["div", { id: "first-child" }, "I'm the first child"],
     ["div", { id: "second-child" }, "I'm the second child"]
 ];
-var data = {
+let data = {
     caption: "Test",
     location: { x: 10, y: 20 },
     values: [true, [10, 20], null]
@@ -163,12 +154,12 @@ function f1(t1, t2, t3) {
     t3 = t1;
     t3 = t2;
 }
-var b10 = 42;
-var b11 = { value: 42 };
-var b12 = { value: { value: { value: 42 } } };
-var b20 = 42; // Error
-var b21 = { value: 42 };
-var b22 = { value: { value: { value: 42 } } };
+const b10 = 42;
+const b11 = { value: 42 };
+const b12 = { value: { value: { value: 42 } } };
+const b20 = 42; // Error
+const b21 = { value: 42 };
+const b22 = { value: { value: { value: 42 } } };
 flat([1, [2, [3]]]); // number[]
 flat([[[0]]]); // number[]
 flat([[[[[[[[[[[4]]]]]]]]]]]); // number[]
@@ -185,32 +176,28 @@ flat2([[[0]]]); // number[]
 flat2([1, 'a', [2]]); // (string | number)[]
 flat2([1, [2, 'a']]); // (string | number)[]
 flat2([1, ['a']]); // Error
-var x1 = foo1(ra1); // Boom!
-var x2 = foo2(ra2); // Boom!
-function parse(node, index) {
-    if (index === void 0) { index = []; }
-    return html('ul', node.map(function (_a, i) {
-        var el = _a[0], children = _a[1];
-        var idx = __spreadArray(__spreadArray([], index, true), [i + 1], false);
+let x1 = foo1(ra1); // Boom!
+let x2 = foo2(ra2); // Boom!
+function parse(node, index = []) {
+    return html('ul', node.map(([el, children], i) => {
+        const idx = [...index, i + 1];
         return html('li', [
-            html('a', { href: "#".concat(el.id), rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
+            html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
             children.length > 0 ? parse(children, idx) : frag()
         ]);
     }));
 }
 function cons(hs) {
     return hs
-        .reduce(function (hss, h) {
-        var hs = hss.pop();
+        .reduce((hss, h) => {
+        const hs = hss.pop();
         return hs.length === 0 || level(h) > level(hs[0])
             ? concat(hss, [concat(hs, [h])])
             : concat(hss, [hs, [h]]);
     }, [[]])
-        .reduce(function (node, hs) {
-        return hs.length === 0
-            ? node
-            : concat(node, [[hs.shift(), cons(hs)]]);
-    }, []);
+        .reduce((node, hs) => hs.length === 0
+        ? node
+        : concat(node, [[hs.shift(), cons(hs)]]), []);
 }
 function level(h) {
     assert(isFinite(+h.tagName[1]));

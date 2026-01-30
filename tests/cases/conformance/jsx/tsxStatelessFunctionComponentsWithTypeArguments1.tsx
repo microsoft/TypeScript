@@ -1,9 +1,10 @@
+// @target: es2015
 // @filename: file.tsx
 // @jsx: preserve
 // @module: amd
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @lib: es5
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react')
 

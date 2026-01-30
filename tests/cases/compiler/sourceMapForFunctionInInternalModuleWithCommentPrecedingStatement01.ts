@@ -1,4 +1,5 @@
-﻿//@sourceMap: true
+﻿// @target: es2015
+//@sourceMap: true
 namespace Q {
     function P() {
         // Test this

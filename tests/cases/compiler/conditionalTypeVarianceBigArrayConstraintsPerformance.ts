@@ -1,3 +1,4 @@
+// @target: es2015
 // @skipLibCheck: true
 /// <reference path="/.lib/react16.d.ts" />
 

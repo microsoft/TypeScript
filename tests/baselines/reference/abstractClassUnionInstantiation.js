@@ -24,30 +24,18 @@ new cls3(); // should work
 [AbstractA, AbstractB].map(cls => new cls()); // should error
 
 //// [abstractClassUnionInstantiation.js]
-var ConcreteA = /** @class */ (function () {
-    function ConcreteA() {
-    }
-    return ConcreteA;
-}());
-var ConcreteB = /** @class */ (function () {
-    function ConcreteB() {
-    }
-    return ConcreteB;
-}());
-var AbstractA = /** @class */ (function () {
-    function AbstractA() {
-    }
-    return AbstractA;
-}());
-var AbstractB = /** @class */ (function () {
-    function AbstractB() {
-    }
-    return AbstractB;
-}());
+class ConcreteA {
+}
+class ConcreteB {
+}
+class AbstractA {
+}
+class AbstractB {
+}
 new cls1(); // should error
 new cls2(); // should error
 new cls3(); // should work
-[ConcreteA, AbstractA, AbstractB].map(function (cls) { return new cls(); }); // should error
-[AbstractA, AbstractB, ConcreteA].map(function (cls) { return new cls(); }); // should error
-[ConcreteA, ConcreteB].map(function (cls) { return new cls(); }); // should work
-[AbstractA, AbstractB].map(function (cls) { return new cls(); }); // should error
+[ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+[AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
+[ConcreteA, ConcreteB].map(cls => new cls()); // should work
+[AbstractA, AbstractB].map(cls => new cls()); // should error

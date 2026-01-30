@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 var { } = { x: 5, y: "hello" };

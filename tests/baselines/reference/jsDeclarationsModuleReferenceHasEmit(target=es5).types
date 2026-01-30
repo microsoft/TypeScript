@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsModuleReferenceHasEmit.ts] ////
+
+=== index.js ===
+/**
+ * @module A
+ */
+class A {}
+>A : A
+>  : ^
+
+
+/**
+ * Target element
+ * @type {module:A}
+ */
+export let el = null;
+>el : error
+
+export default A;
+>A : A
+>  : ^
+

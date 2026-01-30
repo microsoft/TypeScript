@@ -1,3 +1,4 @@
+// @target: es2015
 class Model<Attributes = any> {
     public createdAt: Date;
 }

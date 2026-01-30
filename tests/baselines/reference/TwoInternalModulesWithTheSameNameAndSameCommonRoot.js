@@ -42,7 +42,7 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 //// [part1.js]
 var A;
 (function (A) {
-    var Utils;
+    let Utils;
     (function (Utils) {
         function mirror(p) {
             return { x: p.y, y: p.x };
@@ -54,15 +54,14 @@ var A;
 var A;
 (function (A) {
     A.Origin = { x: 0, y: 0 };
-    var Utils;
+    let Utils;
     (function (Utils) {
-        var Plane = /** @class */ (function () {
-            function Plane(tl, br) {
+        class Plane {
+            constructor(tl, br) {
                 this.tl = tl;
                 this.br = br;
             }
-            return Plane;
-        }());
+        }
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (A = {}));

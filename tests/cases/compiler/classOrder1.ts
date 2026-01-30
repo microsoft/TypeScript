@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     public foo() {
         /*WScript.Echo("Here!");*/

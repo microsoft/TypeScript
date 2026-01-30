@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // @strict: false
 // Functions
 function f1(arguments: number, ...restParameters) { //arguments is error

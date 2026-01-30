@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 const fn1 = <Params>(
     params: Pick<Params, Exclude<keyof Params, never>>,

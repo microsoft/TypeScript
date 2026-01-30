@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 // these should be errors for implicit any parameter
 var lambda = (l1) => { };       // Error at "l1"

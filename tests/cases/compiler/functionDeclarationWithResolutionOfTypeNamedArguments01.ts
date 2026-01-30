@@ -1,4 +1,5 @@
-﻿interface arguments {
+﻿// @target: es2015
+interface arguments {
 }
 
 function f() {

@@ -1,5 +1,5 @@
 // @strict: false
-// @target: ES5
+// @target: ES5, ES2015
 
 const z7 = false;
 const z8: number = 23;

@@ -5,6 +5,9 @@
 ////export {};
 // @filename: /dir/tsconfig.json
 ////{
+////    "compilerOptions": {
+////        "module": "commonjs"
+////    }
 ////}
 
 // cannot fix module when default options are applied

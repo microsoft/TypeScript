@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Editor {
 
     export class List<T> {

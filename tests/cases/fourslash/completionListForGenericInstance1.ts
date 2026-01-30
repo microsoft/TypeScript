@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////interface Iterator<T, U> {
 ////    (value: T, index: any, list: any): U
 ////}

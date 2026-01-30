@@ -1,3 +1,4 @@
+// @target: es2015
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 f(1, "") === false;
 

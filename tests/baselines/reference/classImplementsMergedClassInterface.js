@@ -26,23 +26,11 @@ class C5 implements C1 { // okay
 }
 
 //// [classImplementsMergedClassInterface.js]
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var C4 = /** @class */ (function () {
-    function C4() {
-    }
-    return C4;
-}());
-var C5 = /** @class */ (function () {
-    function C5() {
-    }
-    return C5;
-}());
+class C2 {
+}
+class C3 {
+}
+class C4 {
+}
+class C5 {
+}

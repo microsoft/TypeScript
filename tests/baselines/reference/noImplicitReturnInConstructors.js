@@ -8,9 +8,8 @@ class C {
 }
 
 //// [noImplicitReturnInConstructors.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         return;
     }
-    return C;
-}());
+}

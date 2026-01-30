@@ -1,7 +1,8 @@
+// @module: commonjs
+// @target: es5, es2015
 // @strict: false
 // @allowJs: true
 // @checkJs: true
-// @target: es5
 // @outDir: ./out
 // @declaration: true
 // @filename: index.js

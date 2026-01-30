@@ -1,3 +1,4 @@
+// @target: es2015
 if (0) {
 } else if (1) {
 } else if (2) {

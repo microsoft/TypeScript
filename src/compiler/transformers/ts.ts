@@ -1055,6 +1055,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
+                // Ignore parameter properties with destructured names; we will have errored on them earlier.
+                if (!isIdentifier(parameter.name)) {
+                    continue;
+                }
                 const parameterProperty = factory.createPropertyDeclaration(
                     /*modifiers*/ undefined,
                     parameter.name,

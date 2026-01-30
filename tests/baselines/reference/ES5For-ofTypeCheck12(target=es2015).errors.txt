@@ -1,0 +1,7 @@
+ES5For-ofTypeCheck12.ts(1,17): error TS2488: Type '0' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== ES5For-ofTypeCheck12.ts (1 errors) ====
+    for (const v of 0) { }
+                    ~
+!!! error TS2488: Type '0' must have a '[Symbol.iterator]()' method that returns an iterator.

@@ -68,17 +68,11 @@ K.One;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
-    return default_1;
-}());
+class default_1 {
+}
 exports.default = default_1;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [b.js]
 "use strict";
@@ -91,8 +85,8 @@ console.log(a, b);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
-var a = a_1.A;
+const a_1 = require("./a");
+const a = a_1.A;
 console.log(a, b);
 //// [e.js]
 "use strict";
@@ -101,8 +95,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 0 /* C.One */;
-var c = 1 /* C.Two */;
-var d = 1 /* C.Two */;
+let c = 1 /* C.Two */;
+let d = 1 /* C.Two */;
 console.log(c, d);
 //// [g.js]
 "use strict";
@@ -110,16 +104,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 console.log(c, d);
 //// [h.js]
 "use strict";
-var H = /** @class */ (function () {
-    function H() {
-    }
-    return H;
-}());
+class H {
+}
 module.exports = H;
 //// [i.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var h = {};
+let h = {};
 console.log(h);
 //// [j.js]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

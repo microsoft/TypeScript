@@ -10,7 +10,7 @@ function foo(a) {
 
 //// [out.js]
 function foo(a) {
-    for (var a_1 = 0; a_1 < 10; a_1++) {
+    for (let a = 0; a < 10; a++) {
         // do something
     }
 }

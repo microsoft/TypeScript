@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 export class BuildWorkspaceService {
     public injectRequestService<P0, P1, P2>(service: P0) {

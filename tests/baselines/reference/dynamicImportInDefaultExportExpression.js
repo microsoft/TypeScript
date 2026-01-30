@@ -45,6 +45,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     getInstance: function () {
-        return Promise.resolve().then(function () { return __importStar(require('./foo2')); });
+        return Promise.resolve().then(() => __importStar(require('./foo2')));
     }
 };

@@ -1,0 +1,13 @@
+decoratorOnClassProperty6.ts(4,6): error TS1240: Unable to resolve signature of property decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
+
+
+==== decoratorOnClassProperty6.ts (1 errors) ====
+    declare function dec(target: Function): void;
+    
+    class C {
+        @dec prop;
+         ~~~
+!!! error TS1240: Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1240:   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
+    }

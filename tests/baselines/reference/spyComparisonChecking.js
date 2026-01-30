@@ -27,9 +27,8 @@ function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 
 //// [spyComparisonChecking.js]
 function mock(spyName, methodNames) {
-    var spyObj = createSpyObj(spyName, methodNames);
-    for (var _i = 0, methodNames_1 = methodNames; _i < methodNames_1.length; _i++) {
-        var methodName = methodNames_1[_i];
+    const spyObj = createSpyObj(spyName, methodNames);
+    for (const methodName of methodNames) {
         spyObj[methodName].and.returnValue(1);
     }
     return spyObj;

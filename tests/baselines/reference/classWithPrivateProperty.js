@@ -26,17 +26,16 @@ var r8: string = C.g();
 
 //// [classWithPrivateProperty.js]
 // accessing any private outside the class is an error
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.a = '';
         this.b = '';
-        this.d = function () { return ''; };
+        this.d = () => '';
     }
-    C.prototype.c = function () { return ''; };
-    C.f = function () { return ''; };
-    C.g = function () { return ''; };
-    return C;
-}());
+    c() { return ''; }
+    static f() { return ''; }
+}
+C.g = () => '';
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

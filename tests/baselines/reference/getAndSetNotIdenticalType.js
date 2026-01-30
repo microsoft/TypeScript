@@ -9,16 +9,9 @@ class C {
 }
 
 //// [getAndSetNotIdenticalType.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get x() {
+        return 1;
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return 1;
-        },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    set x(v) { }
+}

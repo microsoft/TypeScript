@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: es5,es2017.object
 
 var o = { a: 1, b: 2 };

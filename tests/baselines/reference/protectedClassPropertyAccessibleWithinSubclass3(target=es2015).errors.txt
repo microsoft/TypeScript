@@ -1,0 +1,19 @@
+protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
+
+
+==== protectedClassPropertyAccessibleWithinSubclass3.ts (1 errors) ====
+    class Base {
+        protected x: string;
+        method() {
+            this.x;            // OK, accessed within their declaring class
+        }
+    }
+    
+    class Derived extends Base {
+        method1() {
+            this.x;            // OK, accessed within a subclass of the declaring class
+            super.x;           // Error, x is not public
+                  ~
+!!! error TS2855: Class field 'x' defined by the parent class is not accessible in the child class via super.
+        }
+    }

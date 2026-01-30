@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {
     inAll: string;
     notInB: string;

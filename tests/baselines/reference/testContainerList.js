@@ -13,10 +13,9 @@ namespace A {
 // Regression test for #325
 var A;
 (function (A) {
-    var C = /** @class */ (function () {
-        function C(d) {
+    class C {
+        constructor(d) {
             this.d = d;
         }
-        return C;
-    }());
+    }
 })(A || (A = {}));

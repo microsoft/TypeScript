@@ -27,13 +27,10 @@ var M;
     M.x = 1;
     function f() { }
     M.f = f;
-    var N;
+    let N;
     (function (N) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         N.C = C;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));

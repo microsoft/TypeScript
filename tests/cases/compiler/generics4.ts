@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T> { private x: T; }
 interface X { f(): string; }
 interface Y { f(): boolean; }

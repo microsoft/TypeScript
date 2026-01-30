@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 // @lib: esnext
 // @filename: O1.ts
 const o1 = {

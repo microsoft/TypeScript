@@ -1,3 +1,4 @@
+// @target: es2015
 namespace MsPortal.Controls.Base.ItemList {
 
     export interface Interface<TValue> {

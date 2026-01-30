@@ -1,3 +1,4 @@
+// @target: es2015
 function M() {
     var m = class C<X> {
         f<T>() {

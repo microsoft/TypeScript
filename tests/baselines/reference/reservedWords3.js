@@ -15,11 +15,8 @@ var ;
 })( || ( = {}));
 { }
 function f2() { }
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
-    return default_1;
-}());
+class {
+}
 { }
 function f3() { }
 function () { }

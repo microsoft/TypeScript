@@ -70,69 +70,45 @@ declare class c6NoError {
 
 //// [collisionRestParameterClassConstructor.js]
 // Constructors
-var c1 = /** @class */ (function () {
-    function c1(_i) {
-        var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
-        }
+class c1 {
+    constructor(_i, ...restParameters) {
         var _i = 10; // no error
     }
-    return c1;
-}());
-var c1NoError = /** @class */ (function () {
-    function c1NoError(_i) {
+}
+class c1NoError {
+    constructor(_i) {
         var _i = 10; // no error
     }
-    return c1NoError;
-}());
-var c2 = /** @class */ (function () {
-    function c2() {
-        var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a] = arguments[_a];
-        }
+}
+class c2 {
+    constructor(...restParameters) {
         var _i = 10; // no error
     }
-    return c2;
-}());
-var c2NoError = /** @class */ (function () {
-    function c2NoError() {
+}
+class c2NoError {
+    constructor() {
         var _i = 10; // no error
     }
-    return c2NoError;
-}());
-var c3 = /** @class */ (function () {
-    function c3(_i) {
-        var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
-        }
+}
+class c3 {
+    constructor(_i, ...restParameters) {
         this._i = _i;
         var _i = 10; // no error
     }
-    return c3;
-}());
-var c3NoError = /** @class */ (function () {
-    function c3NoError(_i) {
+}
+class c3NoError {
+    constructor(_i) {
         this._i = _i;
         var _i = 10; // no error
     }
-    return c3NoError;
-}());
-var c5 = /** @class */ (function () {
-    function c5(_i) {
-        var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
-        }
+}
+class c5 {
+    constructor(_i, ...rest) {
         var _i; // no error
     }
-    return c5;
-}());
-var c5NoError = /** @class */ (function () {
-    function c5NoError(_i) {
+}
+class c5NoError {
+    constructor(_i) {
         var _i; // no error
     }
-    return c5NoError;
-}());
+}

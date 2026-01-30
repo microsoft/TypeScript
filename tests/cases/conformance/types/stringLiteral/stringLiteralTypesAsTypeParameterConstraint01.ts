@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 function foo<T extends "foo">(f: (x: T) => T) {
     return f;

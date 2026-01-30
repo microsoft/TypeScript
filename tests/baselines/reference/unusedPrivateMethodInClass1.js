@@ -8,11 +8,8 @@ class greeter {
 }
 
 //// [unusedPrivateMethodInClass1.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
-    }
-    greeter.prototype.function1 = function () {
+class greeter {
+    function1() {
         var y = 10;
-    };
-    return greeter;
-}());
+    }
+}

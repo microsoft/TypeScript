@@ -1,7 +1,8 @@
+// @target: es2015
 // @strict: true
 // @jsx: preserve
 // @skipLibCheck: true
-// @libFiles: lib.d.ts,react.d.ts
+/// <reference path="/.lib/react.d.ts" />
 interface A { isIt: true; text: string; }
 interface B { isIt: false; value: number; }
 type C = A | B;

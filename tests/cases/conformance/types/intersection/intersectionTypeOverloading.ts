@@ -1,3 +1,4 @@
+// @target: es2015
 // Check that order is preserved in intersection types for purposes of
 // overload resolution
 

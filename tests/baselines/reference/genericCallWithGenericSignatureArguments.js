@@ -52,21 +52,21 @@ function foo(a, b) {
     return r;
 }
 //var r1 = foo((x: number) => 1, (x: string) => ''); // error
-var r1b = foo(function (x) { return 1; }, function (x) { return ''; }); // {} => {}
-var r2 = foo(function (x) { return null; }, function (x) { return ''; }); // Object => Object
-var r3 = foo(function (x) { return 1; }, function (x) { return null; }); // number => number
-var r3ii = foo(function (x) { return 1; }, function (x) { return 1; }); // number => number
+var r1b = foo((x) => 1, (x) => ''); // {} => {}
+var r2 = foo((x) => null, (x) => ''); // Object => Object
+var r3 = foo((x) => 1, (x) => null); // number => number
+var r3ii = foo((x) => 1, (x) => 1); // number => number
 var a;
 var b;
-var r4 = foo(function (x) { return a; }, function (x) { return b; }); // typeof a => typeof a
-var r5 = foo(function (x) { return b; }, function (x) { return a; }); // typeof b => typeof b
+var r4 = foo((x) => a, (x) => b); // typeof a => typeof a
+var r5 = foo((x) => b, (x) => a); // typeof b => typeof b
 function other(x) {
-    var r6 = foo(function (a) { return a; }, function (b) { return b; }); // T => T
-    var r6b = foo(function (a) { return a; }, function (b) { return b; }); // {} => {}
+    var r6 = foo((a) => a, (b) => b); // T => T
+    var r6b = foo((a) => a, (b) => b); // {} => {}
 }
 function other2(x) {
-    var r7 = foo(function (a) { return a; }, function (b) { return b; }); // T => T
-    var r7b = foo(function (a) { return a; }, function (b) { return b; }); // {} => {}
+    var r7 = foo((a) => a, (b) => b); // T => T
+    var r7b = foo((a) => a, (b) => b); // {} => {}
     var r8 = r7(null);
     // BUG 835518
     //var r9 = r7(new Date());
@@ -76,5 +76,5 @@ function foo2(a, b) {
     return r;
 }
 function other3(x) {
-    var r8 = foo2(function (a) { return a; }, function (b) { return b; }); // Date => Date
+    var r8 = foo2((a) => a, (b) => b); // Date => Date
 }

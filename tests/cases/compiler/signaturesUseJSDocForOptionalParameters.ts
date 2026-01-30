@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @outFile: out_1.js
 // @filename: jsDocOptionality.js

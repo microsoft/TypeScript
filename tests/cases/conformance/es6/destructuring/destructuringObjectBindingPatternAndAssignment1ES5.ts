@@ -1,4 +1,5 @@
-﻿// In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
+﻿// @target: es2015
+// In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
 
 // V is an object assignment pattern and, for each assignment property P in V,

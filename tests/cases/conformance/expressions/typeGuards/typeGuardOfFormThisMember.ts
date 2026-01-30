@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @declaration: true
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {

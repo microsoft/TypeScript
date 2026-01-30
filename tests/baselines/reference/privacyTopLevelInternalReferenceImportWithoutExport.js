@@ -109,13 +109,10 @@ define(["require", "exports"], function (require, exports) {
     // private elements
     var m_private;
     (function (m_private) {
-        var c_private = /** @class */ (function () {
-            function c_private() {
-            }
-            return c_private;
-        }());
+        class c_private {
+        }
         m_private.c_private = c_private;
-        var e_private;
+        let e_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
             e_private[e_private["Grumpy"] = 1] = "Grumpy";
@@ -125,26 +122,20 @@ define(["require", "exports"], function (require, exports) {
         }
         m_private.f_private = f_private;
         m_private.v_private = new c_private();
-        var mi_private;
+        let mi_private;
         (function (mi_private) {
-            var c = /** @class */ (function () {
-                function c() {
-                }
-                return c;
-            }());
+            class c {
+            }
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
     // Public elements
     var m_public;
     (function (m_public) {
-        var c_public = /** @class */ (function () {
-            function c_public() {
-            }
-            return c_public;
-        }());
+        class c_public {
+        }
         m_public.c_public = c_public;
-        var e_public;
+        let e_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
             e_public[e_public["Grumpy"] = 1] = "Grumpy";
@@ -154,13 +145,10 @@ define(["require", "exports"], function (require, exports) {
         }
         m_public.f_public = f_public;
         m_public.v_public = 10;
-        var mi_public;
+        let mi_public;
         (function (mi_public) {
-            var c = /** @class */ (function () {
-                function c() {
-                }
-                return c;
-            }());
+            class c {
+            }
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public || (exports.m_public = m_public = {}));

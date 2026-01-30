@@ -15,17 +15,14 @@ class C {
 }
 
 //// [instanceMemberAssignsToClassPrototype.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo() {
+        C.prototype.foo = () => { };
     }
-    C.prototype.foo = function () {
-        C.prototype.foo = function () { };
-    };
-    C.prototype.bar = function (x) {
-        C.prototype.bar = function () { }; // error
-        C.prototype.bar = function (x) { return x; }; // ok
-        C.prototype.bar = function (x) { return 1; }; // ok
+    bar(x) {
+        C.prototype.bar = () => { }; // error
+        C.prototype.bar = (x) => x; // ok
+        C.prototype.bar = (x) => 1; // ok
         return 1;
-    };
-    return C;
-}());
+    }
+}

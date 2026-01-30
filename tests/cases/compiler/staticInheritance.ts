@@ -1,3 +1,4 @@
+// @target: es2015
 function doThing(x: { n: string }) { }
 class A {
     static n: string;

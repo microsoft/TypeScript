@@ -86,6 +86,8 @@ declare const console: { log(msg: any): void; };
 Output::
 app/src/index.ts(2,28): error TS2613: Module '"/home/src/workspaces/project/app/src/local"' has no default export. Did you mean to use 'import { local } from "/home/src/workspaces/project/app/src/local"' instead?
 app/src/index.ts(3,28): error TS2613: Module '"/home/src/workspaces/project/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/home/src/workspaces/project/node_modules/esm-package/index"' instead?
+app/src/index.ts(4,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/a"' has no default export.
+app/src/index.ts(5,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/a"' has no default export.
 
 
 //// [/home/src/workspaces/project/app/dist/local.js]

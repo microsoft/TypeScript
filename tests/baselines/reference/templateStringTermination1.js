@@ -4,4 +4,4 @@
 ``
 
 //// [templateStringTermination1.js]
-"";
+``;

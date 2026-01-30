@@ -1,3 +1,4 @@
+// @target: es2015
 // string can add every type, and result string cannot be assigned to below types
 enum E { a, b, c }
 

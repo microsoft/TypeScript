@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @module: commonjs
 
 // @Filename: /node_modules/global/index.d.ts
 ////export const x: number;

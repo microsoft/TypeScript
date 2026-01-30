@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare const a: { p: string | undefined, m(): string | undefined };

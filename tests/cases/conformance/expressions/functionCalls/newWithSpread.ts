@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 
 function f(x: number, y: number, ...z: string[]) {

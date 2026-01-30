@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: types.d.ts
 declare function foo(props: any): any;
 export default foo;

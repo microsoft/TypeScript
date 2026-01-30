@@ -102,50 +102,17 @@ namespace Errors {
 
 //// [assignmentCompatWithCallSignatures4.js]
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Errors;
 (function (Errors) {
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
-    var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived;
-    }(Base));
-    var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived2;
-    }(Derived));
-    var OtherDerived = /** @class */ (function (_super) {
-        __extends(OtherDerived, _super);
-        function OtherDerived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return OtherDerived;
-    }(Base));
-    var WithNonGenericSignaturesInBaseType;
+    class Base {
+    }
+    class Derived extends Base {
+    }
+    class Derived2 extends Derived {
+    }
+    class OtherDerived extends Base {
+    }
+    let WithNonGenericSignaturesInBaseType;
     (function (WithNonGenericSignaturesInBaseType) {
         a2 = b2;
         b2 = a2;
@@ -168,7 +135,7 @@ var Errors;
         a17 = b17;
         b17 = a17;
     })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
-    var WithGenericSignaturesInBaseType;
+    let WithGenericSignaturesInBaseType;
     (function (WithGenericSignaturesInBaseType) {
         a2 = b2;
         b2 = a2;

@@ -1,4 +1,5 @@
-﻿namespace M {
+﻿// @target: es2015
+namespace M {
     interface P { x: number; y: number; }
     export var a = 1
 }

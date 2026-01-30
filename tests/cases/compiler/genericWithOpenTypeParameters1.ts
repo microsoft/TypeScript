@@ -1,3 +1,4 @@
+// @target: es2015
 class B<T> {
    foo(x: T): T { return null; }
 }

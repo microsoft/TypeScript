@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 
 // https://github.com/Microsoft/TypeScript/issues/11236
 while (true)

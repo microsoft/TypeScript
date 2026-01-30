@@ -8,10 +8,7 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod4.js]
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    f1() {
     }
-    A.prototype.f1 = function () {
-    };
-    return A;
-}());
+}

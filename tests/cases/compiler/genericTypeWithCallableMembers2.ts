@@ -1,3 +1,4 @@
+// @target: es2015
 function foo1<T extends { (): string; }>(f: T) {
     return f(); // should return 'string', once returned 'any'
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 /// Copyright (c) 2012 Ecma International.  All rights reserved. 

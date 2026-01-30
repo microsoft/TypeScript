@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////namespace M {
 ////    export interface I { }
 ////    export class C {

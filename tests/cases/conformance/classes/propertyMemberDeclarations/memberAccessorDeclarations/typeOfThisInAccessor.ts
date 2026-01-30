@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     get x() {
         var r = this; // C

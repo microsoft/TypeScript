@@ -1,3 +1,4 @@
+// @target: es2015
 enum E { a, b, c }
 
 function foo<T>(t: T) {

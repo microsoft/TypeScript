@@ -20,12 +20,9 @@ function f1() { }
 function f2() { }
 function f2() { }
 function f3() { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m1 = function () { };
-    C.prototype.m2 = function () { };
-    C.prototype.m2 = function () { };
-    C.prototype.m3 = function () { };
-    return C;
-}());
+class C {
+    m1() { }
+    m2() { }
+    m2() { }
+    m3() { }
+}

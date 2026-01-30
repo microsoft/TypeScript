@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Optional parameters should be valid in all the below casts
 

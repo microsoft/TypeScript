@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @strict: false
 // @allowNonTsExtensions: true
 // @Filename: jsdocCallbackTag.js

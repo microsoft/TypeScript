@@ -10,8 +10,8 @@ return <>
 }
 
 //// [jsxFragReactReferenceErrors.js]
-/// <reference path="react18/react18.d.ts" />
-/// <reference path="react18/global.d.ts" />
+/// <reference path="/.lib/react18/react18.d.ts" />
+/// <reference path="/.lib/react18/global.d.ts" />
 export function Component() {
     return <>
   </>;

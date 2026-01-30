@@ -51,4 +51,4 @@ fn(['']);
 fn(4);
 fn({});
 // Should work
-fn(function (a) { });
+fn(a => { });

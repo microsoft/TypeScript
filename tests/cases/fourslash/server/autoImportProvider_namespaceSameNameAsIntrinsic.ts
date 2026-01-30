@@ -14,7 +14,7 @@
 //// { "dependencies": { "fp-ts": "^0.10.4" } }
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs" } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/index.ts
 //// type A = { name: string/**/ }

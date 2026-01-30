@@ -4,4 +4,4 @@
 `\\\`
 
 //// [templateStringUnterminated4.js]
-"\\`";
+`\\\`;

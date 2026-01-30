@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 //Function overload signature with optional parameter followed by non-optional parameter
 function fn4a(x?: number, y: string);

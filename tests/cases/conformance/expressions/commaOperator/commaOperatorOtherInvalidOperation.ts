@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 //Expect to have compiler errors

@@ -31,38 +31,18 @@ class D extends C {
 
 //// [classWithProtectedProperty.js]
 // accessing any protected outside the class is an error
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.a = '';
         this.b = '';
-        this.d = function () { return ''; };
+        this.d = () => '';
     }
-    C.prototype.c = function () { return ''; };
-    C.f = function () { return ''; };
-    C.g = function () { return ''; };
-    return C;
-}());
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D.prototype.method = function () {
+    c() { return ''; }
+    static f() { return ''; }
+}
+C.g = () => '';
+class D extends C {
+    method() {
         // No errors
         var d = new D();
         var r1 = d.x;
@@ -73,6 +53,5 @@ var D = /** @class */ (function (_super) {
         var r6 = C.e;
         var r7 = C.f();
         var r8 = C.g();
-    };
-    return D;
-}(C));
+    }
+}

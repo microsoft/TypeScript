@@ -1,3 +1,4 @@
+// @target: es2015
 interface Object { }
 
 class Foo<T, U extends T> { }

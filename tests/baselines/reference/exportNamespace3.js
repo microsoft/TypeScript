@@ -18,11 +18,8 @@ new a.A(); // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [b.js]
 "use strict";
@@ -68,5 +65,5 @@ exports.a = __importStar(require("./b"));
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 new c_1.a.A(); // Error

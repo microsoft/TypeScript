@@ -1,3 +1,4 @@
+// @target: es2015
 declare const a: [number, string]
 declare const rest: [number, string, ...boolean[]]
 

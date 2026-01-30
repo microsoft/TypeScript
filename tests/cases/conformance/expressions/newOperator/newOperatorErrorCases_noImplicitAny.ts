@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 
 function fnNumber(this: void): number { return 90; }

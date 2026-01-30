@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class A<T> { }
 class B<T> extends A<T> {}

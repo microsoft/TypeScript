@@ -1,3 +1,4 @@
+// @target: es2015
 //@filename: part1.ts
 namespace Root {
     export namespace A {

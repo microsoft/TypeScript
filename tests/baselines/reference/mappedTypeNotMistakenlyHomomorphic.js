@@ -44,7 +44,7 @@ var ABC;
     ABC[ABC["B"] = 1] = "B";
 })(ABC || (ABC = {}));
 // 'a' and 'b' properties required !?!?
-var gen2TypeA = { v: "I am A", a: "" };
-var gen2TypeB = { v: "I am B", b: "" };
+const gen2TypeA = { v: "I am A", a: "" };
+const gen2TypeB = { v: "I am B", b: "" };
 a = b;
 b = a;

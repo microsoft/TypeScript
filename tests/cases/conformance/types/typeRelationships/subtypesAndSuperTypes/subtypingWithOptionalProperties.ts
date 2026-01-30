@@ -1,3 +1,4 @@
+// @target: es2015
 // subtyping is not transitive due to optional properties but the subtyping algorithm assumes it is for the 99% case
 
 // returns { s?: number; }

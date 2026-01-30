@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @declaration: true
 // @emitDeclarationOnly: true
 import {Foo} from './a';

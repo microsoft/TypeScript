@@ -13,11 +13,10 @@ namespace mod {
 //// [parameterPropertyInConstructor2.js]
 var mod;
 (function (mod) {
-    var Customers = /** @class */ (function () {
-        function Customers(names, ages) {
+    class Customers {
+        constructor(names, ages) {
             this.names = names;
             this.ages = ages;
         }
-        return Customers;
-    }());
+    }
 })(mod || (mod = {}));

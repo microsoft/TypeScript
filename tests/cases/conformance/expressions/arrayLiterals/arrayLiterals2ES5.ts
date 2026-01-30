@@ -1,4 +1,5 @@
-﻿// ElementList:  ( Modified )
+﻿// @target: es2015
+// ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement
 //      ElementList, Elisionopt   AssignmentExpression

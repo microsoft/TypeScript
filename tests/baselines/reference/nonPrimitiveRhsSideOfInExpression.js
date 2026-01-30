@@ -11,9 +11,9 @@ const b1 = "foo" in o;
 const b2 = "bar" in f();
 
 //// [nonPrimitiveRhsSideOfInExpression.js]
-var o = {};
+let o = {};
 function f() {
     return {};
 }
-var b1 = "foo" in o;
-var b2 = "bar" in f();
+const b1 = "foo" in o;
+const b2 = "bar" in f();

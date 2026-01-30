@@ -1,3 +1,4 @@
+// @target: es2015
 declare function fn(x: never): void;
 
 fn([1, 2, 3])

@@ -1,3 +1,4 @@
+// @target: es2015
 var t = 32;
 
 function noReturn(): {

@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /deep/module/why/you/want/this/path.ts

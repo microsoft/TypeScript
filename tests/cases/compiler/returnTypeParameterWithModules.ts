@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 namespace M1 {
     export function reduce<A>(ar, f, e?): Array<A> {
