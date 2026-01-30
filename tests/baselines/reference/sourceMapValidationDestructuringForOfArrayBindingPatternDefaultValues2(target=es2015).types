@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -833,8 +832,8 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >robots : Robot[]
@@ -863,8 +862,8 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >getRobots() : Robot[]
@@ -895,8 +894,8 @@ for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >[robotA, robotB] : Robot[]

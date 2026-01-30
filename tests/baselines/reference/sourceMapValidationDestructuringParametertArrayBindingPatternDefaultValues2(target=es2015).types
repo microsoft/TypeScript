@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [string, string[]];
 >Robot : Robot

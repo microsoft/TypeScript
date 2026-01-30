@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -953,8 +952,8 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberA3 : number
 >         : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >robotA : Robot
@@ -997,8 +996,8 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberA3 : number
 >         : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >getRobot() : Robot
@@ -1043,8 +1042,8 @@ for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberA3 : number
 >         : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 ><Robot>[2, "trimmer", "trimming"] : Robot
@@ -1093,8 +1092,8 @@ for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 >                                   : ^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
@@ -1135,8 +1134,8 @@ for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 >                                       : ^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getMultiRobot() : MultiSkilledRobot
@@ -1179,8 +1178,8 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
 >                                                                              : ^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot

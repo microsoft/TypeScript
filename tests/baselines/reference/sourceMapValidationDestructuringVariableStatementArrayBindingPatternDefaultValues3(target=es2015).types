@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -534,8 +533,8 @@ let multiRobotAInfo: (string | string[])[];
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >robotB : Robot
@@ -554,8 +553,8 @@ let multiRobotAInfo: (string | string[])[];
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >getRobotB() : Robot
@@ -576,8 +575,8 @@ let multiRobotAInfo: (string | string[])[];
 >   : ^^
 >1 : 1
 >  : ^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 ><Robot>[2, "trimmer", "trimming"] : Robot

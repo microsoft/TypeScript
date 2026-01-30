@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -112,8 +111,8 @@ function getMultiRobots() {
 for (let [, nameA = "noName"] of robots) {
 > : undefined
 > : ^^^^^^^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >robots : Robot[]
@@ -128,14 +127,14 @@ for (let [, nameA = "noName"] of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let [, nameA = "noName"] of getRobots()) {
 > : undefined
 > : ^^^^^^^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >getRobots() : Robot[]
@@ -152,14 +151,14 @@ for (let [, nameA = "noName"] of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let [, nameA = "noName"] of [robotA, robotB]) {
 > : undefined
 > : ^^^^^^^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >[robotA, robotB] : Robot[]
@@ -178,22 +177,22 @@ for (let [, nameA = "noName"] of [robotA, robotB]) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let [, [
 > : undefined
 > : ^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -216,22 +215,22 @@ for (let [, [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 }
 for (let [, [
 > : undefined
 > : ^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -256,22 +255,22 @@ for (let [, [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 }
 for (let [, [
 > : undefined
 > : ^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -298,13 +297,13 @@ for (let [, [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 }
 
 for (let [numberB = -1] of robots) {
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -321,12 +320,12 @@ for (let [numberB = -1] of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 }
 for (let [numberB = -1] of getRobots()) {
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -345,12 +344,12 @@ for (let [numberB = -1] of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 }
 for (let [numberB = -1] of [robotA, robotB]) {
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -371,12 +370,12 @@ for (let [numberB = -1] of [robotA, robotB]) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberB : any
->        : ^^^
+>numberB : number
+>        : ^^^^^^
 }
 for (let [nameB = "noName"] of multiRobots) {
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >multiRobots : MultiSkilledRobot[]
@@ -391,12 +390,12 @@ for (let [nameB = "noName"] of multiRobots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 }
 for (let [nameB = "noName"] of getMultiRobots()) {
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >getMultiRobots() : MultiSkilledRobot[]
@@ -413,12 +412,12 @@ for (let [nameB = "noName"] of getMultiRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 }
 for (let [nameB = "noName"] of [multiRobotA, multiRobotB]) {
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
@@ -437,23 +436,23 @@ for (let [nameB = "noName"] of [multiRobotA, multiRobotB]) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameB : any
->      : ^^^
+>nameB : string
+>      : ^^^^^^
 }
 
 for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of robots) {
->numberA2 : any
->         : ^^^
+>numberA2 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
->skillA2 : any
->        : ^^^
+>skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
 >        : ^^^^^^^
 >robots : Robot[]
@@ -468,22 +467,22 @@ for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 }
 for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of getRobots()) {
->numberA2 : any
->         : ^^^
+>numberA2 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
->skillA2 : any
->        : ^^^
+>skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
 >        : ^^^^^^^
 >getRobots() : Robot[]
@@ -500,22 +499,22 @@ for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 }
 for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of [robotA, robotB]) {
->numberA2 : any
->         : ^^^
+>numberA2 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
->skillA2 : any
->        : ^^^
+>skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
 >        : ^^^^^^^
 >[robotA, robotB] : Robot[]
@@ -534,24 +533,24 @@ for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of [robotA, robot
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA2 : any
->       : ^^^
+>nameA2 : string
+>       : ^^^^^^
 }
 for (let [nameMA = "noName", [
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -574,24 +573,24 @@ for (let [nameMA = "noName", [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 }
 for (let [nameMA = "noName", [
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -616,24 +615,24 @@ for (let [nameMA = "noName", [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 }
 for (let [nameMA = "noName", [
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
 >         : ^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA : any
->              : ^^^
+>primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
 >          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA : any
->                : ^^^
+>secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
 >            : ^^^^^^^^^^^
 
@@ -660,19 +659,19 @@ for (let [nameMA = "noName", [
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameMA : any
->       : ^^^
+>nameMA : string
+>       : ^^^^^^
 }
 
 for (let [numberA3 = -1, ...robotAInfo] of robots) {
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->robotAInfo : any
->           : ^^^
+>robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >robots : Robot[]
 >       : ^^^^^^^
 
@@ -685,18 +684,18 @@ for (let [numberA3 = -1, ...robotAInfo] of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 }
 for (let [numberA3 = -1, ...robotAInfo] of getRobots()) {
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->robotAInfo : any
->           : ^^^
+>robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >getRobots() : Robot[]
 >            : ^^^^^^^
 >getRobots : () => Robot[]
@@ -711,18 +710,18 @@ for (let [numberA3 = -1, ...robotAInfo] of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 }
 for (let [numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->robotAInfo : any
->           : ^^^
+>robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >[robotA, robotB] : Robot[]
 >                 : ^^^^^^^
 >robotA : Robot
@@ -739,6 +738,6 @@ for (let [numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->numberA3 : any
->         : ^^^
+>numberA3 : number
+>         : ^^^^^^
 }

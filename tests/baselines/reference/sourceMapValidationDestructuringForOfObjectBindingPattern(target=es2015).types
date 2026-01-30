@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 interface Robot {
     name: string;
@@ -132,8 +131,8 @@ function getMultiRobots() {
 for (let {name: nameA } of robots) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >robots : Robot[]
 >       : ^^^^^^^
 
@@ -146,14 +145,14 @@ for (let {name: nameA } of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA } of getRobots()) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >getRobots() : Robot[]
 >            : ^^^^^^^
 >getRobots : () => Robot[]
@@ -168,14 +167,14 @@ for (let {name: nameA } of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
@@ -208,20 +207,20 @@ for (let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >multiRobots : MultiRobot[]
 >            : ^^^^^^^^^^^^
 
@@ -234,20 +233,20 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of multiRobots
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >getMultiRobots() : MultiRobot[]
 >                 : ^^^^^^^^^^^^
 >getMultiRobots : () => MultiRobot[]
@@ -262,20 +261,20 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRob
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
 >                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
@@ -326,19 +325,19 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "m
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 }
 
 for (let {name: nameA, skill: skillA } of robots) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skill : any
 >      : ^^^
->skillA : any
->       : ^^^
+>skillA : string
+>       : ^^^^^^
 >robots : Robot[]
 >       : ^^^^^^^
 
@@ -351,18 +350,18 @@ for (let {name: nameA, skill: skillA } of robots) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA, skill: skillA } of getRobots()) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skill : any
 >      : ^^^
->skillA : any
->       : ^^^
+>skillA : string
+>       : ^^^^^^
 >getRobots() : Robot[]
 >            : ^^^^^^^
 >getRobots : () => Robot[]
@@ -377,18 +376,18 @@ for (let {name: nameA, skill: skillA } of getRobots()) {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skill : any
 >      : ^^^
->skillA : any
->       : ^^^
+>skillA : string
+>       : ^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
@@ -421,24 +420,24 @@ for (let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, {
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >multiRobots : MultiRobot[]
 >            : ^^^^^^^^^^^^
 
@@ -451,24 +450,24 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >getMultiRobots() : MultiRobot[]
 >                 : ^^^^^^^^^^^^
 >getMultiRobots : () => MultiRobot[]
@@ -483,24 +482,24 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >name : any
 >     : ^^^
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 >skills : any
 >       : ^^^
 >primary : any
 >        : ^^^
->primaryA : any
->         : ^^^
+>primaryA : string
+>         : ^^^^^^
 >secondary : any
 >          : ^^^
->secondaryA : any
->           : ^^^
+>secondaryA : string
+>           : ^^^^^^
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
 >                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
@@ -551,6 +550,6 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
->nameA : any
->      : ^^^
+>nameA : string
+>      : ^^^^^^
 }

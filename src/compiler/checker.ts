@@ -25480,7 +25480,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isArrayLikeType(type: Type): boolean {
         // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
-        // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
+        // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>.
+        // When Array doesn't exist (noLib), we can't determine array-likeness.
+        if (anyReadonlyArrayType === emptyObjectType) {
+            return false;
+        }
         return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
     }
 
@@ -45619,7 +45623,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+        const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
+        // Only use iteration semantics when Iterable exists; otherwise fall through to array-like handling.
+        const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 

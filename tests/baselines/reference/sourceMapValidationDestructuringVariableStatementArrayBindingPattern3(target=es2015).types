@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -382,8 +381,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >robotB : Robot
@@ -396,8 +395,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 >getRobotB() : Robot
@@ -412,8 +411,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
->...robotAInfo : any
->              : ^^^
+>...robotAInfo : string | number
+>              : ^^^^^^^^^^^^^^^
 >robotAInfo : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
 ><Robot>[2, "trimmer", "trimming"] : Robot
@@ -432,8 +431,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                                   : ^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
@@ -444,8 +443,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                                        : ^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getMultiRobotB() : MultiSkilledRobot
@@ -458,8 +457,8 @@ let multiRobotAInfo: (string | [string, string])[];
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[...multiRobotAInfo] : (string | [string, string])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->...multiRobotAInfo : any
->                   : ^^^
+>...multiRobotAInfo : string | [string, string]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotAInfo : (string | [string, string])[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : (string | [string, string])[]
