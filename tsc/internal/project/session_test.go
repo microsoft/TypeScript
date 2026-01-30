@@ -904,6 +904,50 @@ func TestSession(t *testing.T) {
 		assert.Equal(t, len(codeLensRefreshCalls), 1, "expected one RefreshCodeLens call after code lens preference change")
 		assert.Equal(t, len(inlayHintsRefreshCalls), 1, "expected one RefreshInlayHints call after inlay hints preference change")
 	})
+	t.Run("config parsing", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": "{}",
+			"/src/index.ts":      "export const x = 1;",
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+
+		configMap1 := map[string]any{
+			"UseAliasesForRename":       true,
+			"QuotePreference":           "single",
+			"OrganizeImportsIgnoreCase": true,
+		}
+		// set "typescript" options only
+		session.Configure(lsutil.ParseNewUserConfig([]any{nil, configMap1, nil}))
+		actualConfig1 := session.Config()
+		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
+		expectedPrefs1.UseAliasesForRename = core.TSTrue
+		expectedPrefs1.QuotePreference = lsutil.QuotePreferenceSingle
+		expectedPrefs1.OrganizeImportsIgnoreCase = core.TSTrue
+
+		// "javascript" options should default to ts
+		assert.DeepEqual(t, *actualConfig1.TS(), *expectedPrefs1)
+		assert.DeepEqual(t, *actualConfig1.JS(), *expectedPrefs1)
+
+		configMap2 := map[string]any{
+			"UseAliasesForRename":       false,
+			"QuotePreference":           "double",
+			"OrganizeImportsIgnoreCase": false,
+		}
+		// set "javascript" options only
+		session.Configure(lsutil.ParseNewUserConfig([]any{nil, nil, configMap2}))
+		actualConfig2 := session.Config()
+		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
+		expectedPrefs2.UseAliasesForRename = core.TSFalse
+		expectedPrefs2.QuotePreference = lsutil.QuotePreferenceDouble
+		expectedPrefs2.OrganizeImportsIgnoreCase = core.TSFalse
+		// "typescript" options should not change
+		assert.DeepEqual(t, *actualConfig2.TS(), *expectedPrefs1)
+		assert.DeepEqual(t, *actualConfig2.JS(), *expectedPrefs2)
+	})
 }
 
 func ptrTo[T any](v T) *T {

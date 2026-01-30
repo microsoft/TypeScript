@@ -982,7 +982,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		if newSnapshot.AutoImports.IsPreparedForImportingFile(
 			changedFile.FileName(),
 			project.configFilePath,
-			newSnapshot.allUserPreferences.TS(),
+			newSnapshot.allUserPreferences.GetPreferences(changedFile.FileName()),
 		) {
 			return
 		}

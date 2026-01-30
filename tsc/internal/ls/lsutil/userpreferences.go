@@ -626,7 +626,7 @@ func parseIntWithDefault(val any, defaultV int) int {
 
 func (p *UserPreferences) Set(name string, value any) bool {
 	switch strings.ToLower(name) {
-	case "quotePreference":
+	case "quotepreference":
 		p.QuotePreference = parseQuotePreference(value)
 	case "lazyconfiguredprojectsfromexternalproject":
 		p.LazyConfiguredProjectsFromExternalProject = parseBoolWithDefault(value, false)

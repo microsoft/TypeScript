@@ -14,15 +14,15 @@ type UserConfig struct {
 // if `userPreferences` is nil, this function will return a config with default userPreferences
 func NewUserConfig(userPreferences *UserPreferences) *UserConfig {
 	return &UserConfig{
-		js: userPreferences.CopyOrDefault(),
-		ts: userPreferences.CopyOrDefault(),
+		js: userPreferences.Copy(),
+		ts: userPreferences.Copy(),
 	}
 }
 
 func (c *UserConfig) Copy() *UserConfig {
 	return &UserConfig{
-		ts: c.ts.CopyOrDefault(),
-		js: c.js.CopyOrDefault(),
+		ts: c.ts.Copy(),
+		js: c.js.Copy(),
 	}
 }
 
@@ -46,16 +46,26 @@ func (a *UserConfig) Merge(b *UserConfig) *UserConfig {
 }
 
 func (c *UserConfig) TS() *UserPreferences {
-	return c.ts
+	if c.ts != nil {
+		return c.ts
+	} else if c.js != nil {
+		return c.js
+	}
+	return NewDefaultUserPreferences()
 }
 
 func (c *UserConfig) JS() *UserPreferences {
-	return c.js
+	if c.js != nil {
+		return c.js
+	} else if c.ts != nil {
+		return c.ts
+	}
+	return NewDefaultUserPreferences()
 }
 
 func (c *UserConfig) GetPreferences(activeFile string) *UserPreferences {
 	fileEnding := strings.TrimPrefix(tspath.GetAnyExtensionFromPath(activeFile, nil, true), ".")
-	if tspath.ExtensionIsTs(fileEnding) {
+	if activeFile == "" || tspath.ExtensionIsTs(fileEnding) {
 		if c.ts != nil {
 			return c.ts
 		} else if c.js != nil {
@@ -72,13 +82,12 @@ func (c *UserConfig) GetPreferences(activeFile string) *UserPreferences {
 }
 
 func ParseNewUserConfig(items []any) *UserConfig {
-	defaultPref := NewUserConfig(nil)
-	c := NewUserConfig(nil)
+	defaultPref := NewUserConfig(NewDefaultUserPreferences())
+	c := &UserConfig{}
 	for i, item := range items {
 		if item == nil {
 			// continue
 		} else if config, ok := item.(map[string]any); ok {
-			newConfig := &UserConfig{}
 			switch i {
 			case 0:
 				// if provided, parse and set "js/ts" as base config
@@ -87,13 +96,11 @@ func ParseNewUserConfig(items []any) *UserConfig {
 				continue
 			case 1:
 				// typescript
-				newConfig.ts = defaultPref.ts.ParseWorker(config)
+				c.ts = defaultPref.ts.ParseWorker(config)
 			case 2:
 				// javascript
-				newConfig.js = defaultPref.js.ParseWorker(config)
+				c.js = defaultPref.js.ParseWorker(config)
 			}
-
-			c = c.Merge(newConfig)
 		} else if item, ok := item.(*UserPreferences); ok {
 			// case for fourslash -- fourslash sends the entire userPreferences over
 			// !!! support format and js/ts distinction?

@@ -385,13 +385,13 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	for path, overlay := range overlays {
 		openFiles[path] = overlay.FileName()
 	}
-	oldAutoImports := s.AutoImports
-	if oldAutoImports == nil {
-		oldAutoImports = autoimport.NewRegistry(s.toPath, s.allUserPreferences.TS())
-	}
 	prepareAutoImports := tspath.Path("")
 	if change.ResourceRequest.AutoImports != "" {
 		prepareAutoImports = change.ResourceRequest.AutoImports.Path(s.UseCaseSensitiveFileNames())
+	}
+	oldAutoImports := s.AutoImports
+	if oldAutoImports == nil {
+		oldAutoImports = autoimport.NewRegistry(s.toPath, s.allUserPreferences.GetPreferences(string(prepareAutoImports)))
 	}
 	var autoImportsWatch *WatchedFiles[map[tspath.Path]string]
 	autoImports, err := oldAutoImports.Clone(ctx, autoimport.RegistryChange{
@@ -401,7 +401,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		Created:         change.fileChanges.Created,
 		Deleted:         change.fileChanges.Deleted,
 		RebuiltPrograms: projectsWithNewProgramStructure,
-		UserPreferences: config.TS(),
+		UserPreferences: config.GetPreferences(string(prepareAutoImports)),
 	}, autoImportHost, logger.Fork("UpdateAutoImports"))
 	if err == nil {
 		autoImportsWatch = s.autoImportsWatch.Clone(autoImports.NodeModulesDirectories())
