@@ -4,11 +4,8 @@
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
-<<<<<<< HEAD
-////     "types": ["*"]
-=======
+////     "types": ["*"],
 ////     "lib": ["es5"]
->>>>>>> upstream/main
 ////   }
 //// }
 
