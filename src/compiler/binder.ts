@@ -3843,8 +3843,6 @@ export function getContainerFlags(node: Node): ContainerFlags {
             // falls through
         case SyntaxKind.Constructor:
         case SyntaxKind.FunctionDeclaration:
-        case SyntaxKind.ClassStaticBlockDeclaration:
-            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
         case SyntaxKind.MethodSignature:
         case SyntaxKind.CallSignature:
         case SyntaxKind.JSDocSignature:
@@ -3852,11 +3850,12 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.FunctionType:
         case SyntaxKind.ConstructSignature:
         case SyntaxKind.ConstructorType:
-            return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
         case SyntaxKind.JSDocImportTag:
             // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
-            return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
@@ -3864,6 +3863,8 @@ export function getContainerFlags(node: Node): ContainerFlags {
 
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
+        case SyntaxKind.PropertyDeclaration:
+            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
         case SyntaxKind.CatchClause:
         case SyntaxKind.ForStatement:
