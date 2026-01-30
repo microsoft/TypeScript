@@ -61,8 +61,6 @@ type Orchestrator struct {
 	tasks  *collections.SyncMap[tspath.Path, *BuildTask]
 	order  []string
 	errors []*ast.Diagnostic
-	// Semaphore to limit concurrent builds
-	buildSemaphore chan struct{}
 
 	errorSummaryReporter tsc.DiagnosticsReporter
 	watchStatusReporter  tsc.DiagnosticReporter
@@ -240,14 +238,9 @@ func (o *Orchestrator) Watch() {
 func (o *Orchestrator) updateWatch() {
 	oldCache := o.host.mTimes
 	o.host.mTimes = &collections.SyncMap[tspath.Path, time.Time]{}
-	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
-	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
-		wg.Queue(func() {
-			task.updateWatch(o, oldCache)
-		})
-		return true
+	o.rangeTask(func(path tspath.Path, task *BuildTask) {
+		task.updateWatch(o, oldCache)
 	})
-	wg.RunAndWait()
 }
 
 func (o *Orchestrator) resetCaches() {
@@ -263,20 +256,14 @@ func (o *Orchestrator) DoCycle() {
 	var needsConfigUpdate atomic.Bool
 	var needsUpdate atomic.Bool
 	mTimes := o.host.mTimes.Clone()
-	wg := core.NewWorkGroup(o.opts.Command.CompilerOptions.SingleThreaded.IsTrue())
-	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
-		wg.Queue(func() {
-			if updateKind := task.hasUpdate(o, path); updateKind != updateKindNone {
-				needsUpdate.Store(true)
-				if updateKind == updateKindConfig {
-					needsConfigUpdate.Store(true)
-				}
+	o.rangeTask(func(path tspath.Path, task *BuildTask) {
+		if updateKind := task.hasUpdate(o, path); updateKind != updateKindNone {
+			needsUpdate.Store(true)
+			if updateKind == updateKindConfig {
+				needsConfigUpdate.Store(true)
 			}
-		})
-		// Watch for file changes
-		return true
+		}
 	})
-	wg.RunAndWait()
 
 	if !needsUpdate.Load() {
 		o.host.mTimes = mTimes
@@ -307,11 +294,9 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	var buildResult orchestratorResult
 	if len(o.errors) == 0 {
 		buildResult.statistics.Projects = len(o.Order())
-		if o.opts.Command.CompilerOptions.SingleThreaded.IsTrue() {
-			o.singleThreadedBuildOrClean(&buildResult)
-		} else {
-			o.multiThreadedBuildOrClean(&buildResult)
-		}
+		o.rangeTask(func(path tspath.Path, task *BuildTask) {
+			o.buildOrCleanProject(task, path, &buildResult)
+		})
 	} else {
 		// Circularity errors prevent any project from being built
 		buildResult.result.Status = tsc.ExitStatusProjectReferenceCycle_OutputsSkipped
@@ -325,25 +310,40 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	return buildResult.result
 }
 
-func (o *Orchestrator) singleThreadedBuildOrClean(buildResult *orchestratorResult) {
-	// Go in the order since only one project can be built at a time so that random order isnt picked by work group creating deadlock
-	for _, config := range o.Order() {
+func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
+	numRoutines := 4
+	if o.opts.Command.CompilerOptions.SingleThreaded.IsTrue() {
+		numRoutines = 1
+	} else if builders := o.opts.Command.BuildOptions.Builders; builders != nil {
+		numRoutines = *builders
+	}
+
+	var currentTaskIndex atomic.Int64
+	getNextTask := func() (tspath.Path, *BuildTask, bool) {
+		index := int(currentTaskIndex.Add(1) - 1)
+		if index >= len(o.order) {
+			return "", nil, false
+		}
+		config := o.order[index]
 		path := o.toPath(config)
 		task := o.getTask(path)
-		o.buildOrCleanProject(task, path, buildResult)
+		return path, task, true
 	}
-}
+	runTask := func() {
+		for path, task, ok := getNextTask(); ok; path, task, ok = getNextTask() {
+			f(path, task)
+		}
+	}
 
-func (o *Orchestrator) multiThreadedBuildOrClean(buildResult *orchestratorResult) {
-	// Spin off the threads with waiting on upstream to build before actual project build
-	wg := core.NewWorkGroup(false)
-	o.tasks.Range(func(path tspath.Path, task *BuildTask) bool {
-		wg.Queue(func() {
-			o.buildOrCleanProject(task, path, buildResult)
-		})
-		return true
-	})
-	wg.RunAndWait()
+	if numRoutines == 1 {
+		runTask()
+	} else {
+		wg := core.NewWorkGroup(false)
+		for range numRoutines {
+			wg.Queue(runTask)
+		}
+		wg.RunAndWait()
+	}
 }
 
 func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, buildResult *orchestratorResult) {
@@ -397,10 +397,6 @@ func NewOrchestrator(opts Options) *Orchestrator {
 		orchestrator.watchStatusReporter = tsc.CreateWatchStatusReporter(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions, opts.Testing)
 	} else {
 		orchestrator.errorSummaryReporter = tsc.CreateReportErrorSummary(opts.Sys, opts.Command.Locale(), opts.Command.CompilerOptions)
-	}
-	// If we want to build more than one project at a time, create a semaphore to limit concurrency
-	if builders := opts.Command.BuildOptions.Builders; builders != nil {
-		orchestrator.buildSemaphore = make(chan struct{}, *builders)
 	}
 	return orchestrator
 }

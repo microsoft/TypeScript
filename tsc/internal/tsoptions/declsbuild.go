@@ -54,7 +54,7 @@ var OptionsForBuild = []*CommandLineOption{
 		Kind:                    CommandLineOptionTypeNumber,
 		Category:                diagnostics.Command_line_Options,
 		Description:             diagnostics.Set_the_number_of_projects_to_build_concurrently,
-		DefaultValueDescription: diagnostics.X_all_unless_singleThreaded_is_passed,
+		DefaultValueDescription: diagnostics.X_4_unless_singleThreaded_is_passed,
 		minValue:                1,
 	},
 	{

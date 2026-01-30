@@ -6,27 +6,23 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 )
 
-type parseCacheEntry[V any] struct {
+type parseCacheEntry[V comparable] struct {
 	value V
 	mu    sync.Mutex
 }
 
-type parseCache[K comparable, V any] struct {
+type parseCache[K comparable, V comparable] struct {
 	entries collections.SyncMap[K, *parseCacheEntry[V]]
 }
 
-func (c *parseCache[K, V]) loadOrStoreNew(key K, parse func(K) V) V {
-	return c.loadOrStoreNewIf(key, parse, func(value V) bool { return true })
-}
-
-func (c *parseCache[K, V]) loadOrStoreNewIf(key K, parse func(K) V, canCacheValue func(V) bool) V {
+func (c *parseCache[K, V]) loadOrStore(key K, parse func(K) V, allowZero bool) V {
 	newEntry := &parseCacheEntry[V]{}
 	newEntry.mu.Lock()
 	defer newEntry.mu.Unlock()
 	if entry, loaded := c.entries.LoadOrStore(key, newEntry); loaded {
 		entry.mu.Lock()
 		defer entry.mu.Unlock()
-		if canCacheValue(entry.value) {
+		if allowZero || entry.value != *new(V) {
 			return entry.value
 		}
 		newEntry = entry
