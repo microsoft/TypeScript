@@ -77,7 +77,12 @@ exitCode:: ExitStatus.undefined
 
 Change:: npm install node types
 
-Input::
+Before running Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions
+Output::
+sysLog:: /users/username/projects/project/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+
+
 //// [/users/username/projects/project/node_modules/@types/node/package.json]
 
 {
@@ -92,10 +97,6 @@ declare module "fs" {
         isFile(): boolean;
     }
 }
-
-
-Output::
-sysLog:: /users/username/projects/project/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
 
 
 PolledWatches::
@@ -123,14 +124,74 @@ FsWatchesRecursive::
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions
-
 Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
 8: timerToUpdateProgram *new*
 
+Input::
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/users/username/projects/project/foo.js] file written with same contents
+
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
+  {}
+/users/username/projects/project/foo.ts:
+  {}
+/users/username/projects/project/node_modules/@types/node/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/@types/node/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "watch": true,
+  "types": [
+    "node"
+  ]
+}
+Program structureReused: SafeModules
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/node_modules/@types/node/index.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/node_modules/@types/node/index.d.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/foo.ts (computed .d.ts)
+/users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
 
 exitCode:: ExitStatus.undefined

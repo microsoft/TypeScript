@@ -263,6 +263,7 @@ declare module "fs" {
     }
 }`,
                     });
+                    sys.runQueuedTimeoutCallbacks();
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
