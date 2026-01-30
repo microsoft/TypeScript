@@ -281,16 +281,6 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "type": "install package",
             "file": "/home/src/projects/project/src/file.ts",
-            "packageName": "@types/node"
-          },
-          {
-            "type": "install package",
-            "file": "/home/src/projects/project/src/file.ts",
-            "packageName": "@types/node"
-          },
-          {
-            "type": "install package",
-            "file": "/home/src/projects/project/src/file.ts",
             "packageName": "@types/vscode"
           }
         ]
@@ -308,14 +298,14 @@ Info seq  [hh:mm:ss:mss] request:
         "command": {
           "type": "install package",
           "file": "/home/src/projects/project/src/file.ts",
-          "packageName": "@types/node"
+          "packageName": "@types/vscode"
         }
       },
       "seq": 3,
       "type": "request"
     }
 TI:: [hh:mm:ss:mss] #-1 with cwd: /home/src/projects/project arguments: [
-  "@types/node"
+  "@types/vscode"
 ]
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -326,16 +316,16 @@ After request
 
 PendingInstalls callback:: count: 1
 1: #-1 with arguments:: [
-  "@types/node"
+  "@types/vscode"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1
 1: #-1 with arguments:: [
-  "@types/node"
+  "@types/vscode"
 ]
 
 TI:: Installation #-1 with arguments:: [
-  "@types/node"
+  "@types/vscode"
 ] complete with success::true
 
 TI:: [hh:mm:ss:mss] Sending response:
@@ -343,130 +333,6 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::packageInstalled",
       "projectName": "/home/src/projects/project/tsconfig.json",
       "id": 1,
-      "success": true,
-      "message": "Package @types/node installed."
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "kind": "action::packageInstalled",
-        "projectName": "/home/src/projects/project/tsconfig.json",
-        "id": 1,
-        "success": true,
-        "message": "Package @types/node installed."
-      }
-    }
-After running PendingInstalls callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "applyCodeActionCommand",
-      "arguments": {
-        "command": {
-          "type": "install package",
-          "file": "/home/src/projects/project/src/file.ts",
-          "packageName": "@types/node"
-        }
-      },
-      "seq": 4,
-      "type": "request"
-    }
-TI:: [hh:mm:ss:mss] #-1 with cwd: /home/src/projects/project arguments: [
-  "@types/node"
-]
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": {},
-      "responseRequired": true
-    }
-After request
-
-PendingInstalls callback:: count: 1
-2: #-1 with arguments:: [
-  "@types/node"
-] *new*
-
-Before running PendingInstalls callback:: count: 1
-2: #-1 with arguments:: [
-  "@types/node"
-]
-
-TI:: Installation #-1 with arguments:: [
-  "@types/node"
-] complete with success::true
-
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::packageInstalled",
-      "projectName": "/home/src/projects/project/tsconfig.json",
-      "id": 2,
-      "success": true,
-      "message": "Package @types/node installed."
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "kind": "action::packageInstalled",
-        "projectName": "/home/src/projects/project/tsconfig.json",
-        "id": 2,
-        "success": true,
-        "message": "Package @types/node installed."
-      }
-    }
-After running PendingInstalls callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "applyCodeActionCommand",
-      "arguments": {
-        "command": {
-          "type": "install package",
-          "file": "/home/src/projects/project/src/file.ts",
-          "packageName": "@types/vscode"
-        }
-      },
-      "seq": 5,
-      "type": "request"
-    }
-TI:: [hh:mm:ss:mss] #-1 with cwd: /home/src/projects/project arguments: [
-  "@types/vscode"
-]
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": {},
-      "responseRequired": true
-    }
-After request
-
-PendingInstalls callback:: count: 1
-3: #-1 with arguments:: [
-  "@types/vscode"
-] *new*
-
-Before running PendingInstalls callback:: count: 1
-3: #-1 with arguments:: [
-  "@types/vscode"
-]
-
-TI:: Installation #-1 with arguments:: [
-  "@types/vscode"
-] complete with success::true
-
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::packageInstalled",
-      "projectName": "/home/src/projects/project/tsconfig.json",
-      "id": 3,
       "success": true,
       "message": "Package @types/vscode installed."
     }
@@ -478,7 +344,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "kind": "action::packageInstalled",
         "projectName": "/home/src/projects/project/tsconfig.json",
-        "id": 3,
+        "id": 1,
         "success": true,
         "message": "Package @types/vscode installed."
       }

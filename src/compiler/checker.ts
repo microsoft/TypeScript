@@ -1144,6 +1144,7 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
+    nodeCoreModules,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -4694,9 +4695,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean, errorMessage?: DiagnosticMessage): Symbol | undefined {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
-        errorMessage ??= isClassic ?
+        errorMessage ??= getCannotResolveModuleNameErrorForSpecificModule(moduleReferenceExpression) ?? (isClassic ?
             Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
-            : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
+            : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations);
         return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : errorMessage, ignoreErrors);
     }
 
@@ -27632,6 +27633,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return usesWildcardTypes(compilerOptions)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig;
+            case "beforeEach":
             case "describe":
             case "suite":
             case "it":
@@ -27643,6 +27645,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "require":
             case "Buffer":
             case "module":
+            case "NodeJS":
                 return usesWildcardTypes(compilerOptions)
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig;
@@ -27682,6 +27685,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Diagnostics.Cannot_find_name_0;
                 }
         }
+    }
+
+    function getCannotResolveModuleNameErrorForSpecificModule(moduleName: Expression): DiagnosticMessage | undefined {
+        if (moduleName.kind === SyntaxKind.StringLiteral) {
+            if (nodeCoreModules.has((moduleName as StringLiteral).text)) {
+                    if (usesWildcardTypes(compilerOptions)) {
+                        return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
+                    } else {
+                        return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig
+                    }
+            }
+        }
+        return undefined;
     }
 
     function getResolvedSymbol(node: Identifier): Symbol {

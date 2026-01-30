@@ -27,6 +27,8 @@ const errorCannotFindImplicitJsxImport = Diagnostics.This_JSX_tag_requires_the_m
 const errorCodes = [
     errorCodeCannotFindModule,
     Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
     errorCannotFindImplicitJsxImport,
 ];
 registerCodeFix({
