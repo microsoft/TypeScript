@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "lib": "es5", "module": "preserve", "types": ["*"] } }
+//// { "compilerOptions": { "lib": ["es5"], "module": "preserve", "types": ["*"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 //// declare module "node:fs" {
