@@ -579,7 +579,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
-    deprecatedKeys: new Set(["es3"]),
+    deprecatedKeys: new Set(["es3", "es5"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,

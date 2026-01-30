@@ -7659,6 +7659,7 @@ export const enum ScriptKind {
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
+    /** @deprecated */
     ES5 = 1,
     ES2015 = 2,
     ES2016 = 3,
