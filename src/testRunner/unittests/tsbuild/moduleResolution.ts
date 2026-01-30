@@ -163,8 +163,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/a/src/index.ts": "",
                 "/home/src/workspaces/project/a/tsconfig.json": jsonToReadableText({
-                    compilerOptions: { strict: true },
-                    types: ["*"]
+                    compilerOptions: { strict: true, types: ["*"] },
                 }),
                 "/home/src/workspaces/project/b/src/index.ts": dedent`
                     import pg from "pg";
