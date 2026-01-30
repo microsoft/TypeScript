@@ -1914,6 +1914,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 			false, /*preselect*/
 			autoImport.Fix.ModuleSpecifier,
 			autoImport.Fix.AutoImportFix,
+			nil, /*detail*/
 		)
 
 		if isShadowed, _ := uniques[autoImport.Fix.Name]; !isShadowed {
@@ -2213,7 +2214,8 @@ func (l *LanguageService) createCompletionItem(
 		hasAction,
 		preselect,
 		source,
-		nil,
+		nil, /*autoImportFix*/
+		nil, /*detail*/
 	)
 }
 
@@ -4299,6 +4301,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		false, /*preselect*/
 		"",    /*source*/
 		nil,   /*autoImportEntryData*/ // !!! jsx autoimports
+		nil,   /*detail*/
 	)
 	items := []*lsproto.CompletionItem{item}
 	itemDefaults := l.setItemDefaults(
@@ -4336,6 +4339,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	preselect bool,
 	source string,
 	autoImportFix *lsproto.AutoImportFix,
+	detail *string,
 ) *lsproto.CompletionItem {
 	kind := getCompletionsSymbolKind(elementKind)
 	data := &lsproto.CompletionItemData{
@@ -4397,6 +4401,7 @@ func (l *LanguageService) createLSPCompletionItem(
 		LabelDetails:     labelDetails,
 		Kind:             &kind,
 		Tags:             tags,
+		Detail:           detail,
 		Preselect:        boolToPtr(preselect),
 		SortText:         ptrTo(string(sortText)),
 		FilterText:       strPtrTo(filterText),
@@ -4471,6 +4476,7 @@ func (l *LanguageService) getLabelStatementCompletions(
 					false, /*preselect*/
 					"",    /*source*/
 					nil,   /*autoImportEntryData*/
+					nil,   /*detail*/
 				))
 			}
 		}

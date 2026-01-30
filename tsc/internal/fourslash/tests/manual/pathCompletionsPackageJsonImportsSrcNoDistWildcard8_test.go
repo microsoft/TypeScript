@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
+func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard8(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
@@ -23,29 +23,13 @@ func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
 // @Filename: /home/src/workspaces/project/package.json
 {
   "name": "foo",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "imports": {
-    "#*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "default": "./dist/*.js"
-    },
-    "#arguments": {
-      "types": "./dist/arguments/index.d.ts",
-      "import": "./dist/arguments/index.mjs",
-      "default": "./dist/arguments/index.js"
-    }
+    "#*": "./dist/*.js"
   }
 }
-// @Filename: /home/src/workspaces/project/src/index.ts
-export const index = 0;
 // @Filename: /home/src/workspaces/project/src/blah.ts
 export const blah = 0;
-// @Filename: /home/src/workspaces/project/src/arguments/index.ts
-export const arguments = 0;
-// @Filename: /home/src/workspaces/project/src/m.mts
+// @Filename: /home/src/workspaces/project/src/index.mts
 import { } from "/**/";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -57,21 +41,11 @@ import { } from "/**/";`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{
+			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#blah",
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
 					Detail: PtrTo("#blah.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "#index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#index.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "#arguments",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#arguments.d.ts"),
 				},
 			},
 		},

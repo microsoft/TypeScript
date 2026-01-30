@@ -40,12 +40,14 @@ import {} from "foo/bar/_dir//*3*/";`
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "_b/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "_b/suffix",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("_b/suffix.d.ts"),
 				},
 				&lsproto.CompletionItem{
-					Label: "_dir",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "_dir",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("_dir"),
 				},
 			},
 		},
@@ -60,8 +62,9 @@ import {} from "foo/bar/_dir//*3*/";`
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "_b/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "_b/suffix",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("_b/suffix.d.ts"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							Range:   f.Ranges()[0].LSRange,
@@ -70,8 +73,9 @@ import {} from "foo/bar/_dir//*3*/";`
 					},
 				},
 				&lsproto.CompletionItem{
-					Label: "_dir",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "_dir",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("_dir"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							Range:   f.Ranges()[0].LSRange,
@@ -91,8 +95,9 @@ import {} from "foo/bar/_dir//*3*/";`
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "x/suffix",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "x/suffix",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("x/suffix.d.ts"),
 				},
 			},
 		},

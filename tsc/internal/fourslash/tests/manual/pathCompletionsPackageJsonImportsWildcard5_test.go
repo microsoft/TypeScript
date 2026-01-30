@@ -9,18 +9,11 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
+func TestPathCompletionsPackageJsonImportsWildcard5(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{
-  "compilerOptions": {
-    "module": "nodenext",
-    "rootDir": "src",
-    "outDir": "dist"
-  }
-}
-// @Filename: /home/src/workspaces/project/package.json
+	const content = `// @module: node18
+// @Filename: /package.json
 {
   "name": "foo",
   "main": "dist/index.js",
@@ -28,28 +21,37 @@ func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard1(t *testing.T) {
   "types": "dist/index.d.ts",
   "imports": {
     "#*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "default": "./dist/*.js"
+      "import": {
+        "types": "./dist/types/*.d.mts",
+        "default": "./dist/esm/*.mjs"
+      },
+      "default": {
+        "types": "./dist/types/*.d.ts",
+        "default": "./dist/cjs/*.js"
+      }
     },
-    "#arguments": {
-      "types": "./dist/arguments/index.d.ts",
-      "import": "./dist/arguments/index.mjs",
-      "default": "./dist/arguments/index.js"
+    "#only-in-cjs": {
+      "require": {
+        "types": "./dist/types/only-in-cjs/index.d.ts",
+        "default": "./dist/cjs/only-in-cjs/index.js"
+      }
     }
   }
 }
-// @Filename: /home/src/workspaces/project/src/index.ts
+// @Filename: /dist/types/index.d.mts
 export const index = 0;
-// @Filename: /home/src/workspaces/project/src/blah.ts
+// @Filename: /dist/types/index.d.ts
+export const index = 0;
+// @Filename: /dist/types/blah.d.mts
 export const blah = 0;
-// @Filename: /home/src/workspaces/project/src/arguments/index.ts
-export const arguments = 0;
-// @Filename: /home/src/workspaces/project/src/m.mts
+// @Filename: /dist/types/blah.d.ts
+export const blah = 0;
+// @Filename: /dist/types/only-in-cjs/index.d.ts
+export const onlyInCjs = 0;
+// @Filename: /index.mts
 import { } from "/**/";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.MarkTestAsStradaServer()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
@@ -57,21 +59,16 @@ import { } from "/**/";`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{
+			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#blah",
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#blah.ts"),
+					Detail: PtrTo("#blah.d.mts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "#index",
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#index.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "#arguments",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#arguments.d.ts"),
+					Detail: PtrTo("#index.d.mts"),
 				},
 			},
 		},

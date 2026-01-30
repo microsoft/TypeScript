@@ -46,56 +46,34 @@ import { } from "foo//**/";`
 		Items: &fourslash.CompletionsExpectedItems{
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "blah.js",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "blah.js",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("blah.js"),
 				},
 				&lsproto.CompletionItem{
-					Label: "index.js",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "index.js",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("index.js"),
 				},
 				&lsproto.CompletionItem{
-					Label: "foo",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "foo",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("foo"),
 				},
 				&lsproto.CompletionItem{
-					Label: "subfolder",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "subfolder",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("subfolder"),
 				},
 				&lsproto.CompletionItem{
-					Label: "bar",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "bar",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("bar"),
 				},
 				&lsproto.CompletionItem{
-					Label: "exact-match",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-			},
-		},
-	})
-	f.Insert(t, "foo/")
-	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
-		IsIncomplete: false,
-		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
-			EditRange:        Ignored,
-		},
-		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{
-					Label: "blah.js",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "index.js",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
-				},
-				&lsproto.CompletionItem{
-					Label: "foo",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
-				},
-				&lsproto.CompletionItem{
-					Label: "subfolder",
-					Kind:  PtrTo(lsproto.CompletionItemKindFolder),
+					Label:  "exact-match",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("exact-match.d.ts"),
 				},
 			},
 		},
@@ -110,8 +88,41 @@ import { } from "foo//**/";`
 		Items: &fourslash.CompletionsExpectedItems{
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "onlyInFooFolder.js",
-					Kind:  PtrTo(lsproto.CompletionItemKindFile),
+					Label:  "blah.js",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("blah.js"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "index.js",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("index.js"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "foo",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("foo"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "subfolder",
+					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
+					Detail: PtrTo("subfolder"),
+				},
+			},
+		},
+	})
+	f.Insert(t, "foo/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Unsorted: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "onlyInFooFolder.js",
+					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: PtrTo("onlyInFooFolder.js"),
 				},
 			},
 		},

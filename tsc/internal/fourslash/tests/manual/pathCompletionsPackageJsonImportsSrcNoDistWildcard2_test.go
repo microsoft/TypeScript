@@ -9,23 +9,37 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestCompletionsPaths_importType(t *testing.T) {
+func TestPathCompletionsPackageJsonImportsSrcNoDistWildcard2(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowJs: true
-// @moduleResolution: bundler
-// @Filename: /ns.ts
-file content not read
-// @Filename: /node_modules/package/index.ts
-file content not read
-// @Filename: /usage.ts
-type A = typeof import("[|p|]/*1*/");
-type B = import(".//*2*/");
-// @Filename: /user.js
-/** @type {import("/*3*/")} */`
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
+// @Filename: /home/src/workspaces/project/package.json
+{
+  "name": "salesforce-pageobjects",
+  "version": "1.0.0",
+  "imports": {
+    "#*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "default": "./dist/*.js"
+    }
+  }
+}
+// @Filename: /home/src/workspaces/project/src/action/pageObjects/actionRenderer.ts
+export const actionRenderer = 0;
+// @Filename: /home/src/workspaces/project/src/index.mts
+import { } from "/**/";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+	f.MarkTestAsStradaServer()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
@@ -34,20 +48,15 @@ type B = import(".//*2*/");
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:  "package",
+					Label:  "#action",
 					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("package"),
-					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{
-							NewText: "package",
-							Range:   f.Ranges()[0].LSRange,
-						},
-					},
+					Detail: PtrTo("#action"),
 				},
 			},
 		},
 	})
-	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
+	f.Insert(t, "#action/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
@@ -56,14 +65,15 @@ type B = import(".//*2*/");
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:  "package",
+					Label:  "pageObjects",
 					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("package"),
+					Detail: PtrTo("pageObjects"),
 				},
 			},
 		},
 	})
-	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
+	f.Insert(t, "pageObjects/")
+	f.VerifyCompletions(t, nil, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
 			CommitCharacters: &[]string{},
@@ -72,19 +82,9 @@ type B = import(".//*2*/");
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:  "node_modules",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("node_modules"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "ns",
+					Label:  "actionRenderer",
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("ns.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "user",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("user.js"),
+					Detail: PtrTo("actionRenderer.ts"),
 				},
 			},
 		},

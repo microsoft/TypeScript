@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
-func TestPathCompletionsPackageJsonImportsWildcard1(t *testing.T) {
+func TestPathCompletionsPackageJsonImportsWildcard6(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: node18
@@ -20,24 +20,13 @@ func TestPathCompletionsPackageJsonImportsWildcard1(t *testing.T) {
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "imports": {
-    "#*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "default": "./dist/*.js"
-    },
-    "#arguments": {
-      "types": "./dist/arguments/index.d.ts",
-      "import": "./dist/arguments/index.mjs",
-      "default": "./dist/arguments/index.js"
-    }
+    "#*": "./dist/*?.d.ts"
   }
 }
 // @Filename: /dist/index.d.ts
 export const index = 0;
-// @Filename: /dist/blah.d.ts
+// @Filename: /dist/blah?.d.ts
 export const blah = 0;
-// @Filename: /dist/arguments/index.d.ts
-export const arguments = 0;
 // @Filename: /index.mts
 import { } from "/**/";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
@@ -49,21 +38,11 @@ import { } from "/**/";`
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Unsorted: []fourslash.CompletionsExpectedItem{
+			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#blah",
 					Kind:   PtrTo(lsproto.CompletionItemKindFile),
 					Detail: PtrTo("#blah.d.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "#index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#index.d.ts"),
-				},
-				&lsproto.CompletionItem{
-					Label:  "#arguments",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#arguments.d.ts"),
 				},
 			},
 		},
