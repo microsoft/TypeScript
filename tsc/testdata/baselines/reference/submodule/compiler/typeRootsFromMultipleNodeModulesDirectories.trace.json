@@ -90,7 +90,6 @@ Resolving real path for '/foo/node_modules/@types/sneezy/index.d.ts', result '/f
 ======== Resolving type reference directive 'dopey', containing file '/foo/bar/__inferred type names__.ts', root directory '/foo/bar/node_modules/@types,/foo/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/foo/bar/node_modules/@types, /foo/node_modules/@types, /node_modules/@types'.
 Directory '/foo/bar/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/foo/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/@types/dopey/package.json' does not exist.
 File '/node_modules/@types/dopey/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/node_modules/@types/dopey/index.d.ts', result '/node_modules/@types/dopey/index.d.ts'.

@@ -1,6 +1,5 @@
 ======== Resolving type reference directive 'JqUeRy', containing file '/a.ts', root directory '/node_modules/@types'. ========
 Resolving with primary search path '/node_modules/@types'.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/node_modules/JqUeRy.d.ts' does not exist.
