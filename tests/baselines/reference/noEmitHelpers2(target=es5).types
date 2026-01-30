@@ -3,9 +3,11 @@
 === noEmitHelpers2.ts ===
 declare var decorator: any;
 >decorator : any
+>          : ^^^
 
 @decorator
 >decorator : any
+>          : ^^^
 
 class A {
 >A : A
@@ -15,6 +17,7 @@ class A {
 >a : number
 >  : ^^^^^^
 >decorator : any
+>          : ^^^
 >b : string
 >  : ^^^^^^
     }

@@ -5,6 +5,7 @@ declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPrope
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
 >    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >target : any
+>       : ^^^
 >propertyKey : string
 >            : ^^^^^^
 >descriptor : TypedPropertyDescriptor<T>

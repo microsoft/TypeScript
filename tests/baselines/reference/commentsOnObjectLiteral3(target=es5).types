@@ -30,9 +30,11 @@ var v = {
  //getter
  get a() {
 >a : any
+>  : ^^^
 
   return this.prop;
 >this.prop : any
+>          : ^^^
 >this : any
 >     : ^^^
 >prop : any
@@ -42,16 +44,21 @@ var v = {
  //setter
  set a(value) {
 >a : any
+>  : ^^^
 >value : any
+>      : ^^^
 
   this.prop = value;
 >this.prop = value : any
+>                  : ^^^
 >this.prop : any
+>          : ^^^
 >this : any
 >     : ^^^
 >prop : any
 >     : ^^^
 >value : any
+>      : ^^^
 
  } // trailing 2
 };

@@ -11,6 +11,7 @@ var n: number;
 
 var a: any;
 >a : any
+>  : ^^^
 
 var v = {
 >v : { [x: string]: () => void; [x: number]: () => void; ""(): void; 0(): void; "hello bye"(): void; }
@@ -74,11 +75,13 @@ var v = {
 >[a] : () => void
 >    : ^^^^^^^^^^
 >a : any
+>  : ^^^
 
     [<any>true]() { },
 >[<any>true] : () => void
 >            : ^^^^^^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
 >     : ^^^^
 
@@ -94,4 +97,5 @@ var v = {
 >`hello ${a} bye` : string
 >                 : ^^^^^^
 >a : any
+>  : ^^^
 }

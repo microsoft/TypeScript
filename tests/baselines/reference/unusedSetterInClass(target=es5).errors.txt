@@ -1,7 +1,9 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 unusedSetterInClass.ts(2,13): error TS6133: '_fullName' is declared but its value is never read.
 unusedSetterInClass.ts(4,17): error TS6133: 'fullName' is declared but its value is never read.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== unusedSetterInClass.ts (2 errors) ====
     class Employee {
         private _fullName: string;

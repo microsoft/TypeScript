@@ -3,6 +3,7 @@
 === letDeclarations-es5-1.ts ===
     let l1;
 >l1 : any
+>   : ^^^
 
     let l2: number;
 >l2 : number
@@ -10,10 +11,13 @@
 
     let l3, l4, l5 :string, l6;    
 >l3 : any
+>   : ^^^
 >l4 : any
+>   : ^^^
 >l5 : string
 >   : ^^^^^^
 >l6 : any
+>   : ^^^
 
     let l7 = false;
 >l7 : boolean
@@ -37,4 +41,5 @@
 >"" : ""
 >   : ^^
 >l11 : any
+>    : ^^^
 

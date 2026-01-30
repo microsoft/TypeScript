@@ -7,7 +7,9 @@ class A {
 
     get testProp() { return this.testProp; }
 >testProp : any
+>         : ^^^
 >this.testProp : any
+>              : ^^^
 >this : this
 >     : ^^^^
 >testProp : any

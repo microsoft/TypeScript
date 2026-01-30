@@ -19,11 +19,13 @@ const foo = {
 >void start : undefined
 >           : ^^^^^^^^^
 >start : any
+>      : ^^^
 
         void end;
 >void end : undefined
 >         : ^^^^^^^^^
 >end : any
+>    : ^^^
 
     },
 };

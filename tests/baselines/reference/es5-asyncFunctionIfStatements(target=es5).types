@@ -3,11 +3,17 @@
 === es5-asyncFunctionIfStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function ifStatement1() {
 >ifStatement1 : () => Promise<void>
@@ -15,9 +21,13 @@ async function ifStatement1() {
 
     if (await x) { y; } else { z; }
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function ifStatement2() {
@@ -26,9 +36,13 @@ async function ifStatement2() {
 
     if (x) { await y; } else { z; }
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function ifStatement3() {
@@ -37,7 +51,11 @@ async function ifStatement3() {
 
     if (x) { y; } else { await z; }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }

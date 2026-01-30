@@ -240,6 +240,20 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
+              "line": 5,
+              "offset": 15
+            },
+            "end": {
+              "line": 5,
+              "offset": 20
+            },
+            "text": "Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
+          },
+          {
+            "start": {
               "line": 6,
               "offset": 5
             },

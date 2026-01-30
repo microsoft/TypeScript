@@ -3,21 +3,25 @@
 === modifierParenCast.ts ===
 let readonly: any = undefined;
 >readonly : any
+>         : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 let override: any = undefined;
 >override : any
+>         : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 let out: any = undefined;
 >out : any
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 let declare: any = undefined;
 >declare : any
+>        : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -29,6 +33,7 @@ export const a = (readonly as number);
 >readonly as number : number
 >                   : ^^^^^^
 >readonly : any
+>         : ^^^
 
 export const b = (override as number);
 >b : number
@@ -38,6 +43,7 @@ export const b = (override as number);
 >override as number : number
 >                   : ^^^^^^
 >override : any
+>         : ^^^
 
 export const c = (out as number);
 >c : number
@@ -47,6 +53,7 @@ export const c = (out as number);
 >out as number : number
 >              : ^^^^^^
 >out : any
+>    : ^^^
 
 export const d = (declare as number);
 >d : number
@@ -56,4 +63,5 @@ export const d = (declare as number);
 >declare as number : number
 >                  : ^^^^^^
 >declare : any
+>        : ^^^
 

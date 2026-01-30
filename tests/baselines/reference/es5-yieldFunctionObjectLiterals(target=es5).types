@@ -27,7 +27,9 @@ function* objectLiteral1() {
 
         b: yield 2,
 >b : any
+>  : ^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
 >  : ^
 
@@ -57,11 +59,13 @@ function* objectLiteral2() {
 
         [g()]: yield 2,
 >[g()] : any
+>      : ^^^
 >g() : string
 >    : ^^^^^^
 >g : () => string
 >  : ^^^^^^^^^^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
 >  : ^
 
@@ -91,7 +95,9 @@ function* objectLiteral3() {
 
         b: yield 2,
 >b : any
+>  : ^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
 >  : ^
 
@@ -141,7 +147,9 @@ function* objectLiteral4() {
 
         b: yield 3,
 >b : any
+>  : ^^^
 >yield 3 : any
+>        : ^^^
 >3 : 3
 >  : ^
 
@@ -171,11 +179,13 @@ function* objectLiteral5() {
 
         [g()]: yield 2,
 >[g()] : any
+>      : ^^^
 >g() : string
 >    : ^^^^^^
 >g : () => string
 >  : ^^^^^^^^^^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
 >  : ^
 
@@ -207,6 +217,7 @@ function* objectLiteral6() {
 >[yield] : number
 >        : ^^^^^^
 >yield : any
+>      : ^^^
 >2 : 2
 >  : ^
 
@@ -236,8 +247,11 @@ function* objectLiteral7() {
 
         [yield]: yield 2,
 >[yield] : any
+>        : ^^^
 >yield : any
+>      : ^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
 >  : ^
 

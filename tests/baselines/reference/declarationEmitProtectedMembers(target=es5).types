@@ -178,4 +178,5 @@ class C4 {
 >a : number
 >  : ^^^^^^
 >b : any
+>  : ^^^
 }

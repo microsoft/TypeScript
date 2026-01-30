@@ -11,6 +11,7 @@ var obj = {
 >[this.bar] : number
 >           : ^^^^^^
 >this.bar : any
+>         : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >bar : any

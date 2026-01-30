@@ -7,5 +7,7 @@ const x = async => async;
 >async => async : (async: any) => any
 >               : ^     ^^^^^^^^^^^^^
 >async : any
+>      : ^^^
 >async : any
+>      : ^^^
 

@@ -35,11 +35,15 @@ var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >{ p  : (true ? { [K] : 'v'} as any : null) } : { p: any; }
 >                                             : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >(true ? { [K] : 'v'} as any : null) : any
+>                                    : ^^^
 >true ? { [K] : 'v'} as any : null : any
+>                                  : ^^^
 >true : true
 >     : ^^^^
 >{ [K] : 'v'} as any : any
+>                    : ^^^
 >{ [K] : 'v'} : { [K]: string; }
 >             : ^^     ^^^^^^ ^^
 >[K] : string

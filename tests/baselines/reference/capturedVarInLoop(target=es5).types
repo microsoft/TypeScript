@@ -37,6 +37,7 @@ for (var i = 0; i < 10; i++) {
 >(y) => { } : (y: any) => void
 >           : ^ ^^^^^^^^^^^^^^
 >y : any
+>  : ^^^
 
     let lambda2 = () => lambda1(len);
 >lambda2 : () => void

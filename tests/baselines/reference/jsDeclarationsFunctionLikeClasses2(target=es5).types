@@ -254,6 +254,7 @@ export function Point2D(x, y) {
     }
     Vec.call(this, 2);
 >Vec.call(this, 2) : any
+>                  : ^^^
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >         : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >Vec : typeof Vec
@@ -314,7 +315,9 @@ Point2D.prototype = {
 
         return this.storage[0];
 >this.storage[0] : any
+>                : ^^^
 >this.storage : any
+>             : ^^^
 >this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
@@ -336,7 +339,9 @@ Point2D.prototype = {
 >this.storage[0] = x : number
 >                    : ^^^^^^
 >this.storage[0] : any
+>                : ^^^
 >this.storage : any
+>             : ^^^
 >this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
@@ -353,7 +358,9 @@ Point2D.prototype = {
 
         return this.storage[1];
 >this.storage[1] : any
+>                : ^^^
 >this.storage : any
+>             : ^^^
 >this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any
@@ -375,7 +382,9 @@ Point2D.prototype = {
 >this.storage[1] = y : number
 >                    : ^^^^^^
 >this.storage[1] : any
+>                : ^^^
 >this.storage : any
+>             : ^^^
 >this : { __proto__: typeof Vec; get x(): number; set x(x: number); get y(): number; set y(y: number); }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >storage : any

@@ -19,6 +19,7 @@ var object = {
 
         return this._0;
 >this._0 : any
+>        : ^^^
 >this : any
 >     : ^^^
 >_0 : any
@@ -35,6 +36,7 @@ var object = {
 >this._0 = x : number
 >            : ^^^^^^
 >this._0 : any
+>        : ^^^
 >this : any
 >     : ^^^
 >_0 : any

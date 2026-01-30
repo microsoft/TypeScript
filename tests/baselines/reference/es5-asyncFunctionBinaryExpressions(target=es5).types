@@ -3,11 +3,17 @@
 === es5-asyncFunctionBinaryExpressions.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function binaryPlus0() {
 >binaryPlus0 : () => Promise<void>
@@ -15,10 +21,15 @@ async function binaryPlus0() {
 
     (await x) + y;
 >(await x) + y : any
+>              : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryPlus1() {
@@ -27,9 +38,13 @@ async function binaryPlus1() {
 
     x + await y;
 >x + await y : any
+>            : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryLogicalAnd0() {
@@ -38,10 +53,15 @@ async function binaryLogicalAnd0() {
 
     (await x) && y;
 >(await x) && y : any
+>               : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryLogicalAnd1() {
@@ -50,9 +70,13 @@ async function binaryLogicalAnd1() {
 
     x && await y;
 >x && await y : any
+>             : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment0() {
@@ -61,9 +85,13 @@ async function binaryAssignment0() {
 
     x = await y;
 >x = await y : any
+>            : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment1() {
@@ -72,13 +100,17 @@ async function binaryAssignment1() {
 
     x.a = await y;
 >x.a = await y : any
+>              : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment2() {
@@ -87,7 +119,9 @@ async function binaryAssignment2() {
 
     x.a.b = await y;
 >x.a.b = await y : any
+>                : ^^^
 >x.a.b : any
+>      : ^^^
 >x.a : any
 >    : ^^^
 >x : any
@@ -97,7 +131,9 @@ async function binaryAssignment2() {
 >b : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment3() {
@@ -106,11 +142,17 @@ async function binaryAssignment3() {
 
     x[z] = await y;
 >x[z] = await y : any
+>               : ^^^
 >x[z] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >z : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment4() {
@@ -119,15 +161,21 @@ async function binaryAssignment4() {
 
     x[z].b = await y;
 >x[z].b = await y : any
+>                 : ^^^
 >x[z].b : any
+>       : ^^^
 >x[z] : any
 >     : ^^^
 >x : any
+>  : ^^^
 >z : any
+>  : ^^^
 >b : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment5() {
@@ -136,15 +184,21 @@ async function binaryAssignment5() {
 
     x.a[z] = await y;
 >x.a[z] = await y : any
+>                 : ^^^
 >x.a[z] : any
+>       : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >z : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment6() {
@@ -153,14 +207,19 @@ async function binaryAssignment6() {
 
     (await x).a = y;
 >(await x).a = y : any
+>                : ^^^
 >(await x).a : any
+>            : ^^^
 >(await x) : any
 >          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment7() {
@@ -169,11 +228,15 @@ async function binaryAssignment7() {
 
     (await x.a).b = y;
 >(await x.a).b = y : any
+>                  : ^^^
 >(await x.a).b : any
+>              : ^^^
 >(await x.a) : any
 >            : ^^^
 >await x.a : any
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
@@ -181,6 +244,7 @@ async function binaryAssignment7() {
 >b : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment8() {
@@ -189,12 +253,19 @@ async function binaryAssignment8() {
 
     (await x)[z] = y;
 >(await x)[z] = y : any
+>                 : ^^^
 >(await x)[z] : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >z : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment9() {
@@ -203,11 +274,17 @@ async function binaryAssignment9() {
 
     x[await z] = y;
 >x[await z] = y : any
+>               : ^^^
 >x[await z] : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment10() {
@@ -216,15 +293,21 @@ async function binaryAssignment10() {
 
     x[await z].b = y;
 >x[await z].b = y : any
+>                 : ^^^
 >x[await z].b : any
+>             : ^^^
 >x[await z] : any
 >           : ^^^
 >x : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >b : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment11() {
@@ -233,16 +316,23 @@ async function binaryAssignment11() {
 
     (await x[z]).b = y;
 >(await x[z]).b = y : any
+>                   : ^^^
 >(await x[z]).b : any
+>               : ^^^
 >(await x[z]) : any
 >             : ^^^
 >await x[z] : any
+>           : ^^^
 >x[z] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >z : any
+>  : ^^^
 >b : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment12() {
@@ -251,15 +341,21 @@ async function binaryAssignment12() {
 
     x.a[await z] = y;
 >x.a[await z] = y : any
+>                 : ^^^
 >x.a[await z] : any
+>             : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryAssignment13() {
@@ -268,16 +364,23 @@ async function binaryAssignment13() {
 
     (await x.a)[z] = y;
 >(await x.a)[z] = y : any
+>                   : ^^^
 >(await x.a)[z] : any
+>               : ^^^
 >(await x.a) : any
+>            : ^^^
 >await x.a : any
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >z : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment0() {
@@ -286,9 +389,13 @@ async function binaryCompoundAssignment0() {
 
     x += await y;
 >x += await y : any
+>             : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment1() {
@@ -297,13 +404,17 @@ async function binaryCompoundAssignment1() {
 
     x.a += await y;
 >x.a += await y : any
+>               : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment2() {
@@ -312,11 +423,17 @@ async function binaryCompoundAssignment2() {
 
     x[a] += await y;
 >x[a] += await y : any
+>                : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment3() {
@@ -325,14 +442,19 @@ async function binaryCompoundAssignment3() {
 
     (await x).a += y;
 >(await x).a += y : any
+>                 : ^^^
 >(await x).a : any
+>            : ^^^
 >(await x) : any
 >          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment4() {
@@ -341,12 +463,19 @@ async function binaryCompoundAssignment4() {
 
     (await x)[a] += y;
 >(await x)[a] += y : any
+>                  : ^^^
 >(await x)[a] : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment5() {
@@ -355,11 +484,17 @@ async function binaryCompoundAssignment5() {
 
     x[await a] += y;
 >x[await a] += y : any
+>                : ^^^
 >x[await a] : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment6() {
@@ -368,15 +503,21 @@ async function binaryCompoundAssignment6() {
 
     (await x).a += await y;
 >(await x).a += await y : any
+>                       : ^^^
 >(await x).a : any
+>            : ^^^
 >(await x) : any
 >          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment7() {
@@ -385,13 +526,21 @@ async function binaryCompoundAssignment7() {
 
     (await x)[a] += await y;
 >(await x)[a] += await y : any
+>                        : ^^^
 >(await x)[a] : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryCompoundAssignment8() {
@@ -400,12 +549,19 @@ async function binaryCompoundAssignment8() {
 
     x[await a] += await y;
 >x[await a] += await y : any
+>                      : ^^^
 >x[await a] : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryExponentiation() {
@@ -416,16 +572,23 @@ async function binaryExponentiation() {
 >(await x) ** y : number
 >               : ^^^^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     x ** await y;
 >x ** await y : number
 >             : ^^^^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryComma0() {
@@ -434,10 +597,15 @@ async function binaryComma0() {
 
     return (await x), y;
 >(await x), y : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function binaryComma1(): Promise<any> {
@@ -446,7 +614,11 @@ async function binaryComma1(): Promise<any> {
 
     return x, await y;
 >x, await y : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }

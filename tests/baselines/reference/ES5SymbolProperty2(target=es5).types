@@ -7,6 +7,7 @@ namespace M {
 
     var Symbol: any;
 >Symbol : any
+>       : ^^^
 
     export class C {
 >C : C
@@ -16,6 +17,7 @@ namespace M {
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
 >       : ^^^
 >iterator : any
@@ -31,6 +33,7 @@ namespace M {
 >C : typeof C
 >  : ^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
 >       : ^^^
 >iterator : any
@@ -38,7 +41,8 @@ namespace M {
 }
 
 (new M.C)[Symbol.iterator];
->(new M.C)[Symbol.iterator] : error
+>(new M.C)[Symbol.iterator] : any
+>                           : ^^^
 >(new M.C) : M.C
 >          : ^^^
 >new M.C : M.C

@@ -3,11 +3,17 @@
 === es5-asyncFunctionNestedLoops.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function nestedLoops() {
 >nestedLoops : () => Promise<void>
@@ -17,13 +23,17 @@ async function nestedLoops() {
 >A : any
 >  : ^^^
 >x : any
+>  : ^^^
 
         await y;
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
         while (z) {
 >z : any
+>  : ^^^
 
             continue A;
 >A : any
@@ -31,6 +41,7 @@ async function nestedLoops() {
         }
         while (a) {
 >a : any
+>  : ^^^
 
             continue;
         }

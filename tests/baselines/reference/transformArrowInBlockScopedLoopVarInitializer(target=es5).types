@@ -8,6 +8,7 @@ while (true)
 {
     let local = null;
 >local : any
+>      : ^^^
 
     var a = () => local; // <-- Lambda should be converted to function()
 >a : () => any
@@ -15,4 +16,5 @@ while (true)
 >() => local : () => any
 >            : ^^^^^^^^^
 >local : any
+>      : ^^^
 }

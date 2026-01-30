@@ -22,6 +22,7 @@ module.exports.MyClass = function() {
 >this.x = 1 : 1
 >           : ^
 >this.x : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >x : any

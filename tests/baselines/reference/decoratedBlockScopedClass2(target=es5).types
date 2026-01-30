@@ -48,4 +48,5 @@ try {
 }
 catch (e) {}
 >e : any
+>  : ^^^
 

@@ -69,9 +69,11 @@ export class c1 {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
 >                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -138,9 +140,11 @@ export class c1 {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
 >                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -207,9 +211,11 @@ export class c1 {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
 >                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -276,9 +282,11 @@ export class c1 {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
 >                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 }
 
@@ -390,9 +398,11 @@ class c2 {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
 >                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -459,9 +469,11 @@ class c2 {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
 >                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -528,9 +540,11 @@ class c2 {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
 >                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 
 
@@ -597,9 +611,11 @@ class c2 {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
 >                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 }
 

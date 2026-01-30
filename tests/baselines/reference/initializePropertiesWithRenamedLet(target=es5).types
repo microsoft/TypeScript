@@ -3,6 +3,7 @@
 === initializePropertiesWithRenamedLet.ts ===
 var x0;
 >x0 : any
+>   : ^^^
 
 if (true) {
 >true : true
@@ -10,6 +11,7 @@ if (true) {
 
     let x0;
 >x0 : any
+>   : ^^^
 
     var obj1 = { x0: x0 };
 >obj1 : { x0: any; }
@@ -17,7 +19,9 @@ if (true) {
 >{ x0: x0 } : { x0: any; }
 >           : ^^^^^^^^^^^^
 >x0 : any
+>   : ^^^
 >x0 : any
+>   : ^^^
 
     var obj2 = { x0 };
 >obj2 : { x0: any; }
@@ -25,12 +29,16 @@ if (true) {
 >{ x0 } : { x0: any; }
 >       : ^^^^^^^^^^^^
 >x0 : any
+>   : ^^^
 }
 
 var x, y, z;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 
 if (true) {
 >true : true
@@ -60,6 +68,7 @@ if (true) {
 
     let z;
 >z : any
+>  : ^^^
 
     ({ z: z } = { z: 0 });
 >({ z: z } = { z: 0 }) : { z: number; }
@@ -69,7 +78,9 @@ if (true) {
 >{ z: z } : { z: any; }
 >         : ^^^^^^^^^^^
 >z : any
+>  : ^^^
 >z : any
+>  : ^^^
 >{ z: 0 } : { z: number; }
 >         : ^^^^^^^^^^^^^^
 >z : number
@@ -85,6 +96,7 @@ if (true) {
 >{ z } : { z: any; }
 >      : ^^^^^^^^^^^
 >z : any
+>  : ^^^
 >{ z: 0 } : { z: number; }
 >         : ^^^^^^^^^^^^^^
 >z : number

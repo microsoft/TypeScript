@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 superInObjectLiterals_ES5.ts(7,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
 superInObjectLiterals_ES5.ts(10,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
 superInObjectLiterals_ES5.ts(14,9): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
@@ -11,6 +12,7 @@ superInObjectLiterals_ES5.ts(49,17): error TS2660: 'super' can only be reference
 superInObjectLiterals_ES5.ts(52,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== superInObjectLiterals_ES5.ts (11 errors) ====
     var obj = {
         __proto__: {

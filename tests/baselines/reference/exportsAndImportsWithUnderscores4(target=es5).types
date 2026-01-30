@@ -3,6 +3,7 @@
 === m1.ts ===
 declare var console: any;
 >console : any
+>        : ^^^
 
 export function _() {
 >_ : () => void
@@ -10,7 +11,9 @@ export function _() {
 
     console.log("_");
 >console.log("_") : any
+>                 : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -24,7 +27,9 @@ export function __() {
 
     console.log("__");
 >console.log("__") : any
+>                  : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -38,7 +43,9 @@ export function ___() {
 
     console.log("___");
 >console.log("___") : any
+>                   : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -52,7 +59,9 @@ export function _hi() {
 
     console.log("_hi");
 >console.log("_hi") : any
+>                   : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -66,7 +75,9 @@ export function __proto() {
 
     console.log("__proto");
 >console.log("__proto") : any
+>                       : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -80,7 +91,9 @@ export function __esmodule() {
 
     console.log("__esmodule");
 >console.log("__esmodule") : any
+>                          : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -94,7 +107,9 @@ export function ___hello(){
 
     console.log("___hello");
 >console.log("___hello") : any
+>                        : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any

@@ -224,7 +224,9 @@ function multiply(a: number, b: number, c?: number, d?, e?) {
 >c : number
 >  : ^^^^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 }
 /** fn f1 with number
 * @param { string} b about b
@@ -246,10 +248,13 @@ function f1(aOrb, opt?) {
 >f1 : { (a: number): any; (b: string): any; }
 >   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >aOrb : any
+>     : ^^^
 >opt : any
+>    : ^^^
 
     return aOrb;
 >aOrb : any
+>     : ^^^
 }
 /** This is subtract function
 @param { a

@@ -1,6 +1,8 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 exportDefaultClassNameWithObject.ts(1,22): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== exportDefaultClassNameWithObject.ts (1 errors) ====
     export default class Object {}
                          ~~~~~~

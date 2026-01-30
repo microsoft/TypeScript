@@ -51,8 +51,11 @@ const result = fns.map(fn => fn());
 >fn => fn() : (fn: any) => any
 >           : ^  ^^^^^^^^^^^^^
 >fn : any
+>   : ^^^
 >fn() : any
+>     : ^^^
 >fn : any
+>   : ^^^
 
 console.log(result)
 >console.log(result) : void

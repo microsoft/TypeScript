@@ -23,6 +23,7 @@ function annotation(): PropertyDecorator {
 >(target: any): void => { } : (target: any) => void
 >                           : ^      ^^   ^^^^^    
 >target : any
+>       : ^^^
 }
 export class ClassA {
 >ClassA : ClassA

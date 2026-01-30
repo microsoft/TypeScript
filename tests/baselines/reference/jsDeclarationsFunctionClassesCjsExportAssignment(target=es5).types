@@ -14,6 +14,7 @@ function Timer(timeout) {
 >this.timeout = timeout : number
 >                       : ^^^^^^
 >this.timeout : any
+>             : ^^^
 >this : this
 >     : ^^^^
 >timeout : any
@@ -50,6 +51,7 @@ function Hook(handle) {
 >this.handle = handle : HookHandler
 >                     : ^^^^^^^^^^^
 >this.handle : any
+>            : ^^^
 >this : this
 >     : ^^^^
 >handle : any
@@ -131,6 +133,7 @@ function Context(input) {
 >this.state = this.construct(input) : State
 >                                   : ^^^^^
 >this.state : any
+>           : ^^^
 >this : this & { construct(input: Input, handle?: HookHandler | undefined): State; }
 >     : ^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >state : any

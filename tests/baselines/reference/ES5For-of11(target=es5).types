@@ -3,9 +3,11 @@
 === ES5For-of11.ts ===
 var v;
 >v : any
+>  : ^^^
 
 for (v of []) { }
 >v : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 

@@ -117,7 +117,9 @@ var i2_i_foo_r = i2_i.foo(30);
 
 var i2_i_i2_si = i2_i["hello"];
 >i2_i_i2_si : any
+>           : ^^^
 >i2_i["hello"] : any
+>              : ^^^
 >i2_i : i2
 >     : ^^
 >"hello" : "hello"
@@ -135,7 +137,9 @@ var i2_i_i2_ii = i2_i[30];
 
 var i2_i_n = new i2_i(i1_i);
 >i2_i_n : any
+>       : ^^^
 >new i2_i(i1_i) : any
+>               : ^^^
 >i2_i : i2
 >     : ^^
 >i1_i : i1
@@ -299,7 +303,9 @@ i3_i = {
 
     l: this.f,
 >l : any
+>  : ^^^
 >this.f : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >f : any
@@ -308,8 +314,11 @@ i3_i = {
     /** own x*/
     x: this.f(10),
 >x : any
+>  : ^^^
 >this.f(10) : any
+>           : ^^^
 >this.f : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >f : any
@@ -319,13 +328,17 @@ i3_i = {
 
     nc_x: this.l(this.x),
 >nc_x : any
+>     : ^^^
 >this.l(this.x) : any
+>               : ^^^
 >this.l : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >l : any
 >  : ^^^
 >this.x : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >x : any
@@ -333,7 +346,9 @@ i3_i = {
 
     nc_f: this.f,
 >nc_f : any
+>     : ^^^
 >this.f : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >f : any
@@ -341,7 +356,9 @@ i3_i = {
 
     nc_l: this.l
 >nc_l : any
+>     : ^^^
 >this.l : any
+>       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >l : any

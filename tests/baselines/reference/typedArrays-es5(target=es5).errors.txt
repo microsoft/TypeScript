@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 typedArrays-es5.ts(2,5): error TS2802: Type 'Float32Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 typedArrays-es5.ts(5,5): error TS2802: Type 'Float64Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 typedArrays-es5.ts(8,5): error TS2802: Type 'Int16Array<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
@@ -10,6 +11,7 @@ typedArrays-es5.ts(26,5): error TS2802: Type 'Uint8Array<ArrayBuffer>' can only 
 typedArrays-es5.ts(29,5): error TS2802: Type 'Uint8ClampedArray<ArrayBuffer>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== typedArrays-es5.ts (10 errors) ====
     const float32Array = new Float32Array(1);
     [...float32Array];

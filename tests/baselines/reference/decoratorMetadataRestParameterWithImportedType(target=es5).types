@@ -46,6 +46,7 @@ function annotation(): ClassDecorator {
 >(target: any): void => { } : (target: any) => void
 >                           : ^      ^^   ^^^^^    
 >target : any
+>       : ^^^
 }
 
 function annotation1(): MethodDecorator {
@@ -56,6 +57,7 @@ function annotation1(): MethodDecorator {
 >(target: any): void => { } : (target: any) => void
 >                           : ^      ^^   ^^^^^    
 >target : any
+>       : ^^^
 }
 
 @annotation()

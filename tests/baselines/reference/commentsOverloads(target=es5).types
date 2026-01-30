@@ -18,6 +18,7 @@ function f1(aOrb: any) {
 >f1 : { (a: number): number; (b: string): number; }
 >   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
+>     : ^^^
 
     return 10;
 >10 : 10
@@ -57,6 +58,7 @@ function f2(aOrb: any) {
 >f2 : { (a: number): number; (b: string): number; }
 >   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
+>     : ^^^
 
     return 10;
 >10 : 10
@@ -94,6 +96,7 @@ function f3(aOrb: any) {
 >f3 : { (a: number): number; (b: string): number; }
 >   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
+>     : ^^^
 
     return 10;
 >10 : 10
@@ -133,6 +136,7 @@ function f4(aOrb: any) {
 >f4 : { (a: number): number; (b: string): number; }
 >   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
+>     : ^^^
 
     return 10;
 >10 : 10
@@ -236,6 +240,7 @@ interface i1 {
 >foo4 : { (a: number): number; (b: string): number; (c: any): any; }
 >     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
 >c : any
+>  : ^^^
 
     /// new 1
     new (a: string);
@@ -335,6 +340,7 @@ class c {
 >prop1 : { (a: number): number; (b: string): number; }
 >      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aorb : any
+>     : ^^^
 
         return 10;
 >10 : 10
@@ -357,6 +363,7 @@ class c {
 >prop2 : { (a: number): number; (b: string): number; }
 >      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aorb : any
+>     : ^^^
 
         return 10;
 >10 : 10
@@ -379,6 +386,7 @@ class c {
 >prop3 : { (a: number): number; (b: string): number; }
 >      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aorb : any
+>     : ^^^
 
         return 10;
 >10 : 10
@@ -402,6 +410,7 @@ class c {
 >prop4 : { (a: number): number; (b: string): number; }
 >      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aorb : any
+>     : ^^^
 
         return 10;
 >10 : 10
@@ -426,6 +435,7 @@ class c {
 >prop5 : { (a: number): number; (b: string): number; }
 >      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aorb : any
+>     : ^^^
 
         return 10;
 >10 : 10
@@ -446,6 +456,7 @@ class c1 {
 
     constructor(aorb: any) {
 >aorb : any
+>     : ^^^
     }
 }
 class c2 {
@@ -464,6 +475,7 @@ class c2 {
 
     constructor(aorb: any) {
 >aorb : any
+>     : ^^^
     }
 }
 class c3 {
@@ -481,6 +493,7 @@ class c3 {
 
     constructor(aorb: any) {
 >aorb : any
+>     : ^^^
     }
 }
 class c4 {
@@ -500,6 +513,7 @@ class c4 {
     /** c4 3 */
     constructor(aorb: any) {
 >aorb : any
+>     : ^^^
     }
 }
 class c5 {
@@ -519,6 +533,7 @@ class c5 {
     /** c5 implementation*/
     constructor(aorb: any) {
 >aorb : any
+>     : ^^^
     }
 }
 var c_i = new c();

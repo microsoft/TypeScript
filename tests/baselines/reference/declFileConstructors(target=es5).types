@@ -73,6 +73,7 @@ export class ConstructorWithOverloads {
 
     constructor(a: any) {
 >a : any
+>  : ^^^
     }
 }
 
@@ -191,6 +192,7 @@ class GlobalConstructorWithOverloads {
 
     constructor(a: any) {
 >a : any
+>  : ^^^
     }
 }
 

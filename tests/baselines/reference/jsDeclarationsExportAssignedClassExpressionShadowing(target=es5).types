@@ -42,6 +42,7 @@ module.exports = class Q {
 >this.x = new A() : A
 >                 : ^
 >this.x : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >x : any

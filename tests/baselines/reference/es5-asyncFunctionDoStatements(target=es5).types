@@ -3,11 +3,17 @@
 === es5-asyncFunctionDoStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function doStatement0() {
 >doStatement0 : () => Promise<void>
@@ -15,7 +21,9 @@ async function doStatement0() {
 
     do { x; } while (y);
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement1() {
@@ -24,8 +32,11 @@ async function doStatement1() {
 
     do { await x; } while (y);
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement2() {
@@ -34,8 +45,11 @@ async function doStatement2() {
 
     do { x; } while (await y);
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement3() {
@@ -44,6 +58,7 @@ async function doStatement3() {
 
     do { continue; } while (y);
 >y : any
+>  : ^^^
 }
 
 async function doStatement4() {
@@ -52,8 +67,11 @@ async function doStatement4() {
 
     do { await x; continue; } while (y);
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement5() {
@@ -64,8 +82,11 @@ async function doStatement5() {
 >1 : 1
 >  : ^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement6() {
@@ -74,7 +95,9 @@ async function doStatement6() {
 
     do { continue; } while (await y);
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement7() {
@@ -87,6 +110,7 @@ async function doStatement7() {
 >A : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement8() {
@@ -97,10 +121,13 @@ async function doStatement8() {
 >B : any
 >  : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >B : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement9() {
@@ -115,8 +142,11 @@ async function doStatement9() {
 >C : any
 >  : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement10() {
@@ -129,7 +159,9 @@ async function doStatement10() {
 >D : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement11() {
@@ -138,6 +170,7 @@ async function doStatement11() {
 
     do { break; } while (y);
 >y : any
+>  : ^^^
 }
 
 async function doStatement12() {
@@ -146,8 +179,11 @@ async function doStatement12() {
 
     do { await x; break; } while (y);
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement13() {
@@ -158,8 +194,11 @@ async function doStatement13() {
 >1 : 1
 >  : ^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement14() {
@@ -168,7 +207,9 @@ async function doStatement14() {
 
     do { break; } while (await y);
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement15() {
@@ -181,6 +222,7 @@ async function doStatement15() {
 >E : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement16() {
@@ -191,10 +233,13 @@ async function doStatement16() {
 >F : any
 >  : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >F : any
 >  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement17() {
@@ -209,8 +254,11 @@ async function doStatement17() {
 >G : any
 >  : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 async function doStatement18() {
@@ -223,5 +271,7 @@ async function doStatement18() {
 >H : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 }

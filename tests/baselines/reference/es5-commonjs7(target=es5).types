@@ -7,4 +7,5 @@ export default undefined;
 
 export var __esModule;
 >__esModule : any
+>           : ^^^
 

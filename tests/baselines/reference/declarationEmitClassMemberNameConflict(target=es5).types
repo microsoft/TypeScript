@@ -31,6 +31,7 @@ export class C2 {
 
     C2: any // has to be the same as the class name
 >C2 : any
+>   : ^^^
 
     bar() {
 >bar : () => (t: typeof C2) => void
@@ -80,7 +81,9 @@ export class C4 {
 
     set C4(v) { } // has to be the same as the class name
 >C4 : any
+>   : ^^^
 >v : any
+>  : ^^^
 
     bar() {
 >bar : () => (t: typeof C4) => void

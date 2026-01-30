@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 blockScopedSameNameFunctionDeclarationES5.ts(3,18): error TS2393: Duplicate function implementation.
 blockScopedSameNameFunctionDeclarationES5.ts(5,13): error TS2554: Expected 0 arguments, but got 1.
 blockScopedSameNameFunctionDeclarationES5.ts(8,18): error TS2393: Duplicate function implementation.
@@ -6,6 +7,7 @@ blockScopedSameNameFunctionDeclarationES5.ts(12,9): error TS2554: Expected 0 arg
 blockScopedSameNameFunctionDeclarationES5.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== blockScopedSameNameFunctionDeclarationES5.ts (6 errors) ====
     function foo(a: number) {
         if (a === 1) {

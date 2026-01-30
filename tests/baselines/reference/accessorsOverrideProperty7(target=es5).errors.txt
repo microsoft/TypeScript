@@ -1,7 +1,9 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 accessorsOverrideProperty7.ts(2,14): error TS1267: Property 'p' cannot have an initializer because it is marked abstract.
 accessorsOverrideProperty7.ts(5,9): error TS2611: 'p' is defined as a property in class 'A', but is overridden here in 'B' as an accessor.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== accessorsOverrideProperty7.ts (2 errors) ====
     abstract class A {
         abstract p = 'yep'

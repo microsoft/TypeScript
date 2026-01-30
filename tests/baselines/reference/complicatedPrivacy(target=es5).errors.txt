@@ -1,8 +1,10 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
 complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
 complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== complicatedPrivacy.ts (3 errors) ====
     namespace m1 {
         export namespace m2 {

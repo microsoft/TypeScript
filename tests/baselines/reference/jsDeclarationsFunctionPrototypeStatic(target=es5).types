@@ -33,6 +33,7 @@ MyClass.prototype.method = function() {}
 >MyClass.prototype.method = function() {} : () => void
 >                                         : ^^^^^^^^^^
 >MyClass.prototype.method : any
+>                         : ^^^
 >MyClass.prototype : any
 >                  : ^^^
 >MyClass : typeof MyClass

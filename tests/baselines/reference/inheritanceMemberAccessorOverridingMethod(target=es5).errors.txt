@@ -1,6 +1,8 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== inheritanceMemberAccessorOverridingMethod.ts (1 errors) ====
     class a {
         x() {

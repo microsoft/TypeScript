@@ -25,7 +25,9 @@ const o2 = {
 
         const x = yield;
 >x : any
+>  : ^^^
 >yield : any
+>      : ^^^
     }
 }
 === O3.ts ===
@@ -41,7 +43,9 @@ const o3 = {
 
         const x = yield 1;
 >x : any
+>  : ^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
     }
@@ -59,7 +63,9 @@ const o4 = {
 
         const x = yield* [1];
 >x : any
+>  : ^^^
 >yield* [1] : any
+>           : ^^^
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1
@@ -89,6 +95,7 @@ const o5 = {
 >async function*() { yield 1; } : () => AsyncGenerator<number, void, unknown>
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
     }

@@ -1,0 +1,63 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== C1.ts (0 errors) ====
+    class C1 {
+        async * f() {
+        }
+    }
+==== C2.ts (0 errors) ====
+    class C2 {
+        async * f() {
+            const x = yield;
+        }
+    }
+==== C3.ts (0 errors) ====
+    class C3 {
+        async * f() {
+            const x = yield 1;
+        }
+    }
+==== C4.ts (0 errors) ====
+    class C4 {
+        async * f() {
+            const x = yield* [1];
+        }
+    }
+==== C5.ts (0 errors) ====
+    class C5 {
+        async * f() {
+            const x = yield* (async function*() { yield 1; })();
+        }
+    }
+==== C6.ts (0 errors) ====
+    class C6 {
+        async * f() {
+            const x = await 1;
+        }
+    }
+==== C7.ts (0 errors) ====
+    class C7 {
+        async * f() {
+            return 1;
+        }
+    }
+==== C8.ts (0 errors) ====
+    class C8 {
+        g() {
+        }
+        async * f() {
+            this.g();
+        }
+    }
+==== C9.ts (0 errors) ====
+    class B9 {
+        g() {}
+    }
+    class C9 extends B9 {
+        async * f() {
+            super.g();
+        }
+    }
+    

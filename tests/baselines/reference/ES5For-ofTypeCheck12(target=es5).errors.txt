@@ -1,6 +1,8 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ES5For-ofTypeCheck12.ts(1,17): error TS2495: Type '0' is not an array type or a string type.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== ES5For-ofTypeCheck12.ts (1 errors) ====
     for (const v of 0) { }
                     ~

@@ -65,9 +65,11 @@ export function fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
 >                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
     return a;
 >a : any
+>  : ^^^
 }
 
 export function fooWithSingleOverload(a: string): string;
@@ -80,15 +82,18 @@ export function fooWithSingleOverload(a: any) {
 >fooWithSingleOverload : (a: string) => string
 >                      : ^ ^^      ^^^^^      
 >a : any
+>  : ^^^
 
     return a;
 >a : any
+>  : ^^^
 }
 
 export function fooWithTypePredicate(a: any): a is number {
 >fooWithTypePredicate : (a: any) => a is number
 >                     : ^ ^^   ^^^^^           
 >a : any
+>  : ^^^
 
     return true;
 >true : true
@@ -98,8 +103,11 @@ export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a
 >fooWithTypePredicateAndMulitpleParams : (a: any, b: any, c: any) => a is number
 >                                      : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^           
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
     return true;
 >true : true
@@ -109,6 +117,7 @@ export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 >fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
 >                                   : ^ ^^ ^^   ^^^^^      
 >a : any
+>  : ^^^
 
     return true;
 >true : true
@@ -118,6 +127,7 @@ export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is numb
 >fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
 >                                     : ^ ^^   ^^^^^    ^^^^^^^^^^^^           
 >a : any
+>  : ^^^
 >rest : any[]
 >     : ^^^^^
 
@@ -190,9 +200,11 @@ function nonExportedFooWithOverloads(a: any): any {
 >nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
 >                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
     return a;
 >a : any
+>  : ^^^
 }
 
 === declFileFunctions_1.ts ===
@@ -259,7 +271,9 @@ function globalfooWithOverloads(a: any): any {
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }
 >                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
+>  : ^^^
 
     return a;
 >a : any
+>  : ^^^
 }

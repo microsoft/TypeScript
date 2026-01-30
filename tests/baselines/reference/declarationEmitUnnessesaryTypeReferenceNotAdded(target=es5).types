@@ -21,7 +21,9 @@ export default function parseArgs(): minimist.ParsedArgs {
 >minimist : (x: any) => minimist.ParsedArgs
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >process.argv.slice(2) : any
+>                      : ^^^
 >process.argv.slice : any
+>                   : ^^^
 >process.argv : any
 >             : ^^^
 >process : any
@@ -42,6 +44,7 @@ declare function thing(x: any): thing.ParsedArgs;
 >thing : (x: any) => thing.ParsedArgs
 >      : ^ ^^   ^^^^^                
 >x : any
+>  : ^^^
 >thing : any
 >      : ^^^
 
@@ -52,6 +55,7 @@ export = thing;
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;
 >thing : any
+>      : ^^^
 
 export = thing;
 >thing : any

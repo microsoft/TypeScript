@@ -3,9 +3,11 @@
 === decoratorOnClassConstructor4.ts ===
 declare var dec: any;
 >dec : any
+>    : ^^^
 
 @dec
 >dec : any
+>    : ^^^
 
 class A {
 >A : A
@@ -14,6 +16,7 @@ class A {
 
 @dec
 >dec : any
+>    : ^^^
 
 class B {
 >B : B
@@ -26,6 +29,7 @@ class B {
 
 @dec
 >dec : any
+>    : ^^^
 
 class C extends A {
 >C : C

@@ -5,6 +5,7 @@ function baz(x: any) {
 >baz : (x: any) => any[][]
 >    : ^ ^^   ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
   return [[x, x]];
 >[[x, x]] : any[][]
@@ -12,13 +13,16 @@ function baz(x: any) {
 >[x, x] : any[]
 >       : ^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 }
 
 function foo(set: any) {
 >foo : (set: any) => void
 >    : ^   ^^   ^^^^^^^^^
 >set : any
+>    : ^^^
 
   for (const [value, i] of baz(set.values)) {
 >value : any
@@ -30,6 +34,7 @@ function foo(set: any) {
 >baz : (x: any) => any[][]
 >    : ^ ^^   ^^^^^^^^^^^^
 >set.values : any
+>           : ^^^
 >set : any
 >    : ^^^
 >values : any
@@ -37,6 +42,7 @@ function foo(set: any) {
 
     const bar: any = [];
 >bar : any
+>    : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -46,10 +52,13 @@ function foo(set: any) {
 >() => bar : () => any
 >          : ^^^^^^^^^
 >bar : any
+>    : ^^^
 
     set.values.push(...[]);
 >set.values.push(...[]) : any
+>                       : ^^^
 >set.values.push : any
+>                : ^^^
 >set.values : any
 >           : ^^^
 >set : any

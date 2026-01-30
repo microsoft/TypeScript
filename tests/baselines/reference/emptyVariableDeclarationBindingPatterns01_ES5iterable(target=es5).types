@@ -11,36 +11,49 @@
 
     var a: any;
 >a : any
+>  : ^^^
 
     var {} = a;
 >a : any
+>  : ^^^
 
     let {} = a;
 >a : any
+>  : ^^^
 
     const {} = a;
 >a : any
+>  : ^^^
 
     var [] = a;
 >a : any
+>  : ^^^
 
     let [] = a;
 >a : any
+>  : ^^^
 
     const [] = a;
 >a : any
+>  : ^^^
 
     var {} = a, [] = a;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     let {} = a, [] = a;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     const {} = a, [] = a;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     var { p1: {}, p2: [] } = a;
 >p1 : any
@@ -48,6 +61,7 @@
 >p2 : any
 >   : ^^^
 >a : any
+>  : ^^^
 
     let { p1: {}, p2: [] } = a;
 >p1 : any
@@ -55,6 +69,7 @@
 >p2 : any
 >   : ^^^
 >a : any
+>  : ^^^
 
     const { p1: {}, p2: [] } = a;
 >p1 : any
@@ -62,6 +77,7 @@
 >p2 : any
 >   : ^^^
 >a : any
+>  : ^^^
 
     for (var {} = {}, {} = {}; false; void 0) {
 >{} : {}
@@ -80,24 +96,31 @@
 >f : ({}?: any, []?: any, { p: {} }?: any) => ({}?: any, []?: any, { p: {} }?: any) => any
 >  : ^  ^^^^^^^^  ^^^^^^^^         ^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^         ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >p : any
 >  : ^^^
 >a : any
 >  : ^^^
 >a : any
+>  : ^^^
 
         return ({} = a, [] = a, { p: {} = a } = a) => a;
 >({} = a, [] = a, { p: {} = a } = a) => a : ({}?: any, []?: any, { p: {} }?: any) => any
 >                                         : ^  ^^^^^^^^  ^^^^^^^^         ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >p : any
 >  : ^^^
 >a : any
 >  : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
     }
 })();
 

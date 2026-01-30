@@ -3,11 +3,17 @@
 === es5-asyncFunctionNewExpressions.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function newExpression0() {
 >newExpression0 : () => Promise<void>
@@ -15,10 +21,15 @@ async function newExpression0() {
 
     await new x(y, z);
 >await new x(y, z) : any
+>                  : ^^^
 >new x(y, z) : any
+>            : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression1() {
@@ -27,11 +38,17 @@ async function newExpression1() {
 
     new (await x)(y, z);
 >new (await x)(y, z) : any
+>                    : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression2() {
@@ -40,10 +57,15 @@ async function newExpression2() {
 
     new x(await y, z);
 >new x(await y, z) : any
+>                  : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression3() {
@@ -52,10 +74,15 @@ async function newExpression3() {
 
     new x(y, await z);
 >new x(y, await z) : any
+>                  : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression4() {
@@ -64,11 +91,17 @@ async function newExpression4() {
 
     await new x(...y, z);
 >await new x(...y, z) : any
+>                     : ^^^
 >new x(...y, z) : any
+>               : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression5() {
@@ -77,12 +110,19 @@ async function newExpression5() {
 
     new (await x)(...y, z);
 >new (await x)(...y, z) : any
+>                       : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression6() {
@@ -91,12 +131,19 @@ async function newExpression6() {
 
     new x(...(await y), z);
 >new x(...(await y), z) : any
+>                       : ^^^
 >x : any
+>  : ^^^
 >...(await y) : any
+>             : ^^^
 >(await y) : any
+>          : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression7() {
@@ -105,11 +152,17 @@ async function newExpression7() {
 
     new x(...y, await z);
 >new x(...y, await z) : any
+>                     : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression8() {
@@ -118,11 +171,17 @@ async function newExpression8() {
 
     new x(await y, ...z);
 >new x(await y, ...z) : any
+>                     : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >...z : any
+>     : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression9() {
@@ -131,12 +190,19 @@ async function newExpression9() {
 
     new x(y, ...(await z));
 >new x(y, ...(await z)) : any
+>                       : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >...(await z) : any
+>             : ^^^
 >(await z) : any
+>          : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression10() {
@@ -145,14 +211,19 @@ async function newExpression10() {
 
     await new x.a(y, z);
 >await new x.a(y, z) : any
+>                    : ^^^
 >new x.a(y, z) : any
+>              : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression11() {
@@ -161,15 +232,21 @@ async function newExpression11() {
 
     new (await x.a)(y, z);
 >new (await x.a)(y, z) : any
+>                      : ^^^
 >(await x.a) : any
+>            : ^^^
 >await x.a : any
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression12() {
@@ -178,15 +255,21 @@ async function newExpression12() {
 
     new (await x).a(y, z);
 >new (await x).a(y, z) : any
+>                      : ^^^
 >(await x).a : any
+>            : ^^^
 >(await x) : any
 >          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression13() {
@@ -195,14 +278,19 @@ async function newExpression13() {
 
     new x.a(await y, z);
 >new x.a(await y, z) : any
+>                    : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression14() {
@@ -211,14 +299,19 @@ async function newExpression14() {
 
     new x.a(y, await z);
 >new x.a(y, await z) : any
+>                    : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression15() {
@@ -227,12 +320,19 @@ async function newExpression15() {
 
     await new x[a](y, z);
 >await new x[a](y, z) : any
+>                     : ^^^
 >new x[a](y, z) : any
+>               : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression16() {
@@ -241,13 +341,21 @@ async function newExpression16() {
 
     new (await x[a])(y, z);
 >new (await x[a])(y, z) : any
+>                       : ^^^
 >(await x[a]) : any
+>             : ^^^
 >await x[a] : any
+>           : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression17() {
@@ -256,13 +364,21 @@ async function newExpression17() {
 
     new (await x)[a](y, z);
 >new (await x)[a](y, z) : any
+>                       : ^^^
 >(await x)[a] : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression18() {
@@ -271,12 +387,19 @@ async function newExpression18() {
 
     new x[await a](y, z);
 >new x[await a](y, z) : any
+>                     : ^^^
 >x[await a] : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression19() {
@@ -285,12 +408,19 @@ async function newExpression19() {
 
     new x[a](await y, z);
 >new x[a](await y, z) : any
+>                     : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function newExpression20() {
@@ -299,10 +429,17 @@ async function newExpression20() {
 
     new x[a](y, await z);
 >new x[a](y, await z) : any
+>                     : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }

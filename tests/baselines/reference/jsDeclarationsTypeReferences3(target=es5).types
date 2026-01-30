@@ -11,6 +11,7 @@ const Something = require("fs").Something;
 >require("fs") : typeof import("fs")
 >              : ^^^^^^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >"fs" : "fs"
 >     : ^^^^
 >Something : typeof Something

@@ -39,6 +39,7 @@ export function Point(x, y) {
 >this.x = x : number
 >           : ^^^^^^
 >this.x : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >x : any
@@ -50,6 +51,7 @@ export function Point(x, y) {
 >this.y = y : number
 >           : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any

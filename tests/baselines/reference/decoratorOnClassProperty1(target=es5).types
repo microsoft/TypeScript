@@ -5,6 +5,7 @@ declare function dec(target: any, propertyKey: string): void;
 >dec : (target: any, propertyKey: string) => void
 >    : ^      ^^   ^^           ^^      ^^^^^    
 >target : any
+>       : ^^^
 >propertyKey : string
 >            : ^^^^^^
 
@@ -16,4 +17,5 @@ class C {
 >dec : (target: any, propertyKey: string) => void
 >    : ^      ^^   ^^           ^^      ^^^^^    
 >prop : any
+>     : ^^^
 }
