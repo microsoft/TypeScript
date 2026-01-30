@@ -74,8 +74,8 @@ import {
     StringLiteralLike,
     trace,
     updateResolutionField,
-    WatchDirectoryFlags,
     usesWildcardTypes,
+    WatchDirectoryFlags,
 } from "./_namespaces/ts.js";
 
 /** @internal */

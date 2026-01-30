@@ -401,7 +401,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
                     ) :
                     undefined;
             case FileIncludeKind.AutomaticTypeDirectiveFile:
-                configFileNode = getOptionsSyntaxByArrayElementValue(getCompilerOptionsObjectLiteralSyntax(), "types", usesWildcardTypes(options) ? "*" :  reason.typeReference);
+                configFileNode = getOptionsSyntaxByArrayElementValue(getCompilerOptionsObjectLiteralSyntax(), "types", usesWildcardTypes(options) ? "*" : reason.typeReference);
 
                 message = Diagnostics.File_is_entry_point_of_type_library_specified_here;
                 break;

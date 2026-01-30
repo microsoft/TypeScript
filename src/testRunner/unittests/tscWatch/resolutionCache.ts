@@ -569,7 +569,7 @@ declare namespace NodeJS {
                 };
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{ \"compilerOptions\": { \"types\": [\"*\"] } }",
+                    content: '{ "compilerOptions": { "types": ["*"] } }',
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return TestServerHost.createWatchedSystem(

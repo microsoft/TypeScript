@@ -911,6 +911,7 @@ import {
     NodeBuilderFlags,
     nodeCanBeDecorated,
     NodeCheckFlags,
+    nodeCoreModules,
     NodeFlags,
     nodeHasName,
     nodeIsMissing,
@@ -1144,7 +1145,6 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
-    nodeCoreModules,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -27705,11 +27705,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getCannotResolveModuleNameErrorForSpecificModule(moduleName: Expression): DiagnosticMessage | undefined {
         if (moduleName.kind === SyntaxKind.StringLiteral) {
             if (nodeCoreModules.has((moduleName as StringLiteral).text)) {
-                    if (usesWildcardTypes(compilerOptions)) {
-                        return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
-                    } else {
-                        return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig
-                    }
+                if (usesWildcardTypes(compilerOptions)) {
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
+                }
+                else {
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig;
+                }
             }
         }
         return undefined;
