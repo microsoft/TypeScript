@@ -52,7 +52,6 @@ import {
     removeSuffix,
     SourceFile,
     TsConfigSourceFile,
-    usesWildcardTypes,
 } from "./_namespaces/ts.js";
 
 interface FileReasonToChainCache {
