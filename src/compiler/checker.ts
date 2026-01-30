@@ -25480,11 +25480,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isArrayLikeType(type: Type): boolean {
         // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
-        // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>.
-        // When Array doesn't exist (noLib), we can't determine array-likeness.
-        if (anyReadonlyArrayType === emptyObjectType) {
-            return false;
-        }
+        // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
         return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
     }
 
