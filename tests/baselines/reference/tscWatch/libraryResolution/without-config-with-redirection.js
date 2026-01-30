@@ -207,17 +207,11 @@ project1/file2.ts
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
+export const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
+export const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
@@ -370,11 +364,8 @@ project1/file2.ts
 
 
 //// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.xyz = exports.file = void 0;
-exports.file = 10;
-exports.xyz = 10;
+export const file = 10;
+export const xyz = 10;
 
 
 

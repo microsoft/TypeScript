@@ -15,7 +15,7 @@ Info seq  [hh:mm:ss:mss] request:
               "../shared/src/*"
             ]
           },
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true,
           "rootDir": "/home/src/workspaces/project/packages/shared/src",

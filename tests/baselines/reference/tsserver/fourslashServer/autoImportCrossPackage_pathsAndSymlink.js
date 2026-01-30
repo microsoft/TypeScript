@@ -18,7 +18,7 @@ Info seq  [hh:mm:ss:mss] request:
               "./*"
             ]
           },
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

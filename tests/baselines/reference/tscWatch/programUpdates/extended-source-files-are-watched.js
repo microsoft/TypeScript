@@ -51,12 +51,14 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 
@@ -71,7 +73,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
@@ -91,17 +93,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile2.ts (used version)
 
@@ -139,12 +141,12 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
 "use strict";
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
 "use strict";
-var y = 1;
+let y = 1;
 
 
 
@@ -159,7 +161,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
@@ -185,12 +187,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
@@ -226,11 +228,11 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 
@@ -247,12 +249,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
@@ -303,12 +305,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
@@ -357,7 +359,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
@@ -384,12 +386,12 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 

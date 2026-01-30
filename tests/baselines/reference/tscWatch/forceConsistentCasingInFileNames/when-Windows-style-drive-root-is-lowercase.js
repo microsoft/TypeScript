@@ -41,8 +41,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C:/workspaces/solution/project/a" from file 'project/b.ts'
@@ -53,21 +53,18 @@ project/b.ts
 
 
 
+//// [c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [c:/workspaces/solution/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
+export const a = 1;
+export const b = 2;
 
 
 //// [c:/workspaces/solution/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("C:/workspaces/solution/project/a");
-var a_2 = require("c:/workspaces/solution/project/a");
-a_1.a;
-a_2.b;
+import { a } from "C:/workspaces/solution/project/a";
+import { b } from "c:/workspaces/solution/project/a";
+a;
+b;
 
 
 
@@ -80,7 +77,7 @@ c:/workspaces/solution/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 c:/workspaces/solution/project/a.ts: *new*
   {}
@@ -106,17 +103,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 
 Shape signatures in builder refreshed for::
-c:/home/src/tslibs/ts/lib/lib.d.ts (used version)
+c:/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 c:/workspaces/solution/project/a.ts (used version)
 c:/workspaces/solution/project/b.ts (used version)
 
@@ -145,8 +142,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C:/workspaces/solution/project/a" from file 'project/b.ts'
@@ -158,12 +155,9 @@ project/b.ts
 
 
 //// [c:/workspaces/solution/project/a.js]
-"use strict";
 // some comment
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
+export const a = 1;
+export const b = 2;
 
 
 //// [c:/workspaces/solution/project/b.js] file written with same contents
@@ -182,7 +176,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 

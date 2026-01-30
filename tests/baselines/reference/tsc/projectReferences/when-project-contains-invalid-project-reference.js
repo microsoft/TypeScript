@@ -63,6 +63,8 @@ Found 4 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/theApp.js]
 define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
