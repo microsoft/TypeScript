@@ -79,7 +79,11 @@ function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string 
 }
 
 function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
-    return diagCode === errorCodeCannotFindModule
-        ? (nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-        : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
+    if (nodeCoreModules.has(packageName)) {
+        return "@types/node";
+    }
+    if (diagCode !== errorCodeCannotFindModule) {
+        return host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined;
+    }
+    return undefined;
 }
