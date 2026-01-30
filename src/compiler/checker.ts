@@ -45620,7 +45620,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
-        // Only use iteration semantics when Iterable exists; otherwise fall through to array-like handling.
         const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
