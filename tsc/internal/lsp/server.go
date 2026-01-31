@@ -528,7 +528,11 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 	if handler := handlers()[req.Method]; handler != nil {
 		start := time.Now()
 		err := handler(s, ctx, req)
-		s.logger.Info("handled method '", req.Method, "' (", req.ID, ") in ", time.Since(start))
+		idStr := ""
+		if req.ID != nil {
+			idStr = " (" + req.ID.String() + ")"
+		}
+		s.logger.Info("handled method '", req.Method, "'", idStr, " in ", time.Since(start))
 		return err
 	}
 	s.logger.Warn("unknown method '", req.Method, "'")
