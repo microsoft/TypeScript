@@ -62,8 +62,8 @@ const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) 
 
 === controlFlowFunctionLikeCircular_3.ts ===
 function test(arg: () => string) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : () => string
 >    : ^^^^^^      
 
@@ -96,8 +96,8 @@ function test(arg: () => string) {
 
 === controlFlowFunctionLikeCircular_4.ts ===
 function test(arg: () => string) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : () => string
 >    : ^^^^^^      
 
@@ -128,8 +128,8 @@ function test(arg: () => string) {
 
 === controlFlowFunctionLikeCircular_5.ts ===
 function test(arg: string | number) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 
@@ -144,16 +144,16 @@ function test(arg: string | number) {
 >         : ^^^^^^^^
 
     fn();
->fn() : string
->     : ^^^^^^
+>fn() : string | number
+>     : ^^^^^^^^^^^^^^^
 >fn : () => typeof arg
 >   : ^^^^^^          
 
     const fn: () => typeof arg = () => arg;
 >fn : () => typeof arg
 >   : ^^^^^^          
->arg : string
->    : ^^^^^^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
 >() => arg : () => string
 >          : ^^^^^^^^^^^^
 >arg : string
@@ -170,8 +170,8 @@ function test(arg: string | number) {
 
 === controlFlowFunctionLikeCircular_6.ts ===
 function test(arg: string | number) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 
@@ -212,8 +212,8 @@ function test(arg: string | number) {
 
 === controlFlowFunctionLikeCircular_7.ts ===
 function test(arg: string | number) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 
@@ -228,16 +228,16 @@ function test(arg: string | number) {
 >         : ^^^^^^^^
 
     fn();
->fn() : string
->     : ^^^^^^
+>fn() : string | number
+>     : ^^^^^^^^^^^^^^^
 >fn : () => typeof arg
 >   : ^^^^^^          
 
     const fn: { (): typeof arg } = () => arg;
 >fn : () => typeof arg
 >   : ^^^^^^          
->arg : string
->    : ^^^^^^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
 >() => arg : () => string
 >          : ^^^^^^^^^^^^
 >arg : string
@@ -254,8 +254,8 @@ function test(arg: string | number) {
 
 === controlFlowFunctionLikeCircular_8.ts ===
 function test(arg: string | number, whatever: any) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 >whatever : any
@@ -306,8 +306,8 @@ function test(arg: string | number, whatever: any) {
 
 === controlFlowFunctionLikeCircular_9.ts ===
 function test(arg: string | number, whatever: any) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 >whatever : any
@@ -324,36 +324,36 @@ function test(arg: string | number, whatever: any) {
 >         : ^^^^^^^^
 
     o.x();
->o.x() : any
->      : ^^^
->o.x : (() => any) | (() => void)
->    : ^^^^^^^^^^^^^^^^^^^^^    ^
+>o.x() : void | DateConstructor
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>o.x : (() => typeof Date) | (() => void)
+>    : ^^^^^^^           ^^^^^^^^^^^    ^
 >o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
 >  : ^^^^^^^^^^^^^^^^^^^^^          ^^^^^                                  ^^^
->x : (() => any) | (() => void)
->  : ^^^^^^^^^^^^^^^^^^^^^    ^
+>x : (() => typeof Date) | (() => void)
+>  : ^^^^^^^           ^^^^^^^^^^^    ^
 
     const o: { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void) } = whatever
 >o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
 >  : ^^^^^^^^^^^^^^^^^^^^^          ^^^^^                                  ^^^
 >k : string
 >  : ^^^^^^
->arg : string
->    : ^^^^^^
->x : (() => any) | (() => void)
->  : ^^^^^^^^^^^^^^^^^^^^^    ^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
+>x : (() => typeof Date) | (() => void)
+>  : ^^^^^^^           ^^^^^^^^^^^    ^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >whatever : any
 >         : ^^^
 
     return o.x;
->o.x : (() => any) | (() => void)
->    : ^^^^^^^^^^^^^^^^^^^^^    ^
+>o.x : (() => typeof Date) | (() => void)
+>    : ^^^^^^^           ^^^^^^^^^^^    ^
 >o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
 >  : ^^^^^^^^^^^^^^^^^^^^^          ^^^^^                                  ^^^
->x : (() => any) | (() => void)
->  : ^^^^^^^^^^^^^^^^^^^^^    ^
+>x : (() => typeof Date) | (() => void)
+>  : ^^^^^^^           ^^^^^^^^^^^    ^
   }
   return undefined;
 >undefined : undefined
@@ -362,8 +362,8 @@ function test(arg: string | number, whatever: any) {
 
 === controlFlowFunctionLikeCircular_10.ts ===
 function test(arg: string | number, whatever: any) {
->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => any) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
->     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
+>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is string) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
+>     : ^^^   ^^            ^^^^^^^^^^   ^^            ^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^^^^^^^^^          ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^   ^^       ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^    ^^^^^^^^^^^^^^^^   ^^               ^^        ^^   ^^^^^^^^^^          ^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
 >whatever : any
@@ -380,8 +380,8 @@ function test(arg: string | number, whatever: any) {
 >         : ^^^^^^^^
 
     o.foo();
->o.foo() : string
->        : ^^^^^^
+>o.foo() : string | number
+>        : ^^^^^^^^^^^^^^^
 >o.foo : () => typeof arg
 >      : ^^^^^^          
 >o : { [k: string]: () => typeof arg; }
@@ -394,8 +394,8 @@ function test(arg: string | number, whatever: any) {
 >  : ^^^^^^^^^^^^^^^^^^^^^          ^^^
 >k : string
 >  : ^^^^^^
->arg : string
->    : ^^^^^^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
 >whatever : any
 >         : ^^^
 

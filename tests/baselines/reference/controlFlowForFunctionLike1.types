@@ -79,10 +79,10 @@ function test2(a: number | string) {
     const fn: { (arg: typeof a): boolean; } = () => true;
 >fn : (arg: typeof a) => boolean
 >   : ^   ^^        ^^^^^       
->arg : number
->    : ^^^^^^
->a : number
->  : ^^^^^^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
 >() => true : () => true
 >           : ^^^^^^^^^^
 >true : true
@@ -98,8 +98,8 @@ function test2(a: number | string) {
 test2(0)?.(100);
 >test2(0)?.(100) : boolean | undefined
 >                : ^^^^^^^^^^^^^^^^^^^
->test2(0) : ((arg: number) => boolean) | undefined
->         : ^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^
+>test2(0) : ((arg: string | number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^
 >test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >      : ^ ^^               ^^^^^^^   ^^        ^^^^^       ^^^^^^^^^^^^^
 >0 : 0
@@ -110,8 +110,8 @@ test2(0)?.(100);
 test2(0)?.("");
 >test2(0)?.("") : boolean | undefined
 >               : ^^^^^^^^^^^^^^^^^^^
->test2(0) : ((arg: number) => boolean) | undefined
->         : ^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^
+>test2(0) : ((arg: string | number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^
 >test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >      : ^ ^^               ^^^^^^^   ^^        ^^^^^       ^^^^^^^^^^^^^
 >0 : 0
