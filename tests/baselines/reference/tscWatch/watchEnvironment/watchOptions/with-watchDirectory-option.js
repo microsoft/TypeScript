@@ -37,8 +37,6 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 16
-
 //// [/user/username/projects/project/commonFile1.js] Inode:: 118
 let x = 1;
 
@@ -55,8 +53,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":13}
 /user/username/projects/project: *new*
   {"inode":4}
 /user/username/projects/project/commonFile1.ts: *new*
@@ -76,17 +74,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/project/commonfile1.ts (used version)
 /user/username/projects/project/commonfile2.ts (used version)
 

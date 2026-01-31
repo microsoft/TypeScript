@@ -53,8 +53,6 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
-
 //// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js]
 var zz = 10;
 
@@ -81,7 +79,7 @@ FsWatches::
   {}
 /home/src/projects/a/rootFolder/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -101,14 +99,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js
 /home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/rootfolder/project/scripts/javascript.js (used version)
 /home/src/projects/a/rootfolder/project/scripts/typescript.ts (used version)
 
@@ -168,7 +166,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js
 /home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts
 
@@ -176,7 +174,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

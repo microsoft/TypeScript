@@ -16,7 +16,6 @@ Info seq  [hh:mm:ss:mss] request:
           "typeRoots": [
             "/home/src/workspaces/project/node_modules/@types"
           ],
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

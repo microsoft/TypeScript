@@ -74,8 +74,8 @@ Output::
     [7m [0m [96m                   ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
+  Default library
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -87,8 +87,6 @@ moduleB.ts
 [[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
 
 
-
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/ModuleC.js]
 export const x = 10;
@@ -110,7 +108,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/ModuleC.ts: *new*
   {}
@@ -139,19 +137,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/modulec.ts (used version)
 /user/username/projects/myproject/modulea.ts (used version)
 /user/username/projects/myproject/moduleb.ts (used version)
@@ -216,8 +214,8 @@ Output::
     [7m [0m [96m                                       ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
+  Default library
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -247,7 +245,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts

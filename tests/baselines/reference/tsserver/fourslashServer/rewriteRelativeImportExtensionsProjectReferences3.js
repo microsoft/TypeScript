@@ -15,7 +15,6 @@ Info seq  [hh:mm:ss:mss] request:
           "rewriteRelativeImportExtensions": true,
           "rootDir": "/tests/cases/fourslash/server/src/services",
           "outDir": "/tests/cases/fourslash/server/dist/services",
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

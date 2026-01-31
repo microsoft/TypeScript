@@ -11,7 +11,6 @@ Info seq  [hh:mm:ss:mss] request:
             "es5"
           ],
           "module": "commonjs",
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

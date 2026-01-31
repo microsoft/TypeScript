@@ -15,7 +15,6 @@ Info seq  [hh:mm:ss:mss] request:
           "declaration": true,
           "declarationMap": true,
           "outFile": "/tests/cases/fourslash/server/buttonClass/Source.js",
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

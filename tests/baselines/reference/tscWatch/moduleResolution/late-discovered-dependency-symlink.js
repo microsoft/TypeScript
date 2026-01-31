@@ -124,8 +124,8 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.d.ts
+  Default library
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -135,8 +135,6 @@ index.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspace/packageC/index.js]
 import * as pkg from "package-b";
@@ -155,7 +153,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /home/src/workspace/packageA/index.d.ts: *new*
   {}
@@ -194,19 +192,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/workspace/packagea/index.d.ts (used version)
 /home/src/workspace/packageb/index.d.ts (used version)
 /home/src/workspace/packagec/index.ts (computed .d.ts during emit)
@@ -268,8 +266,8 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.d.ts
+  Default library
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -303,7 +301,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts

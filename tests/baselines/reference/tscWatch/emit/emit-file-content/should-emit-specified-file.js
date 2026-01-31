@@ -36,8 +36,6 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
-
 //// [/home/src/projects/a/b/f1.js]
 export function Foo() { return 10; }
 
@@ -70,7 +68,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -89,19 +87,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/b/f1.ts (used version)
 /home/src/projects/a/b/f2.ts (used version)
 /home/src/projects/a/b/f3.ts (used version)
@@ -152,7 +150,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
@@ -213,7 +211,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts

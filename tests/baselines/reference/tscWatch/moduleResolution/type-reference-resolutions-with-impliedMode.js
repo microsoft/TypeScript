@@ -103,8 +103,8 @@ File '/package.json' does not exist.
 [7m2[0m interface LocalInterface extends RequireInterface {}
 [7m [0m [91m                                 ~~~~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
+  Default library
 node_modules/@types/pkg/import.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/import.d.ts@0.0.1'
   File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"
@@ -113,8 +113,6 @@ index.ts
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
-
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
 /// <reference types="pkg"/>
@@ -132,7 +130,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
@@ -166,17 +164,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
@@ -258,8 +256,8 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
+  Default library
 node_modules/@types/pkg/require.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/require.d.ts@0.0.1'
   File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"
@@ -282,7 +280,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/index.ts:
   {}
@@ -321,12 +319,12 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
 /user/username/projects/myproject/index.ts
 

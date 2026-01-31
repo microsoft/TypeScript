@@ -138,8 +138,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
-
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -158,12 +156,12 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
     "../const.cts",
     "../index.ts"
   ],
@@ -173,7 +171,7 @@ export type { TheNum } from './const.cjs';
     ]
   ],
   "fileInfos": {
-    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -227,7 +225,7 @@ export type { TheNum } from './const.cjs';
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1042
+  "size": 1030
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -300,17 +298,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/const.cts (computed .d.ts during emit)
 /user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
@@ -327,19 +325,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
@@ -460,7 +458,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -574,7 +572,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -701,7 +699,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -762,12 +760,12 @@ File '/package.json' does not exist.
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../const.cts","../index.cts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../const.cts","../index.cts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
     "../const.cts",
     "../index.cts"
   ],
@@ -777,7 +775,7 @@ File '/package.json' does not exist.
     ]
   ],
   "fileInfos": {
-    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -831,7 +829,7 @@ File '/package.json' does not exist.
   },
   "latestChangedDtsFile": "./index.d.cts",
   "version": "FakeTSVersion",
-  "size": 1043
+  "size": 1031
 }
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs]
@@ -971,7 +969,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.cts
 
@@ -994,7 +992,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.cts
 /user/username/projects/myproject/packages/pkg1/index.ts

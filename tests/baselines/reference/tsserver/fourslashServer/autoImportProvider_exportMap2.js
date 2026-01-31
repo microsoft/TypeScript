@@ -12,7 +12,6 @@ Info seq  [hh:mm:ss:mss] request:
           ],
           "module": "commonjs",
           "moduleResolution": "node10",
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

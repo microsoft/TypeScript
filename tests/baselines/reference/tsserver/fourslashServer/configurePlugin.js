@@ -16,7 +16,6 @@ Info seq  [hh:mm:ss:mss] request:
               "message": "configured error"
             }
           ],
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

@@ -41,22 +41,7 @@ type InstanceType<T extends abstract new (...args: any) => any> = T extends abst
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
 
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
-
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
-
-
-
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/MessageablePerson.js]
 const Messageable = () => {
@@ -90,12 +75,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21006966954-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[2,[{"start":169,"length":12,"messageText":"Cannot find name 'InstanceType'.","category":1,"code":2304},{"start":182,"length":10,"messageText":"Cannot find name 'ReturnType'.","category":1,"code":2304}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21006966954-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./messageableperson.ts",
     "./main.ts"
   ],
@@ -105,13 +90,13 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
         "affectsGlobalScope": true
       },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
+      "signature": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
       "affectsGlobalScope": true
     },
     "./messageableperson.ts": {
@@ -149,33 +134,12 @@ export {};
       "./messageableperson.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./messageableperson.ts",
-      [
-        {
-          "start": 169,
-          "length": 12,
-          "messageText": "Cannot find name 'InstanceType'.",
-          "category": 1,
-          "code": 2304
-        },
-        {
-          "start": 182,
-          "length": 10,
-          "messageText": "Cannot find name 'ReturnType'.",
-          "category": 1,
-          "code": 2304
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion",
-  "size": 1602
+  "size": 1579
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -183,23 +147,10 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
-
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
 
 
 
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: modify public to protected
 
@@ -217,6 +168,11 @@ export default MessageablePerson;
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
+[96mmain.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
+
+[7m3[0m     console.log( person.message );
+[7m [0m [91m                        ~~~~~~~[0m
+
 [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported anonymous class type may not be private or protected.
 
 [7m6[0m const wrapper = () => Messageable();
@@ -227,31 +183,24 @@ Output::
     [7m [0m [96m      ~~~~~~~[0m
     Add a type annotation to the variable wrapper.
 
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
 
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
+Found 2 errors in 2 files.
 
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
-
+Errors  Files
+     1  main.ts[90m:3[0m
+     1  MessageablePerson.ts[90m:6[0m
 
 
 //// [/home/src/workspaces/project/MessageablePerson.js] file written with same contents
 //// [/home/src/workspaces/project/main.js] file written with same contents
 //// [/home/src/workspaces/project/main.d.ts] file written with same contents
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-6547480893-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n(116,7)Error4094: Property 'message' of exported anonymous class type may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[2,[{"start":172,"length":12,"messageText":"Cannot find name 'InstanceType'.","category":1,"code":2304},{"start":185,"length":10,"messageText":"Cannot find name 'ReturnType'.","category":1,"code":2304}]]],"emitDiagnosticsPerFile":[[2,[{"start":116,"length":7,"messageText":"Property 'message' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":116,"length":7,"messageText":"Add a type annotation to the variable wrapper.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-6547480893-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n(116,7)Error4094: Property 'message' of exported anonymous class type may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":131,"length":7,"messageText":"Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.","category":1,"code":2445}]]],"emitDiagnosticsPerFile":[[2,[{"start":116,"length":7,"messageText":"Property 'message' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":116,"length":7,"messageText":"Add a type annotation to the variable wrapper.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./messageableperson.ts",
     "./main.ts"
   ],
@@ -261,13 +210,13 @@ Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
         "affectsGlobalScope": true
       },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
+      "signature": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
       "affectsGlobalScope": true
     },
     "./messageableperson.ts": {
@@ -307,21 +256,14 @@ Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "./messageableperson.ts",
+      "./main.ts",
       [
         {
-          "start": 172,
-          "length": 12,
-          "messageText": "Cannot find name 'InstanceType'.",
+          "start": 131,
+          "length": 7,
+          "messageText": "Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.",
           "category": 1,
-          "code": 2304
-        },
-        {
-          "start": 185,
-          "length": 10,
-          "messageText": "Cannot find name 'ReturnType'.",
-          "category": 1,
-          "code": 2304
+          "code": 2445
         }
       ]
     ]
@@ -350,7 +292,7 @@ Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 2025
+  "size": 2209
 }
 
 
@@ -362,6 +304,11 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
+[96mmain.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
+
+[7m3[0m     console.log( person.message );
+[7m [0m [91m                        ~~~~~~~[0m
+
 [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported anonymous class type may not be private or protected.
 
 [7m6[0m const wrapper = () => Messageable();
@@ -372,19 +319,12 @@ Output::
     [7m [0m [96m      ~~~~~~~[0m
     Add a type annotation to the variable wrapper.
 
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
 
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
+Found 2 errors in 2 files.
 
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
-
+Errors  Files
+     1  main.ts[90m:3[0m
+     1  MessageablePerson.ts[90m:6[0m
 
 
 
@@ -406,19 +346,6 @@ export default MessageablePerson;
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
-
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
-
 
 
 //// [/home/src/workspaces/project/MessageablePerson.js] file written with same contents
@@ -426,12 +353,12 @@ Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
 //// [/home/src/workspaces/project/main.js] file written with same contents
 //// [/home/src/workspaces/project/main.d.ts] file written with same contents
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21006966954-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[2,[{"start":169,"length":12,"messageText":"Cannot find name 'InstanceType'.","category":1,"code":2304},{"start":182,"length":10,"messageText":"Cannot find name 'ReturnType'.","category":1,"code":2304}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21006966954-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./messageableperson.ts",
     "./main.ts"
   ],
@@ -441,13 +368,13 @@ Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
         "affectsGlobalScope": true
       },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
+      "signature": "-53631447317-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;",
       "affectsGlobalScope": true
     },
     "./messageableperson.ts": {
@@ -485,33 +412,12 @@ Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
       "./messageableperson.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./messageableperson.ts",
-      [
-        {
-          "start": 169,
-          "length": 12,
-          "messageText": "Cannot find name 'InstanceType'.",
-          "category": 1,
-          "code": 2304
-        },
-        {
-          "start": 182,
-          "length": 10,
-          "messageText": "Cannot find name 'ReturnType'.",
-          "category": 1,
-          "code": 2304
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion",
-  "size": 1602
+  "size": 1579
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
 
@@ -519,20 +425,7 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                         ~~~~~~~~~~~~[0m
-
-[96mMessageablePerson.ts[0m:[93m7[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ReturnType'.
-
-[7m7[0m type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
-[7m [0m [91m                                      ~~~~~~~~~~[0m
-
-
-Found 2 errors in the same file, starting at: MessageablePerson.ts[90m:7[0m
 
 
 
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success

@@ -18,7 +18,6 @@ Info seq  [hh:mm:ss:mss] request:
             ]
           },
           "outDir": "/home/src/workspaces/project/dist/packages/dep",
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

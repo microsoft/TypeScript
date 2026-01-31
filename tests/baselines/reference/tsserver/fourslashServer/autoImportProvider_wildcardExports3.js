@@ -14,7 +14,6 @@ Info seq  [hh:mm:ss:mss] request:
           "lib": [
             "es5"
           ],
-          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

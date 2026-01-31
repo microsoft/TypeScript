@@ -37,8 +37,6 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
-
 //// [/home/src/workspaces/project/dist/index.js]
 export const x = 10;
 

@@ -34,8 +34,6 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 16
-
 //// [/a/username/projects/project/src/file1.js] Inode:: 118
 
 
@@ -55,8 +53,8 @@ FsWatches::
   {"inode":6}
 /a/username/projects/project/tsconfig.json: *new*
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":13}
 
 Program root files: [
   "/a/username/projects/project/src/file1.ts"
@@ -67,15 +65,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /a/username/projects/project/src/file1.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -107,8 +105,8 @@ FsWatches::
   {"inode":5}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
 
 FsWatches *deleted*::
 /a/username/projects/project/src/file1.ts:
@@ -153,8 +151,8 @@ FsWatches::
   {"inode":119}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
 
 
 Program root files: [
@@ -166,7 +164,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::

@@ -49,8 +49,6 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
-
 //// [/home/src/workspaces/solution/project/index.js]
 import { E } from "../utils";
 E.A;

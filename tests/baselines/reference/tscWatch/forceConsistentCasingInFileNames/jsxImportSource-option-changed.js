@@ -66,8 +66,8 @@ Output::
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
+  Default library
 node_modules/react/Jsx-Runtime/index.d.ts
   Part of 'files' list in tsconfig.json
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
@@ -76,8 +76,6 @@ index.tsx
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
-
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
 import { jsx as _jsx } from "react/jsx-runtime";
@@ -94,7 +92,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects: *new*
   {}
@@ -128,14 +126,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts
 /user/username/projects/myproject/index.tsx
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 

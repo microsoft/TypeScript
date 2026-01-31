@@ -7,7 +7,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "options": {
-          "target": "es2024",
           "newLine": "crlf",
           "lib": [
             "es6"
