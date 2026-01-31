@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
     export class B {
 	    public x=10;

@@ -1,3 +1,4 @@
+// @target: es2015
 
 // should replace all refs to 'x' in the body,
 // with fully qualified

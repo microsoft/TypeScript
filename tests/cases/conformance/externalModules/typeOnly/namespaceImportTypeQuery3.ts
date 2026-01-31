@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @Filename: /a.ts
 import type { A } from './z'; // unresolved
 const A = 0;

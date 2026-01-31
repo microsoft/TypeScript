@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // every type is a subtype of any, no errors expected
 

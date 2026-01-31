@@ -1,1 +1,2 @@
-﻿while (true) continue
+﻿// @target: es2015
+while (true) continue

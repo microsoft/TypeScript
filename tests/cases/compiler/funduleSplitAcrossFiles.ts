@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: funduleSplitAcrossFiles_function.ts
 function D() { }
 

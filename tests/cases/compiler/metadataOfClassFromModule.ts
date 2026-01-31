@@ -1,6 +1,6 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
-// @target: es5
+// @target: es5, es2015
 namespace MyModule {
 
     export function inject(target: any, key: string): void { }

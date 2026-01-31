@@ -39,31 +39,31 @@ if (!!!x) {
 }
 
 //// [stringLiteralTypesInUnionTypes04.js]
-var x = undefined;
-var y = undefined;
+let x = undefined;
+let y = undefined;
 if (x === "") {
-    var a = x;
+    let a = x;
 }
 if (x !== "") {
-    var b = x;
+    let b = x;
 }
 if (x == "") {
-    var c = x;
+    let c = x;
 }
 if (x != "") {
-    var d = x;
+    let d = x;
 }
 if (x) {
-    var e = x;
+    let e = x;
 }
 if (!x) {
-    var f = x;
+    let f = x;
 }
 if (!!x) {
-    var g = x;
+    let g = x;
 }
 if (!!!x) {
-    var h = x;
+    let h = x;
 }
 
 

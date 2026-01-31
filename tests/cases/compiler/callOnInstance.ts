@@ -1,3 +1,4 @@
+// @target: es2015
 declare function D(): string; // error
 
 declare class D { constructor (value: number); } // error

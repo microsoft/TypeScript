@@ -1,3 +1,4 @@
+// @target: es2015
 function salt() {
   function pepper() { return 5;}
   return pepper();  

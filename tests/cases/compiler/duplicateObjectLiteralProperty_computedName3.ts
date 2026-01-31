@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: a.ts
 export const n = 1;
 export const s = "s";

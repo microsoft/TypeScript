@@ -1,3 +1,4 @@
+// @target: es2015
 // module then function
 namespace m2 { }
 function m2() { }; // ok since the module is not instantiated

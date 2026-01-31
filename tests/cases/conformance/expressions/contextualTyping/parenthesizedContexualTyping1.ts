@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 
 function fun<T>(g: (x: T) => T, x: T): T;

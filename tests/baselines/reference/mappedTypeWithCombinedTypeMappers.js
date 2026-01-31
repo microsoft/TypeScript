@@ -23,4 +23,4 @@ const shouldFail: { important: boolean } = output.x.children;
 
 //// [mappedTypeWithCombinedTypeMappers.js]
 // Repro from #13351
-var shouldFail = output.x.children;
+const shouldFail = output.x.children;

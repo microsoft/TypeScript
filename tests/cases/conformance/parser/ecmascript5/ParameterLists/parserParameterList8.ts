@@ -1,3 +1,4 @@
+// @target: es2015
 declare class C2 {
  constructor(public p1:string); // ERROR
  constructor(private p2:number); // ERROR

@@ -1,3 +1,4 @@
+// @target: es2015
 // two interfaces with different root modules should not merge
 
 namespace M {

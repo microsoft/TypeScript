@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: false
 // @filename: gridview.ts
 export type Sizing = any;

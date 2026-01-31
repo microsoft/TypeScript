@@ -1,13 +1,11 @@
-import {
-    harnessSessionLibLocation,
-    harnessTypingInstallerCacheLocation,
-} from "../../../harness/harnessLanguageService.js";
+import * as vfs from "../../../harness/_namespaces/vfs.js";
+import { harnessTypingInstallerCacheLocation } from "../../../harness/harnessLanguageService.js";
 import * as ts from "../../_namespaces/ts.js";
 
 /** Default typescript and lib installs location for tests */
 export const tscTypeScriptTestLocation: string = getPathForTypeScriptTestLocation("tsc.js");
 export function getPathForTypeScriptTestLocation(fileName: string): string {
-    return ts.combinePaths(harnessSessionLibLocation, fileName);
+    return ts.combinePaths(vfs.fourslashLibFolder, fileName);
 }
 
 export function getTypeScriptLibTestLocation(libName: string): string {
@@ -34,5 +32,5 @@ interface Symbol {
 `;
 
 export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined): object | undefined {
-    return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
+    return withNodeNext ? { module: "nodenext", target: "es2015" } : undefined;
 }

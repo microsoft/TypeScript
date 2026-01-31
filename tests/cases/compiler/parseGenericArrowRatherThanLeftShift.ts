@@ -1,3 +1,4 @@
+// @target: es2015
 type Bar = ReturnType<<T>(x: T) => number>;
 declare const a: Bar;
 

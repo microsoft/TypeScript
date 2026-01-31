@@ -7,7 +7,7 @@
 //// export class PatternValidator {}
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// {}
+//// { "compilerOptions": { "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "@angular/forms": "*" } }

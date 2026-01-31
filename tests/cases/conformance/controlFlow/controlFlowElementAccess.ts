@@ -1,3 +1,4 @@
+// @target: es2015
 let x: { o: boolean } = { o: false }
 if (x['o'] === false) {
     x['o'] = true

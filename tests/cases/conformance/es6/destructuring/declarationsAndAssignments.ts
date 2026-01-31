@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function f0() {
     var [] = [1, "hello"];

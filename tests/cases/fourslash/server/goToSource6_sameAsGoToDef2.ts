@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/node_modules/foo/package.json
 //// { "name": "foo", "version": "1.2.3", "typesVersions": { "*": { "*": ["./types/*"] } } }
 

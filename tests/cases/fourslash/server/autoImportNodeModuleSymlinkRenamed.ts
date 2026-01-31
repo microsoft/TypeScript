@@ -16,6 +16,7 @@
 // @Filename: /home/src/workspaces/solution/packages/utils/tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "composite": true,
 ////         "module": "nodenext",
 ////         "rootDir": "src",
@@ -39,6 +40,7 @@
 // @Filename: /home/src/workspaces/solution/packages/web/tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "composite": true,
 ////         "module": "esnext",
 ////         "moduleResolution": "bundler",

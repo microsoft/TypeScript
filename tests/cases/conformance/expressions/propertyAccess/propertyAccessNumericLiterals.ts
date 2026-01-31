@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 0xffffffff.toString();
 0o01234.toString();

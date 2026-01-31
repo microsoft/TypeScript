@@ -1,3 +1,4 @@
-﻿var a = "foo" === "bar" as string;
+﻿// @target: es2015
+var a = "foo" === "bar" as string;
 var b = "foo" !== ("bar" as string);
 var c = "foo" == (<any>"bar");

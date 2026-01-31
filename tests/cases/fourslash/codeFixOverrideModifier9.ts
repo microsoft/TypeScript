@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noImplicitOverride: true
 
 //// class B {

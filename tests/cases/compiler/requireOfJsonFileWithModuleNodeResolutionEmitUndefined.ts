@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: bundler
 // @outdir: out/
 // @fullEmitPaths: true

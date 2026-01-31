@@ -1,3 +1,4 @@
+// @target: es2015
 var myCars=new Array(); 
 var myCars2 = new [];
 var myCars3 = new Array({});

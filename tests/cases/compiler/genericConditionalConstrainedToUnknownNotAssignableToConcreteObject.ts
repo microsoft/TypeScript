@@ -1,3 +1,4 @@
+// @target: es2015
 interface A { x: number }
 
 declare function isA(a: unknown): a is A;

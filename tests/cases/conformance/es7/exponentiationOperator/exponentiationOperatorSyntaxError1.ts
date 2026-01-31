@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 -1 ** 2;

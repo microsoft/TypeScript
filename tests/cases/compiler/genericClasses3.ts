@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 class B<T> {
     a: T;

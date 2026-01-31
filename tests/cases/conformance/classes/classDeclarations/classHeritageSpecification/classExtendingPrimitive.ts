@@ -1,3 +1,4 @@
+// @target: es2015
 // classes cannot extend primitives
 
 class C extends number { }

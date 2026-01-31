@@ -1,1 +1,2 @@
-﻿const array = [,, /* comment */];
+﻿// @target: es2015
+const array = [,, /* comment */];

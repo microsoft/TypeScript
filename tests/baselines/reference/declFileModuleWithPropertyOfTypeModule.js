@@ -11,11 +11,8 @@ namespace m {
 //// [declFileModuleWithPropertyOfTypeModule.js]
 var m;
 (function (m) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     m.c = c;
     m.a = m;
 })(m || (m = {}));

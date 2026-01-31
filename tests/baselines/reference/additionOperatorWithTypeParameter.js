@@ -48,13 +48,13 @@ var E;
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
 function foo(t, u) {
-    var a;
-    var b;
-    var c;
-    var d;
-    var e;
-    var g;
-    var f;
+    let a;
+    let b;
+    let c;
+    let d;
+    let e;
+    let g;
+    let f;
     // type parameter as left operand
     var r1 = t + a; // ok, one operand is any
     var r2 = t + b;
@@ -76,6 +76,6 @@ function foo(t, u) {
     var r16 = t + undefined;
     var r17 = t + t;
     var r18 = t + u;
-    var r19 = t + (function () { });
+    var r19 = t + (() => { });
     var r20 = t + [];
 }

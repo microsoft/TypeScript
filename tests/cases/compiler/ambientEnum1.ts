@@ -1,3 +1,4 @@
+// @target: es2015
     declare enum E1 {
         y = 4.23
     }

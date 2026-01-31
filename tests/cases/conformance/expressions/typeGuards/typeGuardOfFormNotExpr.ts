@@ -1,3 +1,4 @@
+// @target: es2015
 var str: string;
 var bool: boolean;
 var num: number;

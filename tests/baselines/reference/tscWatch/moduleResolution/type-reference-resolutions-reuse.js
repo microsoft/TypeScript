@@ -163,18 +163,16 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="import"/>
 /// <reference types="pkg1" resolution-mode="require"/>
+export {};
 
 
 
@@ -201,7 +199,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -238,7 +236,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
@@ -247,7 +245,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
@@ -357,11 +355,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
 /// <reference types="pkg" resolution-mode="import"/>
-exports.x = 10;
+export const x = 10;
 
 
 
@@ -378,7 +373,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/index.ts

@@ -1,3 +1,4 @@
+// @target: es2015
 interface Settings {
     timeout?: number;
     onError?(): void;

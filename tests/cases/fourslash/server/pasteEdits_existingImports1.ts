@@ -17,7 +17,7 @@
 //// export const t3 = 1;
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["target.ts", "other.ts", "other2.ts", "other3.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["target.ts", "other.ts", "other2.ts", "other3.ts"] }
 
 verify.pasteEdits({
     args: {

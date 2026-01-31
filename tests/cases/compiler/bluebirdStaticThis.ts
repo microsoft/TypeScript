@@ -1,3 +1,4 @@
+// @target: es2015
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.
 // Then it adds explicit `this` arguments to the static members.

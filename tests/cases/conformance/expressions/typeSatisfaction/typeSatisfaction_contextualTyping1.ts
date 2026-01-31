@@ -1,3 +1,4 @@
+// @target: es2015
 type Predicates = { [s: string]: (n: number) => boolean };
 
 const p = {

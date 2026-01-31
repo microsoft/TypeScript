@@ -59,21 +59,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.r13 = exports.r12 = exports.r11 = exports.r10 = exports.r9 = exports.r8 = exports.r7 = exports.r6 = exports.r5 = exports.i = exports.r4b = exports.r4 = exports.r3 = exports.c = exports.r2 = exports.r1 = void 0;
 var x = 1;
 var y = { foo: '' };
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c2;
 var i2;
 var M;
 (function (M) {
     M.foo = '';
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
 })(M || (M = {}));
 var E;
@@ -83,10 +77,7 @@ var E;
 function foo() { }
 (function (foo) {
     foo.y = 1;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     foo.C = C;
 })(foo || (foo = {}));

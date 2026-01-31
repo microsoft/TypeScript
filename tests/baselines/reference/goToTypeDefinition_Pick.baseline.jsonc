@@ -8,7 +8,7 @@
 // declare const user2: PickedUser
 // user2
 
-// === lib.d.ts ===
+// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 // --- (line: --) skipped ---
 // /**
 //  * From T, pick a set of properties whose keys are in the union K
@@ -57,7 +57,7 @@
 // declare const user2: PickedUser
 // /*GOTO TYPE*/user2
 
-// === lib.d.ts ===
+// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 // --- (line: --) skipped ---
 // /**
 //  * From T, pick a set of properties whose keys are in the union K

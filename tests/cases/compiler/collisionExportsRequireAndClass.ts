@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 //@filename: collisionExportsRequireAndClass_externalmodule.ts
 export class require {

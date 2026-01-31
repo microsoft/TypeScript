@@ -18,10 +18,7 @@ var r = i.y;
 var r2 = i.x; // error
 
 //// [interfaceExtendingClassWithProtecteds.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var r = i.y;
 var r2 = i.x; // error

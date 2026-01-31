@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @strictNullChecks: true,false
 // @allowJs: true

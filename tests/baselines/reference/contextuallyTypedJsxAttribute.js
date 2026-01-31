@@ -26,9 +26,9 @@ Test({
 
 
 //// [index.jsx]
-<Test as="bar" callback={function (value) { }}/>;
+<Test as="bar" callback={(value) => { }}/>;
 Test({
     as: "bar",
-    callback: function (value) { },
+    callback: (value) => { },
 });
-<Test as="bar" callback={function (value) { }}/>;
+<Test as="bar" callback={(value) => { }}/>;

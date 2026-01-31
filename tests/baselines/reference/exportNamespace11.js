@@ -14,11 +14,8 @@ export class Ghost {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ghost = void 0;
-var Ghost = /** @class */ (function () {
-    function Ghost() {
-    }
-    return Ghost;
-}());
+class Ghost {
+}
 exports.Ghost = Ghost;
 //// [intermediate.js]
 "use strict";
@@ -59,5 +56,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var intermediate = __importStar(require("./intermediate"));
-var ghost = new intermediate.Ghost();
+const intermediate = __importStar(require("./intermediate"));
+const ghost = new intermediate.Ghost();

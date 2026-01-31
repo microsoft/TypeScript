@@ -1,3 +1,4 @@
+// @target: es2015
 declare class TableClass<S = any> {
     _field: S;
 }

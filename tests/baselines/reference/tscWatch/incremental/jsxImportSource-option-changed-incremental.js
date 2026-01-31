@@ -70,30 +70,32 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js -i --explainFiles
 Output::
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
   Matched by default include pattern '**/*'
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/users/username/projects/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
+const jsx_runtime_1 = require("react/jsx-runtime");
+const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./node_modules/react/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},"-14760199789-export const App = () => <div propA={true}></div>;"],"root":[3],"options":{"jsx":4,"jsxImportSource":"react","module":1},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/react/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},"-14760199789-export const App = () => <div propA={true}></div>;"],"root":[3],"options":{"jsx":4,"jsxImportSource":"react","module":1},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./node_modules/react/jsx-runtime/index.d.ts",
     "./index.tsx"
   ],
@@ -103,7 +105,7 @@ exports.App = App;
     ]
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -143,7 +145,7 @@ exports.App = App;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1105
+  "size": 1117
 }
 
 
@@ -160,17 +162,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
@@ -197,8 +199,8 @@ Output::
 [7m1[0m export const App = () => <div propA={true}></div>;
 [7m [0m [91m                              ~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -212,18 +214,18 @@ Found 1 error in index.tsx[90m:1[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
+const jsx_runtime_1 = require("preact/jsx-runtime");
+const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./node_modules/preact/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17896129664-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propB?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-8162467991-export declare const App: () => import(\"preact/jsx-runtime\").JSX.Element;\n"}],"root":[3],"options":{"jsx":4,"jsxImportSource":"preact","module":1},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":30,"length":5,"code":2322,"category":1,"messageText":{"messageText":"Type '{ propA: boolean; }' is not assignable to type '{ propB?: boolean; }'.","category":1,"code":2322,"next":[{"messageText":"Property 'propA' does not exist on type '{ propB?: boolean; }'. Did you mean 'propB'?","category":1,"code":2551}]}}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/preact/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17896129664-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propB?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-8162467991-export declare const App: () => import(\"preact/jsx-runtime\").JSX.Element;\n"}],"root":[3],"options":{"jsx":4,"jsxImportSource":"preact","module":1},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":30,"length":5,"code":2322,"category":1,"messageText":{"messageText":"Type '{ propA: boolean; }' is not assignable to type '{ propB?: boolean; }'.","category":1,"code":2322,"next":[{"messageText":"Property 'propA' does not exist on type '{ propB?: boolean; }'. Did you mean 'propB'?","category":1,"code":2551}]}}]]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./node_modules/preact/jsx-runtime/index.d.ts",
     "./index.tsx"
   ],
@@ -233,7 +235,7 @@ exports.App = App;
     ]
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -302,7 +304,7 @@ exports.App = App;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1581
+  "size": 1593
 }
 
 
@@ -319,12 +321,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 

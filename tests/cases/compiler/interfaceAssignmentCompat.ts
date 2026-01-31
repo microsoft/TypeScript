@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
     export enum Color {
         Green,

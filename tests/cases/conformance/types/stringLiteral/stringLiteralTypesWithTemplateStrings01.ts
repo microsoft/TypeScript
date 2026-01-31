@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 let ABC: "ABC" = `ABC`;
 let DE_NEWLINE_F: "DE\nF" = `DE

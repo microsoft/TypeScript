@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
 

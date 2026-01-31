@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #18005
 
 let x = 123;

@@ -31,11 +31,8 @@ y = x;
 //// [elaboratedErrors.js]
 function fn(s) { }
 // This should issue a large error, not a small one
-var WorkerFS = /** @class */ (function () {
-    function WorkerFS() {
-    }
-    return WorkerFS;
-}());
+class WorkerFS {
+}
 // Only one of these errors should be large
 x = y;
 x = y;

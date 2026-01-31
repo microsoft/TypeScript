@@ -20,11 +20,8 @@ var p: m.Point; // Error
 //// [invalidInstantiatedModule.js]
 var M;
 (function (M) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
+    class Point {
+    }
     M.Point = Point;
     M.Point = 1; // Error
 })(M || (M = {}));

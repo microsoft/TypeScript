@@ -77,12 +77,12 @@ define(["require", "exports"], function (require, exports) {
     })(exports || (exports.exports = exports = {}));
     var m1;
     (function (m1) {
-        var require;
+        let require;
         (function (require) {
             require[require["_thisVal1"] = 0] = "_thisVal1";
             require[require["_thisVal2"] = 1] = "_thisVal2";
         })(require || (require = {}));
-        var exports;
+        let exports;
         (function (exports) {
             exports[exports["_thisVal1"] = 0] = "_thisVal1";
             exports[exports["_thisVal2"] = 1] = "_thisVal2";
@@ -90,12 +90,12 @@ define(["require", "exports"], function (require, exports) {
     })(m1 || (m1 = {}));
     var m2;
     (function (m2) {
-        var require;
+        let require;
         (function (require) {
             require[require["_thisVal1"] = 0] = "_thisVal1";
             require[require["_thisVal2"] = 1] = "_thisVal2";
         })(require = m2.require || (m2.require = {}));
-        var exports;
+        let exports;
         (function (exports) {
             exports[exports["_thisVal1"] = 0] = "_thisVal1";
             exports[exports["_thisVal2"] = 1] = "_thisVal2";
@@ -115,12 +115,12 @@ var exports;
 })(exports || (exports = {}));
 var m3;
 (function (m3) {
-    var require;
+    let require;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";
     })(require || (require = {}));
-    var exports;
+    let exports;
     (function (exports) {
         exports[exports["_thisVal1"] = 0] = "_thisVal1";
         exports[exports["_thisVal2"] = 1] = "_thisVal2";
@@ -128,12 +128,12 @@ var m3;
 })(m3 || (m3 = {}));
 var m4;
 (function (m4) {
-    var require;
+    let require;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";
     })(require = m4.require || (m4.require = {}));
-    var exports;
+    let exports;
     (function (exports) {
         exports[exports["_thisVal1"] = 0] = "_thisVal1";
         exports[exports["_thisVal2"] = 1] = "_thisVal2";

@@ -29,7 +29,7 @@ const RandomComponent: React.SFC = () => {
 
 //// [reactSFCAndFunctionResolvable.js]
 "use strict";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -64,12 +64,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
-var RandomComponent = function () {
-    var Component = condition1
+const React = __importStar(require("react"));
+const RandomComponent = () => {
+    const Component = condition1
         ? Radio
         : Checkbox;
-    var OtherComponent = condition2
+    const OtherComponent = condition2
         ? OtherRadio
         : Checkbox;
     return condition1 ? React.createElement(Component, null) : React.createElement(OtherComponent, null);

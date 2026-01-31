@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>(t: T) {
     var r1 = t < t;
     var r2 = t > t;

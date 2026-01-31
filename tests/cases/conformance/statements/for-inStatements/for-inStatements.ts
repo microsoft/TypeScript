@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var aString: string;
 for (aString in {}) { }

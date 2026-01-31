@@ -45,16 +45,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/a/b/main.ts SVC-1-0 "let x =1;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../../user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 
@@ -78,6 +78,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /user/username/projects/myproject/a/b/jsconfig.json: *new*
@@ -94,7 +96,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -104,7 +106,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -131,13 +133,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/a/b/main.ts SVC-1-0 "let x =1;"
 	/user/username/projects/myproject/a/c/main.ts SVC-1-0 "let x =1;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../../user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 	../../../../../user/username/projects/myproject/a/c/main.ts
@@ -185,7 +187,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
@@ -195,7 +197,7 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -226,14 +228,14 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/a/b/main.ts SVC-1-0 "let x =1;"
 	/user/username/projects/myproject/a/c/main.ts SVC-1-0 "let x =1;"
 	/user/username/projects/myproject/a/d/main.ts SVC-1-0 "let x =1;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../../user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 	../../../../../user/username/projects/myproject/a/c/main.ts
@@ -289,7 +291,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
@@ -298,7 +300,7 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -359,7 +361,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/a/b/tsconfig.json: *new*
   {}
@@ -492,13 +494,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/a/c/main.ts SVC-1-0 "let x =1;"
 	/user/username/projects/myproject/a/d/main.ts SVC-1-0 "let x =1;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../../user/username/projects/myproject/a/c/main.ts
 	  Root file specified for compilation
 	../../../../../user/username/projects/myproject/a/d/main.ts
@@ -570,7 +572,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
   {}
@@ -587,7 +589,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*

@@ -1,4 +1,5 @@
-﻿interface Runnable {
+﻿// @target: es2015
+interface Runnable {
     isRunning: boolean;
 }
 

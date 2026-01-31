@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Empty array literal with no contextual type has type Undefined[]
 

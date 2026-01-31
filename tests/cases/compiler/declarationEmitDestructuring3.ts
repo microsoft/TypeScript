@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @declaration: true
 function bar([x, z, ...w]) { }

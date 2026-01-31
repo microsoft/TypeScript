@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+
 // @Filename: /foo.ts
 ////type foo = "foo";
 ////export { type foo as "[|__<alias>|]" };

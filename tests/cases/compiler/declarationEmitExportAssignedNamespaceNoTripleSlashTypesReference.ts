@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: node_modules/@types/react/index.d.ts
 export = React;

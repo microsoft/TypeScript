@@ -9,16 +9,10 @@ class noParams {}
 new noParams<>();
 
 //// [emptyTypeArgumentListWithNew.js]
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+class foo {
+}
 new foo();
 // https://github.com/microsoft/TypeScript/issues/33041
-var noParams = /** @class */ (function () {
-    function noParams() {
-    }
-    return noParams;
-}());
+class noParams {
+}
 new noParams();

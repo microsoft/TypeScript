@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #32657
 
 interface Base<T> {

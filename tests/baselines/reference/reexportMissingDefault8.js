@@ -9,7 +9,7 @@ export { default } from "./b";
 
 //// [b.js]
 "use strict";
-var b = null;
+const b = null;
 module.exports = b;
 //// [a.js]
 "use strict";

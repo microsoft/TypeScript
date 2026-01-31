@@ -21,18 +21,14 @@ b = {} // fine
 
 
 //// [mappedTypeUnionConstraintInferences.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.doSomething_Actual = doSomething_Actual;
-function doSomething_Actual(a) {
-    var x = null;
+export function doSomething_Actual(a) {
+    const x = null;
     return x;
 }
-exports.a = doSomething_Actual({ prop: "test" });
-exports.a = {}; // should be fine, equivalent to below
-exports.b = doSomething_Expected({ prop: "test" });
-exports.b = {}; // fine
+export let a = doSomething_Actual({ prop: "test" });
+a = {}; // should be fine, equivalent to below
+export let b = doSomething_Expected({ prop: "test" });
+b = {}; // fine
 
 
 //// [mappedTypeUnionConstraintInferences.d.ts]

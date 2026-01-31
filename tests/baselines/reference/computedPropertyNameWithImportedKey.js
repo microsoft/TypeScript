@@ -19,9 +19,8 @@ exports.a = Symbol();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = fn;
-var a_1 = require("./a");
-function fn(_a) {
-    var _b = a_1.a, value = _a[_b];
+const a_1 = require("./a");
+function fn({ [a_1.a]: value }) {
     return value;
 }
 

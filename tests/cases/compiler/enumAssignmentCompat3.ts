@@ -1,3 +1,4 @@
+// @target: es2015
 namespace First {
     export enum E {
         a, b, c,

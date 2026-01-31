@@ -1,3 +1,4 @@
+// @target: es2015
 // Type inference infers from indexers in target type, error cases
 
 function foo<T>(x: T) {

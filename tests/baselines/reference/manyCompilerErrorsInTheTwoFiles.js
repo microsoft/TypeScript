@@ -13,9 +13,9 @@ to
 limit
 
 //// [a.js]
-var a = !;
+const a = !;
 !;
-var b = !;
+const b = !;
 !;
 !;
 !OK;

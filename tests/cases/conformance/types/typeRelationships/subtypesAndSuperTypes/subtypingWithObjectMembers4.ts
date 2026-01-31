@@ -1,3 +1,4 @@
+// @target: es2015
 // subtyping when property names do not match
 
 class Base {

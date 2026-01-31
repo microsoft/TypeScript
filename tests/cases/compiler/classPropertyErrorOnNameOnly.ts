@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type Values = 1 | 2 | 3 | 4 | 5 | 6
 

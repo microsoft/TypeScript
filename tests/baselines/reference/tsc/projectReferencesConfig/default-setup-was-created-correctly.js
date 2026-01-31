@@ -47,9 +47,10 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/primary/bin/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/workspaces/project/primary/bin/a.d.ts]
@@ -57,16 +58,16 @@ export {};
 
 
 //// [/home/src/workspaces/project/primary/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3531955686-export { };","signature":"-3531856636-export {};\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.es2024.full.d.ts","../a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3531955686-export { };","signature":"-3531856636-export {};\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../a.ts"
   ],
   "fileInfos": {
-    "../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -96,7 +97,7 @@ export {};
   },
   "latestChangedDtsFile": "./a.d.ts",
   "version": "FakeTSVersion",
-  "size": 706
+  "size": 718
 }
 
 

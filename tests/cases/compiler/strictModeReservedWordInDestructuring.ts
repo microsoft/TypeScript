@@ -1,4 +1,5 @@
-﻿"use strict"
+﻿// @target: es2015
+"use strict"
 var [public] = [1];
 var { x: public } = { x: 1 };
 var [[private]] = [["hello"]];

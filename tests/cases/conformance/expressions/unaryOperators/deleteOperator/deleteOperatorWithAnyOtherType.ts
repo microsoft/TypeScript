@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // delete  operator on any type
 

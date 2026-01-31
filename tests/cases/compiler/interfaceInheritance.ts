@@ -1,3 +1,4 @@
+// @target: es2015
 interface I1 {
     i1P1: number;
     i1P2(): void;

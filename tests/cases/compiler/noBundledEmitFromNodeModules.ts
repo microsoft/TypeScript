@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: out.js
 // @module: system
 // @moduleResolution: bundler

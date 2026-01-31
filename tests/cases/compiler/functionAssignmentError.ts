@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var func = function (){return "ONE";};
 func = function (){return "ONE";};

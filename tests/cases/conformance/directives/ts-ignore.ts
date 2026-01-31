@@ -1,3 +1,4 @@
+// @target: es2015
 // @ts-ignore with additional commenting
 var invalidCommentedFancy: number = 'nope';
 

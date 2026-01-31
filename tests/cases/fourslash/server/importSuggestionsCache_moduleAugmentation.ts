@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "compilerOptions": { "module": "esnext" } }
+////{ "compilerOptions": { "module": "esnext", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts
 ////export function useState(): void;

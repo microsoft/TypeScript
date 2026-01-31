@@ -5,6 +5,24 @@ Assignability cache: 1,000
 Type Count: 5,000
 Instantiation count: 10,000
 
+=== foo.tsx ===
+/// <reference path="react.d.ts" />
+import { Test } from 'a';
+>Test : null
+>     : ^^^^
+
+const Foo = (<h1></h1>);
+>Foo : JSX.Element
+>    : ^^^^^^^^^^^
+>(<h1></h1>) : JSX.Element
+>            : ^^^^^^^^^^^
+><h1></h1> : JSX.Element
+>          : ^^^^^^^^^^^
+>h1 : any
+>   : ^^^
+>h1 : any
+>   : ^^^
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : import("/node_modules/@types/a/index.d.ts").Foo
@@ -36,21 +54,4 @@ declare module 'a' {
 >     : ^^^^
     }
 }
-
-=== foo.tsx ===
-import { Test } from 'a';
->Test : null
->     : ^^^^
-
-const Foo = (<h1></h1>);
->Foo : JSX.Element
->    : ^^^^^^^^^^^
->(<h1></h1>) : JSX.Element
->            : ^^^^^^^^^^^
-><h1></h1> : JSX.Element
->          : ^^^^^^^^^^^
->h1 : any
->   : ^^^
->h1 : any
->   : ^^^
 

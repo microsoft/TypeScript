@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 //// type User = { name: string };
 //// declare const users: User[]
 //// /*reference*/users

@@ -1382,9 +1382,8 @@ export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefin
 }
 
 export function getDefaultCompilerOptions(): CompilerOptions {
-    // Always default to "ScriptTarget.ES5" for the language service
     return {
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.LatestStandard,
         jsx: JsxEmit.Preserve,
     };
 }

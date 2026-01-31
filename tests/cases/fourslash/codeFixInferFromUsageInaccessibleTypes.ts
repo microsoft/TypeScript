@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noImplicitAny: true
 ////function f1(a) { a; }
 ////function h1() {

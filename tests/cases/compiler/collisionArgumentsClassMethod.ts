@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // @strict: false
 class c1 {
     public foo(i: number, ...arguments) { //arguments is error

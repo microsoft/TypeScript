@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Test {
     export interface MyFunc {
         <T>(value1: T): T;

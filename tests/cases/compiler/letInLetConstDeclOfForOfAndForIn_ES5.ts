@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 // Should be an error
 for (let let of [1,2,3]) {}

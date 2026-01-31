@@ -20,19 +20,13 @@ var foo: (__proto__: number) => void;
 var hasOwnProperty; // Error
 var m1;
 (function (m1) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
 })(m1 || (m1 = {}));
 __proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var foo;
 
 

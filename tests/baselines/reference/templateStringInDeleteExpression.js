@@ -4,4 +4,4 @@
 delete `abc${0}abc`;
 
 //// [templateStringInDeleteExpression.js]
-delete "abc".concat(0, "abc");
+delete `abc${0}abc`;

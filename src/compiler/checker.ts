@@ -3794,6 +3794,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // are ESM, there cannot be a synthetic default.
                 return false;
             }
+            // For other files (not node16/nodenext with impliedNodeFormat), check if we can determine
+            // the module format from project references
+            if (!targetMode && file.isDeclarationFile) {
+                // Try to get the project reference - try both source file mapping and output file mapping
+                // since declaration files can be mapped either way depending on how they're resolved
+                const redirect = host.getRedirectFromSourceFile(file.path) || host.getRedirectFromOutput(file.path);
+                if (redirect) {
+                    // This is a declaration file from a project reference, so we can determine
+                    // its module format from the referenced project's options
+                    const targetModuleKind = host.getEmitModuleFormatOfFile(file);
+                    if (usageMode === ModuleKind.ESNext && ModuleKind.ES2015 <= targetModuleKind && targetModuleKind <= ModuleKind.ESNext) {
+                        return false;
+                    }
+                }
+            }
         }
         if (!allowSyntheticDefaultImports) {
             return false;
@@ -45605,7 +45620,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+        const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
+        const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 

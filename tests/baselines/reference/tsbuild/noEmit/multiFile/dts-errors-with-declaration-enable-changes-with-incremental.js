@@ -36,17 +36,19 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -78,7 +80,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 664
+  "size": 676
 }
 
 
@@ -93,15 +95,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
 exitCode:: ExitStatus.Success
@@ -151,16 +153,16 @@ Found 1 error.
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -221,7 +223,7 @@ Found 1 error.
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1004
+  "size": 1016
 }
 
 
@@ -237,7 +239,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -262,16 +264,16 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"declarationMap":true},"affectedFilesPendingEmit":[[2,49]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"declarationMap":true},"affectedFilesPendingEmit":[[2,49]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -310,7 +312,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 722
+  "size": 734
 }
 
 
@@ -327,7 +329,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -381,16 +383,16 @@ Found 1 error.
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -442,16 +444,13 @@ Found 1 error.
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 968
+  "size": 980
 }
 
 //// [/home/src/projects/project/a.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
+const a = class {
+    p = 10;
+};
 
 
 
@@ -466,7 +465,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -494,16 +493,16 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9520728827-const a = class { public p = 10; };","signature":"13034998770-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9520728827-const a = class { public p = 10; };","signature":"13034998770-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -536,7 +535,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 757
+  "size": 769
 }
 
 
@@ -551,11 +550,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
@@ -579,16 +578,16 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9520728827-const a = class { public p = 10; };","signature":"13034998770-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9520728827-const a = class { public p = 10; };","signature":"13034998770-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -627,7 +626,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 793
+  "size": 805
 }
 
 
@@ -643,7 +642,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::

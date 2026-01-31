@@ -1,6 +1,7 @@
+// @module: commonjs
+// @target: es5, es2015
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
-// @target: es5
 // @filename: Class1.ts
 // @strictNullChecks: true, false
 // @strictPropertyInitialization: false

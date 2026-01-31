@@ -14,7 +14,7 @@ if (isFoo(value)) {
 
 
 //// [typeGuardNarrowsToLiteralType.js]
-var value;
+let value;
 if (isFoo(value)) {
     doThis(value);
 }

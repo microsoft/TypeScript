@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @esModuleInterop: true
 // @Filename: foo.d.ts
 declare function foo(): void;

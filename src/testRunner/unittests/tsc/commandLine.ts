@@ -32,6 +32,26 @@ describe("unittests:: tsc:: commandLine::", () => {
 
     verifyTsc({
         scenario: "commandLine",
+        subScenario: "adds color when FORCE_COLOR is set",
+        sys: () =>
+            TestServerHost.createWatchedSystem(emptyArray, {
+                environmentVariables: new Map([["FORCE_COLOR", "true"]]),
+            }),
+        commandLineArgs: emptyArray,
+    });
+
+    verifyTsc({
+        scenario: "commandLine",
+        subScenario: "does not add color when NO_COLOR is set even if FORCE_COLOR is set",
+        sys: () =>
+            TestServerHost.createWatchedSystem(emptyArray, {
+                environmentVariables: new Map([["NO_COLOR", "true"], ["FORCE_COLOR", "true"]]),
+            }),
+        commandLineArgs: emptyArray,
+    });
+
+    verifyTsc({
+        scenario: "commandLine",
         subScenario: "when build not first argument",
         sys: () => TestServerHost.createWatchedSystem(emptyArray),
         commandLineArgs: ["--verbose", "--build"],

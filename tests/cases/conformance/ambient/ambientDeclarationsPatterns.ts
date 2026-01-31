@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: false
 // @Filename: declarations.d.ts
 declare module "foo*baz" {

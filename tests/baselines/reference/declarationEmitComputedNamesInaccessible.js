@@ -26,26 +26,23 @@ export function f1() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f1 = f1;
 function f1() {
-    var localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";
-    var localOtherField = localClassFieldName === "g1" ? "g2" : "g1";
-    var localStaticField = Math.random() > 0.5 ? "s1" : "s2";
-    return /** @class */ (function () {
-        function ParameterizedHolder() {
-        }
-        ParameterizedHolder.prototype[localClassFieldName] = function () {
+    const localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";
+    const localOtherField = localClassFieldName === "g1" ? "g2" : "g1";
+    const localStaticField = Math.random() > 0.5 ? "s1" : "s2";
+    return class ParameterizedHolder {
+        [localClassFieldName]() {
             return "value";
-        };
-        ParameterizedHolder.prototype[localOtherField] = function () {
+        }
+        [localOtherField]() {
             return 42;
-        };
-        ParameterizedHolder[localStaticField] = function () {
+        }
+        static [localStaticField]() {
             return { static: true };
-        };
-        ParameterizedHolder[localStaticField] = function () {
+        }
+        static [localStaticField]() {
             return { static: "sometimes" };
-        };
-        return ParameterizedHolder;
-    }());
+        }
+    };
 }
 
 

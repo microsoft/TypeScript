@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 function EmptyPropSFC() {
 >EmptyPropSFC : () => JSX.Element
 >             : ^^^^^^^^^^^^^^^^^

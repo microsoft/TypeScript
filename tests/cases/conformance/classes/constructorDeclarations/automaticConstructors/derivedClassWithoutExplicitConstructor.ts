@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     a = 1;
     constructor(x: number) { this.a = x; }

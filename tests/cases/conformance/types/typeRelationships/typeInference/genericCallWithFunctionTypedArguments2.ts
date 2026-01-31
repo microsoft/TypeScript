@@ -1,3 +1,4 @@
+// @target: es2015
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using construct signature arguments, no errors expected
 

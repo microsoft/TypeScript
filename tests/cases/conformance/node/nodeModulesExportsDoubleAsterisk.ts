@@ -1,3 +1,4 @@
+// @target: es2022
 // @module: node18,node20,nodenext
 // @noTypesAndSymbols: true
 // @noEmit: true

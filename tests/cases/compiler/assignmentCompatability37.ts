@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 namespace __test1__ {
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;

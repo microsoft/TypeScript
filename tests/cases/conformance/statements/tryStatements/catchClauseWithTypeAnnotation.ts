@@ -1,3 +1,4 @@
+// @target: es2015
 // @useUnknownInCatchVariables: false
 type any1 = any;
 type unknown1 = unknown;

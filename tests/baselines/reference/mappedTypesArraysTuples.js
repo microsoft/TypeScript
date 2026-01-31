@@ -105,21 +105,21 @@ type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 
 //// [mappedTypesArraysTuples.js]
 "use strict";
-var y10 = unboxify(x10);
-var y11 = unboxify(x11);
-var y12 = unboxify(x12);
-var y20 = nonpartial(x20);
-var y21 = nonpartial(x21);
-var y22 = nonpartial(x22);
+let y10 = unboxify(x10);
+let y11 = unboxify(x11);
+let y12 = unboxify(x12);
+let y20 = nonpartial(x20);
+let y21 = nonpartial(x21);
+let y22 = nonpartial(x22);
 function f1(a, b, c, d) {
-    var x1 = all(a);
-    var x2 = all(a, b);
-    var x3 = all(a, b, c);
-    var x4 = all(a, b, c, d);
+    let x1 = all(a);
+    let x2 = all(a, b);
+    let x3 = all(a, b, c);
+    let x4 = all(a, b, c, d);
 }
 function f2(a) {
-    var x = a.pop();
-    var y = a.concat(a);
+    let x = a.pop();
+    let y = a.concat(a);
 }
 function acceptMappedArray(arr) {
     acceptArray(mapArray(arr));

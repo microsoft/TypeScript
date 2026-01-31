@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
 
 enum E { x }

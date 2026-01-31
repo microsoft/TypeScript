@@ -1,3 +1,4 @@
+// @target: es2015
 class BaseClass<T> {
     public _getValue1: { (): T; };
     public _getValue2: () => T;

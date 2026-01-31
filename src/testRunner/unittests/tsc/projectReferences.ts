@@ -92,6 +92,42 @@ describe("unittests:: tsc:: projectReferences::", () => {
 
     verifyTsc({
         scenario: "projectReferences",
+        subScenario: "referenced project with esnext module disallows synthetic default imports",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/lib/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        module: "esnext",
+                        moduleResolution: "bundler",
+                        rootDir: "src",
+                        outDir: "dist",
+                    },
+                    include: ["src"],
+                }),
+                "/home/src/workspaces/project/lib/src/utils.ts": "export const test = () => 'test';",
+                "/home/src/workspaces/project/lib/dist/utils.d.ts": "export declare const test: () => string;",
+                "/home/src/workspaces/project/app/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        module: "esnext",
+                        moduleResolution: "bundler",
+                    },
+                    references: [
+                        { path: "../lib" },
+                    ],
+                }),
+                "/home/src/workspaces/project/app/index.ts": `
+                    import TestSrc from '../lib/src/utils'; // Error
+                    import TestDecl from '../lib/dist/utils'; // Error
+                    console.log(TestSrc.test());
+                    console.log(TestDecl.test());`,
+            }),
+        commandLineArgs: ["--p", "app", "--pretty", "false"],
+    });
+
+    verifyTsc({
+        scenario: "projectReferences",
         subScenario: "referencing ambient const enum from referenced project with preserveConstEnums",
         sys: () =>
             TestServerHost.createWatchedSystem({

@@ -36,26 +36,20 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-function Foo() { return 10; }
+export function Foo() { return 10; }
 
 
 //// [/home/src/projects/a/b/f2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-var f1_1 = require("./f1");
-exports.y = (0, f1_1.Foo)();
+import { Foo } from "./f1";
+export let y = Foo();
 
 
 //// [/home/src/projects/a/b/f3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var f2_1 = require("./f2");
-var x = f2_1.y;
+import { y } from "./f2";
+let x = y;
 
 
 
@@ -76,7 +70,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -95,19 +89,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/projects/a/b/f1.ts (used version)
 /home/src/projects/a/b/f2.ts (used version)
 /home/src/projects/a/b/f3.ts (used version)
@@ -138,12 +132,8 @@ Output::
 
 
 //// [/home/src/projects/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-exports.foo2 = foo2;
-function Foo() { return 10; }
-function foo2() { return 2; }
+export function Foo() { return 10; }
+export function foo2() { return 2; }
 
 
 //// [/home/src/projects/a/b/f2.js] file written with same contents
@@ -162,7 +152,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts
@@ -203,14 +193,9 @@ Output::
 
 
 //// [/home/src/projects/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-exports.foo2 = foo2;
-exports.fooN = fooN;
-function Foo() { return 10; }
-function foo2() { return 2; }
-function fooN() { return 2; }
+export function Foo() { return 10; }
+export function foo2() { return 2; }
+export function fooN() { return 2; }
 
 
 //// [/home/src/projects/a/b/f2.js] file written with same contents
@@ -228,7 +213,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/f1.ts
 /home/src/projects/a/b/f2.ts
 /home/src/projects/a/b/f3.ts

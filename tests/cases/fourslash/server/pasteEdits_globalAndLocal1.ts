@@ -19,7 +19,7 @@
 
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["target.ts", "globals.d.ts", "test.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["target.ts", "globals.d.ts", "test.ts"] }
 
 const ranges = test.ranges();
 verify.pasteEdits({

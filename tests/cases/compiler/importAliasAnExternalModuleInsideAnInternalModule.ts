@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: importAliasAnExternalModuleInsideAnInternalModule_file0.ts
 export namespace m {
     export function foo() { }

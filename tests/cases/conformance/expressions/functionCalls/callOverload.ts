@@ -1,3 +1,4 @@
+// @target: es2015
 declare function fn(x: any): void;
 declare function takeTwo(x: any, y: any): void;
 declare function withRest(a: any, ...args: Array<any>): void;

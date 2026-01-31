@@ -1,4 +1,5 @@
-﻿// A parameter declaration may specify either an identifier or a binding pattern.
+﻿// @target: es2015
+// A parameter declaration may specify either an identifier or a binding pattern.
 
 // Reserved words are not allowed to be used as an identifier in parameter declaration
 "use strict"

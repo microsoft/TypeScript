@@ -87,61 +87,53 @@ declare namespace foo {
 //// [definiteAssignmentAssertions.js]
 "use strict";
 // Suppress strict property initialization check
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
+class C1 {
+}
 // Suppress definite assignment check in constructor
-var C2 = /** @class */ (function () {
-    function C2() {
-        var x = this.a;
+class C2 {
+    constructor() {
+        let x = this.a;
     }
-    return C2;
-}());
+}
 // Definite assignment assertion requires type annotation, no initializer, no static modifier
-var C3 = /** @class */ (function () {
-    function C3() {
+class C3 {
+    constructor() {
         this.a = 1;
         this.b = 1;
     }
-    return C3;
-}());
+}
 // Definite assignment assertion not permitted on abstract property
-var C5 = /** @class */ (function () {
-    function C5() {
-    }
-    return C5;
-}());
+class C5 {
+}
 // Suppress definite assignment check for variable
 function f1() {
-    var x;
-    var y = x;
+    let x;
+    let y = x;
     var a;
     var b = a;
 }
 function f2() {
-    var x;
+    let x;
     if (typeof x === "string") {
-        var s = x;
+        let s = x;
     }
     else {
-        var n = x;
+        let n = x;
     }
 }
 function f3() {
-    var x;
-    var g = function () {
+    let x;
+    const g = () => {
         x = 1;
     };
     g();
-    var y = x;
+    let y = x;
 }
 // Definite assignment assertion requires type annotation and no initializer
 function f4() {
-    var a;
-    var b = 1;
-    var c = 1;
+    let a;
+    let b = 1;
+    let c = 1;
 }
 
 

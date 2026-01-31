@@ -31,14 +31,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BindingKey = void 0;
-var BindingKey = /** @class */ (function () {
-    function BindingKey() {
-    }
-    BindingKey.create = function (ctor) {
+class BindingKey {
+    static create(ctor) {
         return new BindingKey();
-    };
-    return BindingKey;
-}());
+    }
+}
 exports.BindingKey = BindingKey;
 //// [index.js]
 "use strict";
@@ -66,7 +63,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTROLLER_CLASS = void 0;
-var context_1 = require("@loopback/context");
+const context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
 

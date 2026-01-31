@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: 1.ts
 0b00_
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: react
 // https://github.com/Microsoft/TypeScript/issues/13157
 declare namespace React {

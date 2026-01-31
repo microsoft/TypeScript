@@ -1,3 +1,4 @@
+// @target: es2015
 
 //
 // Calling new with (non)abstract classes.

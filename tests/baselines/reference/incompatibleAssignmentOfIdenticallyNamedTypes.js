@@ -12,11 +12,8 @@ class Foo<T> {
 
 
 //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.fn = function () {
+class Foo {
+    fn() {
         this.x = a;
-    };
-    return Foo;
-}());
+    }
+}

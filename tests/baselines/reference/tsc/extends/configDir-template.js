@@ -89,7 +89,7 @@ declare const console: { log(msg: any): void; };
 Output::
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
 'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
 Module name '@myscope/sometype', matched pattern '@myscope/*'.
@@ -99,7 +99,7 @@ File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name 
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
 'paths' option is specified, looking for a pattern to match module name 'other/sometype2'.
 Module name 'other/sometype2', matched pattern 'other/*'.
@@ -138,8 +138,8 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -153,11 +153,10 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/home/src/projects/myproject/decls/types/sometype.d.ts]
@@ -165,11 +164,8 @@ export declare const x = 10;
 
 
 //// [/home/src/projects/myproject/outDir/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
 // some comment
-exports.y = 10;
+export const y = 10;
 
 
 //// [/home/src/projects/myproject/decls/main.d.ts]
@@ -177,11 +173,8 @@ export declare const y = 10;
 
 
 //// [/home/src/projects/myproject/outDir/src/secondary.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
 // some comment
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/projects/myproject/decls/src/secondary.d.ts]

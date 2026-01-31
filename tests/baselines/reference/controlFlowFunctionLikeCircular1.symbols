@@ -8,7 +8,7 @@ const unionOfDifferentReturnType1: { (a: any): number; } | { (a: number): typeof
 >unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 5))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 38))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 62))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
 === controlFlowFunctionLikeCircular_2.ts ===
 unionOfDifferentReturnType1(true);
@@ -21,7 +21,7 @@ const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) 
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 53))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 69))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
 === controlFlowFunctionLikeCircular_3.ts ===
 function test(arg: () => string) {
@@ -180,7 +180,7 @@ function test(arg: string | number, whatever: any) {
 >k : Symbol(k, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 16))
 >arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 14))
 >x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 35))
 
     return o.x;

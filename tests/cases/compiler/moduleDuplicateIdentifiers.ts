@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 export var Foo = 2;
 export var Foo = 42; // Should error

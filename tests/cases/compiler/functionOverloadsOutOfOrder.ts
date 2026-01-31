@@ -1,3 +1,4 @@
+// @target: es2015
 class d {
     private foo(n: number): string;
     private foo(ns: any) {

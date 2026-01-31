@@ -1,4 +1,5 @@
-﻿interface ifc { }
+﻿// @target: es2015
+interface ifc { }
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 

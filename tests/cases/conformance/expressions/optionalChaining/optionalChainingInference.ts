@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/microsoft/TypeScript/issues/34579
 declare function unbox<T>(box: { value: T | undefined }): T;
 declare const su: string | undefined;

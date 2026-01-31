@@ -1,3 +1,4 @@
+// @target: es2015
 // @removeComments: true
 var a = 'some'
     // comment

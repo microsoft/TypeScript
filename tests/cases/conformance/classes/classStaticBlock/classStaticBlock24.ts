@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs, es2015, es2020, es2022, UMD, AMD, System, esnext
 
 export class C {

@@ -76,7 +76,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var reExportX_1 = require("./reExportX");
-var $ = __importStar(require("./reExportAll"));
+const reExportX_1 = require("./reExportX");
+const $ = __importStar(require("./reExportAll"));
 // '$' is not callable, it is an object.
 (0, reExportX_1.x)($);

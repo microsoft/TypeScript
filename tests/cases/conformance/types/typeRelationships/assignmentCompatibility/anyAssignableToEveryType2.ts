@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // any is not a subtype of any other types, but is assignable, all the below should work
 

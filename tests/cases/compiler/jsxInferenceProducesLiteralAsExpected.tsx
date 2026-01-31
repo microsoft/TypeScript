@@ -1,5 +1,7 @@
+// @target: es2015
+// @module: commonjs
 // @jsx: react
-// @libFiles: lib.d.ts,react.d.ts
+/// <reference path="/.lib/react.d.ts" />
 import React = require("react");
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 class TestObject {

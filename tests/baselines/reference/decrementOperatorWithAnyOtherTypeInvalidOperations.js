@@ -76,20 +76,17 @@ ANY2--;
 
 //// [decrementOperatorWithAnyOtherTypeInvalidOperations.js]
 var ANY2 = ["", ""];
-var obj1 = { x: "", y: function () { } };
+var obj1 = { x: "", y: () => { } };
 function foo() {
     var a;
     return a;
 }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () {
+class A {
+    static foo() {
         var a;
         return a;
-    };
-    return A;
-}());
+    }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

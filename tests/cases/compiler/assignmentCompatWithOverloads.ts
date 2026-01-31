@@ -1,3 +1,4 @@
+// @target: es2015
 function f1(x: string): number { return null; }
 
 function f2(x: string): string { return null; }

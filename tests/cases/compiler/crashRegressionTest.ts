@@ -1,3 +1,4 @@
+// @target: es2015
 namespace MsPortal.Util.TemplateEngine {
     "use strict";
  

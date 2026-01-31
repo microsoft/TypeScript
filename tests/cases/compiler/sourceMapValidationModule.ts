@@ -1,3 +1,4 @@
+// @target: es2015
 // @sourcemap: true
 namespace m2 {
     var a = 10;

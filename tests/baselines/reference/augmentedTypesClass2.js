@@ -35,34 +35,25 @@ class c44 {
 //// [augmentedTypesClass2.js]
 // Checking class with other things in type space not value space
 // class then interface
-var c11 = /** @class */ (function () {
-    function c11() {
-    }
-    c11.prototype.foo = function () {
+class c11 {
+    foo() {
         return 1;
-    };
-    return c11;
-}());
+    }
+}
 // class then class - covered
 // class then enum 
-var c33 = /** @class */ (function () {
-    function c33() {
-    }
-    c33.prototype.foo = function () {
+class c33 {
+    foo() {
         return 1;
-    };
-    return c33;
-}());
+    }
+}
 (function (c33) {
     c33[c33["One"] = 0] = "One";
 })(c33 || (c33 = {}));
 ;
 // class then import
-var c44 = /** @class */ (function () {
-    function c44() {
-    }
-    c44.prototype.foo = function () {
+class c44 {
+    foo() {
         return 1;
-    };
-    return c44;
-}());
+    }
+}

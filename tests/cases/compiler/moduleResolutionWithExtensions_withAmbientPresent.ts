@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
 // Allowjs is false, but this should *not* warn about the unused 'index.js'

@@ -7,5 +7,5 @@ function foo():any {
 
 //// [parser509669.js]
 function foo() {
-    return function () { };
+    return () => { };
 }

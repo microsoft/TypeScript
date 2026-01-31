@@ -1,4 +1,5 @@
 /// <reference path="../fourslash.ts" />
+// @lib: es5
 // @Filename: index.ts
 ////export class Foo {
 ////    member: string;

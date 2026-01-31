@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 class C { }
 declare var a: { m(...string): void }

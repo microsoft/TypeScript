@@ -1,3 +1,4 @@
+// @target: es2015
 export type Errors<D> = { readonly [K in keyof D | "base"]?: string[] };
 
 class Model<D> {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var arr = null;
 for (var i:number in arr) { // error

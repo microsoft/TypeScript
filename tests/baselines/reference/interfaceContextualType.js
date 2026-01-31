@@ -26,17 +26,14 @@ class Bug {
 //// [interfaceContextualType.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Bug = /** @class */ (function () {
-    function Bug() {
-    }
-    Bug.prototype.ok = function () {
+class Bug {
+    ok() {
         this.values = {};
         this.values['comments'] = { italic: true };
-    };
-    Bug.prototype.shouldBeOK = function () {
+    }
+    shouldBeOK() {
         this.values = {
             comments: { italic: true }
         };
-    };
-    return Bug;
-}());
+    }
+}

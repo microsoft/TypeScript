@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class S0<B, A> {
 set S1(S2: S0<any,any>) {

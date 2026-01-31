@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 

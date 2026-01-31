@@ -1,3 +1,4 @@
+// @target: es2015
 // Basic recursive type
 
 class List<T> {

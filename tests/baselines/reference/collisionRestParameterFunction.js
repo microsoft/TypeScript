@@ -37,31 +37,19 @@ declare function f6(_i: string); // no codegen no error
 
 //// [collisionRestParameterFunction.js]
 // Functions
-function f1(_i) {
-    var restParameters = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        restParameters[_a - 1] = arguments[_a];
-    }
+function f1(_i, ...restParameters) {
     var _i = 10; // no error
 }
 function f1NoError(_i) {
     var _i = 10; // no error
 }
-function f3() {
-    var restParameters = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        restParameters[_a] = arguments[_a];
-    }
+function f3(...restParameters) {
     var _i = 10; // no error
 }
 function f3NoError() {
     var _i = 10; // no error
 }
-function f4(_i) {
-    var rest = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        rest[_a - 1] = arguments[_a];
-    }
+function f4(_i, ...rest) {
 }
 function f4NoError(_i) {
 }

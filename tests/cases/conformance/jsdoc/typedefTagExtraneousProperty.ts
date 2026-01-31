@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 // @allowjs: true
 // @checkjs: true

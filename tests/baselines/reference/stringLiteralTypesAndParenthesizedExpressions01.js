@@ -10,10 +10,10 @@ let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
 
 
 //// [stringLiteralTypesAndParenthesizedExpressions01.js]
-var a = ("foo");
-var b = ("foo");
-var c = (myRandBool ? "foo" : ("foo"));
-var d = (myRandBool ? "foo" : ("bar"));
+let a = ("foo");
+let b = ("foo");
+let c = (myRandBool ? "foo" : ("foo"));
+let d = (myRandBool ? "foo" : ("bar"));
 
 
 //// [stringLiteralTypesAndParenthesizedExpressions01.d.ts]

@@ -8991,15 +8991,10 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     target: {
-        dependencies: ["module"],
+        dependencies: [],
         computeValue: compilerOptions => {
             const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
-            return target ??
-                ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
-                    (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-                    ScriptTarget.ES5);
+            return target ?? ScriptTarget.LatestStandard;
         },
     },
     module: {

@@ -23,12 +23,9 @@ catch (error) {
     if (error.number === -2147024809) { }
 }
 for (var key in this) { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.temp = function () {
+class C {
+    temp() {
         for (var x in this) {
         }
-    };
-    return C;
-}());
+    }
+}

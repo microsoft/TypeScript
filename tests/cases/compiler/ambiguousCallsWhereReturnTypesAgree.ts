@@ -1,3 +1,4 @@
+// @target: es2015
 class TestClass {
     public bar(x: string): void;
     public bar(x: string[]): void;

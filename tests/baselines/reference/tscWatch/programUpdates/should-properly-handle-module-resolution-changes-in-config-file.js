@@ -47,9 +47,10 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -74,7 +75,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/file1.ts: *new*
   {}
@@ -98,14 +99,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/node_modules/module1.ts
 /user/username/workspace/solution/projects/project/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/node_modules/module1.ts (used version)
 /user/username/workspace/solution/projects/project/file1.ts (used version)
 
@@ -146,8 +147,7 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/file1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/module1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -174,7 +174,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/module1.ts: *new*
   {}
@@ -205,7 +205,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/module1.ts
 /user/username/workspace/solution/projects/project/file1.ts
 

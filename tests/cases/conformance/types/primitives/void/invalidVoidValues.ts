@@ -1,3 +1,4 @@
+// @target: es2015
 var x: void;
 x = 1;
 x = '';

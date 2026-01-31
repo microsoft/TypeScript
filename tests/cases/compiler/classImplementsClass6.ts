@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     static bar(): string {
         return "";

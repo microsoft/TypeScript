@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnusedLabels: false
 
 let x = 1;

@@ -17,7 +17,7 @@ export * as aliased from "./data1";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
-var r = [];
+const r = [];
 function register(data) {
     r.push(data);
 }
@@ -67,5 +67,5 @@ exports.aliased = __importStar(require("./data1"));
 //// [data1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _1 = require("./");
+const _1 = require("./");
 (0, _1.register)("ok");

@@ -18,5 +18,5 @@ module.exports = {
     }
 };
 //// [requireTwoPropertyAccesses.js]
-var value = require("./mod").x.y;
+const value = require("./mod").x.y;
 console.log(value);

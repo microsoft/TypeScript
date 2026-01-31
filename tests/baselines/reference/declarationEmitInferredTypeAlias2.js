@@ -18,14 +18,14 @@ export { v, bar }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 {
-    var obj = true;
+    let obj = true;
 }
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.v = void 0;
 exports.bar = bar;
-var v = "str" || true;
+let v = "str" || true;
 exports.v = v;
 function bar() {
     return v;

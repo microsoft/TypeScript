@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // the type printback for every `test` below should be "y"
 

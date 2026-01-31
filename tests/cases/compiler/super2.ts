@@ -1,3 +1,4 @@
+// @target: es2015
 // Case 5
 class Base5 {
     public x() {

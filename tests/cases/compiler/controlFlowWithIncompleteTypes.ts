@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #11000
 
 declare var cond: boolean;

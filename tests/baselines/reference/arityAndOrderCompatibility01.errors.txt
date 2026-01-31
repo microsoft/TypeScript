@@ -1,5 +1,5 @@
 arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
-arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
+arityAndOrderCompatibility01.ts(17,5): error TS2488: Type '{ 0: string; 1: number; length: 2; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
   Source has 2 element(s) but target requires 3.
 arityAndOrderCompatibility01.ts(19,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
@@ -50,7 +50,7 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
     var [d, e, f] = y;
     var [g, h, i] = z;
         ~~~~~~~~~
-!!! error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
+!!! error TS2488: Type '{ 0: string; 1: number; length: 2; }' must have a '[Symbol.iterator]()' method that returns an iterator.
     var j1: [number, number, number] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.

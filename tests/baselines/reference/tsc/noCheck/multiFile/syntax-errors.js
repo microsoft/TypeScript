@@ -40,11 +40,10 @@ Found 1 error in a.ts[90m:1[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello;
+export const a = "hello;
 
 
 //// [/home/src/workspaces/project/a.d.ts]
@@ -52,10 +51,7 @@ export declare const a = "hello";
 
 
 //// [/home/src/workspaces/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 
 
 //// [/home/src/workspaces/project/b.d.ts]
@@ -74,7 +70,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -112,7 +108,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -130,10 +126,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello";
+export const a = "hello";
 
 
 //// [/home/src/workspaces/project/a.d.ts] file written with same contents
@@ -151,7 +144,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -181,7 +174,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -210,7 +203,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -239,7 +232,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -269,7 +262,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -295,10 +288,7 @@ Found 1 error in a.ts[90m:1[0m
 
 
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello;
+export const a = "hello;
 
 
 //// [/home/src/workspaces/project/a.d.ts] file written with same contents
@@ -316,7 +306,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -354,7 +344,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -391,7 +381,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -409,10 +399,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello";
+export const a = "hello";
 
 
 //// [/home/src/workspaces/project/a.d.ts] file written with same contents
@@ -430,7 +417,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -459,7 +446,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -489,10 +476,7 @@ Found 1 error in c.ts[90m:1[0m
 //// [/home/src/workspaces/project/b.js] file written with same contents
 //// [/home/src/workspaces/project/b.d.ts] file written with same contents
 //// [/home/src/workspaces/project/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = "hello";
+export const c = "hello";
 
 
 //// [/home/src/workspaces/project/c.d.ts]
@@ -511,7 +495,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -538,10 +522,7 @@ Found 1 error in a.ts[90m:1[0m
 
 
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello;
+export const a = "hello;
 
 
 //// [/home/src/workspaces/project/a.d.ts] file written with same contents
@@ -562,7 +543,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -581,10 +562,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello";
+export const a = "hello";
 
 
 //// [/home/src/workspaces/project/a.d.ts] file written with same contents
@@ -605,7 +583,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -646,7 +624,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -680,7 +658,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -721,7 +699,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts

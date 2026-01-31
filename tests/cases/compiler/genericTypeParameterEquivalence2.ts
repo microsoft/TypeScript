@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {

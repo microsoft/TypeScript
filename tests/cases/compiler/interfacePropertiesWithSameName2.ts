@@ -1,3 +1,4 @@
+// @target: es2015
 interface Mover {
     move(): void;
     getStatus(): { speed: number; };

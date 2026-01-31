@@ -1,3 +1,4 @@
+// @target: es2015
 // explicit type annotation should cause `method` to have type 'x' | 'y'
 // both inside and outside `test`.
 function test({

@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: projA/index.d.ts
 export declare class Foo extends Number {

@@ -1,3 +1,4 @@
+// @target: es2015
 // derived class constructors must contain a super call
 
 class Base {

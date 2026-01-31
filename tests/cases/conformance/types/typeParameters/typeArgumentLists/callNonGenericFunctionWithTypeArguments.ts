@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // it is always illegal to provide type arguments to a non-generic function
 // all invocations here are illegal

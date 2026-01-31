@@ -38,38 +38,25 @@ class a {
 
 
 //// [parserErrantSemicolonInClass1.js]
-var a = /** @class */ (function () {
-    function a(ns) {
+class a {
+    constructor(ns) {
     }
-    a.prototype.pgF = function () { };
+    pgF() { }
     ;
-    Object.defineProperty(a.prototype, "d", {
-        get: function () {
-            return 30;
-        },
-        set: function () {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(a, "p2", {
-        get: function () {
-            return { x: 30, y: 40 };
-        },
-        enumerable: false,
-        configurable: true
-    });
-    a.d2 = function () {
-    };
-    Object.defineProperty(a, "p3", {
-        get: function () {
-            return "string";
-        },
-        enumerable: false,
-        configurable: true
-    });
-    a.prototype.foo = function (ns) {
+    get d() {
+        return 30;
+    }
+    set d() {
+    }
+    static get p2() {
+        return { x: 30, y: 40 };
+    }
+    static d2() {
+    }
+    static get p3() {
+        return "string";
+    }
+    foo(ns) {
         return ns.toString();
-    };
-    return a;
-}());
+    }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 // https://github.com/microsoft/TypeScript/issues/19577
 

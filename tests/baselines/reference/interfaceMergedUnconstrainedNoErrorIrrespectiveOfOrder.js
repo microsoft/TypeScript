@@ -21,8 +21,6 @@ export namespace ns {
 }
 
 //// [working.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [regression.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

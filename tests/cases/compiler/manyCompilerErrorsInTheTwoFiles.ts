@@ -1,3 +1,4 @@
+// @target: es2015
 // @pretty: true
 // @filename: a.ts
 const a =!@#!@$

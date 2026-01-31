@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     get x() { return 1; }
     static get x() {

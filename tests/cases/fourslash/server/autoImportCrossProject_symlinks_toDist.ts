@@ -6,6 +6,7 @@
 // @Filename: /home/src/workspaces/project/packages/app/tsconfig.json
 //// {
 ////   "compilerOptions": {
+////     "lib": ["es5"],
 ////     "module": "commonjs",
 ////     "outDir": "dist",
 ////     "rootDir": "src",
@@ -26,7 +27,7 @@
 
 // @Filename: /home/src/workspaces/project/packages/dep/tsconfig.json
 //// {
-////   "compilerOptions": { "outDir": "dist", "rootDir": "src", "module": "commonjs" }
+////   "compilerOptions": { "lib": ["es5"], "outDir": "dist", "rootDir": "src", "module": "commonjs" }
 //// }
 
 // @Filename: /home/src/workspaces/project/packages/dep/src/index.ts

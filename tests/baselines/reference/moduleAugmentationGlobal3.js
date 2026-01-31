@@ -23,11 +23,8 @@ let y = x.getCountAsString().toLowerCase();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 ;
 //// [f2.js]
@@ -37,8 +34,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./f2");
-var x = [1];
-var y = x.getCountAsString().toLowerCase();
+let x = [1];
+let y = x.getCountAsString().toLowerCase();
 
 
 //// [f1.d.ts]

@@ -1,3 +1,4 @@
+// @target: es2015
 interface IBookStyle {
     initialLeftPageTransforms?: (width: number) => NamedTransform[];
 }

@@ -11,10 +11,7 @@ export = foo
 //// [m1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
+    class foo {
+    }
     return foo;
 });

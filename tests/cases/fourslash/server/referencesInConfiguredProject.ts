@@ -11,6 +11,6 @@
 ////var c = /*1*/globalClass();
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }
+////{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"], "compilerOptions": { "lib": ["es5"] } }
 
 verify.baselineFindAllReferences('1')

@@ -1,4 +1,4 @@
-//@Target: ES5
+// @target: ES5, ES2015
 
 // Multiple properties with the same name
 var e1 = { a: 0, a: 0 };
