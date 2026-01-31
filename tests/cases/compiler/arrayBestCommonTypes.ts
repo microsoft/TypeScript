@@ -1,4 +1,5 @@
-﻿namespace EmptyTypes {
+﻿// @target: es2015
+namespace EmptyTypes {
     interface iface { }
     class base implements iface { }
     class base2 implements iface { }

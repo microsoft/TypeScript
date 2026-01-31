@@ -49,11 +49,11 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("../utils");
-utils_1.E.A;
+import { E } from "../utils";
+E.A;
 
 
 

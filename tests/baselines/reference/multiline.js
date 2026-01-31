@@ -92,11 +92,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
 /// <reference path="/.lib/react.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 function MyComponent(props) {
     return React.createElement("div", null);
 }
-var x = (React.createElement("div", null,
+let x = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),

@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 namespace m1 {
     export namespace m2 {
 

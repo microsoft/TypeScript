@@ -34,7 +34,7 @@ const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 //// [enumLiteralAssignableToEnumInsideUnion.js]
 var X;
 (function (X) {
-    var Foo;
+    let Foo;
     (function (Foo) {
         Foo[Foo["A"] = 0] = "A";
         Foo[Foo["B"] = 1] = "B";
@@ -42,7 +42,7 @@ var X;
 })(X || (X = {}));
 var Y;
 (function (Y) {
-    var Foo;
+    let Foo;
     (function (Foo) {
         Foo[Foo["A"] = 0] = "A";
         Foo[Foo["B"] = 1] = "B";
@@ -50,7 +50,7 @@ var Y;
 })(Y || (Y = {}));
 var Z;
 (function (Z) {
-    var Foo;
+    let Foo;
     (function (Foo) {
         Foo[Foo["A"] = 2] = "A";
         Foo[Foo["B"] = 4] = "B";
@@ -58,15 +58,15 @@ var Z;
 })(Z || (Z = {}));
 var Ka;
 (function (Ka) {
-    var Foo;
+    let Foo;
     (function (Foo) {
         Foo[Foo["A"] = 1024] = "A";
         Foo[Foo["B"] = 2048] = "B";
     })(Foo = Ka.Foo || (Ka.Foo = {}));
 })(Ka || (Ka = {}));
-var e0 = Y.Foo.A; // ok
-var e1 = Z.Foo.A; // not legal, Z is computed
-var e2 = Z.Foo.A; // still not legal
-var e3 = Z.Foo.A; // not legal
-var e4 = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
-var e5 = Z.Foo.A; // ok
+const e0 = Y.Foo.A; // ok
+const e1 = Z.Foo.A; // not legal, Z is computed
+const e2 = Z.Foo.A; // still not legal
+const e3 = Z.Foo.A; // not legal
+const e4 = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
+const e5 = Z.Foo.A; // ok

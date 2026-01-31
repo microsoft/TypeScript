@@ -36,7 +36,7 @@ c.p + c.q;
 //// [importer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var assignmentToVoidZero2_1 = require("./assignmentToVoidZero2");
+const assignmentToVoidZero2_1 = require("./assignmentToVoidZero2");
 assignmentToVoidZero2_1.j + assignmentToVoidZero2_1.k;
 
 

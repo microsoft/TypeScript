@@ -20,7 +20,7 @@
 ////}
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "compilerOptions": { "lib": ["es5"] }, "files": ["folder/c.jsx", "react.d.ts", "b.jsx"] }
+////{ "compilerOptions": { "lib": ["es5"], "module": "commonjs" }, "files": ["folder/c.jsx", "react.d.ts", "b.jsx"] }
 
 const range = test.ranges();
 verify.pasteEdits({

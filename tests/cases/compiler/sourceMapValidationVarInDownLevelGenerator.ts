@@ -1,3 +1,4 @@
+// @target: es2015
 // @sourcemap: true
 // @downlevelIteration: true
 // @noEmitHelpers: true

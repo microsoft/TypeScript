@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowImportingTsExtensions: true
 // @noEmit: true
 // @moduleResolution: classic,node16,nodenext,bundler

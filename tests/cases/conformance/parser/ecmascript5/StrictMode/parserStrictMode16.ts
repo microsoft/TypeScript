@@ -1,3 +1,4 @@
+// @target: es2015
 "use strict";
 delete this;
 delete 1;

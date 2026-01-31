@@ -45,16 +45,10 @@ var numStrTuple2 = [5, "foo", true];
 var numStrBoolTuple = [5, "foo", true];
 var objNumTuple = [{ a: "world" }, 5];
 var strTupleTuple = ["bar", [5, { x: 1, y: 1 }]];
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
 var unionTuple = [new C(), "foo"];
 var unionTuple1 = [new C(), "foo"];
 var unionTuple2 = [new C(), "foo", new D()];
@@ -69,5 +63,5 @@ unionTuple = unionTuple1;
 unionTuple = unionTuple2;
 unionTuple2 = unionTuple;
 numStrTuple = unionTuple3;
-var var1 = [0, 0];
-var withExtra = [];
+let var1 = [0, 0];
+const withExtra = [];

@@ -14,11 +14,8 @@ interface Array<T> {
 //// [innerBoundLambdaEmit.js]
 var M;
 (function (M) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     M.Foo = Foo;
-    var bar = function () { };
+    var bar = () => { };
 })(M || (M = {}));

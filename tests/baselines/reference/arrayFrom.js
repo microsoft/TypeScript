@@ -41,34 +41,22 @@ function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 //// [arrayFrom.js]
 // Tests fix for #20432, ensures Array.from accepts all valid inputs
 // Also tests for #19682
-var inputA = [];
-var inputB = [];
-var inputALike = { length: 0 };
-var inputARand = getEither(inputA, inputALike);
-var inputASet = new Set();
-var result1 = Array.from(inputA);
-var result2 = Array.from(inputA.values());
-var result3 = Array.from(inputA.values()); // expect error
-var result4 = Array.from(inputB, function (_a) {
-    var b = _a.b;
-    return ({ a: b });
-});
-var result5 = Array.from(inputALike);
-var result6 = Array.from(inputALike); // expect error
-var result7 = Array.from(inputALike, function (_a) {
-    var a = _a.a;
-    return ({ b: a });
-});
-var result8 = Array.from(inputARand);
-var result9 = Array.from(inputARand, function (_a) {
-    var a = _a.a;
-    return ({ b: a });
-});
-var result10 = Array.from(new Set());
-var result11 = Array.from(inputASet, function (_a) {
-    var a = _a.a;
-    return ({ b: a });
-});
+const inputA = [];
+const inputB = [];
+const inputALike = { length: 0 };
+const inputARand = getEither(inputA, inputALike);
+const inputASet = new Set();
+const result1 = Array.from(inputA);
+const result2 = Array.from(inputA.values());
+const result3 = Array.from(inputA.values()); // expect error
+const result4 = Array.from(inputB, ({ b }) => ({ a: b }));
+const result5 = Array.from(inputALike);
+const result6 = Array.from(inputALike); // expect error
+const result7 = Array.from(inputALike, ({ a }) => ({ b: a }));
+const result8 = Array.from(inputARand);
+const result9 = Array.from(inputARand, ({ a }) => ({ b: a }));
+const result10 = Array.from(new Set());
+const result11 = Array.from(inputASet, ({ a }) => ({ b: a }));
 // if this is written inline, the compiler seems to infer
 // the ?: as always taking the false branch, narrowing to ArrayLike<T>,
 // even when the type is written as : Iterable<T>|ArrayLike<T>

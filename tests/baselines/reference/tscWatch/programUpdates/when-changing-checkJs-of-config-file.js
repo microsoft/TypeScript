@@ -41,7 +41,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
@@ -54,9 +54,10 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -67,7 +68,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject: *new*
   {}
@@ -92,15 +93,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -157,7 +158,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject:
   {}
@@ -186,7 +187,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 

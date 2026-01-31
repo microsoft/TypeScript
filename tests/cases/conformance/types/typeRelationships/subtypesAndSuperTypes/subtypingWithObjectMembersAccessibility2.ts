@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived member is private, base member is not causes errors
 
 class Base {

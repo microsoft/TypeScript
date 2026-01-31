@@ -31,7 +31,7 @@ let d = <SFC2AndEmptyComp data-prop />;
 "use strict";
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 function EmptySFC1() {
     return React.createElement("div", null, "Hi");
 }
@@ -44,7 +44,7 @@ function SFC2(prop) {
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
 var SFC2AndEmptyComp = SFC2 || EmptySFC1;
 // Error
-var a = React.createElement(EmptySFCComp, { x: true });
-var b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
-var c = React.createElement(SFC2AndEmptyComp, null);
-var d = React.createElement(SFC2AndEmptyComp, { "data-prop": true });
+let a = React.createElement(EmptySFCComp, { x: true });
+let b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
+let c = React.createElement(SFC2AndEmptyComp, null);
+let d = React.createElement(SFC2AndEmptyComp, { "data-prop": true });

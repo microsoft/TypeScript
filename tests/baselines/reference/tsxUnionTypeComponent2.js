@@ -18,6 +18,6 @@ const X: Invalid1 = 1;
 "use strict";
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var X = 1;
+const React = require("react");
+const X = 1;
 React.createElement(X, null);

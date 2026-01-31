@@ -1,3 +1,4 @@
+// @target: es2015
 interface Base extends Derived2 { // error
     x: string;
 }

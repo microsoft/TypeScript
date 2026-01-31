@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare function foo(x: (y: string) => (y2: number) => void);
 

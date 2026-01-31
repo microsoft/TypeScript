@@ -1,3 +1,4 @@
+// @target: es2015
 // Test the error message when attempting to merge an enum with a class, an interface, or a function.
 // @Filename: duplicateIdentifierEnum_A.ts
 enum A {

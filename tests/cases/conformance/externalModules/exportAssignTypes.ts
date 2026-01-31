@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @strict: false
 // @Filename: expString.ts
 var x = "test";

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 for (let x = 0; x < 1; ++x) {
     let x;

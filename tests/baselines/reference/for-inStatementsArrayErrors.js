@@ -21,12 +21,12 @@ for (var j in a ) {
 
 
 //// [for-inStatementsArrayErrors.js]
-for (var x in a) {
-    var a1 = a[x + 1];
-    var a2 = a[x - 1];
+for (let x in a) {
+    let a1 = a[x + 1];
+    let a2 = a[x - 1];
     if (x === 1) {
     }
-    var a3 = x.unknownProperty;
+    let a3 = x.unknownProperty;
 }
 var i;
 for (var i in a) {

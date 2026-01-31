@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function foo(foo:{a:string; b:number;}):string;
 function foo(foo:{a:string; b:number;}):number;

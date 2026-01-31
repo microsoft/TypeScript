@@ -6,9 +6,8 @@ class C {
 }
 
 //// [Protected9.js]
-var C = /** @class */ (function () {
-    function C(p) {
+class C {
+    constructor(p) {
         this.p = p;
     }
-    return C;
-}());
+}

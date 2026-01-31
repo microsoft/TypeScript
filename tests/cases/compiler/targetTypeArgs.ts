@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(callback: (x: string) => void) {
     callback("hello");   
 }

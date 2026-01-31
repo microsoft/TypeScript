@@ -43,16 +43,14 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspaces/projects/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/workspaces/projects/myproject/lib/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -65,7 +63,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspaces/projects/b.ts: *new*
   {}
@@ -89,17 +87,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspaces/projects/b.ts
 /user/username/workspaces/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspaces/projects/b.ts
 /user/username/workspaces/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspaces/projects/b.ts (used version)
 /user/username/workspaces/projects/myproject/a.ts (used version)
 
@@ -149,7 +147,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspaces/projects/b.ts
 /user/username/workspaces/projects/myproject/a.ts
 

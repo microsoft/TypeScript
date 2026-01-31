@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {
     new(): number;
     apply(a: any, b?: any): void;

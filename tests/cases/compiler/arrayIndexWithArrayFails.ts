@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare const arr1: (string | string[])[];
 declare const arr2: number[];

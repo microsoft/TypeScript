@@ -1,4 +1,5 @@
-﻿namespace TypeScript.Parser {
+﻿// @target: es2015
+namespace TypeScript.Parser {
     class SyntaxCursor {
         public currentNode(): SyntaxNode {
             return null;

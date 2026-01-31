@@ -69,7 +69,7 @@ Output::
 
 ======== Resolving module 'package-b' from '/home/src/workspace/packageC/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Found 'package.json' at '/home/src/workspace/packageC/package.json'.
 Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -88,7 +88,7 @@ Resolving real path for '/home/src/workspace/packageC/node_modules/package-b/ind
 ======== Module name 'package-b' was successfully resolved to '/home/src/workspace/packageB/index.d.ts'. ========
 ======== Resolving module 'package-a' from '/home/src/workspace/packageB/index.d.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Found 'package.json' at '/home/src/workspace/packageB/package.json'.
 Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -107,17 +107,7 @@ Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/src/workspace/packageC/package.json' exists according to earlier cached lookups.
 Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspace/packageC/node_modules/package-b/package.json' exists according to earlier cached lookups.
-File '/home/src/workspace/packageC/node_modules/package-b.ts' does not exist.
-File '/home/src/workspace/packageC/node_modules/package-b.tsx' does not exist.
-File '/home/src/workspace/packageC/node_modules/package-b.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' does not have a 'types' field.
-'package.json' does not have a 'main' field.
-File '/home/src/workspace/packageC/node_modules/package-b/index.ts' does not exist.
-File '/home/src/workspace/packageC/node_modules/package-b/index.tsx' does not exist.
-File '/home/src/workspace/packageC/node_modules/package-b/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspace/packageC/node_modules/package-b/index.d.ts', result '/home/src/workspace/packageB/index.d.ts'.
+Resolution for module 'package-b' was found in cache from location '/home/src/workspace/packageC'.
 ======== Module name 'package-b' was successfully resolved to '/home/src/workspace/packageB/index.d.ts'. ========
 ======== Resolving module 'package-a' from '/home/src/workspace/packageC/package.json'. ========
 Module resolution kind is not specified, using 'Bundler'.
@@ -134,8 +124,8 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -146,45 +136,11 @@ index.ts
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspace/packageC/index.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-var pkg = __importStar(require("package-b"));
-exports.a = pkg.invoke();
+import * as pkg from "package-b";
+export const a = pkg.invoke();
 
 
 //// [/home/src/workspace/packageC/index.d.ts]
@@ -199,7 +155,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /home/src/workspace/packageA/index.d.ts: *new*
   {}
@@ -238,19 +194,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspace/packagea/index.d.ts (used version)
 /home/src/workspace/packageb/index.d.ts (used version)
 /home/src/workspace/packagec/index.ts (computed .d.ts during emit)
@@ -312,8 +268,8 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -325,44 +281,8 @@ index.ts
 
 
 //// [/home/src/workspace/packageC/index.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.aa = void 0;
-var pkg = __importStar(require("package-b"));
-exports.aa = pkg.invoke();
+import * as pkg from "package-b";
+export const aa = pkg.invoke();
 
 
 //// [/home/src/workspace/packageC/index.d.ts]
@@ -383,7 +303,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts

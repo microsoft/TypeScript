@@ -1,3 +1,4 @@
+// @target: es2015
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
     let v1: Extract<T, string> = 0 as any as T;  // Error
     let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error

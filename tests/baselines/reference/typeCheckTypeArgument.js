@@ -17,16 +17,10 @@ class Foo2 {
 
 //// [typeCheckTypeArgument.js]
 var f;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 function bar() { }
-var Foo2 = /** @class */ (function () {
-    function Foo2() {
-    }
-    Foo2.prototype.method = function () { };
-    return Foo2;
-}());
-(function (a) { });
+class Foo2 {
+    method() { }
+}
+((a) => { });

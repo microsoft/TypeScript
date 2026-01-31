@@ -21,13 +21,12 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithTwoPublic = /** @class */ (function () {
-        function classWithTwoPublic(one, two) {
+    class classWithTwoPublic {
+        constructor(one, two) {
             this.one = one;
             this.two = two;
         }
-        return classWithTwoPublic;
-    }());
+    }
     __test2__.classWithTwoPublic = classWithTwoPublic;
     var x2 = new classWithTwoPublic(1, "a");
     ;

@@ -60,11 +60,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 // should be fine - `ElementType` accepts `div`
-var a = React.createElement("div", null);
+let a = React.createElement("div", null);
 // should be an error - `ElementType` does not accept `span`
-var b = React.createElement("span", null);
+let b = React.createElement("span", null);
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
-var c = React.createElement("ruhroh", null);
+let c = React.createElement("ruhroh", null);

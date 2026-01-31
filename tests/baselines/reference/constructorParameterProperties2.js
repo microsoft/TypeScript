@@ -35,30 +35,25 @@ var r4 = f.y; // error
 
 
 //// [constructorParameterProperties2.js]
-var C = /** @class */ (function () {
-    function C(y) {
-    } // ok
-    return C;
-}());
+class C {
+    constructor(y) { } // ok
+}
 var r = c.y;
-var D = /** @class */ (function () {
-    function D(y) {
+class D {
+    constructor(y) {
         this.y = y;
     } // error
-    return D;
-}());
+}
 var r2 = d.y;
-var E = /** @class */ (function () {
-    function E(y) {
+class E {
+    constructor(y) {
         this.y = y;
     } // error
-    return E;
-}());
+}
 var r3 = e.y; // error
-var F = /** @class */ (function () {
-    function F(y) {
+class F {
+    constructor(y) {
         this.y = y;
     } // error
-    return F;
-}());
+}
 var r4 = f.y; // error

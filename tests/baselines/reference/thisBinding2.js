@@ -24,24 +24,21 @@ var messenger = {
 
 
 //// [thisBinding2.js]
-var C = /** @class */ (function () {
-    function C() {
-        var _this = this;
-        this.x = (function () {
+class C {
+    constructor() {
+        this.x = (() => {
             var x = 1;
-            return _this.x;
+            return this.x;
         })();
         this.x = function () {
             var x = 1;
             return this.x;
         }();
     }
-    return C;
-}());
+}
 var messenger = {
     message: "Hello World",
     start: function () {
-        var _this = this;
-        return setTimeout(function () { var x = _this.message; }, 3000);
+        return setTimeout(() => { var x = this.message; }, 3000);
     }
 };

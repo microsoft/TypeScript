@@ -1,3 +1,4 @@
+// @target: es2015
 function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
     return undefined;
 }

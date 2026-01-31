@@ -1,3 +1,4 @@
+// @target: es2015
 interface B<T> {
     bar: T;
 }

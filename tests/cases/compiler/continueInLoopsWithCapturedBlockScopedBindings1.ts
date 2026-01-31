@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 function foo() {
     for (const i of [0, 1]) {
         if (i === 0) {

@@ -45,86 +45,29 @@ export class C extends A<B> {
 
 
 //// [typeReference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [classReference.js]
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.D = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return D;
-}(C));
-exports.D = D;
+export class D extends C {
+}
 //// [interface.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [call.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var unknown_1 = require("unknown");
-(0, unknown_1.foo)();
+import { foo } from "unknown";
+foo();
 //// [new.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var unkown_1 = require("unkown");
-new unkown_1.Foo();
+import { Foo } from "unkown";
+new Foo();
 //// [callAny.js]
 g();
 g(); // Should get error for type argument
 //// [super.js]
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var unknown_1 = require("unknown");
-var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
-        return _super !== null && _super.apply(this, arguments) || this;
+import { A } from "unknown";
+export class C extends A {
+    m() {
+        super.m(1);
+        super.m(); // Should get error for type argument
     }
-    C.prototype.m = function () {
-        _super.prototype.m.call(this, 1);
-        _super.prototype.m.call(this); // Should get error for type argument
-    };
-    return C;
-}(unknown_1.A));
-exports.C = C;
+}

@@ -26,11 +26,8 @@ var b = {
 var r4 = b["a b"];
 
 //// [stringNamedPropertyAccess.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r1 = c["a b"];
 var r1b = C['c d'];

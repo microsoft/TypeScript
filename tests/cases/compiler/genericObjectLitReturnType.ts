@@ -1,3 +1,4 @@
+// @target: es2015
 class X<T>
 {
     f(t: T) { return { a: t }; }

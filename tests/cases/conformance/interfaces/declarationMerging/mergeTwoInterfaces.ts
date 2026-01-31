@@ -1,3 +1,4 @@
+// @target: es2015
 // two interfaces with the same root module should merge
 
 // basic case

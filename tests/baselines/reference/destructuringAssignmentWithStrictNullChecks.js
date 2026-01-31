@@ -17,5 +17,5 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var bar;
+let bar;
 (bar = __rest({}, []));

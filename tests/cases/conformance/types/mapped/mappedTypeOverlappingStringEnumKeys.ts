@@ -1,3 +1,4 @@
+// @target: es2015
 // #37859
 
 enum TerrestrialAnimalTypes {

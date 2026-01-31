@@ -1,4 +1,5 @@
-﻿// @filename: file.tsx
+﻿// @target: es2015
+// @filename: file.tsx
 // @jsx: preserve
 // @module: amd
 // @skipLibCheck: true

@@ -1,3 +1,4 @@
+// @target: es2015
 // All errors
 
 // naked break not allowed

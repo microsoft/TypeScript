@@ -1,4 +1,5 @@
-﻿class Base {
+﻿// @target: es2015
+class Base {
     constructor(...arg) {
     }
 }

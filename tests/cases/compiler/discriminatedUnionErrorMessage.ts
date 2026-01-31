@@ -1,3 +1,4 @@
+// @target: es2015
 type Square = { kind: "sq", size: number }
 type Rectangle = { kind: "rt", x: number, y: number }
 type Circle = { kind: "cr", radius: number }

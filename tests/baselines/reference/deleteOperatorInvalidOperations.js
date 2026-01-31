@@ -26,10 +26,9 @@ delete ; //expect error
 // miss an operand
 var BOOLEAN2 = delete ;
 // delete global variable s
-var testADelx = /** @class */ (function () {
-    function testADelx(s) {
+class testADelx {
+    constructor(s) {
         this.s = s;
         delete s; //expect error
     }
-    return testADelx;
-}());
+}

@@ -29,8 +29,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var removeF = function (_a) {
-    var f = _a.f, rest = __rest(_a, ["f"]);
+const removeF = (_a) => {
+    var { f } = _a, rest = __rest(_a, ["f"]);
     return rest;
 };
-var result = removeF({ f: '', g: 3 }).g;
+const result = removeF({ f: '', g: 3 }).g;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 // @Filename: a.ts
 import Namespace from "./b";

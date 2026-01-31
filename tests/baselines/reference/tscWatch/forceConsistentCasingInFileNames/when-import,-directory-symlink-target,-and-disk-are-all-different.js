@@ -53,7 +53,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/xY/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
@@ -68,8 +68,8 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -82,6 +82,8 @@ b.ts
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out.js]
 System.register("xY/a", [], function (exports_1, context_1) {
@@ -137,7 +139,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/b.ts: *new*
   {}
@@ -168,7 +170,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/xY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
@@ -224,8 +226,8 @@ CreatingProgramWith::
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -303,7 +305,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/xY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts

@@ -69,7 +69,7 @@ function foo2(bar) {
         case "a":
             return 1;
     }
-    var unusedVariable;
+    let unusedVariable;
 }
 function foo3(bar) {
     switch (bar) {

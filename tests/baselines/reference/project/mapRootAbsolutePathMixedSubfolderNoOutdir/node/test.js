@@ -1,11 +1,9 @@
 /// <reference path='ref/m1.ts'/>
 /// <reference path='ref/m2.ts'/>
 var a1 = 10;
-var c1 = /** @class */ (function () {
-    function c1() {
-    }
-    return c1;
-}());
+class c1 {
+    p1;
+}
 var instance1 = new c1();
 function f1() {
     return instance1;

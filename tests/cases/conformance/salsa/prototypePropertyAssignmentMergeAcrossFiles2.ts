@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: prototypePropertyAssignmentMergeAcrossFiles2.js
 // @allowJs: true
 // @checkJs: true

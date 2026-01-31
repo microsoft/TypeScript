@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function test(x: boolean): boolean { return x; }

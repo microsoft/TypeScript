@@ -12,16 +12,9 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 }
 
 //// [jsxPartialSpread.jsx]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Repro = Repro;
 /// <reference path="/.lib/react16.d.ts" />
-var Select = function (p) { return <p></p>; };
-var react_1 = __importDefault(require("react"));
-function Repro(_a) {
-    var _b = _a.SelectProps, SelectProps = _b === void 0 ? {} : _b;
+const Select = (p) => <p></p>;
+import React from 'react';
+export function Repro({ SelectProps = {} }) {
     return (<Select value={'test'} {...SelectProps}/>);
 }

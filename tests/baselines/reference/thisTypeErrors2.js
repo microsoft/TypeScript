@@ -17,21 +17,16 @@ class Derived {
 
 
 //// [thisTypeErrors2.js]
-var Base = /** @class */ (function () {
-    function Base(a) {
+class Base {
+    constructor(a) {
     }
-    return Base;
-}());
-var Generic = /** @class */ (function () {
-    function Generic() {
-    }
-    return Generic;
-}());
-var Derived = /** @class */ (function () {
-    function Derived(host) {
+}
+class Generic {
+}
+class Derived {
+    constructor(host) {
         this.host = host;
-        var self = this;
+        let self = this;
         this.n = 12;
     }
-    return Derived;
-}());
+}

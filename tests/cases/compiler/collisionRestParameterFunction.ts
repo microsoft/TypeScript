@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Functions
 function f1(_i: number, ...restParameters) { //_i is error

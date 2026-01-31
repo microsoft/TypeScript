@@ -55,7 +55,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             function pluginOneConfig() {
                 return jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         declaration: true,
                         traceResolution: true,
                     },
@@ -236,7 +236,7 @@ ${pluginOneAction()}`,
                         compilerOptions: {
                             outDir: "dist",
                             rootDir: "src",
-                            target: "es5",
+                            target: "es2015",
                             module: "commonjs",
                             strict: true,
                             esModuleInterop: true,

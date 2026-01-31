@@ -1,3 +1,4 @@
+// @target: es2015
  interface IArguments {}
 
  declare namespace M {

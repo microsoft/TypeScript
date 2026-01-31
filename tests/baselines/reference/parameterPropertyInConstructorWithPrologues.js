@@ -86,72 +86,49 @@ class Foo9 extends C {
 
 //// [parameterPropertyInConstructorWithPrologues.js]
 // https://github.com/microsoft/TypeScript/issues/48671
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var Foo1 = /** @class */ (function () {
-    function Foo1(A) {
+class C {
+}
+class Foo1 {
+    constructor(A) {
         "ngInject1";
         this.A = A;
     }
-    return Foo1;
-}());
-var Foo2 = /** @class */ (function () {
-    function Foo2(A, B) {
+}
+class Foo2 {
+    constructor(A, B) {
         "ngInject1";
         "ngInject2";
         this.A = A;
         this.B = B;
     }
-    return Foo2;
-}());
-var Foo3 = /** @class */ (function () {
-    function Foo3(A, B, C) {
+}
+class Foo3 {
+    constructor(A, B, C) {
         "ngInject1";
         "ngInject2";
         this.A = A;
         this.B = B;
         this.C = C;
     }
-    return Foo3;
-}());
-var Foo4 = /** @class */ (function () {
-    function Foo4(A) {
+}
+class Foo4 {
+    constructor(A) {
         "ngInject1";
         this.A = A;
         console.log("hi");
     }
-    return Foo4;
-}());
-var Foo5 = /** @class */ (function () {
-    function Foo5(A, B) {
+}
+class Foo5 {
+    constructor(A, B) {
         "ngInject1";
         "ngInject2";
         this.A = A;
         this.B = B;
         console.log("hi");
     }
-    return Foo5;
-}());
-var Foo6 = /** @class */ (function () {
-    function Foo6(A, B, C) {
+}
+class Foo6 {
+    constructor(A, B, C) {
         "ngInject1";
         "ngInject2";
         this.A = A;
@@ -159,42 +136,32 @@ var Foo6 = /** @class */ (function () {
         this.C = C;
         console.log("hi");
     }
-    return Foo6;
-}());
-var Foo7 = /** @class */ (function (_super) {
-    __extends(Foo7, _super);
-    function Foo7(member) {
+}
+class Foo7 extends C {
+    constructor(member) {
         "ngInject1";
-        var _this = _super.call(this) || this;
-        _this.member = member;
+        super();
+        this.member = member;
         console.log("hi");
-        return _this;
     }
-    return Foo7;
-}(C));
-var Foo8 = /** @class */ (function (_super) {
-    __extends(Foo8, _super);
-    function Foo8(member) {
+}
+class Foo8 extends C {
+    constructor(member) {
         "ngInject1";
-        var _this = _super.call(this) || this;
-        _this.member = member;
-        _this.m();
+        super();
+        this.member = member;
+        this.m();
         console.log("hi");
-        return _this;
     }
-    Foo8.prototype.m = function () { };
-    return Foo8;
-}(C));
-var Foo9 = /** @class */ (function (_super) {
-    __extends(Foo9, _super);
-    function Foo9() {
+    m() { }
+}
+class Foo9 extends C {
+    constructor() {
         "ngInject1";
         "ngInject2";
-        var _this = _super.call(this) || this;
-        _this.m();
+        super();
+        this.m();
         console.log("hi");
-        return _this;
     }
-    Foo9.prototype.m = function () { };
-    return Foo9;
-}(C));
+    m() { }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 class LanguageSpec_section_4_5_error_cases {
     public set AnnotatedSetter_SetterFirst(a: number) { }
     public get AnnotatedSetter_SetterFirst() { return ""; }

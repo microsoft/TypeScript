@@ -1,4 +1,5 @@
 error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+/project/b.ts(2,17): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './dir.js'?
 
 
 !!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
@@ -14,7 +15,9 @@ error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResol
 ==== /project/dir.js (0 errors) ====
     export default "dir.js";
     
-==== /project/b.ts (0 errors) ====
+==== /project/b.ts (1 errors) ====
     import a from "./a.js";
     import dir from "./dir";
+                    ~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './dir.js'?
     

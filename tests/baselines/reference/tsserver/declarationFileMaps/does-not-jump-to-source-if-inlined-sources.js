@@ -94,7 +94,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -104,14 +104,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
 	/home/src/projects/project/b/bin/b.d.ts Text-1 "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
 	/home/src/projects/project/user/user.ts SVC-1-0 "import * as a from \"../a/bin/a\";\nimport * as b from \"../b/bin/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../a/bin/a.d.ts
 	  Imported via "../a/bin/a" from file 'user.ts'
 	../b/bin/b.d.ts
@@ -139,6 +139,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
@@ -161,7 +163,7 @@ FsWatches::
   {}
 /home/src/projects/project/b/bin/b.d.ts: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -189,7 +191,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -270,7 +272,7 @@ FsWatches::
   {}
 /home/src/projects/project/b/bin/b.d.ts:
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -306,7 +308,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -392,7 +394,7 @@ FsWatches::
   {}
 /home/src/projects/project/b/bin/b.d.ts.map: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -440,7 +442,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -510,7 +512,7 @@ FsWatches::
   {}
 /home/src/projects/project/user/user.ts: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -558,7 +560,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -590,12 +592,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/dummy/dummy.ts SVC-1-0 "let a = 10;"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -603,14 +605,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 	/home/src/projects/project/a/bin/a.d.ts
 	/home/src/projects/project/b/bin/b.d.ts
 	/home/src/projects/project/user/user.ts
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../a/bin/a.d.ts
 	  Imported via "../a/bin/a" from file 'user.ts'
 	../b/bin/b.d.ts
@@ -676,7 +678,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -748,7 +750,7 @@ ScriptInfos::
 /home/src/projects/project/user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*

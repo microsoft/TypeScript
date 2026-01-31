@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: foo1.ts
 import foo2 = require('./foo2');
 export namespace M1 {

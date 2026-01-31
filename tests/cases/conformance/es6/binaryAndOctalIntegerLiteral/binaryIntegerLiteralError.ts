@@ -1,4 +1,5 @@
-﻿// error
+﻿// @target: es2015
+// error
 var bin1 = 0B1102110;
 var bin1 = 0b11023410;
 

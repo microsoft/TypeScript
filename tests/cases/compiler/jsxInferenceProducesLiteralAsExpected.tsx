@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @jsx: react
 /// <reference path="/.lib/react.d.ts" />
 import React = require("react");

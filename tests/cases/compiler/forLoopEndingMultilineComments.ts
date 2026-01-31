@@ -1,3 +1,4 @@
+// @target: es2015
 declare var a: any;
 
 export function consoleTestResultHandler(testResult: any): boolean {

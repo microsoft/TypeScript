@@ -1,3 +1,4 @@
+// @target: es2015
 
 declare namespace Q {
     function _try(method: Function, ...args: any[]): any;

@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     x: string = 'A';
     y: number = 0;

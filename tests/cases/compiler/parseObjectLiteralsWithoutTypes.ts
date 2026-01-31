@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 let x: { foo, bar }
 let y: { foo: number, bar }

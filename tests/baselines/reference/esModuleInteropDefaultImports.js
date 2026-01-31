@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = fun;
 //// [a.js]
 "use strict";
-var mod = require("./mod");
+const mod = require("./mod");
 module.exports = mod;
 //// [b.js]
 "use strict";
@@ -84,10 +84,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.def = exports.default = void 0;
-var a_1 = __importDefault(require("./a"));
-var a_2 = __importDefault(require("./a"));
-var a_3 = __importDefault(require("./a"));
-var self = __importStar(require("./b"));
+const a_1 = __importDefault(require("./a"));
+const a_2 = __importDefault(require("./a"));
+const a_3 = __importDefault(require("./a"));
+const self = __importStar(require("./b"));
 var a_4 = require("./a");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(a_4).default; } });
 var a_5 = require("./a");

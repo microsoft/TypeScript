@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: test1.d.ts
 export interface T<P> {
     a: P;

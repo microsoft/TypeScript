@@ -1,5 +1,5 @@
 // @lib: es2015
-// @target: ES5
+// @target: ES5, ES2015
 async function foo<T>(x: T): Promise<T> {
   let yaddable = await getXOrYadda(x);
   return yaddable;

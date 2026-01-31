@@ -1,4 +1,5 @@
-﻿class T {
+﻿// @target: es2015
+class T {
     m(...p3) {
 
     }

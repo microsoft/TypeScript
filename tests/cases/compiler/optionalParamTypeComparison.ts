@@ -1,3 +1,4 @@
+// @target: es2015
 declare var f: (s: string, n?: number) => void;
 declare var g: (s: string, b?: boolean) => void;
 

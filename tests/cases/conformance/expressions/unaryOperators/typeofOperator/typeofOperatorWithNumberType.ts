@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnusedLabels: true
 // typeof  operator on number type
 declare var NUMBER: number;

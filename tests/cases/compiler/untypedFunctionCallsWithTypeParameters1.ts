@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // none of these function calls should be allowed
 var x = function () { return; };

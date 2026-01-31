@@ -1,4 +1,5 @@
-﻿interface I1<T> {
+﻿// @target: es2015
+interface I1<T> {
     commonMethodType(a: string): string;
     commonPropertyType: string;
 

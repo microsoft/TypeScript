@@ -15,17 +15,15 @@ class  bigClass {
 
 
 //// [es6ClassTest5.js]
-var C1T5 = /** @class */ (function () {
-    function C1T5() {
-        this.foo = function (i) {
+class C1T5 {
+    constructor() {
+        this.foo = (i) => {
             return i;
         };
     }
-    return C1T5;
-}());
-var bigClass = /** @class */ (function () {
-    function bigClass() {
+}
+class bigClass {
+    constructor() {
         this.break = 1;
     }
-    return bigClass;
-}());
+}

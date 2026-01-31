@@ -1,3 +1,4 @@
+// @target: es2015
 
 // Invoke function call on value of type 'any' with no type arguments
 declare var anyVar: any;

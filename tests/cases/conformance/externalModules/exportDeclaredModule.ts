@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: foo1.ts
 
 declare namespace M1 {

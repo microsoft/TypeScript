@@ -64,12 +64,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
-var RandomComponent = function () {
-    var Component = condition1
+const React = __importStar(require("react"));
+const RandomComponent = () => {
+    const Component = condition1
         ? Radio
         : Checkbox;
-    var OtherComponent = condition2
+    const OtherComponent = condition2
         ? OtherRadio
         : Checkbox;
     return condition1 ? React.createElement(Component, null) : React.createElement(OtherComponent, null);

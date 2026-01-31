@@ -1,3 +1,4 @@
+// @target: es2015
 // checking assignment compat for function types. All valid
 
 class Base { foo: string; }

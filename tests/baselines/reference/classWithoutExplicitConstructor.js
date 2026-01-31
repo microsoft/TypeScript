@@ -18,21 +18,19 @@ var d = new D();
 var d2 = new D(null); // error
 
 //// [classWithoutExplicitConstructor.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 1;
         this.y = 'hello';
     }
-    return C;
-}());
+}
 var c = new C();
 var c2 = new C(null); // error
-var D = /** @class */ (function () {
-    function D() {
+class D {
+    constructor() {
         this.x = 2;
         this.y = null;
     }
-    return D;
-}());
+}
 var d = new D();
 var d2 = new D(null); // error

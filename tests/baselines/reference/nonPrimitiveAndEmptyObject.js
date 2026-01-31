@@ -18,11 +18,10 @@ fooProps.barProp;
 
 
 //// [nonPrimitiveAndEmptyObject.js]
-"use strict";
 // Repro from #49480
-Object.defineProperty(exports, "__esModule", { value: true });
-var _a = foo.fooProps, fooProps = _a === void 0 ? {} : _a;
+const { fooProps = {} } = foo;
 fooProps.barProp;
+export {};
 
 
 //// [nonPrimitiveAndEmptyObject.d.ts]

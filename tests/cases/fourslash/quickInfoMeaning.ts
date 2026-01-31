@@ -7,6 +7,8 @@
 // However, when we have an alias for a type, the quickInfo for a value with the same should skip the alias, and vice versa.
 // goToDefinition should work the same way.
 
+// @module: commonjs
+
 // @Filename: foo.d.ts
 ////declare const [|/*foo_value_declaration*/foo: number|];
 ////[|declare module "foo_module" {

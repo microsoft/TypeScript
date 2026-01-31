@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace _ {
     interface Collection<T> { }
     interface List<T> extends Collection<T> {

@@ -1,0 +1,15 @@
+blockScopedFunctionDeclarationInStrictClass.ts(7,9): error TS2304: Cannot find name 'foo'.
+
+
+==== blockScopedFunctionDeclarationInStrictClass.ts (1 errors) ====
+    class c {
+        method() {
+            if (true) {
+                function foo() { }
+                foo(); // ok
+            }
+            foo(); // not ok
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        }
+    }

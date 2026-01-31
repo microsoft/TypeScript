@@ -7,4 +7,4 @@ declare function identity<V>(y: V): V;
 var s = map("", () => { return { x: identity }; });
 
 //// [inferentialTypingWithFunctionTypeNested.js]
-var s = map("", function () { return { x: identity }; });
+var s = map("", () => { return { x: identity }; });

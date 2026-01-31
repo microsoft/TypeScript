@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 export function enumFromStrings<const Members extends readonly string[]>() {
     type Part1 = {

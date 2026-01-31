@@ -45619,7 +45619,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+        const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
+        const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 

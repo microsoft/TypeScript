@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6
 // @noImplicitAny: true
 let named = "foo";

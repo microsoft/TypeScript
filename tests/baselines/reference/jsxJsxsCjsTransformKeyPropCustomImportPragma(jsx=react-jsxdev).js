@@ -22,46 +22,24 @@ export {};
 
 //// [preact.js]
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var preact_1 = require("preact");
-var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
-var _jsxFileName = "/.src/preact.tsx";
+const preact_1 = require("preact");
+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
+const _jsxFileName = "/.src/preact.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
-var props = { answer: 42 };
-var a = (0, jsx_dev_runtime_1.jsxDEV)("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
-var b = (0, preact_1.createElement)("div", __assign({}, props, { key: "bar" }), "text");
+const props = { answer: 42 };
+const a = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
+const b = (0, preact_1.createElement)("div", Object.assign({}, props, { key: "bar" }), "text");
 //// [react.js]
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "react.tsx";
+const react_1 = require("react");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const _jsxFileName = "react.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");
-var props2 = { answer: 42 };
-var a2 = (0, jsx_dev_runtime_1.jsxDEV)("div", __assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
-var b2 = (0, react_1.createElement)("div", __assign({}, props2, { key: "bar" }), "text");
+const props2 = { answer: 42 };
+const a2 = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
+const b2 = (0, react_1.createElement)("div", Object.assign({}, props2, { key: "bar" }), "text");

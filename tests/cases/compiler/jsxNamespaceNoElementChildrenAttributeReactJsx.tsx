@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 //@jsx: react-jsx,react-jsxdev
 //@jsxImportSource: /jsx
 //@filename: /jsx.d.ts

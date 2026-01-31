@@ -8,8 +8,7 @@ export interface Foo {
 
 
 //// [declarationEmitLambdaWithMissingTypeParameterNoCrash.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [declarationEmitLambdaWithMissingTypeParameterNoCrash.d.ts]

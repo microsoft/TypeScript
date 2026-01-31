@@ -1,3 +1,4 @@
+// @target: es2015
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 enum E1 {
     a = 1,

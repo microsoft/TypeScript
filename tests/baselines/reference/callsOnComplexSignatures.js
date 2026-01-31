@@ -107,30 +107,23 @@ function test5() {
 
 
 //// [callsOnComplexSignatures.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react16.d.ts" />
-var react_1 = __importDefault(require("react"));
+import React from "react";
 // Simple calls from real usecases
 function test1() {
     function test(t) {
-        var z = t.getValue("bar"); // Should be fine
+        const z = t.getValue("bar"); // Should be fine
     }
 }
 function test2() {
-    var messages = {
-        foo: function (options) { return "Foo"; },
-        bar: function (options) { return "Bar"; },
+    const messages = {
+        foo: (options) => "Foo",
+        bar: (options) => "Bar",
     };
-    var test1 = function (type) {
-        return messages[type]({ a: "A", b: 0 });
-    };
+    const test1 = (type) => messages[type]({ a: "A", b: 0 });
 }
 function test3(items) {
-    items.forEach(function (item) { return console.log(item); });
+    items.forEach(item => console.log(item));
 }
 function test4(arg1, arg2, arg3, arg4, arg5, arg6) {
     arg1();
@@ -155,17 +148,17 @@ function test4(arg1, arg2, arg3, arg4, arg5, arg6) {
 function test5() {
     // Pair of non-like intrinsics
     function render(url) {
-        var Tag = url ? 'a' : 'button';
-        return react_1.default.createElement(Tag, null, "test");
+        const Tag = url ? 'a' : 'button';
+        return React.createElement(Tag, null, "test");
     }
     // Union of all intrinsics and components of `any`
     function App(props) {
-        var Comp = props.component;
-        return (react_1.default.createElement(Comp, null));
+        const Comp = props.component;
+        return (React.createElement(Comp, null));
     }
     // custom components with non-subset props
     function render2() {
         var C = null;
-        var a = react_1.default.createElement(C, { p: true });
+        const a = React.createElement(C, { p: true });
     }
 }

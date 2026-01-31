@@ -21,6 +21,6 @@ let x1 = <MyComp a="hi"/>
 "use strict";
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var x = <MyComp />;
-var x1 = <MyComp a="hi"/>;
+const React = require("react");
+let x = <MyComp />;
+let x1 = <MyComp a="hi"/>;

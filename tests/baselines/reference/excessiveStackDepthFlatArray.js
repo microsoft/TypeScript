@@ -43,22 +43,13 @@ const Component = () => {
 
 
 //// [index.js]
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 configureStore({
-    middleware: __spreadArray([], defaultMiddleware, true), // Should not error
+    middleware: [...defaultMiddleware], // Should not error
 });
-var Component = function () {
-    var categories = ['Fruit', 'Vegetables'];
+const Component = () => {
+    const categories = ['Fruit', 'Vegetables'];
     return (React.createElement("ul", null,
         React.createElement("li", null, "All"),
-        categories.map(function (category) { return (React.createElement("li", { key: category }, category) // Error about 'key' only
-        ); })));
+        categories.map((category) => (React.createElement("li", { key: category }, category) // Error about 'key' only
+        ))));
 };

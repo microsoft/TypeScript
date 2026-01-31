@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @strictNullChecks: true
 
 // @Filename: /a.d.ts

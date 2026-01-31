@@ -42,32 +42,26 @@ class C2<T extends Date, U extends Date> {
 //// [innerTypeParameterShadowingOuterOne2.js]
 // inner type parameters shadow outer ones of the same name
 // no errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.g = function () {
+class C {
+    g() {
         var x;
         x.toFixed();
-    };
-    C.prototype.h = function () {
+    }
+    h() {
         var x;
         x.getDate();
-    };
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
     }
-    C2.prototype.g = function () {
+}
+class C2 {
+    g() {
         var x;
         x.toFixed();
-    };
-    C2.prototype.h = function () {
+    }
+    h() {
         var x;
         x.getDate();
-    };
-    return C2;
-}());
+    }
+}
 //class C2<T extends Date, U extends T> {
 //    g<T extends Number, U extends T>() {
 //        var x: U;

@@ -1,7 +1,7 @@
 // @strict: false
 // @lib: es5,es2015.promise
 // @noEmitHelpers: true
-// @target: ES5
+// @target: ES5, ES2015
 // @lib: es2015
 
 // mainly to verify indentation of emitted code

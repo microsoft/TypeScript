@@ -38,7 +38,7 @@ import React = require('react');
 "use strict";
 /// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+const React = require("react");
 <div>
     // Not Comment
 </div>;

@@ -12,7 +12,7 @@ export const fun = (
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fun = void 0;
 // This function's type is changed on declaration
-var fun = function (subFun) { };
+const fun = (subFun) => { };
 exports.fun = fun;
 
 

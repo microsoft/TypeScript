@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare class _this { // no error - as no code generation
 }

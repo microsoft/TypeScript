@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: nodenext
 // @filename: mod.mts
 import * as thing1 from "./mod.mjs" assert {field: 0};

@@ -1,3 +1,4 @@
+// @target: es2015
 interface G<T> {
     x: G<G<T>> // infinitely expanding type reference
     y: T

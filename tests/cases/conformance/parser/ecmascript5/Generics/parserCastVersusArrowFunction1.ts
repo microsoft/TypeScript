@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var v = <T>() => 1;
 var v = <T>a;

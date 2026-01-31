@@ -1,3 +1,4 @@
+// @target: es2015
 //@jsx: preserve
 var t02 = <a>{0}#</a>;
 var t03 = <a>#{0}</a>;

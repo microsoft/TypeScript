@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 // @esModuleInterop: true
 // @strict: true

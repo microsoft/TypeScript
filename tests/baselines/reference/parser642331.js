@@ -7,8 +7,6 @@ class test {
 
 
 //// [parser642331.js]
-var test = /** @class */ (function () {
-    function test(static) {
-    }
-    return test;
-}());
+class test {
+    constructor(static) { }
+}

@@ -92,7 +92,7 @@ export function getSysForDemoProjectReferences(): TestServerHost {
         "/user/username/projects/demo/tsconfig-base.json": jsonToReadableText({
             compilerOptions: {
                 declaration: true,
-                target: "es5",
+                target: "es2015",
                 module: "commonjs",
                 strict: true,
                 noUnusedLocals: true,

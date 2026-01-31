@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 const enum numbers {
     zero,
     one

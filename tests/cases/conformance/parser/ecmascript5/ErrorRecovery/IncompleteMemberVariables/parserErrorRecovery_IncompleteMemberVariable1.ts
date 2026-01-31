@@ -1,3 +1,4 @@
+// @target: es2015
 // Interface
 interface IPoint {
     getDist(): number;

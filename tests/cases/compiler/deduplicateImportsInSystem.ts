@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 import {A} from "f1";
 import {B} from "f2";

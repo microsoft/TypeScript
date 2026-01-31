@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 interface A {
     <T>(x: T): void;

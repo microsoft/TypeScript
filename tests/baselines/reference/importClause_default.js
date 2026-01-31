@@ -13,15 +13,12 @@ let b = { A };
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.default = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 new A();
-var a = { a: '' };
-var b = { A: A };
+let a = { a: '' };
+let b = { A };

@@ -19,11 +19,8 @@ var m;
     m_1.m = '';
 })(m || (m = {}));
 var x = m.m;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+class C {
+    foo() {
         var x = '';
-    };
-    return C;
-}());
+    }
+}

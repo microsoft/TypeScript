@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 import a1 = require("garbage");
 export declare var a: {

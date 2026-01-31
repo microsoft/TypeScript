@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: voidAsNonAmbiguousReturnType_0.ts
 export function mkdirSync(path: string, mode?: number): void;

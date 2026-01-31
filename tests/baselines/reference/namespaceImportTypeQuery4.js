@@ -18,17 +18,14 @@ let t: typeof types = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 exports.B = B;
 ;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var t = {
+let t = {
     A: undefined, // error
     B: undefined,
 };

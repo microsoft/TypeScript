@@ -9,8 +9,10 @@ import foo = require("foo");
 
 foo;
 >foo : any
+>    : ^^^
 
 === mod.d.ts ===
 declare module "foo";
 >"foo" : any
+>      : ^^^
 

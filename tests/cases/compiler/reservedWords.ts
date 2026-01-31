@@ -1,3 +1,4 @@
+// @target: es2015
 var obj = {
     if: 0,
     debugger: 2,

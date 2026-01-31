@@ -128,6 +128,11 @@ interface Symbol {
 
 /home/src/tslibs/TS/Lib/tsc.js -b
 Output::
+[96mcommon/nominal.js[0m:[93m3[0m:[93m20[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+[7m3[0m  * @typedef {T & {[Symbol.species]: Name}} Nominal
+[7m [0m [91m                   ~~~~~~[0m
+
 [96msub-project/index.js[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18042: [0m'Nominal' is a type and cannot be imported in JavaScript files. Use 'import("../common/nominal").Nominal' in a JSDoc type annotation.
 
 [7m1[0m import { Nominal } from '../common/nominal';
@@ -139,9 +144,11 @@ Output::
 [7m [0m [91m         ~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 3 errors.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/lib/common/nominal.js]
 /**
@@ -158,22 +165,22 @@ export type Nominal<T, Name> = T & {
 
 
 //// [/home/src/workspaces/lib/common/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../../solution/common/nominal.js"],"fileInfos":[{"version":"-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},{"version":"-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n","signature":"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n"}],"root":[2],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"latestChangedDtsFile":"./nominal.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2024.full.d.ts","../../solution/common/nominal.js"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n","signature":"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n"}],"root":[2],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"semanticDiagnosticsPerFile":[[2,[{"start":44,"length":6,"messageText":"Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.","category":1,"code":2583}]]],"latestChangedDtsFile":"./nominal.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/lib/common/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../../solution/common/nominal.js"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "signature": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../../solution/common/nominal.js": {
@@ -200,15 +207,27 @@ export type Nominal<T, Name> = T & {
     "rootDir": "../../solution",
     "skipLibCheck": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../solution/common/nominal.js",
+      [
+        {
+          "start": 44,
+          "length": 6,
+          "messageText": "Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.",
+          "category": 1,
+          "code": 2583
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./nominal.d.ts",
   "version": "FakeTSVersion",
-  "size": 1194
+  "size": 1230
 }
 
 //// [/home/src/workspaces/lib/sub-project/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var nominal_1 = require("../common/nominal");
+import { Nominal } from '../common/nominal';
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
@@ -220,12 +239,12 @@ import { Nominal } from '../common/nominal';
 
 
 //// [/home/src/workspaces/lib/sub-project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../common/nominal.d.ts","../../solution/sub-project/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n",{"version":"-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n","signature":"-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n"}],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":7,"messageText":"'Nominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../common/nominal\").Nominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2024.full.d.ts","../common/nominal.d.ts","../../solution/sub-project/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n",{"version":"-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n","signature":"-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n"}],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":7,"messageText":"'Nominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../common/nominal\").Nominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/lib/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../common/nominal.d.ts",
     "../../solution/sub-project/index.js"
   ],
@@ -235,13 +254,13 @@ import { Nominal } from '../common/nominal';
     ]
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "signature": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../common/nominal.d.ts": {
@@ -293,21 +312,18 @@ import { Nominal } from '../common/nominal';
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1628
+  "size": 1431
 }
 
 //// [/home/src/workspaces/lib/sub-project-2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVar = getVar;
-var index_1 = require("../sub-project/index");
-var variable = {
+import { MyNominal } from '../sub-project/index';
+const variable = {
     key: /** @type {MyNominal} */ ('value'),
 };
 /**
  * @return {keyof typeof variable}
  */
-function getVar() {
+export function getVar() {
     return 'key';
 }
 
@@ -325,12 +341,12 @@ export {};
 
 
 //// [/home/src/workspaces/lib/sub-project-2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n",{"version":"9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n","signature":"33013066229-/**\n * @return {keyof typeof variable}\n */\nexport function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    let key: MyNominal;\n}\nimport { MyNominal } from '../sub-project/index';\nexport {};\n"}],"root":[4],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[4,[{"start":9,"length":9,"messageText":"'MyNominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../sub-project/index\").MyNominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2024.full.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n",{"version":"9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n","signature":"33013066229-/**\n * @return {keyof typeof variable}\n */\nexport function getVar(): keyof typeof variable;\ndeclare namespace variable {\n    let key: MyNominal;\n}\nimport { MyNominal } from '../sub-project/index';\nexport {};\n"}],"root":[4],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[4,[{"start":9,"length":9,"messageText":"'MyNominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../sub-project/index\").MyNominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/lib/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../common/nominal.d.ts",
     "../sub-project/index.d.ts",
     "../../solution/sub-project-2/index.js"
@@ -344,13 +360,13 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "signature": "-25303837216-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../common/nominal.d.ts": {
@@ -409,8 +425,8 @@ export {};
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 2013
+  "size": 1816
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

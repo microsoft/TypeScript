@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: file.ts
 export interface Foo {
     x: number;

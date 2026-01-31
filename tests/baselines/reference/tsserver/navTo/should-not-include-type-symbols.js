@@ -62,7 +62,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/jsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/jsconfig.json WatchType: Type roots
@@ -74,17 +74,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/b/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/b/file1.js SVC-1-0 "function foo() {}"
 
 
-	../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	file1.js
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
@@ -99,7 +101,7 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/a/b/jsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -116,7 +118,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/a/b/jsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/a/b/jsconfig.json
@@ -144,7 +146,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/home/src/projects/project/a/b/jsconfig.json",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/home/src/projects/project/a/b/file1.js"
       ],
       "compilerOptions": {
@@ -342,7 +344,7 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/a/b/jsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::

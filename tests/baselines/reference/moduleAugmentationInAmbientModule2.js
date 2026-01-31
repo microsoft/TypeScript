@@ -32,5 +32,5 @@ x.foo().x;
 /// <reference path="O.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 require("Map");
-var x;
+let x;
 x.foo().x;

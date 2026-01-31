@@ -38,17 +38,19 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "1311033573-const a: number = \"hello\""
   },
   "root": [
@@ -62,10 +64,10 @@ Found 1 error in tsconfig.json[90m:3[0m
   },
   "changeFileSet": [
     "./project/a.ts",
-    "../tslibs/ts/lib/lib.d.ts"
+    "../tslibs/ts/lib/lib.es2024.full.d.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 612
+  "size": 624
 }
 
 
@@ -81,7 +83,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -119,7 +121,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -148,16 +150,16 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "3528887741-const a = \"hello\";"
   },
   "root": [
@@ -171,10 +173,10 @@ Found 1 error in tsconfig.json[90m:3[0m
   },
   "changeFileSet": [
     "./project/a.ts",
-    "../tslibs/ts/lib/lib.d.ts"
+    "../tslibs/ts/lib/lib.es2024.full.d.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 605
+  "size": 617
 }
 
 
@@ -190,7 +192,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -228,7 +230,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -254,16 +256,16 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "3528887741-const a = \"hello\";"
   },
   "root": [
@@ -277,7 +279,7 @@ Found 1 error in tsconfig.json[90m:3[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -286,11 +288,11 @@ Found 1 error in tsconfig.json[90m:3[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 618
+  "size": 630
 }
 
 //// [/home/src/projects/outFile.js]
-var a = "hello";
+const a = "hello";
 
 
 
@@ -305,7 +307,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -343,7 +345,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -372,16 +374,16 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "1311033573-const a: number = \"hello\""
   },
   "root": [
@@ -397,7 +399,7 @@ Found 1 error in tsconfig.json[90m:3[0m
     "./project/a.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 610
+  "size": 622
 }
 
 
@@ -413,7 +415,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -439,16 +441,16 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1311033573-const a: number = \"hello\""],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "1311033573-const a: number = \"hello\""
   },
   "root": [
@@ -462,7 +464,7 @@ Found 1 error in tsconfig.json[90m:3[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -471,7 +473,7 @@ Found 1 error in tsconfig.json[90m:3[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 625
+  "size": 637
 }
 
 //// [/home/src/projects/outFile.js] file written with same contents
@@ -487,7 +489,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -525,7 +527,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::

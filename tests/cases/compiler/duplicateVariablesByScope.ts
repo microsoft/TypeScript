@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 // duplicate local variables are only reported at global scope

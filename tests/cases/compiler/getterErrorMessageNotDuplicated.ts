@@ -1,3 +1,4 @@
+// @target: es2015
 interface Thing {
     get style(): Foo;
     set style(cssText: string | Bar);

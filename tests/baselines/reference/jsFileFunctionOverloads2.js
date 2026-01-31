@@ -81,7 +81,7 @@ function getTypeName(x) {
  * @param {T} x
  * @returns {T}
  */
-var identity = function (x) { return x; };
+const identity = x => x;
 /**
  * @template T
  * @template U
@@ -98,12 +98,11 @@ var identity = function (x) { return x; };
  * @param {(x: unknown) => unknown} iterable
  * @returns {unknown[]}
  */
-function flatMap(array, iterable) {
-    if (iterable === void 0) { iterable = identity; }
+function flatMap(array, iterable = identity) {
     /** @type {unknown[]} */
-    var result = [];
-    for (var i = 0; i < array.length; i += 1) {
-        result.push.apply(result, /** @type {unknown[]} */ (iterable(array[i])));
+    const result = [];
+    for (let i = 0; i < array.length; i += 1) {
+        result.push(... /** @type {unknown[]} */(iterable(array[i])));
     }
     return result;
 }

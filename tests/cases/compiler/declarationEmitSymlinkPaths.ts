@@ -1,7 +1,8 @@
+// @module: commonjs
+// @target: es5, es2015
 // @declaration: true
 // @outDir: /packages/search-prefix/lib
 // @rootDir: /packages/search-prefix/src
-// @target: es5
 // @filename: /packages/search/package.json
 {
     "name": "search",

@@ -7,9 +7,6 @@ class C {
 }
 
 //// [parserClassDeclaration16.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { };
-    return C;
-}());
+class C {
+    foo() { }
+}

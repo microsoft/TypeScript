@@ -35,10 +35,10 @@ module.exports = { a: true, b: "hello" };
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c1 = require("./c"); // resolves to c.ts 
-var x2 = c1.a;
-var c2 = require("./c.json"); // resolves to c.json
+const c1 = require("./c"); // resolves to c.ts 
+let x2 = c1.a;
+const c2 = require("./c.json"); // resolves to c.json
 if (x2) {
-    var b = c2.b;
-    var x = (c1.b === b);
+    let b = c2.b;
+    let x = (c1.b === b);
 }

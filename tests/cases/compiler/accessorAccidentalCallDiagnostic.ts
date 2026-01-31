@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 // https://github.com/microsoft/TypeScript/issues/24554
 class Test24554 {

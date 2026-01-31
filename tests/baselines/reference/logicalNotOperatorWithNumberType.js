@@ -50,12 +50,9 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 //// [logicalNotOperatorWithNumberType.js]
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -66,7 +63,7 @@ var ResultIsBoolean2 = !NUMBER1;
 // number type literal
 var ResultIsBoolean3 = !1;
 var ResultIsBoolean4 = !{ x: 1, y: 2 };
-var ResultIsBoolean5 = !{ x: 1, y: function (n) { return n; } };
+var ResultIsBoolean5 = !{ x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

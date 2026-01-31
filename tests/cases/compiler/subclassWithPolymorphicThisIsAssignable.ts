@@ -1,3 +1,4 @@
+// @target: es2015
 /* taken from mongoose.Document */
 interface Document {
     increment(): this;

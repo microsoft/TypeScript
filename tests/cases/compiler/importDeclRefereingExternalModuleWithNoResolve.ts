@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @noresolve: true
 import b = require("externalModule");
 declare module "m1" {

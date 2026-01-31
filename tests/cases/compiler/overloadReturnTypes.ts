@@ -1,3 +1,4 @@
+// @target: es2015
 class Accessor {}
 
 function attr(name: string): string;

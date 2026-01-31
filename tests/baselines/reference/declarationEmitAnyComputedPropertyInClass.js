@@ -18,14 +18,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var abcdefgh_1 = __importDefault(require("abcdefgh"));
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype[abcdefgh_1.default.someKey] = function () { };
+const abcdefgh_1 = __importDefault(require("abcdefgh"));
+class C {
+    [abcdefgh_1.default.someKey]() { }
     ;
-    return C;
-}());
+}
 exports.C = C;
 
 

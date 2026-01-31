@@ -15,13 +15,8 @@ const alsoOk = <Elem2>text</Elem2>;
 
 
 //// [tsxInvokeComponentType.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react16.d.ts" />
-var react_1 = __importDefault(require("react"));
-var bad = react_1.default.createElement(Elem, null);
-var good = react_1.default.createElement(Elem, { someKey: "ok" });
-var alsoOk = react_1.default.createElement(Elem2, null, "text");
+import React from "react";
+const bad = React.createElement(Elem, null);
+const good = React.createElement(Elem, { someKey: "ok" });
+const alsoOk = React.createElement(Elem2, null, "text");

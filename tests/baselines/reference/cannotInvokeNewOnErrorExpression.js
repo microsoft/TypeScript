@@ -10,10 +10,7 @@ var t = new M.ClassA[];
 //// [cannotInvokeNewOnErrorExpression.js]
 var M;
 (function (M) {
-    var ClassA = /** @class */ (function () {
-        function ClassA() {
-        }
-        return ClassA;
-    }());
+    class ClassA {
+    }
 })(M || (M = {}));
 var t = new M.ClassA[];

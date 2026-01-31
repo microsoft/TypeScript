@@ -29,7 +29,7 @@ exports.symb = Symbol();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = test;
-var types_1 = require("./types");
+const types_1 = require("./types");
 /**
  * @returns {import("./types").TestSymb}
  */

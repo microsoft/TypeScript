@@ -21,5 +21,5 @@ y.toLowerCase(); // strictNullChecks error
 
 //// [index.js]
 function f(x) { } // noImplicitAny error
-var y;
+let y;
 y.toLowerCase(); // strictNullChecks error

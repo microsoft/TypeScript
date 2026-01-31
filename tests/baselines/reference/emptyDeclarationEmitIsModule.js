@@ -15,11 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [module.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 
 
 //// [index.d.ts]

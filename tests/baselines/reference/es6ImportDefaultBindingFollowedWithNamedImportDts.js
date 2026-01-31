@@ -27,56 +27,38 @@ export var x6 = new m();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x11 = exports.a12 = exports.a11 = exports.m = exports.x = exports.a = void 0;
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 exports.a = a;
-var x = /** @class */ (function () {
-    function x() {
-    }
-    return x;
-}());
+class x {
+}
 exports.x = x;
-var m = /** @class */ (function () {
-    function m() {
-    }
-    return m;
-}());
+class m {
+}
 exports.m = m;
-var a11 = /** @class */ (function () {
-    function a11() {
-    }
-    return a11;
-}());
+class a11 {
+}
 exports.a11 = a11;
-var a12 = /** @class */ (function () {
-    function a12() {
-    }
-    return a12;
-}());
+class a12 {
+}
 exports.a12 = a12;
-var x11 = /** @class */ (function () {
-    function x11() {
-    }
-    return x11;
-}());
+class x11 {
+}
 exports.x11 = x11;
 //// [client.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x6 = exports.x3 = exports.x5 = exports.x4 = exports.x2 = exports.x1 = void 0;
-var server_1 = require("./server");
+const server_1 = require("./server");
 exports.x1 = new server_1.a();
-var server_2 = require("./server");
+const server_2 = require("./server");
 exports.x2 = new server_2.a11();
-var server_3 = require("./server");
+const server_3 = require("./server");
 exports.x4 = new server_3.x();
 exports.x5 = new server_3.a12();
-var server_4 = require("./server");
+const server_4 = require("./server");
 exports.x3 = new server_4.x11();
-var server_5 = require("./server");
+const server_5 = require("./server");
 exports.x6 = new server_5.m();
 
 

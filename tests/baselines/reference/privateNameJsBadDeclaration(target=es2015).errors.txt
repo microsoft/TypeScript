@@ -1,0 +1,41 @@
+privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(15,10): error TS2339: Property '#z' does not exist on type 'C'.
+
+
+==== privateNameJsPrototype.js (7 errors) ====
+    function A() { }
+    A.prototype = {
+      #x: 1,         // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      #m() {},       // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      get #p() { return "" } // Error
+          ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    class B { }
+    B.prototype = {
+      #y: 2,         // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      #m() {},       // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      get #p() { return "" } // Error
+          ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    class C {
+      constructor() {
+        this.#z = 3;
+             ~~
+!!! error TS2339: Property '#z' does not exist on type 'C'.
+      }
+    }

@@ -28,7 +28,7 @@ export default Foo;
 
 ==== /foo/tsconfig.json (1 errors) ====
     {
-        "compilerOptions": { "declaration": true, "declarationDir": "out" }
+        "compilerOptions": { "declaration": true, "declarationDir": "out", "module": "commonjs", "target": "es2015" }
                                                   ~~~~~~~~~~~~~~~~
 !!! error TS5011: The common source directory of 'tsconfig.json' is '../.src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
 !!! error TS5011:   Visit https://aka.ms/ts6 for migration information.

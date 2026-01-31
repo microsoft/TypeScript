@@ -1,4 +1,5 @@
-﻿class C extends null {
+﻿// @target: es2015
+class C extends null {
     constructor() {
         super();
         return Object.create(null);

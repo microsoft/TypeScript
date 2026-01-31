@@ -1,3 +1,4 @@
+// @target: es2015
 declare function foo(func: (x: string, y: string) => any): boolean;
 declare function foo(func: (x: string, y: number) => any): string;
 

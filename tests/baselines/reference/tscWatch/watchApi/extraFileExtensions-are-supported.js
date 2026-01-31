@@ -33,8 +33,10 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/main.js]
-var x = 10;
+const x = 10;
 
 
 //// [/user/username/projects/myproject/other.vue.js]
@@ -48,7 +50,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
@@ -71,17 +73,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.vue
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.vue
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 /user/username/projects/myproject/other.vue (used version)
 
@@ -121,7 +123,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -148,7 +150,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.vue
 /user/username/projects/myproject/other2.vue

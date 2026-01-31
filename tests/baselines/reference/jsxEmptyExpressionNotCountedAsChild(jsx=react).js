@@ -56,9 +56,9 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react16.d.ts" />
-var React = __importStar(require("react"));
+const React = __importStar(require("react"));
 function Wrapper(props) {
     return React.createElement("div", null, props.children);
 }
-var element = (React.createElement(Wrapper, null,
+const element = (React.createElement(Wrapper, null,
     React.createElement("div", null, "Hello")));

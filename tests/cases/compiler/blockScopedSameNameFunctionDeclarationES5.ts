@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 function foo(a: number) {
     if (a === 1) {
         function foo() { } // duplicate function

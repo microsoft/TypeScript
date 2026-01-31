@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: module.d.ts
 declare namespace Point {
     export var Origin: { x: number; y: number; }

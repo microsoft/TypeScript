@@ -1,5 +1,5 @@
 // @lib: es2015
-// @target: es5
+// @target: es5, es2015
 // @module: umd
 // https://github.com/Microsoft/TypeScript/issues/17564
 class C {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @mapRoot: local
 // @inlineSourceMap: true
 

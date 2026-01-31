@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @module: commonjs
 // @Filename: protoAsIndexInIndexExpression_0.ts

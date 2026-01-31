@@ -29,59 +29,21 @@ class D4 extends AB {
 }
 
 //// [override2.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var AB = /** @class */ (function () {
-    function AB() {
-    }
-    return AB;
-}());
-var AD1 = /** @class */ (function (_super) {
-    __extends(AD1, _super);
-    function AD1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return AD1;
-}(AB));
-var AD2 = /** @class */ (function (_super) {
-    __extends(AD2, _super);
-    function AD2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return AD2;
-}(AB));
-var AD3 = /** @class */ (function (_super) {
-    __extends(AD3, _super);
-    function AD3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    AD3.prototype.foo = function (v) { }; // need override?
-    AD3.prototype.baz = function () { };
-    return AD3;
-}(AB));
-var D4 = /** @class */ (function (_super) {
-    __extends(D4, _super);
-    function D4() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    D4.prototype.foo = function (v) { };
-    D4.prototype.bar = function (v) { };
-    D4.prototype.baz = function () { };
-    return D4;
-}(AB));
+class AB {
+}
+class AD1 extends AB {
+}
+class AD2 extends AB {
+}
+class AD3 extends AB {
+    foo(v) { } // need override?
+    baz() { }
+}
+class D4 extends AB {
+    foo(v) { }
+    bar(v) { }
+    baz() { }
+}
 
 
 //// [override2.d.ts]

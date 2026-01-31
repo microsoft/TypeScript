@@ -1,3 +1,4 @@
+// @target: es2015
 function f(x: string | number | boolean) {
     let y: string | number | boolean = false;
     let z: string | number | boolean = false;

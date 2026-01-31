@@ -1,3 +1,5 @@
+// @target: es5, es2015
+// @module: commonjs
 // @strict: false
 class BaseErrClass {
     constructor(t: any) { }

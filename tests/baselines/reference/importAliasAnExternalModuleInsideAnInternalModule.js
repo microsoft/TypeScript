@@ -26,7 +26,7 @@ var m;
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
+const r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
 var m_private;
 (function (m_private) {
     //import r2 = require('m'); // would be error

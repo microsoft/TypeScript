@@ -1,0 +1,92 @@
+===================================================================
+JsFile: ES5For-of33.js
+mapUrl: ES5For-of33.js.map
+sourceRoot: 
+sources: ES5For-of33.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:ES5For-of33.js
+sourceFile:ES5For-of33.ts
+-------------------------------------------------------------------
+>>>for (var v of ['a', 'b', 'c']) {
+1 >
+2 >^^^^^
+3 >     ^^^^
+4 >         ^
+5 >          ^^^^
+6 >              ^
+7 >               ^^^
+8 >                  ^^
+9 >                    ^^^
+10>                       ^^
+11>                         ^^^
+12>                            ^
+13>                             ^^
+14>                               ^
+1 >
+2 >for (
+3 >     var 
+4 >         v
+5 >           of 
+6 >              [
+7 >               'a'
+8 >                  , 
+9 >                    'b'
+10>                       , 
+11>                         'c'
+12>                            ]
+13>                             ) 
+14>                               {
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+7 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+8 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+9 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+10>Emitted(1, 26) Source(1, 26) + SourceIndex(0)
+11>Emitted(1, 29) Source(1, 29) + SourceIndex(0)
+12>Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+13>Emitted(1, 32) Source(1, 32) + SourceIndex(0)
+14>Emitted(1, 33) Source(1, 33) + SourceIndex(0)
+---
+>>>    console.log(v);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^
+7 >                 ^
+8 >                  ^
+1 >
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                v
+7 >                 )
+8 >                  ;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
+7 >Emitted(2, 19) Source(2, 19) + SourceIndex(0)
+8 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=ES5For-of33.js.map

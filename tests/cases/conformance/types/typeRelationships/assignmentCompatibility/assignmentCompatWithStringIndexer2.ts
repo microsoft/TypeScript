@@ -1,3 +1,4 @@
+// @target: es2015
 // index signatures must be compatible in assignments
 
 interface Base { foo: string; }

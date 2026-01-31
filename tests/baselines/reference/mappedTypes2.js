@@ -121,21 +121,21 @@ function f2(shape) {
     var partial = {};
 }
 function f3(shape) {
-    var x = pick(shape, "name", "location"); // { name: string, location: Point }
+    const x = pick(shape, "name", "location"); // { name: string, location: Point }
 }
 function f4() {
-    var rec = { foo: "hello", bar: "world", baz: "bye" };
-    var lengths = mapObject(rec, function (s) { return s.length; }); // { foo: number, bar: number, baz: number }
+    const rec = { foo: "hello", bar: "world", baz: "bye" };
+    const lengths = mapObject(rec, s => s.length); // { foo: number, bar: number, baz: number }
 }
 function f5(shape) {
-    var p = proxify(shape);
-    var name = p.name.get();
+    const p = proxify(shape);
+    let name = p.name.get();
     p.width.set(42);
 }
 function f6(shape) {
-    var name = shape.name; // string
-    var location = shape.location; // DeepReadonly<Point>
-    var x = location.x; // number
+    let name = shape.name; // string
+    let location = shape.location; // DeepReadonly<Point>
+    let x = location.x; // number
 }
 
 

@@ -1,4 +1,6 @@
-﻿// @filename: file.tsx
+﻿// @target: es2015
+// @module: commonjs
+// @filename: file.tsx
 // @jsx: preserve
 // @skipLibCheck: true
 // @noImplicitAny: true

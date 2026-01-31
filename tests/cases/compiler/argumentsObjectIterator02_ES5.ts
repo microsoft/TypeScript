@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
     let blah = arguments[Symbol.iterator];

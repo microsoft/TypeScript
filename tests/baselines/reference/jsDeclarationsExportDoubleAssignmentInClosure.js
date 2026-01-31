@@ -19,7 +19,7 @@ function foo() {
     module.exports = exports = function (o) {
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
     };
-    var m = function () {
+    const m = function () {
         // I have no idea what to put here
     };
     exports.methods = m;

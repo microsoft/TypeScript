@@ -1,3 +1,4 @@
+// @target: es2015
 interface Base {
     [x: number]: { a: number; b: number }
     x: {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 type Foo<T> = T | { x: Foo<T> };

@@ -1,3 +1,4 @@
+// @target: es2015
 declare class MyArray<T> implements Array<T> {
     toString(): string;
     toLocaleString(): string;

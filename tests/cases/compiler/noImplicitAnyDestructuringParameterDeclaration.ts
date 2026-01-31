@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 function f1([a], {b}, c, d) { // error
 }

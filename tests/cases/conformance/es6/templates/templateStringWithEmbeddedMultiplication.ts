@@ -1,1 +1,2 @@
-﻿var x = `abc${ 7 * 6 }def`;
+﻿// @target: es2015
+var x = `abc${ 7 * 6 }def`;

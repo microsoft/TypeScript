@@ -1,7 +1,7 @@
 // @strict: false
 // @experimentaldecorators: true
 // @emitdecoratormetadata: true
-// @target: ES5
+// @target: ES5, ES2015
 
 declare const MyClassDecorator: ClassDecorator;
 declare const MyMethodDecorator: MethodDecorator;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: bundler
 // @module: esnext, preserve
 // @checkJs: true

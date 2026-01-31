@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     x: number;
     get X(): number { return 1; }

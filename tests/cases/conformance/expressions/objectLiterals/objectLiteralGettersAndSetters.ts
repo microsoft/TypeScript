@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Get and set accessor with the same name
 var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };

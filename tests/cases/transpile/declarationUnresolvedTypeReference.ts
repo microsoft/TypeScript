@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @declaration:true
 // @emitDeclarationOnly: true
 import { type Type } from "./a";

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors

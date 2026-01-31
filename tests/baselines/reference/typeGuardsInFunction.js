@@ -144,7 +144,7 @@ function f3(param) {
     // variables in function declaration
     var var2;
     // variables in function expressions
-    var r = (function (param1) {
+    var r = ((param1) => {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables from outer function declaration

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true, false
 // @jsx: react
 // @filename: a.tsx

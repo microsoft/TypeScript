@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @filename: foo.tsx
 // @jsx: preserve
 // @skipLibCheck: true

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 // @filename: core-js.d.ts
 declare namespace core {

@@ -20,5 +20,5 @@ function foo2(x) { }
 foo2(["s", "t"]);
 function foo3(x) { }
 ;
-foo3(function (s) { });
-foo3(function (n) { return; });
+foo3((s) => { });
+foo3((n) => { return; });

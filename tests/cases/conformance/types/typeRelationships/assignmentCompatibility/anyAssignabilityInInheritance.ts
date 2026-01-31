@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
 

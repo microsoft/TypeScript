@@ -50,19 +50,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
 exports.NoOverload = NoOverload;
 exports.NoOverload1 = NoOverload1;
-var React = require("react");
+const React = require("react");
 function MainButton(props) {
-    var linkProps = props;
+    const linkProps = props;
     if (linkProps.goTo) {
         return this._buildMainLink(props);
     }
     return this._buildMainButton(props);
 }
-var b0 = <MainButton {...{ onClick: function (k) { log(k); } }} extra/>; // k has type "left" | "right"
-var b2 = <MainButton onClick={function (k) { log(k); }} extra/>; // k has type "left" | "right"
-var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
-var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
+const b0 = <MainButton {...{ onClick: (k) => { log(k); } }} extra/>; // k has type "left" | "right"
+const b2 = <MainButton onClick={(k) => { log(k); }} extra/>; // k has type "left" | "right"
+const b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
+const b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
 function NoOverload(buttonProps) { return undefined; }
-var c1 = <NoOverload {...{ onClick: function (k) { log(k); } }} extra/>; // k has type any
+const c1 = <NoOverload {...{ onClick: (k) => { log(k); } }} extra/>; // k has type any
 function NoOverload1(linkProps) { return undefined; }
-var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
+const d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"

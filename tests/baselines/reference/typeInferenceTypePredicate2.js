@@ -8,5 +8,5 @@
 
 //// [typeInferenceTypePredicate2.js]
 [true, true, false, null]
-    .filter(function (thing) { return thing !== null; })
-    .map(function (thing) { return thing.toString(); });
+    .filter((thing) => thing !== null)
+    .map(thing => thing.toString());

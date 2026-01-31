@@ -14,5 +14,5 @@ gg = o.method;
 
 //// [voidParamAssignmentCompatibility.js]
 "use strict";
-var gg = g;
+let gg = g;
 gg = o.method;

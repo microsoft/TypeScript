@@ -19,12 +19,7 @@ const content = <my-element/>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createElement = createElement;
-function createElement(element, props) {
-    var children = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
-    }
-}
+function createElement(element, props, ...children) { }
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -61,5 +56,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var MyLib = __importStar(require("./library"));
-var content = MyLib.createElement("my-element", null);
+const MyLib = __importStar(require("./library"));
+const content = MyLib.createElement("my-element", null);

@@ -1,3 +1,4 @@
+// @target: es2015
 interface I1<T> {
     func<U>(callback: (value: T) => U): I1<T>;
 }

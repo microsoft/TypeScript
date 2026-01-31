@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo<T extends Foo.Bar> {
   constructor() {
   }

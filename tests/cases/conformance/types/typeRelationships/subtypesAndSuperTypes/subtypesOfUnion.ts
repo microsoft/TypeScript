@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 enum E { e1, e2 }
 interface I8 { [x: string]: number[]; }

@@ -49,18 +49,14 @@ c["foo"];
 
 
 //// [interfaceImplementation1.js]
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.iFn = function (n, s) { };
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
+class C1 {
+    iFn(n, s) { }
+}
+class C2 {
+    constructor() {
         this.x = 1;
     }
-    return C2;
-}());
+}
 var a = function () {
     return new C2();
 };

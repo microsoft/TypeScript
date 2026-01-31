@@ -1,3 +1,4 @@
+// @target: es2015
 class T<A> {
     a: A;
     b: any

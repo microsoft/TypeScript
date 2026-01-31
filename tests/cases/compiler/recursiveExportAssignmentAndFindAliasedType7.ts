@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 //@module: commonjs
 // @Filename: recursiveExportAssignmentAndFindAliasedType7_moduleC.ts

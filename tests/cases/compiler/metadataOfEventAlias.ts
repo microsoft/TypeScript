@@ -1,6 +1,7 @@
+// @module: commonjs
+// @target: es5, es2015
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
-// @target: es5
 // @skipLibCheck: true
 
 // @filename: event.ts

@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 function foo1() {
     return E.A
     enum E { A }
