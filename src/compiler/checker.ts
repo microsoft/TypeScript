@@ -1080,6 +1080,7 @@ import {
     tryGetJSDocSatisfiesTypeNode,
     tryGetModuleSpecifierFromDeclaration,
     tryGetPropertyAccessOrIdentifierToString,
+    tryGetTextOfPropertyName,
     TryStatement,
     TupleType,
     TupleTypeNode,
@@ -4706,7 +4707,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getImportAttributesFromLocation(location: Node): ImportAttributes | undefined {
-        // Try to find import attributes from the location node
         const importDecl = findAncestor(location, isImportDeclaration);
         if (importDecl?.attributes) {
             return importDecl.attributes;
@@ -4719,7 +4719,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (importType?.attributes) {
             return importType.attributes;
         }
+        const importCall = findAncestor(location, isImportCall);
+        if (importCall) {
+            return getImportAttributesFromImportCall(importCall);
+        }
         return undefined;
+    }
+
+    function getImportAttributesFromImportCall(importCall: ImportCall): ImportAttributes | undefined {
+        // import("./module", { with: { type: "json" } })
+        if (importCall.arguments.length < 2) {
+            return undefined;
+        }
+        const optionsArg = importCall.arguments[1];
+        if (!isObjectLiteralExpression(optionsArg)) {
+            return undefined;
+        }
+        for (const prop of optionsArg.properties) {
+            if (isPropertyAssignment(prop) && isObjectLiteralExpression(prop.initializer)) {
+                const propName = tryGetTextOfPropertyName(prop.name);
+                if (propName === "with" as __String || propName === "assert" as __String) {
+                    return createSyntheticImportAttributes(prop.initializer);
+                }
+            }
+        }
+        return undefined;
+    }
+
+    function createSyntheticImportAttributes(objectLiteral: ObjectLiteralExpression): ImportAttributes | undefined {
+        // Create synthetic ImportAttribute elements from PropertyAssignment nodes
+        // PropertyAssignment has { name, initializer } but ImportAttribute needs { name, value }
+        const elements: { name: PropertyName; value: Expression; }[] = [];
+        for (const prop of objectLiteral.properties) {
+            if (isPropertyAssignment(prop) && isStringLiteral(prop.initializer)) {
+                elements.push({ name: prop.name, value: prop.initializer });
+            }
+        }
+        if (elements.length === 0) {
+            return undefined;
+        }
+        return { elements: elements as unknown as NodeArray<ImportAttribute> } as unknown as ImportAttributes;
     }
 
     function resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage | undefined, errorNode: Node | undefined, isForAugmentation = false): Symbol | undefined {
@@ -4729,7 +4768,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(errorNode, diag, withoutAtTypePrefix, moduleReference);
         }
 
-        // Get import attributes from the import/export statement
         const importAttributes = getImportAttributesFromLocation(location);
 
         const ambientModule = tryFindAmbientModule(moduleReference, /*withAugmentations*/ true, importAttributes);
@@ -4820,6 +4858,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (sourceFile.symbol) {
+                // Check for pattern ambient module with matching import attributes
+                if (importAttributes?.elements.length) {
+                    const patternMatch = tryFindPatternAmbientModuleWithAttributes(moduleReference, importAttributes);
+                    if (patternMatch) {
+                        return patternMatch;
+                    }
+                }
+
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
@@ -4865,32 +4911,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (patternAmbientModules) {
             const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
             if (pattern) {
-                // Check if the pattern module has matching import attributes
-                const patternSymbol = pattern.symbol;
-                if (patternSymbol.declarations) {
-                    const hasMatchingDeclaration = patternSymbol.declarations.some(decl => {
-                        if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
-                            return importAttributesMatch(importAttributes, decl.withClause);
-                        }
-                        return false;
-                    });
-                    if (!hasMatchingDeclaration) {
-                        // Pattern matched but attributes don't match
-                        if (errorNode && moduleNotFoundError) {
-                            error(errorNode, Diagnostics.No_ambient_module_declaration_matches_import_of_0_with_the_specified_import_attributes, moduleReference);
-                        }
-                        return undefined;
+                if (!hasMatchingImportAttributes(pattern.symbol, importAttributes)) {
+                    if (errorNode && moduleNotFoundError) {
+                        error(errorNode, Diagnostics.No_ambient_module_declaration_matches_import_of_0_with_the_specified_import_attributes, moduleReference);
                     }
+                    return undefined;
                 }
-                // If the module reference matched a pattern ambient module ('*.foo') but there's also a
-                // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
-                // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
-                // from a.foo.
-                const augmentation = patternAmbientModuleAugmentations && patternAmbientModuleAugmentations.get(moduleReference);
-                if (augmentation) {
-                    return getMergedSymbol(augmentation);
-                }
-                return getMergedSymbol(pattern.symbol);
+                const augmentation = patternAmbientModuleAugmentations?.get(moduleReference);
+                return getMergedSymbol(augmentation || pattern.symbol);
             }
         }
 
@@ -16048,20 +16076,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function importAttributesMatch(importAttributes: ImportAttributes | undefined, moduleAttributes: ImportAttributes | undefined): boolean {
-        // If neither has attributes, they match
         if (!importAttributes && !moduleAttributes) {
             return true;
         }
-        // If only one has attributes, they don't match
         if (!importAttributes || !moduleAttributes) {
             return false;
         }
-        // Both have attributes - check if they match
-        // For now, we require exact match of all attributes
         if (importAttributes.elements.length !== moduleAttributes.elements.length) {
             return false;
         }
-        // Create a map of module attributes for easier lookup
         const moduleAttrsMap = new Map<string, string>();
         for (const attr of moduleAttributes.elements) {
             const name = isIdentifier(attr.name) ? idText(attr.name) : attr.name.text;
@@ -16070,7 +16093,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 moduleAttrsMap.set(name, value);
             }
         }
-        // Check that all import attributes match
         for (const attr of importAttributes.elements) {
             const name = isIdentifier(attr.name) ? idText(attr.name) : attr.name.text;
             const value = isStringLiteral(attr.value) ? attr.value.text : undefined;
@@ -16081,29 +16103,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
+    function hasMatchingImportAttributes(symbol: Symbol, importAttributes: ImportAttributes | undefined): boolean {
+        return !symbol.declarations || symbol.declarations.some(decl => isModuleDeclaration(decl) && isStringLiteral(decl.name) && importAttributesMatch(importAttributes, decl.withClause));
+    }
+
     function tryFindAmbientModule(moduleName: string, withAugmentations: boolean, importAttributes?: ImportAttributes) {
         if (isExternalModuleNameRelative(moduleName)) {
             return undefined;
         }
         const symbol = getSymbol(globals, '"' + moduleName + '"' as __String, SymbolFlags.ValueModule);
-        if (!symbol) {
+        if (!symbol || !hasMatchingImportAttributes(symbol, importAttributes)) {
             return undefined;
         }
-        // Check if the module declaration has matching import attributes
-        const declarations = symbol.declarations;
-        if (declarations) {
-            const hasMatchingDeclaration = declarations.some(decl => {
-                if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
-                    return importAttributesMatch(importAttributes, decl.withClause);
-                }
-                return false;
-            });
-            if (!hasMatchingDeclaration) {
-                return undefined;
-            }
+        return withAugmentations ? getMergedSymbol(symbol) : symbol;
+    }
+
+    function tryFindPatternAmbientModuleWithAttributes(moduleReference: string, importAttributes: ImportAttributes | undefined): Symbol | undefined {
+        if (!patternAmbientModules) {
+            return undefined;
         }
-        // merged symbol is module declaration symbol combined with all augmentations
-        return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
+        const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
+        if (!pattern || !hasMatchingImportAttributes(pattern.symbol, importAttributes)) {
+            return undefined;
+        }
+        const augmentation = patternAmbientModuleAugmentations?.get(moduleReference);
+        return getMergedSymbol(augmentation || pattern.symbol);
     }
 
     function hasEffectiveQuestionToken(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {

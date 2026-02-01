@@ -1,0 +1,329 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesDynamicImport.ts] ////
+
+=== types.d.ts ===
+// Test exact match with attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : typeof import("*.css")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+
+    export default stylesheet;
+>stylesheet : CSSStyleSheet
+>           : ^^^^^^^^^^^^^
+}
+
+// Test exact match with different attributes
+declare module "*.json" with { type: "json" } {
+>"*.json" : typeof import("*.json")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+    const data: any;
+>data : any
+>     : ^^^
+
+    export default data;
+>data : any
+>     : ^^^
+}
+
+// Test exact match without attributes
+declare module "*.txt" {
+>"*.txt" : typeof import("*.txt")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const content: string;
+>content : string
+>        : ^^^^^^
+
+    export default content;
+>content : string
+>        : ^^^^^^
+}
+
+// Test multiple attributes
+declare module "*.wasm" with { type: "module", version: "1" } {
+>"*.wasm" : typeof import("*.wasm")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+>version : any
+>        : ^^^
+
+    const module: WebAssembly.Module;
+>module : WebAssembly.Module
+>       : ^^^^^^^^^^^^^^^^^^
+>WebAssembly : any
+>            : ^^^
+
+    export default module;
+>module : WebAssembly.Module
+>       : ^^^^^^^^^^^^^^^^^^
+}
+
+=== test.ts ===
+async function testDynamicImports() {
+>testDynamicImports : () => Promise<void>
+>                   : ^^^^^^^^^^^^^^^^^^^
+
+    // Should resolve correctly - matching attributes
+    const styles = await import("styles.css", { with: { type: "css" } });
+>styles : typeof import("*.css")
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>await import("styles.css", { with: { type: "css" } }) : typeof import("*.css")
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^
+>import("styles.css", { with: { type: "css" } }) : Promise<typeof import("*.css")>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"styles.css" : "styles.css"
+>             : ^^^^^^^^^^^^
+>{ with: { type: "css" } } : { with: { type: string; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "css" } : { type: string; }
+>                : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"css" : "css"
+>      : ^^^^^
+
+    styles.default; // Should be CSSStyleSheet
+>styles.default : CSSStyleSheet
+>               : ^^^^^^^^^^^^^
+>styles : typeof import("*.css")
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>default : CSSStyleSheet
+>        : ^^^^^^^^^^^^^
+
+    // Should resolve correctly - matching attributes
+    const data = await import("data.json", { with: { type: "json" } });
+>data : typeof import("*.json")
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import("data.json", { with: { type: "json" } }) : typeof import("*.json")
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>import("data.json", { with: { type: "json" } }) : Promise<typeof import("*.json")>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"data.json" : "data.json"
+>            : ^^^^^^^^^^^
+>{ with: { type: "json" } } : { with: { type: string; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "json" } : { type: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"json" : "json"
+>       : ^^^^^^
+
+    data.default; // Should be any
+>data.default : any
+>             : ^^^
+>data : typeof import("*.json")
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>default : any
+>        : ^^^
+
+    // Should resolve correctly - no attributes on either side
+    const text = await import("file.txt");
+>text : typeof import("*.txt")
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>await import("file.txt") : typeof import("*.txt")
+>                         : ^^^^^^^^^^^^^^^^^^^^^^
+>import("file.txt") : Promise<typeof import("*.txt")>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"file.txt" : "file.txt"
+>           : ^^^^^^^^^^
+
+    text.default; // Should be string
+>text.default : string
+>             : ^^^^^^
+>text : typeof import("*.txt")
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>default : string
+>        : ^^^^^^
+
+    // Should resolve correctly - multiple matching attributes
+    const wasmModule = await import("module.wasm", { with: { type: "module", version: "1" } });
+>wasmModule : typeof import("*.wasm")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import("module.wasm", { with: { type: "module", version: "1" } }) : typeof import("*.wasm")
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>import("module.wasm", { with: { type: "module", version: "1" } }) : Promise<typeof import("*.wasm")>
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"module.wasm" : "module.wasm"
+>              : ^^^^^^^^^^^^^
+>{ with: { type: "module", version: "1" } } : { with: { type: string; version: string; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; version: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: "module", version: "1" } : { type: string; version: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"module" : "module"
+>         : ^^^^^^^^
+>version : string
+>        : ^^^^^^
+>"1" : "1"
+>    : ^^^
+
+    wasmModule.default; // Should be WebAssembly.Module
+>wasmModule.default : WebAssembly.Module
+>                   : ^^^^^^^^^^^^^^^^^^
+>wasmModule : typeof import("*.wasm")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>default : WebAssembly.Module
+>        : ^^^^^^^^^^^^^^^^^^
+
+    // Should NOT resolve - import has attributes but declaration doesn't
+    const text2 = await import("file2.txt", { with: { type: "text" } });
+>text2 : any
+>      : ^^^
+>await import("file2.txt", { with: { type: "text" } }) : any
+>                                                      : ^^^
+>import("file2.txt", { with: { type: "text" } }) : Promise<any>
+>                                                : ^^^^^^^^^^^^
+>"file2.txt" : "file2.txt"
+>            : ^^^^^^^^^^^
+>{ with: { type: "text" } } : { with: { type: string; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "text" } : { type: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"text" : "text"
+>       : ^^^^^^
+
+    text2.default; // Should be any (no match)
+>text2.default : any
+>              : ^^^
+>text2 : any
+>      : ^^^
+>default : any
+>        : ^^^
+
+    // Should NOT resolve - import has no attributes but declaration does
+    const styles2 = await import("styles2.css");
+>styles2 : any
+>        : ^^^
+>await import("styles2.css") : any
+>                            : ^^^
+>import("styles2.css") : Promise<any>
+>                      : ^^^^^^^^^^^^
+>"styles2.css" : "styles2.css"
+>              : ^^^^^^^^^^^^^
+
+    styles2.default; // Should be any (no match)
+>styles2.default : any
+>                : ^^^
+>styles2 : any
+>        : ^^^
+>default : any
+>        : ^^^
+
+    // Should NOT resolve - mismatched attribute values
+    const styles3 = await import("styles3.css", { with: { type: "style" } });
+>styles3 : any
+>        : ^^^
+>await import("styles3.css", { with: { type: "style" } }) : any
+>                                                         : ^^^
+>import("styles3.css", { with: { type: "style" } }) : Promise<any>
+>                                                   : ^^^^^^^^^^^^
+>"styles3.css" : "styles3.css"
+>              : ^^^^^^^^^^^^^
+>{ with: { type: "style" } } : { with: { type: string; }; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "style" } : { type: string; }
+>                  : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"style" : "style"
+>        : ^^^^^^^
+
+    styles3.default; // Should be any (no match)
+>styles3.default : any
+>                : ^^^
+>styles3 : any
+>        : ^^^
+>default : any
+>        : ^^^
+
+    // Should NOT resolve - missing attribute
+    const wasmModule2 = await import("module2.wasm", { with: { type: "module" } });
+>wasmModule2 : any
+>            : ^^^
+>await import("module2.wasm", { with: { type: "module" } }) : any
+>                                                           : ^^^
+>import("module2.wasm", { with: { type: "module" } }) : Promise<any>
+>                                                     : ^^^^^^^^^^^^
+>"module2.wasm" : "module2.wasm"
+>               : ^^^^^^^^^^^^^^
+>{ with: { type: "module" } } : { with: { type: string; }; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ type: "module" } : { type: string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"module" : "module"
+>         : ^^^^^^^^
+
+    wasmModule2.default; // Should be any (no match - missing version attribute)
+>wasmModule2.default : any
+>                    : ^^^
+>wasmModule2 : any
+>            : ^^^
+>default : any
+>        : ^^^
+
+    // Should NOT resolve - extra attribute
+    const wasmModule3 = await import("module3.wasm", { with: { type: "module", version: "1", extra: "value" } });
+>wasmModule3 : any
+>            : ^^^
+>await import("module3.wasm", { with: { type: "module", version: "1", extra: "value" } }) : any
+>                                                                                         : ^^^
+>import("module3.wasm", { with: { type: "module", version: "1", extra: "value" } }) : Promise<any>
+>                                                                                   : ^^^^^^^^^^^^
+>"module3.wasm" : "module3.wasm"
+>               : ^^^^^^^^^^^^^^
+>{ with: { type: "module", version: "1", extra: "value" } } : { with: { type: string; version: string; extra: string; }; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>with : { type: string; version: string; extra: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: "module", version: "1", extra: "value" } : { type: string; version: string; extra: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"module" : "module"
+>         : ^^^^^^^^
+>version : string
+>        : ^^^^^^
+>"1" : "1"
+>    : ^^^
+>extra : string
+>      : ^^^^^^
+>"value" : "value"
+>        : ^^^^^^^
+
+    wasmModule3.default; // Should be any (no match - extra attribute)
+>wasmModule3.default : any
+>                    : ^^^
+>wasmModule3 : any
+>            : ^^^
+>default : any
+>        : ^^^
+}
+
+

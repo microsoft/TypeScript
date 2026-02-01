@@ -1,0 +1,148 @@
+//// [tests/cases/conformance/ambient/ambientModuleWithImportAttributesDynamicImport.ts] ////
+
+=== types.d.ts ===
+// Test exact match with attributes
+declare module "*.css" with { type: "css" } {
+>"*.css" : Symbol("*.css", Decl(types.d.ts, 0, 0))
+
+    const stylesheet: CSSStyleSheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+>CSSStyleSheet : Symbol(CSSStyleSheet, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default stylesheet;
+>stylesheet : Symbol(stylesheet, Decl(types.d.ts, 2, 9))
+}
+
+// Test exact match with different attributes
+declare module "*.json" with { type: "json" } {
+>"*.json" : Symbol("*.json", Decl(types.d.ts, 4, 1))
+
+    const data: any;
+>data : Symbol(data, Decl(types.d.ts, 8, 9))
+
+    export default data;
+>data : Symbol(data, Decl(types.d.ts, 8, 9))
+}
+
+// Test exact match without attributes
+declare module "*.txt" {
+>"*.txt" : Symbol("*.txt", Decl(types.d.ts, 10, 1))
+
+    const content: string;
+>content : Symbol(content, Decl(types.d.ts, 14, 9))
+
+    export default content;
+>content : Symbol(content, Decl(types.d.ts, 14, 9))
+}
+
+// Test multiple attributes
+declare module "*.wasm" with { type: "module", version: "1" } {
+>"*.wasm" : Symbol("*.wasm", Decl(types.d.ts, 16, 1))
+
+    const module: WebAssembly.Module;
+>module : Symbol(module, Decl(types.d.ts, 20, 9))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    export default module;
+>module : Symbol(module, Decl(types.d.ts, 20, 9))
+}
+
+=== test.ts ===
+async function testDynamicImports() {
+>testDynamicImports : Symbol(testDynamicImports, Decl(test.ts, 0, 0))
+
+    // Should resolve correctly - matching attributes
+    const styles = await import("styles.css", { with: { type: "css" } });
+>styles : Symbol(styles, Decl(test.ts, 2, 9))
+>"styles.css" : Symbol("*.css", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(test.ts, 2, 47))
+>type : Symbol(type, Decl(test.ts, 2, 55))
+
+    styles.default; // Should be CSSStyleSheet
+>styles.default : Symbol(default, Decl(types.d.ts, 2, 36))
+>styles : Symbol(styles, Decl(test.ts, 2, 9))
+>default : Symbol(default, Decl(types.d.ts, 2, 36))
+
+    // Should resolve correctly - matching attributes
+    const data = await import("data.json", { with: { type: "json" } });
+>data : Symbol(data, Decl(test.ts, 6, 9))
+>"data.json" : Symbol("*.json", Decl(types.d.ts, 4, 1))
+>with : Symbol(with, Decl(test.ts, 6, 44))
+>type : Symbol(type, Decl(test.ts, 6, 52))
+
+    data.default; // Should be any
+>data.default : Symbol(default, Decl(types.d.ts, 8, 20))
+>data : Symbol(data, Decl(test.ts, 6, 9))
+>default : Symbol(default, Decl(types.d.ts, 8, 20))
+
+    // Should resolve correctly - no attributes on either side
+    const text = await import("file.txt");
+>text : Symbol(text, Decl(test.ts, 10, 9))
+>"file.txt" : Symbol("*.txt", Decl(types.d.ts, 10, 1))
+
+    text.default; // Should be string
+>text.default : Symbol(default, Decl(types.d.ts, 14, 26))
+>text : Symbol(text, Decl(test.ts, 10, 9))
+>default : Symbol(default, Decl(types.d.ts, 14, 26))
+
+    // Should resolve correctly - multiple matching attributes
+    const wasmModule = await import("module.wasm", { with: { type: "module", version: "1" } });
+>wasmModule : Symbol(wasmModule, Decl(test.ts, 14, 9))
+>"module.wasm" : Symbol("*.wasm", Decl(types.d.ts, 16, 1))
+>with : Symbol(with, Decl(test.ts, 14, 52))
+>type : Symbol(type, Decl(test.ts, 14, 60))
+>version : Symbol(version, Decl(test.ts, 14, 76))
+
+    wasmModule.default; // Should be WebAssembly.Module
+>wasmModule.default : Symbol(default, Decl(types.d.ts, 20, 37))
+>wasmModule : Symbol(wasmModule, Decl(test.ts, 14, 9))
+>default : Symbol(default, Decl(types.d.ts, 20, 37))
+
+    // Should NOT resolve - import has attributes but declaration doesn't
+    const text2 = await import("file2.txt", { with: { type: "text" } });
+>text2 : Symbol(text2, Decl(test.ts, 18, 9))
+>with : Symbol(with, Decl(test.ts, 18, 45))
+>type : Symbol(type, Decl(test.ts, 18, 53))
+
+    text2.default; // Should be any (no match)
+>text2 : Symbol(text2, Decl(test.ts, 18, 9))
+
+    // Should NOT resolve - import has no attributes but declaration does
+    const styles2 = await import("styles2.css");
+>styles2 : Symbol(styles2, Decl(test.ts, 22, 9))
+
+    styles2.default; // Should be any (no match)
+>styles2 : Symbol(styles2, Decl(test.ts, 22, 9))
+
+    // Should NOT resolve - mismatched attribute values
+    const styles3 = await import("styles3.css", { with: { type: "style" } });
+>styles3 : Symbol(styles3, Decl(test.ts, 26, 9))
+>with : Symbol(with, Decl(test.ts, 26, 49))
+>type : Symbol(type, Decl(test.ts, 26, 57))
+
+    styles3.default; // Should be any (no match)
+>styles3 : Symbol(styles3, Decl(test.ts, 26, 9))
+
+    // Should NOT resolve - missing attribute
+    const wasmModule2 = await import("module2.wasm", { with: { type: "module" } });
+>wasmModule2 : Symbol(wasmModule2, Decl(test.ts, 30, 9))
+>with : Symbol(with, Decl(test.ts, 30, 54))
+>type : Symbol(type, Decl(test.ts, 30, 62))
+
+    wasmModule2.default; // Should be any (no match - missing version attribute)
+>wasmModule2 : Symbol(wasmModule2, Decl(test.ts, 30, 9))
+
+    // Should NOT resolve - extra attribute
+    const wasmModule3 = await import("module3.wasm", { with: { type: "module", version: "1", extra: "value" } });
+>wasmModule3 : Symbol(wasmModule3, Decl(test.ts, 34, 9))
+>with : Symbol(with, Decl(test.ts, 34, 54))
+>type : Symbol(type, Decl(test.ts, 34, 62))
+>version : Symbol(version, Decl(test.ts, 34, 78))
+>extra : Symbol(extra, Decl(test.ts, 34, 92))
+
+    wasmModule3.default; // Should be any (no match - extra attribute)
+>wasmModule3 : Symbol(wasmModule3, Decl(test.ts, 34, 9))
+}
+
+
