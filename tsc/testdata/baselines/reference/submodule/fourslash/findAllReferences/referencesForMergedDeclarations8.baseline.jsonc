@@ -30,9 +30,9 @@
 // === /referencesForMergedDeclarations8.ts ===
 // interface Foo { }
 // module Foo {
-//     export interface [|Bar|] { }
+//     export interface Bar { }
 //     export module [|Bar|] { export interface Baz { } }
-//     export function [|Bar|]() { }
+//     export function Bar() { }
 // }
 // 
 // // module

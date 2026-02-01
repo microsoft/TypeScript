@@ -4,15 +4,18 @@
 //     num: 0,
 //     f() {
 //         type Y = typeof this;
-//                           ^
+//                         ^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | { num: number; f(): void; g(this: number): void; }
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //         type Z = typeof this.num;
 //                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | any
+// | { num: number; f(): void; g(this: number): void; }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -22,7 +25,7 @@
 //                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) this: number
+// | number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -53,7 +56,7 @@
 //                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) this: number
+// | number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -70,7 +73,22 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n{ num: number; f(): void; g(this: number): void; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 24
+        },
+        "end": {
+          "line": 3,
+          "character": 28
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -85,7 +103,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nany\n```\n"
+        "value": "```tsx\n{ num: number; f(): void; g(this: number): void; }\n```\n"
       },
       "range": {
         "start": {
@@ -112,7 +130,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) this: number\n```\n"
+        "value": "```tsx\nnumber\n```\n"
       },
       "range": {
         "start": {
@@ -193,7 +211,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) this: number\n```\n"
+        "value": "```tsx\nnumber\n```\n"
       },
       "range": {
         "start": {

@@ -315,6 +315,7 @@
 // | ```tsx
 // | (parameter) b: string
 // | ```
+// | about b
 // | 
 // | ----------------------------------------------------------------------
 // /**@param opt optional parameter*/
@@ -338,6 +339,9 @@
 // | ```tsx
 // | function f1(b: string): any
 // | ```
+// | fn f1 with number
+// | 
+// | *@param* `b` — about b
 // | 
 // | ----------------------------------------------------------------------
 // 
@@ -1358,7 +1362,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: string\n```\n"
+        "value": "```tsx\n(parameter) b: string\n```\nabout b\n"
       },
       "range": {
         "start": {
@@ -1412,7 +1416,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f1(b: string): any\n```\n"
+        "value": "```tsx\nfunction f1(b: string): any\n```\nfn f1 with number\n\n*@param* `b` — about b\n"
       },
       "range": {
         "start": {

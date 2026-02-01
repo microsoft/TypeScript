@@ -998,10 +998,10 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 		if node.Kind != ast.KindQualifiedName {
 			name = core.IfElse(node.Parent.Kind == ast.KindQualifiedName && node.Parent.AsQualifiedName().Right == node, node.Parent, nil)
 		}
-		if name == nil || name.Parent.Kind == ast.KindImportEqualsDeclaration {
-			return ast.SemanticMeaningNamespace
+		if name != nil && name.Parent.Kind == ast.KindImportEqualsDeclaration {
+			return ast.SemanticMeaningAll
 		}
-		return ast.SemanticMeaningAll
+		return ast.SemanticMeaningNamespace
 	case ast.IsDeclarationName(node):
 		return getMeaningFromDeclaration(parent)
 	case ast.IsEntityName(node) && ast.IsJSDocNameReferenceContext(node):

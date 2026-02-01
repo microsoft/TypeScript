@@ -237,6 +237,9 @@
 //    ^
 // | ----------------------------------------------------------------------
 // | f1(**b: string**): any
+// | - `b: string`: about b
+
+// | fn f1 with number
 // | ----------------------------------------------------------------------
 // 
 // /** This is subtract function
@@ -1134,9 +1137,17 @@ not aligned text about parameter will eat only one space
         },
         {
           "label": "f1(b: string): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "fn f1 with number"
+          },
           "parameters": [
             {
-              "label": "b: string"
+              "label": "b: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "about b\n"
+              }
             }
           ],
           "activeParameter": 0
@@ -1172,9 +1183,17 @@ not aligned text about parameter will eat only one space
         },
         {
           "label": "f1(b: string): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "fn f1 with number"
+          },
           "parameters": [
             {
-              "label": "b: string"
+              "label": "b: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "about b\n"
+              }
             }
           ],
           "activeParameter": 0

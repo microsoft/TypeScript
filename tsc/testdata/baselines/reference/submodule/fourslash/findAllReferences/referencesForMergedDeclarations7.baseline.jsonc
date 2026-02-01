@@ -6,7 +6,9 @@
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
-// --- (line: 7) skipped ---
+// 
+// // module, value and type
+// import a2 = Foo.[|Bar|];
 
 
 
@@ -34,7 +36,7 @@
 // }
 // 
 // // module, value and type
-// import a2 = Foo.Bar;
+// import a2 = Foo.[|Bar|];
 
 
 
@@ -42,9 +44,9 @@
 // === /referencesForMergedDeclarations7.ts ===
 // interface Foo { }
 // module Foo {
-//     export interface Bar { }
+//     export interface [|Bar|] { }
 //     export module [|Bar|] { export interface Baz { } }
-//     export function Bar() { }
+//     export function [|Bar|]() { }
 // }
 // 
 // // module, value and type

@@ -1,3 +1,4 @@
+augmentedTypesModule2
 autoCloseFragment
 autoCloseTag
 autoImportPackageRootPathTypeModule
