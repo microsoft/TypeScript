@@ -15,6 +15,7 @@ import type {
     Request,
     Structure,
     Type,
+    TypeAlias,
 } from "./metaModelSchema.mts";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -163,6 +164,48 @@ const customStructures: Structure[] = [
         ],
         documentation: "CustomClosingTagCompletion is the response for the custom/textDocument/closingTagCompletion request.",
     },
+    {
+        name: "RequestFailureTelemetryEvent",
+        properties: [
+            {
+                name: "eventName",
+                type: { kind: "stringLiteral", value: "languageServer.errorResponse" },
+                documentation: "The name of the telemetry event.",
+            },
+            {
+                name: "telemetryPurpose",
+                type: { kind: "stringLiteral", value: "error" },
+                documentation: "Indicates whether the reason for generating the event (e.g. general usage telemetry or errors).",
+            },
+            {
+                name: "properties",
+                type: { kind: "reference", name: "RequestFailureTelemetryProperties" },
+                documentation: "The properties associated with the event.",
+            },
+        ],
+        documentation: "A RequestFailureTelemetryEvent is sent when a request fails and the server recovers.",
+    },
+    {
+        name: "RequestFailureTelemetryProperties",
+        properties: [
+            {
+                name: "errorCode",
+                type: { kind: "base", name: "string" },
+                documentation: "The error code associated with the event.",
+            },
+            {
+                name: "requestMethod",
+                type: { kind: "base", name: "string" },
+                documentation: "The method of the request that caused the event.",
+            },
+            {
+                name: "stack",
+                type: { kind: "base", name: "string" },
+                documentation: "The stack trace associated with the event.",
+            },
+        ],
+        documentation: "RequestFailureTelemetryProperties contains failure information when an LSP request manages to recover.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -268,6 +311,19 @@ const customRequests: Request[] = [
         messageDirection: "clientToServer",
         result: { kind: "reference", name: "ProfileResult" },
         documentation: "Stops CPU profiling and saves the profile.",
+    },
+];
+
+const customTypeAliases: TypeAlias[] = [
+    {
+        name: "TelemetryEvent",
+        type: {
+            kind: "or",
+            items: [
+                { kind: "reference", name: "RequestFailureTelemetryEvent" },
+                { kind: "base", name: "null" },
+            ],
+        },
     },
 ];
 
@@ -382,6 +438,15 @@ function patchAndPreprocessModel() {
                     prop.type = registerOptionsUnionType;
                 }
             }
+        }
+    }
+
+    for (const notification of model.notifications) {
+        if (notification.typeName === "TelemetryEventNotification") {
+            notification.params = {
+                kind: "reference",
+                name: "TelemetryEvent",
+            };
         }
     }
 
@@ -532,6 +597,11 @@ function resolveType(type: Type): GoType {
                 return typeAliasOverride;
             }
 
+            const nonResolved = nonResolvedAliases.has(type.name);
+            if (nonResolved) {
+                return { name: type.name, needsPointer: false };
+            }
+
             // Check if this is a type alias that resolves to a union type
             const aliasedType = typeInfo.typeAliasMap.get(type.name);
             if (aliasedType) {
@@ -580,7 +650,7 @@ function resolveType(type: Type): GoType {
         }
 
         case "stringLiteral": {
-            const typeName = `StringLiteral${titleCase(type.value)}`;
+            const typeName = `StringLiteral${type.value.split(".").map(titleCase).join("")}`;
             typeInfo.literalTypes.set(String(type.value), typeName);
             return { name: typeName, needsPointer: false };
         }
@@ -807,6 +877,12 @@ const typeAliasOverrides = new Map([
     ["LSPObject", { name: "map[string]any", needsPointer: false }],
     ["uint64", { name: "uint64", needsPointer: false }],
 ]);
+
+// These type aliases are intentionally not resolved to their underlying types.
+// It means that we can end up with non-normalized union types in some places.
+// Also, unlike other type aliases, these will get a type alias in the generated source code.
+// We may want to eventually do this for all type aliases though.
+const nonResolvedAliases = new Set(customTypeAliases.map(ta => ta.name));
 
 /**
  * First pass: Resolve all type information
@@ -1579,6 +1655,15 @@ function generateCode() {
             writeLine(`var ${methodName}Info = NotificationInfo[${paramGoType}]{Method: Method${methodName}}`);
         }
 
+        writeLine("");
+    }
+
+    // Generate type aliases
+    writeLine("// Type aliases\n");
+    for (const aliasName of customTypeAliases) {
+        const resolvedType = resolveType(aliasName.type);
+        const goType = resolvedType.needsPointer ? `*${resolvedType.name}` : resolvedType.name;
+        writeLine(`type ${aliasName.name} = ${goType}`);
         writeLine("");
     }
 

@@ -1,14 +1,23 @@
 import * as vscode from "vscode";
+
 import {
+    CloseAction,
+    CloseHandlerResult,
+    ErrorAction,
+    ErrorHandler,
+    ErrorHandlerResult,
     LanguageClient,
     LanguageClientOptions,
+    Message,
     NotebookDocumentFilter,
     ServerOptions,
     TextDocumentFilter,
     TransportKind,
 } from "vscode-languageclient/node";
+
 import { codeLensShowLocationsCommandName } from "./commands";
 import { registerTagClosingFeature } from "./languageFeatures/tagClosing";
+import * as tr from "./telemetryReporting";
 import {
     ExeInfo,
     getExe,
@@ -19,6 +28,8 @@ import { getLanguageForUri } from "./util";
 export class Client {
     private outputChannel: vscode.LogOutputChannel;
     private traceOutputChannel: vscode.LogOutputChannel;
+    private telemetryReporter: tr.TelemetryReporter;
+
     private documentSelector: Array<{ scheme: string; language: string; }>;
     private clientOptions: LanguageClientOptions;
     private client?: LanguageClient;
@@ -29,9 +40,10 @@ export class Client {
     private exe: ExeInfo | undefined;
     private onStartedCallbacks: Set<() => void> = new Set();
 
-    constructor(outputChannel: vscode.LogOutputChannel, traceOutputChannel: vscode.LogOutputChannel) {
+    constructor(outputChannel: vscode.LogOutputChannel, traceOutputChannel: vscode.LogOutputChannel, telemetryReporter: tr.TelemetryReporter) {
         this.outputChannel = outputChannel;
         this.traceOutputChannel = traceOutputChannel;
+        this.telemetryReporter = telemetryReporter;
         this.documentSelector = [
             ...jsTsLanguageModes.map(language => ({ scheme: "file", language })),
             ...jsTsLanguageModes.map(language => ({ scheme: "untitled", language })),
@@ -43,6 +55,7 @@ export class Client {
             initializationOptions: {
                 codeLensShowLocationsCommandName,
             },
+            errorHandler: new ReportingErrorHandler(this.telemetryReporter, 5),
             diagnosticPullOptions: {
                 onChange: true,
                 onSave: true,
@@ -100,6 +113,9 @@ export class Client {
     async start(context: vscode.ExtensionContext, exe: { path: string; version: string; }): Promise<vscode.Disposable> {
         this.exe = exe;
         this.outputChannel.appendLine(`Resolved to ${this.exe.path}`);
+        this.telemetryReporter.sendTelemetryEvent("languageServer.start", {
+            version: this.exe.version,
+        });
 
         // Get pprofDir
         const config = vscode.workspace.getConfiguration("typescript.native-preview");
@@ -150,7 +166,32 @@ export class Client {
             this.traceOutputChannel.appendLine(`To see LSP trace output, set this output's log level to "Trace" (gear icon next to the dropdown).`);
         }
 
+        type TelemetryData = {
+            eventName: string;
+            telemetryPurpose: "usage" | "error";
+            properties?: Record<string, string>;
+            measurements?: Record<string, number>;
+        };
+
+        const serverTelemetryListener = this.client.onTelemetry((d: TelemetryData) => {
+            switch (d.telemetryPurpose) {
+                case "usage":
+                    this.telemetryReporter.sendTelemetryEventUntyped(d.eventName, d.properties, d.measurements);
+                    break;
+                case "error":
+                    this.telemetryReporter.sendTelemetryErrorEventUntyped(d.eventName, d.properties, d.measurements);
+                    break;
+                default:
+                    const _: never = d.telemetryPurpose;
+                    this.telemetryReporter.sendTelemetryErrorEvent("languageServer.unexpectedTelemetryPurpose", {
+                        telemetryPurpose: String(d.telemetryPurpose),
+                    });
+                    break;
+            }
+        });
+
         this.disposables.push(
+            serverTelemetryListener,
             registerTagClosingFeature("typescript", this.documentSelector, this.client),
             registerTagClosingFeature("javascript", this.documentSelector, this.client),
         );
@@ -186,6 +227,7 @@ export class Client {
         }
 
         this.onStartedCallbacks.add(callback);
+
         return new vscode.Disposable(() => {
             this.onStartedCallbacks.delete(callback);
         });
@@ -245,5 +287,85 @@ export class Client {
         }
         const result = await this.client.sendRequest<{ file: string; }>("custom/stopCPUProfile");
         return result.file;
+    }
+}
+
+// Adapted from the default error handler in vscode-languageclient.
+class ReportingErrorHandler implements ErrorHandler {
+    telemetryReporter: tr.TelemetryReporter;
+    maxRestartCount: number;
+    restarts: number[];
+
+    constructor(telemetryReporter: tr.TelemetryReporter, maxRestartCount: number) {
+        this.telemetryReporter = telemetryReporter;
+        this.maxRestartCount = maxRestartCount;
+        this.restarts = [];
+    }
+
+    error(_error: Error, _message: Message | undefined, count: number | undefined): ErrorHandlerResult | Promise<ErrorHandlerResult> {
+        let errorAction = ErrorAction.Shutdown;
+        if (count && count <= 3) {
+            errorAction = ErrorAction.Continue;
+        }
+
+        let actionString = "";
+        switch (errorAction) {
+            case ErrorAction.Continue:
+                actionString = "continue";
+                break;
+            case ErrorAction.Shutdown:
+                actionString = "shutdown";
+                break;
+            default:
+                const _: never = errorAction;
+        }
+        this.telemetryReporter.sendTelemetryErrorEvent("languageServer.connectionError", {
+            resultingAction: actionString,
+        });
+
+        return { action: errorAction };
+    }
+
+    closed(): CloseHandlerResult | Promise<CloseHandlerResult> {
+        let resultingAction: CloseAction;
+
+        this.restarts.push(Date.now());
+        if (this.restarts.length <= this.maxRestartCount) {
+            resultingAction = CloseAction.Restart;
+        }
+        else {
+            const diff = this.restarts[this.restarts.length - 1] - this.restarts[0];
+            if (diff <= 3 * 60 * 1000) {
+                resultingAction = CloseAction.DoNotRestart;
+            }
+            else {
+                this.restarts.shift();
+                resultingAction = CloseAction.Restart;
+            }
+        }
+
+        let actionString = "";
+        switch (resultingAction) {
+            case CloseAction.DoNotRestart:
+                actionString = "doNotRestart";
+                break;
+            case CloseAction.Restart:
+                actionString = "restart";
+                break;
+            default:
+                const _: never = resultingAction;
+        }
+        this.telemetryReporter.sendTelemetryErrorEvent("languageServer.connectionClosed", {
+            resultingAction: actionString,
+        });
+
+        if (resultingAction === CloseAction.DoNotRestart) {
+            return {
+                action: resultingAction,
+                message: `The typescript.native-preview-lsp server crashed ${this.maxRestartCount + 1} times in the last 3 minutes. The server will not be restarted. See the output for more information.`,
+            };
+        }
+
+        return { action: resultingAction };
     }
 }

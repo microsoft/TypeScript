@@ -246,8 +246,7 @@ func (s *Server) RefreshDiagnostics(ctx context.Context) error {
 
 // PublishDiagnostics implements project.Client.
 func (s *Server) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
-	notification := lsproto.TextDocumentPublishDiagnosticsInfo.NewNotificationMessage(params)
-	return s.send(notification.Message())
+	return sendNotification(s, lsproto.TextDocumentPublishDiagnosticsInfo, params)
 }
 
 func (s *Server) RefreshInlayHints(ctx context.Context) error {
@@ -506,6 +505,10 @@ func (s *Server) sendError(id *lsproto.ID, err error) error {
 			Message: err.Error(),
 		},
 	})
+}
+
+func sendNotification[Params any](s *Server, info lsproto.NotificationInfo[Params], params Params) error {
+	return s.send(info.NewNotificationMessage(params).Message())
 }
 
 func (s *Server) sendResponse(resp *lsproto.ResponseMessage) error {
@@ -781,6 +784,19 @@ func (s *Server) recover(ctx context.Context, req *lsproto.RequestMessage) {
 		s.logger.Errorf("panic handling request %s: %v\n%s", req.Method, r, string(stack))
 		if req.ID != nil {
 			err := s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
+			if err != nil {
+				panic(err)
+			}
+
+			err = sendNotification(s, lsproto.TelemetryEventInfo, lsproto.TelemetryEvent{
+				RequestFailureTelemetryEvent: &lsproto.RequestFailureTelemetryEvent{
+					Properties: &lsproto.RequestFailureTelemetryProperties{
+						ErrorCode:     lsproto.ErrorCodeInternalError.String(),
+						RequestMethod: string(req.Method),
+						Stack:         sanitizeStackTrace(string(stack)),
+					},
+				},
+			})
 			if err != nil {
 				panic(err)
 			}

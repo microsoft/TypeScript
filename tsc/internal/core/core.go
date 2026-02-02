@@ -647,6 +647,19 @@ func ConcatenateSeq[T any](seqs ...iter.Seq[T]) iter.Seq[T] {
 	}
 }
 
+// Enumerate returns a sequence of (index, value) pairs from the input sequence.
+func Enumerate[T any](seq iter.Seq[T]) iter.Seq2[int, T] {
+	return func(yield func(int, T) bool) {
+		i := 0
+		for v := range seq {
+			if !yield(i, v) {
+				return
+			}
+			i++
+		}
+	}
+}
+
 func comparableValuesEqual[T comparable](a, b T) bool {
 	return a == b
 }

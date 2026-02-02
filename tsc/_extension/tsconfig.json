@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2020",
+        "target": "es2023",
         "module": "NodeNext",
         "rootDir": "./src",
         "outDir": "./dist",
