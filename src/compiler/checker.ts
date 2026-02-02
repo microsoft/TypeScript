@@ -48552,6 +48552,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
             }
 
+            if (!isImportAttributes && compilerOptions.ignoreDeprecations !== "6.0") {
+                grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
+
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
                 return grammarErrorOnNode(
                     node,
