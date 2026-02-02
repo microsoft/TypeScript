@@ -208,6 +208,11 @@ func getAllModulePathsWorker(
 		allFileNames[p.FileName] = p
 	}
 
+	useCaseSensitiveFileNames := info.UseCaseSensitiveFileNames
+	comparePaths := func(a, b ModulePath) int {
+		return comparePathsByRedirect(a, b, useCaseSensitiveFileNames)
+	}
+
 	// Sort by paths closest to importing file Name directory
 	sortedPaths := make([]ModulePath, 0, len(paths))
 	for directory := info.SourceDirectory; len(allFileNames) != 0; {
@@ -220,7 +225,7 @@ func getAllModulePathsWorker(
 			}
 		}
 		if len(pathsInDirectory) > 0 {
-			slices.SortStableFunc(pathsInDirectory, comparePathsByRedirectAndNumberOfDirectorySeparators)
+			slices.SortFunc(pathsInDirectory, comparePaths)
 			sortedPaths = append(sortedPaths, pathsInDirectory...)
 		}
 		newDirectory := tspath.GetDirectoryPath(directory)
@@ -231,7 +236,7 @@ func getAllModulePathsWorker(
 	}
 	if len(allFileNames) > 0 {
 		remainingPaths := slices.Collect(maps.Values(allFileNames))
-		slices.SortStableFunc(remainingPaths, comparePathsByRedirectAndNumberOfDirectorySeparators)
+		slices.SortFunc(remainingPaths, comparePaths)
 		sortedPaths = append(sortedPaths, remainingPaths...)
 	}
 	return sortedPaths
