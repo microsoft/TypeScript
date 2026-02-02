@@ -420,7 +420,7 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
     const fn = jsdoc.parent;
     if (!isFunctionLike(fn)) return [];
 
-    return mapDefined(fn.parameters, param => {
+    return mapDefined(fn.parameters, (param, index) => {
         if (!isIdentifier(param.name)) return undefined;
 
         const name = param.name.text;
@@ -431,7 +431,9 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
             return undefined;
         }
 
-        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
+        // Use parameter index as sortText suffix to maintain argument order in completions
+        const sortText = (Completions.SortText.LocationPriority + String(index).padStart(4, "0")) as Completions.SortText;
+        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText };
     });
 }
 
