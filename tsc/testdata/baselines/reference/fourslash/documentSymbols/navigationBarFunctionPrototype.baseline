@@ -4,12 +4,12 @@
 // <|f.prototype.[|{| name: x, kind: Variable |}x|]|> = 0;
 // <|f.[|{| name: y, kind: Variable |}y|]|> = 0;
 // <|f.prototype.[|{| name: method, kind: Variable |}method|]|> = <|[|{| name: method, kind: Function |}|]function () {}|>;
-// Object.defineProperty(f, 'staticProp', { 
+// Object.defineProperty(f, <|[|{| name: "staticProp", kind: Property |}'staticProp'|]|>, { 
 //     <|[|{| name: set, kind: Property |}set|]: function() {}|>, 
 //     <|[|{| name: get, kind: Property |}get|]: function(){
 //     }|> 
 // });
-// Object.defineProperty(f.prototype, 'name', { 
+// Object.defineProperty(f.prototype, <|[|{| name: "name", kind: Property |}'name'|]|>, { 
 //     <|[|{| name: set, kind: Property |}set|]: function() {}|>, 
 //     <|[|{| name: get, kind: Property |}get|]: function(){
 //     }|> 
@@ -21,7 +21,9 @@
   (Variable) y
   (Variable) method
     (Function) method
-(Property) set
-(Property) get
-(Property) set
-(Property) get
+  (Property) "staticProp"
+    (Property) set
+    (Property) get
+  (Property) "name"
+    (Property) set
+    (Property) get
