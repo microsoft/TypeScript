@@ -1847,8 +1847,8 @@ func tryGetRealFileNameForNonJSDeclarationFileName(fileName string) string {
 	noExtension := tspath.RemoveExtension(fileName, tspath.ExtensionTs)
 	lastDotIndex := strings.LastIndex(noExtension, ".")
 	ext := noExtension[lastDotIndex:]
-	dIndex := strings.Index(noExtension, ".d.")
-	return noExtension[:dIndex] + ext
+	before, _, _ := strings.Cut(noExtension, ".d.")
+	return before + ext
 }
 
 func walkUpParentheses(node *ast.Node) *ast.Node {

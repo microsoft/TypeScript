@@ -1082,7 +1082,7 @@ func tryGetModuleNameFromPaths(
 			if len(pattern) == 0 {
 				pattern = normalized
 			}
-			indexOfStar := strings.Index(pattern, "*")
+			prefix, suffix, ok := strings.Cut(pattern, "*")
 
 			// In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
 			// meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
@@ -1141,9 +1141,7 @@ func tryGetModuleNameFromPaths(
 				})
 			}
 
-			if indexOfStar != -1 {
-				prefix := pattern[0:indexOfStar]
-				suffix := pattern[indexOfStar+1:]
+			if ok {
 				for _, c := range candidates {
 					value := c.value
 					if len(value) >= len(prefix)+len(suffix) &&

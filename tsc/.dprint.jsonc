@@ -57,8 +57,8 @@
     // Also, if updating typescript, update the one in package.json.
     "plugins": [
         "https://plugins.dprint.dev/typescript-0.95.13.wasm",
-        "https://plugins.dprint.dev/json-0.21.0.wasm",
-        "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm",
-        "https://plugins.dprint.dev/jakebailey/gofumpt-v0.0.3.wasm"
+        "https://plugins.dprint.dev/json-0.21.1.wasm",
+        "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm",
+        "https://plugins.dprint.dev/jakebailey/gofumpt-v0.0.4.wasm"
     ]
 }

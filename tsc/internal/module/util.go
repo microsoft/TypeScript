@@ -67,9 +67,9 @@ func MangleScopedPackageName(packageName string) string {
 }
 
 func UnmangleScopedPackageName(packageName string) string {
-	idx := strings.Index(packageName, "__")
-	if idx != -1 {
-		return "@" + packageName[:idx] + "/" + packageName[idx+2:]
+	before, after, ok := strings.Cut(packageName, "__")
+	if ok {
+		return "@" + before + "/" + after
 	}
 	return packageName
 }
