@@ -2101,7 +2101,7 @@ func (f *FourslashTest) VerifyBaselineHover(t *testing.T) {
 
 		params := &lsproto.HoverParams{
 			TextDocument: lsproto.TextDocumentIdentifier{
-				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+				Uri: lsconv.FileNameToDocumentURI(marker.fileName),
 			},
 			Position: marker.LSPosition,
 		}

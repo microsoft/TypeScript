@@ -375,9 +375,6 @@ TestJsDocFunctionSignatures7
 TestJsDocFunctionSignatures8
 TestJsDocGenerics2
 TestJsDocInheritDoc
-TestJsdocLink2
-TestJsdocLink3
-TestJsdocLink6
 TestJsDocPropertyDescription1
 TestJsDocPropertyDescription10
 TestJsDocPropertyDescription11
@@ -430,7 +427,6 @@ TestProtoVarVisibleWithOuterScopeUnderscoreProto
 TestQualifyModuleTypeNames
 TestQuickInfo_notInsideComment
 TestQuickinfo01
-TestQuickInfoAlias
 TestQuickInfoAssertionNodeNotReusedWhenTypeNotEquivalent1
 TestQuickInfoBindingPatternInJsdocNoCrash1
 TestQuickInfoCanBeTruncated

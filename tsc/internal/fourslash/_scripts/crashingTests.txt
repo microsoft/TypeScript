@@ -5,8 +5,4 @@ TestFormatDocumentWithTrivia
 TestFormattingJsxTexts4
 TestGetOccurrencesIfElseBroken
 TestImportNameCodeFix_importType8
-TestJsdocLink2
-TestJsdocLink3
-TestJsdocLink6
-TestQuickInfoAlias
 TestQuickInfoBindingPatternInJsdocNoCrash1

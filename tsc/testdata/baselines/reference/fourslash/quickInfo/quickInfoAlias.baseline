@@ -1,0 +1,95 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import { x } from "./a";
+// x;
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) const x: 0
+// | ```
+// | Doc
+// | 
+// | *@tag* — Tag text
+// | 
+// | ----------------------------------------------------------------------
+=== /c.ts ===
+// /**
+//  * Doc 2
+//  * @tag Tag text 2
+//  */
+// import {
+//     /**
+//      * Doc 3
+//      * @tag Tag text 3
+//      */
+//     x
+// } from "./a";
+// x;
+// ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) const x: 0
+// | ```
+// | Doc
+// | 
+// | *@tag* — Tag text
+// | 
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 1
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 118,
+      "LSPosition": {
+        "line": 11,
+        "character": 1
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 0
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        }
+      }
+    }
+  }
+]

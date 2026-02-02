@@ -1,0 +1,414 @@
+// === QuickInfo ===
+=== /a.ts ===
+// /**
+//  * A function
+//  */
+// export function foo() {}
+//                 ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function foo(): void
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+=== /b.ts ===
+// import { foo } from './a';
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) function foo(): void
+// | type foo = number
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+// export { foo };
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) function foo(): void
+// | (alias) type foo = number
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * A type
+//  */
+// type foo = number;
+//      ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type foo = number
+// | ```
+// | A type
+// | ----------------------------------------------------------------------
+// 
+// foo()
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) function foo(): void
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+// let x1: foo;
+//         ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type foo = number
+// | ```
+// | A type
+// | ----------------------------------------------------------------------
+
+
+=== /c.ts ===
+// import { foo } from './b';
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) function foo(): void
+// | (alias) type foo = number
+// | namespace foo
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * A namespace
+//  */
+// namespace foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace foo
+// | ```
+// | A namespace
+// | ----------------------------------------------------------------------
+//     export type bar = string[];
+// }
+// 
+// foo()
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) function foo(): void
+// | ```
+// | A function
+// | ----------------------------------------------------------------------
+// let x1: foo;
+//         ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) type foo = number
+// | ```
+// | A type
+// | ----------------------------------------------------------------------
+// let x2: foo.bar;
+//         ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace foo
+// | ```
+// | A namespace
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 3,
+        "character": 19
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction foo(): void\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 16
+        },
+        "end": {
+          "line": 3,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 12,
+      "LSPosition": {
+        "line": 0,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) function foo(): void\ntype foo = number\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 39,
+      "LSPosition": {
+        "line": 1,
+        "character": 12
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) function foo(): void\n(alias) type foo = number\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 9
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 70,
+      "LSPosition": {
+        "line": 6,
+        "character": 8
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype foo = number\n```\nA type"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 5
+        },
+        "end": {
+          "line": 6,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 85,
+      "LSPosition": {
+        "line": 8,
+        "character": 3
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) function foo(): void\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 99,
+      "LSPosition": {
+        "line": 9,
+        "character": 11
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\ntype foo = number\n```\nA type"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 8
+        },
+        "end": {
+          "line": 9,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 12,
+      "LSPosition": {
+        "line": 0,
+        "character": 12
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) function foo(): void\n(alias) type foo = number\nnamespace foo\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 5,
+        "character": 13
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace foo\n```\nA namespace"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 10
+        },
+        "end": {
+          "line": 5,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 9,
+        "character": 3
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) function foo(): void\n```\nA function"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 0
+        },
+        "end": {
+          "line": 9,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 10,
+        "character": 11
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) type foo = number\n```\nA type"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 8
+        },
+        "end": {
+          "line": 10,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 132,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nnamespace foo\n```\nA namespace"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 8
+        },
+        "end": {
+          "line": 11,
+          "character": 11
+        }
+      }
+    }
+  }
+]

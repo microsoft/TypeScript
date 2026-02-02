@@ -1,0 +1,45 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import A, { B } from "./a";
+// /**
+//  * {@link A}
+//  * {@link B}
+//  */
+// export default function f() { }
+//                         ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function f(): void
+// | ```
+// | [A](file:///a.ts#1,25-1,26)
+// | [B](file:///a.ts#2,17-2,18)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 5,
+        "character": 24
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction f(): void\n```\n[A](file:///a.ts#1,25-1,26)\n[B](file:///a.ts#2,17-2,18)"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 24
+        },
+        "end": {
+          "line": 5,
+          "character": 25
+        }
+      }
+    }
+  }
+]

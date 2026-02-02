@@ -1,0 +1,56 @@
+// === QuickInfo ===
+=== /script.ts ===
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function CC(): void
+// | ```
+// | [C](file:///jsdocLink2.ts#1,7-1,8)
+// | 
+// | *@wat* — Makes a [C](file:///jsdocLink2.ts#1,7-1,8). A default one.
+// | [C()](file:///jsdocLink2.ts#1,7-1,8)
+// | [postfix text](file:///jsdocLink2.ts#1,7-1,8)
+// | unformatted postfix text
+// | 
+// | *@see* — [C](file:///jsdocLink2.ts#1,7-1,8) its great
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 177,
+      "LSPosition": {
+        "line": 8,
+        "character": 9
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink2.ts#1,7-1,8)\n\n*@wat* — Makes a [C](file:///jsdocLink2.ts#1,7-1,8). A default one.\n[C()](file:///jsdocLink2.ts#1,7-1,8)\n[postfix text](file:///jsdocLink2.ts#1,7-1,8)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink2.ts#1,7-1,8) its great\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 9
+        },
+        "end": {
+          "line": 8,
+          "character": 11
+        }
+      }
+    }
+  }
+]

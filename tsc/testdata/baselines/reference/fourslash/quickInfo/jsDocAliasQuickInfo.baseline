@@ -14,13 +14,19 @@
 // | ----------------------------------------------------------------------
 === /test.ts ===
 // export { default as test } from "./jsDocAliasQuickInfo";
-//          ^
+//          ^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*2*/.
+// | ```tsx
+// | (property) default: 10
+// | ```
+// | Comment
 // | ----------------------------------------------------------------------
-//                     ^
+//                     ^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*3*/.
+// | ```tsx
+// | (alias) (property) default: 10
+// | ```
+// | Comment
 // | ----------------------------------------------------------------------
 
 
@@ -62,7 +68,22 @@
       "Name": "2",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 16
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -74,6 +95,21 @@
       "Name": "3",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) (property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 20
+        },
+        "end": {
+          "line": 0,
+          "character": 24
+        }
+      }
+    }
   }
 ]

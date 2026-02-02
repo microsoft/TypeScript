@@ -1,32 +1,50 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsExternalModuleAlias_file1.ts ===
 // import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
-//        ^
+//        ^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*1*/.
+// | ```tsx
+// | (alias) module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
-//                     ^
+//                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*mod1*/.
+// | ```tsx
+// | module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 // new a1.m1.c();
-//     ^
+//     ^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*2*/.
+// | ```tsx
+// | (alias) module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 // export import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
-//               ^
+//               ^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*3*/.
+// | ```tsx
+// | (alias) module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
-//                            ^
+//                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*mod2*/.
+// | ```tsx
+// | module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 // new a2.m1.c();
-//     ^
+//     ^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*4*/.
+// | ```tsx
+// | (alias) module a1
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -39,7 +57,22 @@
       "Name": "1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 7
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -51,7 +84,22 @@
       "Name": "mod1",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nmodule a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 21
+        },
+        "end": {
+          "line": 0,
+          "character": 69
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -63,7 +111,22 @@
       "Name": "2",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 6
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -75,7 +138,22 @@
       "Name": "3",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 14
+        },
+        "end": {
+          "line": 2,
+          "character": 16
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -87,7 +165,22 @@
       "Name": "mod2",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nmodule a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 28
+        },
+        "end": {
+          "line": 2,
+          "character": 76
+        }
+      }
+    }
   },
   {
     "marker": {
@@ -99,6 +192,21 @@
       "Name": "4",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 6
+        }
+      }
+    }
   }
 ]

@@ -1,0 +1,57 @@
+// === QuickInfo ===
+=== /module1.ts ===
+// import { C } from './jsdocLink3'
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function CC(): void
+// | ```
+// | [C](file:///jsdocLink3.ts#1,14-1,15)
+// | 
+// | *@wat* — Makes a [C](file:///jsdocLink3.ts#1,14-1,15). A default one.
+// | [C()](file:///jsdocLink3.ts#1,14-1,15)
+// | [postfix text](file:///jsdocLink3.ts#1,14-1,15)
+// | unformatted postfix text
+// | 
+// | *@see* — [C](file:///jsdocLink3.ts#1,14-1,15) its great
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 210,
+      "LSPosition": {
+        "line": 9,
+        "character": 9
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink3.ts#1,14-1,15)\n\n*@wat* — Makes a [C](file:///jsdocLink3.ts#1,14-1,15). A default one.\n[C()](file:///jsdocLink3.ts#1,14-1,15)\n[postfix text](file:///jsdocLink3.ts#1,14-1,15)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink3.ts#1,14-1,15) its great\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 9
+        },
+        "end": {
+          "line": 9,
+          "character": 11
+        }
+      }
+    }
+  }
+]
