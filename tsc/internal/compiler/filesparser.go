@@ -293,11 +293,11 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	libFilesMap := make(map[tspath.Path]*LibFile, libFileCount)
 
 	var redirectTargetsMap map[tspath.Path][]string
-	var deduplicatedPaths collections.Set[tspath.Path]
-	var packageIdToCanonicalPath map[module.PackageId]tspath.Path
+	var redirectFilesByPath map[tspath.Path]*redirectsFile
+	var packageIdToSourceFile map[module.PackageId]*ast.SourceFile
 	if !loader.opts.Config.CompilerOptions().DeduplicatePackages.IsFalse() {
 		redirectTargetsMap = make(map[tspath.Path][]string)
-		packageIdToCanonicalPath = make(map[module.PackageId]tspath.Path)
+		packageIdToSourceFile = make(map[module.PackageId]*ast.SourceFile)
 	}
 
 	var collectFiles func(tasks []*parseTask, seen map[*parseTaskData]string)
@@ -349,22 +349,31 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 				loader.opts.Host.Trace(trace.Message, trace.Args...)
 			}
 
-			var existingCanonicalPath tspath.Path
-			if packageIdToCanonicalPath != nil && data.packageId.Name != "" {
-				if canonical, exists := packageIdToCanonicalPath[data.packageId]; exists {
-					redirectTargetsMap[canonical] = append(redirectTargetsMap[canonical], task.normalizedFilePath)
-					existingCanonicalPath = canonical
-					deduplicatedPaths.Add(task.path)
-					deduplicatedPaths.Add(canonical)
-				} else {
-					packageIdToCanonicalPath[data.packageId] = task.path
+			file := task.file
+			if packageIdToSourceFile != nil && data.packageId.Name != "" {
+				if packageIdFile, exists := packageIdToSourceFile[data.packageId]; exists {
+					redirectTargetsMap[packageIdFile.Path()] = append(redirectTargetsMap[packageIdFile.Path()], task.normalizedFilePath)
+					if redirectFilesByPath == nil {
+						redirectFilesByPath = make(map[tspath.Path]*redirectsFile, totalFileCount)
+					}
+					redirectFilesByPath[task.path] = &redirectsFile{
+						index:    len(files) + len(redirectFilesByPath),
+						fileName: task.normalizedFilePath,
+						path:     task.path,
+						target:   packageIdFile.Path(),
+					}
+					filesByPath[task.path] = packageIdFile
+					if data.lowestDepth > 0 {
+						sourceFilesFoundSearchingNodeModules.Add(task.path)
+					}
+					continue
+				} else if file != nil {
+					packageIdToSourceFile[data.packageId] = file
 				}
 			}
 
-			if existingCanonicalPath == "" {
-				if subTasks := task.subTasks; len(subTasks) > 0 {
-					collectFiles(subTasks, seen)
-				}
+			if subTasks := task.subTasks; len(subTasks) > 0 {
+				collectFiles(subTasks, seen)
 			}
 
 			// Exclude automatic type directive tasks from include reason processing,
@@ -380,10 +389,6 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if task.isForAutomaticTypeDirective {
 				typeResolutionsInFile[task.path] = task.typeResolutionsInFile
 				continue
-			}
-			file := task.file
-			if existingCanonicalPath != "" {
-				file = filesByPath[existingCanonicalPath]
 			}
 
 			path := task.path
@@ -401,7 +406,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if task.libFile != nil {
 				libFiles = append(libFiles, file)
 				libFilesMap[path] = task.libFile
-			} else if existingCanonicalPath == "" {
+			} else {
 				files = append(files, file)
 			}
 			filesByPath[path] = file
@@ -431,6 +436,9 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	loader.sortLibs(libFiles)
 
 	allFiles := append(libFiles, files...)
+	for _, redirectFile := range redirectFilesByPath {
+		redirectFile.index += len(libFiles)
+	}
 
 	keys := slices.Collect(loader.pathForLibFileResolutions.Keys())
 	slices.Sort(keys)
@@ -461,7 +469,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		includeProcessor:                     includeProcessor,
 		outputFileToProjectReferenceSource:   outputFileToProjectReferenceSource,
 		redirectTargetsMap:                   redirectTargetsMap,
-		deduplicatedPaths:                    deduplicatedPaths,
+		redirectFilesByPath:                  redirectFilesByPath,
 	}
 }
 

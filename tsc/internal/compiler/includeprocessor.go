@@ -122,11 +122,20 @@ func (i *includeProcessor) getRelatedInfo(r *FileIncludeReason, program *Program
 
 func (i *includeProcessor) explainRedirectAndImpliedFormat(
 	program *Program,
-	file *ast.SourceFile,
+	filePath tspath.Path,
 	toFileName func(fileName string) string,
 ) []*ast.Diagnostic {
-	if existing, ok := i.redirectAndFileFormat.Load(file.Path()); ok {
+	if existing, ok := i.redirectAndFileFormat.Load(filePath); ok {
 		return existing
+	}
+	var file ast.HasFileName
+	var sourceFile *ast.SourceFile
+	redirectsFile := program.redirectFilesByPath[filePath]
+	if redirectsFile != nil {
+		file = redirectsFile
+	} else {
+		sourceFile = program.GetSourceFileByPath(filePath)
+		file = sourceFile
 	}
 	var result []*ast.Diagnostic
 	if source := program.GetSourceOfProjectReferenceIfOutputIncluded(file); source != file.FileName() {
@@ -135,15 +144,16 @@ func (i *includeProcessor) explainRedirectAndImpliedFormat(
 			toFileName(source),
 		))
 	}
-	// !!! redirects
-	// if (file.redirectInfo) {
-	//     (result ??= []).push(chainDiagnosticMessages(
-	//         /*details*/ undefined,
-	//         Diagnostics.File_redirects_to_file_0,
-	//         toFileName(file.redirectInfo.redirectTarget, fileNameConvertor),
-	//     ));
-	// }
-	if ast.IsExternalOrCommonJSModule(file) {
+
+	if redirectsFile != nil {
+		targetFile := program.GetSourceFileByPath(redirectsFile.target)
+		result = append(result, ast.NewCompilerDiagnostic(
+			diagnostics.File_redirects_to_file_0,
+			toFileName(targetFile.FileName()),
+		))
+	}
+
+	if sourceFile != nil && ast.IsExternalOrCommonJSModule(sourceFile) {
 		metaData := program.GetSourceFileMetaData(file.Path())
 		switch program.GetImpliedNodeFormatForEmit(file) {
 		case core.ModuleKindESNext:
@@ -166,6 +176,6 @@ func (i *includeProcessor) explainRedirectAndImpliedFormat(
 		}
 	}
 
-	result, _ = i.redirectAndFileFormat.LoadOrStore(file.Path(), result)
+	result, _ = i.redirectAndFileFormat.LoadOrStore(filePath, result)
 	return result
 }

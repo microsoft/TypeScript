@@ -241,18 +241,19 @@ func NewProgram(opts ProgramOptions) *Program {
 // Return an updated program for which it is known that only the file with the given path has changed.
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
 func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost) (*Program, bool) {
-	oldFile := p.filesByPath[changedFilePath]
 	newOpts := p.opts
 	newOpts.Host = newHost
-	newFile := newHost.GetSourceFile(oldFile.ParseOptions())
-	if !canReplaceFileInProgram(oldFile, newFile) {
-		return NewProgram(newOpts), false
-	}
+
 	// If this file is part of a package redirect group (same package installed in multiple
 	// node_modules locations), we need to rebuild the program because the redirect targets
 	// might need recalculation.
-	if p.deduplicatedPaths.Has(changedFilePath) {
-		// File is either a canonical file or a redirect target; either way, need full rebuild
+	if _, exists := p.redirectFilesByPath[changedFilePath]; exists {
+		return NewProgram(newOpts), false
+	}
+
+	oldFile := p.filesByPath[changedFilePath]
+	newFile := newHost.GetSourceFile(oldFile.ParseOptions())
+	if !canReplaceFileInProgram(oldFile, newFile) {
 		return NewProgram(newOpts), false
 	}
 	// TODO: reverify compiler options when config has changed?
@@ -1576,6 +1577,8 @@ func (p *Program) HasSameFileNames(other *Program) bool {
 	return maps.EqualFunc(p.filesByPath, other.filesByPath, func(a, b *ast.SourceFile) bool {
 		// checks for casing differences on case-insensitive file systems
 		return a.FileName() == b.FileName()
+	}) && maps.EqualFunc(p.redirectFilesByPath, other.redirectFilesByPath, func(a, b *redirectsFile) bool {
+		return a.FileName() == b.FileName()
 	})
 }
 
@@ -1599,15 +1602,40 @@ func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale) {
 	toRelativeFileName := func(fileName string) string {
 		return tspath.GetRelativePathFromDirectory(p.GetCurrentDirectory(), fileName, p.comparePathsOptions)
 	}
-	for _, file := range p.GetSourceFiles() {
+	filesExplained := 0
+	explainFile := func(file ast.HasFileName) {
 		fmt.Fprintln(w, toRelativeFileName(file.FileName()))
 		for _, reason := range p.includeProcessor.fileIncludeReasons[file.Path()] {
 			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true).Localize(locale))
 		}
-		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file, toRelativeFileName) {
+		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file.Path(), toRelativeFileName) {
 			fmt.Fprintln(w, "  ", diag.Localize(locale))
 		}
+		filesExplained++
 	}
+
+	redirectFiles := slices.Collect(maps.Values(p.redirectFilesByPath))
+	slices.SortFunc(redirectFiles, func(a, b *redirectsFile) int {
+		return a.index - b.index
+	})
+
+	files := p.GetSourceFiles()
+	sourceFileIndex := 0
+	explainSourceFiles := func(endIndex int) {
+		for filesExplained < endIndex {
+			explainFile(files[sourceFileIndex])
+			sourceFileIndex++
+		}
+	}
+
+	for _, redirectFile := range redirectFiles {
+		// Explain all sourceFiles till we reach this redirectFile index
+		explainSourceFiles(redirectFile.index)
+		explainFile(redirectFile)
+	}
+
+	// Explain any remaining sourceFiles
+	explainSourceFiles(len(files) + len(redirectFiles))
 }
 
 func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFile {

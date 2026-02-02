@@ -102,7 +102,7 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 		for _, reason := range reasons {
 			processInclude(reason)
 		}
-		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, program.GetSourceFileByPath(diag.file), func(fileName string) string { return fileName })
+		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, diag.file, func(fileName string) string { return fileName })
 	}
 	if diag.diagnosticReason != nil {
 		processInclude(diag.diagnosticReason)

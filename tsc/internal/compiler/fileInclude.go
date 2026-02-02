@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -23,8 +22,6 @@ const (
 	fileIncludeKindLibReferenceDirective
 
 	fileIncludeKindRootFile
-	fileIncludeKindSourceFromProjectReference
-	fileIncludeKindOutputFromProjectReference
 	fileIncludeKindLibFile
 	fileIncludeKindAutomaticTypeDirectiveFile
 )
@@ -192,15 +189,6 @@ func (r *FileIncludeReason) computeDiagnostic(program *Program, toFileName func(
 		} else {
 			return ast.NewCompilerDiagnostic(diagnostics.Root_file_specified_for_compilation)
 		}
-	case fileIncludeKindSourceFromProjectReference,
-		fileIncludeKindOutputFromProjectReference:
-		diag := core.IfElse(
-			r.kind == fileIncludeKindOutputFromProjectReference,
-			diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none,
-			diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
-		)
-		referencedResolvedRef := program.projectReferenceFileMapper.getResolvedProjectReferences()[r.asIndex()]
-		return ast.NewCompilerDiagnostic(diag, toFileName(referencedResolvedRef.ConfigName()))
 	case fileIncludeKindAutomaticTypeDirectiveFile:
 		data := r.asAutomaticTypeDirectiveFileData()
 		if program.Options().Types != nil {
@@ -288,16 +276,6 @@ func (r *FileIncludeReason) toRelatedInfo(program *Program) *ast.Diagnostic {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, includeNode.AsNode(), diagnostics.File_is_matched_by_include_pattern_specified_here)
 			}
 		}
-	case fileIncludeKindSourceFromProjectReference,
-		fileIncludeKindOutputFromProjectReference:
-		return tsoptions.CreateDiagnosticAtReferenceSyntax(
-			config,
-			r.asIndex(),
-			core.IfElse(
-				r.kind == fileIncludeKindOutputFromProjectReference,
-				diagnostics.File_is_output_from_referenced_project_specified_here,
-				diagnostics.File_is_source_from_referenced_project_specified_here,
-			))
 	case fileIncludeKindAutomaticTypeDirectiveFile:
 		if program.Options().Types != nil {
 			data := r.asAutomaticTypeDirectiveFileData()
