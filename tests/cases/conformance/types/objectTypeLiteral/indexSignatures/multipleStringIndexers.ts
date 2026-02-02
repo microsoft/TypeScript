@@ -1,3 +1,4 @@
+// @target: es2015
 // Multiple indexers of the same type are an error
 
 class C {

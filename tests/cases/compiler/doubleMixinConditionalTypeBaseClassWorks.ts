@@ -1,3 +1,4 @@
+// @target: es2015
 type Constructor = new (...args: any[]) => {};
 
 const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private _fooPrivate: {}; }

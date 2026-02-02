@@ -1,3 +1,4 @@
+// @target: es2015
 declare function isString1(a: number, b: Object): b is string;
 
 declare function isString2(a: Object): a is string;

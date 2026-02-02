@@ -112,7 +112,7 @@ class F extends C { foo4() { } }
 >foo4 : () => void
 >     : ^^^^^^^^^^
 
-var c: C, d: D, e: E, f: F;
+declare var c: C, d: D, e: E, f: F;
 >c : C
 >  : ^
 >d : D

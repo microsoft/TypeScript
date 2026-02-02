@@ -47,7 +47,7 @@ namespace server {
 >    : ^^^^^^^^^^^^^
     }
 }
-var server: {
+declare var server: {
 >server : { (): server.connectExport; foo: Date; }
 >       : ^^^^^^                    ^^^^^^^    ^^^
 

@@ -1,4 +1,5 @@
-﻿declare function commentedParameters(...args): any;
+﻿// @target: es2015
+declare function commentedParameters(...args): any;
 
 function ifelse() {
     if (commentedParameters(1, 2)) {

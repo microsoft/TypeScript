@@ -48,12 +48,9 @@ var m4c;
 })(m4c || (m4c = {}));
 var m4d;
 (function (m4d) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.foo = function () { };
-        return C;
-    }());
+    class C {
+        foo() { }
+    }
 })(m4d || (m4d = {}));
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";

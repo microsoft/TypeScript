@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 
 class C {
@@ -103,7 +104,7 @@ let reconstructed: {
 
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
-let explicitXProperty: (this: { x: number }, m: number) => number;
+declare let explicitXProperty: (this: { x: number }, m: number) => number;
 
 // from differing object types
 c.explicitC = function(this: D, m: number) { return this.x + m };

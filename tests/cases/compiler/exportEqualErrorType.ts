@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: commonjs
 // @Filename: exportEqualErrorType_0.ts
 namespace server {
@@ -8,7 +10,7 @@ namespace server {
         use: (mod: connectModule) => connectExport;
     }
 }
-var server: {
+declare var server: {
     (): server.connectExport;
     foo: Date;
 };

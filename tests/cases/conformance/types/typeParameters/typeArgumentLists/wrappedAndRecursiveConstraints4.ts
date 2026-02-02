@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T extends { length: number }> {
     constructor(x: T) { }
     foo<U extends T>(x: U) {

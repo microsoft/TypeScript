@@ -6,9 +6,6 @@ class X {
 }
 
 //// [arrayReferenceWithoutTypeArgs.js]
-var X = /** @class */ (function () {
-    function X() {
-    }
-    X.prototype.f = function (a) { };
-    return X;
-}());
+class X {
+    f(a) { }
+}

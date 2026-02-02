@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 //// declare const foo: number;
 //// interface Empty {}
 //// interface Typed { typed: number; }

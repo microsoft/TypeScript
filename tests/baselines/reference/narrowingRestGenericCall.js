@@ -30,7 +30,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 function call(obj, cb) {
     cb(obj);
 }
-call(obj, function (_a) {
-    var foo = _a.foo, rest = __rest(_a, ["foo"]);
+call(obj, (_a) => {
+    var { foo } = _a, rest = __rest(_a, ["foo"]);
     console.log(rest.bar);
 });

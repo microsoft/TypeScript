@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 //@filename: v1/index.d.ts
 export as namespace Alpha;
 export var x: string;

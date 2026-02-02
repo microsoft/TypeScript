@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var s="hello";
 s.substring(0);
 s.substring(3,4);

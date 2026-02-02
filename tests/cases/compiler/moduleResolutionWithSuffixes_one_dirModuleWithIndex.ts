@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // moduleSuffixes has one entry and there's a matching dir with an index file.
 
 // @filename: /tsconfig.json

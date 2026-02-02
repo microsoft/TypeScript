@@ -93,17 +93,17 @@ var f2 = function (x, y) {
         };
     }
 };
-var f3 = function (x, y) {
+var f3 = (x, y) => {
     function bar() {
-        var g = function (a, b) {
+        var g = (a, b) => {
             x = y;
             return y;
         };
     }
 };
-var f4 = function (x, y) {
+var f4 = (x, y) => {
     function bar() {
-        var g = function (a, b) {
+        var g = (a, b) => {
             x = y;
             return y;
         };

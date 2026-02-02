@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: classic
 // @module: amd
 // @baseUrl: c:/root

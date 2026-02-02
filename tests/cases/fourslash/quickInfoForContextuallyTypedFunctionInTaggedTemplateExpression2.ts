@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 ////function tempTag2(templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number;
 ////function tempTag2(templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string;
 ////function tempTag2(...rest: any[]): any {

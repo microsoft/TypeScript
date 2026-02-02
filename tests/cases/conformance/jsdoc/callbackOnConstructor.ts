@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: callbackOnConstructor.js
 // @checkJs: true
 // @outdir: dist

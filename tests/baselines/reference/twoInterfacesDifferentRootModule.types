@@ -27,7 +27,7 @@ namespace M2 {
 >    : ^^^^^^
     }
 
-    var a: A;
+    declare var a: A;
 >a : A
 >  : ^
 
@@ -57,7 +57,7 @@ namespace M2 {
 >    : ^
     }
 
-    var b: B<string>;
+    declare var b: B<string>;
 >b : B<string>
 >  : ^^^^^^^^^
 

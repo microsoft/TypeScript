@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Basic type inference with generic calls and constraints, no errors expected
 
 class Base { foo: string; }

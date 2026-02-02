@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: tsconfig.json
 {
     "compilerOptions": {

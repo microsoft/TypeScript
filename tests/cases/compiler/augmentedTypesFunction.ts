@@ -1,3 +1,4 @@
+// @target: es2015
 // function then var
 function y1() { } // error
 var y1 = 1; // error

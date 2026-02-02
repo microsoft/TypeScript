@@ -1,4 +1,5 @@
-﻿class Based { }
+﻿// @target: es2015
+class Based { }
 class Derived extends Based {
     public x: number;
     constructor() {

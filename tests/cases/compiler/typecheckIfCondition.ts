@@ -1,3 +1,4 @@
+// @target: es2015
 // both uses of module should be an undefined symbol
 function myWrapper()
 {

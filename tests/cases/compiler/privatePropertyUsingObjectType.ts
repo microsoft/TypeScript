@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 export class FilterManager {
     private _filterProviders: { index: IFilterProvider; };

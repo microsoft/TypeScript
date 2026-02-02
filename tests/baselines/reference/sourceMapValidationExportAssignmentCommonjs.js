@@ -8,10 +8,7 @@ export = a;
 
 //// [sourceMapValidationExportAssignmentCommonjs.js]
 "use strict";
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 module.exports = a;
 //# sourceMappingURL=sourceMapValidationExportAssignmentCommonjs.js.map

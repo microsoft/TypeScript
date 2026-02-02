@@ -4,9 +4,9 @@
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 
-var a: boolean;
-var b: string;
-var c: Object;
+declare var a: boolean;
+declare var b: string;
+declare var c: Object;
 
 // operator **
 var r1a1 = null ** a;
@@ -28,9 +28,6 @@ var r1d3 = {} ** null;
 //// [exponentiationOperatorWithNullValueAndInvalidOperands.js]
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
-var a;
-var b;
-var c;
 // operator **
 var r1a1 = Math.pow(null, a);
 var r1a2 = Math.pow(null, b);

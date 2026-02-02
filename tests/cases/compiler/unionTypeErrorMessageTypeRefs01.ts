@@ -1,3 +1,4 @@
+// @target: es2015
 
 interface Foo { foo: any }
 interface Bar { bar: any }

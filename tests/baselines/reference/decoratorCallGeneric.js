@@ -22,12 +22,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function dec(c) { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.m = function () { };
-    C = __decorate([
-        dec
-    ], C);
-    return C;
-}());
+let C = class C {
+    static m() { }
+};
+C = __decorate([
+    dec
+], C);

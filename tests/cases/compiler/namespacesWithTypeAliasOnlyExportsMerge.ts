@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: constAndNS.ts
 type A = number;
 declare const Q: number;

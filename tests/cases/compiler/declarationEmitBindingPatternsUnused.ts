@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 // @target: esnext
 // @skipLibCheck: false

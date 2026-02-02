@@ -10,11 +10,8 @@ namespace D {
 D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 //// [cloduleSplitAcrossFiles_module.js]
 var D;
 (function (D) {

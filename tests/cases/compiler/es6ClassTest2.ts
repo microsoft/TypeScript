@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class BasicMonster {
     constructor(public name: string, public health: number) {
 

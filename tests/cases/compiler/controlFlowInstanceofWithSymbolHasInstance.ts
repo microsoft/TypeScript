@@ -56,7 +56,7 @@ function f4(s: Set<string> | Set<number>) {
 // More tests
 
 class A {
-    a: string;
+    a: string = "";
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
         T extends (abstract new (...args: any) => infer U) ? U :
         never
@@ -64,8 +64,8 @@ class A {
         return Function.prototype[Symbol.hasInstance].call(this, value);
     }
 }
-class B extends A { b: string }
-class C extends A { c: string }
+class B extends A { b: string = ""; }
+class C extends A { c: string = ""; }
 
 function foo(x: A | undefined) {
     x;  // A | undefined
@@ -105,7 +105,7 @@ interface X {
 }
 
 class Y {
-    y: string;
+    y: string = "";
 }
 
 function goo(x: X) {

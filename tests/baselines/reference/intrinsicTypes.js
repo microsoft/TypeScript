@@ -68,7 +68,7 @@ function foo1(s, x, y) {
     y = x; // Error
 }
 function foo2(x) {
-    var s = x;
+    let s = x;
 }
 function foo4(x) {
     return foo3(x);

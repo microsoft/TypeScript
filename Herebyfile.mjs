@@ -601,7 +601,7 @@ export const knip = task({
     name: "knip",
     description: "Runs knip.",
     dependencies: [generateDiagnostics],
-    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
+    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
 const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuildTask({
@@ -677,7 +677,7 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, lssl, watchOtherOutputs, dts, watchSrc],
 });
 
-const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
+const runtestsDeps = [tests, generateLibs, generateTypesMap].concat(cmdLineOptions.typecheck ? [dts] : []);
 
 export const runTests = task({
     name: "runtests",

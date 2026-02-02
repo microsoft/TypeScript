@@ -18,10 +18,7 @@ var d = x<any>(x);
 var x;
 var a = x();
 var b = x('hello');
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = x(x);
 var d = x(x);

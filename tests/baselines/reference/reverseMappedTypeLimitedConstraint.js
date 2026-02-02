@@ -20,8 +20,8 @@ const checked_ = checkType_<{x: number, y: string}>()({
 //// [reverseMappedTypeLimitedConstraint.js]
 foo_({ x: 1, y: 'foo' });
 // -----------------------------------------------------------------------------------------
-var checkType_ = function () { return function (value) { return value; }; };
-var checked_ = checkType_()({
+const checkType_ = () => (value) => value;
+const checked_ = checkType_()({
     x: 1,
     y: "y",
     z: "z",

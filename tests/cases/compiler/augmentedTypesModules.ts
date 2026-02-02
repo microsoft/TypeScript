@@ -1,3 +1,4 @@
+// @target: es2015
 // module then var
 namespace m1 { }
 var m1 = 1; // Should be allowed

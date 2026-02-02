@@ -1,3 +1,4 @@
+// @target: es2015
 //// class then var
 class c1 { public foo() { } }
 var c1 = 1; // error

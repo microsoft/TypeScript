@@ -111,11 +111,11 @@ interface A {
 >  : ^
 }
 
-var x: A;
+declare var x: A;
 >x : A
 >  : ^
 
-var b: new <T>(x: T) => T[]; 
+declare var b: new <T>(x: T) => T[]; 
 >b : new <T>(x: T) => T[]
 >  : ^^^^^ ^^ ^^ ^^^^^   
 >x : T
@@ -145,7 +145,7 @@ b = x.a;
 >a : new <T>(x: T) => T[]
 >  : ^^^^^ ^^ ^^ ^^^^^   
 
-var b2: new <T>(x: T) => string[]; 
+declare var b2: new <T>(x: T) => string[]; 
 >b2 : new <T>(x: T) => string[]
 >   : ^^^^^ ^^ ^^ ^^^^^        
 >x : T
@@ -175,7 +175,7 @@ b2 = x.a2;
 >a2 : new <T>(x: T) => string[]
 >   : ^^^^^ ^^ ^^ ^^^^^        
 
-var b3: new <T>(x: T) => T;
+declare var b3: new <T>(x: T) => T;
 >b3 : new <T>(x: T) => T
 >   : ^^^^^ ^^ ^^ ^^^^^ 
 >x : T
@@ -205,7 +205,7 @@ b3 = x.a3;
 >a3 : new <T>(x: T) => void
 >   : ^^^^^ ^^ ^^ ^^^^^    
 
-var b4: new <T, U>(x: T, y: U) => string; 
+declare var b4: new <T, U>(x: T, y: U) => string; 
 >b4 : new <T, U>(x: T, y: U) => string
 >   : ^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
@@ -237,7 +237,7 @@ b4 = x.a4;
 >a4 : new <T, U>(x: T, y: U) => string
 >   : ^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 
-var b5: new <T, U>(x: (arg: T) => U) => T; 
+declare var b5: new <T, U>(x: (arg: T) => U) => T; 
 >b5 : new <T, U>(x: (arg: T) => U) => T
 >   : ^^^^^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
@@ -269,7 +269,7 @@ b5 = x.a5;
 >a5 : new <T, U>(x: (arg: T) => U) => T
 >   : ^^^^^ ^^ ^^ ^^             ^^^^^ 
 
-var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+declare var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >b11 : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >    : ^^^^^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
@@ -307,7 +307,7 @@ b11 = x.a11;
 >a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >    : ^^^^^ ^^ ^^           ^^ ^^                   ^^^^^    
 
-var b16: new <T>(x: { a: T; b: T }) => T[]; 
+declare var b16: new <T>(x: { a: T; b: T }) => T[]; 
 >b16 : new <T>(x: { a: T; b: T; }) => T[]
 >    : ^^^^^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }

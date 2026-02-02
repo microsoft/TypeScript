@@ -32,4 +32,4 @@ type OriginF = `${A}foo${A}`;
 
 //// [templateLiteralIntersection.js]
 // https://github.com/microsoft/TypeScript/issues/48034
-var a = 'a';
+const a = 'a';

@@ -16,4 +16,4 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var b = __rest({}, []);
+const b = __rest({}, []);

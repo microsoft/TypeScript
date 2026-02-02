@@ -12,7 +12,7 @@ data.foo + data.bar + data.baz + data.noWay
 
 
 //// [modifiersInObjectLiterals.js]
-var data = {
+let data = {
     foo: 'hey',
     bar: 'nay',
     baz: 'oh my',

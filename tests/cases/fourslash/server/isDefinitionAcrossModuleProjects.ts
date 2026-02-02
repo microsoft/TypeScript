@@ -112,6 +112,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,
+////        "lib": ["es5"],
 ////    },
 ////    "references": [
 ////        { "path": "a" },
@@ -128,6 +129,7 @@
 ////        "declarationMap": true,
 ////        "module": "CommonJS",
 ////        "emitDeclarationOnly": true,
+////        "lib": ["es5"],
 ////    }
 ////}
 

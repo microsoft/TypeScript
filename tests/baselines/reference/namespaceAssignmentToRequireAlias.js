@@ -12,7 +12,7 @@ u.noError()
 
 //// [bug40140.js]
 "use strict";
-var u = require('untyped');
+const u = require('untyped');
 u.assignment.nested = true;
 u.noError();
 

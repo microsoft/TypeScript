@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 function foo1(strs: TemplateStringsArray, x: number): string;
 function foo1(strs: string[], x: number): number;
 function foo1(...stuff: any[]): any {

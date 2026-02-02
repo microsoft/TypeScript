@@ -19,12 +19,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 function PropDeco(target, propKey) { }
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    __decorate([
-        PropDeco,
-        __metadata("design:type", String)
-    ], Foo.prototype, "foo", void 0);
-    return Foo;
-}());
+class Foo {
+}
+__decorate([
+    PropDeco,
+    __metadata("design:type", String)
+], Foo.prototype, "foo", void 0);

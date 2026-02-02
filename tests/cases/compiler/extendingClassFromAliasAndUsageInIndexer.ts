@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: extendingClassFromAliasAndUsageInIndexer_backbone.ts
 export class Model {

@@ -96,20 +96,13 @@ var withMultiParamsVar = withMultiParams;
 function withOptionalParams(a) {
 }
 var withOptionalParamsVar = withOptionalParams;
-function withInitializedParams(a, b0, b, c) {
-    if (b === void 0) { b = 30; }
-    if (c === void 0) { c = "string value"; }
+function withInitializedParams(a, b0, b = 30, c = "string value") {
 }
 var withInitializedParamsVar = withInitializedParams;
-function withOptionalInitializedParams(a, c) {
-    if (c === void 0) { c = "hello string"; }
+function withOptionalInitializedParams(a, c = "hello string") {
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
-function withRestParams(a) {
-    var myRestParameter = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        myRestParameter[_i - 1] = arguments[_i];
-    }
+function withRestParams(a, ...myRestParameter) {
     return myRestParameter;
 }
 var withRestParamsVar = withRestParams;
@@ -124,11 +117,11 @@ var m2;
     }
     m2.foo = foo;
 })(m2 || (m2 = {}));
-m2.foo(function () {
+m2.foo(() => {
     var b = 30;
     return b;
 });
-var f2 = function () {
+var f2 = () => {
     return "string";
 };
 

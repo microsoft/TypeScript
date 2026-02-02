@@ -163,7 +163,7 @@ export class TestRunner {
 >test : () => boolean
 >     : ^^^^^^       
             }
-            catch (e) {
+            catch (e: any) {
 >e : any
 >  : ^^^
 

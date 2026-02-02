@@ -1821,9 +1821,8 @@
         "code": 1539
     },
     "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.": {
-        "category": "Suggestion",
-        "code": 1540,
-        "reportsDeprecated": true
+        "category": "Error",
+        "code": 1540
     },
     "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
         "category": "Error",
@@ -4480,6 +4479,10 @@
     "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
         "category": "Error",
         "code": 5010
+    },
+    "The common source directory of '{0}' is '{1}'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.": {
+        "category": "Error",
+        "code": 5011
     },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",

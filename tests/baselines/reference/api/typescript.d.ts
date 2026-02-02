@@ -7,7 +7,7 @@ License at http://www.apache.org/licenses/LICENSE-2.0
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
 WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+MERCHANTABILITY OR NON-INFRINGEMENT.
 
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
@@ -2543,6 +2543,7 @@ declare namespace ts {
             export enum ScriptTarget {
                 /** @deprecated */
                 ES3 = "es3",
+                /** @deprecated */
                 ES5 = "es5",
                 ES6 = "es6",
                 ES2015 = "es2015",
@@ -2558,6 +2559,7 @@ declare namespace ts {
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
+                LatestStandard = "es2024",
             }
         }
         namespace typingsInstaller {
@@ -7207,6 +7209,7 @@ declare namespace ts {
     enum ScriptTarget {
         /** @deprecated */
         ES3 = 0,
+        /** @deprecated */
         ES5 = 1,
         ES2015 = 2,
         ES2016 = 3,
@@ -7221,6 +7224,7 @@ declare namespace ts {
         ESNext = 99,
         JSON = 100,
         Latest = 99,
+        LatestStandard = 11,
     }
     enum LanguageVariant {
         Standard = 0,

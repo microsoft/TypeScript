@@ -11,7 +11,7 @@ exportAssignmentOfDeclaredExternalModule_1.ts(4,9): error TS2693: 'Sammy' only r
     var y = Sammy(); // error to use interface name as call target
             ~~~~~
 !!! error TS2693: 'Sammy' only refers to a type, but is being used as a value here.
-    var z: Sammy; // no error - z is of type interface Sammy from module 'M'
+    declare var z: Sammy; // no error - z is of type interface Sammy from module 'M'
     var a = new z(); // constructor - no error
     var b = z(); // call signature - no error
 ==== exportAssignmentOfDeclaredExternalModule_0.ts (0 errors) ====

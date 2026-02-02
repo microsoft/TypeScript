@@ -28,7 +28,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
     
     namespace onlyT {
         function foo<T>(a: (x: T) => T, b: (x: T) => T) {
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     
@@ -52,7 +52,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
         }
     
         function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     
@@ -70,7 +70,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
         enum F { A }
     
         function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     
@@ -82,7 +82,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
     
     namespace TU {
         function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     
@@ -101,7 +101,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
         }
     
         function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     
@@ -123,7 +123,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
 !!! error TS2304: Cannot find name 'U'.
                                                             ~
 !!! error TS2304: Cannot find name 'U'.
-            var r: (x: T) => T;
+            var r!: (x: T) => T;
             return r;
         }
     

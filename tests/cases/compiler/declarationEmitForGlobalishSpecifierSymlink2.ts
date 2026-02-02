@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @useCaseSensitiveFilenames: true
 // @declaration: true
 // @filename: /cache/typescript-fsa/src/impl.d.ts

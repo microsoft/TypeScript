@@ -1,4 +1,5 @@
-﻿var x: CustomEvent;
+﻿// @target: es2015
+var x: CustomEvent;
 
 // valid since detail is any
 x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });

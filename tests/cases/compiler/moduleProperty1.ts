@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
     var x=10;  // variable local to this module body
     var y=x;  // property visible only in module

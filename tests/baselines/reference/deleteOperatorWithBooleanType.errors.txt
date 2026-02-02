@@ -13,7 +13,7 @@ deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' 
 
 ==== deleteOperatorWithBooleanType.ts (11 errors) ====
     // delete  operator on boolean type
-    var BOOLEAN: boolean;
+    declare var BOOLEAN: boolean;
     
     function foo(): boolean { return true; }
     

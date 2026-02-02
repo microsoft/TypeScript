@@ -20,7 +20,7 @@ deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' o
 
 ==== deleteOperatorWithStringType.ts (18 errors) ====
     // delete  operator on string type
-    var STRING: string;
+    declare var STRING: string;
     var STRING1: string[] = ["", "abc"];
     
     function foo(): string { return "abc"; }

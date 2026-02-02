@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function x2(callback: (x?: number) => number);
 function x2(callback: (x: string) => number);
 function x2(callback: (x: any) => number) { }

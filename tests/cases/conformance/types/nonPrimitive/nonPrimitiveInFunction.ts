@@ -1,10 +1,11 @@
+// @target: es2015
 // @declaration: true
 function takeObject(o: object) {}
 function returnObject(): object {
     return {};
 }
 
-var nonPrimitive: object;
+var nonPrimitive: object = {};
 var primitive: boolean;
 
 takeObject(nonPrimitive);

@@ -42,35 +42,27 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-function Foo() { }
+export function Foo() { }
 ;
 
 
 //// [/home/src/projects/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export var y = 10;
 
 
 //// [/home/src/projects/a/b/file1Consumer2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var z = 10;
+let z = 10;
+export {};
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
 
 
 //// [/home/src/projects/a/b/moduleFile2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
+export var Foo4 = 10;
 
 
 
@@ -95,7 +87,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -115,7 +107,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -123,7 +115,7 @@ Program files::
 /home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -131,7 +123,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/a/b/moduleFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/projects/a/b/modulefile1.ts (used version)
 /home/src/projects/a/b/file1consumer1.ts (used version)
 /home/src/projects/a/b/file1consumer2.ts (used version)
@@ -186,7 +178,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -194,7 +186,7 @@ Program files::
 /home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -203,7 +195,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/b/globalfile3.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/projects/a/b/modulefile1.ts (computed .d.ts)
 /home/src/projects/a/b/file1consumer1.ts (computed .d.ts)
 /home/src/projects/a/b/file1consumer2.ts (computed .d.ts)

@@ -10,9 +10,7 @@ function test()
 }
 
 //// [thisReferencedInFunctionInsideArrowFunction1.js]
-var foo = function (dummy) { };
+var foo = (dummy) => { };
 function test() {
-    foo(function () {
-        return function () { return this; };
-    });
+    foo(() => function () { return this; });
 }

@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/nestedModulePrivateAccess.ts] ////
 
 //// [nestedModulePrivateAccess.ts]
-module a{
+namespace a{
        var x:number;
-       module b{
+       namespace b{
                var y = x; // should not be an error
        }
 }
@@ -12,7 +12,7 @@ module a{
 var a;
 (function (a) {
     var x;
-    var b;
+    let b;
     (function (b) {
         var y = x; // should not be an error
     })(b || (b = {}));

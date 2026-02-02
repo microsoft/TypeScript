@@ -9,7 +9,7 @@ namespace server {
         use: (mod: connectModule) => connectExport;
     }
 }
-var server: {
+declare var server: {
     (): server.connectExport;
     foo: Date;
 };
@@ -23,11 +23,10 @@ connect().use(connect.static('foo')); // Error	1	The property 'static' does not 
 
 //// [exportEqualMemberMissing_0.js]
 "use strict";
-var server;
 module.exports = server;
 //// [exportEqualMemberMissing_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='exportEqualMemberMissing_0.ts'/>
-var connect = require("./exportEqualMemberMissing_0");
+const connect = require("./exportEqualMemberMissing_0");
 connect().use(connect.static('foo')); // Error	1	The property 'static' does not exist on value of type ''.

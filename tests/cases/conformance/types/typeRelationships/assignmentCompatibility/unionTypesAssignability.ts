@@ -1,4 +1,5 @@
-﻿var unionNumberString: number | string;
+﻿// @target: es2015
+var unionNumberString: number | string;
 class C { }
 class D extends C { foo1() { } }
 class E extends C { foo2() { } }

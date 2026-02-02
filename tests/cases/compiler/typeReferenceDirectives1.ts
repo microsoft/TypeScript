@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true

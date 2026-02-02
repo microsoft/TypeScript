@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 let obj: { f(s: string): void } & Record<string, unknown> = {

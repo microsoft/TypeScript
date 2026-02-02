@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: demo.d.ts
 declare namespace demoNS {
     function f(): void;

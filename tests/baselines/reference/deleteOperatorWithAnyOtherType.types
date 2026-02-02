@@ -3,11 +3,11 @@
 === deleteOperatorWithAnyOtherType.ts ===
 // delete  operator on any type
 
-var ANY: any;
+declare var ANY: any;
 >ANY : any
 >    : ^^^
 
-var ANY1;
+declare var ANY1;
 >ANY1 : any
 >     : ^^^
 
@@ -21,7 +21,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >   : ^^
 
-var obj: () => {};
+declare var obj: () => {};
 >obj : () => {}
 >    : ^^^^^^  
 

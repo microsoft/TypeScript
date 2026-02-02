@@ -1,3 +1,4 @@
+// @target: es2015
 function A() {
   return class T {
      a = arguments

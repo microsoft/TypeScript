@@ -2,7 +2,7 @@
 
 //// [decrementOperatorWithNumberTypeInvalidOperations.ts]
 // -- operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
@@ -49,16 +49,11 @@ NUMBER1--;
 foo()--;
 
 //// [decrementOperatorWithNumberTypeInvalidOperations.js]
-// -- operator on number type
-var NUMBER;
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -69,10 +64,10 @@ var ResultIsNumber2 = NUMBER1--;
 // number type literal
 var ResultIsNumber3 = --1;
 var ResultIsNumber4 = --{ x: 1, y: 2 };
-var ResultIsNumber5 = --{ x: 1, y: function (n) { return n; } };
+var ResultIsNumber5 = --{ x: 1, y: (n) => { return n; } };
 var ResultIsNumber6 = 1--;
 var ResultIsNumber7 = { x: 1, y: 2 }--;
-var ResultIsNumber8 = { x: 1, y: function (n) { return n; } }--;
+var ResultIsNumber8 = { x: 1, y: (n) => { return n; } }--;
 // number type expressions
 var ResultIsNumber9 = --foo();
 var ResultIsNumber10 = --A.foo();

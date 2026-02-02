@@ -183,7 +183,7 @@ namespace WithCandidates {
         }
     }
 
-    var c: C<number>;
+    declare var c: C<number>;
 >c : C<number>
 >  : ^^^^^^^^^
 
@@ -273,7 +273,7 @@ namespace WithCandidates {
         }
     }
 
-    var c2: C2<number, string>;
+    declare var c2: C2<number, string>;
 >c2 : C2<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -346,7 +346,7 @@ namespace WithCandidates {
 >  : ^
         }
     }
-    var c3: C3<number, string>;
+    declare var c3: C3<number, string>;
 >c3 : C3<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 

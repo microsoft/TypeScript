@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////function C(x: number) { }
 ////
 ////namespace C {

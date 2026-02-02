@@ -44,8 +44,8 @@ interface Document2 {
 >Base : Symbol(Base, Decl(overloadingOnConstants1.ts, 0, 0))
 }
 
-var d2: Document2;
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+declare var d2: Document2;
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >Document2 : Symbol(Document2, Decl(overloadingOnConstants1.ts, 3, 41))
 
 // these are ok
@@ -53,28 +53,28 @@ var htmlElement: Base = d2.createElement("yo")
 >htmlElement : Symbol(htmlElement, Decl(overloadingOnConstants1.ts, 15, 3))
 >Base : Symbol(Base, Decl(overloadingOnConstants1.ts, 0, 0))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 >htmlCanvasElement : Symbol(htmlCanvasElement, Decl(overloadingOnConstants1.ts, 16, 3))
 >Derived1 : Symbol(Derived1, Decl(overloadingOnConstants1.ts, 0, 24))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlDivElement: Derived2 = d2.createElement("div");
 >htmlDivElement : Symbol(htmlDivElement, Decl(overloadingOnConstants1.ts, 17, 3))
 >Derived2 : Symbol(Derived2, Decl(overloadingOnConstants1.ts, 1, 41))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlSpanElement: Derived3 = d2.createElement("span");
 >htmlSpanElement : Symbol(htmlSpanElement, Decl(overloadingOnConstants1.ts, 18, 3))
 >Derived3 : Symbol(Derived3, Decl(overloadingOnConstants1.ts, 2, 41))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 // these are errors
@@ -82,27 +82,27 @@ var htmlElement2: Derived1 = d2.createElement("yo")
 >htmlElement2 : Symbol(htmlElement2, Decl(overloadingOnConstants1.ts, 21, 3))
 >Derived1 : Symbol(Derived1, Decl(overloadingOnConstants1.ts, 0, 24))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 >htmlCanvasElement2 : Symbol(htmlCanvasElement2, Decl(overloadingOnConstants1.ts, 22, 3))
 >Derived3 : Symbol(Derived3, Decl(overloadingOnConstants1.ts, 2, 41))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlDivElement2: Derived1 = d2.createElement("div");
 >htmlDivElement2 : Symbol(htmlDivElement2, Decl(overloadingOnConstants1.ts, 23, 3))
 >Derived1 : Symbol(Derived1, Decl(overloadingOnConstants1.ts, 0, 24))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 
 var htmlSpanElement2: Derived1 = d2.createElement("span");
 >htmlSpanElement2 : Symbol(htmlSpanElement2, Decl(overloadingOnConstants1.ts, 24, 3))
 >Derived1 : Symbol(Derived1, Decl(overloadingOnConstants1.ts, 0, 24))
 >d2.createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
->d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 3))
+>d2 : Symbol(d2, Decl(overloadingOnConstants1.ts, 12, 11))
 >createElement : Symbol(Document2.createElement, Decl(overloadingOnConstants1.ts, 5, 21), Decl(overloadingOnConstants1.ts, 6, 47), Decl(overloadingOnConstants1.ts, 7, 44), Decl(overloadingOnConstants1.ts, 8, 45))
 

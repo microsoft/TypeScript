@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @esModuleInterop: true
 // @noUnusedLocals: true
 // @jsx: react-jsx,react-jsxdev

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReturns: true
 declare function log(s: string): void;
 declare function get(): number;

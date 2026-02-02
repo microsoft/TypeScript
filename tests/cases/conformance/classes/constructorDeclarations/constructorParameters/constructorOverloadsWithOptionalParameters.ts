@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C {
     foo: string;
     constructor(x?, y?: any[]); 

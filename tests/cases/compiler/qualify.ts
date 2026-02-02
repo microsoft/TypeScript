@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace M {
     export var m=0;
     export namespace N {
@@ -41,7 +43,7 @@ namespace Everest {
         export interface I4 {
             z;
         }
-        var v1:I4;
+        var v1:I4 = undefined as any;
         var v2:K1.I3=v1;
         var v3:K1.I3[]=v1;
         var v4:()=>K1.I3=v1;
@@ -54,6 +56,6 @@ interface I {
     k;
 }
 
-var y:I;
+var y:I = undefined as any;
 var x:T.I=y;
 

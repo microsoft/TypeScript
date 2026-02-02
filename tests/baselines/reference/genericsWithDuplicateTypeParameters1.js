@@ -21,13 +21,10 @@ var m = {
 //// [genericsWithDuplicateTypeParameters1.js]
 function f() { }
 function f2(a, b) { return null; }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () { };
-    C.prototype.f2 = function (a, b) { return null; };
-    return C;
-}());
+class C {
+    f() { }
+    f2(a, b) { return null; }
+}
 var m = {
     a: function f() { },
     b: function f2(a, b) { return null; }

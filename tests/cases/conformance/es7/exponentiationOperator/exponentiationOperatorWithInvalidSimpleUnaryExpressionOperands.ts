@@ -1,4 +1,5 @@
-﻿var temp: any;
+﻿// @target: es2015
+var temp: any;
 
 // Error: incorrect type on left-hand side 
 (! --temp) ** 3;

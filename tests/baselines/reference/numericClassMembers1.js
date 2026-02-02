@@ -18,24 +18,21 @@ class C236 {
 
 
 //// [numericClassMembers1.js]
-var C234 = /** @class */ (function () {
-    function C234() {
+class C234 {
+    constructor() {
         this[0] = 1;
         this[0.0] = 2;
     }
-    return C234;
-}());
-var C235 = /** @class */ (function () {
-    function C235() {
+}
+class C235 {
+    constructor() {
         this[0.0] = 1;
         this['0'] = 2;
     }
-    return C235;
-}());
-var C236 = /** @class */ (function () {
-    function C236() {
+}
+class C236 {
+    constructor() {
         this['0.0'] = 1;
         this['0'] = 2;
     }
-    return C236;
-}());
+}

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Should all be allowed
 
 namespace M {

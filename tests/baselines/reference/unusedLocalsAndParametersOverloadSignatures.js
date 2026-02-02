@@ -25,24 +25,17 @@ export function genericFunc(details: number, message: any): any {
 }
 
 //// [unusedLocalsAndParametersOverloadSignatures.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-exports.func = func;
-exports.genericFunc = genericFunc;
-function func(details, message) {
+export function func(details, message) {
     return details + message;
 }
-var C = /** @class */ (function () {
-    function C(details, message) {
+export class C {
+    constructor(details, message) {
         details + message;
     }
-    C.prototype.method = function (details, message) {
+    method(details, message) {
         return details + message;
-    };
-    return C;
-}());
-exports.C = C;
-function genericFunc(details, message) {
+    }
+}
+export function genericFunc(details, message) {
     return details + message;
 }

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // call
 interface i1 {
     (i: number, ...arguments); // no error - no code gen

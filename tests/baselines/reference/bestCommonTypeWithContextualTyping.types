@@ -21,7 +21,7 @@ interface Ellement {
 >  : ^^^
 }
 
-var e: Ellement;
+declare var e: Ellement;
 >e : Ellement
 >  : ^^^^^^^^
 

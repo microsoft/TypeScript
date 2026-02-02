@@ -21,11 +21,8 @@ new r.Member();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Member = void 0;
-var Member = /** @class */ (function () {
-    function Member() {
-    }
-    return Member;
-}());
+class Member {
+}
 exports.Member = Member;
 exports.default = Member;
 //// [a.js]
@@ -64,10 +61,10 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b_2 = __importStar(require("./b"));
-var ns = __importStar(require("./b"));
-var r = require("./b");
+const b_1 = require("./b");
+const b_2 = __importStar(require("./b"));
+const ns = __importStar(require("./b"));
+const r = require("./b");
 new b_1.Member();
 new b_2.default();
 new b_2.Member();

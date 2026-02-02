@@ -1,3 +1,4 @@
+// @target: es2015
 var tokens = [{ startIndex: deltaOffset }];
 
 var functions = [function() {

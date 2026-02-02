@@ -9,7 +9,7 @@ class C<T extends Date> {
     f() {
 >f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 0, 25))
 
-        var x: T;
+        var x: T = {} as any;
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 2, 11))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 0, 8))
 
@@ -39,25 +39,25 @@ interface I<T extends Date> {
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 29))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 12))
 }
-var i: I<Date>;
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 3))
+declare var i: I<Date>;
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 11))
 >I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 8, 28))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var r2 = i.foo.notHere();
 >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 14, 3))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 29))
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 3))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 11))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 29))
 
 var r2b = i.foo['notHere']();
 >r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 15, 3))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 29))
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 3))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 13, 11))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 10, 29))
 
-var a: {
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 3))
+declare var a: {
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 11))
 
     <T extends Date>(): T;
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 18, 5))
@@ -66,11 +66,11 @@ var a: {
 }
 var r3: string = a().notHere();
 >r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 20, 3))
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 11))
 
 var r3b: string = a()['notHere']();
 >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 21, 3))
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 17, 11))
 
 var b = {
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 23, 3))

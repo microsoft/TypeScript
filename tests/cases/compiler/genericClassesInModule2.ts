@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: amd
 export class A<T1>{
     constructor( public callback: (self: A<T1>) => void) {

@@ -1,3 +1,4 @@
+// @target: es2015
 //@declaration: true
 // double underscores
 var __proto__ = 10;

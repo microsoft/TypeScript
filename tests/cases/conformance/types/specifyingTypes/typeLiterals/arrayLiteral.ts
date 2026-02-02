@@ -1,3 +1,4 @@
+// @target: es2015
 // valid uses of array literals
 
 var x = [];

@@ -17,34 +17,20 @@ class Property {
     public parent: Module | Class;
 }
 
-var c: Class;
-var p: Property;
+declare var c: Class;
+declare var p: Property;
 c = p;
 p = c;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
-var Module = /** @class */ (function () {
-    function Module() {
-    }
-    return Module;
-}());
-var Namespace = /** @class */ (function () {
-    function Namespace() {
-    }
-    return Namespace;
-}());
-var Class = /** @class */ (function () {
-    function Class() {
-    }
-    return Class;
-}());
-var Property = /** @class */ (function () {
-    function Property() {
-    }
-    return Property;
-}());
-var c;
-var p;
+class Module {
+}
+class Namespace {
+}
+class Class {
+}
+class Property {
+}
 c = p;
 p = c;

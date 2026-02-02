@@ -101,17 +101,11 @@ var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 var r3 = foo3(a); // any
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
+class A2 {
+}
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
@@ -125,11 +119,8 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 var r3 = foo3(a); // any
-var CC = /** @class */ (function () {
-    function CC() {
-    }
-    return CC;
-}());
+class CC {
+}
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

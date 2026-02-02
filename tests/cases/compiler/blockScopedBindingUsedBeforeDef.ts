@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // 1:
 for (let {[a]: a} of [{ }]) continue;
 

@@ -2,7 +2,7 @@
 
 === incrementOperatorWithNumberTypeInvalidOperations.ts ===
 // ++ operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 >       : ^^^^^^
 
@@ -26,7 +26,7 @@ class A {
 >A : A
 >  : ^
 
-    public a: number;
+    public a!: number;
 >a : number
 >  : ^^^^^^
 

@@ -26,7 +26,7 @@ export declare function box<T>(value: T): Box<T>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._ = void 0;
-var boxedBox_1 = require("./boxedBox");
+const boxedBox_1 = require("./boxedBox");
 exports._ = boxedBox_1.boxedBox;
 // At index 83
 /**

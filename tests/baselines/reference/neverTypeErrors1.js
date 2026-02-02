@@ -51,7 +51,7 @@ function func(): { value: Union[] } {
 
 //// [neverTypeErrors1.js]
 function f1() {
-    var x;
+    let x;
     x = 1;
     x = "abc";
     x = false;
@@ -68,12 +68,10 @@ function f3() {
 }
 function f4() {
 }
-for (var _i = 0, _a = f4(); _i < _a.length; _i++) {
-    var n = _a[_i];
-}
-for (var n in f4()) { }
+for (const n of f4()) { }
+for (const n in f4()) { }
 function f5() {
-    var x = []; // Ok
+    let x = []; // Ok
 }
 function func() {
     return {

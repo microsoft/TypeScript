@@ -19,14 +19,11 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 }
 
 //// [narrowingConstrainedTypeParameter.js]
-"use strict";
 // Repro from #10811
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.speak = speak;
 function isPet(pet) {
     return typeof pet.name === "string";
 }
-function speak(pet, voice) {
+export function speak(pet, voice) {
     if (!isPet(pet)) {
         throw new Error("Expected \"pet\" to be a Pet");
     }

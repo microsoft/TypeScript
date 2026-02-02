@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: /a.ts
 import x = require("something");
 export { x };

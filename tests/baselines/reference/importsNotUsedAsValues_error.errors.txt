@@ -13,20 +13,20 @@ error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it
     
 ==== /b.ts (0 errors) ====
     import { A, B } from './a'; // Error
-    let a: A;
-    let b: B;
+    declare let a: A;
+    declare let b: B;
     console.log(a, b);
     
 ==== /c.ts (0 errors) ====
     import Default, * as named from './a'; // Error
-    let a: Default;
-    let b: named.B;
+    declare let a: Default;
+    declare let b: named.B;
     console.log(a, b);
     
 ==== /d.ts (0 errors) ====
     import Default, { A } from './a';
     const a = A;
-    let b: Default;
+    declare let b: Default;
     console.log(a, b);
     
 ==== /e.ts (1 errors) ====
@@ -44,8 +44,8 @@ error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it
     
 ==== /g.ts (0 errors) ====
     import { C } from './a';
-    let c: C;
-    let d: C.Two;
+    declare let c: C;
+    declare let d: C.Two;
     console.log(c, d);
     
 ==== /h.ts (0 errors) ====

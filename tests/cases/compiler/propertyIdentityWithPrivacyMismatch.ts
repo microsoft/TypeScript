@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: commonjs
 // @Filename: propertyIdentityWithPrivacyMismatch_0.ts
 declare module 'mod1' {

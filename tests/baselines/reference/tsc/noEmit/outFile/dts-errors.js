@@ -28,20 +28,17 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m const a = class { private p = 10; };
-[7m [0m [91m      ~[0m
-
-  [96ma.ts[0m:[93m1[0m:[93m7[0m
-    [7m1[0m const a = class { private p = 10; };
-    [7m [0m [96m      ~[0m
-    Add a type annotation to the variable a.
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in a.ts[90m:1[0m
+Found 1 error in tsconfig.json[90m:3[0m
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 
 Program root files: [
@@ -56,7 +53,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -67,18 +64,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m const a = class { private p = 10; };
-[7m [0m [91m      ~[0m
-
-  [96ma.ts[0m:[93m1[0m:[93m7[0m
-    [7m1[0m const a = class { private p = 10; };
-    [7m [0m [96m      ~[0m
-    Add a type annotation to the variable a.
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in a.ts[90m:1[0m
+Found 1 error in tsconfig.json[90m:3[0m
 
 
 
@@ -95,7 +87,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -109,6 +101,14 @@ const a = "hello";
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -124,10 +124,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -135,6 +135,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -150,10 +158,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Emit after fixing error
 
@@ -161,10 +169,18 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 //// [/home/src/projects/outFile.js]
-var a = "hello";
+const a = "hello";
 
 
 //// [/home/src/projects/outFile.d.ts]
@@ -183,10 +199,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
 
@@ -194,6 +210,14 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 
 
 
@@ -209,10 +233,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Introduce error
 
@@ -223,18 +247,13 @@ const a = class { private p = 10; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m const a = class { private p = 10; };
-[7m [0m [91m      ~[0m
-
-  [96ma.ts[0m:[93m1[0m:[93m7[0m
-    [7m1[0m const a = class { private p = 10; };
-    [7m [0m [96m      ~[0m
-    Add a type annotation to the variable a.
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in a.ts[90m:1[0m
+Found 1 error in tsconfig.json[90m:3[0m
 
 
 
@@ -251,7 +270,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -272,18 +291,23 @@ Output::
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in a.ts[90m:1[0m
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:1[0m
+     1  tsconfig.json[90m:3[0m
 
 
 //// [/home/src/projects/outFile.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
+const a = class {
+    p = 10;
+};
 
 
 
@@ -298,7 +322,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
@@ -309,18 +333,13 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m const a = class { private p = 10; };
-[7m [0m [91m      ~[0m
-
-  [96ma.ts[0m:[93m1[0m:[93m7[0m
-    [7m1[0m const a = class { private p = 10; };
-    [7m [0m [96m      ~[0m
-    Add a type annotation to the variable a.
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
-Found 1 error in a.ts[90m:1[0m
+Found 1 error in tsconfig.json[90m:3[0m
 
 
 
@@ -337,7 +356,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /node_modules/pkg/index.d.ts
 export declare function pkg(): "pkg";
 

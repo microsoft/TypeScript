@@ -1,2 +1,2 @@
-// @target: es5
+// @target: es5, es2015
 var v = { get foo(v: number) { } };

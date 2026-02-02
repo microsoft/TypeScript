@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // #42957
 
 // @filename: errors.d.ts

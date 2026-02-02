@@ -83,6 +83,8 @@ Found 1 error.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project1/src/a.d.ts]
 export declare const a = 10;
 
@@ -156,21 +158,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -189,7 +191,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -199,7 +201,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -257,7 +259,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -267,7 +269,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -337,21 +339,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -370,7 +372,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -380,7 +382,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -454,21 +456,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -487,7 +489,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -497,7 +499,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -550,60 +552,39 @@ Found 1 error.
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/solution/project1/src/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.aaa = exports.a = void 0;
-exports.a = 10;
-var aLocal = 10;
-var aa = 10;
-exports.aaa = 10;
+export const a = 10;
+const aLocal = 10;
+const aa = 10;
+export const aaa = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
+export const b = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-var a_1 = require("./a");
-exports.c = a_1.a;
+import { a } from "./a";
+export const c = a;
 
 
 //// [/home/src/workspaces/solution/project1/src/d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.d = void 0;
-var b_1 = require("./b");
-exports.d = b_1.b;
+import { b } from "./b";
+export const d = b;
 
 
 //// [/home/src/workspaces/solution/project2/src/e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e = void 0;
-exports.e = 10;
+export const e = 10;
 
 
 //// [/home/src/workspaces/solution/project2/src/f.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-var a_1 = require("../../project1/src/a");
-exports.f = a_1.a;
+import { a } from "../../project1/src/a";
+export const f = a;
 
 
 //// [/home/src/workspaces/solution/project2/src/g.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.g = void 0;
-var b_1 = require("../../project1/src/b");
-exports.g = b_1.b;
+import { b } from "../../project1/src/b";
+export const g = b;
 
 
 
@@ -620,21 +601,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -652,7 +633,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -662,7 +643,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -720,7 +701,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -730,7 +711,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -787,12 +768,9 @@ Found 1 error.
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/solution/project1/src/a.js] file written with same contents
 //// [/home/src/workspaces/solution/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
+export const b = 10;
+const bLocal = 10;
+const alocal = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js] file written with same contents
@@ -814,21 +792,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -846,7 +824,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -856,7 +834,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -926,21 +904,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -959,7 +937,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -969,7 +947,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -1043,21 +1021,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -1076,7 +1054,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -1086,7 +1064,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)
@@ -1148,15 +1126,12 @@ export declare const a2 = 10;
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/solution/project1/src/a.js] file written with same contents
 //// [/home/src/workspaces/solution/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a2 = exports.aaaaa = exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
-var aaaa = 10;
-exports.aaaaa = 10;
-exports.a2 = 10;
+export const b = 10;
+const bLocal = 10;
+const alocal = 10;
+const aaaa = 10;
+export const aaaaa = 10;
+export const a2 = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js] file written with same contents
@@ -1178,21 +1153,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project1/src/a.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/b.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/c.ts (computed .d.ts during emit)
@@ -1210,7 +1185,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -1220,7 +1195,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/solution/project2/src/e.ts (computed .d.ts during emit)
 /home/src/workspaces/solution/project1/src/a.d.ts (used version)
 /home/src/workspaces/solution/project2/src/f.ts (computed .d.ts during emit)

@@ -1,3 +1,4 @@
+// @target: es2015
 class foo<T>
 {
     bar(): foo2<T[]> { return null; }

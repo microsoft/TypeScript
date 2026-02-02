@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 
 // Arrow function used in with statement
 with (window) {

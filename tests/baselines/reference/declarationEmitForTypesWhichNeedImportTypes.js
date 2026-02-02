@@ -23,7 +23,7 @@ function createNamed() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = void 0;
-var b_1 = require("./b");
+const b_1 = require("./b");
 exports.Value = (0, b_1.createNamed)();
 
 

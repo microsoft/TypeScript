@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 export function f1() {
     const localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";

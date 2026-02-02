@@ -8,12 +8,9 @@ class C {
 }
 
 //// [declFileForClassWithPrivateOverloadedFunction.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) { };
-    return C;
-}());
+class C {
+    foo(x) { }
+}
 
 
 //// [declFileForClassWithPrivateOverloadedFunction.d.ts]

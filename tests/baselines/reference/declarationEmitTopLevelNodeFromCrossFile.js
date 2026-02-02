@@ -20,12 +20,12 @@ export const x = { p: fn };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = void 0;
-exports.fn = { o: function (a) { } };
+exports.fn = { o: (a) => { } };
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.m = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.m = {
     /**
     * leading doc for prop

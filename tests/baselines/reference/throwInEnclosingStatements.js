@@ -52,7 +52,7 @@ var aa = {
 function fn(x) {
     throw x;
 }
-(function (x) { throw x; });
+(x) => { throw x; };
 var y;
 switch (y) {
     case 'a':
@@ -77,18 +77,17 @@ var j = 0;
 while (j < 0) {
     throw j;
 }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    biz() {
+        throw this.value;
+    }
+    constructor() {
         throw this;
     }
-    C.prototype.biz = function () {
-        throw this.value;
-    };
-    return C;
-}());
+}
 var aa = {
     id: 12,
-    biz: function () {
+    biz() {
         throw this;
     }
 };

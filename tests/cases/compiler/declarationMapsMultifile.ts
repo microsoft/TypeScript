@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @declaration: true
 // @declarationMap: true
 // @filename: a.ts

@@ -1,7 +1,6 @@
+// @target: es2015
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
 // @allowJs: true
 // @outDir: ./out
 // @checkJs: true
@@ -17,6 +16,7 @@ export interface Prop {
 }
 
 // @filename: file.jsx
+/// <reference path="/.lib/react.d.ts" />
 import { MyComp, Prop } from "./component";
 import * as React from "react";
 

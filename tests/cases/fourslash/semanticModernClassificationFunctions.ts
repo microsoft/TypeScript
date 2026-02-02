@@ -1,3 +1,5 @@
+// @lib: es5
+
 //// function foo(p1) {
 ////   return foo(Math.abs(p1))
 //// }

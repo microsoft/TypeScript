@@ -13,7 +13,7 @@ class C {
     private static foo() { }
 }
 
-var c: C;
+declare var c: C;
 // all errors
 c.x;
 c.y;
@@ -26,26 +26,14 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsPrivate.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "y", {
-        get: function () { return null; },
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.foo = function () { };
-    Object.defineProperty(C, "b", {
-        get: function () { return null; },
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.foo = function () { };
-    return C;
-}());
-var c;
+class C {
+    get y() { return null; }
+    set y(x) { }
+    foo() { }
+    static get b() { return null; }
+    static set b(x) { }
+    static foo() { }
+}
 // all errors
 c.x;
 c.y;

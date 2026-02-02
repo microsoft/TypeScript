@@ -1,3 +1,4 @@
+// @target: es2015
 // @outDir: testfiles
 // @sourcemap: true
 // @useCaseSensitiveFileNames: false

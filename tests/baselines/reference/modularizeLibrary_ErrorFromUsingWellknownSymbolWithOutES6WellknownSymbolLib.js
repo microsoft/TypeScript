@@ -14,5 +14,5 @@ function f(x, y, z) {
     return Array.from(arguments);
 }
 f(1, 2, 3); // no error
-var a = ['c', 'd'];
+let a = ['c', 'd'];
 a[Symbol.isConcatSpreadable] = false;

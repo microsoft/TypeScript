@@ -1,5 +1,6 @@
+// @target: es2015
 // @lib: es5
-module M
+namespace M
 {
     export class Test
     {

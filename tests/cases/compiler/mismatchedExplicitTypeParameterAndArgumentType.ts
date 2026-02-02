@@ -1,3 +1,4 @@
+// @target: es2015
 function map<T, U>(xs: T[], f: (x: T) => U) {
     var ys: U[] = [];
     xs.forEach(x => ys.push(f(x)));

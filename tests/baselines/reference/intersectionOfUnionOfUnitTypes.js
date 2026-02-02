@@ -29,21 +29,21 @@ let z5: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E) & (E.D | E.E |
 
 //// [intersectionOfUnionOfUnitTypes.js]
 // @strict
-var x0; // 'a' | 'b' | 'c'
-var x1; // 'b' | 'c'
-var x2; // 'c'
-var x3; // never
-var x4; // 'c'
-var x5; // never
-var y0; // 0 | 1 | 2
-var y1; // 1 | 2
-var y2; // 2
-var y3; // never
-var y4; // 2
-var y5; // never
-var z0; // E.A | E.B | E.C
-var z1; // E.B | E.C
-var z2; // E.C
-var z3; // never
-var z4; // E.C
-var z5; // never
+let x0; // 'a' | 'b' | 'c'
+let x1; // 'b' | 'c'
+let x2; // 'c'
+let x3; // never
+let x4; // 'c'
+let x5; // never
+let y0; // 0 | 1 | 2
+let y1; // 1 | 2
+let y2; // 2
+let y3; // never
+let y4; // 2
+let y5; // never
+let z0; // E.A | E.B | E.C
+let z1; // E.B | E.C
+let z2; // E.C
+let z3; // never
+let z4; // E.C
+let z5; // never

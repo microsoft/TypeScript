@@ -18,7 +18,7 @@ namespace App {
 //// [localImportNameVsGlobalName.js]
 var Keyboard;
 (function (Keyboard) {
-    var Key;
+    let Key;
     (function (Key) {
         Key[Key["UP"] = 0] = "UP";
         Key[Key["DOWN"] = 1] = "DOWN";

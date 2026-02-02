@@ -1,3 +1,4 @@
+// @target: es2015
 type Foo = FooBase | FooArray;
 type FooBase = string | false;
 type FooArray = FooBase[];

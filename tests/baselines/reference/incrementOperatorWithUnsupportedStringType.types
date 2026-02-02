@@ -2,7 +2,7 @@
 
 === incrementOperatorWithUnsupportedStringType.ts ===
 // ++ operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 >       : ^^^^^^
 
@@ -26,7 +26,7 @@ class A {
 >A : A
 >  : ^
 
-    public a: string;
+    public a!: string;
 >a : string
 >  : ^^^^^^
 

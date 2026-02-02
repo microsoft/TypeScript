@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     export interface X { s: string }
     export var a = 10;

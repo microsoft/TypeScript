@@ -1,4 +1,5 @@
-// @target: es5
+// @module: commonjs
+// @target: es5, es2015
 
 export const exp0 = "test";
 export const exp1 = "test";

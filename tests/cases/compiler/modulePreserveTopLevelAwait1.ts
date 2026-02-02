@@ -1,3 +1,4 @@
+// @strict: false
 // @module: preserve
 // @target: es2016, esnext
 // @noEmit: true

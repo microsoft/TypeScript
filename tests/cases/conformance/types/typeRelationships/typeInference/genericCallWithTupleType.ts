@@ -1,9 +1,11 @@
-﻿interface I<T, U> {
+﻿// @target: es2015
+interface I<T, U> {
     tuple1: [T, U];
 } 
 
 var i1: I<string, number>;
-var i2: I<{}, {}>;
+declare var i1: I<string, number>;
+declare var i2: I<{}, {}>;
 
 // no error
 i1.tuple1 = ["foo", 5];

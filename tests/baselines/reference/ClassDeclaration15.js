@@ -7,8 +7,6 @@ class C {
 }
 
 //// [ClassDeclaration15.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+    constructor() { }
+}

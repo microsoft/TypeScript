@@ -1,3 +1,4 @@
+// @target: es2015
 // fixes #12200
 function f() {
     let n: number = 12;

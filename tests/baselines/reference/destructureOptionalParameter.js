@@ -26,8 +26,7 @@ interface QueryMetadataFactory {
 
 
 //// [destructureOptionalParameter.js]
-function f2(_a) {
-    var _b = _a === void 0 ? { a: 0, b: 0 } : _a, a = _b.a, b = _b.b;
+function f2({ a, b } = { a: 0, b: 0 }) {
     a;
     b;
 }

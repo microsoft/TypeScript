@@ -21,9 +21,9 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
         a5: new (x?: number, y?: number) => number;
         a6: new (x: number, y: number) => number;
     }
-    var b: Base;
+    declare var b: Base;
     
-    var a: new () => number;
+    declare var a: new () => number;
         a = b.a; // ok
         a = b.a2; // ok
         a = b.a3; // error
@@ -40,7 +40,7 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 0.
     
-    var a2: new (x?: number) => number; 
+    declare var a2: new (x?: number) => number; 
         a2 = b.a; // ok
         a2 = b.a2; // ok
         a2 = b.a3; // ok
@@ -51,7 +51,7 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
-    var a3: new (x: number) => number; 
+    declare var a3: new (x: number) => number; 
         a3 = b.a; // ok
         a3 = b.a2; // ok
         a3 = b.a3; // ok
@@ -62,7 +62,7 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
-    var a4: new (x: number, y?: number) => number;
+    declare var a4: new (x: number, y?: number) => number;
         a4 = b.a; // ok
         a4 = b.a2; // ok
         a4 = b.a3; // ok
@@ -70,7 +70,7 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
         a4 = b.a5; // ok
         a4 = b.a6; // ok
     
-    var a5: new (x?: number, y?: number) => number;
+    declare var a5: new (x?: number, y?: number) => number;
         a5 = b.a; // ok
         a5 = b.a2; // ok
         a5 = b.a3; // ok

@@ -8,7 +8,7 @@ assignmentCompatability33.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOpt
         export var __val__obj4 = obj4;
     }
     namespace __test2__ {
-        export var obj: { <Tstring>(a: Tstring): Tstring; };
+        export declare var obj: { <Tstring>(a: Tstring): Tstring; };
         export var __val__obj = obj;
     }
     __test2__.__val__obj = __test1__.__val__obj4

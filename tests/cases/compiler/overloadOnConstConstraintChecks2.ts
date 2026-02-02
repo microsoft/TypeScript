@@ -1,3 +1,4 @@
+// @target: es2015
 class A {} 
 class B extends A {}
 class C extends A {

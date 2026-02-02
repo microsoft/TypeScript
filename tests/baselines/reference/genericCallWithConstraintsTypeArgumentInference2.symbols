@@ -11,7 +11,7 @@ function foo<T, U extends T>(t: T) {
 >t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference2.ts, 2, 29))
 >T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference2.ts, 2, 13))
 
-    var u: U;
+    var u!: U;
 >u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference2.ts, 3, 7))
 >U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference2.ts, 2, 15))
 

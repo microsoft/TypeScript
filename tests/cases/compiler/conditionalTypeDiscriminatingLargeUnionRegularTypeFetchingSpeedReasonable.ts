@@ -1,3 +1,4 @@
+// @target: es2015
 type BigUnion =
     {
         name: '0';

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////interface I<T> {
 ////    [/*1*/]: T;
 ////    [/*2*/]: T;

@@ -1,3 +1,4 @@
+// @target: es2015
 declare function f<T>(x: { prop: T }): T;
 
 declare const a: { prop: string } & { prop: number };

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module:amd
 // @Filename: file1.ts
 export namespace elaborate.nested.mod.name {

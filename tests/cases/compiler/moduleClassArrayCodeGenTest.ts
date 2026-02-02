@@ -1,6 +1,7 @@
+// @target: es2015
 // Invalid code gen for Array of Module class
 
-module M
+namespace M
 {
     export class A { }
     class B{ }

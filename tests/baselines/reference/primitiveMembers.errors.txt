@@ -15,7 +15,7 @@ primitiveMembers.ts(21,10): error TS2872: This kind of expression is always trut
     x.toString();
     
     var n = 0;
-    var N: Number;
+    declare var N: Number;
     
     n = N;  // should not work, as 'number' has a different brand
     ~

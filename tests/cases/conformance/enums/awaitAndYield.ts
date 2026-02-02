@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES2019
 // @noTypesAndSymbols: true
 async function* test(x: Promise<number>) {

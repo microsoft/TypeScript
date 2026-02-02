@@ -1,3 +1,4 @@
+// @target: es2015
 // indexers should behave like other members when merging interface declarations
 
 interface A {

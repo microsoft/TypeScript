@@ -14,8 +14,7 @@ export type D =
   | /*leading2*/ 2 /*trailing2*/;
 
 //// [unionTypeWithLeadingOperator.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [unionTypeWithLeadingOperator.d.ts]

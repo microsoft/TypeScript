@@ -1,3 +1,4 @@
+// @target: es2015
 // This would be classed as moduleResolutionKind: Classic
 // @module: es2015
 

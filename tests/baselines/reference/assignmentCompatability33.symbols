@@ -23,16 +23,16 @@ namespace __test1__ {
 namespace __test2__ {
 >__test2__ : Symbol(__test2__, Decl(assignmentCompatability33.ts, 3, 1))
 
-    export var obj: { <Tstring>(a: Tstring): Tstring; };
->obj : Symbol(obj, Decl(assignmentCompatability33.ts, 5, 14))
->Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 23))
->a : Symbol(a, Decl(assignmentCompatability33.ts, 5, 32))
->Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 23))
->Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 23))
+    export declare var obj: { <Tstring>(a: Tstring): Tstring; };
+>obj : Symbol(obj, Decl(assignmentCompatability33.ts, 5, 22))
+>Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 31))
+>a : Symbol(a, Decl(assignmentCompatability33.ts, 5, 40))
+>Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 31))
+>Tstring : Symbol(Tstring, Decl(assignmentCompatability33.ts, 5, 31))
 
     export var __val__obj = obj;
 >__val__obj : Symbol(__val__obj, Decl(assignmentCompatability33.ts, 6, 14))
->obj : Symbol(obj, Decl(assignmentCompatability33.ts, 5, 14))
+>obj : Symbol(obj, Decl(assignmentCompatability33.ts, 5, 22))
 }
 __test2__.__val__obj = __test1__.__val__obj4
 >__test2__.__val__obj : Symbol(__test2__.__val__obj, Decl(assignmentCompatability33.ts, 6, 14))

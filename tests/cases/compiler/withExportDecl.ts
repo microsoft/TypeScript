@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: amd
 // @declaration: true
 var simpleVar;

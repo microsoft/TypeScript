@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M1 {
  export class A {
  }

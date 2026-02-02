@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: class.ts
 namespace X.Y {
     export class Point {

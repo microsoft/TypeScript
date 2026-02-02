@@ -86,14 +86,14 @@ namespace MemberWithConstructSignature {
 >T : Symbol(T, Decl(constructSignatureAssignabilityInInheritance.ts, 39, 17))
     }
 
-    var b: Base;
->b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance.ts, 42, 7))
+    declare var b: Base;
+>b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance.ts, 42, 15))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance.ts, 34, 40))
 
     var r = new b.a(1);
 >r : Symbol(r, Decl(constructSignatureAssignabilityInInheritance.ts, 43, 7))
 >b.a : Symbol(Base.a, Decl(constructSignatureAssignabilityInInheritance.ts, 35, 20))
->b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance.ts, 42, 7))
+>b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance.ts, 42, 15))
 >a : Symbol(Base.a, Decl(constructSignatureAssignabilityInInheritance.ts, 35, 20))
 
     // S's

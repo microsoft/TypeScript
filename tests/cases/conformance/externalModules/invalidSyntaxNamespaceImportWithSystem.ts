@@ -1,4 +1,5 @@
-﻿// @module: system
+﻿// @target: es2015
+// @module: system
 // @filename: 0.ts
 export class C { }
 

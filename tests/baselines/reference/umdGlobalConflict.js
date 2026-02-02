@@ -21,4 +21,4 @@ const p: string = Alpha.x;
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [global.js]
 // Should be OK, first in wins
-var p = Alpha.x;
+const p = Alpha.x;

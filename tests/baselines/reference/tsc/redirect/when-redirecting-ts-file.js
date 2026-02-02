@@ -56,28 +56,22 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/out/copy1/node_modules/target/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 1;
+export const a = 1;
 
 
 //// [/home/src/workspaces/project/out/copy1/node_modules/target/import.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/workspaces/project/out/copy2/node_modules/target/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 1;
+export const a = 1;
 
 
 //// [/home/src/workspaces/project/out/copy2/node_modules/target/import.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 

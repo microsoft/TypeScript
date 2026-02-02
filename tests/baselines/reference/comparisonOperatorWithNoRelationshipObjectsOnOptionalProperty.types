@@ -13,11 +13,11 @@ interface B1 {
 >  : ^^^^^^
 }
 
-var a: A1;
+declare var a: A1;
 >a : A1
 >  : ^^
 
-var b: B1;
+declare var b: B1;
 >b : B1
 >  : ^^
 

@@ -4,7 +4,7 @@ logicalNotOperatorInvalidOperations.ts(11,16): error TS1109: Expression expected
 
 ==== logicalNotOperatorInvalidOperations.ts (2 errors) ====
     // Unary operator !
-    var b: number;
+    declare var b: number;
     
     // operand before !
     var BOOLEAN1 = b!;  //expect error

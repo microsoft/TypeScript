@@ -1,9 +1,9 @@
 //// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts] ////
 
 //// [stringLiteralsWithSwitchStatements03.ts]
-let x: "foo";
-let y: "foo" | "bar"; 
-let z: "bar";
+declare let x: "foo";
+declare let y: "foo" | "bar";
+declare let z: "bar";
 
 declare function randBool(): boolean;
 
@@ -30,9 +30,6 @@ switch (x) {
 
 
 //// [stringLiteralsWithSwitchStatements03.js]
-var x;
-var y;
-var z;
 switch (x) {
     case randBool() ? "foo" : "baz":
         break;

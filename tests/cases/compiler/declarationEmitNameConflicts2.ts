@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 namespace X.Y.base {
     export function f() { }

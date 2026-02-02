@@ -1,8 +1,9 @@
+// @target: es2015
 // @noImplicitAny: true
 // @noImplicitThis: true
 
 class C {
- x: number;
+ x!: number;
     constructor() {
         this.x = (() => {
    var x = 1;

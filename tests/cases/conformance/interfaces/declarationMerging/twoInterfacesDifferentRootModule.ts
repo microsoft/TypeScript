@@ -1,3 +1,4 @@
+// @target: es2015
 // two interfaces with different root modules should not merge
 
 namespace M {
@@ -15,7 +16,7 @@ namespace M2 {
         bar: number;
     }
 
-    var a: A;
+    declare var a: A;
     var r1 = a.foo; // error
     var r2 = a.bar; 
 
@@ -23,7 +24,7 @@ namespace M2 {
         bar: T;
     }
 
-    var b: B<string>;
+    declare var b: B<string>;
     var r3 = b.foo; // error
     var r4 = b.bar; 
 }

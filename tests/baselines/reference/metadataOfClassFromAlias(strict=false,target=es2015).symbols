@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/metadataOfClassFromAlias.ts] ////
+
+=== auxiliary.ts ===
+export class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(auxiliary.ts, 0, 0))
+
+    field: string;
+>field : Symbol(SomeClass.field, Decl(auxiliary.ts, 0, 24))
+}
+
+=== testA.ts ===
+import { SomeClass } from './auxiliary';
+>SomeClass : Symbol(SomeClass, Decl(testA.ts, 0, 8))
+
+function annotation(): PropertyDecorator {
+>annotation : Symbol(annotation, Decl(testA.ts, 0, 40))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
+
+    return (target: any): void => { };
+>target : Symbol(target, Decl(testA.ts, 2, 12))
+}
+export class ClassA {
+>ClassA : Symbol(ClassA, Decl(testA.ts, 3, 1))
+
+    @annotation() aaa: SomeClass;
+>annotation : Symbol(annotation, Decl(testA.ts, 0, 40))
+>aaa : Symbol(ClassA.aaa, Decl(testA.ts, 4, 21))
+>SomeClass : Symbol(SomeClass, Decl(testA.ts, 0, 8))
+}
+
+=== testB.ts ===
+import { SomeClass } from './auxiliary';
+>SomeClass : Symbol(SomeClass, Decl(testB.ts, 0, 8))
+
+function annotation(): PropertyDecorator {
+>annotation : Symbol(annotation, Decl(testB.ts, 0, 40))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
+
+    return (target: any): void => { };
+>target : Symbol(target, Decl(testB.ts, 2, 12))
+}
+export class ClassB {
+>ClassB : Symbol(ClassB, Decl(testB.ts, 3, 1))
+
+    @annotation() bbb: SomeClass | null;
+>annotation : Symbol(annotation, Decl(testB.ts, 0, 40))
+>bbb : Symbol(ClassB.bbb, Decl(testB.ts, 4, 21))
+>SomeClass : Symbol(SomeClass, Decl(testB.ts, 0, 8))
+}

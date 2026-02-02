@@ -1,3 +1,4 @@
+// @target: es2015
 function f1(): void {
     for (let i = 0; i < 1; i++)
         type foo = [];

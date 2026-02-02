@@ -21,8 +21,7 @@ function sum(n, v, k) {
     n += v[k]; // += should work the same way
 }
 function realSum(n, vs, k) {
-    for (var _i = 0, vs_1 = vs; _i < vs_1.length; _i++) {
-        var v = vs_1[_i];
+    for (const v of vs) {
         n = n + v[k];
         n += v[k];
     }

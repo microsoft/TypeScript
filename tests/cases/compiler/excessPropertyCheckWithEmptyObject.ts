@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #14910
 
 // Excess property error expected here

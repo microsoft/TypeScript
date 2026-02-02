@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: true
 // @jsx: react
 // @filename: /node_modules/react/index.d.ts

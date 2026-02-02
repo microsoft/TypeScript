@@ -1,3 +1,4 @@
+// @target: es2015
 class Signature {
     public parameters: ParameterSymbol[] = null;
 }

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 declare function dec<T>(target: T): T;
 

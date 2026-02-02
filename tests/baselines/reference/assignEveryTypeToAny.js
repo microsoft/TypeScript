@@ -84,17 +84,14 @@ var f = E.A;
 x = f;
 var g;
 x = g;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var h;
 x = h;
 var i;
 x = i;
-x = { f: function () { return 1; } };
-x = { f: function (x) { return x; } };
+x = { f() { return 1; } };
+x = { f(x) { return x; } };
 function j(a) {
     x = a;
 }

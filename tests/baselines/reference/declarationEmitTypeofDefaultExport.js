@@ -11,11 +11,8 @@ export default a.default;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.default = C;
 ;
 //// [b.js]
@@ -54,7 +51,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = __importStar(require("./a"));
+const a = __importStar(require("./a"));
 exports.default = a.default;
 
 

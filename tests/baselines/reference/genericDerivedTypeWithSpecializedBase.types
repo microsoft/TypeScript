@@ -21,11 +21,11 @@ class B<U> extends A<string> {
 >  : ^
 }
 
-var x: A<number>;
+declare var x: A<number>;
 >x : A<number>
 >  : ^^^^^^^^^
 
-var y: B<number>;
+declare var y: B<number>;
 >y : B<number>
 >  : ^^^^^^^^^
 

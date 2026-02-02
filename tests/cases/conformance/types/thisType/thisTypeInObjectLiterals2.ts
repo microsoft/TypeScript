@@ -1,6 +1,6 @@
 // @declaration: true
 // @strict: true
-// @target: es5
+// @target: es5, es2015
 
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.

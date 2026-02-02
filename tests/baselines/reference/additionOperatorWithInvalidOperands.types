@@ -33,19 +33,19 @@ namespace M { export var a }
 >a : any
 >  : ^^^
 
-var a: boolean;
+declare var a: boolean;
 >a : boolean
 >  : ^^^^^^^
 
-var b: number;
+declare var b: number;
 >b : number
 >  : ^^^^^^
 
-var c: Object;
+declare var c: Object;
 >c : Object
 >  : ^^^^^^
 
-var d: Number;
+declare var d: Number;
 >d : Number
 >  : ^^^^^^
 

@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: true
 // @jsx: preserve,react-jsx
 // @jsxImportSource: @emotion/react

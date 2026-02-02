@@ -35,7 +35,7 @@ console.log(foo);
 //// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "rootDir": "./",
     "composite": true,
@@ -80,33 +80,35 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/strings/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 project/strings/foo.json
   Matched by include pattern 'foo.json' in 'project/strings/tsconfig.json'
 [[90mHH:MM:SS AM[0m] Project 'project/main/tsconfig.json' is out of date because output file 'project/main/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/main/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 project/strings/foo.json
   Imported via '../strings/foo.json' from file 'project/main/index.ts'
 project/main/index.ts
   Matched by include pattern './**/*.ts' in 'project/main/tsconfig.json'
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project/strings/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.es6.d.ts","./foo.json"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":2},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/strings/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.es6.d.ts",
     "./foo.json"
   ],
   "fileInfos": {
-    "../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -132,16 +134,16 @@ project/main/index.ts
     "module": 1,
     "rootDir": "..",
     "strict": true,
-    "target": 1
+    "target": 2
   },
   "version": "FakeTSVersion",
-  "size": 701
+  "size": 705
 }
 
 //// [/home/src/workspaces/solution/project/main/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_json_1 = require("../strings/foo.json");
+const foo_json_1 = require("../strings/foo.json");
 console.log(foo_json_1.foo);
 
 
@@ -150,12 +152,12 @@ export {};
 
 
 //// [/home/src/workspaces/solution/project/main/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}",{"version":"-6647471184-import { foo } from '../strings/foo.json';\nconsole.log(foo);\n","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.es6.d.ts","../strings/foo.json","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}",{"version":"-6647471184-import { foo } from '../strings/foo.json';\nconsole.log(foo);\n","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":2},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.es6.d.ts",
     "../strings/foo.json",
     "./index.ts"
   ],
@@ -165,7 +167,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -199,7 +201,7 @@ export {};
     "module": 1,
     "rootDir": "..",
     "strict": true,
-    "target": 1
+    "target": 2
   },
   "referencedMap": {
     "./index.ts": [
@@ -208,7 +210,7 @@ export {};
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 934
+  "size": 938
 }
 
 

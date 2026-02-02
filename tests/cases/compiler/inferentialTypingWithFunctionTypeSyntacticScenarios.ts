@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 declare function map<T, U>(array: T, func: (x: T) => U): U;

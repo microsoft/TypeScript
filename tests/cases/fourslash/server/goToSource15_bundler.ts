@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "esnext", "moduleResolution": "bundler" } }
+//// { "compilerOptions": { "module": "esnext", "moduleResolution": "bundler", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/react/package.json
 //// { "name": "react", "version": "16.8.6", "main": "index.js" }

@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }

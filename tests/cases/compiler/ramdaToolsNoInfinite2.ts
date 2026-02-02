@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare module "Any/Kind" {
     import { Extends } from "Any/Extends";

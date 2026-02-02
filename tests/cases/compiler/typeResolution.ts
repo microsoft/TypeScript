@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: amd
 // @sourcemap: true
 export namespace TopLevelModule1 {

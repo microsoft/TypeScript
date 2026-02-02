@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @skipLibCheck: true
 // @noImplicitAny:true

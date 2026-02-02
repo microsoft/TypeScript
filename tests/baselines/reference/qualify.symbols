@@ -94,9 +94,10 @@ namespace Everest {
             z;
 >z : Symbol(I4.z, Decl(qualify.ts, 40, 29))
         }
-        var v1:I4;
+        var v1:I4 = undefined as any;
 >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
 >I4 : Symbol(I4, Decl(qualify.ts, 39, 25))
+>undefined : Symbol(undefined)
 
         var v2:K1.I3=v1;
 >v2 : Symbol(v2, Decl(qualify.ts, 44, 11))
@@ -139,9 +140,10 @@ interface I {
 >k : Symbol(I.k, Decl(qualify.ts, 52, 13))
 }
 
-var y:I;
+var y:I = undefined as any;
 >y : Symbol(y, Decl(qualify.ts, 56, 3))
 >I : Symbol(I, Decl(qualify.ts, 50, 1))
+>undefined : Symbol(undefined)
 
 var x:T.I=y;
 >x : Symbol(x, Decl(qualify.ts, 57, 3))

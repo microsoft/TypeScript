@@ -1,3 +1,4 @@
+// @target: es2015
 // all errors imported modules conflict with local variables
 
 namespace A {

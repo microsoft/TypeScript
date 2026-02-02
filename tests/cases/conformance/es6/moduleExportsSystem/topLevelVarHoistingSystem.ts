@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 // @module: system
 // @noTypesAndSymbols: true

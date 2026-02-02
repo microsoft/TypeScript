@@ -1,3 +1,4 @@
+// @target: es2015
 // We allow ambient classes and functions to merge, this way callable classes
 // which are also namespaces can be represented in declaration files
 declare function Foo (x: number): Foo.Inst;

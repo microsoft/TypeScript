@@ -97,47 +97,14 @@ var s = fn5((n) => n.substr(0));
 
 
 //// [overloadResolution.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var SomeBase = /** @class */ (function () {
-    function SomeBase() {
-    }
-    return SomeBase;
-}());
-var SomeDerived1 = /** @class */ (function (_super) {
-    __extends(SomeDerived1, _super);
-    function SomeDerived1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived1;
-}(SomeBase));
-var SomeDerived2 = /** @class */ (function (_super) {
-    __extends(SomeDerived2, _super);
-    function SomeDerived2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived2;
-}(SomeBase));
-var SomeDerived3 = /** @class */ (function (_super) {
-    __extends(SomeDerived3, _super);
-    function SomeDerived3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return SomeDerived3;
-}(SomeBase));
+class SomeBase {
+}
+class SomeDerived1 extends SomeBase {
+}
+class SomeDerived2 extends SomeBase {
+}
+class SomeDerived3 extends SomeBase {
+}
 function fn1() { return null; }
 var s = fn1(undefined);
 var s;
@@ -179,5 +146,5 @@ fn4(null, null); // Error
 fn4(true, null); // Error
 fn4(null, true); // Error
 function fn5() { return undefined; }
-var n = fn5(function (n) { return n.toFixed(); });
-var s = fn5(function (n) { return n.substr(0); });
+var n = fn5((n) => n.toFixed());
+var s = fn5((n) => n.substr(0));

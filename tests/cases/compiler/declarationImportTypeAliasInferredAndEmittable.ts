@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @declaration: true
 // @filename: foo.ts
 class Conn {

@@ -1,3 +1,4 @@
+// @target: es2015
 const a = 'a';
 const b = 'b';
 const d = 'd';

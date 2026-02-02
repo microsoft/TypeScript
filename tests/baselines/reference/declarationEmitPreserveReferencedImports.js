@@ -21,13 +21,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.o = void 0;
-var o = function (o) { return function () { return null; }; };
+const o = (o) => () => null;
 exports.o = o;
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
-var decl_1 = require("./decl");
+const decl_1 = require("./decl");
 exports.f = { o: (0, decl_1.o)({ v: null }) };
 
 

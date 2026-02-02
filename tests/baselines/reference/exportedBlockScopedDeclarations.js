@@ -20,19 +20,19 @@ namespace NS1 {
 }
 
 //// [exportedBlockScopedDeclarations.js]
-var foo = foo; // compile error
-export var bar = bar; // should be compile error
+const foo = foo; // compile error
+export const bar = bar; // should be compile error
 function f() {
-    var bar = bar; // compile error
+    const bar = bar; // compile error
 }
 var NS;
 (function (NS) {
     NS.bar = NS.bar; // should be compile error
 })(NS || (NS = {}));
-var foo1 = foo1; // compile error
-export var bar1 = bar1; // should be compile error
+let foo1 = foo1; // compile error
+export let bar1 = bar1; // should be compile error
 function f1() {
-    var bar1 = bar1; // compile error
+    let bar1 = bar1; // compile error
 }
 var NS1;
 (function (NS1) {

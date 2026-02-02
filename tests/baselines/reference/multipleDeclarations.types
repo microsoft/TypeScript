@@ -9,6 +9,7 @@ function C() {
 >this.m = null : null
 >              : ^^^^
 >this.m : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >m : any
@@ -18,6 +19,7 @@ C.prototype.m = function() {
 >C.prototype.m = function() {    this.nothing();} : () => void
 >                                                 : ^^^^^^^^^^
 >C.prototype.m : any
+>              : ^^^
 >C.prototype : any
 >            : ^^^
 >C : typeof C
@@ -30,8 +32,10 @@ C.prototype.m = function() {
 >                                 : ^^^^^^^^^^
 
     this.nothing();
->this.nothing() : error
->this.nothing : error
+>this.nothing() : any
+>               : ^^^
+>this.nothing : any
+>             : ^^^
 >this : this
 >     : ^^^^
 >nothing : any
@@ -44,6 +48,7 @@ class X {
     constructor() {
         this.m = this.m.bind(this);
 >this.m = this.m.bind(this) : any
+>                           : ^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
@@ -51,6 +56,7 @@ class X {
 >m : () => void
 >  : ^^^^^^^^^^
 >this.m.bind(this) : any
+>                  : ^^^
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this.m : () => void
@@ -142,6 +148,7 @@ class Y {
     constructor() {
         this.m = this.m.bind(this);
 >this.m = this.m.bind(this) : any
+>                           : ^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
@@ -149,6 +156,7 @@ class Y {
 >m : () => void
 >  : ^^^^^^^^^^
 >this.m.bind(this) : any
+>                  : ^^^
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this.m : () => void

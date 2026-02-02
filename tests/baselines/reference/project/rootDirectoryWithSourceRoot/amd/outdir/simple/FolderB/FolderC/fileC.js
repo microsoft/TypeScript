@@ -1,6 +1,3 @@
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 //# sourceMappingURL=fileC.js.map

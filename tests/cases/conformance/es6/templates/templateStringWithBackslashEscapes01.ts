@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 
 var a = `hello\world`;
 var b = `hello\\world`;

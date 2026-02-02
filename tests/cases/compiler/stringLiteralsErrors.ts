@@ -1,3 +1,4 @@
+// @target: es2015
 // Srtings missing line terminator
 var es1 = "line 1
 ";

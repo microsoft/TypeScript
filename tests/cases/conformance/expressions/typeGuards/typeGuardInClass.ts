@@ -1,4 +1,5 @@
-let x: string | number;
+// @target: es2015
+declare var x: string | number;
 
 if (typeof x === "string") {
     let n = class {

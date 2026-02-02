@@ -7,6 +7,6 @@ const array = [
 
 
 //// [commentOnArrayElement8.js]
-var array = [
+const array = [
     1, /* comment */
 ];

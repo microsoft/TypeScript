@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // void  operator on boolean type
 var BOOLEAN: boolean;
 

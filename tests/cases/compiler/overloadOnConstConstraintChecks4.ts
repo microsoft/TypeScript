@@ -1,3 +1,4 @@
+// @target: es2015
 class Z { }
 class A extends Z { private x = 1 }
 class B extends A {}

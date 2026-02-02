@@ -1,3 +1,4 @@
+// @target: es2015
 // expect no errors here
 
 namespace A {

@@ -144,7 +144,7 @@ underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this
     initialize();
     initialize();
     
-    var notes: any[];
+    var notes: any[] = [];
     var render = () => alert("rendering...");
     var renderNotes = _.after(notes.length, render);
     _.each(notes, (note) => note.asyncSave({ success: renderNotes }));

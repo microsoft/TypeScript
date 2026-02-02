@@ -7,8 +7,8 @@ interface Base { foo: string; }
 interface Derived extends Base { bar: string; }
 interface Derived2 extends Derived { baz: string; }
 
-var a: A;
-var b1: { [x: string]: string; }
+declare var a: A;
+declare var b1: { [x: string]: string; };
 a = b1; // error
 b1 = a; // error
 
@@ -18,8 +18,8 @@ namespace Generics {
     }
    
     function foo<T extends Derived>() {
-        var a: A<T>;
-        var b: { [x: string]: string; }
+        var a!: A<T>;
+        var b!: { [x: string]: string; };
         a = b; // error
         b = a; // error
     }
@@ -27,17 +27,12 @@ namespace Generics {
 
 //// [assignmentCompatWithStringIndexer3.js]
 // Derived type indexer must be subtype of base type indexer
-var a;
-var b1;
 a = b1; // error
 b1 = a; // error
 var Generics;
 (function (Generics) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     function foo() {
         var a;
         var b;

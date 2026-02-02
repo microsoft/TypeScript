@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 enum E1 { x }
 enum E2 { x }
 var o = {

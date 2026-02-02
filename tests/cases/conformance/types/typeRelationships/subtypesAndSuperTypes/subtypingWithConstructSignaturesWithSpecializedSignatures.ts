@@ -1,3 +1,4 @@
+// @target: es2015
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
 namespace CallSignature {

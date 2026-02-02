@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @allowArbitraryExtensions: true
 // @filename: foo.d.html.ts

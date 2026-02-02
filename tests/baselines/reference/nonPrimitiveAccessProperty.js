@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts] ////
 
 //// [nonPrimitiveAccessProperty.ts]
-var a: object;
+var a: object = {};
 a.toString();
 a.nonExist(); // error
 
@@ -21,8 +21,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var a;
+var a = {};
 a.toString();
 a.nonExist(); // error
-var destructuring = a.destructuring; // error
+var { destructuring } = a; // error
 var rest = __rest(a, []); // ok

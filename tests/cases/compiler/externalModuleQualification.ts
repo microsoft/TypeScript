@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export var ID = "test";
 export class DiffEditor<A, B, C> {

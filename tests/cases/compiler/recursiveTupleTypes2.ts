@@ -1,3 +1,4 @@
+// @target: es2015
 interface Tree1 {
     children: [Tree1, Tree2];
 }

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // numeric properties must be distinct after a ToNumber operation
 // so the below are all errors
 

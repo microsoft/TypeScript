@@ -71,7 +71,7 @@ c.p;
 >p : number
 >  : ^^^^^^
 
-var i:I;
+declare var i:I;
 >i : I
 >  : ^
 

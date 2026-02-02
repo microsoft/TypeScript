@@ -57,16 +57,16 @@ namespace Merged2 {
     }
 }
 
-var abc: First.E;
-var secondAbc: Abc.E;
-var secondAbcd: Abcd.E;
-var secondAb: Ab.E;
-var secondCd: Cd.E;
-var nope: Abc.Nope;
-var k: Const.E;
-var decl: Decl.E;
-var merged: Merged.E;
-var merged2: Merged2.E;
+declare var abc: First.E;
+declare var secondAbc: Abc.E;
+declare var secondAbcd: Abcd.E;
+declare var secondAb: Ab.E;
+declare var secondCd: Cd.E;
+declare var nope: Abc.Nope;
+declare var k: Const.E;
+declare var decl: Decl.E;
+declare var merged: Merged.E;
+declare var merged2: Merged2.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -94,7 +94,7 @@ merged2 = abc; // ok
 //// [enumAssignmentCompat3.js]
 var First;
 (function (First) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -103,13 +103,13 @@ var First;
 })(First || (First = {}));
 var Abc;
 (function (Abc) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
     })(E = Abc.E || (Abc.E = {}));
-    var Nope;
+    let Nope;
     (function (Nope) {
         Nope[Nope["a"] = 0] = "a";
         Nope[Nope["b"] = 1] = "b";
@@ -118,7 +118,7 @@ var Abc;
 })(Abc || (Abc = {}));
 var Abcd;
 (function (Abcd) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -128,7 +128,7 @@ var Abcd;
 })(Abcd || (Abcd = {}));
 var Ab;
 (function (Ab) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -136,7 +136,7 @@ var Ab;
 })(Ab || (Ab = {}));
 var Cd;
 (function (Cd) {
-    var E;
+    let E;
     (function (E) {
         E[E["c"] = 0] = "c";
         E[E["d"] = 1] = "d";
@@ -147,7 +147,7 @@ var Decl;
 })(Decl || (Decl = {}));
 var Merged;
 (function (Merged) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -159,7 +159,7 @@ var Merged;
 })(Merged || (Merged = {}));
 var Merged2;
 (function (Merged2) {
-    var E;
+    let E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -169,16 +169,6 @@ var Merged2;
         E.d = 5;
     })(E = Merged2.E || (Merged2.E = {}));
 })(Merged2 || (Merged2 = {}));
-var abc;
-var secondAbc;
-var secondAbcd;
-var secondAb;
-var secondCd;
-var nope;
-var k;
-var decl;
-var merged;
-var merged2;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok

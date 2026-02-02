@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
 

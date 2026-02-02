@@ -1,7 +1,9 @@
-file.tsx(12,10): error TS2322: Type 'string' is not assignable to type 'never'.
+file.tsx(14,10): error TS2322: Type 'string' is not assignable to type 'never'.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     function SFC1(prop: { x: number }) {

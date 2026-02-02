@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @moduleResolution: bundler
 // @Filename: /node_modules/abs/subModule.js
 ////export const x = 0;

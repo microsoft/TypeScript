@@ -1,4 +1,5 @@
-﻿class Action {
+﻿// @target: es2015
+class Action {
     id: number;
 }
 

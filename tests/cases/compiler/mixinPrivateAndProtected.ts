@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #13830
 
 type Constructor<T> = new(...args: any[]) => T;

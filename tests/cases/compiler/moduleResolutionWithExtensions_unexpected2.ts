@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
 // This tests that a package.json "types" with an unexpected extension is ignored.

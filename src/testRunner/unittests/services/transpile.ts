@@ -21,6 +21,7 @@ describe("unittests:: services:: Transpile", () => {
                 }
                 if (transpileOptions.compilerOptions.target === undefined) {
                     transpileOptions.compilerOptions.target = ts.ScriptTarget.ES5;
+                    transpileOptions.compilerOptions.ignoreDeprecations = "6.0";
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -204,6 +205,7 @@ var x = 0;`,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     target: ts.ScriptTarget.ES5,
+                    ignoreDeprecations: "6.0",
                 },
             },
             testVerbatimModuleSyntax: true,

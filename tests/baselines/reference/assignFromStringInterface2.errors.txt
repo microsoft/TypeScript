@@ -42,8 +42,8 @@ assignFromStringInterface2.ts(48,1): error TS2322: Type 'NotString' is not assig
     }
     
     var x = '';
-    var a: String;
-    var b: NotString;
+    declare var a: String;
+    declare var b: NotString;
     
     a = x;
     a = b;

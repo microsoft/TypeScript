@@ -2,6 +2,7 @@
 
 // https://github.com/microsoft/TypeScript/issues/55574
 
+// @strict: false
 //// declare const optionals:
 ////   | ((a?: { a: true }) => unknown)
 ////   | ((b?: { b: true }) => unknown);

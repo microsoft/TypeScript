@@ -261,11 +261,11 @@ namespace GenericSignaturesInvalid {
 >foo : Symbol(foo, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 54, 5))
 >T : Symbol(T, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 57, 17))
 
-        var b: Base2;
+        var b!: Base2;
 >b : Symbol(b, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 58, 11))
 >Base2 : Symbol(Base2, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 38, 36))
 
-        var t: Target<T>;
+        var t!: Target<T>;
 >t : Symbol(t, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 59, 11))
 >Target : Symbol(Target, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 46, 5))
 >T : Symbol(T, Decl(assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts, 57, 17))

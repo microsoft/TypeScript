@@ -1,3 +1,4 @@
+// @target: es2015
 var t = 32;
 
 function noReturn(): {
@@ -16,6 +17,6 @@ interface A2 {
     x: { y: string; };
 }
 
-var t1: A1;
-var t2: A2;
+declare var t1: A1;
+declare var t2: A2;
 t1 = t2;

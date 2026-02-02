@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: nodenext
 // @traceResolution: true
 
