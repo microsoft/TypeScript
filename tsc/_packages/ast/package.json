@@ -4,6 +4,9 @@
     "version": "1.0.0",
     "description": "TypeScript AST definitions",
     "type": "module",
+    "engines": {
+        "node": ">=20.19"
+    },
     "imports": {
         "#syntaxKind": {
             "@typescript/source": {

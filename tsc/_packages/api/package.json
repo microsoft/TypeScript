@@ -3,6 +3,9 @@
     "name": "@typescript/api",
     "version": "1.0.0",
     "type": "module",
+    "engines": {
+        "node": ">=20.19"
+    },
     "imports": {
         "#symbolFlags": {
             "@typescript/source": {
@@ -42,7 +45,7 @@
         "test": "node --test --experimental-strip-types --no-warnings --conditions @typescript/source ./test/**/*.test.ts"
     },
     "devDependencies": {
-        "tinybench": "^3.1.1"
+        "tinybench": "^6.0.0"
     },
     "dependencies": {
         "@typescript/ast": "1.0.0",
