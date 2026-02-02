@@ -31,6 +31,7 @@ controlFlowFunctionLikeCircular_8.ts(1,10): error TS2393: Duplicate function imp
 controlFlowFunctionLikeCircular_8.ts(3,5): error TS2448: Block-scoped variable 'b' used before its declaration.
 controlFlowFunctionLikeCircular_8.ts(3,5): error TS2454: Variable 'b' is used before being assigned.
 controlFlowFunctionLikeCircular_8.ts(3,5): error TS2554: Expected 1 arguments, but got 0.
+controlFlowFunctionLikeCircular_8.ts(4,10): error TS2456: Type alias 'First' circularly references itself.
 controlFlowFunctionLikeCircular_9.ts(1,10): error TS2393: Duplicate function implementation.
 controlFlowFunctionLikeCircular_9.ts(3,5): error TS2448: Block-scoped variable 'o' used before its declaration.
 controlFlowFunctionLikeCircular_9.ts(3,5): error TS2454: Variable 'o' is used before being assigned.
@@ -147,7 +148,7 @@ controlFlowFunctionLikeCircular_9.ts(4,47): error TS2411: Property 'x' of type '
       return undefined;
     }
     
-==== controlFlowFunctionLikeCircular_8.ts (4 errors) ====
+==== controlFlowFunctionLikeCircular_8.ts (5 errors) ====
     function test(arg: string | number, whatever: any) {
              ~~~~
 !!! error TS2393: Duplicate function implementation.
@@ -162,6 +163,8 @@ controlFlowFunctionLikeCircular_9.ts(4,47): error TS2411: Property 'x' of type '
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 controlFlowFunctionLikeCircular_8.ts:5:18: An argument for 'arg' was not provided.
         type First = typeof arg;
+             ~~~~~
+!!! error TS2456: Type alias 'First' circularly references itself.
         type Test = (arg: unknown) => arg is First;
         const b: Test = whatever;
         return b;
