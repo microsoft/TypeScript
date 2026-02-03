@@ -215,6 +215,7 @@ if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
 
 
 //// [typeGuardsWithInstanceOfBySymbolHasInstance.js]
+"use strict";
 if (obj1 instanceof A) { // narrowed to A.
     obj1.foo;
     obj1.bar;

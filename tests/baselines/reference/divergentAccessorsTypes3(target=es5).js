@@ -46,6 +46,7 @@ u1.prop4 = true;
 
 
 //// [divergentAccessorsTypes3.js]
+"use strict";
 var One = /** @class */ (function () {
     function One() {
     }

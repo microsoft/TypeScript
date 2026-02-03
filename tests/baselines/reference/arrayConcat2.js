@@ -11,6 +11,7 @@ b.concat('hello');
 
 
 //// [arrayConcat2.js]
+"use strict";
 var a = [];
 a.concat("hello", 'world');
 a.concat('Hello');

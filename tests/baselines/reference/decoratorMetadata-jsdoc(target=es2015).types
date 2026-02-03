@@ -16,8 +16,8 @@ class X {
 >          : ^^^
 
     a?: string?;
->a : string
->  : ^^^^^^
+>a : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     @decorator()
 >decorator() : any
@@ -26,8 +26,8 @@ class X {
 >          : ^^^
 
     b?: string!;
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     @decorator()
 >decorator() : any

@@ -8,6 +8,7 @@ class C {
 (new C)[Symbol.iterator]
 
 //// [ES5SymbolProperty6.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

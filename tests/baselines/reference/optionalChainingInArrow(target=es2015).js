@@ -8,6 +8,7 @@ const test = (names: string[]) =>
 
 
 //// [optionalChainingInArrow.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/41814
 const test = (names) => 
 // single-line comment

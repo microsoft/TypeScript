@@ -10,6 +10,7 @@ class C1 {
 
 
 //// [autoAccessor3.js]
+"use strict";
 class C1 {
     #_a_accessor_storage;
     get "w"() { return this.#_a_accessor_storage; }

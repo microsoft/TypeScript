@@ -1,0 +1,21 @@
+numericIndexerConstraint4.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+numericIndexerConstraint4.ts(6,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+
+
+==== numericIndexerConstraint4.ts (2 errors) ====
+    class A {
+        foo: number;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class B extends A {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var x: {
+        [idx: number]: A;
+    } = { 0: new B() }
+    

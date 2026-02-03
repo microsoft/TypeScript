@@ -33,6 +33,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/main.js]
+"use strict";
 const x = 10;
 
 
@@ -90,6 +91,7 @@ Output::
 
 //// [/user/username/projects/myproject/main.js] file written with same contents
 //// [/user/username/projects/myproject/bar.js]
+"use strict";
 const y = 10;
 
 

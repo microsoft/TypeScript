@@ -1,0 +1,20 @@
+index.ts(4,5): error TS2564: Property '_ref' has no initializer and is not definitely assigned in the constructor.
+
+
+==== deps.ts (0 errors) ====
+    export function Input(): any { }
+    export class TemplateRef { }
+    
+==== index.ts (1 errors) ====
+    import { Input, TemplateRef } from './deps';
+    
+    export class MyComponent {
+        _ref: TemplateRef;
+        ~~~~
+!!! error TS2564: Property '_ref' has no initializer and is not definitely assigned in the constructor.
+    
+        @Input()
+        get ref() { return this._ref; }
+        set ref(value: TemplateRef) { this._ref = value; }
+    }
+    

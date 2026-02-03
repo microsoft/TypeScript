@@ -79,6 +79,7 @@ var r8b1 = b1 !== a1;
 var r8b2 = b2 !== a2;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
+"use strict";
 class A1 {
 }
 class B1 {

@@ -39,6 +39,7 @@ var t = p.x;
 
 
 //// [a.js]
+"use strict";
 /// <reference path="node_modules/math2d/index.d.ts" />
 /// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);

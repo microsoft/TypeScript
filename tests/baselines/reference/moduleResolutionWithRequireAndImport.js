@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.other = void 0;
 exports.other = 123;
 //// [index.js]
+"use strict";
 const a = null;
 function foo() {
     const a = require('../outside-of-rootdir/foo');

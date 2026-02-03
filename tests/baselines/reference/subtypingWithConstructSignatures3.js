@@ -123,6 +123,7 @@ namespace WithGenericSignaturesInBaseType {
 }
 
 //// [subtypingWithConstructSignatures3.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases, so function calls will all result in 'any'
 var Errors;

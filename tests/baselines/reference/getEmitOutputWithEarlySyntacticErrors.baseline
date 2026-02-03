@@ -2,6 +2,7 @@
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile1.js
+"use strict";
 // File contains early errors. All outputs should be skipped.
 const uninitialized_const_error;
 

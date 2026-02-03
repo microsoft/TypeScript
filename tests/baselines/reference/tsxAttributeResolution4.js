@@ -19,6 +19,7 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+"use strict";
 // OK
 <test1 {...{ x: (n) => 0 }}/>;
 // Error, no member 'len' on 'string'

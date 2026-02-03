@@ -264,6 +264,7 @@ Output::
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = "hello";
 
 

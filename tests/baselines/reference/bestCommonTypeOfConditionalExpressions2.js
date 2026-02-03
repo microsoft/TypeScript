@@ -27,6 +27,7 @@ function foo3<T extends U, U extends V, V>(t: T, u: U) {
 }
 
 //// [bestCommonTypeOfConditionalExpressions2.js]
+"use strict";
 // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
 // these are errors
 class Base {

@@ -8,6 +8,7 @@ var o = {
 };
 
 //// [computedPropertyNames47_ES5.js]
+"use strict";
 var _a;
 var E1;
 (function (E1) {

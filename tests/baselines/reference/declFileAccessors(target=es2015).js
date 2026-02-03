@@ -152,6 +152,7 @@ class c1 {
 }
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
+"use strict";
 /** This is comment for c2 - the global class*/
 class c2 {
     /** getter property*/

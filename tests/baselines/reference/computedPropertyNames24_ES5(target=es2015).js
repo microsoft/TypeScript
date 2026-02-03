@@ -11,6 +11,7 @@ class C extends Base {
 }
 
 //// [computedPropertyNames24_ES5.js]
+"use strict";
 class Base {
     bar() {
         return 0;

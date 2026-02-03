@@ -22,3 +22,4 @@ declare namespace Module {
 
 
 //// [noImplicitAnyModule.js]
+"use strict";

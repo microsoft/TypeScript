@@ -33,6 +33,7 @@ i.prop2 = "hello"; // error
 
 
 //// [divergentAccessorsTypes4.js]
+"use strict";
 class One {
     get prop1() { return ""; }
     set prop1(s) { }

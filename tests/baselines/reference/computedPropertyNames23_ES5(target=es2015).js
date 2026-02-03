@@ -11,6 +11,7 @@ class C {
 }
 
 //// [computedPropertyNames23_ES5.js]
+"use strict";
 class C {
     bar() {
         return 0;

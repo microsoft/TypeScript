@@ -2,8 +2,9 @@
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile1.js.map
-{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,MAAM,CAAC;IACL,CAAC,CAAS;IACV,CAAC,CAAS;CACX"}
+{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile1.ts"],"names":[],"mappings":";AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,MAAM,CAAC;IACL,CAAC,CAAS;IACV,CAAC,CAAS;CACX"}
 FileName : sample/outDir/inputFile1.js
+"use strict";
 var x = 109;
 var foo = "hello world";
 class M {
@@ -14,8 +15,9 @@ class M {
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile2.js.map
-{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,IAAI,KAAK,KAAK,SAAS,EAAE,CAAC;IACvB,IAAI,CAAC,GAAG,EAAE,CAAC;AACd,CAAC"}
+{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":";AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,IAAI,KAAK,KAAK,SAAS,EAAE,CAAC;IACvB,IAAI,CAAC,GAAG,EAAE,CAAC;AACd,CAAC"}
 FileName : sample/outDir/inputFile2.js
+"use strict";
 var intro = "hello world";
 if (intro !== undefined) {
     var k = 10;

@@ -12,6 +12,7 @@ class C<T> {
 
 
 //// [incrementOnTypeParameter.js]
+"use strict";
 class C {
     foo() {
         this.a++;

@@ -67,6 +67,7 @@ world
 
 
 //// [file.js]
+"use strict";
 // THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
 var p = 0;

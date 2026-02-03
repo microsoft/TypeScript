@@ -42,6 +42,7 @@ M.foo.y // ok
 M.foo.z // error
 
 //// [mergedDeclarations3.js]
+"use strict";
 var M;
 (function (M) {
     let Color;

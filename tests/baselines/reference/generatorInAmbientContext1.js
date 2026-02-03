@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [generatorInAmbientContext1.js]
+"use strict";

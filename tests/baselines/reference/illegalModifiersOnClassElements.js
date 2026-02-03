@@ -7,6 +7,7 @@ class C {
 }
 
 //// [illegalModifiersOnClassElements.js]
+"use strict";
 class C {
     constructor() {
         this.bar = 1;

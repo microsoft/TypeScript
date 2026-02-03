@@ -17,6 +17,7 @@ function foo() {
 //// [0.js]
 export function foo() { return "foo"; }
 //// [1.js]
+"use strict";
 import("./0");
 var p1 = import("./0");
 p1.then(zero => {

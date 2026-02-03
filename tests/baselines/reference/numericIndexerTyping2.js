@@ -15,6 +15,7 @@ declare var i2: I2;
 var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexere
 
 //// [numericIndexerTyping2.js]
+"use strict";
 class I {
 }
 class I2 extends I {

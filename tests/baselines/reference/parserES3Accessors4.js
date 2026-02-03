@@ -4,4 +4,5 @@
 var v = { set Foo(a) { } };
 
 //// [parserES3Accessors4.js]
+"use strict";
 var v = { set Foo(a) { } };

@@ -15,6 +15,7 @@ namespace maker {
 
 
 //// [circularTypeofWithFunctionModule.js]
+"use strict";
 // Repro from #6072
 class Foo {
 }

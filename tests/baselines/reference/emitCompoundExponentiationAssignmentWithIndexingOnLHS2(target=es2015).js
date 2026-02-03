@@ -14,6 +14,7 @@ foo()[0] **= foo()[0] ** 2;
 var result_foo3 = foo()[0] **= foo()[0] ** 2;
 
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS2.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
 var globalCounter = 0;
 function foo() {

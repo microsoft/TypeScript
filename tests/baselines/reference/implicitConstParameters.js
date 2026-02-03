@@ -58,6 +58,7 @@ function f6(x: string | undefined) {
 }
 
 //// [implicitConstParameters.js]
+"use strict";
 function doSomething(cb) {
     cb();
 }

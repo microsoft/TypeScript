@@ -10,6 +10,7 @@ var x = '';
 
 
 //// [importAndVariableDeclarationConflict1.js]
+"use strict";
 var m;
 (function (m_1) {
     m_1.m = '';

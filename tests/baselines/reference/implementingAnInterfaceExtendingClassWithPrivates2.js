@@ -88,6 +88,7 @@ namespace M2 {
 }
 
 //// [implementingAnInterfaceExtendingClassWithPrivates2.js]
+"use strict";
 class Foo {
 }
 class Bar extends Foo {

@@ -73,6 +73,7 @@ yy[1] = "abc";  // Error
 yy["foo"] = "abc";
 
 //// [readonlyMembers.js]
+"use strict";
 var x = { a: 0 };
 x.a = 1; // Error
 x.b = 1; // Error

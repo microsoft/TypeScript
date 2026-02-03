@@ -15,6 +15,7 @@ x = y;  // error
 
 
 //// [genericDerivedTypeWithSpecializedBase2.js]
+"use strict";
 class A {
 }
 class B extends A {

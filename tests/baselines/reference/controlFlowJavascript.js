@@ -107,6 +107,7 @@ function f10() {
 
 
 //// [out.js]
+"use strict";
 let cond = true;
 // CFA for 'let' and no initializer
 function f1() {

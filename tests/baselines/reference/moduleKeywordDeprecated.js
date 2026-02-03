@@ -22,3 +22,4 @@ export module exported.sub { }
 
 
 //// [foo.js]
+"use strict";

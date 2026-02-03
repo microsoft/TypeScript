@@ -27,6 +27,7 @@ f2(d2); // never
 
 
 //// [unionAndIntersectionInference2.js]
+"use strict";
 var a1;
 var b1;
 var c1;

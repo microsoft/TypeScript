@@ -57,6 +57,7 @@ namespace M {
 }
 
 //// [mergedInterfacesWithMultipleBases.js]
+"use strict";
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
 class C {

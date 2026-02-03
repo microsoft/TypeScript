@@ -10,6 +10,7 @@ interface i4 {
 }
 
 //// [interfaceDeclaration6.js]
+"use strict";
 ;
 ;
 ;

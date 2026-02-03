@@ -136,6 +136,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 }
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.js]
+"use strict";
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

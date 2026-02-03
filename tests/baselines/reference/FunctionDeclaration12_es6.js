@@ -4,4 +4,5 @@
 var v = function * yield() { }
 
 //// [FunctionDeclaration12_es6.js]
+"use strict";
 var v = function* yield() { };

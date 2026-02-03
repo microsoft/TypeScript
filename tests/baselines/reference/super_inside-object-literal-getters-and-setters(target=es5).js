@@ -30,6 +30,7 @@ class SuperObjectTest extends F {
 
 
 //// [super_inside-object-literal-getters-and-setters.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

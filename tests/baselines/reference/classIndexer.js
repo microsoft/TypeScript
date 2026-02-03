@@ -8,6 +8,7 @@ class C123 {
 }
 
 //// [classIndexer.js]
+"use strict";
 class C123 {
     constructor() {
     }

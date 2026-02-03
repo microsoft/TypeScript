@@ -18,6 +18,7 @@ var foo = new m2.m2();
 var foo = new m2._m2();
 
 //// [collisionCodeGenModuleWithMemberClassConflict.js]
+"use strict";
 var m1;
 (function (m1_1) {
     class m1 {

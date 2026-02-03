@@ -37,7 +37,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96msrc/types/classnames.d.ts[0m:[93m1[0m:[93m61[0m - [91merror[0m[90m TS7008: [0mMember 'foo' implicitly has an 'any' type.
+
+[7m1[0m export {}; declare module "classnames" { interface Result { foo } }
+[7m [0m [91m                                                            ~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -54,7 +59,7 @@ const classnames_1 = __importDefault(require("classnames"));
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileIdsList":[[2,4],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1239706283-export interface Result {} export default function classNames(): Result;","impliedFormat":1},"-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"referencedMap":[[3,1],[4,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileIdsList":[[2,4],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1239706283-export interface Result {} export default function classNames(): Result;","impliedFormat":1},"-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[4,[{"start":60,"length":3,"messageText":"Member 'foo' implicitly has an 'any' type.","category":1,"code":7008}]]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -123,8 +128,22 @@ const classnames_1 = __importDefault(require("classnames"));
       "./node_modules/classnames/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/types/classnames.d.ts",
+      [
+        {
+          "start": 60,
+          "length": 3,
+          "messageText": "Member 'foo' implicitly has an 'any' type.",
+          "category": 1,
+          "code": 7008
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1002
+  "size": 1147
 }
 
 

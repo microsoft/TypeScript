@@ -24,6 +24,7 @@ var m : _modes;
 
 
 //// [moduleCrashBug1.js]
+"use strict";
 var _modes;
 (function (_modes) {
     class Mode {

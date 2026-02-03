@@ -4,4 +4,5 @@
 (a:number => { }
 
 //// [parserErrorRecovery_ParameterList5.js]
+"use strict";
 (a, {}) => ;

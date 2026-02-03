@@ -20,6 +20,7 @@ b = a;
 
 
 //// [assignmentCompatWithGenericCallSignatures2.js]
+"use strict";
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 // Both errors
 a = b;

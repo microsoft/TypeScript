@@ -60,6 +60,7 @@ new Intl.NumberFormat("fr").format(bigintVal);
 
 
 //// [bigintWithoutLib.js]
+"use strict";
 // Every line should error because these builtins are not declared
 // Test BigInt functions
 var bigintVal = BigInt(123);

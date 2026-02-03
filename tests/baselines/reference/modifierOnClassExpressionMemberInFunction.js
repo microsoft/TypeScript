@@ -10,6 +10,7 @@ function g() {
 }
 
 //// [modifierOnClassExpressionMemberInFunction.js]
+"use strict";
 function g() {
     var _a;
     var x = (_a = class C {

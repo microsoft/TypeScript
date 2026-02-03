@@ -45,6 +45,7 @@ function f() {
 
 
 //// [controlFlowForStatement.js]
+"use strict";
 function a() {
     let x;
     for (x = ""; cond; x = 5) {

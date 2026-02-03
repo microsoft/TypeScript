@@ -17,6 +17,7 @@ module.exports = {
 
 
 //// [index.js]
+"use strict";
 /// <reference types="node" />
 const Something = require("fs").Something;
 const thing = new Something();

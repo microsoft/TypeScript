@@ -9,6 +9,7 @@ function bar(a = foo()) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements16.js]
+"use strict";
 var v;
 function foo(a = bar()) { }
 function bar(a = foo()) {

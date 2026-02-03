@@ -3,54 +3,69 @@
 === jsxReactTestSuite.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 declare var Component:any;
 >Component : any
+>          : ^^^
 
 declare var Composite:any;
 >Composite : any
+>          : ^^^
 
 declare var Composite2:any;
 >Composite2 : any
+>           : ^^^
 
 declare var Child:any;
 >Child : any
+>      : ^^^
 
 declare var Namespace:any;
 >Namespace : any
+>          : ^^^
 
 declare var foo: any;
 >foo : any
+>    : ^^^
 
 declare var bar: any;
 >bar : any
+>    : ^^^
 
 declare var y:any;
 >y : any
+>  : ^^^
 
 declare var x:any;
 >x : any
+>  : ^^^
 
 declare var z:any;
 >z : any
+>  : ^^^
 
 declare var hasOwnProperty:any;
 >hasOwnProperty : any
+>               : ^^^
 
 <div>text</div>;
-><div>text</div> : error
+><div>text</div> : any
+>                : ^^^
 >div : any
 >    : ^^^
 >div : any
 >    : ^^^
 
 <div>
-><div>  {this.props.children}</div> : error
+><div>  {this.props.children}</div> : any
+>                                   : ^^^
 >div : any
 >    : ^^^
 
   {this.props.children}
 >this.props.children : any
+>                    : ^^^
 >this.props : any
 >           : ^^^
 >this : typeof globalThis
@@ -65,32 +80,42 @@ declare var hasOwnProperty:any;
 >    : ^^^
 
 <div>
-><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : error
+><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : any
+>                                                                                : ^^^
 >div : any
 >    : ^^^
 
   <div><br /></div>
-><div><br /></div> : error
+><div><br /></div> : any
+>                  : ^^^
 >div : any
 >    : ^^^
-><br /> : error
+><br /> : any
+>       : ^^^
 >br : any
 >   : ^^^
 >div : any
 >    : ^^^
 
   <Component>{foo}<br />{bar}</Component>
-><Component>{foo}<br />{bar}</Component> : error
+><Component>{foo}<br />{bar}</Component> : any
+>                                        : ^^^
 >Component : any
+>          : ^^^
 >foo : any
-><br /> : error
+>    : ^^^
+><br /> : any
+>       : ^^^
 >br : any
 >   : ^^^
 >bar : any
+>    : ^^^
 >Component : any
+>          : ^^^
 
   <br />
-><br /> : error
+><br /> : any
+>       : ^^^
 >br : any
 >   : ^^^
 
@@ -100,11 +125,14 @@ declare var hasOwnProperty:any;
 
 
 <Composite>
-><Composite>    {this.props.children}</Composite> : error
+><Composite>    {this.props.children}</Composite> : any
+>                                                 : ^^^
 >Composite : any
+>          : ^^^
 
     {this.props.children}
 >this.props.children : any
+>                    : ^^^
 >this.props : any
 >           : ^^^
 >this : typeof globalThis
@@ -116,23 +144,31 @@ declare var hasOwnProperty:any;
 
 </Composite>;
 >Composite : any
+>          : ^^^
 
 <Composite>
-><Composite>    <Composite2 /></Composite> : error
+><Composite>    <Composite2 /></Composite> : any
+>                                          : ^^^
 >Composite : any
+>          : ^^^
 
     <Composite2 />
-><Composite2 /> : error
+><Composite2 /> : any
+>               : ^^^
 >Composite2 : any
+>           : ^^^
 
 </Composite>;
 >Composite : any
+>          : ^^^
 
 var x =
 >x : any
+>  : ^^^
 
   <div
-><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : error
+><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : any
+>                                                                                                                                                                                                               : ^^^
 >div : any
 >    : ^^^
 
@@ -203,17 +239,20 @@ var x =
 >    : ^^^
 
 (
->(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : error
+>(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : any
+>                                                                                                                                                                                                                                                                         : ^^^
 
   <div>
-><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : error
+><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : any
+>                                                                                                                                                                                                                                                                     : ^^^
 >div : any
 >    : ^^^
 
     {/* A comment at the beginning */}
     {/* A second comment at the beginning */}
     <span>
-><span>      {/* A nested comment */}    </span> : error
+><span>      {/* A nested comment */}    </span> : any
+>                                                : ^^^
 >span : any
 >     : ^^^
 
@@ -224,7 +263,8 @@ var x =
 
     {/* A sandwiched comment */}
     <br />
-><br /> : error
+><br /> : any
+>       : ^^^
 >br : any
 >   : ^^^
 
@@ -237,10 +277,12 @@ var x =
 );
 
 (
->(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : error
+>(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : any
+>                                                                                                                               : ^^^
 
   <div
-><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : error
+><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : any
+>                                                                                                                           : ^^^
 >div : any
 >    : ^^^
 
@@ -251,7 +293,8 @@ var x =
 >      : ^^^^^^
 
     <span // a double-slash comment
-><span // a double-slash comment      attr2="bar"    /> : error
+><span // a double-slash comment      attr2="bar"    /> : any
+>                                                       : ^^^
 >span : any
 >     : ^^^
 
@@ -267,43 +310,52 @@ var x =
 );
 
 <div>&nbsp;</div>;
-><div>&nbsp;</div> : error
+><div>&nbsp;</div> : any
+>                  : ^^^
 >div : any
 >    : ^^^
 >div : any
 >    : ^^^
 
 <div>&nbsp; </div>;
-><div>&nbsp; </div> : error
+><div>&nbsp; </div> : any
+>                   : ^^^
 >div : any
 >    : ^^^
 >div : any
 >    : ^^^
 
 <hasOwnProperty>testing</hasOwnProperty>;
-><hasOwnProperty>testing</hasOwnProperty> : error
+><hasOwnProperty>testing</hasOwnProperty> : any
+>                                         : ^^^
 >hasOwnProperty : any
 >               : ^^^
 >hasOwnProperty : any
 >               : ^^^
 
 <Component constructor="foo" />;
-><Component constructor="foo" /> : error
+><Component constructor="foo" /> : any
+>                                : ^^^
 >Component : any
+>          : ^^^
 >constructor : string
 >            : ^^^^^^
 
 <Namespace.Component />;
-><Namespace.Component /> : error
+><Namespace.Component /> : any
+>                        : ^^^
 >Namespace.Component : any
+>                    : ^^^
 >Namespace : any
 >          : ^^^
 >Component : any
 >          : ^^^
 
 <Namespace.DeepNamespace.Component />;
-><Namespace.DeepNamespace.Component /> : error
+><Namespace.DeepNamespace.Component /> : any
+>                                      : ^^^
 >Namespace.DeepNamespace.Component : any
+>                                  : ^^^
 >Namespace.DeepNamespace : any
 >                        : ^^^
 >Namespace : any
@@ -314,9 +366,12 @@ var x =
 >          : ^^^
 
 <Component { ... x } y
-><Component { ... x } y={2 } z /> : error
+><Component { ... x } y={2 } z /> : any
+>                                 : ^^^
 >Component : any
+>          : ^^^
 >x : any
+>  : ^^^
 >y : number
 >  : ^^^^^^
 
@@ -327,11 +382,14 @@ var x =
 >  : ^^^^
 
 <Component
-><Component    {...this.props} sound="moo" /> : error
+><Component    {...this.props} sound="moo" /> : any
+>                                             : ^^^
 >Component : any
+>          : ^^^
 
     {...this.props} sound="moo" />;
 >this.props : any
+>           : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >props : any
@@ -340,39 +398,54 @@ var x =
 >      : ^^^^^^
 
 <font-face />;
-><font-face /> : error
+><font-face /> : any
+>              : ^^^
 >font-face : any
 >          : ^^^
 
 <Component x={y} />;
-><Component x={y} /> : error
+><Component x={y} /> : any
+>                    : ^^^
 >Component : any
+>          : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 <x-component />;
-><x-component /> : error
+><x-component /> : any
+>                : ^^^
 >x-component : any
 >            : ^^^
 
 <Component {...x} />;
-><Component {...x} /> : error
+><Component {...x} /> : any
+>                     : ^^^
 >Component : any
+>          : ^^^
 >x : any
+>  : ^^^
 
 <Component { ...x } y={2} />;
-><Component { ...x } y={2} /> : error
+><Component { ...x } y={2} /> : any
+>                             : ^^^
 >Component : any
+>          : ^^^
 >x : any
+>  : ^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
 >  : ^
 
 <Component { ... x } y={2} z />;
-><Component { ... x } y={2} z /> : error
+><Component { ... x } y={2} z /> : any
+>                                : ^^^
 >Component : any
+>          : ^^^
 >x : any
+>  : ^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
@@ -381,18 +454,23 @@ var x =
 >  : ^^^^
 
 <Component x={1} {...y} />;
-><Component x={1} {...y} /> : error
+><Component x={1} {...y} /> : any
+>                           : ^^^
 >Component : any
+>          : ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >y : any
+>  : ^^^
 
 
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
-><Component x={1} y="2" {...z} {...z}><Child /></Component> : error
+><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
+>                                                           : ^^^
 >Component : any
+>          : ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -400,21 +478,31 @@ var x =
 >y : string
 >  : ^^^^^^
 >z : any
+>  : ^^^
 >z : any
-><Child /> : error
+>  : ^^^
+><Child /> : any
+>          : ^^^
 >Child : any
+>      : ^^^
 >Component : any
+>          : ^^^
 
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
-><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : error
+><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
+>                                                               : ^^^
 >Component : any
+>          : ^^^
 >x : string
 >  : ^^^^^^
 >(z = { y: 2 }, z) : any
+>                  : ^^^
 >z = { y: 2 }, z : any
+>                : ^^^
 >z = { y: 2 } : { y: number; }
 >             : ^^^^^^^^^^^^^^
 >z : any
+>  : ^^^
 >{ y: 2 } : { y: number; }
 >         : ^^^^^^^^^^^^^^
 >y : number
@@ -422,11 +510,13 @@ var x =
 >2 : 2
 >  : ^
 >z : any
+>  : ^^^
 >z : number
 >  : ^^^^^^
 >3 : 3
 >  : ^
 >Component : any
+>          : ^^^
 
 
 

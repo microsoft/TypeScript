@@ -67,6 +67,7 @@ Output::
 
 
 //// [/home/src/projects/a/b/output/common.js]
+"use strict";
 var Main;
 (function (Main) {
     function fooBar() { }

@@ -26,6 +26,7 @@ declare var AAA: typeof I;
 AAA = A;
 
 //// [classAbstractClinterfaceAssignability.js]
+"use strict";
 class A {
 }
 AA = I;

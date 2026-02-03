@@ -17,6 +17,7 @@ test.fail2(arg => foo.reject(arg));  // Should be OK.  Was: Error: Supplied para
 
 
 //// [typeLiteralCallback.js]
+"use strict";
 var foo;
 var test;
 test.fail(arg => foo.reject(arg));

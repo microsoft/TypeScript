@@ -23,6 +23,7 @@ class Derived extends Base {
 }
 
 //// [derivedClassWithPrivateStaticShadowingProtectedStatic.js]
+"use strict";
 class Base {
     static fn() {
         return '';

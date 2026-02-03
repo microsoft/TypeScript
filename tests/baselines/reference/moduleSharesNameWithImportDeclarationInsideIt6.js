@@ -13,6 +13,7 @@ namespace A.M {
 }
 
 //// [moduleSharesNameWithImportDeclarationInsideIt6.js]
+"use strict";
 var Z;
 (function (Z) {
     var M;

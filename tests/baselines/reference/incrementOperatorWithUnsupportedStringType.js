@@ -68,6 +68,7 @@ M.n++;
 objA.a++, M.n++;
 
 //// [incrementOperatorWithUnsupportedStringType.js]
+"use strict";
 var STRING1 = ["", ""];
 function foo() { return ""; }
 class A {

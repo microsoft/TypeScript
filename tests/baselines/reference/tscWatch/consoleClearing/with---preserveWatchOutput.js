@@ -29,6 +29,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 
 
 
@@ -89,6 +90,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 //
 
 

@@ -11,6 +11,7 @@ return null;
 
 
 //// [overloadEquivalenceWithStatics.js]
+"use strict";
 class A1 {
     static B(v) {
         return null;

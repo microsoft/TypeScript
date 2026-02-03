@@ -151,6 +151,7 @@ Found 3 errors.
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/lib/common/nominal.js]
+"use strict";
 /**
  * @template T, Name
  * @typedef {T & {[Symbol.species]: Name}} Nominal

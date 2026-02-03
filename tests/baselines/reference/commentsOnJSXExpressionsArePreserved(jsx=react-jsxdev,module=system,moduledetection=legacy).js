@@ -23,6 +23,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
 const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 class Component {
     render() {

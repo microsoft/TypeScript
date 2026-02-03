@@ -15,6 +15,7 @@ namespace M {
 
 
 //// [innerFunc.js]
+"use strict";
 function salt() {
     function pepper() { return 5; }
     return pepper();

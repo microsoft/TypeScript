@@ -5,5 +5,6 @@ function Point() { this.x = 3; }
 var x: any = new Point();  // error at "new"
 
 //// [implicitAnyNewExprLackConstructorSignature.js]
+"use strict";
 function Point() { this.x = 3; }
 var x = new Point(); // error at "new"

@@ -18,6 +18,7 @@ let c2 = pInst.optionalParam('hello', null)
 
 
 //// [out_1.js]
+"use strict";
 function MyClass() {
     this.prop = null;
 }

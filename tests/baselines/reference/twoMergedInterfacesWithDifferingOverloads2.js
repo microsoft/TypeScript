@@ -34,6 +34,7 @@ namespace G {
 }
 
 //// [twoMergedInterfacesWithDifferingOverloads2.js]
+"use strict";
 var a;
 var r = a();
 var r2 = a(1);

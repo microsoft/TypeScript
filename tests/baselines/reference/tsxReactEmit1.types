@@ -11,9 +11,11 @@ declare namespace JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 var p;
 >p : any
+>  : ^^^
 
 var selfClosed1 = <div />;
 >selfClosed1 : JSX.Element
@@ -90,8 +92,10 @@ var selfClosed7 = <div x={p} y='p' b />;
 >                      : ^^^^^^^^^^^
 >div : any
 >    : ^^^
->x : any
->p : any
+>x : undefined
+>  : ^^^^^^^^^
+>p : undefined
+>  : ^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >b : true
@@ -128,7 +132,8 @@ var openClosed3 = <div n='m'>{p}</div>;
 >    : ^^^
 >n : string
 >  : ^^^^^^
->p : any
+>p : undefined
+>  : ^^^^^^^^^
 >div : any
 >    : ^^^
 
@@ -143,8 +148,10 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >  : ^^^^^^
 >p < p : boolean
 >      : ^^^^^^^
->p : any
->p : any
+>p : undefined
+>  : ^^^^^^^^^
+>p : undefined
+>  : ^^^^^^^^^
 >div : any
 >    : ^^^
 
@@ -161,8 +168,10 @@ var openClosed5 = <div n='m' b>{p > p}</div>;
 >  : ^^^^
 >p > p : boolean
 >      : ^^^^^^^
->p : any
->p : any
+>p : undefined
+>  : ^^^^^^^^^
+>p : undefined
+>  : ^^^^^^^^^
 >div : any
 >    : ^^^
 
@@ -198,9 +207,13 @@ class SomeClass {
 >[p, ...p, p] : any[]
 >             : ^^^^^
 >p : any
+>  : ^^^
 >...p : any
+>     : ^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -214,6 +227,7 @@ class SomeClass {
 >{p} : { p: any; }
 >    : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -245,9 +259,13 @@ class SomeClass {
 >[p, ...p, p] : any[]
 >             : ^^^^^
 >p : any
+>  : ^^^
 >...p : any
+>     : ^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -263,6 +281,7 @@ class SomeClass {
 >{p} : { p: any; }
 >    : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 	}
@@ -285,7 +304,8 @@ var whitespace2 = <div>  {p}    </div>;
 >                     : ^^^^^^^^^^^
 >div : any
 >    : ^^^
->p : any
+>p : undefined
+>  : ^^^^^^^^^
 >div : any
 >    : ^^^
 
@@ -298,7 +318,8 @@ var whitespace3 = <div>
 >    : ^^^
 
       {p}    
->p : any
+>p : undefined
+>  : ^^^^^^^^^
 
       </div>;
 >div : any

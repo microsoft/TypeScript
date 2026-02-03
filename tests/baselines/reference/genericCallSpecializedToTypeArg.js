@@ -12,6 +12,7 @@ function dupeAndGetDist<U>(x: U): U {
 
 
 //// [genericCallSpecializedToTypeArg.js]
+"use strict";
 function dupe(x) {
     return x;
 }

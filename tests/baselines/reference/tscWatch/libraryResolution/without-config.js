@@ -174,6 +174,7 @@ export const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker"/>
 /// <reference lib="scripthost"/>
 /// <reference lib="es5"/>

@@ -7,6 +7,7 @@ function f(x: string | Promise<string>) {
 
 
 //// [nonexistentPropertyOnUnion.js]
+"use strict";
 function f(x) {
     x.toLowerCase();
 }

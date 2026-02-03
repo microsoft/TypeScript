@@ -41,6 +41,7 @@ Found 1 error in tsconfig.json[90m:3[0m
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 const x = 10;
 
 

@@ -66,6 +66,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspaces/solution/sample1/core/index.js]
+"use strict";
 function foo() { return 10; }
 
 
@@ -114,6 +115,7 @@ declare function foo(): number;
 }
 
 //// [/user/username/workspaces/solution/sample1/logic/index.js]
+"use strict";
 function bar() { return foo() + 1; }
 ;
 
@@ -256,6 +258,7 @@ Output::
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.js]
+"use strict";
 function foo() { return 10; }
 function myFunc() { return 10; }
 
@@ -451,6 +454,7 @@ Output::
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.js]
+"use strict";
 function foo() { return 10; }
 function myFunc() { return 100; }
 

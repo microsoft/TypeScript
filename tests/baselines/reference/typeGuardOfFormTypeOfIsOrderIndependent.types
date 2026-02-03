@@ -53,12 +53,12 @@ if ("string" === typeof strOrNum) {
 }
 else {
     num = strOrNum;
->num = strOrNum : number
->               : ^^^^^^
+>num = strOrNum : string | number
+>               : ^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->strOrNum : number
->         : ^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 }
 if ("function" === typeof strOrFunc) {
 >"function" === typeof strOrFunc : boolean
@@ -80,12 +80,12 @@ if ("function" === typeof strOrFunc) {
 }
 else {
     str = strOrFunc;
->str = strOrFunc : string
->                : ^^^^^^
+>str = strOrFunc : string | (() => void)
+>                : ^^^^^^^^^^^^^^^^    ^
 >str : string
 >    : ^^^^^^
->strOrFunc : string
->          : ^^^^^^
+>strOrFunc : string | (() => void)
+>          : ^^^^^^^^^^^^^^^^    ^
 }
 if ("number" === typeof numOrBool) {
 >"number" === typeof numOrBool : boolean
@@ -107,12 +107,12 @@ if ("number" === typeof numOrBool) {
 }
 else {
     bool = numOrBool;
->bool = numOrBool : boolean
->                 : ^^^^^^^
+>bool = numOrBool : number | boolean
+>                 : ^^^^^^^^^^^^^^^^
 >bool : boolean
 >     : ^^^^^^^
->numOrBool : boolean
->          : ^^^^^^^
+>numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 if ("boolean" === typeof strOrBool) {
 >"boolean" === typeof strOrBool : boolean
@@ -134,11 +134,11 @@ if ("boolean" === typeof strOrBool) {
 }
 else {
     str = strOrBool;
->str = strOrBool : string
->                : ^^^^^^
+>str = strOrBool : string | boolean
+>                : ^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
->strOrBool : string
->          : ^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 

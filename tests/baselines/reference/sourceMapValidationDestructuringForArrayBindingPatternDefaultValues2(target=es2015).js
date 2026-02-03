@@ -117,6 +117,7 @@ for ([numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; 
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.js]
+"use strict";
 let robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;

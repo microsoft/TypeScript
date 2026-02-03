@@ -63,6 +63,7 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/projects/project2/class2.js]
+"use strict";
 class class2 {
 }
 

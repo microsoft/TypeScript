@@ -14,3 +14,4 @@ interface I {
 }
 
 //// [parseShortform.js]
+"use strict";

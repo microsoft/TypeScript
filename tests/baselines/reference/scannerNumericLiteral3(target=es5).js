@@ -4,5 +4,6 @@
 01.0
 
 //// [scannerNumericLiteral3.js]
+"use strict";
 1;
 .0;

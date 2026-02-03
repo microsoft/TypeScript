@@ -43,6 +43,7 @@ x5 += true;
 x5 += {};
 
 //// [compoundAdditionAssignmentWithInvalidOperands.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

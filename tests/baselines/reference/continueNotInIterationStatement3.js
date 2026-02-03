@@ -7,6 +7,7 @@ switch (0) {
 }
 
 //// [continueNotInIterationStatement3.js]
+"use strict";
 switch (0) {
     default:
         continue;

@@ -11,6 +11,7 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod1.js]
+"use strict";
 class A {
     f1() {
         var a;

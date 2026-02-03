@@ -6,8 +6,8 @@ var v;
 >  : ^^^
 
 try { } catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
     function v() { }
 >v : () => void
@@ -19,8 +19,8 @@ function w() { }
 >  : ^^^^^^^^^^
 
 try { } catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
     var w;
 >w : any
@@ -28,8 +28,8 @@ try { } catch (e) {
 }
 
 try { } catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
     var x;
 >x : any

@@ -19,6 +19,7 @@ import A = require('M');
 var c = new A();
 
 //// [ambientExternalModuleWithInternalImportDeclaration_0.js]
+"use strict";
 //// [ambientExternalModuleWithInternalImportDeclaration_1.js]
 define(["require", "exports", "M"], function (require, exports, A) {
     "use strict";

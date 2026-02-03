@@ -8,6 +8,7 @@ class C1 {
 
 
 //// [constructorNameInAccessor.js]
+"use strict";
 class C1 {
     get constructor() { return; }
     set constructor(value) { }

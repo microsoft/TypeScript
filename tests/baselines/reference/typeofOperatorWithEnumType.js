@@ -30,6 +30,7 @@ z: typeof ENUM;
 z: typeof ENUM1;
 
 //// [typeofOperatorWithEnumType.js]
+"use strict";
 // typeof  operator on enum type
 var ENUM;
 (function (ENUM) {

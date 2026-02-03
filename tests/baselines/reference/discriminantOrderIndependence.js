@@ -44,6 +44,7 @@ if (order2 && order2.type === "a") {
 }
 
 //// [discriminantOrderIndependence.js]
+"use strict";
 // Should NOT error: 'order1' is possibly 'undefined' after the guard
 if (order1 && order1.type === "a") {
     order1.type; // Should be OK

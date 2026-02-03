@@ -10,5 +10,6 @@ class C {
 }
 
 //// [indexSignatureWithAccessibilityModifier.js]
+"use strict";
 class C {
 }

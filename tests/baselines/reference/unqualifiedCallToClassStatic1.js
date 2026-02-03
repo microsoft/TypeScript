@@ -9,6 +9,7 @@ class Vector {
 }
 
 //// [unqualifiedCallToClassStatic1.js]
+"use strict";
 class Vector {
 }
 Vector.foo = () => {

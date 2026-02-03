@@ -9,6 +9,7 @@ const foo = {
 };
 
 //// [es5SetterparameterDestructuringNotElided.js]
+"use strict";
 const foo = {
     set foo([start, end]) {
         void start;

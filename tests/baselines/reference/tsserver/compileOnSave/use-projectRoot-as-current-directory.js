@@ -167,9 +167,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/home/src/root/TypeScriptProject3/TypeScriptProject3/bar.js.map]
-{"version":3,"file":"bar.js","sourceRoot":"","sources":["Foo.ts"],"names":[],"mappings":"AAAA,QAAQ,CAAC,GAAG,CAAC,OAAO,CAAC,CAAC"}
+{"version":3,"file":"bar.js","sourceRoot":"","sources":["Foo.ts"],"names":[],"mappings":";AAAA,QAAQ,CAAC,GAAG,CAAC,OAAO,CAAC,CAAC"}
 
 //// [/home/src/root/TypeScriptProject3/TypeScriptProject3/bar.js]
+"use strict";
 consonle.log('file1');
 //# sourceMappingURL=bar.js.map
 

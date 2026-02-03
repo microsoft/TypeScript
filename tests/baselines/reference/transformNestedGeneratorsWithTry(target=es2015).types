@@ -33,7 +33,8 @@ async function a(): Bluebird<void> {
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 
       } catch (error) { }
->error : any
+>error : unknown
+>      : ^^^^^^^
 
     };
 
@@ -46,7 +47,8 @@ async function a(): Bluebird<void> {
 >  : ^^^^^^              
 
   } catch (error) { }
->error : any
+>error : unknown
+>      : ^^^^^^^
 }
 
 === bluebird.d.ts ===

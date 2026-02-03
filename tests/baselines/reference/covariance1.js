@@ -20,6 +20,7 @@ namespace M {
 
 
 //// [covariance1.js]
+"use strict";
 var M;
 (function (M) {
     class XX {

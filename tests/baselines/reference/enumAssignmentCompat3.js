@@ -92,6 +92,7 @@ abc = merged2; // ok
 merged2 = abc; // ok
 
 //// [enumAssignmentCompat3.js]
+"use strict";
 var First;
 (function (First) {
     let E;

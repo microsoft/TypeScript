@@ -28,6 +28,7 @@ var see3 = true
 
 
 //// [linkTagEmit1.js]
+"use strict";
 /** @typedef {number} N */
 /**
  * @typedef {Object} D1

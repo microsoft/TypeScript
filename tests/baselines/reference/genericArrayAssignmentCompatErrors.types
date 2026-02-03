@@ -14,8 +14,8 @@ var myCars2 = new [];
 >        : ^^^
 >new [] : any
 >       : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var myCars3 = new Array({});
 >myCars3 : {}[]

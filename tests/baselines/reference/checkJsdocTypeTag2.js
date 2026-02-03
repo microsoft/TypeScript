@@ -28,6 +28,7 @@ const x4 = (a) => a + 1;
 x4(0);
 
 //// [0.js]
+"use strict";
 // @ts-check
 /** @type {String} */
 var S = true;

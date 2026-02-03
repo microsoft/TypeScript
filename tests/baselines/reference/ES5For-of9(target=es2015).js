@@ -11,6 +11,7 @@ for (foo().x of []) {
 }
 
 //// [ES5For-of9.js]
+"use strict";
 function foo() {
     return { x: 0 };
 }

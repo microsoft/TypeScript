@@ -7,3 +7,4 @@ declare namespace foo {
 }
 
 //// [ambientModuleWithClassDeclarationWithExtends.js]
+"use strict";

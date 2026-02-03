@@ -7,6 +7,7 @@ orbitol.toExponential()
 
 
 //// [plainJSRedeclare.js]
+"use strict";
 const orbitol = 1;
 var orbitol = 1 + false;
 orbitol.toExponential();

@@ -34,6 +34,7 @@ class F {
 }
 
 //// [accessorWithMismatchedAccessibilityModifiers.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

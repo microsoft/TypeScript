@@ -14,6 +14,7 @@ namespace A {
 }
 
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

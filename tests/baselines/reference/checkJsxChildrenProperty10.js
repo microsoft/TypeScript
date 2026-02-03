@@ -25,6 +25,7 @@ let k3 = <div> {1} {"That is a number"} </div>;
 let k4 = <Button> <h2> Hello </h2> </Button>;
 
 //// [file.jsx]
+"use strict";
 class Button {
     render() {
         return (<div>My Button</div>);

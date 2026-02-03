@@ -17,6 +17,7 @@ function h(obj: { x: number }) {
 
 
 //// [spreadOverwritesProperty.js]
+"use strict";
 var unused1 = Object.assign({ b: 1 }, ab);
 var unused2 = Object.assign(Object.assign({}, ab), ab);
 var unused3 = Object.assign({ b: 1 }, abq);

@@ -11,6 +11,7 @@ class c {
 
 
 //// [thisWhenTypeCheckFails.js]
+"use strict";
 class c {
     n() {
         var k = () => {

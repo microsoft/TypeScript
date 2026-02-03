@@ -12,6 +12,7 @@ var w: Error = new Object();
 
 
 //// [assigningFromObjectToAnythingElse.js]
+"use strict";
 var y;
 y = x;
 var a = Object.create("");

@@ -1,8 +1,112 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+privacyAccessorDeclFile_GlobalFile.ts(6,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyAccessorDeclFile_GlobalFile.ts(9,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyAccessorDeclFile_GlobalFile.ts(12,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyAccessorDeclFile_GlobalFile.ts(15,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyAccessorDeclFile_GlobalFile.ts(57,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(60,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(63,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(66,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(84,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(87,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(90,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(93,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(111,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(114,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(117,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(120,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(138,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(141,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(144,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(147,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(209,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(212,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(231,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(234,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(254,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(257,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(260,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(263,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(281,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(284,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(287,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(290,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(308,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(311,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(314,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(317,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_GlobalFile.ts(335,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(338,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(341,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(344,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(406,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(409,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(428,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.ts(431,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(9,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(12,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(15,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(18,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(36,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(39,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(42,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(45,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(63,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(66,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(69,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(72,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(90,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(93,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(96,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(99,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(161,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(164,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(183,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(186,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(211,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(214,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(217,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(220,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(238,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(241,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(244,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(247,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(265,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(268,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(271,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(274,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(292,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(295,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(298,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(301,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(363,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(366,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(385,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(388,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(414,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(417,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(420,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(423,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(441,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(444,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(447,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(450,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(468,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(471,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(474,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(477,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyAccessorDeclFile_externalModule.ts(495,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(498,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(501,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(504,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(566,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(569,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(588,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyAccessorDeclFile_externalModule.ts(591,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== privacyAccessorDeclFile_externalModule.ts (0 errors) ====
+==== privacyAccessorDeclFile_externalModule.ts (60 errors) ====
     class privateClass {
     }
     
@@ -12,15 +116,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod(): privateClass { // Error
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         private static get myPrivateStaticMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         get myPublicMethod(): privateClass { // Error
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         private get myPrivateMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         static get myPublicStaticMethod1() { // Error
             return new privateClass();
@@ -39,15 +151,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     export class publicClassWithWithPublicGetAccessorTypes {
         static get myPublicStaticMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         private static get myPrivateStaticMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         get myPublicMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         private get myPrivateMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         static get myPublicStaticMethod1() {
             return new publicClass();
@@ -66,15 +186,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     class privateClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         private static get myPrivateStaticMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         get myPublicMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         private get myPrivateMethod(): privateClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
         }
         static get myPublicStaticMethod1() {
             return new privateClass();
@@ -93,15 +221,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     class privateClassWithWithPublicGetAccessorTypes {
         static get myPublicStaticMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         private static get myPrivateStaticMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         get myPublicMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         private get myPrivateMethod(): publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         static get myPublicStaticMethod1() {
             return new publicClass();
@@ -164,9 +300,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     export class publicClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         get myPublicMethod(): privateModule.publicClass { // Error
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         static get myPublicStaticMethod1() { // Error
             return new privateModule.publicClass();
@@ -186,9 +326,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     class privateClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod(): privateModule.publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         get myPublicMethod(): privateModule.publicClass {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
         }
         static get myPublicStaticMethod1() {
             return new privateModule.publicClass();
@@ -214,15 +358,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() { // Error
                 return new privateClass();
@@ -241,15 +393,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -268,15 +428,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateClass();
@@ -295,15 +463,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -366,9 +542,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() { // Error
                 return new privateModule.publicClass();
@@ -388,9 +568,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateModule.publicClass();
@@ -417,15 +601,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { 
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass { 
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() { 
                 return new privateClass();
@@ -444,15 +636,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -471,15 +671,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateClass();
@@ -498,15 +706,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -569,9 +785,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { 
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass { 
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() { 
                 return new privateModule.publicClass();
@@ -591,9 +811,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateModule.publicClass();
@@ -611,22 +835,30 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         }
     }
     
-==== privacyAccessorDeclFile_GlobalFile.ts (0 errors) ====
+==== privacyAccessorDeclFile_GlobalFile.ts (44 errors) ====
     class publicClassInGlobal {
     }
     
     class publicClassInGlobalWithPublicGetAccessorTypes {
         static get myPublicStaticMethod(): publicClassInGlobal {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
         }
         private static get myPrivateStaticMethod(): publicClassInGlobal {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
         }
         get myPublicMethod(): publicClassInGlobal {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
         }
         private get myPrivateMethod(): publicClassInGlobal {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
         }
         static get myPublicStaticMethod1() {
             return new publicClassInGlobal();
@@ -669,15 +901,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             export class publicClassWithWithPrivateGetAccessorTypes {
                 static get myPublicStaticMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 private static get myPrivateStaticMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 get myPublicMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 private get myPrivateMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new privateClass();
@@ -696,15 +936,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             export class publicClassWithWithPublicGetAccessorTypes {
                 static get myPublicStaticMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 private static get myPrivateStaticMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 get myPublicMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 private get myPrivateMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new publicClass();
@@ -723,15 +971,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             class privateClassWithWithPrivateGetAccessorTypes {
                 static get myPublicStaticMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 private static get myPrivateStaticMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 get myPublicMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 private get myPrivateMethod(): privateClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new privateClass();
@@ -750,15 +1006,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             class privateClassWithWithPublicGetAccessorTypes {
                 static get myPublicStaticMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 private static get myPrivateStaticMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 get myPublicMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 private get myPrivateMethod(): publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new publicClass();
@@ -821,9 +1085,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             export class publicClassWithPrivateModuleGetAccessorTypes {
                 static get myPublicStaticMethod(): privateModule.publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 get myPublicMethod(): privateModule.publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new privateModule.publicClass();
@@ -843,9 +1111,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             class privateClassWithPrivateModuleGetAccessorTypes {
                 static get myPublicStaticMethod(): privateModule.publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 get myPublicMethod(): privateModule.publicClass {
                     return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
                 }
                 static get myPublicStaticMethod1() {
                     return new privateModule.publicClass();
@@ -866,15 +1138,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() { // Error
                 return new privateClass();
@@ -893,15 +1173,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -920,15 +1208,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private static get myPrivateStaticMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             get myPublicMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             private get myPrivateMethod(): privateClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateClass();
@@ -947,15 +1243,23 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithWithPublicGetAccessorTypes {
             static get myPublicStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private static get myPrivateStaticMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             private get myPrivateMethod(): publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new publicClass();
@@ -1018,9 +1322,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() { // Error
                 return new privateModule.publicClass();
@@ -1040,9 +1348,13 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         class privateClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             get myPublicMethod(): privateModule.publicClass {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
             }
             static get myPublicStaticMethod1() {
                 return new privateModule.publicClass();

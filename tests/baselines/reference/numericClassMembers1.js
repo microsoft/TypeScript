@@ -18,6 +18,7 @@ class C236 {
 
 
 //// [numericClassMembers1.js]
+"use strict";
 class C234 {
     constructor() {
         this[0] = 1;

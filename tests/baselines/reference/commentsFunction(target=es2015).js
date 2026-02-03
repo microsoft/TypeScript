@@ -57,6 +57,7 @@ function foo2() {
 
 
 //// [commentsFunction.js]
+"use strict";
 /** This comment should appear for foo*/
 function foo() {
 } /* trailing comment of function */

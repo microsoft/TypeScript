@@ -5,3 +5,4 @@ public interface I {
 }
 
 //// [parserInterfaceDeclaration3.js]
+"use strict";

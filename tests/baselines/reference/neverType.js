@@ -93,6 +93,7 @@ test(errorCallback);
 
 
 //// [neverType.js]
+"use strict";
 function error(message) {
     throw new Error(message);
 }

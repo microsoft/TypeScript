@@ -1,0 +1,14 @@
+classExpressionWithResolutionOfNamespaceOfSameName01.ts(7,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+
+
+==== classExpressionWithResolutionOfNamespaceOfSameName01.ts (1 errors) ====
+    namespace C {
+        export interface type {
+        }
+    }
+    
+    var x = class C {
+        prop: C.type;
+        ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+    }

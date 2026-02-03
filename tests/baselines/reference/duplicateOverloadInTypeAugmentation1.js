@@ -11,5 +11,6 @@ var a: Array<string>;
 var r5 = a.reduce((x, y) => x + y);
 
 //// [duplicateOverloadInTypeAugmentation1.js]
+"use strict";
 var a;
 var r5 = a.reduce((x, y) => x + y);

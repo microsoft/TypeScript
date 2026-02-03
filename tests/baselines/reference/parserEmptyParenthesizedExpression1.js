@@ -6,6 +6,7 @@ function getObj() {
 }
 
 //// [parserEmptyParenthesizedExpression1.js]
+"use strict";
 function getObj() {
     ().toString();
 }

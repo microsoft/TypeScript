@@ -22,6 +22,7 @@ namespace consumer {
 
 
 //// [innerAliases2.js]
+"use strict";
 var _provider;
 (function (_provider) {
     class UsefulClass {

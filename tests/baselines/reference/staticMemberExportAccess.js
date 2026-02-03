@@ -23,6 +23,7 @@ var r4 = $.sammy.x; // error
 Sammy.bar();
 
 //// [staticMemberExportAccess.js]
+"use strict";
 class Sammy {
     foo() { return "hi"; }
     static bar() {

@@ -4,4 +4,5 @@
 
 
 //// [emptyFile-souremap.js]
+"use strict";
 //# sourceMappingURL=emptyFile-souremap.js.map

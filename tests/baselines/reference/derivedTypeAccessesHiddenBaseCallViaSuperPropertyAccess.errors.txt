@@ -1,16 +1,22 @@
+derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts(3,9): error TS2322: Type 'null' is not assignable to type '{ a: number; }'.
+derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts(9,9): error TS2322: Type 'null' is not assignable to type '{ a: number; b: number; }'.
 derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts(14,36): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
 
 
-==== derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts (1 errors) ====
+==== derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts (3 errors) ====
     class Base {
         foo(x: { a: number }): { a: number } {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{ a: number; }'.
         }
     }
     
     class Derived extends Base {
         foo(x: { a: number; b: number }): { a: number; b: number } {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{ a: number; b: number; }'.
         }
     
         bar() {

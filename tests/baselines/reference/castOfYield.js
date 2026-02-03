@@ -9,6 +9,7 @@ function* f() {
 
 
 //// [castOfYield.js]
+"use strict";
 function* f() {
     (yield 0);
     // Unlike await, yield is not allowed to appear in a simple unary expression.

@@ -1,10 +1,13 @@
+parserErrantEqualsGreaterThanAfterFunction2.ts(1,10): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,15): error TS2304: Cannot find name 'A'.
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,18): error TS1144: '{' or ';' expected.
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,21): error TS2304: Cannot find name 'p'.
 
 
-==== parserErrantEqualsGreaterThanAfterFunction2.ts (3 errors) ====
+==== parserErrantEqualsGreaterThanAfterFunction2.ts (4 errors) ====
     function f(p: A) => p;
+             ~
+!!! error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
                   ~
 !!! error TS2304: Cannot find name 'A'.
                      ~~

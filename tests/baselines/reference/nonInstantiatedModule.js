@@ -48,6 +48,7 @@ namespace M3 {
 }
 
 //// [nonInstantiatedModule.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;

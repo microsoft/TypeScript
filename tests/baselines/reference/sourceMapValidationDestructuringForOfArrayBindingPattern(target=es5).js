@@ -98,6 +98,7 @@ for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
 }
 
 //// [sourceMapValidationDestructuringForOfArrayBindingPattern.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 var robots = [robotA, robotB];

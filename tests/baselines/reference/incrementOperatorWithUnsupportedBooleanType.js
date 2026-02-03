@@ -57,6 +57,7 @@ M.n++;
 objA.a++, M.n++;
 
 //// [incrementOperatorWithUnsupportedBooleanType.js]
+"use strict";
 function foo() { return true; }
 class A {
     static foo() { return true; }

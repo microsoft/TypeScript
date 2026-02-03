@@ -7,6 +7,7 @@ declare var h: any;
 <><span>1</span><><span>2.1</span><span>2.2</span></></>;
 
 //// [jsxFactoryButNoJsxFragmentFactory.js]
+"use strict";
 h(React.Fragment, null);
 h(React.Fragment, null,
     h("span", null, "1"),

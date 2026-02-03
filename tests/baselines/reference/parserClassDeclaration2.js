@@ -5,5 +5,6 @@ class C implements A implements B {
 }
 
 //// [parserClassDeclaration2.js]
+"use strict";
 class C {
 }

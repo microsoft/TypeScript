@@ -5,4 +5,5 @@ declare var union: string | number;
 for (var v of union) { }
 
 //// [ES5For-ofTypeCheck7.js]
+"use strict";
 for (var v of union) { }

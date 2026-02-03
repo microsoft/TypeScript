@@ -102,6 +102,7 @@ function e6({x: [number, number, number]}) { }  // error, duplicate identifier;
 
 
 //// [destructuringParameterDeclaration1ES6.js]
+"use strict";
 // Conformance for emitting ES6
 // A parameter declaration may specify either an identifier or a binding pattern.
 // The identifiers specified in parameter declarations and binding patterns

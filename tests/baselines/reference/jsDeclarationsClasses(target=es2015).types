@@ -78,6 +78,7 @@ export class E {
 >f1 : U
 >   : ^
 >(null) : any
+>       : ^^^
 
     /**
      * @param {U} _p
@@ -95,6 +96,7 @@ export class E {
 >f2 : U
 >   : ^
 >(null) : any
+>       : ^^^
 
     /**
      * @param {U} _p
@@ -269,6 +271,7 @@ export class K {
 >this.p1 = 12 : 12
 >             : ^^
 >this.p1 : any
+>        : ^^^
 >this : this
 >     : ^^^^
 >p1 : any
@@ -280,6 +283,7 @@ export class K {
 >this.p2 = "ok" : "ok"
 >               : ^^^^
 >this.p2 : any
+>        : ^^^
 >this : this
 >     : ^^^^
 >p2 : any
@@ -317,6 +321,7 @@ export class M extends null {
 >this.prop = 12 : 12
 >               : ^^
 >this.prop : any
+>          : ^^^
 >this : this
 >     : ^^^^
 >prop : any
@@ -353,6 +358,7 @@ export class N extends L {
 >this.another = param : T
 >                     : ^
 >this.another : any
+>             : ^^^
 >this : this
 >     : ^^^^
 >another : any
@@ -391,6 +397,7 @@ export class O extends N {
 >this.another2 = param : U
 >                      : ^
 >this.another2 : any
+>              : ^^^
 >this : this
 >     : ^^^^
 >another2 : any
@@ -402,12 +409,15 @@ export class O extends N {
 
 var x = /** @type {*} */(null);
 >x : any
+>  : ^^^
 >(null) : any
+>       : ^^^
 
 export class VariableBase extends x {}
 >VariableBase : VariableBase
 >             : ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 export class HasStatics {
 >HasStatics : HasStatics

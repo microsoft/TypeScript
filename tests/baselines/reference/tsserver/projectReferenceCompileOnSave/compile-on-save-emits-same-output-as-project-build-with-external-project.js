@@ -72,6 +72,7 @@ declare const console: { log(msg: any): void; };
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/buttonClass/Source.js]
+"use strict";
 var Hmi;
 (function (Hmi) {
     class Button {
@@ -131,6 +132,7 @@ declare namespace Hmi {
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
+"use strict";
 var Hmi;
 (function (Hmi) {
     class Sibling {

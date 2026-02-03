@@ -294,6 +294,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/test/file1.js]
+"use strict";
 const x = 1;
 
 

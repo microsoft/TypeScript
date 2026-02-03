@@ -36,6 +36,7 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 
 
 //// [contextuallyTypedIifeStrict.js]
+"use strict";
 // arrow
 (jake => { })("build");
 // function expression

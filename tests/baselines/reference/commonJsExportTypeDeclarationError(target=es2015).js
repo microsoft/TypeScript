@@ -19,6 +19,7 @@ export type test = test;
 
 
 //// [test.js]
+"use strict";
 module.exports = {
     message: ""
 };

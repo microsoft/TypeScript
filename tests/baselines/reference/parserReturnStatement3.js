@@ -6,6 +6,7 @@ function f() {
 }
 
 //// [parserReturnStatement3.js]
+"use strict";
 function f() {
     return;
 }

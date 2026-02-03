@@ -15,6 +15,7 @@ class Foo3 {
 
 
 //// [varArgConstructorMemberParameter.js]
+"use strict";
 class Foo1 {
     constructor(...args) { }
 }

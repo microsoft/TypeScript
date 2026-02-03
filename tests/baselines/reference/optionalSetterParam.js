@@ -8,6 +8,7 @@ class foo {
 
 
 //// [optionalSetterParam.js]
+"use strict";
 class foo {
     set bar(param) { }
 }

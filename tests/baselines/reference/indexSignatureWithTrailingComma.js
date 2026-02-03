@@ -15,5 +15,6 @@ class C {
 
 
 //// [indexSignatureWithTrailingComma.js]
+"use strict";
 class C {
 }

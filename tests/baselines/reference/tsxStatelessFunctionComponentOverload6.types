@@ -15,12 +15,12 @@ declare function log(...args: any[]): void;
 
 export interface ClickableProps {
     children?: string;
->children : string
->         : ^^^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     className?: string;
->className : string
->          : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 }
 
 export interface ButtonProps extends ClickableProps {
@@ -63,6 +63,7 @@ let obj = {
 }
 let obj1: any;
 >obj1 : any
+>     : ^^^
 
 let obj2 = {
 >obj2 : { onClick: () => void; }
@@ -127,7 +128,9 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
         return this._buildMainLink(props);
 >this._buildMainLink(props) : any
+>                           : ^^^
 >this._buildMainLink : any
+>                    : ^^^
 >this : any
 >     : ^^^
 >_buildMainLink : any
@@ -138,7 +141,9 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
     return this._buildMainButton(props);
 >this._buildMainButton(props) : any
+>                             : ^^^
 >this._buildMainButton : any
+>                      : ^^^
 >this : any
 >     : ^^^
 >_buildMainButton : any
@@ -210,6 +215,7 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
+>     : ^^^
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 >b5 : JSX.Element
@@ -219,6 +225,7 @@ const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the seco
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
+>     : ^^^
 >to : string
 >   : ^^^^^^
 

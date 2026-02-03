@@ -6,6 +6,7 @@ var stringTag = foge[Symbol.toStringTag];
 var species = SharedArrayBuffer[Symbol.species];
 
 //// [useSharedArrayBuffer5.js]
+"use strict";
 var foge = new SharedArrayBuffer(1024);
 var stringTag = foge[Symbol.toStringTag];
 var species = SharedArrayBuffer[Symbol.species];

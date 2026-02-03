@@ -133,6 +133,7 @@ var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 
 
 //// [output.js]
+"use strict";
 var _a;
 class C {
     constructor() {

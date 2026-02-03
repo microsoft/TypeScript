@@ -28,6 +28,7 @@ declare function isBuzz(x: unknown): x is Buzz;
 ([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5);
 
 //// [unionOfArraysFilterCall.js]
+"use strict";
 [].filter(item => item.id < 5);
 [].filter(item => item.id < 5);
 [].find(item => item);

@@ -10,6 +10,7 @@ module.exports = Foo;
 module.exports.Strings = Strings;
 
 //// [cls.js]
+"use strict";
 const Strings = {
     a: "A",
     b: "B"

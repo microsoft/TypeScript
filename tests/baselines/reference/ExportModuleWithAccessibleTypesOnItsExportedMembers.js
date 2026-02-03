@@ -23,6 +23,7 @@ namespace A {
 }
 
 //// [ExportModuleWithAccessibleTypesOnItsExportedMembers.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

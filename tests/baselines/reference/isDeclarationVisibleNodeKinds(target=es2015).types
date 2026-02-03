@@ -10,6 +10,7 @@ namespace schema {
 >createValidator1 : (schema: any) => <T>(data: T) => T
 >                 : ^      ^^   ^^^^^                 
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -28,6 +29,7 @@ namespace schema {
 >createValidator2 : (schema: any) => new <T>(data: T) => T
 >                 : ^      ^^   ^^^^^                     
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -46,6 +48,7 @@ namespace schema {
 >createValidator3 : (schema: any) => number | { new <T>(data: T): T; }
 >                 : ^      ^^   ^^^^^                                 
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -64,6 +67,7 @@ namespace schema {
 >createValidator4 : (schema: any) => { new <T>(data: T): T; }[]
 >                 : ^      ^^   ^^^^^                          
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -83,6 +87,7 @@ namespace schema {
 >createValidator5 : (schema: any) => { new <T>(data: T): T; }
 >                 : ^      ^^   ^^^^^                        
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -101,6 +106,7 @@ namespace schema {
 >createValidator6 : (schema: any) => [new <T>(data: T) => T, number]
 >                 : ^      ^^   ^^^^^                               
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -119,6 +125,7 @@ namespace schema {
 >createValidator7 : (schema: any) => (new <T>(data: T) => T)[]
 >                 : ^      ^^   ^^^^^                         
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 
@@ -137,6 +144,7 @@ namespace schema {
 >createValidator8 : (schema: any) => Array<{ <T>(data: T): T; }>
 >                 : ^      ^^   ^^^^^                           
 >schema : any
+>       : ^^^
 >data : T
 >     : ^
 

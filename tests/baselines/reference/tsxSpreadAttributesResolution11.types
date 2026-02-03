@@ -94,6 +94,7 @@ class OverWriteAttr extends React.Component<Prop, {}> {
 
 let anyobj: any;
 >anyobj : any
+>       : ^^^
 
 // OK
 let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
@@ -210,4 +211,5 @@ let x5 = <OverWriteAttr {...anyobj} />
 >OverWriteAttr : typeof OverWriteAttr
 >              : ^^^^^^^^^^^^^^^^^^^^
 >anyobj : any
+>       : ^^^
 

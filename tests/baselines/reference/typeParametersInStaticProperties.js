@@ -6,5 +6,6 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticProperties.js]
+"use strict";
 class foo {
 }

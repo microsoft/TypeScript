@@ -47,6 +47,7 @@ delete foo();
 delete objA.a,M.n;
 
 //// [deleteOperatorWithStringType.js]
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {

@@ -19,6 +19,7 @@ b = a;
 
 
 //// [moduleAssignmentCompat1.js]
+"use strict";
 var A;
 (function (A) {
     class C {

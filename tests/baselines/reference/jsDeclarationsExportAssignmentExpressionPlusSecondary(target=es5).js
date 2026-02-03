@@ -16,6 +16,7 @@ module.exports.Strings = Strings;
 
 
 //// [index.js]
+"use strict";
 var Strings = {
     a: "A",
     b: "B"

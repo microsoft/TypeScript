@@ -11,5 +11,6 @@ let Bar: {
 
 
 //// [errorOnInitializerInObjectTypeLiteralProperty.js]
+"use strict";
 var Foo;
 let Bar;

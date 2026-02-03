@@ -100,6 +100,7 @@ namespace m6 { export var y = 2; }
 
 
 //// [augmentedTypesModules.js]
+"use strict";
 var m1 = 1; // Should be allowed
 var m1a;
 (function (m1a) {

@@ -1,0 +1,9 @@
+arraySlice.ts(2,1): error TS2454: Variable 'arr' is used before being assigned.
+
+
+==== arraySlice.ts (1 errors) ====
+    var arr: string[] | number[];
+    arr.splice(1, 1);
+    ~~~
+!!! error TS2454: Variable 'arr' is used before being assigned.
+    

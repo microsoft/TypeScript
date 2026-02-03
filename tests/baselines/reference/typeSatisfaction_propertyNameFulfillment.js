@@ -17,6 +17,7 @@ let d = p.d;
 
 
 //// [typeSatisfaction_propertyNameFulfillment.js]
+"use strict";
 const p = {
     a: 0,
     b: "hello",

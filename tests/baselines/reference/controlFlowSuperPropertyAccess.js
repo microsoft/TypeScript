@@ -12,6 +12,7 @@ class C extends B {
 
 
 //// [controlFlowSuperPropertyAccess.js]
+"use strict";
 class B {
 }
 class C extends B {

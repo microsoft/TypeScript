@@ -10,6 +10,7 @@ class Markup {
 
 
 //// [classCannotExtendVar.js]
+"use strict";
 var Markup;
 class Markup {
     constructor() {

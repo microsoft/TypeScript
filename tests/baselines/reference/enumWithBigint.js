@@ -7,6 +7,7 @@ enum E {
 
 
 //// [enumWithBigint.js]
+"use strict";
 var E;
 (function (E) {
     E[E[0n] = 0] = 0n;

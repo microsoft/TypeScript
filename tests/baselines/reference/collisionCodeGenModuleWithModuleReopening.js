@@ -32,6 +32,7 @@ var foo3 = new m2.c1();
 var foo2 = new m2.m2();
 
 //// [collisionCodeGenModuleWithModuleReopening.js]
+"use strict";
 var m1;
 (function (m1_1) {
     class m1 {

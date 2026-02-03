@@ -29,6 +29,7 @@ var s;
 `${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1} !!`;
 
 //// [exponentiationOperatorInTemplateStringWithSyntaxError3.js]
+"use strict";
 var t1 = 10;
 var t2 = 10;
 var s;

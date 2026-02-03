@@ -87,6 +87,7 @@ function id(x) {
 exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
 var templateObject_1;
 //// [script.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

@@ -212,6 +212,7 @@ type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
 type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
 
 //// [mappedTypeRelationships.js]
+"use strict";
 function f1(x, k) {
     return x[k];
 }

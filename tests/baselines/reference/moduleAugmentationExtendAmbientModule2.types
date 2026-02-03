@@ -75,9 +75,11 @@ import { Observable } from "observable"
 >(<any>Observable.prototype).map = function() { } : () => void
 >                                                 : ^^^^^^^^^^
 >(<any>Observable.prototype).map : any
+>                                : ^^^
 >(<any>Observable.prototype) : any
 >                            : ^^^
 ><any>Observable.prototype : any
+>                          : ^^^
 >Observable.prototype : Observable<any>
 >                     : ^^^^^^^^^^^^^^^
 >Observable : typeof Observable

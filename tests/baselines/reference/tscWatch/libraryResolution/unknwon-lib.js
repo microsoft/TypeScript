@@ -143,6 +143,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker2"/>
 /// <reference lib="unknownlib"/>
 /// <reference lib="scripthost"/>
@@ -793,6 +794,7 @@ project1/utils.d.ts
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker2"/>
 /// <reference lib="scripthost"/>
 
@@ -993,6 +995,7 @@ project1/utils.d.ts
 
 //// [/home/src/workspace/projects/project1/file.js] file written with same contents
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker"/>
 /// <reference lib="scripthost"/>
 

@@ -11,8 +11,8 @@ interface Base {
     a2: (x?: number) => number;
 >a2 : (x?: number) => number
 >   : ^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a3: (x: number) => number;
 >a3 : (x: number) => number
@@ -25,16 +25,16 @@ interface Base {
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a5: (x?: number, y?: number) => number;
 >a5 : (x?: number, y?: number) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a6: (x: number, y: number) => number;
 >a6 : (x: number, y: number) => number
@@ -69,8 +69,8 @@ declare var a: () => number;
 >  : ^^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -161,8 +161,8 @@ declare var a: () => number;
 declare var a2: (x?: number) => number; 
 >a2 : (x?: number) => number
 >   : ^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a2 = () => 1; // ok, same number of required params
 >a2 = () => 1 : () => number
@@ -181,8 +181,8 @@ declare var a2: (x?: number) => number;
 >   : ^ ^^^      ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -293,8 +293,8 @@ declare var a3: (x: number) => number;
 >   : ^ ^^      ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -401,8 +401,8 @@ declare var a4: (x: number, y?: number) => number;
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a4 = () => 1; // ok, fewer required params
 >a4 = () => 1 : () => number
@@ -421,10 +421,10 @@ declare var a4: (x: number, y?: number) => number;
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -529,10 +529,10 @@ declare var a4: (x: number, y?: number) => number;
 declare var a5: (x?: number, y?: number) => number;
 >a5 : (x?: number, y?: number) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a5 = () => 1; // ok, fewer required params
 >a5 = () => 1 : () => number
@@ -551,10 +551,10 @@ declare var a5: (x?: number, y?: number) => number;
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
 >(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

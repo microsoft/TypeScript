@@ -61,6 +61,7 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithNumberType.js]
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
 class A {

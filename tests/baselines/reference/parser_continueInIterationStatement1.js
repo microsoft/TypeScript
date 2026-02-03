@@ -6,6 +6,7 @@ while (true) {
 }
 
 //// [parser_continueInIterationStatement1.js]
+"use strict";
 while (true) {
     continue;
 }

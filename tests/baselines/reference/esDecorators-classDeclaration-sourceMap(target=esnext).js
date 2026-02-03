@@ -49,6 +49,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-sourceMap.js]
+"use strict";
 @dec
 @dec
 class C {

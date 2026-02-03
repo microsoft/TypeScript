@@ -20,8 +20,8 @@ declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": bo
 >     : ^^^^^ ^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^
 >b : U
 >  : ^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"ignore-prop" : boolean
 >              : ^^^^^^^
 >JSX : any

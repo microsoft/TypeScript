@@ -34,6 +34,7 @@ class F {
 }
 
 //// [accessorWithMismatchedAccessibilityModifiers.js]
+"use strict";
 class C {
     get x() {
         return 1;

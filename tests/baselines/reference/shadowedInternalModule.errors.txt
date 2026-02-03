@@ -1,10 +1,11 @@
 shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+shadowedInternalModule.ts(25,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
 shadowedInternalModule.ts(47,10): error TS2438: Import name cannot be 'any'.
 shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with local declaration of 'Q'.
 
 
-==== shadowedInternalModule.ts (4 errors) ====
+==== shadowedInternalModule.ts (5 errors) ====
     // all errors imported modules conflict with local variables
     
     namespace A {
@@ -32,6 +33,8 @@ shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with
     
         export class Y {
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     }
     

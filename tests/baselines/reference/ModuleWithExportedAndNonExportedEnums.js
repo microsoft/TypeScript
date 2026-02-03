@@ -14,6 +14,7 @@ var b = A.Day.Monday;
 
 
 //// [ModuleWithExportedAndNonExportedEnums.js]
+"use strict";
 var A;
 (function (A) {
     let Color;

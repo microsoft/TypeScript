@@ -10,6 +10,7 @@ class A {
 
 
 //// [privateNameAndStaticInitializer.js]
+"use strict";
 class A {
     #foo = 1;
     static inst = new A();

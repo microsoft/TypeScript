@@ -5,6 +5,7 @@ class ExtendsNull extends null {
 }
 
 //// [declFileClassExtendsNull.js]
+"use strict";
 class ExtendsNull extends null {
 }
 

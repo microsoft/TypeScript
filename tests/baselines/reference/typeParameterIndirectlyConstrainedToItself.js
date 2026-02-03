@@ -27,6 +27,7 @@ function foo<S extends Foo<S>>() {}
 
 
 //// [typeParameterIndirectlyConstrainedToItself.js]
+"use strict";
 class C {
 }
 class C2 {

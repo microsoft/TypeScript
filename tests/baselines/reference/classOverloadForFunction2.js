@@ -5,5 +5,6 @@ function bar(): string;
 class bar {}
 
 //// [classOverloadForFunction2.js]
+"use strict";
 class bar {
 }

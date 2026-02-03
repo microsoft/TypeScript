@@ -55,6 +55,7 @@ var l4 = 1 + `2${ 3 & 4 }5` + 6;
 
 
 //// [templateStringBinaryOperations.js]
+"use strict";
 var a = 1 + `${3}`;
 var b = 1 + `2${3}`;
 var c = 1 + `${3}4`;

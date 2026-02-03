@@ -19,6 +19,7 @@ class C5 extends foo { } // error
 class C6 extends []{ } // error
 
 //// [classExtendsEveryObjectType.js]
+"use strict";
 class C extends I {
 } // error
 class C2 extends { foo: string } {

@@ -4,4 +4,5 @@
 break;
 
 //// [parser_breakNotInIterationOrSwitchStatement1.js]
+"use strict";
 break;

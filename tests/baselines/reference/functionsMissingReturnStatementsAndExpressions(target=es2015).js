@@ -158,6 +158,7 @@ class C {
 
 
 //// [functionsMissingReturnStatementsAndExpressions.js]
+"use strict";
 function f1() {
     // errors because there are no return statements
 }

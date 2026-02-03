@@ -37,6 +37,7 @@ declare var Obj4: Obj4type;
 
 
 //// [file.jsx]
+"use strict";
 <Obj1 x={10}/>; // OK
 <Obj2 x={10}/>; // OK
 <Obj3 x={10}/>; // Error

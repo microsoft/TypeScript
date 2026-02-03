@@ -41,10 +41,10 @@ function f1() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // CFA for 'let' and 'undefined' initializer
@@ -83,10 +83,10 @@ function f2() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // CFA for 'let' and 'null' initializer
@@ -123,10 +123,10 @@ function f3() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | null
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with no initializer
@@ -163,10 +163,10 @@ function f5() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with 'undefined' initializer
@@ -205,10 +205,10 @@ function f6() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // CFA for 'var' with 'null' initializer
@@ -245,10 +245,10 @@ function f7() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | null
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // No CFA for captured outer variables
@@ -285,10 +285,10 @@ function f9() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function f() {
 >f : () => void
@@ -336,10 +336,10 @@ function f10() {
 >        : ^^^^^^^
     }
     const y = x;  // string | number | undefined
->y : string | number
->  : ^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>y : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const f = () => {
 >f : () => void

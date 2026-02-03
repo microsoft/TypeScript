@@ -7,6 +7,7 @@ class C {
 }
 
 //// [typeParameterEquality.js]
+"use strict";
 class C {
     get x() { return null; }
     set x(p) { }

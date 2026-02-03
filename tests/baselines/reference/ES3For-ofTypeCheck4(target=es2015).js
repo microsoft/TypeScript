@@ -5,5 +5,6 @@ var union: string | string[];
 for (const v of union) { }
 
 //// [ES3For-ofTypeCheck4.js]
+"use strict";
 var union;
 for (const v of union) { }

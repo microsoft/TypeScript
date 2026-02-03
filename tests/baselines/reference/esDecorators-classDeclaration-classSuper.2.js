@@ -29,6 +29,7 @@ class C3 extends ((() => {}) as any) {
 
 
 //// [esDecorators-classDeclaration-classSuper.2.js]
+"use strict";
 // class expression in extends should not get an assigned name
 let C1 = (() => {
     let _classDecorators = [dec];

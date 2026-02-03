@@ -54,6 +54,7 @@ var c: {
 };
 
 //// [propertiesAndIndexers.js]
+"use strict";
 class P {
 }
 class Q extends P {

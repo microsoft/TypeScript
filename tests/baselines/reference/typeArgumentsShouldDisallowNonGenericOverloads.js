@@ -14,6 +14,7 @@ var w: string = foo<string>("hi"); // should error
 var z: number = foo("hi"); // should error
 
 //// [typeArgumentsShouldDisallowNonGenericOverloads.js]
+"use strict";
 function foo(a) {
     return "hi";
 }

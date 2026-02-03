@@ -20,6 +20,7 @@ const contextual: Foo = {
 
 
 //// [thisTypeInAccessorsNegative.js]
+"use strict";
 var mismatch = {
     n: 13,
     get x() { return this.n; },

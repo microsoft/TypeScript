@@ -19,6 +19,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
 
 //// [taggedTemplateContextualTyping2.js]
+"use strict";
 function tempTag2(...rest) {
     return undefined;
 }

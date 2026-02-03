@@ -14,10 +14,12 @@ module.exports = Foo;
 module.exports.Strings = Strings;
 
 //// [bar.js]
+"use strict";
 class Bar {
 }
 module.exports = Bar;
 //// [cls.js]
+"use strict";
 const Bar = require("./bar");
 const Strings = {
     a: "A",

@@ -6,6 +6,7 @@ class Foo {
 }
 
 //// [parameterPropertyInitializerInInitializers.js]
+"use strict";
 class Foo {
     constructor(x, y = x) {
         this.x = x;

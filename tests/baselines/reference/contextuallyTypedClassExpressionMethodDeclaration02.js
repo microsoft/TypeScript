@@ -52,6 +52,7 @@ function getFoo3(): Foo {
 }
 
 //// [contextuallyTypedClassExpressionMethodDeclaration02.js]
+"use strict";
 function getFoo1() {
     return class {
         method1(arg) {

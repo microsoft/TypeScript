@@ -8,4 +8,5 @@ interface I<T> {
 }
 
 //// [computedPropertyNames35_ES5.js]
+"use strict";
 function foo() { return ''; }

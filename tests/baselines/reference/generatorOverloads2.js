@@ -8,3 +8,4 @@ declare namespace M {
 }
 
 //// [generatorOverloads2.js]
+"use strict";

@@ -7,6 +7,7 @@ var a: any;
 ([] = [] = a);
 
 //// [emptyAssignmentPatterns03_ES5.js]
+"use strict";
 var a;
 ({} = {} = a);
 ([] = [] = a);

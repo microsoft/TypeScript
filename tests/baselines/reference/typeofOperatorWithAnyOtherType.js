@@ -77,6 +77,7 @@ z: typeof M.n;
 z: typeof obj1.x;
 
 //// [typeofOperatorWithAnyOtherType.js]
+"use strict";
 // typeof  operator on any type
 var ANY2 = ["", ""];
 var obj1 = { x: "a", y: () => { } };

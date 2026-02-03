@@ -45,9 +45,9 @@ export type A<T> = { x: T };
 export declare const a = 1;
 export declare let b: number;
 export declare var c: number;
-declare const d: any;
+declare const d: undefined;
 export { d };
-declare const e: any;
+declare const e: undefined;
 export { e };
 //// [interface.d.ts] ////
 export interface Foo {

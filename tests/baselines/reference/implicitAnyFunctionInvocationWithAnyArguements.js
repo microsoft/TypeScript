@@ -38,6 +38,7 @@ var newC2 = new C(<any>[], null)
 
 
 //// [implicitAnyFunctionInvocationWithAnyArguements.js]
+"use strict";
 // this should be errors
 var arg0 = null; // error at "arg0"
 var anyArray = [null, undefined]; // error at array literal

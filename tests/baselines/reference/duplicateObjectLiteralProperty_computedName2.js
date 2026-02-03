@@ -28,6 +28,7 @@ const t4 = {
 
 
 //// [duplicateObjectLiteralProperty_computedName2.js]
+"use strict";
 const n = 1;
 const s = "s";
 var E1;

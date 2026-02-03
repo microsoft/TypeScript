@@ -1,0 +1,20 @@
+declarationEmitExpressionInExtends2.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+declarationEmitExpressionInExtends2.ts(3,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declarationEmitExpressionInExtends2.ts (2 errors) ====
+    class C<T, U> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        y: U;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function getClass<T>(c: T) {
+        return C;
+    }
+    
+    class MyClass extends getClass(2) <string, number> {
+    }

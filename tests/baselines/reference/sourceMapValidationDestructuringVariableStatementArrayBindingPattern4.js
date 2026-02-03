@@ -4,5 +4,6 @@
 var [x] = [1, 2];
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js]
+"use strict";
 var [x] = [1, 2];
 //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js.map

@@ -335,6 +335,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = "hello";
 
 
@@ -583,6 +584,7 @@ Found 2 errors.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = class {
     p = 10;
 };

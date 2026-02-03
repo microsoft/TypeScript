@@ -12,6 +12,7 @@ class Foo<T> {
 
 
 //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
+"use strict";
 class Foo {
     fn() {
         this.x = a;

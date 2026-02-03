@@ -68,6 +68,7 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithCallSignatures5.js]
+"use strict";
 // checking assignment compat for function types. No errors in this file
 class Base {
 }

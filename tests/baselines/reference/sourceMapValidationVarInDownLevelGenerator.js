@@ -6,6 +6,7 @@ function * f() {
 }
 
 //// [sourceMapValidationVarInDownLevelGenerator.js]
+"use strict";
 function* f() {
     var x = 1, y;
 }

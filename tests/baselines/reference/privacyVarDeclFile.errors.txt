@@ -1,0 +1,581 @@
+privacyVarDeclFile_GlobalFile.ts(9,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(10,13): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(48,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(49,21): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(55,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(56,21): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(62,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(63,21): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(69,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(70,21): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(88,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(98,13): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(123,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(124,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(130,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(131,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(137,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(138,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(144,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(145,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(163,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_GlobalFile.ts(173,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(26,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(27,13): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(33,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(34,13): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(40,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(41,13): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(47,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(48,13): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(66,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(76,5): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(107,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(108,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(114,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(115,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(121,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(122,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(128,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(129,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(147,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(157,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(189,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(190,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(196,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(197,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(203,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(204,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(210,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(211,17): error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(229,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+privacyVarDeclFile_externalModule.ts(239,9): error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+
+
+==== privacyVarDeclFile_externalModule.ts (30 errors) ====
+    class privateClass {
+    }
+    
+    export class publicClass {
+    }
+    
+    export interface publicInterfaceWithPrivatePropertyTypes {
+        myProperty: privateClass;  // Error
+    }
+    
+    export interface publicInterfaceWithPublicPropertyTypes {
+        myProperty: publicClass;
+    }
+    
+    interface privateInterfaceWithPrivatePropertyTypes {
+        myProperty: privateClass;
+    }
+    
+    interface privateInterfaceWithPublicPropertyTypes {
+        myProperty: publicClass;
+    }
+    
+    export class publicClassWithWithPrivatePropertyTypes {
+        static myPublicStaticProperty: privateClass; // Error
+        private static myPrivateStaticProperty: privateClass;
+        myPublicProperty: privateClass; // Error
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        private myPrivateProperty: privateClass;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    export class publicClassWithWithPublicPropertyTypes {
+        static myPublicStaticProperty: publicClass;
+        private static myPrivateStaticProperty: publicClass;
+        myPublicProperty: publicClass;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        private myPrivateProperty: publicClass;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class privateClassWithWithPrivatePropertyTypes {
+        static myPublicStaticProperty: privateClass;
+        private static myPrivateStaticProperty: privateClass;
+        myPublicProperty: privateClass;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        private myPrivateProperty: privateClass;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class privateClassWithWithPublicPropertyTypes {
+        static myPublicStaticProperty: publicClass;
+        private static myPrivateStaticProperty: publicClass;
+        myPublicProperty: publicClass;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        private myPrivateProperty: publicClass;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    export var publicVarWithPrivatePropertyTypes: privateClass; // Error
+    export var publicVarWithPublicPropertyTypes: publicClass;
+    var privateVarWithPrivatePropertyTypes: privateClass;
+    var privateVarWithPublicPropertyTypes: publicClass;
+    
+    export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+    export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
+    declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
+    declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
+    
+    export interface publicInterfaceWithPrivateModulePropertyTypes {
+        myProperty: privateModule.publicClass; // Error
+    }
+    export class publicClassWithPrivateModulePropertyTypes {
+        static myPublicStaticProperty: privateModule.publicClass; // Error
+        myPublicProperty: privateModule.publicClass; // Error
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    
+    interface privateInterfaceWithPrivateModulePropertyTypes {
+        myProperty: privateModule.publicClass;
+    }
+    class privateClassWithPrivateModulePropertyTypes {
+        static myPublicStaticProperty: privateModule.publicClass;
+        myPublicProperty: privateModule.publicClass;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    
+    export namespace publicModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        export interface publicInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;  // Error
+        }
+    
+        export interface publicInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        interface privateInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;
+        }
+    
+        interface privateInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        export class publicClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass; // Error
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass; // Error
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export class publicClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass;
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var publicVarWithPrivatePropertyTypes: privateClass; // Error
+        export var publicVarWithPublicPropertyTypes: publicClass;
+        var privateVarWithPrivatePropertyTypes: privateClass;
+        var privateVarWithPublicPropertyTypes: publicClass;
+    
+        export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+        export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
+        declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
+        declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
+    
+        export interface publicInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass; // Error
+        }
+        export class publicClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass; // Error
+            myPublicProperty: privateModule.publicClass; // Error
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+        export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    
+        interface privateInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass;
+        }
+        class privateClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass;
+            myPublicProperty: privateModule.publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    }
+    
+    namespace privateModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        export interface publicInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;  
+        }
+    
+        export interface publicInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        interface privateInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;
+        }
+    
+        interface privateInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        export class publicClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass; 
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass; 
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export class publicClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass;
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var publicVarWithPrivatePropertyTypes: privateClass; 
+        export var publicVarWithPublicPropertyTypes: publicClass;
+        var privateVarWithPrivatePropertyTypes: privateClass;
+        var privateVarWithPublicPropertyTypes: publicClass;
+    
+        export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; 
+        export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
+        declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
+        declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
+    
+        export interface publicInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass; 
+        }
+        export class publicClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass; 
+            myPublicProperty: privateModule.publicClass; 
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; 
+        export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    
+        interface privateInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass;
+        }
+        class privateClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass;
+            myPublicProperty: privateModule.publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    }
+    
+==== privacyVarDeclFile_GlobalFile.ts (22 errors) ====
+    class publicClassInGlobal {
+    }
+    interface publicInterfaceWithPublicPropertyTypesInGlobal {
+        myProperty: publicClassInGlobal;
+    }
+    class publicClassWithWithPublicPropertyTypesInGlobal {
+        static myPublicStaticProperty: publicClassInGlobal;
+        private static myPrivateStaticProperty: publicClassInGlobal;
+        myPublicProperty: publicClassInGlobal;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        private myPrivateProperty: publicClassInGlobal;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+    }
+    var publicVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
+    declare var publicAmbientVarWithPublicPropertyTypesInGlobal: publicClassInGlobal;
+    
+    namespace publicModuleInGlobal {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        namespace privateModule {
+            class privateClass {
+            }
+    
+            export class publicClass {
+            }
+    
+            export interface publicInterfaceWithPrivatePropertyTypes {
+                myProperty: privateClass;
+            }
+    
+            export interface publicInterfaceWithPublicPropertyTypes {
+                myProperty: publicClass;
+            }
+    
+            interface privateInterfaceWithPrivatePropertyTypes {
+                myProperty: privateClass;
+            }
+    
+            interface privateInterfaceWithPublicPropertyTypes {
+                myProperty: publicClass;
+            }
+    
+            export class publicClassWithWithPrivatePropertyTypes {
+                static myPublicStaticProperty: privateClass;
+                private static myPrivateStaticProperty: privateClass;
+                myPublicProperty: privateClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+                private myPrivateProperty: privateClass;
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+    
+            export class publicClassWithWithPublicPropertyTypes {
+                static myPublicStaticProperty: publicClass;
+                private static myPrivateStaticProperty: publicClass;
+                myPublicProperty: publicClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+                private myPrivateProperty: publicClass;
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+    
+            class privateClassWithWithPrivatePropertyTypes {
+                static myPublicStaticProperty: privateClass;
+                private static myPrivateStaticProperty: privateClass;
+                myPublicProperty: privateClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+                private myPrivateProperty: privateClass;
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+    
+            class privateClassWithWithPublicPropertyTypes {
+                static myPublicStaticProperty: publicClass;
+                private static myPrivateStaticProperty: publicClass;
+                myPublicProperty: publicClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+                private myPrivateProperty: publicClass;
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+    
+            export var publicVarWithPrivatePropertyTypes: privateClass;
+            export var publicVarWithPublicPropertyTypes: publicClass;
+            var privateVarWithPrivatePropertyTypes: privateClass;
+            var privateVarWithPublicPropertyTypes: publicClass;
+    
+            export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+            export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
+            declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
+            declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
+    
+            export interface publicInterfaceWithPrivateModulePropertyTypes {
+                myProperty: privateModule.publicClass;
+            }
+            export class publicClassWithPrivateModulePropertyTypes {
+                static myPublicStaticProperty: privateModule.publicClass;
+                myPublicProperty: privateModule.publicClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+            export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+            export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    
+            interface privateInterfaceWithPrivateModulePropertyTypes {
+                myProperty: privateModule.publicClass;
+            }
+            class privateClassWithPrivateModulePropertyTypes {
+                static myPublicStaticProperty: privateModule.publicClass;
+                myPublicProperty: privateModule.publicClass;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            }
+            var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+            declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        }
+    
+        export interface publicInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;  // Error
+        }
+    
+        export interface publicInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        interface privateInterfaceWithPrivatePropertyTypes {
+            myProperty: privateClass;
+        }
+    
+        interface privateInterfaceWithPublicPropertyTypes {
+            myProperty: publicClass;
+        }
+    
+        export class publicClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass; // Error
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass; // Error
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export class publicClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPrivatePropertyTypes {
+            static myPublicStaticProperty: privateClass;
+            private static myPrivateStaticProperty: privateClass;
+            myPublicProperty: privateClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: privateClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class privateClassWithWithPublicPropertyTypes {
+            static myPublicStaticProperty: publicClass;
+            private static myPrivateStaticProperty: publicClass;
+            myPublicProperty: publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+            private myPrivateProperty: publicClass;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPrivateProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var publicVarWithPrivatePropertyTypes: privateClass; // Error
+        export var publicVarWithPublicPropertyTypes: publicClass;
+        var privateVarWithPrivatePropertyTypes: privateClass;
+        var privateVarWithPublicPropertyTypes: publicClass;
+    
+        export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
+        export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
+        declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
+        declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
+    
+        export interface publicInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass; // Error
+        }
+        export class publicClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass; // Error
+            myPublicProperty: privateModule.publicClass; // Error
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+        export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
+    
+        interface privateInterfaceWithPrivateModulePropertyTypes {
+            myProperty: privateModule.publicClass;
+        }
+        class privateClassWithPrivateModulePropertyTypes {
+            static myPublicStaticProperty: privateModule.publicClass;
+            myPublicProperty: privateModule.publicClass;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'myPublicProperty' has no initializer and is not definitely assigned in the constructor.
+        }
+        var privateVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+        declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+    }

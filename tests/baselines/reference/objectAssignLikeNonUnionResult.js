@@ -21,6 +21,7 @@ type Explode<T> = T extends { x: infer A } ? [A] : 'X';
 type e1 = Explode<typeof data1>;
 
 //// [objectAssignLikeNonUnionResult.js]
+"use strict";
 const defaultValue = { field: 1 };
 // Displayed type: Interface & { field: number }
 // Underlying type: Something else...

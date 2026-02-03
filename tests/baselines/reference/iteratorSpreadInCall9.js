@@ -35,6 +35,7 @@ new Foo(...new SymbolIterator, ...[...new _StringIterator]);
 
 
 //// [iteratorSpreadInCall9.js]
+"use strict";
 class Foo {
     constructor(...s) { }
 }

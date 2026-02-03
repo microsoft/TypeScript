@@ -43,6 +43,7 @@ obj = bar;
 
 
 //// [interfaceClassMerging.js]
+"use strict";
 class Foo {
     additionalMethod(a) {
         return this.method(0);

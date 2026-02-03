@@ -1,0 +1,7 @@
+letAsIdentifier2.ts(1,10): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+
+
+==== letAsIdentifier2.ts (1 errors) ====
+    function let() {}
+             ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.

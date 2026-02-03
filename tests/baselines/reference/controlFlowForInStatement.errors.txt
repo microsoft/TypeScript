@@ -1,0 +1,27 @@
+controlFlowForInStatement.ts(8,9): error TS2454: Variable 'cond' is used before being assigned.
+controlFlowForInStatement.ts(12,9): error TS2454: Variable 'cond' is used before being assigned.
+
+
+==== controlFlowForInStatement.ts (2 errors) ====
+    let x: string | number | boolean | RegExp | Function;
+    let obj: any;
+    let cond: boolean;
+    
+    x = /a/;
+    for (let y in obj) {
+        x = y;
+        if (cond) {
+            ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
+            x = 42;
+            continue;
+        }
+        if (cond) {
+            ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
+            x = true;
+            break;
+        }
+    }
+    x; // RegExp | string | number | boolean
+    

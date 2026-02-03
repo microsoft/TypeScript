@@ -7,6 +7,7 @@
 `
 
 //// [templateStringMultiline1.js]
+"use strict";
 // newlines are <CR><LF>
 `
 \

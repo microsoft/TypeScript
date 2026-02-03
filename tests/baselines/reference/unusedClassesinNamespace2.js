@@ -12,6 +12,7 @@ namespace Validation {
 }
 
 //// [unusedClassesinNamespace2.js]
+"use strict";
 var Validation;
 (function (Validation) {
     class c1 {

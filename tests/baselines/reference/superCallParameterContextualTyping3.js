@@ -34,6 +34,7 @@ class C extends CBase<string> {
 }
 
 //// [superCallParameterContextualTyping3.js]
+"use strict";
 class CBase {
     constructor(param) {
     }

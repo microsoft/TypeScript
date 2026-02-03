@@ -33,6 +33,7 @@ var entries6 = Object.entries(i);                   // [string, any][]
 var values6 = Object.values(i);                     // any[]
 
 //// [useObjectValuesAndEntries1.js]
+"use strict";
 var o = { a: 1, b: 2 };
 for (var x of Object.values(o)) {
     let y = x;

@@ -13,6 +13,7 @@ var test = new foo<string>();
 
 
 //// [mutuallyRecursiveGenericBaseTypes2.js]
+"use strict";
 class foo {
     bar() { return null; }
 }

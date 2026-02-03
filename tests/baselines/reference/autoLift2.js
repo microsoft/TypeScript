@@ -34,6 +34,7 @@ a.baz();
 
 
 //// [autoLift2.js]
+"use strict";
 class A {
     constructor() {
         this.foo;

@@ -39,6 +39,6 @@ Foo.prototype.bar = function (a, b) { }
 >                    : ^^^ ^^      ^^^    ^^^ ^^      ^^ ^^      ^^^    ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 

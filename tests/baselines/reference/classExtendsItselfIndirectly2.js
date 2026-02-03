@@ -25,6 +25,7 @@ namespace O {
 }
 
 //// [classExtendsItselfIndirectly2.js]
+"use strict";
 class C extends N.E {
 } // error
 var M;

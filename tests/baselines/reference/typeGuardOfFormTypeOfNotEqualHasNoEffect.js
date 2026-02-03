@@ -38,6 +38,7 @@ else {
 }
 
 //// [typeGuardOfFormTypeOfNotEqualHasNoEffect.js]
+"use strict";
 class C {
 }
 ;

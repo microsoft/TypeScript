@@ -42,6 +42,7 @@ var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 
 
 //// [commaOperatorWithSecondOperandObjectType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

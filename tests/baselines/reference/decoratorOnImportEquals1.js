@@ -13,6 +13,7 @@ namespace M2 {
 }
 
 //// [decoratorOnImportEquals1.js]
+"use strict";
 var M1;
 (function (M1) {
 })(M1 || (M1 = {}));

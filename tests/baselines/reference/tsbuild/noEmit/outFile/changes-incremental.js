@@ -84,6 +84,7 @@ Found 3 errors.
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -647,6 +648,7 @@ Found 3 errors.
 
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1023,6 +1025,7 @@ Found 3 errors.
 
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

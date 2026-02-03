@@ -30,6 +30,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/a/username/projects/project/typescript.js]
+"use strict";
 var z = 10;
 
 
@@ -686,6 +687,7 @@ Output::
 
 
 //// [/a/username/projects/project/typescript.js]
+"use strict";
 var zz30 = 100;
 
 

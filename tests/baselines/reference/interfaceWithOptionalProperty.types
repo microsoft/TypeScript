@@ -3,6 +3,6 @@
 === interfaceWithOptionalProperty.ts ===
 interface I {
     x?: number;
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }

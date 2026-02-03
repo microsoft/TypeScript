@@ -18,7 +18,5 @@ if (Array.isArray(maybeArray)) {
 }
 else {
     maybeArray.toFixed(); // OK
->maybeArray.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }

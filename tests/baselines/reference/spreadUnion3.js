@@ -22,6 +22,7 @@ var y = { ...nullAndUndefinedUnion };
 
 
 //// [spreadUnion3.js]
+"use strict";
 function f(x) {
     return Object.assign({ y: 123 }, x); // y: string | number
 }

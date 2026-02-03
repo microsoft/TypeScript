@@ -117,6 +117,7 @@ d3.x;                   // Error, neither within their declaring class nor class
 d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
+"use strict";
 class Base {
     method() {
         class A {

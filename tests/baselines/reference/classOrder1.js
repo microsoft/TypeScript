@@ -14,6 +14,7 @@ a.foo();
 
 
 //// [classOrder1.js]
+"use strict";
 class A {
     foo() {
         /*WScript.Echo("Here!");*/

@@ -160,6 +160,7 @@ function f21<T extends Number>(x: T) {
 }
 
 //// [subtypesOfTypeParameterWithConstraints2.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 function f1(x, y) {
     var r = true ? x : y;

@@ -78,6 +78,7 @@ spreadObj.a; // error 'a' is not in {}
 
 
 //// [objectSpreadNegative.js]
+"use strict";
 let o = { a: 1, b: 'no' };
 /// private propagates
 class PrivateOptionalX {

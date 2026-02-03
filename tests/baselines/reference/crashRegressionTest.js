@@ -28,6 +28,7 @@ namespace MsPortal.Util.TemplateEngine {
 
 
 //// [crashRegressionTest.js]
+"use strict";
 var MsPortal;
 (function (MsPortal) {
     var Util;

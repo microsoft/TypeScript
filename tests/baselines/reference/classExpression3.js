@@ -9,6 +9,7 @@ c.c;
 
 
 //// [classExpression3.js]
+"use strict";
 let C = class extends class extends class {
     constructor() {
         this.a = 1;

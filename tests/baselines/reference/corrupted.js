@@ -4,3 +4,4 @@
 ���
 
 //// [corrupted.js]
+"use strict";

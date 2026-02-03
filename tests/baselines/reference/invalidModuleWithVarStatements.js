@@ -30,6 +30,7 @@ namespace YY3 {
 
 
 //// [invalidModuleWithVarStatements.js]
+"use strict";
 // All of these should be an error
 var Y;
 (function (Y) {

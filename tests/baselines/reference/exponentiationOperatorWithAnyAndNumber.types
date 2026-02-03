@@ -3,6 +3,7 @@
 === exponentiationOperatorWithAnyAndNumber.ts ===
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
@@ -15,7 +16,9 @@ var r1 = a ** a;
 >a ** a : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var r2 = a ** b;
 >r2 : number
@@ -23,6 +26,7 @@ var r2 = a ** b;
 >a ** b : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -32,6 +36,7 @@ var r3 = a ** 0;
 >a ** 0 : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -43,6 +48,7 @@ var r4 = 0 ** a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var r5 = 0 ** 0;
 >r5 : number

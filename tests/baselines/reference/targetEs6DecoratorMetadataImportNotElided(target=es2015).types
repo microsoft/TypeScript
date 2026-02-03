@@ -26,6 +26,7 @@ export class MyComponent {
 
     @Input()
 >Input() : any
+>        : ^^^
 >Input : () => any
 >      : ^^^^^^   
 

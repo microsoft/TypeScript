@@ -16,6 +16,7 @@ namespace Foo {
 }
 
 //// [classExtendsClauseClassMergedWithModuleNotReferingConstructor.js]
+"use strict";
 class A {
 }
 (function (A) {

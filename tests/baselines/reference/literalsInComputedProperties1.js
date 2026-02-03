@@ -53,6 +53,7 @@ let a0 = X["bar"];
 // TODO: make sure that enum still disallow template literals as member names
 
 //// [literalsInComputedProperties1.js]
+"use strict";
 let x = {
     1: 1,
     [2]: 1,

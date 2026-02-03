@@ -14,6 +14,7 @@ C[2] = 2;
 const bar = C[42] 
 
 //// [staticIndexSignature2.js]
+"use strict";
 class C {
 }
 C["foo"] = 1;

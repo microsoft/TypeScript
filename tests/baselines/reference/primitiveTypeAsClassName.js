@@ -4,5 +4,6 @@
 class any {}
 
 //// [primitiveTypeAsClassName.js]
+"use strict";
 class any {
 }

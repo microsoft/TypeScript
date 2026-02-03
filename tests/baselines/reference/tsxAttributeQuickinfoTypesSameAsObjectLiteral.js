@@ -20,6 +20,7 @@ Foo({
 
 
 //// [tsxAttributeQuickinfoTypesSameAsObjectLiteral.jsx]
+"use strict";
 const Foo = (props) => <span>{props.foo}</span>;
 Foo({
     foo: "B"

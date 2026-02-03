@@ -133,6 +133,7 @@ function foo(instance: Function | object) {
 
 
 //// [typeGuardConstructorClassAndNumber.js]
+"use strict";
 // Typical case
 class C1 {
 }

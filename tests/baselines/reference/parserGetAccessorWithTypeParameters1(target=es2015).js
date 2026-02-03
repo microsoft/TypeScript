@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserGetAccessorWithTypeParameters1.js]
+"use strict";
 class C {
     get foo<T>() { }
 }

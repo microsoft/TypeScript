@@ -1,3 +1,7 @@
+assignmentCompatWithConstructSignatures3.ts(3,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures3.ts(4,30): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures3.ts(5,34): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures3.ts(6,35): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
 assignmentCompatWithConstructSignatures3.ts(47,1): error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
@@ -62,13 +66,21 @@ assignmentCompatWithConstructSignatures3.ts(86,1): error TS2322: Type 'new (x: {
         Type 'T' is not assignable to type 'string'.
 
 
-==== assignmentCompatWithConstructSignatures3.ts (15 errors) ====
+==== assignmentCompatWithConstructSignatures3.ts (19 errors) ====
     // checking assignment compatibility relations for function types. All of these are valid.
     
     class Base { foo: string; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class Derived extends Base { bar: string; }
+                                 ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     class Derived2 extends Derived { baz: string; }
+                                     ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     class OtherDerived extends Base { bing: string; }
+                                      ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
     
     declare var a: new (x: number) => number[];
     declare var a2: new (x: number) => string[];

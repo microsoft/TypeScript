@@ -21,6 +21,7 @@ if ((o = fn()).done) {
 }
 
 //// [controlFlowAssignmentExpression.js]
+"use strict";
 let x;
 let obj;
 x = "";

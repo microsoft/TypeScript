@@ -6,6 +6,7 @@ class C {
 }
 
 //// [Protected5.js]
+"use strict";
 class C {
     static m() { }
 }

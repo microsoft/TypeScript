@@ -99,8 +99,8 @@ isEmpty([]);
 >            : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
 >        : ^ ^^                   ^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 isEmpty(new Array(3));
 >isEmpty(new Array(3)) : boolean

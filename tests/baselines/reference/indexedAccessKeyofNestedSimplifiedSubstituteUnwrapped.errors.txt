@@ -1,0 +1,31 @@
+indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts(13,2): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts(21,2): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts (2 errors) ====
+    type AnyFunction = (...args: any[]) => any;
+    type Params<T> = Parameters<Extract<T, AnyFunction>>;
+    
+    interface Wrapper<T> {
+    	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
+    }
+    
+    interface AWrapped {
+    	foo(): void;
+    }
+    
+    class A {
+    	foo: Wrapper<AWrapped>;
+    	~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    interface BWrapped extends AWrapped {
+    	bar(): void;
+    }
+    
+    class B extends A {
+    	foo: Wrapper<BWrapped>;
+    	~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }

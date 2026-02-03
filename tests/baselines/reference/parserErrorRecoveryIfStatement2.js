@@ -12,6 +12,7 @@ class Foo {
 }
 
 //// [parserErrorRecoveryIfStatement2.js]
+"use strict";
 class Foo {
     f1() {
         if (a)

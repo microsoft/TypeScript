@@ -11,6 +11,7 @@ class A {
 }
 
 //// [unusedTypeParameterInLambda2.js]
+"use strict";
 class A {
     f1() {
         return () => {

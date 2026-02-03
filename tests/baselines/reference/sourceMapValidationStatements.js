@@ -86,6 +86,7 @@ var b = function () {
 f();
 
 //// [sourceMapValidationStatements.js]
+"use strict";
 function f() {
     var y;
     var x = 0;

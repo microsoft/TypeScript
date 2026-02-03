@@ -40,6 +40,7 @@ class C {
 }
 
 //// [protectedClassPropertyAccessibleWithinNestedClass.js]
+"use strict";
 // no errors
 var C = /** @class */ (function () {
     function C() {

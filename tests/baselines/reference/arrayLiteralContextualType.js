@@ -32,6 +32,7 @@ foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 
 //// [arrayLiteralContextualType.js]
+"use strict";
 class Giraffe {
     constructor() {
         this.name = "Giraffe";

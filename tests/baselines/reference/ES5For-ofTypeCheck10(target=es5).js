@@ -17,6 +17,7 @@ class MyStringIterator {
 for (var v of new MyStringIterator) { }
 
 //// [ES5For-ofTypeCheck10.js]
+"use strict";
 // In ES3/5, you cannot for...of over an arbitrary iterable.
 var MyStringIterator = /** @class */ (function () {
     function MyStringIterator() {

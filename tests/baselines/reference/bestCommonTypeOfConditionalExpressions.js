@@ -29,6 +29,7 @@ function foo5<T, U>(t: T, u: U): Object {
 }
 
 //// [bestCommonTypeOfConditionalExpressions.js]
+"use strict";
 // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
 // no errors expected here
 var a;

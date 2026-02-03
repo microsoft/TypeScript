@@ -16,8 +16,8 @@ interface Parsers {
     readline(delimiter?: string): ParserFunc;
 >readline : (delimiter?: string) => ParserFunc
 >         : ^         ^^^      ^^^^^          
->delimiter : string
->          : ^^^^^^
+>delimiter : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 }
 declare var parsers: Parsers;
 >parsers : Parsers

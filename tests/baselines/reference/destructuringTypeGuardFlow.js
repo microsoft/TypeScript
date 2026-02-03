@@ -39,6 +39,7 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 
 
 //// [destructuringTypeGuardFlow.js]
+"use strict";
 const aFoo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };
 if (aFoo.bar && aFoo.nested.b) {
     const { bar, baz, nested: { a, b: text } } = aFoo;

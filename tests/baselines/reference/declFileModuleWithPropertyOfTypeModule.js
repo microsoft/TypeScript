@@ -9,6 +9,7 @@ namespace m {
 }
 
 //// [declFileModuleWithPropertyOfTypeModule.js]
+"use strict";
 var m;
 (function (m) {
     class c {

@@ -27,6 +27,7 @@ const log = console.log;
 })();
 
 //// [forAwaitPerIterationBindingDownlevel.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -83,7 +84,6 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var _this = this;
 var sleep = function (tm) { return new Promise(function (resolve) { return setTimeout(resolve, tm); }); };
 function gen() {
     return __asyncGenerator(this, arguments, function gen_1() {
@@ -106,9 +106,8 @@ function gen() {
     });
 }
 var log = console.log;
-(function () { return __awaiter(_this, void 0, void 0, function () {
+(function () { return __awaiter(void 0, void 0, void 0, function () {
     var _loop_1, _a, _b, _c, e_1_1;
-    var _this = this;
     var _d, e_1, _e, _f;
     return __generator(this, function (_g) {
         switch (_g.label) {
@@ -119,7 +118,7 @@ var log = console.log;
                     _a = false;
                     var outer = _f;
                     log("I'm loop ".concat(outer));
-                    (function () { return __awaiter(_this, void 0, void 0, function () {
+                    (function () { return __awaiter(void 0, void 0, void 0, function () {
                         var inner;
                         return __generator(this, function (_a) {
                             switch (_a.label) {

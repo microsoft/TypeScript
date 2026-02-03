@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/multiExtendsSplitInterfaces1.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === multiExtendsSplitInterfaces1.ts ===
 self.cancelAnimationFrame(0);
 >self.cancelAnimationFrame(0) : void

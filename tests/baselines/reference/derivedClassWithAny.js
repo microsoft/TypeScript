@@ -62,6 +62,7 @@ var r = c.foo(); // e.foo would return string
 
 
 //// [derivedClassWithAny.js]
+"use strict";
 class C {
     get X() { return 1; }
     foo() {

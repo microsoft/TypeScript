@@ -20,15 +20,21 @@
 
 
 //// [1.js]
+"use strict";
 0;
 //// [2.js]
+"use strict";
 6;
 //// [3.js]
+"use strict";
 0;
 B0101;
 //// [4.js]
+"use strict";
 7;
 //// [5.js]
+"use strict";
 102;
 //// [6.js]
+"use strict";
 1867;

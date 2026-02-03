@@ -117,6 +117,7 @@ index.ts
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 /// <reference types="pkg"/>
 
 

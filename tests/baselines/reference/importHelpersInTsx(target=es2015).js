@@ -25,4 +25,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = React.createElement("span", Object.assign({}, o));
 //// [script.js]
+"use strict";
 const x = React.createElement("span", Object.assign({}, o));

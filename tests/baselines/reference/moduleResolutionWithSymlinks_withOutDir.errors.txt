@@ -1,0 +1,24 @@
+/src/app.ts(6,5): error TS2454: Variable 'y' is used before being assigned.
+/src/library-a/index.ts(1,32): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== /src/app.ts (1 errors) ====
+    import { MyClass } from "./library-a";
+    import { MyClass2 } from "./library-b";
+    
+    let x: MyClass;
+    let y: MyClass2;
+    x = y;
+        ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    y = x;
+    
+==== /src/library-a/index.ts (1 errors) ====
+    export class MyClass { private x: number; }
+                                   ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    
+==== /src/library-b/index.ts (0 errors) ====
+    import {MyClass} from "library-a";
+    export { MyClass as MyClass2 }
+    

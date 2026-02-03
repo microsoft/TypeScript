@@ -48,18 +48,18 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >           : ^^^^^^^^^^^^^^^^^
 
   const args = classNames.map(arg => {
->args : string[]
->     : ^^^^^^^^
->classNames.map(arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  }) : string[]
->                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^
+>args : (string | null | undefined)[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>classNames.map(arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  }) : (string | null | undefined)[]
+>                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classNames.map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
 >               : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >classNames : ClassNameArg<S>[]
 >           : ^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
 >    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  } : (arg: ClassNameArg<S>) => string
->                                                                                                                                                                                                                                                                                                                                                                                                           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  } : (arg: ClassNameArg<S>) => string | null | undefined
+>                                                                                                                                                                                                                                                                                                                                                                                                           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : ClassNameArg<S>
 >    : ^^^^^^^^^^^^^^^
 
@@ -134,16 +134,16 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >    : ^^^^^^^
 
         obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
->obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : boolean
->                                                       : ^^^^^^^
+>obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : boolean | undefined
+>                                                       : ^^^^^^^^^^^^^^^^^^^
 >obj[exportedClassName] : ClassNameObject
 >                       : ^^^^^^^^^^^^^^^
 >obj : ClassNameObject
 >    : ^^^^^^^^^^^^^^^
 >exportedClassName : S[keyof S]
 >                  : ^^^^^^^^^^
->(arg as ClassNameMap<S>)[key] : boolean
->                              : ^^^^^^^
+>(arg as ClassNameMap<S>)[key] : boolean | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
 >                         : ^^^^^^^^^^^^^^^
 >arg as ClassNameMap<S> : ClassNameMap<S>

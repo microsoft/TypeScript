@@ -72,8 +72,8 @@ namespace Optional {
 
     interface A {
         foo?: Base;
->foo : Base
->    : ^^^^
+>foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
     }
 
     class B implements A {
@@ -87,8 +87,8 @@ namespace Optional {
 
     interface A2 {
         1?: Base;
->1 : Base
->  : ^^^^
+>1 : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
     }
 
     class B2 implements A2 {
@@ -102,8 +102,8 @@ namespace Optional {
 
     interface A3 {
         '1'?: Base;
->'1' : Base
->    : ^^^^
+>'1' : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
     }
 
     class B3 implements A3 {

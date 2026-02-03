@@ -23,5 +23,5 @@ export class Clazz {
     /**
      * @param {function(this:Object, ...*):*} functionDeclaration
      */
-    method(functionDeclaration: (this: any, ...args: any[]) => any): void;
+    method(functionDeclaration: (this: Object, ...args: any[]) => any): void;
 }

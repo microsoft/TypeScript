@@ -12,8 +12,8 @@ namespace M {
         var arguments = [];
 >arguments : any[]
 >          : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }
 
@@ -29,7 +29,7 @@ namespace M {
         var arguments = [];
 >arguments : any[]
 >          : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }

@@ -276,6 +276,7 @@ var c1 = /** @class */ (function () {
 }());
 exports.c1 = c1;
 //// [declFileMethods_1.js]
+"use strict";
 var c2 = /** @class */ (function () {
     function c2() {
     }

@@ -6,6 +6,7 @@ function somefn() {
 }
 
 //// [functionReturningItself.js]
+"use strict";
 function somefn() {
     return somefn;
 }

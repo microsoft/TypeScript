@@ -15,6 +15,7 @@ class SubClass extends BaseClass<number> {
 }
 
 //// [genericBaseClassLiteralProperty.js]
+"use strict";
 class BaseClass {
 }
 class SubClass extends BaseClass {

@@ -34,6 +34,7 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember.js]
+"use strict";
 class C {
     foo() {
         return this;

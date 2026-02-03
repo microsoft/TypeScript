@@ -6,4 +6,5 @@ var x: {
 }
 
 //// [parserES5SymbolIndexer3.js]
+"use strict";
 var x;

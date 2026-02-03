@@ -26,6 +26,7 @@ var r10 = undefined + foo();
 var r11 = undefined + (() => { });
 
 //// [additionOperatorWithUndefinedValueAndInvalidOperands.js]
+"use strict";
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 function foo() { return undefined; }
 // undefined + boolean/Object

@@ -21,6 +21,7 @@ class myCls {
 }
 
 //// [thisInLambda.js]
+"use strict";
 class Foo {
     constructor() {
         this.x = "hello";

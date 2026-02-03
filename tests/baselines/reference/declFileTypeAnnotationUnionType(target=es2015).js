@@ -24,6 +24,7 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 var y = new g<string>() || new m.g<number>() || (() => new c());
 
 //// [declFileTypeAnnotationUnionType.js]
+"use strict";
 class c {
 }
 var m;
@@ -60,22 +61,6 @@ declare class g<T> {
     private s;
 }
 declare var k: c | m.c;
-declare var l: c | m.c;
+declare var l: c;
 declare var x: g<string> | m.g<number> | (() => c);
-declare var y: g<string> | m.g<number> | (() => c);
-
-
-!!!! File declFileTypeAnnotationUnionType.d.ts differs from original emit in noCheck emit
-//// [declFileTypeAnnotationUnionType.d.ts]
-===================================================================
---- Expected	The full check baseline
-+++ Actual	with noCheck set
-@@ -12,7 +12,7 @@
- declare class g<T> {
-     private s;
- }
- declare var k: c | m.c;
--declare var l: c | m.c;
-+declare var l: m.c | c;
- declare var x: g<string> | m.g<number> | (() => c);
- declare var y: g<string> | m.g<number> | (() => c);
+declare var y: g<string>;

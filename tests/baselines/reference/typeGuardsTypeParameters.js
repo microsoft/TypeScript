@@ -37,6 +37,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 
 
 //// [typeGuardsTypeParameters.js]
+"use strict";
 // Type guards involving type parameters produce intersection types
 class C {
     constructor() {

@@ -11,6 +11,7 @@ namespace Outer {
 
 
 //// [privacyCheckTypeOfInvisibleModuleNoError.js]
+"use strict";
 var Outer;
 (function (Outer) {
     let Inner;

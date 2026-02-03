@@ -20,6 +20,7 @@ namespace A.B.C {
 }
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.js]
+"use strict";
 var A;
 (function (A) {
     var B;

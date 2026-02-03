@@ -12,6 +12,7 @@ for (const row of ['1', '2', '3', '4', '5']) {
 }
 
 //// [classInConvertedLoopES5.js]
+"use strict";
 var classesByRow = {};
 var _loop_1 = function (row) {
     var RowClass = /** @class */ (function () {

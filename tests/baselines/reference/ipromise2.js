@@ -24,6 +24,7 @@ var x: number = p2.value;
 
 
 //// [ipromise2.js]
+"use strict";
 var p;
 var p2 = p.then(function (s) {
     return 34;

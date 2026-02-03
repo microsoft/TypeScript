@@ -222,6 +222,7 @@ class c6 extends c5 {
 }
 
 //// [parserAstSpans1.js]
+"use strict";
 class c1 {
     i1_f1() {
     }

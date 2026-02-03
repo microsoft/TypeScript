@@ -35,6 +35,7 @@ isEmpty(['a']);
 
 
 //// [arraySigChecking.js]
+"use strict";
 var strArray = [myVar.voidFn()];
 var myArray;
 myArray = [[1, 2]];

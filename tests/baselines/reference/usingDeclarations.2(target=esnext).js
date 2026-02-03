@@ -8,6 +8,7 @@
 
 
 //// [usingDeclarations.2.js]
+"use strict";
 {
     using d1 = { [Symbol.dispose]() { } }, d2 = { [Symbol.dispose]() { } };
 }

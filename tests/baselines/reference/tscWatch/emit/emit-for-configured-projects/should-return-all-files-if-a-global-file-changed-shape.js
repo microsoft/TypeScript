@@ -59,6 +59,7 @@ export {};
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 
 
 //// [/home/src/projects/a/b/moduleFile2.js]
@@ -159,6 +160,7 @@ Output::
 //// [/home/src/projects/a/b/file1Consumer1.js] file written with same contents
 //// [/home/src/projects/a/b/file1Consumer2.js] file written with same contents
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 var T2;
 
 

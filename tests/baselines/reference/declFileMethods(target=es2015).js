@@ -257,6 +257,7 @@ class c1 {
 }
 exports.c1 = c1;
 //// [declFileMethods_1.js]
+"use strict";
 class c2 {
     /** This comment should appear for foo*/
     foo() {

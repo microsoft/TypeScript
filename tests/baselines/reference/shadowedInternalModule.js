@@ -68,6 +68,7 @@ namespace s {
 
 
 //// [shadowedInternalModule.js]
+"use strict";
 // all errors imported modules conflict with local variables
 var A;
 (function (A) {

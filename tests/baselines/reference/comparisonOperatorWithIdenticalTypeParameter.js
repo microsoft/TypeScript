@@ -13,6 +13,7 @@ function foo<T>(t: T) {
 }
 
 //// [comparisonOperatorWithIdenticalTypeParameter.js]
+"use strict";
 function foo(t) {
     var r1 = t < t;
     var r2 = t > t;

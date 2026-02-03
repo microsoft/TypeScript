@@ -10,4 +10,5 @@ c.ts(1,17): error TS1261: Already included file name '/a/b/D.ts' differs from fi
   The file is in the program because:
     Imported via "D" from file 'c.ts'
     Root file specified for compilation
+D.ts(1,12): error TS7005: Variable 'x' implicitly has an 'any' type.
 

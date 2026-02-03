@@ -41,6 +41,7 @@ var y: (a: string) => string;
 var z: new (a: string) => m.c;
 
 //// [declFileTypeAnnotationTypeLiteral.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

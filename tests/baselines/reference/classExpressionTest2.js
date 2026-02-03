@@ -15,6 +15,7 @@ function M() {
 }
 
 //// [classExpressionTest2.js]
+"use strict";
 function M() {
     var m = class C {
         f() {

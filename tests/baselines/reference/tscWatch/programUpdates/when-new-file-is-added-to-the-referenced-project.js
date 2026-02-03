@@ -88,6 +88,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/projects/project2/class2.js]
+"use strict";
 class class2 {
 }
 

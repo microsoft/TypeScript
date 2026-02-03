@@ -11,6 +11,7 @@ function foo() {
 }
 
 //// [letShadowedByNameInNestedScope.js]
+"use strict";
 var x;
 function foo() {
     let x = 0;

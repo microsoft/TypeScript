@@ -2,6 +2,7 @@
 EmitSkipped: false
 
 FileName : declSingle.js
+"use strict";
 var x = "hello";
 var x1 = 1000;
 

@@ -1,12 +1,14 @@
 classUsedBeforeInitializedVariables.ts(4,15): error TS2729: Property 'p4' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(13,34): error TS2729: Property 'directlyAssigned' is used before its initialization.
+classUsedBeforeInitializedVariables.ts(18,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 classUsedBeforeInitializedVariables.ts(22,15): error TS2729: Property 'withinObjectLiteral' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(26,19): error TS2729: Property 'withinObjectLiteralGetterName' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(32,19): error TS2729: Property 'withinObjectLiteralSetterName' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(35,64): error TS2729: Property 'withinClassDeclarationExtension' is used before its initialization.
+classUsedBeforeInitializedVariables.ts(44,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== classUsedBeforeInitializedVariables.ts (6 errors) ====
+==== classUsedBeforeInitializedVariables.ts (8 errors) ====
     class Test {
         p1 = 0;
         p2 = this.p1;
@@ -31,6 +33,9 @@ classUsedBeforeInitializedVariables.ts(35,64): error TS2729: Property 'withinCla
     
         withinFunction: any = function () {
             return this.withinFunction;
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 classUsedBeforeInitializedVariables.ts:17:27: An outer value of 'this' is shadowed by this container.
         };
     
         withinObjectLiteral: any = {
@@ -69,6 +74,9 @@ classUsedBeforeInitializedVariables.ts(35,64): error TS2729: Property 'withinCla
     
         assignedByFunction: any = (function () {
             return this.assignedByFunction;
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 classUsedBeforeInitializedVariables.ts:43:32: An outer value of 'this' is shadowed by this container.
         })();
     }
     

@@ -15,8 +15,8 @@ interface Int extends Base<number> {
 >     : ^^^^^^^^^
 
     multipleOf?: number;
->multipleOf : number
->           : ^^^^^^
+>multipleOf : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 }
 
 interface Float extends Base<number> {
@@ -31,8 +31,8 @@ interface Str extends Base<string> {
 >     : ^^^^^^^^
 
     format?: string;
->format : string
->       : ^^^^^^
+>format : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 }
 
 interface Bool extends Base<boolean> {
@@ -217,8 +217,8 @@ interface A {
 >     : ^^^
 
     a?: number;
->a : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 interface B {
     type: "B";
@@ -226,8 +226,8 @@ interface B {
 >     : ^^^
 
     b?: number;
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
@@ -309,16 +309,16 @@ export type BaseAttribute<T> = {
 >              : ^^^^^^^^^^^^^^^^
 
     type?: string | undefined;
->type : string
->     : ^^^^^^
+>type : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
     required?: boolean | undefined;
->required : boolean
->         : ^^^^^^^
+>required : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     defaultsTo?: T | undefined;
->defaultsTo : T
->           : ^
+>defaultsTo : T | undefined
+>           : ^^^^^^^^^^^^^
 
 };
 
@@ -358,8 +358,8 @@ export type NumberAttribute = BaseAttribute<number> & {
 >     : ^^^^^^^^
 
     autoIncrement?: boolean | undefined;
->autoIncrement : boolean
->              : ^^^^^^^
+>autoIncrement : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 
 };
 

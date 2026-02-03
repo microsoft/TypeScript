@@ -34,6 +34,7 @@ CreatingProgramWith::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 
 
 
@@ -104,6 +105,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 //
 
 

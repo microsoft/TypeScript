@@ -21,6 +21,7 @@ var y = {
 
 
 //// [duplicateObjectLiteralProperty.js]
+"use strict";
 var x = {
     a: 1,
     b: true, // OK

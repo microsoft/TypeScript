@@ -5,4 +5,5 @@ const array = [1 /* comment */];
 
 
 //// [commentOnArrayElement14.js]
+"use strict";
 const array = [1 /* comment */];

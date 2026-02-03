@@ -10,6 +10,7 @@ class C2<T> {
 }
 
 //// [typeOfThisInStaticMembers2.js]
+"use strict";
 var _a, _b;
 class C {
 }

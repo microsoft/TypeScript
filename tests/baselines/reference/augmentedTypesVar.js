@@ -39,6 +39,7 @@ namespace x6b { export var y = 2; } // error
 
 
 //// [augmentedTypesVar.js]
+"use strict";
 // var then var
 var x1 = 1;
 var x1 = 2;

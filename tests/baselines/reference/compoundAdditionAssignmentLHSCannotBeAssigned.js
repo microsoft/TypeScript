@@ -20,6 +20,7 @@ declare var x5: void;
 x5 += '';
 
 //// [compoundAdditionAssignmentLHSCannotBeAssigned.js]
+"use strict";
 // string can add every type, and result string cannot be assigned to below types
 var E;
 (function (E) {

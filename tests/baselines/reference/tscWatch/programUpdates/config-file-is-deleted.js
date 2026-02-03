@@ -36,10 +36,12 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
+"use strict";
 let y = 2;
 
 

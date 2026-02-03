@@ -10,6 +10,7 @@ else {
 }
 
 //// [emptyThenWithoutWarning.js]
+"use strict";
 let a = 4;
 if (a === 1 || a === 2 || a === 3) {
 }

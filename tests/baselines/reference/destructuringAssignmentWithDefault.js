@@ -35,6 +35,7 @@ function f4(options?: [string, number]) {
 
 
 //// [destructuringAssignmentWithDefault.js]
+"use strict";
 const a = {};
 let x = 0;
 ({ x = 1 } = a);

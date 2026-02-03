@@ -141,8 +141,8 @@ undefined ? exprNumber1 : exprNumber2;
 [null, undefined] ? exprString1 : exprString2;
 >[null, undefined] ? exprString1 : exprString2 : string
 >                                              : ^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >exprString1 : string
@@ -153,8 +153,8 @@ undefined ? exprNumber1 : exprNumber2;
 [null, undefined] ? exprIsObject1 : exprIsObject2;
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >                                                  : ^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >exprIsObject1 : Object
@@ -373,8 +373,8 @@ var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
 >                : ^^^^^^
 >[null, undefined] ? exprString1 : exprString2 : string
 >                                              : ^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >exprString1 : string
@@ -387,8 +387,8 @@ var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
 >                : ^^^^^^
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >                                                  : ^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >exprIsObject1 : Object
@@ -423,8 +423,8 @@ var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; /
 >                         : ^^^^^^^^^^^^^^^^
 >[null, undefined] ? exprString1 : exprBoolean1 : string | boolean
 >                                               : ^^^^^^^^^^^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >exprString1 : string

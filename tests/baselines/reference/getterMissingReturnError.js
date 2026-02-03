@@ -9,6 +9,7 @@ class test {
 
 
 //// [getterMissingReturnError.js]
+"use strict";
 class test {
     get p2() {
     }

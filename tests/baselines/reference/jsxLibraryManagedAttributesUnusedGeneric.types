@@ -54,8 +54,8 @@ declare const Comp: (p: { className?: string }) => null
 >     : ^ ^^                       ^^^^^    
 >p : { className?: string; }
 >  : ^^^^^^^^^^^^^^      ^^^
->className : string
->          : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
 ;<Comp css="color:hotpink;" />
 ><Comp css="color:hotpink;" /> : jsx.JSX.Element

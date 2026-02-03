@@ -12,8 +12,8 @@ interface A {
 }
 
 declare let order1:
->order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 
     | { type: "1" }
 >type : "1"
@@ -32,10 +32,10 @@ declare let order1:
 
 // Should NOT error: 'order1' is possibly 'undefined' after the guard
 if (order1 && order1.type === "a") {
->order1 && order1.type === "a" : boolean
->                              : ^^^^^^^
->order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order1 && order1.type === "a" : boolean | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >order1.type === "a" : boolean
 >                    : ^^^^^^^
 >order1.type : "a" | "1" | "2" | "3"
@@ -67,8 +67,8 @@ interface B {
 }
 
 declare let order2:
->order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 
     | { type: "1" }
 >type : "1"
@@ -87,10 +87,10 @@ declare let order2:
 
 // Should NOT error: 'order2' is possibly 'undefined' after the guard
 if (order2 && order2.type === "a") {
->order2 && order2.type === "a" : boolean
->                              : ^^^^^^^
->order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order2 && order2.type === "a" : boolean | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >order2.type === "a" : boolean
 >                    : ^^^^^^^
 >order2.type : "a" | "1" | "2" | "3"
@@ -113,10 +113,10 @@ if (order2 && order2.type === "a") {
 
 // Also test with !. type assertion
 if (order1 && order1.type === "a") {
->order1 && order1.type === "a" : boolean
->                              : ^^^^^^^
->order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order1 && order1.type === "a" : boolean | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^
+>order1 : A | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >order1.type === "a" : boolean
 >                    : ^^^^^^^
 >order1.type : "a" | "1" | "2" | "3"
@@ -137,10 +137,10 @@ if (order1 && order1.type === "a") {
 >     : ^^^
 }
 if (order2 && order2.type === "a") {
->order2 && order2.type === "a" : boolean
->                              : ^^^^^^^
->order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; }
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^
+>order2 && order2.type === "a" : boolean | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^
+>order2 : B | { type: "1"; } | { type: "2"; } | { type: "3"; } | undefined
+>       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >order2.type === "a" : boolean
 >                    : ^^^^^^^
 >order2.type : "a" | "1" | "2" | "3"

@@ -35,6 +35,7 @@ namespace m {
 
 
 //// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.js]
+"use strict";
 var m;
 (function (m) {
     var private1 = /** @class */ (function () {

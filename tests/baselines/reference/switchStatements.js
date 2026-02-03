@@ -58,6 +58,7 @@ switch ((<T>(x: T) => '')(1)) { }
 
 
 //// [switchStatements.js]
+"use strict";
 var M;
 (function (M) {
     function fn(x) {

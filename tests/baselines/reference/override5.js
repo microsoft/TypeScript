@@ -59,6 +59,7 @@ class ADD extends AD {
 
 
 //// [override5.js]
+"use strict";
 class B {
     constructor() {
         this.p1 = 1;

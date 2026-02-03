@@ -18,6 +18,7 @@ var b: A.B;
 b.foo();
 
 //// [genericCloduleInModule2.js]
+"use strict";
 var A;
 (function (A) {
     class B {

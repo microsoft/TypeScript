@@ -41,6 +41,7 @@ function g() {
 
 
 //// [deepComparisons.js]
+"use strict";
 function f1() {
     let v1 = 0; // Error
     let v2 = 0; // Error
