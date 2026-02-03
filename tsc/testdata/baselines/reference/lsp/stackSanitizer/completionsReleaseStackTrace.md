@@ -39,27 +39,27 @@ created by github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoo
 (REDACTED FRAME)
 	(REDACTED FRAME)
 typescript-go|>internal|>lsp.(*Server).recover()
-	typescript-go|>internal|>lsp|>server.go:777 +0x58
+	typescript-go|>internal|>lsp|>server.go:777
 (REDACTED FRAME)
 	(REDACTED FRAME)
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func15()
-	typescript-go|>internal|>ls|>completions.go:1303 +0xba
+	typescript-go|>internal|>ls|>completions.go:1303
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func18()
 	typescript-go|>internal|>ls|>completions.go:1548
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData()
-	typescript-go|>internal|>ls|>completions.go:1581 +0x1ed4
+	typescript-go|>internal|>ls|>completions.go:1581
 typescript-go|>internal|>ls.(*LanguageService).getCompletionsAtPosition()
-	typescript-go|>internal|>ls|>completions.go:347 +0x35f
+	typescript-go|>internal|>ls|>completions.go:347
 typescript-go|>internal|>ls.(*LanguageService).ProvideCompletion()
-	typescript-go|>internal|>ls|>completions.go:47 +0x11c
+	typescript-go|>internal|>ls|>completions.go:47
 typescript-go|>internal|>lsp.(*Server).handleCompletion()
-	typescript-go|>internal|>lsp|>server.go:1105 +0x39
+	typescript-go|>internal|>lsp|>server.go:1105
 typescript-go|>internal|>lsp.init.func1.registerLanguageServiceWithAutoImportsRequestHandler[...].28()
-	typescript-go|>internal|>lsp|>server.go:682 +0x16c
+	typescript-go|>internal|>lsp|>server.go:682
 typescript-go|>internal|>lsp.(*Server).handleRequestOrNotification()
-	typescript-go|>internal|>lsp|>server.go:531 +0x1c6
+	typescript-go|>internal|>lsp|>server.go:531
 typescript-go|>internal|>lsp.(*Server).dispatchLoop.func1()
-	typescript-go|>internal|>lsp|>server.go:414 +0x3a
-typescript-go|>internal|>lsp.(*Server).dispatchLoop in goroutine 35
-	typescript-go|>internal|>lsp|>server.go:438 +0x9f1
+	typescript-go|>internal|>lsp|>server.go:414
+typescript-go|>internal|>lsp.(*Server).dispatchLoop
+	typescript-go|>internal|>lsp|>server.go:438
 ````

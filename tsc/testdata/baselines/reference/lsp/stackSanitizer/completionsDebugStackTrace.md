@@ -38,27 +38,27 @@ created by github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoo
 (REDACTED FRAME)
         (REDACTED FRAME)
 typescript-go|>internal|>lsp.(*Server).recover()
-        typescript-go|>internal|>lsp|>server.go:777 +0x65
+        typescript-go|>internal|>lsp|>server.go:777
 (REDACTED FRAME)
         (REDACTED FRAME)
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func15()
-        typescript-go|>internal|>ls|>completions.go:1303 +0xfa
+        typescript-go|>internal|>ls|>completions.go:1303
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func18()
-        typescript-go|>internal|>ls|>completions.go:1548 +0x2df
+        typescript-go|>internal|>ls|>completions.go:1548
 typescript-go|>internal|>ls.(*LanguageService).getCompletionData()
-        typescript-go|>internal|>ls|>completions.go:1581 +0x2b92
+        typescript-go|>internal|>ls|>completions.go:1581
 typescript-go|>internal|>ls.(*LanguageService).getCompletionsAtPosition()
-        typescript-go|>internal|>ls|>completions.go:347 +0x690
+        typescript-go|>internal|>ls|>completions.go:347
 typescript-go|>internal|>ls.(*LanguageService).ProvideCompletion()
-        typescript-go|>internal|>ls|>completions.go:47 +0x207
+        typescript-go|>internal|>ls|>completions.go:47
 typescript-go|>internal|>lsp.(*Server).handleCompletion()
-        typescript-go|>internal|>lsp|>server.go:1102 +0xe5
+        typescript-go|>internal|>lsp|>server.go:1102
 typescript-go|>internal|>lsp.registerLanguageServiceWithAutoImportsRequestHandler[...].func1()
-        typescript-go|>internal|>lsp|>server.go:682 +0x32a
+        typescript-go|>internal|>lsp|>server.go:682
 typescript-go|>internal|>lsp.(*Server).handleRequestOrNotification()
-        typescript-go|>internal|>lsp|>server.go:531 +0x11e
+        typescript-go|>internal|>lsp|>server.go:531
 typescript-go|>internal|>lsp.(*Server).dispatchLoop.func1()
-        typescript-go|>internal|>lsp|>server.go:414 +0x65
-typescript-go|>internal|>lsp.(*Server).dispatchLoop in goroutine 19
-        typescript-go|>internal|>lsp|>server.go:438 +0x60
+        typescript-go|>internal|>lsp|>server.go:414
+typescript-go|>internal|>lsp.(*Server).dispatchLoop
+        typescript-go|>internal|>lsp|>server.go:438
 ````

@@ -51,6 +51,12 @@ func writeSanitizedModuleOrPath(line string, result *strings.Builder) {
 	// We don't expect things like \r, but it doesn't hurt to trim just in case.
 	line = strings.TrimSpace(line)
 
+	if plusHex := strings.Index(line, " +0x"); plusHex >= 0 {
+		line = line[:plusHex]
+	} else if inGoroutine := strings.LastIndex(line, " in goroutine "); inGoroutine >= 0 {
+		line = line[:inGoroutine]
+	}
+
 	for segmentIndex, segment := range strings.Split(line, "/") {
 		if segmentIndex > 0 {
 			result.WriteString("|>")

@@ -8,6 +8,7 @@ import (
 	"iter"
 	"runtime/debug"
 	"slices"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -792,7 +793,7 @@ func (s *Server) recover(ctx context.Context, req *lsproto.RequestMessage) {
 				RequestFailureTelemetryEvent: &lsproto.RequestFailureTelemetryEvent{
 					Properties: &lsproto.RequestFailureTelemetryProperties{
 						ErrorCode:     lsproto.ErrorCodeInternalError.String(),
-						RequestMethod: string(req.Method),
+						RequestMethod: strings.ReplaceAll(string(req.Method), "/", "."),
 						Stack:         sanitizeStackTrace(string(stack)),
 					},
 				},
