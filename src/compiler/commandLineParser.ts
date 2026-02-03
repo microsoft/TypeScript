@@ -962,6 +962,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
+        name: "stableTypeOrdering",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Type_Checking,
+        description: Diagnostics.Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
+        defaultValueDescription: true,
+    },
+    {
         name: "noImplicitThis",
         type: "boolean",
         affectsSemanticDiagnostics: true,

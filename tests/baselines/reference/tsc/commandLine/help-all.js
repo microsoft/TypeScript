@@ -271,6 +271,11 @@ Raise an error when a function parameter isn't read.
 type: boolean
 default: false
 
+[94m--stableTypeOrdering[39m
+Ensure types are ordered stably and deterministically across compilations.
+type: boolean
+default: true
+
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean

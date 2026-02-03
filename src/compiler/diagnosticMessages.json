@@ -6589,6 +6589,10 @@
         "category": "Message",
         "code": 6808
     },
+    "Ensure types are ordered stably and deterministically across compilations.": {
+        "category": "Message",
+        "code": 6809
+    },
 
     "one of:": {
         "category": "Message",
