@@ -45,6 +45,7 @@ import {
     getContainingClass,
     getContainingFunction,
     getEffectiveTypeParameterDeclarations,
+    getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
@@ -1042,6 +1043,7 @@ function extractFunctionInScope(
     context: RefactorContext,
 ): RefactorEditInfo {
     const checker = context.program.getTypeChecker();
+    const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
     const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
 
     // Make a unique name for the extracted function
@@ -1061,7 +1063,7 @@ function extractFunctionInScope(
             let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             type = checker.getBaseTypeOfLiteralType(type);
-            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
+            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
         }
 
         const paramDecl = factory.createParameterDeclaration(

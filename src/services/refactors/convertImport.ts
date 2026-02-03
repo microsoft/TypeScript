@@ -37,6 +37,7 @@ import {
     QualifiedName,
     RefactorContext,
     RefactorEditInfo,
+    ScriptTarget,
     some,
     SourceFile,
     Symbol,
@@ -221,7 +222,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? moduleSpecifierToValidIdentifier(moduleSpecifier.text) : "module";
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
         // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.

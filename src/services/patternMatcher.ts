@@ -7,6 +7,7 @@ import {
     isUnicodeIdentifierStart,
     last,
     min,
+    ScriptTarget,
     startsWith,
     TextSpan,
 } from "./_namespaces/ts.js";
@@ -384,7 +385,7 @@ function isUpperCaseLetter(ch: number) {
         return true;
     }
 
-    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch)) {
+    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
         return false;
     }
 
@@ -400,7 +401,7 @@ function isLowerCaseLetter(ch: number) {
         return true;
     }
 
-    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch)) {
+    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
         return false;
     }
 

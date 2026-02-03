@@ -10,6 +10,7 @@ import {
     factory,
     findAncestor,
     getEffectiveBaseTypeNode,
+    getEmitScriptTarget,
     getMeaningFromLocation,
     getTextOfNode,
     getTokenAtPosition,
@@ -32,6 +33,7 @@ import {
     isStringLiteralLike,
     Node,
     NodeFlags,
+    ScriptTarget,
     SemanticMeaning,
     SourceFile,
     Symbol,
@@ -65,14 +67,16 @@ registerCodeFix({
         const info = getInfo(sourceFile, context.span.start, context, errorCode);
         if (!info) return undefined;
         const { node, suggestedSymbol } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol));
+        const target = getEmitScriptTarget(context.host.getCompilationSettings());
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
         return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file, diag.start, context, diag.code);
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol);
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
         }),
 });
 
@@ -143,9 +147,9 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     return suggestedSymbol === undefined ? undefined : { node, suggestedSymbol };
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol) {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
     const suggestion = symbolName(suggestedSymbol);
-    if (!isIdentifierText(suggestion) && isPropertyAccessExpression(node.parent)) {
+    if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
         const valDecl = suggestedSymbol.valueDeclaration;
         if (valDecl && isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
             changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));

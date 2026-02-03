@@ -22,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -147,6 +148,7 @@ function shouldUseInteractiveInlayHints(preferences: UserPreferences) {
 export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
+    const compilerOptions = program.getCompilerOptions();
     const quotePreference = getQuotePreference(file, preferences);
 
     const checker = program.getTypeChecker();
@@ -353,7 +355,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 

@@ -32,24 +32,55 @@ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClass
 
 //// [extendedEscapesForAstralsInVarsAndClasses.js]
 // U+102A7 CARIAN LETTER A2
-var 𐊧;
-var \u{102A7};
+var string;
+var u, { 102: A7 };
 if (Math.random()) {
-    𐊧 = "hello";
+    "hello";
 }
 else {
-    \u{102A7} = "hallo";
+    u;
+    {
+        102;
+        A7;
+    }
+    "hallo";
 }
 class Foo {
-    constructor() {
-        this.\u{102A7} = " world";
-    }
-    methodA() {
-        return this.𐊧;
-    }
 }
-export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
-_\u{102A7} += "!";
+{
+    102;
+    A7;
+}
+string;
+constructor();
+{
+    this.;
+    u;
+    {
+        102;
+        A7;
+    }
+    " world";
+}
+methodA();
+{
+    return this.𐊧;
+}
+export var _;
+new Foo().;
+u;
+{
+    102;
+    A7;
+}
++new Foo().methodA();
+_;
+u;
+{
+    102;
+    A7;
+}
+"!";
 //# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map
 //// [astralAsSurrogatePair.js]
 export {};

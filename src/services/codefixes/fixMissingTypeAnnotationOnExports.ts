@@ -38,6 +38,7 @@ import {
     findAncestor,
     FunctionDeclaration,
     GeneratedIdentifierFlags,
+    getEmitScriptTarget,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
     getTokenAtPosition,
@@ -240,6 +241,7 @@ function withContext<T>(
     const sourceFile: SourceFile = context.sourceFile;
     const program = context.program;
     const typeChecker: TypeChecker = program.getTypeChecker();
+    const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const fixedNodes = new Set<Node>();
     const expandoPropertiesAdded = new Set<Node>();
@@ -284,7 +286,7 @@ function withContext<T>(
         const newProperties = [];
         for (const symbol of elements) {
             // non-valid names will not end up in declaration emit
-            if (!isIdentifierText(symbol.name)) continue;
+            if (!isIdentifierText(symbol.name, getEmitScriptTarget(program.getCompilerOptions()))) continue;
             // already has an existing declaration
             if (symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration)) continue;
 
@@ -1109,13 +1111,13 @@ function withContext<T>(
         if (!minimizedTypeNode) {
             return undefined;
         }
-        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder);
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 
     function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;

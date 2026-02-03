@@ -179,6 +179,7 @@ import {
     PropertySignature,
     pushIfUnique,
     removeAllComments,
+    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -1466,7 +1467,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                             return undefined;
                         }
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);
-                        if (!isIdentifierText(nameStr)) {
+                        if (!isIdentifierText(nameStr, ScriptTarget.ESNext)) {
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);

@@ -3,10 +3,11 @@
 === extendedEscapesForAstralsInVarsAndClasses.ts ===
 // U+102A7 CARIAN LETTER A2
 var 𐊧: string;
->𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+>string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 7))
 
 var \u{102A7}: string;
->\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
 
 if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
@@ -14,51 +15,47 @@ if (Math.random()) {
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     𐊧 = "hello";
->𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
 }
 else {
     \u{102A7} = "hallo";
->\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
 }
 
 class Foo {
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
 
     \u{102A7}: string;
->\u{102A7} : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
+>u : Symbol(Foo.u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 12, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
+>string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 7))
 
     constructor() {
         this.\u{102A7} = " world";
->this.\u{102A7} : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
->this : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
->\u{102A7} : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
+>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
     }
     methodA() {
->methodA : Symbol(Foo.methodA, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 15, 5))
-
         return this.𐊧;
->this.𐊧 : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
->this : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
->𐊧 : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
     }
 }
 
 export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
->_𐊧 : Symbol(_𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
->new Foo().\u{102A7} : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
+>_ : Symbol(_, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
->\u{102A7} : Symbol(Foo[\u{102A7}], Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 11, 11))
->new Foo().methodA : Symbol(Foo.methodA, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 15, 5))
+>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
->methodA : Symbol(Foo.methodA, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 15, 5))
 
 _\u{102A7} += "!";
->_\u{102A7} : Symbol(_𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
+>_ : Symbol(_, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
+>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+>A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
 
 === astralAsSurrogatePair.ts ===
 import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
->_𐊧 : Symbol((Missing), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
-> : Symbol((Missing), Decl(astralAsSurrogatePair.ts, 0, 8))
+>_ : Symbol(_, Decl(astralAsSurrogatePair.ts, 0, 8))
+>as : Symbol(as, Decl(astralAsSurrogatePair.ts, 0, 12))
 >uD800 : Symbol(uD800, Decl(astralAsSurrogatePair.ts, 0, 17))
 >uDEA7 : Symbol(uDEA7, Decl(astralAsSurrogatePair.ts, 0, 23))
 

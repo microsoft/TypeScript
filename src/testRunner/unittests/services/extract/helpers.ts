@@ -88,7 +88,7 @@ export function extractTest(source: string): Test {
     text += source.substring(lastPos, pos);
 
     function consumeIdentifier() {
-        while (ts.isIdentifierPart(source.charCodeAt(pos))) {
+        while (ts.isIdentifierPart(source.charCodeAt(pos), ts.ScriptTarget.Latest)) {
             pos++;
         }
     }
