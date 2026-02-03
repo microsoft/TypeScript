@@ -149,7 +149,7 @@ default: false
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 [94m--types[39m
 Specify type package names to be included without being referenced in a source file.
